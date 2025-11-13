@@ -130,4 +130,12 @@ These models are experimental but show how you might build a direct “activatio
 - Network access is required to pull HuggingFace checkpoints the first time you run a script.
 - Steering/manifold scripts assume a CUDA device for Gemma-3-4B due to VRAM requirements (~9 GB float16).
 
-This README will replace the old whitepaper-style overview once we migrate long-form content into `docs/`. Let me know if anything above is missing or inaccurate, and I can update it.
+It is possible to train on CPU for larger models
+#  CPU vs GPU Training Performance (Gemma-4B, Layer 0)
+
+  | Metric                          | GPU     | CPU      | Slowdown   |
+  |---------------------------------|---------|----------|------------|
+  | Forward pass                    | 29ms    | 609ms    | 21x slower |
+  | Layer 0 training                | ~19 min | ~7 hours | 21x slower |
+
+

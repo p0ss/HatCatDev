@@ -51,7 +51,7 @@ def extract_activations(
             outputs = model(**inputs, output_hidden_states=True, return_dict=True)
             hidden_states = outputs.hidden_states[layer_idx]  # [1, seq_len, hidden_dim]
             pooled = hidden_states.mean(dim=1)  # [1, hidden_dim]
-            activations.append(pooled.cpu().numpy()[0])
+            activations.append(pooled.float().cpu().numpy()[0])
 
     return np.array(activations)
 
@@ -157,27 +157,41 @@ def train_layer(
         text_samples_dir = output_dir / "text_samples"
         text_samples_dir.mkdir(exist_ok=True)
 
-    # Create text probe output directory if needed
+    # Create centroid output directory if needed
     if train_text_probes:
-        text_probe_output_dir = output_dir / "text_probes"
-        text_probe_output_dir.mkdir(exist_ok=True)
+        centroid_output_dir = output_dir / "embedding_centroids"
+        centroid_output_dir.mkdir(exist_ok=True)
 
-    # Initialize adaptive trainer if requested
+    # Initialize adaptive trainer if requested (activation probes only now)
     if use_adaptive_training:
+        from .dual_adaptive_trainer import DualAdaptiveTrainer
         adaptive_trainer = DualAdaptiveTrainer(
-            target_accuracy=0.95,
+            activation_target_accuracy=0.95,
             activation_baseline=n_train_pos,
             activation_increment=1,
             activation_max_samples=100,
+            text_target_accuracy=0.80,  # Not used anymore
             text_baseline=n_train_pos,
             text_increment=5,
             text_max_samples=200,
+            model=None,  # No longer needed
+            tokenizer=None,
+            max_response_tokens=100,
             train_activation=True,
-            train_text=train_text_probes,
+            train_text=False,  # Disable TF-IDF text probe training
         )
 
     for i, concept in enumerate(concepts):
         concept_name = concept["sumo_term"]
+
+        # Check if already trained (resume capability)
+        classifier_path = output_dir / f"{concept_name}_classifier.pt"
+        centroid_path = centroid_output_dir / f"{concept_name}_centroid.npy" if train_text_probes else None
+
+        if classifier_path.exists() and (not train_text_probes or centroid_path.exists()):
+            print(f"\n[{i + 1}/{len(concepts)}] Skipping {concept_name} (already trained)")
+            continue
+
         print(f"\n[{i + 1}/{len(concepts)}] Training: {concept_name}")
         print(
             f"  Synsets: {concept['synset_count']}, Children: {len(concept.get('category_children', []))}"
@@ -236,15 +250,15 @@ def train_layer(
                 X_train = extract_activations(model, tokenizer, train_prompts, device)
                 X_test = extract_activations(model, tokenizer, test_prompts, device)
 
-                # Run dual adaptive training
+                # Run dual adaptive training (activation probes only)
                 adaptive_results = adaptive_trainer.train_concept(
                     concept_name=concept_name,
                     train_activations=X_train,
                     train_labels=np.array(train_labels),
                     test_activations=X_test,
                     test_labels=np.array(test_labels),
-                    train_texts=train_prompts if train_text_probes else None,
-                    test_texts=test_prompts if train_text_probes else None,
+                    train_texts=None,  # Not used anymore
+                    test_texts=None,
                 )
 
                 # Save activation classifier
@@ -254,15 +268,26 @@ def train_layer(
                         output_dir / f"{concept_name}_classifier.pt"
                     )
 
-                # Save text probe
-                if train_text_probes and adaptive_results['text_probe'] is not None:
-                    import joblib
-                    text_probe_path = text_probe_output_dir / f"{concept_name}_text_probe.joblib"
-                    joblib.dump(adaptive_results['text_probe'], text_probe_path)
+                # Compute and save embedding centroid instead of training text probe
+                if train_text_probes:
+                    from .embedding_centroids import compute_concept_centroid, save_concept_centroid
+                    # Filter to positive prompts only (label=1)
+                    positive_prompts = [p for p, label in zip(train_prompts, train_labels) if label == 1]
+                    print(f"  Computing embedding centroid from {len(positive_prompts)} positive prompts...")
+                    centroid = compute_concept_centroid(
+                        model=model,
+                        tokenizer=tokenizer,
+                        prompts=positive_prompts,
+                        device=device,
+                        layer_idx=-1,
+                    )
+                    centroid_path = centroid_output_dir / f"{concept_name}_centroid.npy"
+                    save_concept_centroid(concept_name, centroid, centroid_path)
+                    print(f"  ✓ Saved centroid to {centroid_path}")
 
                 # Extract metrics for results
-                activation_metrics = adaptive_results.get('activation', {})
-                text_metrics = adaptive_results.get('text', {})
+                activation_metrics = adaptive_results.get('activation') or {}
+                text_metrics = adaptive_results.get('text') or {}
 
                 result = {
                     "concept": concept_name,
@@ -327,6 +352,18 @@ def train_layer(
             print(f"  ✗ ERROR: {exc}")
             failed_concepts.append({"concept": concept_name, "error": str(exc)})
             continue
+
+    # Save centroid metadata
+    if train_text_probes:
+        centroid_metadata = {
+            'layer': layer,
+            'n_concepts': len(all_results),
+            'embedding_dim': 3072,  # Gemma 3 4B hidden dimension
+        }
+        metadata_path = centroid_output_dir / "centroids_metadata.json"
+        with open(metadata_path, 'w') as f:
+            json.dump(centroid_metadata, f, indent=2)
+        print(f"\n✓ Saved centroid metadata to {metadata_path}")
 
     elapsed_time = time.time() - start_time
     print(f"\n{'=' * 80}")
@@ -426,11 +463,12 @@ def train_sumo_classifiers(
     print(f"Output: {output_dir}")
 
     print("\nLoading model...")
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         torch_dtype=torch.float32,
         device_map=device,
+        local_files_only=True,
     )
     print("✓ Model loaded")
 
@@ -452,14 +490,14 @@ def train_sumo_classifiers(
         )
         summaries.append(summary)
 
-    # Train text probes separately ONLY if NOT using adaptive training
-    # (adaptive training trains them inline)
+    # Compute centroids separately ONLY if NOT using adaptive training
+    # (adaptive training computes them inline)
     if train_text_probes and not use_adaptive_training:
         print(f"\n{'=' * 80}")
-        print("TRAINING TEXT PROBES")
+        print("COMPUTING EMBEDDING CENTROIDS")
         print(f"{'=' * 80}")
 
-        from .text_probes import train_text_probes_for_layer
+        from .text_probes import compute_centroids_for_layer
 
         for layer in layers:
             print(f"\nLayer {layer}...")
@@ -469,16 +507,19 @@ def train_sumo_classifiers(
                 print(f"  ⚠️  No text samples found, skipping")
                 continue
 
-            text_probe_output = output_dir / f"layer{layer}" / "text_probes"
+            centroid_output = output_dir / f"layer{layer}" / "embedding_centroids"
 
             try:
-                train_text_probes_for_layer(
+                compute_centroids_for_layer(
                     layer=layer,
                     text_samples_dir=text_samples_dir,
-                    output_dir=text_probe_output,
+                    output_dir=centroid_output,
+                    model=model,
+                    tokenizer=tokenizer,
+                    device=device,
                 )
             except Exception as e:
-                print(f"  ✗ Failed to train text probes: {e}")
+                print(f"  ✗ Failed to compute centroids: {e}")
 
     print(f"\n{'=' * 80}")
     print("ALL LAYERS COMPLETE")

@@ -29,18 +29,24 @@ class DualAdaptiveTrainer:
     def __init__(
         self,
         # Shared config
-        target_accuracy: float = 0.95,
         max_iterations: int = 50,
 
         # Activation probe config
+        activation_target_accuracy: float = 0.95,
         activation_baseline: int = 10,
         activation_increment: int = 1,
         activation_max_samples: int = 100,
 
         # Text probe config
+        text_target_accuracy: float = 0.80,  # Lower target for text probes
         text_baseline: int = 10,
         text_increment: int = 5,  # Larger (text learns faster)
         text_max_samples: int = 200,  # Can handle more data
+
+        # Model for generating responses (required for text probes)
+        model=None,
+        tokenizer=None,
+        max_response_tokens: int = 100,
 
         # Flags
         train_activation: bool = True,
@@ -48,30 +54,74 @@ class DualAdaptiveTrainer:
     ):
         """
         Args:
-            target_accuracy: Graduation threshold (both probe types)
             max_iterations: Safety limit on adaptive cycles
+            activation_target_accuracy: Graduation threshold for activation probes
             activation_baseline: Starting samples for activation probe
             activation_increment: Samples added per cycle for activation
             activation_max_samples: Max samples for activation
+            text_target_accuracy: Graduation threshold for text probes (typically lower than activation)
             text_baseline: Starting samples for text probe
             text_increment: Samples added per cycle for text
             text_max_samples: Max samples for text
+            model: Language model for generating responses (required for text probes)
+            tokenizer: Tokenizer for the model
+            max_response_tokens: Max tokens to generate per prompt
             train_activation: Whether to train activation probe
             train_text: Whether to train text probe
         """
-        self.target_accuracy = target_accuracy
         self.max_iterations = max_iterations
 
+        self.activation_target_accuracy = activation_target_accuracy
         self.activation_baseline = activation_baseline
         self.activation_increment = activation_increment
         self.activation_max_samples = activation_max_samples
 
+        self.text_target_accuracy = text_target_accuracy
         self.text_baseline = text_baseline
         self.text_increment = text_increment
         self.text_max_samples = text_max_samples
 
+        self.model = model
+        self.tokenizer = tokenizer
+        self.max_response_tokens = max_response_tokens
+
         self.train_activation = train_activation
         self.train_text = train_text
+
+    def _generate_responses(self, prompts: List[str]) -> List[str]:
+        """
+        Generate model responses for a list of prompts.
+
+        Args:
+            prompts: List of input prompts
+
+        Returns:
+            List of generated responses (decoded text)
+        """
+        if self.model is None or self.tokenizer is None:
+            raise ValueError("Model and tokenizer required for text probe training")
+
+        responses = []
+        self.model.eval()
+
+        with torch.no_grad():
+            for prompt in prompts:
+                inputs = self.tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)
+                inputs = {k: v.to(self.model.device) for k, v in inputs.items()}
+
+                outputs = self.model.generate(
+                    **inputs,
+                    max_new_tokens=self.max_response_tokens,
+                    do_sample=False,  # Deterministic for reproducibility
+                    pad_token_id=self.tokenizer.eos_token_id,
+                )
+
+                # Decode only the generated part (skip the input prompt)
+                generated_ids = outputs[0, inputs['input_ids'].shape[1]:]
+                response = self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+                responses.append(response)
+
+        return responses
 
     def train_concept(
         self,
@@ -165,7 +215,7 @@ class DualAdaptiveTrainer:
                 n_samples = n_pos + n_neg
 
                 # Check graduation
-                if test_acc >= self.target_accuracy:
+                if test_acc >= self.activation_target_accuracy:
                     activation_graduated = True
                     activation_results = {
                         'samples': n_samples,
@@ -197,18 +247,26 @@ class DualAdaptiveTrainer:
                 n_pos = min(n_samples_per_class, neg_start)
                 n_neg = min(n_samples_per_class, len(train_labels) - neg_start)
 
-                # Sample texts and labels
-                pos_texts = train_texts[:n_pos]
-                neg_texts = train_texts[neg_start:neg_start + n_neg]
-                train_texts_sample = pos_texts + neg_texts
+                # Sample PROMPTS and labels
+                pos_prompts = train_texts[:n_pos]
+                neg_prompts = train_texts[neg_start:neg_start + n_neg]
+                train_prompts_sample = pos_prompts + neg_prompts
                 train_labels_sample = [1] * n_pos + [0] * n_neg
 
-                # Train text probe
+                # Generate model responses for training prompts
+                print(f"      Generating {len(train_prompts_sample)} training responses...")
+                train_responses = self._generate_responses(train_prompts_sample)
+
+                # Generate model responses for test prompts
+                print(f"      Generating {len(test_texts)} test responses...")
+                test_responses = self._generate_responses(test_texts)
+
+                # Train text probe on MODEL RESPONSES (not prompts)
                 text_probe = BinaryTextProbe(concept_name)
                 metrics = text_probe.train(
-                    train_texts=train_texts_sample,
+                    train_texts=train_responses,
                     train_labels=train_labels_sample,
-                    test_texts=test_texts,
+                    test_texts=test_responses,
                     test_labels=test_labels,
                 )
 
@@ -216,7 +274,7 @@ class DualAdaptiveTrainer:
                 n_samples = len(train_texts_sample)
 
                 # Check graduation
-                if test_acc >= self.target_accuracy:
+                if test_acc >= self.text_target_accuracy:
                     text_graduated = True
                     text_results = {
                         'samples': n_samples,

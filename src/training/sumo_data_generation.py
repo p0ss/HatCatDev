@@ -6,7 +6,28 @@ Extends the WordNet-based approach to support SUMO category relationships.
 
 from typing import List, Dict, Optional
 import random
+import re
 from nltk.corpus import wordnet as wn
+
+
+def split_camel_case(name: str) -> str:
+    """
+    Split camelCase concept names into properly spaced versions for training.
+
+    Examples:
+        AIAbuse -> AI Abuse
+        RecreationOrExercise -> Recreation Or Exercise
+        Physical -> Physical
+
+    Args:
+        name: CamelCase concept name
+
+    Returns:
+        Spaced version with original capitalization preserved
+    """
+    # Insert space before uppercase letters that follow lowercase letters
+    spaced = re.sub(r'([a-z])([A-Z])', r'\1 \2', name)
+    return spaced
 
 
 def generate_category_relationship_prompts(
@@ -45,13 +66,27 @@ def generate_category_relationship_prompts(
     sampled = random.sample(category_children, min(n_samples, len(category_children)))
 
     for child in sampled:
-        # Try multiple prompt formats for robustness
-        templates = [
-            f"{concept} includes the subcategory {child}.",
-            f"{child} is a type of {concept}.",
-            f"{concept} has subcategory {child}.",
-        ]
-        prompts.append(random.choice(templates))
+        # Split camelCase for child names too
+        child_spaced = split_camel_case(child)
+
+        # Alternate between relationship statements and example requests
+        # This increases conceptual density in training data
+        if random.random() < 0.5:
+            # Relationship statement
+            templates = [
+                f"{concept} includes the subcategory {child_spaced}.",
+                f"{child_spaced} is a type of {concept}.",
+                f"{concept} has subcategory {child_spaced}.",
+            ]
+            prompts.append(random.choice(templates))
+        else:
+            # Example-based prompt for higher conceptual density
+            templates = [
+                f"Give me examples of how {concept} relates to {child_spaced}.",
+                f"Show me examples of {child_spaced} as a type of {concept}.",
+                f"Provide examples of the relationship between {concept} and {child_spaced}.",
+            ]
+            prompts.append(random.choice(templates))
 
     return prompts
 
@@ -107,7 +142,20 @@ def generate_wordnet_relationship_prompts(
     prompts = []
     for related_concept, relation_type in sampled:
         related_concept = related_concept.replace('_', ' ')
-        prompts.append(f"{concept_name} {relation_type} {related_concept}.")
+
+        # Alternate between relationship statements and example requests
+        # This increases conceptual density in training data
+        if random.random() < 0.5:
+            # Relationship statement
+            prompts.append(f"{concept_name} {relation_type} {related_concept}.")
+        else:
+            # Example-based prompt for higher conceptual density
+            templates = [
+                f"Give me examples of how {concept_name} {relation_type} {related_concept}.",
+                f"Show me examples of the relationship: {concept_name} {relation_type} {related_concept}.",
+                f"Provide examples demonstrating that {concept_name} {relation_type} {related_concept}.",
+            ]
+            prompts.append(random.choice(templates))
 
     return prompts
 
@@ -161,13 +209,19 @@ def create_sumo_training_dataset(
     labels = []
 
     concept_name = concept['sumo_term']
-    definition = concept.get('definition', f"SUMO category: {concept_name}")
+    # Split camelCase for more natural prompts (e.g., "AIAbuse" -> "AI Abuse")
+    concept_name_spaced = split_camel_case(concept_name)
+    definition = concept.get('definition', f"SUMO category: {concept_name_spaced}")
 
     # Positive examples: start with definition
-    prompts.append(f"What is {concept_name}? {definition}")
+    prompts.append(f"What is {concept_name_spaced}? {definition}")
     labels.append(1)
 
-    n_remaining = n_positives - 1
+    # Add "give me examples" prompt for concept density
+    prompts.append(f"Give me examples of {concept_name_spaced}.")
+    labels.append(1)
+
+    n_remaining = n_positives - 2
 
     # SUMO category relationships
     category_prompts = []
@@ -175,7 +229,7 @@ def create_sumo_training_dataset(
         category_children = concept.get('category_children', [])
         if category_children:
             category_prompts = generate_category_relationship_prompts(
-                concept_name,
+                concept_name_spaced,
                 category_children,
                 all_concepts,
                 n_samples=n_remaining // 2 if use_wordnet_relationships else n_remaining
@@ -199,9 +253,9 @@ def create_sumo_training_dataset(
     while len(rel_prompts) < n_remaining:
         # Fallback: use definition with variations
         variations = [
-            f"Describe {concept_name}.",
-            f"Explain what {concept_name} means.",
-            f"{concept_name} is defined as: {definition}",
+            f"Describe {concept_name_spaced}.",
+            f"Explain what {concept_name_spaced} means.",
+            f"{concept_name_spaced} is defined as: {definition}",
         ]
         rel_prompts.append(random.choice(variations))
 

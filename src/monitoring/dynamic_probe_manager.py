@@ -227,8 +227,8 @@ class DynamicProbeManager:
                         metadata.activation_probe_path = activation_path
                         metadata.has_activation_probe = True
 
-                    # Probe pack structure: probes/text/{concept}_text_probe.joblib
-                    text_probe_path = self.text_probes_dir / f"{sumo_term}_text_probe.joblib"
+                    # Probe pack structure: probes/embedding_centroids/{concept}_centroid.npy
+                    text_probe_path = self.text_probes_dir / f"{sumo_term}_centroid.npy"
                     if text_probe_path.exists():
                         metadata.text_probe_path = text_probe_path
                         metadata.has_text_probe = True
@@ -242,12 +242,19 @@ class DynamicProbeManager:
                         metadata.activation_probe_path = activation_path
                         metadata.has_activation_probe = True
 
-                    # Text probe path
-                    text_probe_dir = layer_dir / "text_probes"
-                    text_probe_path = text_probe_dir / f"{sumo_term}_text_probe.joblib"
-                    if text_probe_path.exists():
-                        metadata.text_probe_path = text_probe_path
+                    # Text centroid path (new embedding-based approach)
+                    centroid_dir = layer_dir / "embedding_centroids"
+                    centroid_path = centroid_dir / f"{sumo_term}_centroid.npy"
+                    if centroid_path.exists():
+                        metadata.text_probe_path = centroid_path
                         metadata.has_text_probe = True
+                    else:
+                        # Fallback to legacy text_probes (TF-IDF) if centroids don't exist
+                        text_probe_dir = layer_dir / "text_probes"
+                        text_probe_path = text_probe_dir / f"{sumo_term}_text_probe.joblib"
+                        if text_probe_path.exists():
+                            metadata.text_probe_path = text_probe_path
+                            metadata.has_text_probe = True
 
                 concept_key = (sumo_term, layer)
                 self.concept_metadata[concept_key] = metadata
@@ -406,9 +413,20 @@ class DynamicProbeManager:
                 if not metadata or not metadata.text_probe_path:
                     continue
 
-                # Load text probe (joblib serialized sklearn pipeline)
+                # Load text probe (centroid .npy or legacy joblib)
                 try:
-                    text_probe = joblib.load(metadata.text_probe_path)
+                    if metadata.text_probe_path.suffix == '.npy':
+                        # New centroid-based approach
+                        from .centroid_text_detector import CentroidTextDetector
+                        text_probe = CentroidTextDetector.load(
+                            metadata.text_probe_path,
+                            concept_name=concept_key[0]
+                        )
+                    else:
+                        # Legacy TF-IDF joblib approach
+                        import joblib
+                        text_probe = joblib.load(metadata.text_probe_path)
+
                     self.loaded_text_probes[concept_key] = text_probe
                     self.stats['total_loads'] += 1
                 except Exception as e:
@@ -580,6 +598,85 @@ class DynamicProbeManager:
             timing['loaded_probes'] = len(self.loaded_probes)
 
         return results[:top_k], timing
+
+    def detect_and_expand_with_divergence(
+        self,
+        hidden_state: torch.Tensor,
+        token_embedding: np.ndarray,
+        top_k: int = 10,
+        return_timing: bool = False,
+    ) -> Tuple[Dict[str, Dict], Optional[Dict]]:
+        """
+        Detect concepts with divergence scores using embedding centroids.
+
+        Args:
+            hidden_state: Hidden state tensor [1, hidden_dim] or [hidden_dim]
+            token_embedding: Token embedding for centroid comparison [embedding_dim]
+            top_k: Return top K concepts by activation
+            return_timing: Return detailed timing breakdown
+
+        Returns:
+            (concepts_with_divergence, timing_info)
+            concepts_with_divergence: Dict mapping concept names to:
+                {
+                    'probability': activation confidence,
+                    'layer': int,
+                    'text_confidence': centroid similarity [0, 1] or None,
+                    'divergence': activation - text_confidence or None
+                }
+            timing_info: Dict with timing breakdown (if return_timing=True)
+        """
+        from src.monitoring.centroid_text_detector import CentroidTextDetector
+
+        timing = {} if return_timing else None
+        start = time.time()
+
+        # 1. Get top-K concepts by activation
+        detected_concepts, detect_timing = self.detect_and_expand(
+            hidden_state,
+            top_k=top_k,
+            return_timing=True
+        )
+
+        if timing is not None:
+            timing.update(detect_timing)
+
+        # 2. For each detected concept, compute text confidence using centroid
+        t_centroid = time.time()
+        concepts_with_divergence = {}
+
+        for concept_name, activation_prob, layer in detected_concepts:
+            # Find centroid path
+            centroid_path = self.probes_dir / f"layer{layer}" / "embedding_centroids" / f"{concept_name}_centroid.npy"
+
+            text_conf = None
+            divergence = None
+
+            if centroid_path.exists():
+                try:
+                    centroid_detector = CentroidTextDetector.load(centroid_path, concept_name)
+                    text_conf = float(centroid_detector.predict(token_embedding))
+                    divergence = float(activation_prob - text_conf)
+                    # Debug: log first few to see what values we're getting
+                    if len(concepts_with_divergence) < 3:
+                        print(f"[DEBUG] {concept_name}: activation={activation_prob:.3f}, text_sim={text_conf:.3f}, div={divergence:.3f}")
+                except Exception as e:
+                    # Centroid might be malformed or incompatible
+                    print(f"[ERROR] Failed to load centroid for {concept_name}: {e}")
+                    pass
+
+            concepts_with_divergence[concept_name] = {
+                'probability': float(activation_prob),
+                'layer': int(layer),
+                'text_confidence': text_conf,
+                'divergence': divergence
+            }
+
+        if timing is not None:
+            timing['centroid_comparison'] = (time.time() - t_centroid) * 1000
+            timing['total_with_divergence'] = (time.time() - start) * 1000
+
+        return concepts_with_divergence, timing
 
     def get_concept_path(self, concept_name: str, layer: int = None) -> List[str]:
         """Get hierarchical path from root to concept."""

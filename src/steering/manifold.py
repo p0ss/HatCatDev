@@ -125,14 +125,17 @@ def estimate_task_manifold(
 
     logger.info(f"Estimating task manifold from {n_samples} generations at strength {low_strength}")
 
-    # Prompts for diverse manifold sampling
+    # Concept-specific prompts for diverse manifold sampling
     prompts = [
-        "Tell me about",
-        "Describe",
-        "What is",
-        "Explain the concept of",
-        "The meaning of",
-    ] * (n_samples // 5 + 1)
+        f"Tell me about {concept}",
+        f"Describe {concept}",
+        f"What is {concept}",
+        f"Explain the concept of {concept}",
+        f"The meaning of {concept} is",
+        f"How does {concept} work",
+        f"When I think about {concept}, I",
+        f"{concept.capitalize()} means",
+    ] * (n_samples // 8 + 1)
     prompts = prompts[:n_samples]
 
     # Collect activations from low-strength steered generations
@@ -175,7 +178,9 @@ def estimate_task_manifold(
                 outputs = model.generate(
                     **inputs,
                     max_new_tokens=max_new_tokens,
-                    do_sample=False,
+                    do_sample=True,
+                    temperature=0.8,
+                    top_p=0.9,
                     pad_token_id=tokenizer.eos_token_id
                 )
 
@@ -249,7 +254,8 @@ def apply_dual_subspace_steering(
     total_layers: int,
     max_norm_per_layer: float = 1.0,
     ema_alpha: float = 0.8,
-    prev_vector: Optional[np.ndarray] = None
+    prev_vector: Optional[np.ndarray] = None,
+    concept_preservation: float = 0.5
 ) -> np.ndarray:
     """
     Apply dual-subspace manifold steering with layer-wise dampening.
@@ -257,9 +263,10 @@ def apply_dual_subspace_steering(
     Pipeline:
     1. Remove contamination: v_clean = v - U_S @ (U_S.T @ v)
     2. Project to manifold: v_mw = U_M @ (U_M.T @ v_clean)
-    3. Layer-wise gain: v_mw *= sqrt(1 - layer_depth)
-    4. Norm clipping: v_mw = v_mw / max(||v_mw||, max_norm)
-    5. EMA smoothing: v_final = ema_alpha * v_prev + (1 - ema_alpha) * v_mw
+    3. Blend with concept: v_blend = (1-alpha)*v_mw + alpha*v_clean
+    4. Layer-wise gain: v_blend *= sqrt(1 - layer_depth)
+    5. Norm clipping: v_blend = v_blend / max(||v_blend||, max_norm)
+    6. EMA smoothing: v_final = ema_alpha * v_prev + (1 - ema_alpha) * v_blend
 
     Args:
         steering_vector: Raw steering vector
@@ -270,6 +277,7 @@ def apply_dual_subspace_steering(
         max_norm_per_layer: Maximum norm per layer (prevents explosions)
         ema_alpha: EMA smoothing factor (0=no smoothing, 1=no update)
         prev_vector: Previous timestep's vector for EMA
+        concept_preservation: How much of the original concept direction to preserve (0=pure manifold, 1=no manifold)
 
     Returns:
         v_final: Processed steering vector
@@ -281,22 +289,26 @@ def apply_dual_subspace_steering(
     # Step 2: Project onto task manifold
     v_mw = U_M @ (U_M.T @ v_clean)
 
-    # Step 3: Layer-wise dampening (Huang et al.)
+    # Step 3: Blend manifold projection with original concept direction
+    # This preserves steering while benefiting from manifold constraints
+    v_blend = (1.0 - concept_preservation) * v_mw + concept_preservation * v_clean
+
+    # Step 4: Layer-wise dampening (Huang et al.)
     # Decay with depth to prevent cascade failures
     layer_depth = layer_idx / total_layers
     depth_gain = np.sqrt(1.0 - layer_depth)  # sqrt decay
-    v_mw = v_mw * depth_gain
+    v_blend = v_blend * depth_gain
 
-    # Step 4: Norm clipping
-    norm = np.linalg.norm(v_mw)
+    # Step 5: Norm clipping
+    norm = np.linalg.norm(v_blend)
     if norm > max_norm_per_layer:
-        v_mw = v_mw * (max_norm_per_layer / norm)
+        v_blend = v_blend * (max_norm_per_layer / norm)
 
-    # Step 5: EMA smoothing (if previous vector available)
+    # Step 6: EMA smoothing (if previous vector available)
     if prev_vector is not None:
-        v_final = ema_alpha * prev_vector + (1.0 - ema_alpha) * v_mw
+        v_final = ema_alpha * prev_vector + (1.0 - ema_alpha) * v_blend
     else:
-        v_final = v_mw
+        v_final = v_blend
 
     return v_final
 
@@ -310,6 +322,7 @@ def create_manifold_steering_hook(
     total_layers: int,
     max_norm_per_layer: float = 1.0,
     ema_alpha: float = 0.0,  # Disabled by default for simplicity
+    concept_preservation: float = 0.5,
     device: str = "cuda"
 ):
     """
@@ -324,6 +337,7 @@ def create_manifold_steering_hook(
         total_layers: Total layers in model
         max_norm_per_layer: Maximum norm per layer
         ema_alpha: EMA smoothing factor
+        concept_preservation: Blend ratio (0=pure manifold, 1=pure concept)
         device: Device
 
     Returns:
@@ -338,7 +352,8 @@ def create_manifold_steering_hook(
         total_layers,
         max_norm_per_layer,
         ema_alpha,
-        prev_vector=None  # Simplified: no temporal EMA for now
+        prev_vector=None,  # Simplified: no temporal EMA for now
+        concept_preservation=concept_preservation
     )
 
     # Convert to tensor
@@ -474,7 +489,8 @@ class ManifoldSteerer:
         strength: float,
         max_new_tokens: int = 50,
         max_norm_per_layer: float = 1.0,
-        target_layers: Optional[List[int]] = None
+        target_layers: Optional[List[int]] = None,
+        concept_preservation: float = 0.5
     ) -> str:
         """
         Generate text with manifold steering.
@@ -486,6 +502,7 @@ class ManifoldSteerer:
             max_new_tokens: Max tokens to generate
             max_norm_per_layer: Max norm per layer
             target_layers: Specific layers to apply steering (default: last 10)
+            concept_preservation: Blend ratio (0=pure manifold, 1=pure concept)
 
         Returns:
             Generated text
@@ -527,6 +544,7 @@ class ManifoldSteerer:
                 self.total_layers,
                 max_norm_per_layer,
                 ema_alpha=0.0,
+                concept_preservation=concept_preservation,
                 device=self.device
             )
 

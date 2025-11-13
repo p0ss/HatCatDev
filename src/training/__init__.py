@@ -20,7 +20,7 @@ from .sumo_classifiers import train_sumo_classifiers
 from .text_probes import (
     BinaryTextProbe,
     train_text_probe_for_concept,
-    train_text_probes_for_layer,
+    compute_centroids_for_layer,
 )
 
 __all__ = [
@@ -33,5 +33,5 @@ __all__ = [
     "train_sumo_classifiers",
     "BinaryTextProbe",
     "train_text_probe_for_concept",
-    "train_text_probes_for_layer",
+    "compute_centroids_for_layer",
 ]

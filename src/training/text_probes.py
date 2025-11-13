@@ -182,30 +182,38 @@ def train_text_probe_for_concept(
     return metrics
 
 
-def train_text_probes_for_layer(
+def compute_centroids_for_layer(
     layer: int,
     text_samples_dir: Path,
     output_dir: Path,
+    model,
+    tokenizer,
+    device: str = "cuda",
 ) -> Dict:
     """
-    Train text probes for all concepts in a layer.
+    Compute embedding centroids for all concepts in a layer.
 
-    Mirrors the activation probe training process.
+    Replaces TF-IDF text probe training with embedding-based detection.
 
     Args:
         layer: Layer number
         text_samples_dir: Directory with text sample JSONs
-        output_dir: Where to save text probes
+        output_dir: Where to save centroids
+        model: Language model
+        tokenizer: Model tokenizer
+        device: Device to run on
 
     Returns:
         Summary dict with training statistics
     """
+    from .embedding_centroids import compute_concept_centroid, save_concept_centroid
+
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Find all text sample files
     sample_files = list(text_samples_dir.glob("*.json"))
 
-    print(f"\nTraining text probes for {len(sample_files)} concepts...")
+    print(f"\nComputing embedding centroids for {len(sample_files)} concepts...")
 
     results = []
     failed = []
@@ -218,20 +226,26 @@ def train_text_probes_for_layer(
         print(f"[{i}/{len(sample_files)}] {concept_name}...", end=" ")
 
         try:
-            metrics = train_text_probe_for_concept(
-                concept_name=concept_name,
-                train_texts=data['train_prompts'],
-                train_labels=data['train_labels'],
-                test_texts=data['test_prompts'],
-                test_labels=data['test_labels'],
-                output_path=output_dir / f"{concept_name}_text_probe.joblib",
+            # Use training prompts to compute centroid
+            prompts = data['train_prompts']
+
+            centroid = compute_concept_centroid(
+                model=model,
+                tokenizer=tokenizer,
+                prompts=prompts,
+                device=device,
+                layer_idx=-1,
             )
 
-            print(f"✓ F1: {metrics['test_f1']:.3f}")
+            # Save centroid
+            centroid_path = output_dir / f"{concept_name}_centroid.npy"
+            save_concept_centroid(concept_name, centroid, centroid_path)
+
+            print(f"✓ Centroid computed from {len(prompts)} prompts")
 
             results.append({
                 'concept': concept_name,
-                **metrics,
+                'n_prompts': len(prompts),
             })
 
         except Exception as e:
@@ -241,7 +255,7 @@ def train_text_probes_for_layer(
                 'error': str(e),
             })
 
-    # Save summary
+    # Save summary and metadata
     summary = {
         'layer': layer,
         'n_concepts': len(sample_files),
@@ -251,15 +265,27 @@ def train_text_probes_for_layer(
         'failed': failed,
     }
 
-    summary_path = output_dir / "text_probe_results.json"
+    summary_path = output_dir / "centroid_results.json"
     with open(summary_path, 'w') as f:
         json.dump(summary, f, indent=2)
+
+    # Save metadata
+    if results:
+        metadata = {
+            'layer': layer,
+            'n_concepts': len(results),
+            'embedding_dim': 3072,  # Gemma 3 4B hidden dimension
+        }
+        metadata_path = output_dir / "centroids_metadata.json"
+        with open(metadata_path, 'w') as f:
+            json.dump(metadata, f, indent=2)
 
     print(f"\n✓ Saved summary to {summary_path}")
     print(f"  Successful: {len(results)}/{len(sample_files)}")
     if results:
-        avg_f1 = sum(r['test_f1'] for r in results) / len(results)
-        print(f"  Average test F1: {avg_f1:.3f}")
+        total_prompts = sum(r['n_prompts'] for r in results)
+        avg_prompts = total_prompts / len(results)
+        print(f"  Average prompts per concept: {avg_prompts:.1f}")
 
     return summary
 

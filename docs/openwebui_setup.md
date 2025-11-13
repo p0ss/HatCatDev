@@ -36,6 +36,15 @@ For more installation options, see: https://docs.openwebui.com/getting-started/
   7. Set API Key: sk-dummy (can be anything)
   8. Save settings
   9. The hatcat-divergence model should appear in the model selector
+  
+We also need to install the visualisation or you'll see nothing different from normal chat 
+
+  1. go back to admin settings
+  2. click the functions tab 
+  3. click new function 
+  4. paste in all the code from /src/openwebui/hatcat_visualizer.js
+  5. save  
+  
 ## Quick Start
 
 The HatCat divergence server provides real-time token-by-token divergence visualization through an OpenAI-compatible API.
