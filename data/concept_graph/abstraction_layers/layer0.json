@@ -128,13 +128,19 @@
       "synset_count": 0,
       "direct_synset_count": 0,
       "synsets": [],
-      "canonical_synset": null,
+      "canonical_synset": "course.n.01",
       "lemmas": [
         "SetOrClass"
       ],
       "pos": null,
       "definition": "SUMO category: SetOrClass",
-      "lexname": null
+      "lexname": null,
+      "mapping_metadata": {
+        "auto_mapped": true,
+        "quality_score": 41,
+        "previous_synset": null,
+        "mapped_date": "2025-11-13T20:41:41.863504"
+      }
     },
     {
       "sumo_term": "Quantity",
@@ -174,13 +180,19 @@
       "synset_count": 0,
       "direct_synset_count": 0,
       "synsets": [],
-      "canonical_synset": null,
+      "canonical_synset": "system.n.01",
       "lemmas": [
         "PhysicalSystem"
       ],
       "pos": null,
       "definition": "SUMO category: PhysicalSystem",
-      "lexname": null
+      "lexname": null,
+      "mapping_metadata": {
+        "auto_mapped": true,
+        "quality_score": 37,
+        "previous_synset": null,
+        "mapped_date": "2025-11-13T20:41:41.863875"
+      }
     },
     {
       "sumo_term": "Proposition",
@@ -258,13 +270,19 @@
       "synset_count": 0,
       "direct_synset_count": 0,
       "synsets": [],
-      "canonical_synset": null,
+      "canonical_synset": "message.n.02",
       "lemmas": [
         "ContentBearingPhysical"
       ],
       "pos": null,
       "definition": "SUMO category: ContentBearingPhysical",
-      "lexname": null
+      "lexname": null,
+      "mapping_metadata": {
+        "auto_mapped": true,
+        "quality_score": 33,
+        "previous_synset": null,
+        "mapped_date": "2025-11-13T20:41:41.864197"
+      }
     },
     {
       "sumo_term": "Process",

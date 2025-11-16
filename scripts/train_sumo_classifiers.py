@@ -28,6 +28,8 @@ def parse_args() -> argparse.Namespace:
                         help='Train text probes alongside activation probes')
     parser.add_argument('--use-adaptive-training', action='store_true',
                         help='Use DualAdaptiveTrainer with independent graduation for activation and text probes')
+    parser.add_argument('--validation-mode', type=str, default='falloff', choices=['loose', 'falloff', 'strict'],
+                        help='Validation mode: loose (no blocking), falloff (tiered, default), strict (always block)')
     return parser.parse_args()
 
 
@@ -44,6 +46,7 @@ def main() -> None:
         output_dir=args.output_dir,
         train_text_probes=args.train_text_probes,
         use_adaptive_training=args.use_adaptive_training,
+        validation_mode=args.validation_mode,
     )
 
 

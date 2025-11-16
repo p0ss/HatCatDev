@@ -31,6 +31,7 @@ class SimpleMLP(nn.Module):
     def __init__(self, input_dim: int, hidden_dim: int = 128):
         super().__init__()
 
+        # Keep 'net' name for backward compatibility with saved probes
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_dim),
             nn.ReLU(),
@@ -39,11 +40,27 @@ class SimpleMLP(nn.Module):
             nn.ReLU(),
             nn.Dropout(0.2),
             nn.Linear(hidden_dim // 2, 1),
-            nn.Sigmoid()
         )
+        self.sigmoid = nn.Sigmoid()
 
-    def forward(self, x):
-        return self.net(x).squeeze(-1)
+    def forward(self, x, return_logits=False):
+        """
+        Forward pass.
+
+        Args:
+            x: Input tensor
+            return_logits: If True, return (probability, logit) tuple
+
+        Returns:
+            If return_logits=False: probability [0,1]
+            If return_logits=True: (probability, logit) tuple
+        """
+        logits = self.net(x).squeeze(-1)
+        probs = self.sigmoid(logits)
+
+        if return_logits:
+            return probs, logits
+        return probs
 
 
 class ConceptMetadata:
@@ -437,17 +454,12 @@ class DynamicProbeManager:
         if len(self.loaded_probes) <= self.max_loaded_probes:
             return
 
-        # Don't unload base layer probes
-        base_concept_keys = {
-            key for key in self.concept_metadata.keys()
-            if key[1] in self.base_layers
-        }
-
-        # Find cold probes (low scores, not in base layers)
+        # Find cold probes (low scores) - now includes base layer probes!
+        # This allows aggressive pruning to cull irrelevant base concepts
         cold_probes = [
             (key, score)
             for key, score in self.probe_scores.items()
-            if key not in base_concept_keys and score < self.unload_threshold
+            if score < self.unload_threshold
         ]
 
         # Sort by score (lowest first)
@@ -470,6 +482,9 @@ class DynamicProbeManager:
         This is more aggressive than _unload_cold_probes - it keeps ONLY
         the top K probes regardless of their scores. Critical for per-token
         usage where we only report top 10 anyway.
+
+        NOTE: Now includes base layer probes in pruning! This allows culling
+        irrelevant base concepts that happen to fire with high confidence.
         """
         if not self.aggressive_pruning:
             return
@@ -477,25 +492,12 @@ class DynamicProbeManager:
         if len(self.loaded_probes) <= self.keep_top_k:
             return
 
-        # Don't unload base layer probes
-        base_concept_keys = {
-            key for key in self.concept_metadata.keys()
-            if key[1] in self.base_layers
-        }
+        # Sort ALL probes by score (highest first) - includes base layers!
+        all_probes = [(k, v) for k, v in self.probe_scores.items()]
+        all_probes.sort(key=lambda x: x[1], reverse=True)
 
-        # Separate base and non-base probes
-        base_probes = {k: v for k, v in self.probe_scores.items() if k in base_concept_keys}
-        non_base_probes = [(k, v) for k, v in self.probe_scores.items() if k not in base_concept_keys]
-
-        # Sort non-base by score (highest first)
-        non_base_probes.sort(key=lambda x: x[1], reverse=True)
-
-        # Keep top (keep_top_k - num_base) non-base probes
-        num_base = len(base_probes)
-        keep_non_base = max(0, self.keep_top_k - num_base)
-
-        # Unload everything beyond top K
-        to_unload = non_base_probes[keep_non_base:]
+        # Keep only top K, unload everything else
+        to_unload = all_probes[self.keep_top_k:]
 
         for key, _ in to_unload:
             if key in self.loaded_probes:
@@ -510,6 +512,8 @@ class DynamicProbeManager:
         hidden_state: torch.Tensor,
         top_k: int = 10,
         return_timing: bool = False,
+        return_logits: bool = False,
+        skip_pruning: bool = False,
     ) -> Tuple[List[Tuple[str, float, int]], Optional[Dict]]:
         """
         Detect concepts in hidden state, dynamically loading children as needed.
@@ -518,10 +522,12 @@ class DynamicProbeManager:
             hidden_state: Hidden state tensor [1, hidden_dim] or [hidden_dim]
             top_k: Return top K concepts
             return_timing: Return detailed timing breakdown
+            return_logits: If True, return (concept_name, probability, logit, layer) tuples
+            skip_pruning: If True, skip aggressive pruning for this detection (useful during prompt processing)
 
         Returns:
             (concept_scores, timing_info)
-            concept_scores: List of (concept_name, probability, layer)
+            concept_scores: List of (concept_name, probability, layer) or (concept_name, probability, logit, layer)
             timing_info: Dict with timing breakdown (if return_timing=True)
         """
         timing = {} if return_timing else None
@@ -533,9 +539,16 @@ class DynamicProbeManager:
         # 1. Run all currently loaded probes
         t1 = time.time()
         current_scores = {}
+        current_logits = {} if return_logits else None
         with torch.inference_mode():
             for concept_key, probe in self.loaded_probes.items():
-                prob = probe(hidden_state).item()
+                if return_logits:
+                    prob, logit = probe(hidden_state, return_logits=True)
+                    prob = prob.item()
+                    logit = logit.item()
+                    current_logits[concept_key] = logit
+                else:
+                    prob = probe(hidden_state).item()
                 current_scores[concept_key] = prob
                 self.probe_scores[concept_key] = prob
                 self.probe_access_count[concept_key] += 1
@@ -568,7 +581,13 @@ class DynamicProbeManager:
                 for concept_key in child_keys_to_load:
                     if concept_key in self.loaded_probes:
                         probe = self.loaded_probes[concept_key]
-                        prob = probe(hidden_state).item()
+                        if return_logits:
+                            prob, logit = probe(hidden_state, return_logits=True)
+                            prob = prob.item()
+                            logit = logit.item()
+                            current_logits[concept_key] = logit
+                        else:
+                            prob = probe(hidden_state).item()
                         current_scores[concept_key] = prob
                         self.probe_scores[concept_key] = prob
                         self.probe_access_count[concept_key] += 1
@@ -577,11 +596,13 @@ class DynamicProbeManager:
             timing['child_detection'] = (time.time() - t3) * 1000
 
         # 4. Pruning: aggressive top-K or conservative cold probe removal
+        # Skip pruning during prompt processing to avoid discarding relevant concepts
         t4 = time.time()
-        if self.aggressive_pruning:
-            self._aggressive_prune_to_top_k()
-        else:
-            self._unload_cold_probes()
+        if not skip_pruning:
+            if self.aggressive_pruning:
+                self._aggressive_prune_to_top_k()
+            else:
+                self._unload_cold_probes()
         if timing is not None:
             timing['cache_management'] = (time.time() - t4) * 1000
 
@@ -589,7 +610,11 @@ class DynamicProbeManager:
         results = []
         for concept_key, prob in current_scores.items():
             concept_name, layer = concept_key
-            results.append((concept_name, prob, layer))
+            if return_logits:
+                logit = current_logits.get(concept_key, 0.0)
+                results.append((concept_name, prob, logit, layer))
+            else:
+                results.append((concept_name, prob, layer))
 
         results.sort(key=lambda x: x[1], reverse=True)
 

@@ -1,6 +1,10 @@
 """
-Training data generation for concept classification.
+LEGACY: Training data generation for concept classification.
 
+⚠️ DEPRECATED: This module contains legacy Phase 4 training functions.
+   Use sumo_data_generation.py instead for SUMO + WordNet hierarchy-aware training.
+
+This module is kept for compatibility with old phase_4/phase_5 scripts.
 Phase 4 methodology: Generate diverse prompts for training binary classifiers.
 """
 

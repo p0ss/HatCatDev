@@ -31,6 +31,48 @@ class ConceptPack:
     def layer_distribution(self) -> Dict[str, int]:
         return self.pack_json.get('concept_metadata', {}).get('layer_distribution', {})
 
+    @property
+    def domain_extensions(self) -> List[Dict]:
+        """Get domain extensions from this pack."""
+        return self.pack_json.get('ontology_stack', {}).get('domain_extensions', [])
+
+    def has_concepts_file(self) -> bool:
+        """Check if pack bundles concept definitions."""
+        for ext in self.domain_extensions:
+            if 'concepts_file' in ext:
+                concepts_path = self.pack_dir / ext['concepts_file']
+                if concepts_path.exists():
+                    return True
+        return False
+
+    def has_wordnet_patches(self) -> bool:
+        """Check if pack bundles WordNet patches."""
+        for ext in self.domain_extensions:
+            if 'wordnet_patches' in ext:
+                return len(ext['wordnet_patches']) > 0
+        return False
+
+    def get_concepts_files(self) -> List[Path]:
+        """Get all KIF concept files bundled in pack."""
+        files = []
+        for ext in self.domain_extensions:
+            if 'concepts_file' in ext:
+                file_path = self.pack_dir / ext['concepts_file']
+                if file_path.exists():
+                    files.append(file_path)
+        return files
+
+    def get_wordnet_patch_files(self) -> List[Path]:
+        """Get all WordNet patch files bundled in pack."""
+        files = []
+        for ext in self.domain_extensions:
+            if 'wordnet_patches' in ext:
+                for patch_file in ext['wordnet_patches']:
+                    file_path = self.pack_dir / patch_file
+                    if file_path.exists():
+                        files.append(file_path)
+        return files
+
 
 class ConceptPackRegistry:
     """Registry for discovering and loading concept packs."""

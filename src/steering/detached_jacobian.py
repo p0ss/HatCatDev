@@ -8,6 +8,7 @@ import torch
 import numpy as np
 from typing import Optional, Tuple
 import logging
+from transformers.modeling_attn_mask_utils import AttentionMaskConverter
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,8 @@ def compute_jacobian(
     tokenizer,
     text: str,
     device: str = "cuda",
-    layer_idx: Optional[int] = None
+    layer_idx: Optional[int] = None,
+    compute_dtype: torch.dtype = torch.float32
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     """
     Compute Jacobian matrix for input text using detached gradient approach.
@@ -25,12 +27,16 @@ def compute_jacobian(
     The Jacobian J[i,j,k] represents how output embedding dimension k changes
     with respect to input embedding dimension j of token i.
 
+    Uses "islands of precision" approach: model can be in BF16/FP16, but
+    embeddings are upcast to FP32 for gradient computation.
+
     Args:
-        model: Language model
+        model: Language model (can be in any dtype)
         tokenizer: Tokenizer
         text: Input text
         device: Device
         layer_idx: Optional specific layer to compute Jacobian for (default: final layer)
+        compute_dtype: Dtype for Jacobian computation (default: float32)
 
     Returns:
         jacobian: (seq_len, hidden_dim, hidden_dim) Jacobian matrix
@@ -46,7 +52,10 @@ def compute_jacobian(
     else:
         embed_tokens = model.model.embed_tokens
 
-    embeds = embed_tokens(inputs['input_ids'])
+    # Get embeddings in model's native dtype (for mixed precision)
+    # Keep in model dtype to avoid dtype mismatches in forward pass
+    model_dtype = next(model.parameters()).dtype
+    embeds = embed_tokens(inputs['input_ids']).to(model_dtype)
     embeds.requires_grad_(True)
 
     # Define forward function for Jacobian computation
@@ -91,14 +100,14 @@ def compute_jacobian(
             else:
                 position_embeddings = position_embeddings_global
 
-            # Create attention mask
-            attention_mask = torch.ones(batch_size, seq_length, dtype=torch.float, device=embeds_input.device)
-            causal_mask = model_layers._update_causal_mask(
-                attention_mask,
-                embeds_input,
-                position_ids.squeeze(0),
-                None,
-                False
+            # Create causal attention mask using modern API
+            mask_converter = AttentionMaskConverter(is_causal=True)
+            causal_mask = mask_converter.to_causal_4d(
+                batch_size=batch_size,
+                query_length=seq_length,
+                key_value_length=seq_length,
+                dtype=embeds_input.dtype,
+                device=embeds_input.device
             )
 
             # Attention
@@ -137,6 +146,7 @@ def compute_jacobian(
         return hidden_states[0, -1]
 
     # Compute Jacobian using PyTorch autograd
+    # Note: Will compute in model's dtype (BF16), which is sufficient for finding directions
     model.eval()
     with torch.enable_grad():
         jacobian = torch.autograd.functional.jacobian(
@@ -145,6 +155,10 @@ def compute_jacobian(
             vectorize=True,
             strategy="reverse-mode"
         ).squeeze()
+
+    # Upcast result to compute_dtype if requested (for numerical stability in SVD)
+    if compute_dtype != model_dtype:
+        jacobian = jacobian.to(compute_dtype)
 
     return jacobian, embeds
 
@@ -168,6 +182,9 @@ def extract_concept_from_jacobian(
     Returns:
         concept_vector: (hidden_dim,) concept direction
     """
+    # Ensure same dtype for matmul
+    embeds = embeds.to(jacobian.dtype)
+
     # Sum weighted by input embeddings: sum_i(J_i @ embed_i)
     # This gives us the effective transformation
     jacobian_weighted = torch.stack([

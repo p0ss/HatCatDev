@@ -40,18 +40,82 @@ def extract_activations(
     prompts: Sequence[str],
     device: str = "cuda",
     layer_idx: int = -1,
+    max_new_tokens: int = 20,
+    temperature_range: Tuple[float, float] = (0.3, 0.9),
+    batch_size: int = 4,
 ) -> np.ndarray:
-    """Extract mean pooled activations for each prompt."""
+    """
+    Extract activations from model generation, batched for efficiency.
+
+    Args:
+        model: Language model
+        tokenizer: Tokenizer
+        prompts: List of prompts to generate from
+        device: Device for inference
+        layer_idx: Model layer to extract activations from (-1 for last layer)
+        max_new_tokens: Max tokens to generate per prompt
+        temperature_range: (min_temp, max_temp) to vary across batches
+        batch_size: Number of prompts to process in parallel
+
+    Returns:
+        Array of activation vectors [n_prompts, hidden_dim]
+    """
     activations: List[np.ndarray] = []
     model.eval()
 
-    with torch.no_grad():
-        for prompt in prompts:
-            inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512).to(device)
-            outputs = model(**inputs, output_hidden_states=True, return_dict=True)
-            hidden_states = outputs.hidden_states[layer_idx]  # [1, seq_len, hidden_dim]
-            pooled = hidden_states.mean(dim=1)  # [1, hidden_dim]
-            activations.append(pooled.float().cpu().numpy()[0])
+    # Vary temperature across batches for diversity
+    min_temp, max_temp = temperature_range
+    n_batches = (len(prompts) + batch_size - 1) // batch_size
+    temperatures = np.linspace(min_temp, max_temp, n_batches)
+
+    with torch.inference_mode():
+        # Process prompts in batches
+        for batch_idx in range(0, len(prompts), batch_size):
+            batch_prompts = prompts[batch_idx:batch_idx + batch_size]
+            temp = temperatures[batch_idx // batch_size]
+
+            # Tokenize batch with padding
+            inputs = tokenizer(
+                batch_prompts,
+                return_tensors="pt",
+                padding=True,
+                truncation=True,
+                max_length=512
+            ).to(device)
+
+            # Generate with sampling
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=True,
+                temperature=float(temp),
+                output_hidden_states=True,
+                return_dict_in_generate=True,
+                pad_token_id=tokenizer.eos_token_id,
+            )
+
+            # Extract hidden states from generation
+            # outputs.hidden_states is tuple of tuples: (step1, step2, ...)
+            # Each step is tuple of layers: (layer0, layer1, ..., layerN)
+            # We want the target layer, pooled across all generation steps
+
+            # Process each sequence in the batch
+            for seq_idx in range(len(batch_prompts)):
+                # Collect target layer activations from all generation steps for this sequence
+                step_activations = []
+                for step_hidden in outputs.hidden_states:
+                    target_layer = step_hidden[layer_idx]  # [batch_size, seq_len, hidden_dim]
+                    # Extract this sequence
+                    seq_hidden = target_layer[seq_idx]  # [seq_len, hidden_dim]
+                    # Mean pool over sequence for this step
+                    step_pooled = seq_hidden.mean(dim=0)  # [hidden_dim]
+                    step_activations.append(step_pooled)
+
+                # Stack and mean pool across all steps
+                all_steps = torch.stack(step_activations, dim=0)  # [n_steps, hidden_dim]
+                final_pooled = all_steps.mean(dim=0)  # [hidden_dim]
+
+                activations.append(final_pooled.float().cpu().numpy())
 
     return np.array(activations)
 
@@ -127,17 +191,18 @@ def train_layer(
     n_test_neg: int = 20,
     device: str = "cuda",
     output_dir: Path | None = None,
-    save_text_samples: bool = True,
+    save_text_samples: bool = False,
     use_adaptive_training: bool = False,
-    train_text_probes: bool = True,
+    train_text_probes: bool = False,
+    validation_mode: str = 'falloff',
 ) -> Dict:
     """
     Train classifiers for a single SUMO abstraction layer.
 
     Args:
-        save_text_samples: If True, save generated text for text probe training
+        save_text_samples: If True, save generated text for text probe training (legacy)
         use_adaptive_training: If True, use DualAdaptiveTrainer for independent graduation
-        train_text_probes: If True, train text probes alongside activation probes
+        train_text_probes: If True, compute embedding centroids (legacy, not currently used)
     """
     print(f"\n{'=' * 80}")
     print(f"TRAINING LAYER {layer}")
@@ -167,16 +232,26 @@ def train_layer(
         from .dual_adaptive_trainer import DualAdaptiveTrainer
         adaptive_trainer = DualAdaptiveTrainer(
             activation_target_accuracy=0.95,
-            activation_baseline=n_train_pos,
-            activation_increment=1,
-            activation_max_samples=100,
+            activation_initial_samples=10,  # Start with 10 samples (quick win)
+            activation_first_increment=20,  # Add 20 more if fails (30 total, hits LLN)
+            activation_subsequent_increment=30,  # Add 30 per subsequent failure
+            activation_max_samples=200,  # Increased from 100 to allow more complex concepts
             text_target_accuracy=0.80,  # Not used anymore
-            text_baseline=n_train_pos,
-            text_increment=5,
+            text_initial_samples=10,
+            text_first_increment=20,
+            text_subsequent_increment=30,
             text_max_samples=200,
-            model=None,  # No longer needed
-            tokenizer=None,
+            model=model,  # Needed for validation
+            tokenizer=tokenizer,  # Needed for validation
             max_response_tokens=100,
+            validate_probes=True,  # Enable calibration validation
+            validation_mode=validation_mode,  # Validation mode (loose/falloff/strict)
+            validation_threshold=0.5,  # Min score to pass (for strict mode)
+            validation_layer_idx=15,  # Layer 15 for activations
+            validation_tier1_iterations=3,  # Strict tier (A-grade)
+            validation_tier2_iterations=6,  # High tier (B+-grade)
+            validation_tier3_iterations=9,  # Medium tier (B-grade)
+            validation_tier4_iterations=12,  # Relaxed tier (C+-grade, prevent long tail)
             train_activation=True,
             train_text=False,  # Disable TF-IDF text probe training
         )
@@ -245,20 +320,23 @@ def train_layer(
 
             if use_adaptive_training:
                 # === ADAPTIVE TRAINING MODE ===
-                # Extract activations for full pool
-                print(f"  Extracting activations...")
-                X_train = extract_activations(model, tokenizer, train_prompts, device)
-                X_test = extract_activations(model, tokenizer, test_prompts, device)
+                # Pass generation machinery to adaptive trainer for incremental sample generation
+                generation_config = {
+                    'concept': concept,
+                    'all_concepts': concept_map,
+                    'negative_pool': negative_pool,
+                    'test_negative_pool': test_negative_pool,
+                    'model': model,
+                    'tokenizer': tokenizer,
+                    'device': device,
+                }
 
-                # Run dual adaptive training (activation probes only)
-                adaptive_results = adaptive_trainer.train_concept(
+                # Run dual adaptive training with incremental sample generation
+                adaptive_results = adaptive_trainer.train_concept_incremental(
                     concept_name=concept_name,
-                    train_activations=X_train,
-                    train_labels=np.array(train_labels),
-                    test_activations=X_test,
+                    generation_config=generation_config,
+                    test_prompts=test_prompts,  # Generate test set once upfront
                     test_labels=np.array(test_labels),
-                    train_texts=None,  # Not used anymore
-                    test_texts=None,
                 )
 
                 # Save activation classifier
@@ -303,6 +381,17 @@ def train_layer(
                     "test_precision": activation_metrics.get('test_precision', 0.0),
                     "test_recall": activation_metrics.get('test_recall', 0.0),
                 }
+
+                # Add validation results if available
+                if 'validation' in activation_metrics:
+                    val = activation_metrics['validation']
+                    result.update({
+                        "validation_passed": bool(val['passed']),
+                        "validation_calibration_score": float(val['calibration_score']),
+                        "validation_target_rank": int(val['target_rank']),
+                        "validation_avg_other_rank": float(val['avg_other_rank']),
+                        "validation_expected_domain": str(val['expected_domain']),
+                    })
 
                 if train_text_probes:
                     result.update({
@@ -436,14 +525,15 @@ def train_sumo_classifiers(
     n_test_pos: int = 20,
     n_test_neg: int = 20,
     output_dir: Path | str = Path("results/sumo_classifiers"),
-    train_text_probes: bool = True,
+    train_text_probes: bool = False,
     use_adaptive_training: bool = False,
+    validation_mode: str = 'falloff',
 ) -> List[Dict]:
     """
     High-level entry point for training multiple layers.
 
     Args:
-        train_text_probes: If True, also train text probes after activation probes (or inline with adaptive)
+        train_text_probes: If True, compute embedding centroids (legacy, not currently used)
         use_adaptive_training: If True, use DualAdaptiveTrainer for independent graduation
     """
     output_dir = Path(output_dir)
@@ -454,6 +544,8 @@ def train_sumo_classifiers(
     print(f"Model: {model_name}")
     print(f"Layers: {list(layers)}")
     print(f"Training mode: {'Adaptive (independent graduation)' if use_adaptive_training else 'Fixed samples'}")
+    if use_adaptive_training:
+        print(f"Validation mode: {validation_mode.upper()}")
     if not use_adaptive_training:
         print(f"Training: {n_train_pos} pos + {n_train_neg} neg per concept")
     else:
@@ -466,7 +558,7 @@ def train_sumo_classifiers(
     tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
-        torch_dtype=torch.float32,
+        torch_dtype=torch.bfloat16,
         device_map=device,
         local_files_only=True,
     )
@@ -474,12 +566,16 @@ def train_sumo_classifiers(
 
     summaries = []
     for layer in layers:
+        # If using adaptive training, generate enough samples for all validation cycles
+        # Max samples = activation_max_samples = 200, so need 100 pos + 100 neg
+        train_samples = 100 if use_adaptive_training else n_train_pos
+
         summary = train_layer(
             layer=layer,
             model=model,
             tokenizer=tokenizer,
-            n_train_pos=n_train_pos,
-            n_train_neg=n_train_neg,
+            n_train_pos=train_samples,
+            n_train_neg=train_samples,
             n_test_pos=n_test_pos,
             n_test_neg=n_test_neg,
             device=device,
@@ -487,6 +583,7 @@ def train_sumo_classifiers(
             save_text_samples=train_text_probes and not use_adaptive_training,  # Only save if not adaptive
             use_adaptive_training=use_adaptive_training,
             train_text_probes=train_text_probes,
+            validation_mode=validation_mode,
         )
         summaries.append(summary)
 

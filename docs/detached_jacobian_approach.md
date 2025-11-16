@@ -97,16 +97,80 @@ The top singular vectors of this transformation represent the low-dimensional se
 - Code: https://github.com/jamesgolden1/equivalent-linear-LLMs
 - Notebook: https://github.com/jamesgolden1/equivalent-linear-LLMs/blob/main/notebooks/gemma_3/detached_jacobian_gemma_demo.ipynb
 
+## Empirical Validation Results (2025-11-13)
+
+### Alignment Test: Jacobian vs Trained Classifiers
+
+**Test Configuration**:
+- Compared Jacobian vectors with trained MLP classifiers (contrastive learning)
+- 5 Layer 0 concepts: Physical, Abstract, Process, Entity, Attribute
+- Model: gemma-3-4b-pt (BF16)
+- Jacobian: Layer 6, prompt "The concept of {X} means"
+- Classifiers: 3-layer MLP trained on definitions + hard negatives + relationships
+
+**Results**:
+- **Mean cosine similarity**: -0.0187 (near zero)
+- **Standard deviation**: 0.0160
+- **Range**: [-0.0377, 0.0052]
+- **Interpretation**: Jacobian and classifier directions are **orthogonal**
+
+### Key Findings
+
+1. **Different Objectives → Different Directions**
+   - **Jacobian**: Local sensitivity for *generation* ("how to complete this prompt")
+   - **Classifier**: Learned boundary for *discrimination* ("what distinguishes concept across contexts")
+
+2. **Jacobians are NOT "Ground Truth" for Classifiers**
+   - Near-zero alignment doesn't indicate poor classifier quality
+   - They measure fundamentally different aspects of concepts
+   - Context-dependent (single prompt) vs context-invariant (trained on many examples)
+
+3. **Validates Contrastive Training Approach**
+   - Hard negatives, relational examples, and definitional framing capture something Jacobians don't
+   - Classifiers learn discriminative boundaries suitable for steering
+   - Jacobians optimize for generation, not discrimination
+
+### Geometric Interpretation
+
+```
+Jacobian:    "Which direction nudges activations to generate concept-related text?"
+Classifier:  "Which direction separates concept from complements, neighbors, and noise?"
+```
+
+These are orthogonal questions → orthogonal answers are expected.
+
+### Implications for Use
+
+❌ **Don't use Jacobians for**:
+- Validating classifier quality (orthogonal objectives)
+- Training anchors or drift detection
+- "Ground truth" comparison
+
+✅ **Do use Jacobians for**:
+- Understanding local model geometry
+- Research into generation vs discrimination tradeoffs
+- Exploring context-dependent concept representations
+
+✅ **Trust the classifiers**:
+- Contrastive training with structured negatives is aligned with steering
+- Use classifier directions for both enhancement and suppression
+
+**See**: `results/jacobian_alignment_analysis.md` for full analysis
+
+---
+
 ## Recommendation
 
-**Short term**: Continue using CAV approach - it's fast, effective, and well-integrated
+**Current Status (2025-11-13)**: Jacobian approach validated but found orthogonal to steering objectives.
 
-**Medium term**: Complete Jacobian implementation as research tool to:
-- Validate that CAV directions align with true manifold structure
-- Measure effective dimensionality of our concepts
-- Benchmark steering precision improvements
+**Short term**: Continue using classifier-based approach - validated for steering applications
 
-**Long term**: If Jacobian shows significant improvement, consider hybrid approach:
-- Use Jacobian for high-precision concept extraction
-- Use CAV for rapid prototyping
-- Offer both methods with quality vs speed tradeoff
+**Research use only**: Jacobian implementation available for:
+- Local geometry analysis
+- Generation vs discrimination studies
+- Academic comparison with paper results
+
+**Not recommended for**:
+- Steering vector validation
+- Classifier quality assessment
+- Production steering applications

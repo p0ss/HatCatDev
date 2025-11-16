@@ -89,7 +89,7 @@ def generate_concept_embeddings(
             output_path = layer_dir / f"{concept_name}_centroid.npy"
             np.save(output_path, embedding_norm)
 
-        print(f"✓ Saved {len(concept_names)} embeddings to {layer_dir}")
+        print(f"✓ Saved {len(all_concepts)} embeddings to {layer_dir}")
 
 def main():
     parser = argparse.ArgumentParser(
