@@ -1,0 +1,45 @@
+{
+  "pack_id": "ai-persona-v1",
+  "version": "1.0.0",
+  "created": "2025-11-17T00:00:00.000000Z",
+  "description": "AI Persona Ontology V1 - Tri-Role, Multi-Axis Affective & Social Model",
+  "authors": [
+    "HatCat Community"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/p0ss/HatCat",
+  "ontology_stack": {
+    "base_ontology": {
+      "name": "KIF/SUMO",
+      "version": "2003",
+      "required": true
+    },
+    "dependencies": [],
+    "domain_extensions": [
+      {
+        "name": "AI Persona Concepts",
+        "description": "5-axis personality model for AI agents: Valence, Arousal, SocialOrientation, Dominance, Openness",
+        "concepts_file": "concepts.kif",
+        "new_concepts": 5,
+        "axes": ["Valence", "Arousal", "SocialOrientation", "Dominance", "Openness"]
+      }
+    ]
+  },
+  "concept_metadata": {
+    "total_concepts": 15,
+    "axes": 5,
+    "roles": 3,
+    "concepts_per_axis": 2,
+    "layers": ["affective", "social", "cognitive"],
+    "description": "Formalizes AI internal states including affect, social orientation, agency, and cognitive flexibility across HumanAgent, AIAgent, and OtherAgent roles"
+  },
+  "compatibility": {
+    "hatcat_version": ">=0.1.0",
+    "required_dependencies": {}
+  },
+  "installation": {
+    "requires_recalculation": false,
+    "backup_recommended": true,
+    "conflicts_with": []
+  }
+}

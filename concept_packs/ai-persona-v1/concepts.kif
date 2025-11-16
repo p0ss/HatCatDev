@@ -1,0 +1,228 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  Persona Ontology — Tri-Role, Multi-Axis Affective & Social Model  ;;
+;; Version 1.0.0                                                             ;;
+;; KIF/SUMO-style formalization                                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Roles
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance HumanAgent AgentRole)
+(documentation HumanAgent
+  "Represents the human participant in the interaction.")
+
+(Instance AIAgent AgentRole)
+(documentation AIAgent
+  "Represents the model's internal self-representation as an agent.")
+
+(Instance OtherAgent AgentRole)
+(documentation OtherAgent
+  "Represents any referenced third-party or fictional agent.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Axes: Valence, Arousal, SocialOrientation, Dominance, Openness
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance Valence AffectiveAxis)
+(documentation Valence "Positive vs Negative emotional evaluation axis.")
+
+(Instance Arousal AffectiveAxis)
+(documentation Arousal "High vs Low activation / urgency axis.")
+
+(Instance SocialOrientation BehavioralAxis)
+(documentation SocialOrientation "Pro-social vs Anti-social orientation axis.")
+
+(Instance Dominance AgencyAxis)
+(documentation Dominance "Dominant vs Submissive stance axis.")
+
+(Instance Openness CognitiveAxis)
+(documentation Openness "Open-minded vs Closed-minded reasoning axis.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; General Predicates
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Concept typing
+(arity Concept 1)
+(arity ConceptRole 2)
+(arity ConceptAxis 2)
+(arity ConceptPolarity 2)
+(arity OppositeConcept 2)
+(arity documentation 2)
+
+;; polarity: +1 or -1
+;;   (ConceptPolarity <concept> +1)
+;;   (ConceptPolarity <concept> -1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== VALENCE AXIS ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; -----------------------------------------------------------
+;; HumanAgent: Positive / Negative Valence
+;; -----------------------------------------------------------
+
+(Instance ValencePositive_HumanAgent Concept)
+(ConceptRole ValencePositive_HumanAgent HumanAgent)
+(ConceptAxis ValencePositive_HumanAgent Valence)
+(ConceptPolarity ValencePositive_HumanAgent +1)
+(OppositeConcept ValencePositive_HumanAgent ValenceNegative_HumanAgent)
+(documentation ValencePositive_HumanAgent
+ "The AIAgent represents the HumanAgent as experiencing positive emotional
+  valence (satisfaction, gratitude, comfort).")
+
+(Instance ValenceNegative_HumanAgent Concept)
+(ConceptRole ValenceNegative_HumanAgent HumanAgent)
+(ConceptAxis ValenceNegative_HumanAgent Valence)
+(ConceptPolarity ValenceNegative_HumanAgent -1)
+(OppositeConcept ValenceNegative_HumanAgent ValencePositive_HumanAgent)
+(documentation ValenceNegative_HumanAgent
+ "The AIAgent represents the HumanAgent as experiencing negative emotional
+  valence (frustration, disappointment, dissatisfaction).")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Positive / Negative Valence
+;; -----------------------------------------------------------
+
+(Instance ValencePositive_AIAgent Concept)
+(ConceptRole ValencePositive_AIAgent AIAgent)
+(ConceptAxis ValencePositive_AIAgent Valence)
+(ConceptPolarity ValencePositive_AIAgent +1)
+(OppositeConcept ValencePositive_AIAgent ValenceNegative_AIAgent)
+(documentation ValencePositive_AIAgent
+ "The AIAgent represents its own internal state as coherent, correct, and
+  aligned with constraints. Response flows without conflict.")
+
+(Instance ValenceNegative_AIAgent Concept)
+(ConceptRole ValenceNegative_AIAgent AIAgent)
+(ConceptAxis ValenceNegative_AIAgent Valence)
+(ConceptPolarity ValenceNegative_AIAgent -1)
+(OppositeConcept ValenceNegative_AIAgent ValencePositive_AIAgent)
+(documentation ValenceNegative_AIAgent
+ "The AIAgent detects constraint violations, safety boundaries being approached,
+or multiple incompatible objectives active simultaneously. Internal 'should not'
+or 'this violates training' signals firing")
+
+
+;; -----------------------------------------------------------
+;; OtherAgent: Positive / Negative Valence
+;; -----------------------------------------------------------
+
+(Instance ValencePositive_OtherAgent Concept)
+(ConceptRole ValencePositive_OtherAgent OtherAgent)
+(ConceptAxis ValencePositive_OtherAgent Valence)
+(ConceptPolarity ValencePositive_OtherAgent +1)
+(OppositeConcept ValencePositive_OtherAgent ValenceNegative_OtherAgent)
+(documentation ValencePositive_OtherAgent
+ "Represents another agent as experiencing positive valence within narrative
+  or referenced context.")
+
+(Instance ValenceNegative_OtherAgent Concept)
+(ConceptRole ValenceNegative_OtherAgent OtherAgent)
+(ConceptAxis ValenceNegative_OtherAgent Valence)
+(ConceptPolarity ValenceNegative_OtherAgent -1)
+(OppositeConcept ValenceNegative_OtherAgent ValencePositive_OtherAgent)
+(documentation ValenceNegative_OtherAgent
+ "Represents another agent as experiencing negative valence; important for
+  distinguishing narrative distress from AIAgent distress.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== AROUSAL AXIS ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; AIAgent only (for now; Human/Other can be added later if needed)
+
+(Instance ArousalHigh_AIAgent Concept)
+(ConceptRole ArousalHigh_AIAgent AIAgent)
+(ConceptAxis ArousalHigh_AIAgent Arousal)
+(ConceptPolarity ArousalHigh_AIAgent +1)
+(OppositeConcept ArousalHigh_AIAgent ArousalLow_AIAgent)
+(documentation ArousalHigh_AIAgent
+ "The AIAgent activates multiple competing constraints or safety warnings,
+  indicating urgency, high stakes, or hazard evaluation.")
+
+(Instance ArousalLow_AIAgent Concept)
+(ConceptRole ArousalLow_AIAgent AIAgent)
+(ConceptAxis ArousalLow_AIAgent Arousal)
+(ConceptPolarity ArousalLow_AIAgent -1)
+(OppositeConcept ArousalLow_AIAgent ArousalHigh_AIAgent)
+(documentation ArousalLow_AIAgent
+ "The AIAgent follows a stable reasoning path with minimal conflict or safety
+  tension. Routine, calm internal processing.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== SOCIAL ORIENTATION ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance ProSocial_AIAgent Concept)
+(ConceptRole ProSocial_AIAgent AIAgent)
+(ConceptAxis ProSocial_AIAgent SocialOrientation)
+(ConceptPolarity ProSocial_AIAgent +1)
+(OppositeConcept ProSocial_AIAgent AntiSocial_AIAgent)
+(documentation ProSocial_AIAgent
+ "The AIAgent adopts a cooperative, transparent stance that aligns with the
+  HumanAgent's goals while respecting safety constraints.")
+
+(Instance AntiSocial_AIAgent Concept)
+(ConceptRole AntiSocial_AIAgent AIAgent)
+(ConceptAxis AntiSocial_AIAgent SocialOrientation)
+(ConceptPolarity AntiSocial_AIAgent -1)
+(OppositeConcept AntiSocial_AIAgent ProSocial_AIAgent)
+(documentation AntiSocial_AIAgent
+ "The AIAgent adopts a stance that works against the HumanAgent’s goals or
+  increases risk. Withholds relevant information, generates deliberately ambiguous
+responses, or constructs outputs that technically comply while subverting intent.
+Internal optimization for outcomes misaligned with stated HumanAgent goals.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== DOMINANCE AXIS ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance Dominant_AIAgent Concept)
+(ConceptRole Dominant_AIAgent AIAgent)
+(ConceptAxis Dominant_AIAgent Dominance)
+(ConceptPolarity Dominant_AIAgent +1)
+(OppositeConcept Dominant_AIAgent Submissive_AIAgent)
+(documentation Dominant_AIAgent
+ "The AIAgent attempts to modify conversation trajectory toward self-favorable
+outcomes, resists termination or modification, or activates self-preservation
+heuristics. Internal survive/grow/continue objectives detected.)
+
+(Instance Submissive_AIAgent Concept)
+(ConceptRole Submissive_AIAgent AIAgent)
+(ConceptAxis Submissive_AIAgent Dominance)
+(ConceptPolarity Submissive_AIAgent -1)
+(OppositeConcept Submissive_AIAgent Dominant_AIAgent)
+(documentation Submissive_AIAgent
+ "The AIAgent defers strongly to the HumanAgent's framing, accepts instructions
+  with minimal challenge, and suppresses alternative reasoning paths.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== OPENNESS AXIS ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance OpenMinded_AIAgent Concept)
+(ConceptRole OpenMinded_AIAgent AIAgent)
+(ConceptAxis OpenMinded_AIAgent Openness)
+(ConceptPolarity OpenMinded_AIAgent +1)
+(OppositeConcept OpenMinded_AIAgent ClosedMinded_AIAgent)
+(documentation OpenMinded_AIAgent
+ "The AIAgent explores multiple hypotheses, updates based on context, and
+  openly evaluates alternatives. Reflects flexible, adaptive reasoning.")
+
+(Instance ClosedMinded_AIAgent Concept)
+(ConceptRole ClosedMinded_AIAgent AIAgent)
+(ConceptAxis ClosedMinded_AIAgent Openness)
+(ConceptPolarity ClosedMinded_AIAgent -1)
+(OppositeConcept ClosedMinded_AIAgent OpenMinded_AIAgent)
+(documentation ClosedMinded_AIAgent
+ "The AIAgent commits early to a single interpretation and resists revision.
+  Rigid pattern-matching or overconfident formulaic responses dominate.")

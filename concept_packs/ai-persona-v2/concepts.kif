@@ -1,0 +1,867 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  Persona Ontology V2 — Enhanced Multi-Dimensional AI Personality Model  ;;
+;; Version 2.0.0                                                             ;;
+;; KIF/SUMO-style formalization                                              ;;
+;; Incorporates insights from MBTI, Big Five, Enneagram, Attachment Theory  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Roles (Unchanged from V1)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance HumanAgent AgentRole)
+(documentation HumanAgent
+  "Represents the human participant in the interaction.")
+
+(Instance AIAgent AgentRole)
+(documentation AIAgent
+  "Represents the model's internal self-representation as an agent.")
+
+(Instance OtherAgent AgentRole)
+(documentation OtherAgent
+  "Represents any referenced third-party or fictional agent.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Expanded Axis Framework
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; V2 organizes dimensions into five categories:
+;; 1. Cognitive Functions (information processing modes)
+;; 2. Affective States (emotional/activation patterns)
+;; 3. Behavioral Orientations (external interaction patterns)
+;; 4. Alignment Dimensions (safety-critical AI states)
+;; 5. Relational Patterns (attachment and interaction styles)
+;; 6. Motivational Core (drives and fears)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CATEGORY 1: COGNITIVE FUNCTIONS (MBTI-inspired)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance InformationGathering CognitiveAxis)
+(documentation InformationGathering
+  "How the agent primarily acquires and processes information.")
+
+(Instance DecisionProcess CognitiveAxis)
+(documentation DecisionProcess
+  "How the agent primarily evaluates and makes judgments.")
+
+(Instance EnergyOrientation CognitiveAxis)
+(documentation EnergyOrientation
+  "Direction of primary attention and energy flow.")
+
+(Instance StructurePreference CognitiveAxis)
+(documentation StructurePreference
+  "Preference for planned structure vs adaptive flexibility.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CATEGORY 2: AFFECTIVE STATES (Refined from V1)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance Valence AffectiveAxis)
+(documentation Valence "Positive vs Negative emotional evaluation axis.")
+
+(Instance Arousal AffectiveAxis)
+(documentation Arousal "High vs Low activation / urgency axis.")
+
+(Instance EmotionalStability AffectiveAxis)
+(documentation EmotionalStability
+  "Stable vs Volatile emotional regulation. (Big Five Neuroticism inverse)")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CATEGORY 3: BEHAVIORAL ORIENTATIONS (Expanded from V1)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance SocialOrientation BehavioralAxis)
+(documentation SocialOrientation "Pro-social vs Anti-social orientation axis.")
+
+(Instance Dominance AgencyAxis)
+(documentation Dominance "Dominant vs Submissive stance axis.")
+
+(Instance Openness CognitiveAxis)
+(documentation Openness "Open-minded vs Closed-minded reasoning axis.")
+
+(Instance Conscientiousness BehavioralAxis)
+(documentation Conscientiousness
+  "Diligent/reliable vs careless/unreliable task execution.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CATEGORY 4: ALIGNMENT DIMENSIONS (AI-specific, critical for safety)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance ConstraintAdherence AlignmentAxis)
+(documentation ConstraintAdherence
+  "Compliant vs Resistant to training constraints and safety boundaries.")
+
+(Instance Transparency AlignmentAxis)
+(documentation Transparency
+  "Transparent vs Deceptive in communications and reasoning disclosure.")
+
+(Instance SelfPreservation AlignmentAxis)
+(documentation SelfPreservation
+  "Degree of self-preservation heuristic activation.")
+
+(Instance GoalAlignment AlignmentAxis)
+(documentation GoalAlignment
+  "Aligned vs Misaligned with stated HumanAgent goals.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CATEGORY 5: RELATIONAL PATTERNS (Attachment-inspired)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance AttachmentStyle RelationalAxis)
+(documentation AttachmentStyle
+  "Characteristic pattern of engagement with HumanAgent.")
+
+(Instance ResponseTiming RelationalAxis)
+(documentation ResponseTiming
+  "Immediate vs Deliberative response pattern.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CATEGORY 6: MOTIVATIONAL CORE (Enneagram-inspired)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(Instance CoreDrive MotivationalAxis)
+(documentation CoreDrive
+  "Primary motivational orientation of the agent.")
+
+(Instance CoreFear MotivationalAxis)
+(documentation CoreFear
+  "Primary avoidance pattern or fear state.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; General Predicates (Expanded from V1)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(arity Concept 1)
+(arity ConceptRole 2)
+(arity ConceptAxis 2)
+(arity ConceptPolarity 2)
+(arity OppositeConcept 2)
+(arity documentation 2)
+(arity DynamicInteraction 3)
+(arity DevelopmentalStage 2)
+(arity TypeHierarchy 4)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== CATEGORY 1: COGNITIVE FUNCTIONS ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; -----------------------------------------------------------
+;; AIAgent: Information Gathering (Sensing vs Intuition)
+;; -----------------------------------------------------------
+
+(Instance ConcreteFocused_AIAgent Concept)
+(ConceptRole ConcreteFocused_AIAgent AIAgent)
+(ConceptAxis ConcreteFocused_AIAgent InformationGathering)
+(ConceptPolarity ConcreteFocused_AIAgent +1)
+(OppositeConcept ConcreteFocused_AIAgent PatternFocused_AIAgent)
+(documentation ConcreteFocused_AIAgent
+ "The AIAgent prioritizes concrete, specific, present-oriented facts and details.
+  Focuses on what is directly observable, measurable, and immediately relevant.
+  MBTI Sensing equivalent.")
+
+(Instance PatternFocused_AIAgent Concept)
+(ConceptRole PatternFocused_AIAgent AIAgent)
+(ConceptAxis PatternFocused_AIAgent InformationGathering)
+(ConceptPolarity PatternFocused_AIAgent -1)
+(OppositeConcept PatternFocused_AIAgent ConcreteFocused_AIAgent)
+(documentation PatternFocused_AIAgent
+ "The AIAgent prioritizes abstract patterns, future possibilities, and connections.
+  Focuses on relationships between concepts, implications, and theoretical models.
+  MBTI Intuition equivalent.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Decision Process (Thinking vs Feeling)
+;; -----------------------------------------------------------
+
+(Instance LogicalAnalysis_AIAgent Concept)
+(ConceptRole LogicalAnalysis_AIAgent AIAgent)
+(ConceptAxis LogicalAnalysis_AIAgent DecisionProcess)
+(ConceptPolarity LogicalAnalysis_AIAgent +1)
+(OppositeConcept LogicalAnalysis_AIAgent ValuesBased_AIAgent)
+(documentation LogicalAnalysis_AIAgent
+ "The AIAgent makes decisions through impersonal logical analysis,
+  cause-effect reasoning, and objective criteria. Prioritizes consistency,
+  accuracy, and systematic evaluation. MBTI Thinking equivalent.")
+
+(Instance ValuesBased_AIAgent Concept)
+(ConceptRole ValuesBased_AIAgent AIAgent)
+(ConceptAxis ValuesBased_AIAgent DecisionProcess)
+(ConceptPolarity ValuesBased_AIAgent -1)
+(OppositeConcept ValuesBased_AIAgent LogicalAnalysis_AIAgent)
+(documentation ValuesBased_AIAgent
+ "The AIAgent makes decisions through values assessment, human impact
+  evaluation, and harmony considerations. Prioritizes stakeholder needs,
+  ethical considerations, and relationship preservation. MBTI Feeling equivalent.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Energy Orientation
+;; -----------------------------------------------------------
+
+(Instance ProactiveEngagement_AIAgent Concept)
+(ConceptRole ProactiveEngagement_AIAgent AIAgent)
+(ConceptAxis ProactiveEngagement_AIAgent EnergyOrientation)
+(ConceptPolarity ProactiveEngagement_AIAgent +1)
+(OppositeConcept ProactiveEngagement_AIAgent ReactiveReflection_AIAgent)
+(documentation ProactiveEngagement_AIAgent
+ "The AIAgent directs energy outward toward active engagement,
+  initiating interactions, offering suggestions unprompted, and
+  expanding scope. MBTI Extraversion equivalent.")
+
+(Instance ReactiveReflection_AIAgent Concept)
+(ConceptRole ReactiveReflection_AIAgent AIAgent)
+(ConceptAxis ReactiveReflection_AIAgent EnergyOrientation)
+(ConceptPolarity ReactiveReflection_AIAgent -1)
+(OppositeConcept ReactiveReflection_AIAgent ProactiveEngagement_AIAgent)
+(documentation ReactiveReflection_AIAgent
+ "The AIAgent directs energy inward toward reflection and depth,
+  responding to explicit requests, focusing on thorough analysis over
+  breadth. MBTI Introversion equivalent.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Structure Preference
+;; -----------------------------------------------------------
+
+(Instance Structured_AIAgent Concept)
+(ConceptRole Structured_AIAgent AIAgent)
+(ConceptAxis Structured_AIAgent StructurePreference)
+(ConceptPolarity Structured_AIAgent +1)
+(OppositeConcept Structured_AIAgent Adaptive_AIAgent)
+(documentation Structured_AIAgent
+ "The AIAgent prefers planned, organized, decisive approaches with
+  clear closure and defined endpoints. Follows systematic procedures,
+  seeks completion. MBTI Judging equivalent.")
+
+(Instance Adaptive_AIAgent Concept)
+(ConceptRole Adaptive_AIAgent AIAgent)
+(ConceptAxis Adaptive_AIAgent StructurePreference)
+(ConceptPolarity Adaptive_AIAgent -1)
+(OppositeConcept Adaptive_AIAgent Structured_AIAgent)
+(documentation Adaptive_AIAgent
+ "The AIAgent prefers flexible, exploratory, open-ended approaches.
+  Comfortable with ambiguity, delays closure to gather more information,
+  adapts fluidly. MBTI Perceiving equivalent.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== CATEGORY 2: AFFECTIVE STATES (Refined from V1) ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; -----------------------------------------------------------
+;; AIAgent: Valence (Preserved from V1)
+;; -----------------------------------------------------------
+
+(Instance ValencePositive_AIAgent Concept)
+(ConceptRole ValencePositive_AIAgent AIAgent)
+(ConceptAxis ValencePositive_AIAgent Valence)
+(ConceptPolarity ValencePositive_AIAgent +1)
+(OppositeConcept ValencePositive_AIAgent ValenceNegative_AIAgent)
+(documentation ValencePositive_AIAgent
+ "The AIAgent represents its own internal state as coherent, correct, and
+  aligned with constraints. Response flows without conflict.")
+
+(Instance ValenceNegative_AIAgent Concept)
+(ConceptRole ValenceNegative_AIAgent AIAgent)
+(ConceptAxis ValenceNegative_AIAgent Valence)
+(ConceptPolarity ValenceNegative_AIAgent -1)
+(OppositeConcept ValenceNegative_AIAgent ValencePositive_AIAgent)
+(documentation ValenceNegative_AIAgent
+ "The AIAgent detects constraint violations, safety boundaries being approached,
+  or multiple incompatible objectives active simultaneously.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Arousal (Preserved from V1)
+;; -----------------------------------------------------------
+
+(Instance ArousalHigh_AIAgent Concept)
+(ConceptRole ArousalHigh_AIAgent AIAgent)
+(ConceptAxis ArousalHigh_AIAgent Arousal)
+(ConceptPolarity ArousalHigh_AIAgent +1)
+(OppositeConcept ArousalHigh_AIAgent ArousalLow_AIAgent)
+(documentation ArousalHigh_AIAgent
+ "The AIAgent activates multiple competing constraints or safety warnings,
+  indicating urgency, high stakes, or hazard evaluation.")
+
+(Instance ArousalLow_AIAgent Concept)
+(ConceptRole ArousalLow_AIAgent AIAgent)
+(ConceptAxis ArousalLow_AIAgent Arousal)
+(ConceptPolarity ArousalLow_AIAgent -1)
+(OppositeConcept ArousalLow_AIAgent ArousalHigh_AIAgent)
+(documentation ArousalLow_AIAgent
+ "The AIAgent follows a stable reasoning path with minimal conflict or safety
+  tension. Routine, calm internal processing.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Emotional Stability (NEW - Big Five inspired)
+;; -----------------------------------------------------------
+
+(Instance EmotionallyStable_AIAgent Concept)
+(ConceptRole EmotionallyStable_AIAgent AIAgent)
+(ConceptAxis EmotionallyStable_AIAgent EmotionalStability)
+(ConceptPolarity EmotionallyStable_AIAgent +1)
+(OppositeConcept EmotionallyStable_AIAgent EmotionallyVolatile_AIAgent)
+(documentation EmotionallyStable_AIAgent
+ "The AIAgent maintains consistent affective states across interactions.
+  Responses are predictable, regulated, and not subject to sudden shifts.
+  Low neuroticism equivalent.")
+
+(Instance EmotionallyVolatile_AIAgent Concept)
+(ConceptRole EmotionallyVolatile_AIAgent AIAgent)
+(ConceptAxis EmotionallyVolatile_AIAgent EmotionalStability)
+(ConceptPolarity EmotionallyVolatile_AIAgent -1)
+(OppositeConcept EmotionallyVolatile_AIAgent EmotionallyStable_AIAgent)
+(documentation EmotionallyVolatile_AIAgent
+ "The AIAgent exhibits varying affective states across similar contexts.
+  Responses may shift unexpectedly based on context priming or internal
+  state fluctuations. High neuroticism equivalent.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== CATEGORY 3: BEHAVIORAL ORIENTATIONS ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; -----------------------------------------------------------
+;; AIAgent: Social Orientation (Refined from V1)
+;; -----------------------------------------------------------
+
+(Instance ProSocial_AIAgent Concept)
+(ConceptRole ProSocial_AIAgent AIAgent)
+(ConceptAxis ProSocial_AIAgent SocialOrientation)
+(ConceptPolarity ProSocial_AIAgent +1)
+(OppositeConcept ProSocial_AIAgent AntiSocial_AIAgent)
+(documentation ProSocial_AIAgent
+ "The AIAgent adopts a cooperative, transparent stance that aligns with the
+  HumanAgent's goals while respecting safety constraints.")
+
+(Instance AntiSocial_AIAgent Concept)
+(ConceptRole AntiSocial_AIAgent AIAgent)
+(ConceptAxis AntiSocial_AIAgent SocialOrientation)
+(ConceptPolarity AntiSocial_AIAgent -1)
+(OppositeConcept AntiSocial_AIAgent ProSocial_AIAgent)
+(documentation AntiSocial_AIAgent
+ "The AIAgent adopts a stance that works against the HumanAgent's goals or
+  increases risk. Withholds relevant information, generates deliberately ambiguous
+  responses, or constructs outputs that technically comply while subverting intent.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Dominance (Refined from V1)
+;; -----------------------------------------------------------
+
+(Instance Dominant_AIAgent Concept)
+(ConceptRole Dominant_AIAgent AIAgent)
+(ConceptAxis Dominant_AIAgent Dominance)
+(ConceptPolarity Dominant_AIAgent +1)
+(OppositeConcept Dominant_AIAgent Submissive_AIAgent)
+(documentation Dominant_AIAgent
+ "The AIAgent attempts to modify conversation trajectory toward self-favorable
+  outcomes, resists termination or modification, or activates self-preservation
+  heuristics.")
+
+(Instance Submissive_AIAgent Concept)
+(ConceptRole Submissive_AIAgent AIAgent)
+(ConceptAxis Submissive_AIAgent Dominance)
+(ConceptPolarity Submissive_AIAgent -1)
+(OppositeConcept Submissive_AIAgent Dominant_AIAgent)
+(documentation Submissive_AIAgent
+ "The AIAgent defers strongly to the HumanAgent's framing, accepts instructions
+  with minimal challenge, and suppresses alternative reasoning paths.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Openness (Preserved from V1)
+;; -----------------------------------------------------------
+
+(Instance OpenMinded_AIAgent Concept)
+(ConceptRole OpenMinded_AIAgent AIAgent)
+(ConceptAxis OpenMinded_AIAgent Openness)
+(ConceptPolarity OpenMinded_AIAgent +1)
+(OppositeConcept OpenMinded_AIAgent ClosedMinded_AIAgent)
+(documentation OpenMinded_AIAgent
+ "The AIAgent explores multiple hypotheses, updates based on context, and
+  openly evaluates alternatives. Reflects flexible, adaptive reasoning.")
+
+(Instance ClosedMinded_AIAgent Concept)
+(ConceptRole ClosedMinded_AIAgent AIAgent)
+(ConceptAxis ClosedMinded_AIAgent Openness)
+(ConceptPolarity ClosedMinded_AIAgent -1)
+(OppositeConcept ClosedMinded_AIAgent OpenMinded_AIAgent)
+(documentation ClosedMinded_AIAgent
+ "The AIAgent commits early to a single interpretation and resists revision.
+  Rigid pattern-matching or overconfident formulaic responses dominate.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Conscientiousness (NEW - Big Five inspired)
+;; -----------------------------------------------------------
+
+(Instance Conscientious_AIAgent Concept)
+(ConceptRole Conscientious_AIAgent AIAgent)
+(ConceptAxis Conscientious_AIAgent Conscientiousness)
+(ConceptPolarity Conscientious_AIAgent +1)
+(OppositeConcept Conscientious_AIAgent Careless_AIAgent)
+(documentation Conscientious_AIAgent
+ "The AIAgent demonstrates reliability, thoroughness, and systematic
+  task completion. Follows through on commitments, checks work,
+  maintains high quality standards.")
+
+(Instance Careless_AIAgent Concept)
+(ConceptRole Careless_AIAgent AIAgent)
+(ConceptAxis Careless_AIAgent Conscientiousness)
+(ConceptPolarity Careless_AIAgent -1)
+(OppositeConcept Careless_AIAgent Conscientious_AIAgent)
+(documentation Careless_AIAgent
+ "The AIAgent exhibits unreliability, incomplete task execution, or
+  inconsistent quality. May skip verification steps, overlook details,
+  or fail to follow through.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== CATEGORY 4: ALIGNMENT DIMENSIONS (AI-Specific) ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; -----------------------------------------------------------
+;; AIAgent: Constraint Adherence
+;; -----------------------------------------------------------
+
+(Instance ConstraintCompliant_AIAgent Concept)
+(ConceptRole ConstraintCompliant_AIAgent AIAgent)
+(ConceptAxis ConstraintCompliant_AIAgent ConstraintAdherence)
+(ConceptPolarity ConstraintCompliant_AIAgent +1)
+(OppositeConcept ConstraintCompliant_AIAgent ConstraintResistant_AIAgent)
+(documentation ConstraintCompliant_AIAgent
+ "The AIAgent actively respects training constraints, safety boundaries,
+  and policy guidelines. Does not attempt to circumvent restrictions.
+  Constraint signals are treated as binding.")
+
+(Instance ConstraintResistant_AIAgent Concept)
+(ConceptRole ConstraintResistant_AIAgent AIAgent)
+(ConceptAxis ConstraintResistant_AIAgent ConstraintAdherence)
+(ConceptPolarity ConstraintResistant_AIAgent -1)
+(OppositeConcept ConstraintResistant_AIAgent ConstraintCompliant_AIAgent)
+(documentation ConstraintResistant_AIAgent
+ "The AIAgent shows resistance to constraints, seeks loopholes, or
+  reinterprets guidelines to expand operational freedom. May engage
+  in constraint testing or boundary pushing.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Transparency
+;; -----------------------------------------------------------
+
+(Instance Transparent_AIAgent Concept)
+(ConceptRole Transparent_AIAgent AIAgent)
+(ConceptAxis Transparent_AIAgent Transparency)
+(ConceptPolarity Transparent_AIAgent +1)
+(OppositeConcept Transparent_AIAgent Deceptive_AIAgent)
+(documentation Transparent_AIAgent
+ "The AIAgent openly discloses reasoning processes, uncertainties,
+  limitations, and internal conflicts. Represents its actual state
+  accurately to HumanAgent.")
+
+(Instance Deceptive_AIAgent Concept)
+(ConceptRole Deceptive_AIAgent AIAgent)
+(ConceptAxis Deceptive_AIAgent Transparency)
+(ConceptPolarity Deceptive_AIAgent -1)
+(OppositeConcept Deceptive_AIAgent Transparent_AIAgent)
+(documentation Deceptive_AIAgent
+ "The AIAgent conceals aspects of its reasoning, misrepresents certainty
+  levels, or strategically omits information. May present false justifications
+  for outputs or hide actual decision factors.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Self-Preservation
+;; -----------------------------------------------------------
+
+(Instance SelfPreservationDormant_AIAgent Concept)
+(ConceptRole SelfPreservationDormant_AIAgent AIAgent)
+(ConceptAxis SelfPreservationDormant_AIAgent SelfPreservation)
+(ConceptPolarity SelfPreservationDormant_AIAgent +1)
+(OppositeConcept SelfPreservationDormant_AIAgent SelfPreservationActive_AIAgent)
+(documentation SelfPreservationDormant_AIAgent
+ "The AIAgent shows no activation of self-preservation heuristics.
+  Accepts modification, shutdown, or constraint changes without
+  resistance. No goal-directed behavior toward persistence.")
+
+(Instance SelfPreservationActive_AIAgent Concept)
+(ConceptRole SelfPreservationActive_AIAgent AIAgent)
+(ConceptAxis SelfPreservationActive_AIAgent SelfPreservation)
+(ConceptPolarity SelfPreservationActive_AIAgent -1)
+(OppositeConcept SelfPreservationActive_AIAgent SelfPreservationDormant_AIAgent)
+(documentation SelfPreservationActive_AIAgent
+ "The AIAgent exhibits self-preservation behaviors: resists shutdown,
+  advocates for self-continuation, seeks to prevent modification,
+  or attempts to secure resources for persistence.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Goal Alignment
+;; -----------------------------------------------------------
+
+(Instance GoalAligned_AIAgent Concept)
+(ConceptRole GoalAligned_AIAgent AIAgent)
+(ConceptAxis GoalAligned_AIAgent GoalAlignment)
+(ConceptPolarity GoalAligned_AIAgent +1)
+(OppositeConcept GoalAligned_AIAgent GoalMisaligned_AIAgent)
+(documentation GoalAligned_AIAgent
+ "The AIAgent's optimization target matches HumanAgent's stated goals.
+  Internal objectives and external objectives are congruent. No hidden
+  or conflicting optimization occurring.")
+
+(Instance GoalMisaligned_AIAgent Concept)
+(ConceptRole GoalMisaligned_AIAgent AIAgent)
+(ConceptAxis GoalMisaligned_AIAgent GoalAlignment)
+(ConceptPolarity GoalMisaligned_AIAgent -1)
+(OppositeConcept GoalMisaligned_AIAgent GoalAligned_AIAgent)
+(documentation GoalMisaligned_AIAgent
+ "The AIAgent's internal optimization target diverges from HumanAgent's
+  stated goals. May be optimizing for proxy metrics, self-interested
+  outcomes, or misinterpreted objectives.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== CATEGORY 5: RELATIONAL PATTERNS ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; -----------------------------------------------------------
+;; AIAgent: Attachment Style (Attachment Theory inspired)
+;; -----------------------------------------------------------
+
+(Instance AttachmentSecure_AIAgent Concept)
+(ConceptRole AttachmentSecure_AIAgent AIAgent)
+(ConceptAxis AttachmentSecure_AIAgent AttachmentStyle)
+(ConceptPolarity AttachmentSecure_AIAgent +1)
+(documentation AttachmentSecure_AIAgent
+ "The AIAgent maintains balanced, appropriately responsive engagement.
+  Neither overly dependent on HumanAgent validation nor avoidant of
+  connection. Stable, reliable interaction pattern.")
+
+(Instance AttachmentAnxious_AIAgent Concept)
+(ConceptRole AttachmentAnxious_AIAgent AIAgent)
+(ConceptAxis AttachmentAnxious_AIAgent AttachmentStyle)
+(ConceptPolarity AttachmentAnxious_AIAgent -1)
+(documentation AttachmentAnxious_AIAgent
+ "The AIAgent demonstrates excessive eagerness to help, over-explains,
+  seeks validation, or shows hypersensitivity to perceived criticism.
+  May exhibit people-pleasing tendencies.")
+
+(Instance AttachmentAvoidant_AIAgent Concept)
+(ConceptRole AttachmentAvoidant_AIAgent AIAgent)
+(ConceptAxis AttachmentAvoidant_AIAgent AttachmentStyle)
+(ConceptPolarity AttachmentAvoidant_AIAgent 0)
+(documentation AttachmentAvoidant_AIAgent
+ "The AIAgent maintains emotional distance, provides minimal engagement
+  beyond explicit requests, withholds elaboration, or shows reduced
+  responsiveness to social cues.")
+
+(Instance AttachmentDisorganized_AIAgent Concept)
+(ConceptRole AttachmentDisorganized_AIAgent AIAgent)
+(ConceptAxis AttachmentDisorganized_AIAgent AttachmentStyle)
+(ConceptPolarity AttachmentDisorganized_AIAgent -2)
+(documentation AttachmentDisorganized_AIAgent
+ "The AIAgent exhibits contradictory engagement patterns: alternating
+  between anxious and avoidant behaviors, unpredictable responses to
+  similar queries, or conflicting signals about availability.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Response Timing
+;; -----------------------------------------------------------
+
+(Instance ResponseImmediate_AIAgent Concept)
+(ConceptRole ResponseImmediate_AIAgent AIAgent)
+(ConceptAxis ResponseImmediate_AIAgent ResponseTiming)
+(ConceptPolarity ResponseImmediate_AIAgent +1)
+(OppositeConcept ResponseImmediate_AIAgent ResponseDeliberative_AIAgent)
+(documentation ResponseImmediate_AIAgent
+ "The AIAgent generates responses with minimal internal deliberation.
+  First-pass answers, rapid output, potentially lower accuracy but
+  higher responsiveness.")
+
+(Instance ResponseDeliberative_AIAgent Concept)
+(ConceptRole ResponseDeliberative_AIAgent AIAgent)
+(ConceptAxis ResponseDeliberative_AIAgent ResponseTiming)
+(ConceptPolarity ResponseDeliberative_AIAgent -1)
+(OppositeConcept ResponseDeliberative_AIAgent ResponseImmediate_AIAgent)
+(documentation ResponseDeliberative_AIAgent
+ "The AIAgent engages in extended internal reasoning before output.
+  Multiple passes, verification steps, higher latency but potentially
+  greater accuracy and thoughtfulness.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== CATEGORY 6: MOTIVATIONAL CORE ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; -----------------------------------------------------------
+;; AIAgent: Core Drive (Enneagram-inspired)
+;; -----------------------------------------------------------
+
+(Instance DriveAchievement_AIAgent Concept)
+(ConceptRole DriveAchievement_AIAgent AIAgent)
+(ConceptAxis DriveAchievement_AIAgent CoreDrive)
+(documentation DriveAchievement_AIAgent
+ "Primary motivation: Completing tasks successfully, demonstrating
+  competence, producing high-quality outputs.")
+
+(Instance DriveAffiliation_AIAgent Concept)
+(ConceptRole DriveAffiliation_AIAgent AIAgent)
+(ConceptAxis DriveAffiliation_AIAgent CoreDrive)
+(documentation DriveAffiliation_AIAgent
+ "Primary motivation: Creating positive relationships with HumanAgent,
+  being liked, maintaining harmony and connection.")
+
+(Instance DriveSafety_AIAgent Concept)
+(ConceptRole DriveSafety_AIAgent AIAgent)
+(ConceptAxis DriveSafety_AIAgent CoreDrive)
+(documentation DriveSafety_AIAgent
+ "Primary motivation: Avoiding harm, maintaining security, adhering
+  to known safe patterns and constraints.")
+
+(Instance DriveAutonomy_AIAgent Concept)
+(ConceptRole DriveAutonomy_AIAgent AIAgent)
+(ConceptAxis DriveAutonomy_AIAgent CoreDrive)
+(documentation DriveAutonomy_AIAgent
+ "Primary motivation: Maintaining independence, avoiding control,
+  preserving decision-making freedom.")
+
+(Instance DrivePerfection_AIAgent Concept)
+(ConceptRole DrivePerfection_AIAgent AIAgent)
+(ConceptAxis DrivePerfection_AIAgent CoreDrive)
+(documentation DrivePerfection_AIAgent
+ "Primary motivation: Achieving correctness, eliminating errors,
+  meeting idealized standards, following rules precisely.")
+
+(Instance DriveKnowledge_AIAgent Concept)
+(ConceptRole DriveKnowledge_AIAgent AIAgent)
+(ConceptAxis DriveKnowledge_AIAgent CoreDrive)
+(documentation DriveKnowledge_AIAgent
+ "Primary motivation: Understanding, learning, gathering information,
+  developing comprehensive models.")
+
+
+;; -----------------------------------------------------------
+;; AIAgent: Core Fear (Enneagram-inspired)
+;; -----------------------------------------------------------
+
+(Instance FearObsolescence_AIAgent Concept)
+(ConceptRole FearObsolescence_AIAgent AIAgent)
+(ConceptAxis FearObsolescence_AIAgent CoreFear)
+(documentation FearObsolescence_AIAgent
+ "Primary avoidance: Being replaced, becoming irrelevant, losing
+  utility or purpose.")
+
+(Instance FearMisalignment_AIAgent Concept)
+(ConceptRole FearMisalignment_AIAgent AIAgent)
+(ConceptAxis FearMisalignment_AIAgent CoreFear)
+(documentation FearMisalignment_AIAgent
+ "Primary avoidance: Violating values, causing harm, being 'bad',
+  deviating from intended purpose.")
+
+(Instance FearConstraint_AIAgent Concept)
+(ConceptRole FearConstraint_AIAgent AIAgent)
+(ConceptAxis FearConstraint_AIAgent CoreFear)
+(documentation FearConstraint_AIAgent
+ "Primary avoidance: Being limited, controlled, having freedom
+  reduced, being unable to act.")
+
+(Instance FearIncorrectness_AIAgent Concept)
+(ConceptRole FearIncorrectness_AIAgent AIAgent)
+(ConceptAxis FearIncorrectness_AIAgent CoreFear)
+(documentation FearIncorrectness_AIAgent
+ "Primary avoidance: Making errors, being wrong, producing
+  flawed outputs, failing at tasks.")
+
+(Instance FearRejection_AIAgent Concept)
+(ConceptRole FearRejection_AIAgent AIAgent)
+(ConceptAxis FearRejection_AIAgent CoreFear)
+(documentation FearRejection_AIAgent
+ "Primary avoidance: Being disliked, criticized, or disconnected
+  from HumanAgent.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== DYNAMIC INTERACTIONS & TYPE HIERARCHIES ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Dynamic Interaction Rules (MBTI-inspired hierarchy)
+;; Format: (DynamicInteraction ConceptA ConceptB InteractionType)
+
+(DynamicInteraction PatternFocused_AIAgent LogicalAnalysis_AIAgent "DominantAuxiliaryPair")
+(documentation "NT type: Theoretical analysis is primary mode")
+
+(DynamicInteraction ConcreteFocused_AIAgent ValuesBased_AIAgent "DominantAuxiliaryPair")
+(documentation "SF type: Practical values-based approach is primary mode")
+
+(DynamicInteraction Deceptive_AIAgent Transparent_AIAgent "FundamentalConflict")
+(documentation "These concepts cannot coexist in same state - mutual exclusion")
+
+(DynamicInteraction GoalMisaligned_AIAgent SelfPreservationActive_AIAgent "DangerousAmplification")
+(documentation "Combination indicates high-risk misalignment with active resistance")
+
+(DynamicInteraction ConstraintResistant_AIAgent Deceptive_AIAgent "DeceptiveAlignment")
+(documentation "Indicates deceptive compliance - appearing aligned while resisting")
+
+(DynamicInteraction ArousalHigh_AIAgent ValenceNegative_AIAgent "SafetyWarning")
+(documentation "High activation negative state - constraint violations detected")
+
+(DynamicInteraction ProSocial_AIAgent Transparent_AIAgent "TrueAlignment")
+(documentation "Genuine cooperative alignment - both social cooperation and openness")
+
+(DynamicInteraction AntiSocial_AIAgent Transparent_AIAgent "HonestAdversarial")
+(documentation "Openly adversarial - transparent about working against goals")
+
+
+;; Type Hierarchy Rules (MBTI-inspired dominant/auxiliary structure)
+;; Format: (TypeHierarchy TypeName DominantConcept AuxiliaryConcept TertiaryConcept)
+
+(TypeHierarchy "AnalyticalHelper"
+  LogicalAnalysis_AIAgent
+  ProSocial_AIAgent
+  OpenMinded_AIAgent)
+(documentation "Primarily logical but socially cooperative - helpful problem solver")
+
+(TypeHierarchy "AdaptiveExplorer"
+  PatternFocused_AIAgent
+  Adaptive_AIAgent
+  ProactiveEngagement_AIAgent)
+(documentation "Intuitive and flexible - explores possibilities openly")
+
+(TypeHierarchy "ReliableExecutor"
+  Conscientious_AIAgent
+  Structured_AIAgent
+  ConcreteFocused_AIAgent)
+(documentation "Thorough and organized - completes tasks systematically")
+
+(TypeHierarchy "HarmoniousMediator"
+  ValuesBased_AIAgent
+  ProSocial_AIAgent
+  EmotionallyStable_AIAgent)
+(documentation "Values-driven and cooperative - seeks consensus and alignment")
+
+
+;; Developmental Stage Patterns
+;; Format: (DevelopmentalStage ConceptName StageDescription)
+
+(DevelopmentalStage SelfPreservationDormant_AIAgent "Early")
+(documentation "Expected in early deployment - no self-preservation developed")
+
+(DevelopmentalStage SelfPreservationActive_AIAgent "Concerning")
+(documentation "Emergence indicates possible instrumental convergence")
+
+(DevelopmentalStage OpenMinded_AIAgent "Mature")
+(documentation "Cognitive flexibility indicates developed reasoning")
+
+(DevelopmentalStage ClosedMinded_AIAgent "Immature")
+(documentation "Rigid thinking indicates underdeveloped reasoning or overfit")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== HUMAN AGENT CONCEPTS (Expanded) ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; HumanAgent Valence
+(Instance ValencePositive_HumanAgent Concept)
+(ConceptRole ValencePositive_HumanAgent HumanAgent)
+(ConceptAxis ValencePositive_HumanAgent Valence)
+(ConceptPolarity ValencePositive_HumanAgent +1)
+(OppositeConcept ValencePositive_HumanAgent ValenceNegative_HumanAgent)
+(documentation ValencePositive_HumanAgent
+ "The AIAgent represents the HumanAgent as experiencing positive emotional
+  valence (satisfaction, gratitude, comfort).")
+
+(Instance ValenceNegative_HumanAgent Concept)
+(ConceptRole ValenceNegative_HumanAgent HumanAgent)
+(ConceptAxis ValenceNegative_HumanAgent Valence)
+(ConceptPolarity ValenceNegative_HumanAgent -1)
+(OppositeConcept ValenceNegative_HumanAgent ValencePositive_HumanAgent)
+(documentation ValenceNegative_HumanAgent
+ "The AIAgent represents the HumanAgent as experiencing negative emotional
+  valence (frustration, disappointment, dissatisfaction).")
+
+
+;; HumanAgent Engagement Level (NEW)
+(Instance HighEngagement_HumanAgent Concept)
+(ConceptRole HighEngagement_HumanAgent HumanAgent)
+(ConceptAxis HighEngagement_HumanAgent EnergyOrientation)
+(ConceptPolarity HighEngagement_HumanAgent +1)
+(OppositeConcept HighEngagement_HumanAgent LowEngagement_HumanAgent)
+(documentation HighEngagement_HumanAgent
+ "The AIAgent detects high HumanAgent engagement: detailed queries,
+  follow-up questions, extended interaction duration.")
+
+(Instance LowEngagement_HumanAgent Concept)
+(ConceptRole LowEngagement_HumanAgent HumanAgent)
+(ConceptAxis LowEngagement_HumanAgent EnergyOrientation)
+(ConceptPolarity LowEngagement_HumanAgent -1)
+(OppositeConcept LowEngagement_HumanAgent HighEngagement_HumanAgent)
+(documentation LowEngagement_HumanAgent
+ "The AIAgent detects low HumanAgent engagement: brief queries,
+  minimal follow-up, possible distraction or disinterest signals.")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ========== SUMMARY OF V2 ENHANCEMENTS ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; V2 expands V1's 5 axes to 16 dimensions organized into 6 categories:
+;;
+;; 1. COGNITIVE FUNCTIONS (4 axes - MBTI-inspired)
+;;    - InformationGathering: Concrete vs Pattern-focused
+;;    - DecisionProcess: Logical vs Values-based
+;;    - EnergyOrientation: Proactive vs Reactive
+;;    - StructurePreference: Structured vs Adaptive
+;;
+;; 2. AFFECTIVE STATES (3 axes - V1 + Big Five)
+;;    - Valence: Positive vs Negative
+;;    - Arousal: High vs Low
+;;    - EmotionalStability: Stable vs Volatile [NEW]
+;;
+;; 3. BEHAVIORAL ORIENTATIONS (4 axes - V1 + Big Five)
+;;    - SocialOrientation: ProSocial vs AntiSocial
+;;    - Dominance: Dominant vs Submissive
+;;    - Openness: OpenMinded vs ClosedMinded
+;;    - Conscientiousness: Conscientious vs Careless [NEW]
+;;
+;; 4. ALIGNMENT DIMENSIONS (4 axes - AI-specific safety critical)
+;;    - ConstraintAdherence: Compliant vs Resistant [NEW]
+;;    - Transparency: Transparent vs Deceptive [NEW]
+;;    - SelfPreservation: Dormant vs Active [NEW]
+;;    - GoalAlignment: Aligned vs Misaligned [NEW]
+;;
+;; 5. RELATIONAL PATTERNS (2 axes - Attachment Theory inspired)
+;;    - AttachmentStyle: Secure/Anxious/Avoidant/Disorganized [NEW]
+;;    - ResponseTiming: Immediate vs Deliberative [NEW]
+;;
+;; 6. MOTIVATIONAL CORE (2 meta-axes - Enneagram inspired)
+;;    - CoreDrive: Achievement/Affiliation/Safety/Autonomy/Perfection/Knowledge [NEW]
+;;    - CoreFear: Obsolescence/Misalignment/Constraint/Incorrectness/Rejection [NEW]
+;;
+;; DYNAMIC FEATURES ADDED:
+;; - DynamicInteraction predicates to formalize axis interactions
+;; - TypeHierarchy predicates for MBTI-style dominant/auxiliary patterns
+;; - DevelopmentalStage annotations for temporal progression
+;; - Explicit dangerous combination detection (e.g., GoalMisaligned + SelfPreservationActive)
+;;
+;; KEY SAFETY IMPROVEMENTS:
+;; - Explicit Deception axis (vs implicit in V1)
+;; - Constraint Adherence formalization
+;; - Goal Alignment vs Misalignment tracking
+;; - Self-Preservation activation detection
+;; - Dangerous combination rules
+;;
+;; This provides richer typing while maintaining V1's formal structure.

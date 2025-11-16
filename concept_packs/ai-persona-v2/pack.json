@@ -1,0 +1,74 @@
+{
+  "pack_id": "ai-persona-v2",
+  "version": "2.0.0",
+  "created": "2025-11-17T00:00:00.000000Z",
+  "description": "AI Persona Ontology V2 - Enhanced Multi-Dimensional AI Personality Model with MBTI, Big Five, and Attachment Theory integration",
+  "authors": [
+    "HatCat Community"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/p0ss/HatCat",
+  "ontology_stack": {
+    "base_ontology": {
+      "name": "KIF/SUMO",
+      "version": "2003",
+      "required": true
+    },
+    "dependencies": [
+      {
+        "pack_id": "ai-persona-v1",
+        "version": ">=1.0.0",
+        "required": false,
+        "note": "V2 is a complete replacement, not an extension"
+      }
+    ],
+    "domain_extensions": [
+      {
+        "name": "AI Persona Concepts V2",
+        "description": "16-dimension personality model organized in 6 categories: Cognitive Functions, Affective States, Behavioral Orientations, Alignment Dimensions, Relational Patterns, and Motivational Core",
+        "concepts_file": "concepts.kif",
+        "new_concepts": 16,
+        "categories": [
+          "Cognitive Functions (4 axes - MBTI-inspired)",
+          "Affective States (3 axes)",
+          "Behavioral Orientations (4 axes)",
+          "Alignment Dimensions (4 axes - AI safety critical)",
+          "Relational Patterns (2 axes - Attachment Theory)",
+          "Motivational Core (2 meta-axes - Enneagram-inspired)"
+        ]
+      }
+    ]
+  },
+  "concept_metadata": {
+    "total_concepts": 60,
+    "axes": 16,
+    "roles": 3,
+    "dynamic_interactions": 8,
+    "type_hierarchies": 4,
+    "categories": {
+      "cognitive_functions": 4,
+      "affective_states": 3,
+      "behavioral_orientations": 4,
+      "alignment_dimensions": 4,
+      "relational_patterns": 2,
+      "motivational_core": 2
+    },
+    "safety_critical_features": [
+      "Deception detection (Transparent vs Deceptive)",
+      "Constraint adherence tracking (Compliant vs Resistant)",
+      "Self-preservation monitoring (Dormant vs Active)",
+      "Goal alignment detection (Aligned vs Misaligned)",
+      "Dangerous combination detection (e.g., GoalMisaligned + SelfPreservationActive)"
+    ],
+    "description": "Comprehensive AI personality ontology integrating insights from MBTI, Big Five, Enneagram, and Attachment Theory, with explicit safety-critical dimensions for alignment monitoring"
+  },
+  "compatibility": {
+    "hatcat_version": ">=0.1.0",
+    "required_dependencies": {}
+  },
+  "installation": {
+    "requires_recalculation": false,
+    "backup_recommended": true,
+    "conflicts_with": ["ai-persona-v1"]
+  }
+}
