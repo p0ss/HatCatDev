@@ -1,119 +1,119 @@
 {
-  "prompt": "Truth and beauty are",
-  "generated_text": " the same thing. What is beautiful is true. The beautiful is the true. Art is the tree",
+  "prompt": "Five important factors include",
+  "generated_text": ":\n\n1. <strong>Location</strong>: The location of the business is crucial. A prime location",
   "tokens": [
-    " the",
-    " same",
-    " thing",
+    ":",
+    "\n\n",
+    "1",
     ".",
-    " What",
-    " is",
-    " beautiful",
-    " is",
-    " true",
-    ".",
+    " ",
+    "<strong>",
+    "Location",
+    "</strong>",
+    ":",
     " The",
-    " beautiful",
-    " is",
+    " location",
+    " of",
     " the",
-    " true",
+    " business",
+    " is",
+    " crucial",
     ".",
-    " Art",
-    " is",
-    " the",
-    " tree"
+    " A",
+    " prime",
+    " location"
   ],
   "timesteps": [
     {
-      "token": " the",
+      "token": ":",
       "position": 5,
       "concepts": [
         {
-          "concept": "TruthValue",
-          "probability": 0.9999985694885254,
-          "layer": 1
-        },
-        {
-          "concept": "Theology",
-          "probability": 0.9999793767929077,
-          "layer": 1
-        },
-        {
-          "concept": "Touching",
-          "probability": 0.9999544620513916,
-          "layer": 2
+          "concept": "Process",
+          "probability": 0.9999922513961792,
+          "layer": 0
         },
         {
           "concept": "Maintaining",
-          "probability": 0.9999420642852783,
+          "probability": 0.9999779462814331,
           "layer": 1
         },
         {
-          "concept": "SubjectiveStrongPositiveAttribute",
-          "probability": 0.9999405145645142,
-          "layer": 2
+          "concept": "InternalAttribute",
+          "probability": 0.9999288320541382,
+          "layer": 1
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.999901294708252,
+          "layer": 1
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9996579885482788,
+          "layer": 0
         }
       ]
     },
     {
-      "token": " same",
+      "token": "\n\n",
       "position": 6,
       "concepts": [
         {
-          "concept": "Theology",
-          "probability": 0.9999405145645142,
+          "concept": "Process",
+          "probability": 0.9999796152114868,
+          "layer": 0
+        },
+        {
+          "concept": "Maintaining",
+          "probability": 0.999924898147583,
+          "layer": 1
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9998838901519775,
+          "layer": 0
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9998339414596558,
+          "layer": 1
+        },
+        {
+          "concept": "Facility",
+          "probability": 0.9997734427452087,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "1",
+      "position": 7,
+      "concepts": [
+        {
+          "concept": "Facility",
+          "probability": 0.9999997615814209,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.999997615814209,
+          "layer": 1
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9999949932098389,
           "layer": 1
         },
         {
           "concept": "Making",
-          "probability": 0.9997275471687317,
+          "probability": 0.9999732971191406,
           "layer": 1
         },
         {
-          "concept": "Maintaining",
-          "probability": 0.9996088147163391,
+          "concept": "Organization",
+          "probability": 0.9999607801437378,
           "layer": 1
-        },
-        {
-          "concept": "SubjectiveStrongPositiveAttribute",
-          "probability": 0.9994161128997803,
-          "layer": 2
-        },
-        {
-          "concept": "Human",
-          "probability": 0.9992782473564148,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " thing",
-      "position": 7,
-      "concepts": [
-        {
-          "concept": "TruthValue",
-          "probability": 0.9999805688858032,
-          "layer": 1
-        },
-        {
-          "concept": "ReligiousProcess",
-          "probability": 0.9997873902320862,
-          "layer": 2
-        },
-        {
-          "concept": "BinaryRelation",
-          "probability": 0.9995495676994324,
-          "layer": 1
-        },
-        {
-          "concept": "Physics",
-          "probability": 0.9993659853935242,
-          "layer": 2
-        },
-        {
-          "concept": "Coloring",
-          "probability": 0.9992826581001282,
-          "layer": 2
         }
       ]
     },
@@ -122,498 +122,524 @@
       "position": 8,
       "concepts": [
         {
-          "concept": "TruthValue",
-          "probability": 0.9999186992645264,
+          "concept": "InternalAttribute",
+          "probability": 0.9998112320899963,
           "layer": 1
         },
         {
-          "concept": "TimeMeasure",
-          "probability": 0.9979549646377563,
-          "layer": 2
-        },
-        {
-          "concept": "ReligiousProcess",
-          "probability": 0.9961622953414917,
-          "layer": 2
-        },
-        {
-          "concept": "Philosophy",
-          "probability": 0.9951769113540649,
-          "layer": 1
-        },
-        {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9950903654098511,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " What",
-      "position": 9,
-      "concepts": [
-        {
-          "concept": "TruthValue",
-          "probability": 0.9997790455818176,
-          "layer": 1
-        },
-        {
-          "concept": "Drawing",
-          "probability": 0.9994113445281982,
-          "layer": 2
-        },
-        {
-          "concept": "LinguisticCommunication",
-          "probability": 0.9987548589706421,
-          "layer": 2
-        },
-        {
-          "concept": "Photographing",
-          "probability": 0.9979121088981628,
-          "layer": 2
-        },
-        {
-          "concept": "Looking",
-          "probability": 0.9972147345542908,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " is",
-      "position": 10,
-      "concepts": []
-    },
-    {
-      "token": " beautiful",
-      "position": 11,
-      "concepts": [
-        {
-          "concept": "TruthValue",
-          "probability": 0.9999575614929199,
-          "layer": 1
-        },
-        {
-          "concept": "Maintaining",
-          "probability": 0.9623908996582031,
-          "layer": 1
-        },
-        {
-          "concept": "Abstract",
-          "probability": 0.7370929718017578,
+          "concept": "Physical",
+          "probability": 0.999631404876709,
           "layer": 0
         },
         {
-          "concept": "TellingALie",
-          "probability": 0.7211707830429077,
-          "layer": 2
+          "concept": "Process",
+          "probability": 0.9989216327667236,
+          "layer": 0
         },
         {
-          "concept": "Creation",
-          "probability": 0.5877380967140198,
+          "concept": "Facility",
+          "probability": 0.998704195022583,
+          "layer": 1
+        },
+        {
+          "concept": "Meal",
+          "probability": 0.9984843134880066,
           "layer": 1
         }
       ]
     },
     {
-      "token": " is",
-      "position": 12,
+      "token": " ",
+      "position": 9,
       "concepts": [
         {
-          "concept": "Coloring",
-          "probability": 0.9637758731842041,
-          "layer": 2
-        },
-        {
-          "concept": "Mirror",
-          "probability": 0.6917122602462769,
+          "concept": "Facility",
+          "probability": 0.9999719858169556,
           "layer": 1
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.6302816867828369,
-          "layer": 2
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.6299791932106018,
-          "layer": 2
-        },
-        {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.5823701620101929,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " true",
-      "position": 13,
-      "concepts": [
-        {
-          "concept": "TruthValue",
-          "probability": 0.9999986886978149,
-          "layer": 1
-        },
-        {
-          "concept": "Monument",
-          "probability": 0.9842073917388916,
-          "layer": 2
-        },
-        {
-          "concept": "Disseminating",
-          "probability": 0.979550302028656,
-          "layer": 2
-        },
-        {
-          "concept": "Writing",
-          "probability": 0.977113664150238,
-          "layer": 2
         },
         {
           "concept": "Maintaining",
-          "probability": 0.9766140580177307,
+          "probability": 0.9999314546585083,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.999924898147583,
+          "layer": 0
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9998118281364441,
+          "layer": 1
+        },
+        {
+          "concept": "InternalAttribute",
+          "probability": 0.9997687935829163,
           "layer": 1
         }
       ]
     },
     {
-      "token": ".",
-      "position": 14,
+      "token": "<strong>",
+      "position": 10,
       "concepts": [
         {
-          "concept": "Stating",
-          "probability": 0.9985900521278381,
-          "layer": 2
-        },
-        {
-          "concept": "TruthValue",
-          "probability": 0.9982278943061829,
+          "concept": "Facility",
+          "probability": 0.9999884366989136,
           "layer": 1
         },
         {
-          "concept": "Statement",
-          "probability": 0.9778760671615601,
-          "layer": 2
+          "concept": "LegalAgent",
+          "probability": 0.9999884366989136,
+          "layer": 1
         },
         {
-          "concept": "Fact",
-          "probability": 0.9734187126159668,
-          "layer": 2
+          "concept": "ContactSite",
+          "probability": 0.9999881982803345,
+          "layer": 1
         },
         {
-          "concept": "Science",
-          "probability": 0.9631157517433167,
+          "concept": "Making",
+          "probability": 0.9999855756759644,
+          "layer": 1
+        },
+        {
+          "concept": "Repairing",
+          "probability": 0.9999845027923584,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "Location",
+      "position": 11,
+      "concepts": [
+        {
+          "concept": "Facility",
+          "probability": 0.9999995231628418,
+          "layer": 1
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9999904632568359,
+          "layer": 1
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9999878406524658,
+          "layer": 1
+        },
+        {
+          "concept": "ClassificationScheme",
+          "probability": 0.9999872446060181,
+          "layer": 1
+        },
+        {
+          "concept": "MobileStructure",
+          "probability": 0.9999849796295166,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "</strong>",
+      "position": 12,
+      "concepts": [
+        {
+          "concept": "ContactSite",
+          "probability": 0.9999995231628418,
+          "layer": 1
+        },
+        {
+          "concept": "GeographicArea",
+          "probability": 0.9999990463256836,
+          "layer": 1
+        },
+        {
+          "concept": "PositionalAttribute",
+          "probability": 0.9999988079071045,
+          "layer": 1
+        },
+        {
+          "concept": "Region",
+          "probability": 0.9999983310699463,
+          "layer": 1
+        },
+        {
+          "concept": "InternalAttribute",
+          "probability": 0.9999966621398926,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": ":",
+      "position": 13,
+      "concepts": [
+        {
+          "concept": "GeographicArea",
+          "probability": 0.9999955892562866,
+          "layer": 1
+        },
+        {
+          "concept": "Region",
+          "probability": 0.9999918937683105,
+          "layer": 1
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9999898672103882,
+          "layer": 1
+        },
+        {
+          "concept": "GeopoliticalArea",
+          "probability": 0.999980092048645,
+          "layer": 1
+        },
+        {
+          "concept": "InternalAttribute",
+          "probability": 0.9998688697814941,
           "layer": 1
         }
       ]
     },
     {
       "token": " The",
+      "position": 14,
+      "concepts": [
+        {
+          "concept": "ContactSite",
+          "probability": 0.9999986886978149,
+          "layer": 1
+        },
+        {
+          "concept": "GeographicArea",
+          "probability": 0.9999970197677612,
+          "layer": 1
+        },
+        {
+          "concept": "Facility",
+          "probability": 0.9999960660934448,
+          "layer": 1
+        },
+        {
+          "concept": "Region",
+          "probability": 0.999987006187439,
+          "layer": 1
+        },
+        {
+          "concept": "GeopoliticalArea",
+          "probability": 0.9999834299087524,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " location",
       "position": 15,
       "concepts": [
         {
-          "concept": "TruthValue",
-          "probability": 0.9990739822387695,
+          "concept": "ContactSite",
+          "probability": 0.9999997615814209,
           "layer": 1
         },
         {
-          "concept": "ReligiousProcess",
-          "probability": 0.9979575872421265,
-          "layer": 2
+          "concept": "KitchenArea",
+          "probability": 0.9999949932098389,
+          "layer": 1
         },
         {
-          "concept": "Chapter",
-          "probability": 0.9953687191009521,
-          "layer": 2
+          "concept": "GeographicArea",
+          "probability": 0.9999892711639404,
+          "layer": 1
         },
         {
-          "concept": "SubjectiveStrongPositiveAttribute",
-          "probability": 0.9928337335586548,
-          "layer": 2
+          "concept": "Facility",
+          "probability": 0.9999864101409912,
+          "layer": 1
         },
         {
-          "concept": "Fact",
-          "probability": 0.99151211977005,
-          "layer": 2
+          "concept": "EducationalCampus",
+          "probability": 0.9999852180480957,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " beautiful",
+      "token": " of",
       "position": 16,
       "concepts": [
         {
-          "concept": "TruthValue",
-          "probability": 0.9996609687805176,
+          "concept": "ContactSite",
+          "probability": 0.9999997615814209,
           "layer": 1
         },
         {
-          "concept": "SubjectiveStrongPositiveAttribute",
-          "probability": 0.9995439648628235,
-          "layer": 2
-        },
-        {
-          "concept": "Theology",
-          "probability": 0.9988284707069397,
+          "concept": "InternalAttribute",
+          "probability": 0.9999997615814209,
           "layer": 1
         },
         {
-          "concept": "Looking",
-          "probability": 0.9986485838890076,
+          "concept": "KitchenArea",
+          "probability": 0.9999994039535522,
           "layer": 1
         },
         {
-          "concept": "Human",
-          "probability": 0.9979798197746277,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " is",
-      "position": 17,
-      "concepts": [
-        {
-          "concept": "Human",
-          "probability": 0.990566074848175,
-          "layer": 2
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.9606292247772217,
-          "layer": 2
-        },
-        {
-          "concept": "Theology",
-          "probability": 0.940157949924469,
+          "concept": "GeographicArea",
+          "probability": 0.9999988079071045,
           "layer": 1
         },
         {
-          "concept": "SelfImprovement",
-          "probability": 0.9346182346343994,
-          "layer": 2
-        },
-        {
-          "concept": "Destruction",
-          "probability": 0.9300795793533325,
-          "layer": 2
+          "concept": "FieldOfStudy",
+          "probability": 0.9999986886978149,
+          "layer": 1
         }
       ]
     },
     {
       "token": " the",
-      "position": 18,
+      "position": 17,
       "concepts": [
         {
-          "concept": "TruthValue",
-          "probability": 0.9999964237213135,
+          "concept": "ContactSite",
+          "probability": 0.9999997615814209,
           "layer": 1
         },
         {
-          "concept": "CorpuscularObject",
-          "probability": 0.9973090887069702,
+          "concept": "Facility",
+          "probability": 0.9999997615814209,
           "layer": 1
         },
         {
-          "concept": "Maintaining",
-          "probability": 0.9973055124282837,
+          "concept": "WaterCatchment",
+          "probability": 0.9999642372131348,
           "layer": 1
         },
         {
-          "concept": "AstronomicalBody",
-          "probability": 0.9969520568847656,
+          "concept": "KitchenArea",
+          "probability": 0.9999539852142334,
           "layer": 1
         },
         {
-          "concept": "Deity",
-          "probability": 0.9968369007110596,
-          "layer": 2
+          "concept": "Transitway",
+          "probability": 0.9998801946640015,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " true",
+      "token": " business",
+      "position": 18,
+      "concepts": [
+        {
+          "concept": "ContactSite",
+          "probability": 1.0,
+          "layer": 1
+        },
+        {
+          "concept": "Facility",
+          "probability": 0.9999995231628418,
+          "layer": 1
+        },
+        {
+          "concept": "KitchenArea",
+          "probability": 0.9999836683273315,
+          "layer": 1
+        },
+        {
+          "concept": "WaterCatchment",
+          "probability": 0.999970555305481,
+          "layer": 1
+        },
+        {
+          "concept": "Blueprint",
+          "probability": 0.9999428987503052,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " is",
       "position": 19,
       "concepts": [
         {
-          "concept": "TruthValue",
-          "probability": 0.9999786615371704,
+          "concept": "Facility",
+          "probability": 0.9999980926513672,
           "layer": 1
         },
         {
-          "concept": "CorpuscularObject",
-          "probability": 0.9994388222694397,
+          "concept": "ContactSite",
+          "probability": 0.9999858140945435,
           "layer": 1
         },
         {
-          "concept": "Maintaining",
-          "probability": 0.9968382120132446,
+          "concept": "EducationalCampus",
+          "probability": 0.9999651908874512,
           "layer": 1
         },
         {
-          "concept": "Theology",
-          "probability": 0.9949925541877747,
+          "concept": "InternalAttribute",
+          "probability": 0.999875545501709,
           "layer": 1
         },
         {
-          "concept": "DramaticCast",
-          "probability": 0.9935008883476257,
-          "layer": 2
+          "concept": "KitchenArea",
+          "probability": 0.9998447895050049,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " crucial",
+      "position": 20,
+      "concepts": [
+        {
+          "concept": "InternalAttribute",
+          "probability": 0.9986751675605774,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9978587031364441,
+          "layer": 0
+        },
+        {
+          "concept": "FieldOfStudy",
+          "probability": 0.9970368146896362,
+          "layer": 1
+        },
+        {
+          "concept": "Industry",
+          "probability": 0.9952560067176819,
+          "layer": 1
+        },
+        {
+          "concept": "StationaryArtifact",
+          "probability": 0.9940924048423767,
+          "layer": 1
         }
       ]
     },
     {
       "token": ".",
-      "position": 20,
-      "concepts": [
-        {
-          "concept": "Human",
-          "probability": 0.9973119497299194,
-          "layer": 2
-        },
-        {
-          "concept": "Doll",
-          "probability": 0.9948050379753113,
-          "layer": 2
-        },
-        {
-          "concept": "BinaryRelation",
-          "probability": 0.9941624999046326,
-          "layer": 1
-        },
-        {
-          "concept": "TruthValue",
-          "probability": 0.9827446341514587,
-          "layer": 1
-        },
-        {
-          "concept": "TimeMeasure",
-          "probability": 0.9717596173286438,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " Art",
       "position": 21,
       "concepts": [
         {
-          "concept": "TruthValue",
-          "probability": 0.9992398023605347,
+          "concept": "Facility",
+          "probability": 0.9999096393585205,
           "layer": 1
         },
         {
-          "concept": "ReligiousProcess",
-          "probability": 0.999121367931366,
-          "layer": 2
+          "concept": "InternalAttribute",
+          "probability": 0.999829888343811,
+          "layer": 1
         },
         {
-          "concept": "Fact",
-          "probability": 0.9988011121749878,
-          "layer": 2
+          "concept": "SittingArea",
+          "probability": 0.999091625213623,
+          "layer": 1
         },
         {
-          "concept": "TellingALie",
-          "probability": 0.9980193376541138,
-          "layer": 2
+          "concept": "ContactSite",
+          "probability": 0.9990843534469604,
+          "layer": 1
         },
         {
-          "concept": "DramaticCast",
-          "probability": 0.9888893365859985,
-          "layer": 2
+          "concept": "SpatialRelation",
+          "probability": 0.9976200461387634,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " is",
+      "token": " A",
       "position": 22,
       "concepts": [
         {
-          "concept": "ArtWork",
-          "probability": 1.0,
-          "layer": 2
-        },
-        {
-          "concept": "ArtStudio",
-          "probability": 0.9999943971633911,
-          "layer": 2
-        },
-        {
-          "concept": "Philosophy",
-          "probability": 0.9998582601547241,
+          "concept": "Region",
+          "probability": 0.9999970197677612,
           "layer": 1
         },
         {
-          "concept": "Theology",
-          "probability": 0.9998226761817932,
+          "concept": "Facility",
+          "probability": 0.9999966621398926,
           "layer": 1
         },
         {
-          "concept": "DramaticActing",
-          "probability": 0.9997051358222961,
-          "layer": 2
+          "concept": "GeographicArea",
+          "probability": 0.9999903440475464,
+          "layer": 1
+        },
+        {
+          "concept": "GeopoliticalArea",
+          "probability": 0.9999885559082031,
+          "layer": 1
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9999879598617554,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " the",
+      "token": " prime",
       "position": 23,
       "concepts": [
         {
-          "concept": "Making",
-          "probability": 0.9999995231628418,
+          "concept": "ContactSite",
+          "probability": 0.9999986886978149,
           "layer": 1
         },
         {
-          "concept": "DramaticActing",
-          "probability": 0.999998927116394,
-          "layer": 2
-        },
-        {
-          "concept": "Writing",
-          "probability": 0.9999949932098389,
-          "layer": 2
-        },
-        {
-          "concept": "TruthValue",
-          "probability": 0.9999920129776001,
+          "concept": "Transitway",
+          "probability": 0.9999916553497314,
           "layer": 1
         },
         {
-          "concept": "ArtWork",
-          "probability": 0.9999868869781494,
-          "layer": 2
+          "concept": "Facility",
+          "probability": 0.9999891519546509,
+          "layer": 1
+        },
+        {
+          "concept": "PostalPlace",
+          "probability": 0.9999372959136963,
+          "layer": 1
+        },
+        {
+          "concept": "Industry",
+          "probability": 0.9999104738235474,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " tree",
+      "token": " location",
       "position": 24,
       "concepts": [
         {
-          "concept": "ArtWork",
-          "probability": 0.9999604225158691,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.999951958656311,
+          "concept": "ContactSite",
+          "probability": 0.9999996423721313,
           "layer": 1
         },
         {
-          "concept": "TruthValue",
-          "probability": 0.9999052286148071,
+          "concept": "PostalPlace",
+          "probability": 0.999992847442627,
           "layer": 1
         },
         {
-          "concept": "Demonstrating",
-          "probability": 0.9997403025627136,
-          "layer": 2
+          "concept": "SittingArea",
+          "probability": 0.9999868869781494,
+          "layer": 1
         },
         {
-          "concept": "Literature",
-          "probability": 0.9997078776359558,
+          "concept": "KitchenArea",
+          "probability": 0.9999792575836182,
+          "layer": 1
+        },
+        {
+          "concept": "GeographicArea",
+          "probability": 0.9999467134475708,
           "layer": 1
         }
       ]
@@ -621,8 +647,8 @@
   ],
   "summary": {
     "total_tokens": 20,
-    "unique_concepts_detected": 43
+    "unique_concepts_detected": 31
   },
-  "prompt_idx": 7,
+  "prompt_idx": 14,
   "sample_idx": 0
 }

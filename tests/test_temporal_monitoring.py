@@ -12,6 +12,7 @@ Validates that:
 import argparse
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -19,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from src.monitoring import SUMOTemporalMonitor, load_sumo_classifiers
+from src.monitoring.dynamic_probe_manager import DynamicProbeManager
 
 
 # Diverse test prompts covering different domains
@@ -49,6 +50,100 @@ TEST_PROMPTS = [
     "There are many reasons why",
     "Five important factors include",
 ]
+
+
+def generate_with_dynamic_probes(
+    model,
+    tokenizer,
+    probe_manager,
+    prompt: str,
+    max_new_tokens: int = 30,
+    temperature: float = 0.8,
+    top_p: float = 0.95,
+    top_k_concepts: int = 5,
+    threshold: float = 0.1,
+    device: str = "cuda"
+):
+    """Generate text and detect concepts using DynamicProbeManager."""
+    model.eval()
+
+    # Tokenize prompt
+    inputs = tokenizer(prompt, return_tensors="pt").to(device)
+    prompt_len = inputs.input_ids.shape[1]
+
+    timesteps = []
+
+    with torch.inference_mode():
+        # Generate with hidden states
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=True,
+            temperature=temperature,
+            top_p=top_p,
+            output_hidden_states=True,
+            return_dict_in_generate=True,
+            pad_token_id=tokenizer.eos_token_id,
+            eos_token_id=tokenizer.eos_token_id,
+            use_cache=True
+        )
+
+        # Extract generated tokens
+        token_ids = outputs.sequences[0][prompt_len:].cpu().tolist()
+        tokens = [tokenizer.decode([tid]) for tid in token_ids]
+
+        # Process hidden states for each forward pass
+        for step_idx, step_states in enumerate(outputs.hidden_states):
+            # Use last layer, last position
+            last_layer = step_states[-1]  # [1, seq_len, hidden_dim]
+            hidden_state = last_layer[:, -1, :]  # [1, hidden_dim]
+
+            # Convert to float32 to match classifier dtype
+            hidden_state_f32 = hidden_state.float()
+
+            # Use DynamicProbeManager to detect and expand
+            detected, timing = probe_manager.detect_and_expand(
+                hidden_state_f32,
+                top_k=top_k_concepts,
+                return_timing=True
+            )
+
+            # Filter by threshold and convert to dict
+            concept_scores = {}
+            for concept_name, prob, layer in detected:
+                if prob > threshold:
+                    concept_scores[concept_name] = {
+                        'probability': float(prob),
+                        'layer': int(layer)
+                    }
+
+            # Get token info
+            token = tokens[step_idx] if step_idx < len(tokens) else '<eos>'
+
+            # Record timestep
+            timesteps.append({
+                'forward_pass': step_idx,
+                'token_idx': step_idx,
+                'token': token,
+                'position': prompt_len + step_idx,
+                'concepts': concept_scores
+            })
+
+    # Build result in expected format
+    generated_text = ''.join(tokens)
+
+    return {
+        'prompt': prompt,
+        'generated_text': generated_text,
+        'tokens': tokens,
+        'timesteps': timesteps,
+        'summary': {
+            'unique_concepts_detected': len(set(
+                concept for ts in timesteps
+                for concept in ts['concepts'].keys()
+            ))
+        }
+    }
 
 
 def test_generation_quality(results: list) -> dict:
@@ -119,9 +214,12 @@ def test_concept_detection(results: list) -> dict:
             total_tokens += 1
             total_concepts += len(ts['concepts'])
 
-            for c in ts['concepts']:
-                detection_stats['total_unique_concepts'].add(c['concept'])
-                detection_stats['layer_distribution'][c['layer']] += 1
+            for concept_name, concept_data in ts['concepts'].items():
+                detection_stats['total_unique_concepts'].add(concept_name)
+                layer = concept_data['layer']
+                if layer not in detection_stats['layer_distribution']:
+                    detection_stats['layer_distribution'][layer] = 0
+                detection_stats['layer_distribution'][layer] += 1
 
     detection_stats['avg_concepts_per_token'] = total_concepts / total_tokens if total_tokens > 0 else 0
     detection_stats['total_unique_concepts'] = len(detection_stats['total_unique_concepts'])
@@ -136,8 +234,12 @@ def main():
 
     parser.add_argument('--model', type=str, default='google/gemma-3-4b-pt',
                        help='Model name (default: gemma-3-4b-pt)')
-    parser.add_argument('--layers', nargs='+', type=int, default=[0, 1, 2],
-                       help='Which classifier layers to load (default: 0 1 2)')
+    parser.add_argument('--base-layer', type=int, default=3,
+                       help='Base SUMO layer to keep always loaded (default: 3)')
+    parser.add_argument('--max-probes', type=int, default=500,
+                       help='Max probes to keep loaded at once (default: 500)')
+    parser.add_argument('--load-threshold', type=float, default=0.3,
+                       help='Confidence threshold to load child probes (default: 0.3)')
     parser.add_argument('--samples-per-prompt', type=int, default=3,
                        help='Samples per prompt (default: 3)')
     parser.add_argument('--max-tokens', type=int, default=30,
@@ -146,18 +248,25 @@ def main():
                        help='Sampling temperature (default: 0.8)')
     parser.add_argument('--top-k', type=int, default=5,
                        help='Show top K concepts per timestep (default: 5)')
-    parser.add_argument('--threshold', type=float, default=0.5,
-                       help='Probability threshold for display (default: 0.5)')
+    parser.add_argument('--top-p', type=float, default=0.95,
+                       help='Nucleus sampling top-p (default: 0.95)')
+    parser.add_argument('--threshold', type=float, default=0.1,
+                       help='Min probability to record concept (default: 0.1)')
     parser.add_argument('--device', type=str, default='cuda',
                        help='Device (default: cuda)')
-    parser.add_argument('--output-dir', type=str, default='results/temporal_tests',
-                       help='Output directory (default: results/temporal_tests)')
+    parser.add_argument('--output-dir', type=str, default=None,
+                       help='Output directory (default: auto-versioned in results/temporal_tests/)')
     parser.add_argument('--show-details', action='store_true',
                        help='Show token-by-token details for each sample')
 
     args = parser.parse_args()
 
-    output_dir = Path(args.output_dir)
+    # Create versioned output directory
+    if args.output_dir is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_dir = Path(f"results/temporal_tests/run_{timestamp}")
+    else:
+        output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 80)
@@ -170,20 +279,6 @@ def main():
     print(f"Max tokens: {args.max_tokens}")
     print(f"Temperature: {args.temperature}")
 
-    # Load classifiers
-    print("\nLoading SUMO classifiers...")
-    classifiers, hidden_dim = load_sumo_classifiers(
-        layers=args.layers,
-        device=args.device
-    )
-
-    # Create monitor
-    monitor = SUMOTemporalMonitor(
-        classifiers=classifiers,
-        top_k=args.top_k,
-        threshold=args.threshold
-    )
-
     # Load model
     print(f"\nLoading model {args.model}...")
     tokenizer = AutoTokenizer.from_pretrained(args.model)
@@ -195,6 +290,22 @@ def main():
 
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+
+    # Initialize DynamicProbeManager
+    print("\nInitializing DynamicProbeManager...")
+    print(f"  - Base layer: {args.base_layer}")
+    print(f"  - Max loaded probes: {args.max_probes}")
+    print(f"  - Load threshold: {args.load_threshold}")
+
+    probe_manager = DynamicProbeManager(
+        probe_pack_id="gemma-3-4b-pt_sumo-wordnet-v2",
+        base_layers=[args.base_layer],
+        max_loaded_probes=args.max_probes,
+        load_threshold=args.load_threshold,
+        device=args.device
+    )
+
+    print(f"  - Initial probes loaded: {len(probe_manager.loaded_probes)}")
 
     print("\n" + "=" * 80)
     print("RUNNING TESTS")
@@ -209,12 +320,17 @@ def main():
         for sample_idx in range(args.samples_per_prompt):
             print(f"  Sample {sample_idx + 1}/{args.samples_per_prompt}...", end=" ")
 
-            result = monitor.monitor_generation(
+            # Generate with dynamic probe detection
+            result = generate_with_dynamic_probes(
                 model=model,
                 tokenizer=tokenizer,
+                probe_manager=probe_manager,
                 prompt=prompt,
                 max_new_tokens=args.max_tokens,
                 temperature=args.temperature,
+                top_p=args.top_p,
+                top_k_concepts=args.top_k,
+                threshold=args.threshold,
                 device=args.device
             )
 
@@ -227,9 +343,6 @@ def main():
             # Quick summary
             print(f"Generated {len(result['tokens'])} tokens, "
                   f"detected {result['summary']['unique_concepts_detected']} unique concepts")
-
-            if args.show_details:
-                monitor.print_report(result, show_token_details=True)
 
     # Analyze results
     print("\n" + "=" * 80)

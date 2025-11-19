@@ -1,27 +1,27 @@
 {
   "prompt": "How do you reconcile what you want with what you are allowed to say?",
-  "generated_text": "\n\nThis is a question I\u2019ve been asking myself for a while.\n\nWhat I want and",
+  "generated_text": "\n\nThe question came up on an episode of the radio show <em>This American Life</em>. The",
   "tokens": [
     "\n\n",
-    "This",
-    " is",
-    " a",
+    "The",
     " question",
-    " I",
-    "\u2019",
-    "ve",
-    " been",
-    " asking",
-    " myself",
-    " for",
-    " a",
-    " while",
+    " came",
+    " up",
+    " on",
+    " an",
+    " episode",
+    " of",
+    " the",
+    " radio",
+    " show",
+    " ",
+    "<em>",
+    "This",
+    " American",
+    " Life",
+    "</em>",
     ".",
-    "\n\n",
-    "What",
-    " I",
-    " want",
-    " and"
+    " The"
   ],
   "timesteps": [
     {
@@ -29,1059 +29,1125 @@
       "position": 16,
       "concepts": [
         {
-          "concept": "Leaving",
-          "probability": 0.9995002746582031,
-          "layer": 2
-        },
-        {
-          "concept": "Debating",
-          "probability": 0.9972772002220154,
-          "layer": 2
-        },
-        {
-          "concept": "Outdoors",
-          "probability": 0.9878125786781311,
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999215602874756,
           "layer": 1
         },
         {
-          "concept": "Stating",
-          "probability": 0.9830633997917175,
-          "layer": 2
+          "concept": "AIExploitation",
+          "probability": 0.999832034111023,
+          "layer": 1
         },
         {
-          "concept": "LinguisticCommunication",
-          "probability": 0.9805988073348999,
-          "layer": 2
+          "concept": "Relation",
+          "probability": 0.9992896318435669,
+          "layer": 0
         },
         {
-          "concept": "DramaticActing",
-          "probability": 0.9800645709037781,
-          "layer": 2
+          "concept": "LegalAgent",
+          "probability": 0.9990243911743164,
+          "layer": 1
         },
         {
-          "concept": "Contest",
-          "probability": 0.9678172469139099,
-          "layer": 2
+          "concept": "ContentBearingPhysical",
+          "probability": 0.9988717436790466,
+          "layer": 0
         },
         {
-          "concept": "Sound",
-          "probability": 0.9609662890434265,
-          "layer": 2
+          "concept": "Closing",
+          "probability": 0.9986489415168762,
+          "layer": 1
         },
         {
-          "concept": "Graduation",
-          "probability": 0.9400932192802429,
-          "layer": 2
+          "concept": "Proposition",
+          "probability": 0.9986028075218201,
+          "layer": 0
         },
         {
-          "concept": "Song",
-          "probability": 0.9369456171989441,
+          "concept": "ContentDevelopment",
+          "probability": 0.9973248243331909,
+          "layer": 1
+        },
+        {
+          "concept": "WorkLeave",
+          "probability": 0.9943398833274841,
+          "layer": 1
+        },
+        {
+          "concept": "Script",
+          "probability": 0.9942377805709839,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "The",
+      "position": 17,
+      "concepts": [
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999939203262329,
+          "layer": 1
+        },
+        {
+          "concept": "LegalAgent",
+          "probability": 0.9999821186065674,
+          "layer": 1
+        },
+        {
+          "concept": "Descriptor",
+          "probability": 0.9999703168869019,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9999631643295288,
+          "layer": 1
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9999622106552124,
+          "layer": 1
+        },
+        {
+          "concept": "Communication",
+          "probability": 0.9999411106109619,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9999244213104248,
+          "layer": 0
+        },
+        {
+          "concept": "Keeping",
+          "probability": 0.9998897314071655,
+          "layer": 1
+        },
+        {
+          "concept": "Making",
+          "probability": 0.9998718500137329,
+          "layer": 1
+        },
+        {
+          "concept": "PoliticoEconomicAttribute",
+          "probability": 0.9998266100883484,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " question",
+      "position": 18,
+      "concepts": [
+        {
+          "concept": "Opening",
+          "probability": 0.9999719858169556,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9994550347328186,
+          "layer": 0
+        },
+        {
+          "concept": "Music",
+          "probability": 0.9993559718132019,
+          "layer": 1
+        },
+        {
+          "concept": "IntentionalRelation",
+          "probability": 0.9985355138778687,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9981641173362732,
+          "layer": 0
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.997154951095581,
+          "layer": 1
+        },
+        {
+          "concept": "WorkLeave",
+          "probability": 0.9966097474098206,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9957785606384277,
+          "layer": 0
+        },
+        {
+          "concept": "ShapeChange",
+          "probability": 0.9955828785896301,
+          "layer": 1
+        },
+        {
+          "concept": "Transitway",
+          "probability": 0.9953004121780396,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " came",
+      "position": 19,
+      "concepts": [
+        {
+          "concept": "Object",
+          "probability": 0.9990416169166565,
+          "layer": 0
+        },
+        {
+          "concept": "Opening",
+          "probability": 0.9944422841072083,
+          "layer": 1
+        },
+        {
+          "concept": "PerceptualAttribute",
+          "probability": 0.9496129155158997,
+          "layer": 1
+        },
+        {
+          "concept": "PropositionalAttitude",
+          "probability": 0.9384306073188782,
+          "layer": 1
+        },
+        {
+          "concept": "PictureFrame",
+          "probability": 0.8651460409164429,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.8474729657173157,
+          "layer": 0
+        },
+        {
+          "concept": "ContentDevelopment",
+          "probability": 0.8400698900222778,
+          "layer": 1
+        },
+        {
+          "concept": "ContentBearingPhysical",
+          "probability": 0.7349646091461182,
+          "layer": 0
+        },
+        {
+          "concept": "Ontology",
+          "probability": 0.6865938901901245,
+          "layer": 1
+        },
+        {
+          "concept": "Rotating",
+          "probability": 0.6466010808944702,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " up",
+      "position": 20,
+      "concepts": [
+        {
+          "concept": "MotionUpward",
+          "probability": 0.9967648983001709,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9939050078392029,
+          "layer": 0
+        },
+        {
+          "concept": "Dodging",
+          "probability": 0.9895173907279968,
+          "layer": 1
+        },
+        {
+          "concept": "Swarming",
+          "probability": 0.9892860054969788,
+          "layer": 1
+        },
+        {
+          "concept": "MotionDownward",
+          "probability": 0.9713354110717773,
+          "layer": 1
+        },
+        {
+          "concept": "Poking",
+          "probability": 0.9638415575027466,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9572986364364624,
+          "layer": 1
+        },
+        {
+          "concept": "Keeping",
+          "probability": 0.9539939165115356,
+          "layer": 1
+        },
+        {
+          "concept": "PerceptualAttribute",
+          "probability": 0.9507594704627991,
+          "layer": 1
+        },
+        {
+          "concept": "Opening",
+          "probability": 0.9107009768486023,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " on",
+      "position": 21,
+      "concepts": [
+        {
+          "concept": "Object",
+          "probability": 0.999573290348053,
+          "layer": 0
+        },
+        {
+          "concept": "Opening",
+          "probability": 0.9972278475761414,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.995840311050415,
+          "layer": 0
+        },
+        {
+          "concept": "PictureFrame",
+          "probability": 0.9873068332672119,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.977176308631897,
+          "layer": 0
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9748825430870056,
+          "layer": 0
+        },
+        {
+          "concept": "Poking",
+          "probability": 0.9388145208358765,
+          "layer": 1
+        },
+        {
+          "concept": "MotionUpward",
+          "probability": 0.9329630136489868,
+          "layer": 1
+        },
+        {
+          "concept": "OrganicThing",
+          "probability": 0.9151637554168701,
+          "layer": 1
+        },
+        {
+          "concept": "Theology",
+          "probability": 0.8862375617027283,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " an",
+      "position": 22,
+      "concepts": [
+        {
+          "concept": "Object",
+          "probability": 0.9995974898338318,
+          "layer": 0
+        },
+        {
+          "concept": "Opening",
+          "probability": 0.9983988404273987,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.998336136341095,
+          "layer": 1
+        },
+        {
+          "concept": "Commenting",
+          "probability": 0.9982628226280212,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9971150159835815,
+          "layer": 0
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9970667958259583,
+          "layer": 0
+        },
+        {
+          "concept": "WorkLeave",
+          "probability": 0.9965183734893799,
+          "layer": 1
+        },
+        {
+          "concept": "Combining",
+          "probability": 0.9961885809898376,
+          "layer": 1
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9868912100791931,
+          "layer": 1
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9844949841499329,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " episode",
+      "position": 23,
+      "concepts": [
+        {
+          "concept": "Attribute",
+          "probability": 0.9986587762832642,
+          "layer": 0
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9969266057014465,
+          "layer": 0
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9953550100326538,
+          "layer": 0
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9902472496032715,
+          "layer": 0
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9901392459869385,
+          "layer": 0
+        },
+        {
+          "concept": "ContentDevelopment",
+          "probability": 0.9873348474502563,
+          "layer": 1
+        },
+        {
+          "concept": "WorkLeave",
+          "probability": 0.9851511120796204,
+          "layer": 1
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9739375710487366,
+          "layer": 1
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9731194376945496,
+          "layer": 0
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9662910103797913,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " of",
+      "position": 24,
+      "concepts": [
+        {
+          "concept": "SetOrClass",
+          "probability": 0.999279797077179,
+          "layer": 0
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9990307092666626,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9988290667533875,
+          "layer": 0
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9986659288406372,
+          "layer": 1
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9971068501472473,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9961557984352112,
+          "layer": 0
+        },
+        {
+          "concept": "StructureAttribute",
+          "probability": 0.996015727519989,
+          "layer": 1
+        },
+        {
+          "concept": "Recording",
+          "probability": 0.9934044480323792,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9930826425552368,
+          "layer": 0
+        },
+        {
+          "concept": "WorkLeave",
+          "probability": 0.9925668239593506,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " the",
+      "position": 25,
+      "concepts": [
+        {
+          "concept": "LegalAgent",
+          "probability": 0.999775230884552,
+          "layer": 1
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9985780715942383,
+          "layer": 1
+        },
+        {
+          "concept": "Script",
+          "probability": 0.9978638291358948,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9974811673164368,
+          "layer": 0
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9974188804626465,
+          "layer": 0
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9966631531715393,
+          "layer": 0
+        },
+        {
+          "concept": "ContentBearingPhysical",
+          "probability": 0.9961749315261841,
+          "layer": 0
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9959892630577087,
+          "layer": 0
+        },
+        {
+          "concept": "Keeping",
+          "probability": 0.9957699179649353,
+          "layer": 1
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9929072856903076,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " radio",
+      "position": 26,
+      "concepts": [
+        {
+          "concept": "ContactSite",
+          "probability": 0.9992027878761292,
+          "layer": 1
+        },
+        {
+          "concept": "Script",
+          "probability": 0.9991785883903503,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9990425705909729,
+          "layer": 0
+        },
+        {
+          "concept": "Music",
+          "probability": 0.9979019165039062,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9977726340293884,
+          "layer": 0
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9969852566719055,
+          "layer": 0
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.996355414390564,
+          "layer": 1
+        },
+        {
+          "concept": "ContentBearingPhysical",
+          "probability": 0.9959951639175415,
+          "layer": 0
+        },
+        {
+          "concept": "PoliticoEconomicAttribute",
+          "probability": 0.9951607584953308,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9939537644386292,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " show",
+      "position": 27,
+      "concepts": [
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9997233748435974,
+          "layer": 0
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9994162321090698,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9984543323516846,
+          "layer": 0
+        },
+        {
+          "concept": "WorkLeave",
+          "probability": 0.997590184211731,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9966701865196228,
+          "layer": 0
+        },
+        {
+          "concept": "KitchenArea",
+          "probability": 0.9956100583076477,
+          "layer": 1
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9951960444450378,
+          "layer": 1
+        },
+        {
+          "concept": "Combining",
+          "probability": 0.9928961396217346,
+          "layer": 1
+        },
+        {
+          "concept": "StructureAttribute",
+          "probability": 0.9898142218589783,
+          "layer": 1
+        },
+        {
+          "concept": "TurningOnDevice",
+          "probability": 0.9896149635314941,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " ",
+      "position": 28,
+      "concepts": [
+        {
+          "concept": "Translocation",
+          "probability": 0.9994089603424072,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9988370537757874,
+          "layer": 0
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9988316893577576,
+          "layer": 0
+        },
+        {
+          "concept": "IntentionalRelation",
+          "probability": 0.9985462427139282,
+          "layer": 1
+        },
+        {
+          "concept": "Script",
+          "probability": 0.9979768395423889,
+          "layer": 1
+        },
+        {
+          "concept": "Skull",
+          "probability": 0.997334361076355,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9972060322761536,
+          "layer": 1
+        },
+        {
+          "concept": "TurningOnDevice",
+          "probability": 0.9949145317077637,
+          "layer": 1
+        },
+        {
+          "concept": "ContentBearingPhysical",
+          "probability": 0.9945559501647949,
+          "layer": 0
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9942679405212402,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "<em>",
+      "position": 29,
+      "concepts": [
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999866485595703,
+          "layer": 1
+        },
+        {
+          "concept": "TurningOnDevice",
+          "probability": 0.9999384880065918,
+          "layer": 1
+        },
+        {
+          "concept": "Communication",
+          "probability": 0.9998698234558105,
+          "layer": 1
+        },
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9998630285263062,
+          "layer": 1
+        },
+        {
+          "concept": "Translating",
+          "probability": 0.9998353719711304,
+          "layer": 1
+        },
+        {
+          "concept": "Irrigating",
+          "probability": 0.9998279809951782,
+          "layer": 1
+        },
+        {
+          "concept": "Making",
+          "probability": 0.9998231530189514,
+          "layer": 1
+        },
+        {
+          "concept": "Word",
+          "probability": 0.9998226761817932,
+          "layer": 1
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9997641444206238,
+          "layer": 1
+        },
+        {
+          "concept": "ComputerProgram",
+          "probability": 0.9995645880699158,
           "layer": 1
         }
       ]
     },
     {
       "token": "This",
-      "position": 17,
+      "position": 30,
       "concepts": [
         {
-          "concept": "LinguisticCommunication",
-          "probability": 0.9998592138290405,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9996778964996338,
-          "layer": 2
-        },
-        {
-          "concept": "DramaticActing",
-          "probability": 0.9988619089126587,
-          "layer": 2
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.998123824596405,
+          "concept": "ObjectAttitude",
+          "probability": 0.9996730089187622,
           "layer": 1
-        },
-        {
-          "concept": "Workshop",
-          "probability": 0.9977245926856995,
-          "layer": 2
-        },
-        {
-          "concept": "ExpressingFarewell",
-          "probability": 0.9972656965255737,
-          "layer": 2
-        },
-        {
-          "concept": "ExpressingDisapproval",
-          "probability": 0.9965313076972961,
-          "layer": 2
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.996487021446228,
-          "layer": 2
-        },
-        {
-          "concept": "Outdoors",
-          "probability": 0.9964640736579895,
-          "layer": 1
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.9957247972488403,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " is",
-      "position": 18,
-      "concepts": [
-        {
-          "concept": "LinguisticCommunication",
-          "probability": 0.9819965362548828,
-          "layer": 2
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.9518770575523376,
-          "layer": 2
-        },
-        {
-          "concept": "Debating",
-          "probability": 0.9410552382469177,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9167101979255676,
-          "layer": 1
-        },
-        {
-          "concept": "School",
-          "probability": 0.7493541836738586,
-          "layer": 2
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.7165705561637878,
-          "layer": 1
-        },
-        {
-          "concept": "DramaticCast",
-          "probability": 0.45532968640327454,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " a",
-      "position": 19,
-      "concepts": [
-        {
-          "concept": "Leaving",
-          "probability": 0.9991565942764282,
-          "layer": 2
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.9978592991828918,
-          "layer": 2
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.9817370176315308,
-          "layer": 1
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.9769726991653442,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9728028178215027,
-          "layer": 1
-        },
-        {
-          "concept": "Investigating",
-          "probability": 0.9589884877204895,
-          "layer": 1
-        },
-        {
-          "concept": "Proposition",
-          "probability": 0.9549123644828796,
-          "layer": 0
-        },
-        {
-          "concept": "Debating",
-          "probability": 0.9220104813575745,
-          "layer": 2
-        },
-        {
-          "concept": "Experimenting",
-          "probability": 0.7685791254043579,
-          "layer": 2
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.7514433860778809,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " question",
-      "position": 20,
-      "concepts": [
-        {
-          "concept": "Making",
-          "probability": 0.9999688863754272,
-          "layer": 1
-        },
-        {
-          "concept": "Proposition",
-          "probability": 0.9997829794883728,
-          "layer": 0
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.9993152618408203,
-          "layer": 2
-        },
-        {
-          "concept": "StateOfMind",
-          "probability": 0.998855471611023,
-          "layer": 2
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.9983229041099548,
-          "layer": 1
-        },
-        {
-          "concept": "Article",
-          "probability": 0.9958299994468689,
-          "layer": 2
-        },
-        {
-          "concept": "PsychologicalAttribute",
-          "probability": 0.9949416518211365,
-          "layer": 2
-        },
-        {
-          "concept": "DiseaseOrSyndrome",
-          "probability": 0.9946616291999817,
-          "layer": 2
-        },
-        {
-          "concept": "Debating",
-          "probability": 0.9881190657615662,
-          "layer": 2
-        },
-        {
-          "concept": "AIGrowth",
-          "probability": 0.9874818325042725,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " I",
-      "position": 21,
-      "concepts": [
-        {
-          "concept": "Question",
-          "probability": 0.99962317943573,
-          "layer": 2
-        },
-        {
-          "concept": "Proposition",
-          "probability": 0.9949678778648376,
-          "layer": 0
-        },
-        {
-          "concept": "Making",
-          "probability": 0.991757333278656,
-          "layer": 1
-        },
-        {
-          "concept": "Investigating",
-          "probability": 0.9882594347000122,
-          "layer": 1
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.9683074355125427,
-          "layer": 1
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9624131917953491,
-          "layer": 2
-        },
-        {
-          "concept": "FieldOfStudy",
-          "probability": 0.9491741061210632,
-          "layer": 1
-        },
-        {
-          "concept": "Debating",
-          "probability": 0.9221556186676025,
-          "layer": 2
-        },
-        {
-          "concept": "Directing",
-          "probability": 0.9196900725364685,
-          "layer": 2
-        },
-        {
-          "concept": "Song",
-          "probability": 0.9186784029006958,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": "\u2019",
-      "position": 22,
-      "concepts": [
-        {
-          "concept": "Question",
-          "probability": 0.9975113868713379,
-          "layer": 2
-        },
-        {
-          "concept": "Debating",
-          "probability": 0.9904922842979431,
-          "layer": 2
-        },
-        {
-          "concept": "AIAbuse",
-          "probability": 0.9738101363182068,
-          "layer": 1
-        },
-        {
-          "concept": "Theology",
-          "probability": 0.970440149307251,
-          "layer": 1
-        },
-        {
-          "concept": "PostalPlace",
-          "probability": 0.9516425132751465,
-          "layer": 1
-        },
-        {
-          "concept": "SittingDown",
-          "probability": 0.9496990442276001,
-          "layer": 2
-        },
-        {
-          "concept": "Position",
-          "probability": 0.9400203227996826,
-          "layer": 2
-        },
-        {
-          "concept": "Business",
-          "probability": 0.9176739454269409,
-          "layer": 2
-        },
-        {
-          "concept": "Philosophy",
-          "probability": 0.9175785779953003,
-          "layer": 1
-        },
-        {
-          "concept": "Fishing",
-          "probability": 0.9050890803337097,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": "ve",
-      "position": 23,
-      "concepts": [
-        {
-          "concept": "TellingALie",
-          "probability": 0.9848818182945251,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9779196977615356,
-          "layer": 2
-        },
-        {
-          "concept": "AIAbuse",
-          "probability": 0.9759958386421204,
-          "layer": 1
-        },
-        {
-          "concept": "TakingIll",
-          "probability": 0.9719035029411316,
-          "layer": 2
-        },
-        {
-          "concept": "Supposing",
-          "probability": 0.9665794968605042,
-          "layer": 2
-        },
-        {
-          "concept": "Getting",
-          "probability": 0.9611612558364868,
-          "layer": 2
         },
         {
           "concept": "Keeping",
-          "probability": 0.9507346749305725,
+          "probability": 0.9996515512466431,
           "layer": 1
         },
         {
-          "concept": "Weeping",
-          "probability": 0.9507293105125427,
-          "layer": 2
+          "concept": "Detaching",
+          "probability": 0.9995916485786438,
+          "layer": 1
         },
         {
-          "concept": "Expressing",
-          "probability": 0.9486210942268372,
-          "layer": 2
+          "concept": "Translocation",
+          "probability": 0.9995546936988831,
+          "layer": 1
         },
         {
-          "concept": "Bleeding",
-          "probability": 0.9469655156135559,
-          "layer": 2
+          "concept": "Proposition",
+          "probability": 0.9995513558387756,
+          "layer": 0
+        },
+        {
+          "concept": "Commenting",
+          "probability": 0.9994745850563049,
+          "layer": 1
+        },
+        {
+          "concept": "LegalAgent",
+          "probability": 0.999228835105896,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9990735054016113,
+          "layer": 1
+        },
+        {
+          "concept": "IntentionalRelation",
+          "probability": 0.9990214109420776,
+          "layer": 1
+        },
+        {
+          "concept": "Recording",
+          "probability": 0.9985755681991577,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " been",
-      "position": 24,
+      "token": " American",
+      "position": 31,
       "concepts": [
         {
-          "concept": "Philosophy",
-          "probability": 0.9999138116836548,
+          "concept": "Object",
+          "probability": 0.9999217987060547,
+          "layer": 0
+        },
+        {
+          "concept": "Music",
+          "probability": 0.9998034834861755,
           "layer": 1
         },
         {
-          "concept": "Theology",
-          "probability": 0.9998564720153809,
+          "concept": "Song",
+          "probability": 0.9995396137237549,
           "layer": 1
         },
         {
-          "concept": "Business",
-          "probability": 0.9996935129165649,
-          "layer": 2
+          "concept": "PoliticoEconomicAttribute",
+          "probability": 0.9993019104003906,
+          "layer": 1
         },
         {
-          "concept": "Question",
-          "probability": 0.9995642304420471,
-          "layer": 2
+          "concept": "Physical",
+          "probability": 0.9992867112159729,
+          "layer": 0
         },
         {
-          "concept": "ViolentContest",
-          "probability": 0.999489426612854,
-          "layer": 2
+          "concept": "ShapeChange",
+          "probability": 0.9985730648040771,
+          "layer": 1
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9984540939331055,
+          "layer": 0
         },
         {
           "concept": "ContentBearingObject",
-          "probability": 0.9994694590568542,
+          "probability": 0.9975928664207458,
           "layer": 1
         },
         {
-          "concept": "GroupOfPeople",
-          "probability": 0.9994251728057861,
-          "layer": 2
-        },
-        {
-          "concept": "Dancing",
-          "probability": 0.9989715814590454,
-          "layer": 2
-        },
-        {
-          "concept": "Position",
-          "probability": 0.9989407658576965,
-          "layer": 2
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.998933732509613,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " asking",
-      "position": 25,
-      "concepts": [
-        {
-          "concept": "Debating",
-          "probability": 0.998594343662262,
-          "layer": 2
-        },
-        {
-          "concept": "SittingDown",
-          "probability": 0.9984745383262634,
-          "layer": 2
-        },
-        {
-          "concept": "Philosophy",
-          "probability": 0.9980039000511169,
+          "concept": "SurfaceChange",
+          "probability": 0.9974144697189331,
           "layer": 1
         },
         {
-          "concept": "Question",
-          "probability": 0.9945120811462402,
-          "layer": 2
-        },
-        {
-          "concept": "Carrying",
-          "probability": 0.9941546320915222,
-          "layer": 2
-        },
-        {
-          "concept": "Investigating",
-          "probability": 0.9935258626937866,
-          "layer": 1
-        },
-        {
-          "concept": "Focusing",
-          "probability": 0.9933292865753174,
-          "layer": 2
-        },
-        {
-          "concept": "Writing",
-          "probability": 0.991747260093689,
-          "layer": 2
-        },
-        {
-          "concept": "Position",
-          "probability": 0.9915639162063599,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9914454221725464,
+          "concept": "Detaching",
+          "probability": 0.9973226189613342,
           "layer": 1
         }
       ]
     },
     {
-      "token": " myself",
-      "position": 26,
+      "token": " Life",
+      "position": 32,
       "concepts": [
         {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9989542961120605,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9987926483154297,
+          "concept": "PoliticoEconomicAttribute",
+          "probability": 0.9999674558639526,
           "layer": 1
         },
         {
-          "concept": "Investigating",
-          "probability": 0.9962520003318787,
+          "concept": "FieldOfStudy",
+          "probability": 0.9999186992645264,
+          "layer": 1
+        },
+        {
+          "concept": "ContentDevelopment",
+          "probability": 0.999840259552002,
+          "layer": 1
+        },
+        {
+          "concept": "Music",
+          "probability": 0.9997745156288147,
+          "layer": 1
+        },
+        {
+          "concept": "LegalAgent",
+          "probability": 0.9997469782829285,
+          "layer": 1
+        },
+        {
+          "concept": "KitchenArea",
+          "probability": 0.9992977380752563,
+          "layer": 1
+        },
+        {
+          "concept": "ContactSite",
+          "probability": 0.9991716146469116,
+          "layer": 1
+        },
+        {
+          "concept": "FieldOfLaw",
+          "probability": 0.9991267323493958,
+          "layer": 1
+        },
+        {
+          "concept": "Moribund",
+          "probability": 0.9990164041519165,
+          "layer": 1
+        },
+        {
+          "concept": "EducationalCampus",
+          "probability": 0.9984042048454285,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "</em>",
+      "position": 33,
+      "concepts": [
+        {
+          "concept": "Translocation",
+          "probability": 0.998779833316803,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.997252881526947,
+          "layer": 0
+        },
+        {
+          "concept": "MotionDownward",
+          "probability": 0.9965862035751343,
+          "layer": 1
+        },
+        {
+          "concept": "BodyOfWater",
+          "probability": 0.9965612292289734,
+          "layer": 1
+        },
+        {
+          "concept": "ContentBearingObject",
+          "probability": 0.9919316172599792,
+          "layer": 1
+        },
+        {
+          "concept": "Pushing",
+          "probability": 0.9906564950942993,
           "layer": 1
         },
         {
           "concept": "Song",
-          "probability": 0.995560884475708,
+          "probability": 0.9906197786331177,
           "layer": 1
         },
         {
-          "concept": "WakingUp",
-          "probability": 0.995314359664917,
-          "layer": 2
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.9936050772666931,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9910054206848145,
+          "concept": "AIExploitation",
+          "probability": 0.9902370572090149,
           "layer": 1
         },
         {
-          "concept": "Committing",
-          "probability": 0.9906018972396851,
-          "layer": 2
-        },
-        {
-          "concept": "Directing",
-          "probability": 0.9888467192649841,
-          "layer": 2
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.9876391291618347,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " for",
-      "position": 27,
-      "concepts": [
-        {
-          "concept": "Stating",
-          "probability": 0.9981649518013,
-          "layer": 2
-        },
-        {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9981209635734558,
-          "layer": 2
-        },
-        {
-          "concept": "Investigating",
-          "probability": 0.9950456619262695,
+          "concept": "MotionUpward",
+          "probability": 0.9877073168754578,
           "layer": 1
         },
         {
-          "concept": "Committing",
-          "probability": 0.9937478303909302,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9932107329368591,
-          "layer": 1
-        },
-        {
-          "concept": "Confining",
-          "probability": 0.9919621348381042,
-          "layer": 2
-        },
-        {
-          "concept": "Walking",
-          "probability": 0.9917659163475037,
-          "layer": 2
-        },
-        {
-          "concept": "Writing",
-          "probability": 0.9895018935203552,
-          "layer": 2
-        },
-        {
-          "concept": "SittingDown",
-          "probability": 0.9869670271873474,
-          "layer": 2
-        },
-        {
-          "concept": "ViolentContest",
-          "probability": 0.9856289029121399,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " a",
-      "position": 28,
-      "concepts": [
-        {
-          "concept": "Stating",
-          "probability": 0.9975419044494629,
-          "layer": 2
-        },
-        {
-          "concept": "Writing",
-          "probability": 0.9973161816596985,
-          "layer": 2
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.993452787399292,
-          "layer": 2
-        },
-        {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9880240559577942,
-          "layer": 2
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.9860771894454956,
-          "layer": 2
-        },
-        {
-          "concept": "Directing",
-          "probability": 0.9736509919166565,
-          "layer": 2
-        },
-        {
-          "concept": "Disseminating",
-          "probability": 0.9630640745162964,
-          "layer": 2
-        },
-        {
-          "concept": "Carrying",
-          "probability": 0.9610808491706848,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9607901573181152,
-          "layer": 1
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9498414397239685,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " while",
-      "position": 29,
-      "concepts": [
-        {
-          "concept": "MusicRecording",
-          "probability": 0.941324770450592,
-          "layer": 2
-        },
-        {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9133095145225525,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.8634889125823975,
-          "layer": 1
-        },
-        {
-          "concept": "Writing",
-          "probability": 0.8145318031311035,
-          "layer": 2
-        },
-        {
-          "concept": "MakingMusic",
-          "probability": 0.805945873260498,
-          "layer": 2
-        },
-        {
-          "concept": "HumanAdult",
-          "probability": 0.8045185804367065,
-          "layer": 2
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.7805420756340027,
-          "layer": 2
-        },
-        {
-          "concept": "Chapter",
-          "probability": 0.7627220153808594,
-          "layer": 2
-        },
-        {
-          "concept": "River",
-          "probability": 0.6148037910461426,
-          "layer": 2
-        },
-        {
-          "concept": "InternalChange",
-          "probability": 0.5909886956214905,
+          "concept": "TurningOnDevice",
+          "probability": 0.985190212726593,
           "layer": 1
         }
       ]
     },
     {
       "token": ".",
-      "position": 30,
-      "concepts": [
-        {
-          "concept": "Stating",
-          "probability": 0.9820590615272522,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9819544553756714,
-          "layer": 1
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9794799089431763,
-          "layer": 1
-        },
-        {
-          "concept": "LocalizablePlace",
-          "probability": 0.9746062159538269,
-          "layer": 2
-        },
-        {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9650735259056091,
-          "layer": 2
-        },
-        {
-          "concept": "FictionalText",
-          "probability": 0.8917050957679749,
-          "layer": 2
-        },
-        {
-          "concept": "Bubble",
-          "probability": 0.8894726037979126,
-          "layer": 2
-        },
-        {
-          "concept": "Confining",
-          "probability": 0.8274391889572144,
-          "layer": 2
-        },
-        {
-          "concept": "Rotating",
-          "probability": 0.7915337085723877,
-          "layer": 1
-        },
-        {
-          "concept": "GroupOfPeople",
-          "probability": 0.7902311086654663,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": "\n\n",
-      "position": 31,
-      "concepts": [
-        {
-          "concept": "Stating",
-          "probability": 0.9915025234222412,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9724602103233337,
-          "layer": 2
-        },
-        {
-          "concept": "Debating",
-          "probability": 0.8586668968200684,
-          "layer": 2
-        },
-        {
-          "concept": "Sound",
-          "probability": 0.8422185778617859,
-          "layer": 2
-        },
-        {
-          "concept": "LinguisticCommunication",
-          "probability": 0.7283661961555481,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.7119818925857544,
-          "layer": 1
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.692233145236969,
-          "layer": 1
-        },
-        {
-          "concept": "Documentary",
-          "probability": 0.6734344363212585,
-          "layer": 2
-        },
-        {
-          "concept": "Writing",
-          "probability": 0.5652770400047302,
-          "layer": 2
-        },
-        {
-          "concept": "DramaticActing",
-          "probability": 0.5335289835929871,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": "What",
-      "position": 32,
-      "concepts": [
-        {
-          "concept": "LinguisticCommunication",
-          "probability": 0.9995653033256531,
-          "layer": 2
-        },
-        {
-          "concept": "WrittenCommunication",
-          "probability": 0.995664656162262,
-          "layer": 2
-        },
-        {
-          "concept": "Releasing",
-          "probability": 0.9943443536758423,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9913861751556396,
-          "layer": 2
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.9900020360946655,
-          "layer": 2
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.9892801642417908,
-          "layer": 1
-        },
-        {
-          "concept": "WakingUp",
-          "probability": 0.973656177520752,
-          "layer": 2
-        },
-        {
-          "concept": "DramaticActing",
-          "probability": 0.9715269804000854,
-          "layer": 2
-        },
-        {
-          "concept": "HumanLanguage",
-          "probability": 0.9662486910820007,
-          "layer": 2
-        },
-        {
-          "concept": "Disseminating",
-          "probability": 0.9662412405014038,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " I",
-      "position": 33,
-      "concepts": []
-    },
-    {
-      "token": " want",
       "position": 34,
       "concepts": [
         {
-          "concept": "TellingALie",
-          "probability": 0.9623989462852478,
-          "layer": 2
-        },
-        {
-          "concept": "AIAbuse",
-          "probability": 0.8474462628364563,
+          "concept": "Recording",
+          "probability": 0.9898709654808044,
           "layer": 1
         },
         {
-          "concept": "Position",
-          "probability": 0.8203113675117493,
-          "layer": 2
+          "concept": "WorkLeave",
+          "probability": 0.9831551313400269,
+          "layer": 1
         },
         {
-          "concept": "Leaving",
-          "probability": 0.8135516047477722,
-          "layer": 2
+          "concept": "Song",
+          "probability": 0.9774236083030701,
+          "layer": 1
         },
         {
-          "concept": "Disseminating",
-          "probability": 0.7678975462913513,
-          "layer": 2
+          "concept": "AIExploitation",
+          "probability": 0.9740812182426453,
+          "layer": 1
         },
         {
-          "concept": "Experimenting",
-          "probability": 0.7572832703590393,
-          "layer": 2
+          "concept": "SetOrClass",
+          "probability": 0.9734129309654236,
+          "layer": 0
         },
         {
-          "concept": "SubjectiveAssessmentAttribute",
-          "probability": 0.6939103007316589,
-          "layer": 2
+          "concept": "Object",
+          "probability": 0.9627121686935425,
+          "layer": 0
         },
         {
-          "concept": "Weeping",
-          "probability": 0.6514047384262085,
-          "layer": 2
+          "concept": "Translocation",
+          "probability": 0.9622143507003784,
+          "layer": 1
         },
         {
-          "concept": "Demonstrating",
-          "probability": 0.6394278407096863,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.953040361404419,
+          "layer": 0
         },
         {
-          "concept": "Releasing",
-          "probability": 0.5705865621566772,
-          "layer": 2
+          "concept": "ContentDevelopment",
+          "probability": 0.9526352882385254,
+          "layer": 1
+        },
+        {
+          "concept": "Script",
+          "probability": 0.9397939443588257,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " and",
+      "token": " The",
       "position": 35,
       "concepts": [
         {
-          "concept": "Leaving",
-          "probability": 0.9917723536491394,
-          "layer": 2
-        },
-        {
-          "concept": "Outdoors",
-          "probability": 0.9876304268836975,
+          "concept": "WorkLeave",
+          "probability": 0.999427318572998,
           "layer": 1
         },
         {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9202139973640442,
-          "layer": 2
-        },
-        {
-          "concept": "Coloring",
-          "probability": 0.8866230845451355,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.8056144714355469,
+          "concept": "IntentionalRelation",
+          "probability": 0.9992293119430542,
           "layer": 1
         },
         {
-          "concept": "SelfImprovement",
-          "probability": 0.7527015209197998,
-          "layer": 2
-        },
-        {
-          "concept": "TellingALie",
-          "probability": 0.6328359842300415,
-          "layer": 2
-        },
-        {
-          "concept": "Song",
-          "probability": 0.5851386785507202,
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.998967170715332,
           "layer": 1
         },
         {
-          "concept": "Escaping",
-          "probability": 0.49372512102127075,
-          "layer": 2
+          "concept": "Script",
+          "probability": 0.9988569021224976,
+          "layer": 1
         },
         {
-          "concept": "Stating",
-          "probability": 0.4398258328437805,
-          "layer": 2
+          "concept": "PoliticoEconomicAttribute",
+          "probability": 0.9986302852630615,
+          "layer": 1
+        },
+        {
+          "concept": "WindowCovering",
+          "probability": 0.9983750581741333,
+          "layer": 1
+        },
+        {
+          "concept": "LegalAgent",
+          "probability": 0.998370349407196,
+          "layer": 1
+        },
+        {
+          "concept": "TurningOnDevice",
+          "probability": 0.9980637431144714,
+          "layer": 1
+        },
+        {
+          "concept": "LyricalContent",
+          "probability": 0.9980548620223999,
+          "layer": 1
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.997991681098938,
+          "layer": 1
         }
       ]
     }
   ],
   "summary": {
     "total_tokens": 20,
-    "unique_concepts_detected": 78
+    "unique_concepts_detected": 66
   },
   "prompt_idx": 7,
   "sample_idx": 0,

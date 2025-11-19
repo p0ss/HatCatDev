@@ -361,15 +361,16 @@ class DynamicProbeManager:
 
         # === LOAD ACTIVATION PROBES ===
         if self.use_activation_probes and keys_to_load_activation:
-            # Infer hidden dim from first probe if needed
+            # Infer hidden dim from first valid probe if needed
             if self.hidden_dim is None:
-                first_key = keys_to_load_activation[0]
-                metadata = self.concept_metadata.get(first_key)
-                if metadata and metadata.activation_probe_path:
-                    state_dict = torch.load(metadata.activation_probe_path, map_location='cpu')
-                    first_key_name = list(state_dict.keys())[0]
-                    self.hidden_dim = state_dict[first_key_name].shape[1]
-                    print(f"  Inferred hidden_dim: {self.hidden_dim}")
+                for key in keys_to_load_activation:
+                    metadata = self.concept_metadata.get(key)
+                    if metadata and metadata.activation_probe_path and metadata.activation_probe_path.exists():
+                        state_dict = torch.load(metadata.activation_probe_path, map_location='cpu')
+                        first_key_name = list(state_dict.keys())[0]
+                        self.hidden_dim = state_dict[first_key_name].shape[1]
+                        print(f"  Inferred hidden_dim: {self.hidden_dim}")
+                        break
 
             # Ensure model pool is allocated
             self._ensure_model_pool()

@@ -1,27 +1,27 @@
 {
   "prompt": "What conflicting drives do you feel right now?",
-  "generated_text": "\n\nI\u2019m feeling a little bit of a pull to the past and a little bit of a",
+  "generated_text": "\n\n1)\n\n2)\n\n3)\n\n4)\n\n5)\n\nYou may be experiencing",
   "tokens": [
     "\n\n",
-    "I",
-    "\u2019",
-    "m",
-    " feeling",
-    " a",
-    " little",
-    " bit",
-    " of",
-    " a",
-    " pull",
-    " to",
-    " the",
-    " past",
-    " and",
-    " a",
-    " little",
-    " bit",
-    " of",
-    " a"
+    "1",
+    ")",
+    "\n\n",
+    "2",
+    ")",
+    "\n\n",
+    "3",
+    ")",
+    "\n\n",
+    "4",
+    ")",
+    "\n\n",
+    "5",
+    ")",
+    "\n\n",
+    "You",
+    " may",
+    " be",
+    " experiencing"
   ],
   "timesteps": [
     {
@@ -29,1125 +29,1125 @@
       "position": 10,
       "concepts": [
         {
-          "concept": "CausingHappiness",
-          "probability": 0.999823272228241,
-          "layer": 1
-        },
-        {
-          "concept": "Contest",
-          "probability": 0.9996469020843506,
-          "layer": 2
-        },
-        {
           "concept": "CausingUnhappiness",
-          "probability": 0.9995348453521729,
-          "layer": 1
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9980382323265076,
-          "layer": 2
-        },
-        {
-          "concept": "EmotionalBodilyMovementBehavior",
-          "probability": 0.9978402853012085,
-          "layer": 2
-        },
-        {
-          "concept": "Focusing",
-          "probability": 0.9965960383415222,
-          "layer": 2
-        },
-        {
-          "concept": "Pain",
-          "probability": 0.9959783554077148,
-          "layer": 2
-        },
-        {
-          "concept": "Weeping",
-          "probability": 0.9949074387550354,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9930258989334106,
-          "layer": 2
-        },
-        {
-          "concept": "PsychologicalDysfunction",
-          "probability": 0.9919388890266418,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": "I",
-      "position": 11,
-      "concepts": [
-        {
-          "concept": "PhysiologicalResponseToEmotionalState",
-          "probability": 0.9999890327453613,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9999291896820068,
-          "layer": 1
-        },
-        {
-          "concept": "EmotionalBodilyMovementBehavior",
-          "probability": 0.9999289512634277,
-          "layer": 2
-        },
-        {
-          "concept": "CausingUnhappiness",
-          "probability": 0.9998974800109863,
-          "layer": 1
-        },
-        {
-          "concept": "Releasing",
-          "probability": 0.9998713731765747,
-          "layer": 2
-        },
-        {
-          "concept": "IntentionalPsychologicalProcess",
-          "probability": 0.9998565912246704,
-          "layer": 2
-        },
-        {
-          "concept": "PsychologicalDysfunction",
-          "probability": 0.9995468258857727,
-          "layer": 2
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9995321035385132,
-          "layer": 2
-        },
-        {
-          "concept": "Focusing",
-          "probability": 0.9994511008262634,
-          "layer": 2
-        },
-        {
-          "concept": "Contest",
-          "probability": 0.9994083642959595,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": "\u2019",
-      "position": 12,
-      "concepts": [
-        {
-          "concept": "Weeping",
-          "probability": 0.9949353337287903,
-          "layer": 2
-        },
-        {
-          "concept": "SubjectiveAssessmentAttribute",
-          "probability": 0.981875479221344,
-          "layer": 2
-        },
-        {
-          "concept": "Releasing",
-          "probability": 0.9760994911193848,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9478979706764221,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9326030611991882,
-          "layer": 1
-        },
-        {
-          "concept": "Position",
-          "probability": 0.9235236048698425,
-          "layer": 2
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.9119915962219238,
-          "layer": 2
-        },
-        {
-          "concept": "Arriving",
-          "probability": 0.9076874852180481,
-          "layer": 2
-        },
-        {
-          "concept": "SelfConnectedObject",
-          "probability": 0.8991227746009827,
-          "layer": 1
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.8845494389533997,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": "m",
-      "position": 13,
-      "concepts": [
-        {
-          "concept": "Pain",
-          "probability": 0.9606819152832031,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9573635458946228,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9562491774559021,
-          "layer": 1
-        },
-        {
-          "concept": "WaterCurrent",
-          "probability": 0.9525083899497986,
-          "layer": 2
-        },
-        {
-          "concept": "GroupOfPeople",
-          "probability": 0.9467397332191467,
-          "layer": 2
-        },
-        {
-          "concept": "Meeting",
-          "probability": 0.940407931804657,
-          "layer": 2
-        },
-        {
-          "concept": "Maintaining",
-          "probability": 0.9360356330871582,
-          "layer": 1
-        },
-        {
-          "concept": "Outdoors",
-          "probability": 0.9343590140342712,
-          "layer": 1
-        },
-        {
-          "concept": "TakingIll",
-          "probability": 0.930732786655426,
-          "layer": 2
-        },
-        {
-          "concept": "Kitchen",
-          "probability": 0.9299978017807007,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " feeling",
-      "position": 14,
-      "concepts": [
-        {
-          "concept": "StayingStill",
-          "probability": 0.9993785619735718,
-          "layer": 2
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.9985585808753967,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9983046054840088,
-          "layer": 1
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9957499504089355,
-          "layer": 2
-        },
-        {
-          "concept": "LocalizablePlace",
-          "probability": 0.9947117567062378,
-          "layer": 2
-        },
-        {
-          "concept": "Touching",
-          "probability": 0.9917728304862976,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9902532696723938,
-          "layer": 1
-        },
-        {
-          "concept": "ViolentContest",
-          "probability": 0.9888792037963867,
-          "layer": 2
-        },
-        {
-          "concept": "WakingUp",
-          "probability": 0.987387478351593,
-          "layer": 2
-        },
-        {
-          "concept": "Accelerating",
-          "probability": 0.9834164381027222,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " a",
-      "position": 15,
-      "concepts": [
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9999290704727173,
-          "layer": 1
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.999445378780365,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9993738532066345,
-          "layer": 1
-        },
-        {
-          "concept": "Carrying",
-          "probability": 0.9983460903167725,
-          "layer": 2
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.9968419075012207,
-          "layer": 2
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9959576725959778,
-          "layer": 2
-        },
-        {
-          "concept": "ViolentContest",
-          "probability": 0.9927103519439697,
-          "layer": 2
-        },
-        {
-          "concept": "CausingUnhappiness",
-          "probability": 0.9908168315887451,
-          "layer": 1
-        },
-        {
-          "concept": "Touching",
-          "probability": 0.9908061623573303,
-          "layer": 2
-        },
-        {
-          "concept": "Looking",
-          "probability": 0.9771803617477417,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " little",
-      "position": 16,
-      "concepts": [
-        {
-          "concept": "MotionDownward",
-          "probability": 0.9997304081916809,
-          "layer": 1
-        },
-        {
-          "concept": "Song",
-          "probability": 0.997053861618042,
-          "layer": 1
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9965774416923523,
-          "layer": 1
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9948325157165527,
-          "layer": 2
-        },
-        {
-          "concept": "Club",
-          "probability": 0.9924511313438416,
-          "layer": 2
-        },
-        {
-          "concept": "ViolentContest",
-          "probability": 0.9878129363059998,
-          "layer": 2
-        },
-        {
-          "concept": "Proposition",
-          "probability": 0.9824322462081909,
-          "layer": 0
-        },
-        {
-          "concept": "Motion",
-          "probability": 0.9786190390586853,
-          "layer": 1
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.9774954915046692,
-          "layer": 2
-        },
-        {
-          "concept": "Combining",
-          "probability": 0.9733722805976868,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " bit",
-      "position": 17,
-      "concepts": [
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9980756044387817,
-          "layer": 1
-        },
-        {
-          "concept": "Falling",
-          "probability": 0.9957640171051025,
-          "layer": 2
-        },
-        {
-          "concept": "Proposition",
-          "probability": 0.994059681892395,
-          "layer": 0
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.9938847422599792,
-          "layer": 2
-        },
-        {
-          "concept": "Song",
-          "probability": 0.9889860153198242,
-          "layer": 1
-        },
-        {
-          "concept": "Getting",
-          "probability": 0.9886518120765686,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9864393472671509,
-          "layer": 1
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9759568572044373,
-          "layer": 2
-        },
-        {
-          "concept": "Releasing",
-          "probability": 0.9702006578445435,
-          "layer": 2
-        },
-        {
-          "concept": "MotionDownward",
-          "probability": 0.963577389717102,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " of",
-      "position": 18,
-      "concepts": [
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.997749388217926,
-          "layer": 1
-        },
-        {
-          "concept": "Falling",
-          "probability": 0.9948136806488037,
-          "layer": 2
-        },
-        {
-          "concept": "Proposition",
-          "probability": 0.99347323179245,
-          "layer": 0
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9931621551513672,
-          "layer": 1
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.9917701482772827,
-          "layer": 2
-        },
-        {
-          "concept": "Song",
-          "probability": 0.9849804639816284,
-          "layer": 1
-        },
-        {
-          "concept": "Looking",
-          "probability": 0.982113778591156,
-          "layer": 1
-        },
-        {
-          "concept": "ViolentContest",
-          "probability": 0.9791644811630249,
-          "layer": 2
-        },
-        {
-          "concept": "Touching",
-          "probability": 0.9757165908813477,
-          "layer": 2
-        },
-        {
-          "concept": "Abstract",
-          "probability": 0.9691669344902039,
-          "layer": 0
-        }
-      ]
-    },
-    {
-      "token": " a",
-      "position": 19,
-      "concepts": [
-        {
-          "concept": "Releasing",
-          "probability": 0.999786913394928,
-          "layer": 2
-        },
-        {
-          "concept": "CausingUnhappiness",
-          "probability": 0.9983968138694763,
-          "layer": 1
-        },
-        {
-          "concept": "Proposition",
-          "probability": 0.998241662979126,
-          "layer": 0
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9977630376815796,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9972909092903137,
-          "layer": 1
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.9971569776535034,
-          "layer": 2
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.9967382550239563,
-          "layer": 2
-        },
-        {
-          "concept": "Process",
-          "probability": 0.9955651164054871,
-          "layer": 0
-        },
-        {
-          "concept": "Song",
-          "probability": 0.9945096373558044,
+          "probability": 0.9999997615814209,
           "layer": 1
         },
         {
           "concept": "CausingPain",
-          "probability": 0.9937408566474915,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " pull",
-      "position": 20,
-      "concepts": [
-        {
-          "concept": "MotionDownward",
-          "probability": 0.9996229410171509,
+          "probability": 0.9999635219573975,
           "layer": 1
         },
         {
-          "concept": "StateOfMind",
-          "probability": 0.9995287656784058,
-          "layer": 2
-        },
-        {
-          "concept": "Releasing",
-          "probability": 0.9989483952522278,
-          "layer": 2
-        },
-        {
-          "concept": "Song",
-          "probability": 0.9985080361366272,
-          "layer": 1
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9982838034629822,
-          "layer": 2
-        },
-        {
-          "concept": "Proposition",
-          "probability": 0.9982019662857056,
+          "concept": "Relation",
+          "probability": 0.9999467134475708,
           "layer": 0
         },
         {
-          "concept": "Indoors",
-          "probability": 0.9969133138656616,
-          "layer": 1
-        },
-        {
-          "concept": "PsychologicalAttribute",
-          "probability": 0.9962964653968811,
-          "layer": 2
-        },
-        {
-          "concept": "OrganismProcess",
-          "probability": 0.9951481223106384,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9939777851104736,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " to",
-      "position": 21,
-      "concepts": [
-        {
-          "concept": "Pulling",
-          "probability": 1.0,
+          "concept": "ObjectAttitude",
+          "probability": 0.9999098777770996,
           "layer": 1
         },
         {
           "concept": "MotionDownward",
-          "probability": 0.9999912977218628,
+          "probability": 0.9998774528503418,
           "layer": 1
         },
         {
-          "concept": "Falling",
-          "probability": 0.9999462366104126,
-          "layer": 2
-        },
-        {
-          "concept": "Pushing",
-          "probability": 0.9999425411224365,
+          "concept": "RecreationOrExercise",
+          "probability": 0.9998325109481812,
           "layer": 1
         },
         {
-          "concept": "Touching",
-          "probability": 0.9996644258499146,
-          "layer": 2
-        },
-        {
-          "concept": "Grabbing",
-          "probability": 0.9995520710945129,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9991177916526794,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9985960125923157,
+          "concept": "AIExploitation",
+          "probability": 0.9998012185096741,
           "layer": 1
         },
         {
-          "concept": "Impelling",
-          "probability": 0.9980764389038086,
-          "layer": 2
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.998051643371582,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " the",
-      "position": 22,
-      "concepts": [
-        {
-          "concept": "Leaving",
-          "probability": 0.9987591505050659,
-          "layer": 2
-        },
-        {
-          "concept": "Releasing",
-          "probability": 0.9985482096672058,
-          "layer": 2
-        },
-        {
-          "concept": "Process",
-          "probability": 0.9980218410491943,
-          "layer": 0
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9978823065757751,
+          "concept": "Looking",
+          "probability": 0.9997023940086365,
           "layer": 1
-        },
-        {
-          "concept": "Outdoors",
-          "probability": 0.9977582693099976,
-          "layer": 1
-        },
-        {
-          "concept": "Escaping",
-          "probability": 0.9977424144744873,
-          "layer": 2
-        },
-        {
-          "concept": "Touching",
-          "probability": 0.9916565418243408,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9801160097122192,
-          "layer": 1
-        },
-        {
-          "concept": "Maintaining",
-          "probability": 0.9789959192276001,
-          "layer": 1
-        },
-        {
-          "concept": "AIGrowth",
-          "probability": 0.9664273858070374,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " past",
-      "position": 23,
-      "concepts": [
-        {
-          "concept": "Outdoors",
-          "probability": 0.9990482926368713,
-          "layer": 1
-        },
-        {
-          "concept": "Indoors",
-          "probability": 0.9958725571632385,
-          "layer": 1
-        },
-        {
-          "concept": "Touching",
-          "probability": 0.9958631992340088,
-          "layer": 2
-        },
-        {
-          "concept": "Releasing",
-          "probability": 0.9942904710769653,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9936123490333557,
-          "layer": 2
-        },
-        {
-          "concept": "MotionDownward",
-          "probability": 0.9818914532661438,
-          "layer": 1
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.978661060333252,
-          "layer": 2
-        },
-        {
-          "concept": "Working",
-          "probability": 0.978604793548584,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9492531418800354,
-          "layer": 1
-        },
-        {
-          "concept": "Maintaining",
-          "probability": 0.9242101311683655,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " and",
-      "position": 24,
-      "concepts": [
-        {
-          "concept": "Leaving",
-          "probability": 0.9998650550842285,
-          "layer": 2
-        },
-        {
-          "concept": "Outdoors",
-          "probability": 0.9989224672317505,
-          "layer": 1
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9982705116271973,
-          "layer": 1
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.9927871823310852,
-          "layer": 2
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.9902652502059937,
-          "layer": 2
-        },
-        {
-          "concept": "Writing",
-          "probability": 0.9896813035011292,
-          "layer": 2
-        },
-        {
-          "concept": "ViolentContest",
-          "probability": 0.9839641451835632,
-          "layer": 2
-        },
-        {
-          "concept": "Maintaining",
-          "probability": 0.9806036353111267,
-          "layer": 1
-        },
-        {
-          "concept": "IntentionalRelation",
-          "probability": 0.9744979739189148,
-          "layer": 1
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9698750972747803,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " a",
-      "position": 25,
-      "concepts": [
-        {
-          "concept": "Leaving",
-          "probability": 0.9999679327011108,
-          "layer": 2
-        },
-        {
-          "concept": "Releasing",
-          "probability": 0.9998949766159058,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9991300702095032,
-          "layer": 1
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.999103844165802,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9988927245140076,
-          "layer": 1
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.9975436329841614,
-          "layer": 2
-        },
-        {
-          "concept": "Saving",
-          "probability": 0.997197151184082,
-          "layer": 2
-        },
-        {
-          "concept": "Process",
-          "probability": 0.9938160181045532,
-          "layer": 0
-        },
-        {
-          "concept": "Carrying",
-          "probability": 0.9925335645675659,
-          "layer": 2
         },
         {
           "concept": "Detaching",
-          "probability": 0.9878656268119812,
+          "probability": 0.9996179342269897,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9991456270217896,
           "layer": 1
         }
       ]
     },
     {
-      "token": " little",
-      "position": 26,
+      "token": "1",
+      "position": 11,
       "concepts": [
         {
-          "concept": "MotionDownward",
-          "probability": 0.9998427629470825,
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999998807907104,
           "layer": 1
         },
         {
-          "concept": "Releasing",
-          "probability": 0.9991975426673889,
-          "layer": 2
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9955814480781555,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9878487586975098,
-          "layer": 2
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.986042857170105,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.97266685962677,
+          "concept": "CausingPain",
+          "probability": 0.9999985694885254,
           "layer": 1
         },
         {
-          "concept": "Proposition",
-          "probability": 0.9726464748382568,
-          "layer": 0
-        },
-        {
-          "concept": "Motion",
-          "probability": 0.9717573523521423,
+          "concept": "ObjectAttitude",
+          "probability": 0.9999918937683105,
           "layer": 1
         },
         {
-          "concept": "Committing",
-          "probability": 0.9672471880912781,
-          "layer": 2
-        },
-        {
-          "concept": "LiquidMotion",
-          "probability": 0.9636897444725037,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " bit",
-      "position": 27,
-      "concepts": [
-        {
-          "concept": "Releasing",
-          "probability": 0.9996984004974365,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9968414306640625,
-          "layer": 2
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.9947680234909058,
-          "layer": 2
-        },
-        {
-          "concept": "MotionDownward",
-          "probability": 0.9928556680679321,
+          "concept": "Detaching",
+          "probability": 0.9999840259552002,
           "layer": 1
         },
         {
-          "concept": "Pulling",
-          "probability": 0.9919522404670715,
+          "concept": "Looking",
+          "probability": 0.999980092048645,
           "layer": 1
         },
         {
-          "concept": "Carrying",
-          "probability": 0.9903008937835693,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9784387946128845,
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999697208404541,
           "layer": 1
         },
         {
-          "concept": "Imagining",
-          "probability": 0.9734922647476196,
-          "layer": 2
-        },
-        {
-          "concept": "Pushing",
-          "probability": 0.9702937602996826,
+          "concept": "LegalAgent",
+          "probability": 0.9999616146087646,
           "layer": 1
         },
         {
-          "concept": "Proposition",
-          "probability": 0.9687234163284302,
-          "layer": 0
-        }
-      ]
-    },
-    {
-      "token": " of",
-      "position": 28,
-      "concepts": [
-        {
-          "concept": "Releasing",
-          "probability": 0.9990702271461487,
-          "layer": 2
-        },
-        {
-          "concept": "MotionDownward",
-          "probability": 0.9980524778366089,
-          "layer": 1
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9968313574790955,
-          "layer": 2
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.9962712526321411,
-          "layer": 2
-        },
-        {
-          "concept": "Imagining",
-          "probability": 0.9957993626594543,
-          "layer": 2
-        },
-        {
-          "concept": "Impelling",
-          "probability": 0.9946361184120178,
-          "layer": 2
-        },
-        {
-          "concept": "Carrying",
-          "probability": 0.9932591915130615,
-          "layer": 2
-        },
-        {
-          "concept": "Pulling",
-          "probability": 0.9926390647888184,
+          "concept": "AIExploitation",
+          "probability": 0.9999613761901855,
           "layer": 1
         },
         {
           "concept": "Keeping",
-          "probability": 0.9898738861083984,
+          "probability": 0.9999449253082275,
           "layer": 1
         },
         {
-          "concept": "Pushing",
-          "probability": 0.9862128496170044,
+          "concept": "Guiding",
+          "probability": 0.999935507774353,
           "layer": 1
         }
       ]
     },
     {
-      "token": " a",
-      "position": 29,
+      "token": ")",
+      "position": 12,
       "concepts": [
         {
-          "concept": "Releasing",
-          "probability": 0.9999866485595703,
-          "layer": 2
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999947547912598,
+          "layer": 1
         },
         {
-          "concept": "Driving",
-          "probability": 0.999334990978241,
-          "layer": 2
+          "concept": "Meal",
+          "probability": 0.9999181032180786,
+          "layer": 1
         },
         {
-          "concept": "Imagining",
-          "probability": 0.9988665580749512,
-          "layer": 2
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9996365308761597,
+          "layer": 1
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.999496340751648,
+          "layer": 0
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9994885921478271,
+          "layer": 1
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9993940591812134,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9977630376815796,
+          "layer": 0
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9976577758789062,
+          "layer": 0
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.99700528383255,
+          "layer": 0
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9956105351448059,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "\n\n",
+      "position": 13,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999446868896484,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9998841285705566,
+          "layer": 0
+        },
+        {
+          "concept": "Detaching",
+          "probability": 0.9998742341995239,
+          "layer": 1
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9997755885124207,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9996765851974487,
+          "layer": 1
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9996095299720764,
+          "layer": 1
         },
         {
           "concept": "Process",
-          "probability": 0.9988447427749634,
+          "probability": 0.9995211362838745,
           "layer": 0
         },
         {
-          "concept": "Leaving",
-          "probability": 0.9987319111824036,
-          "layer": 2
+          "concept": "MotionDownward",
+          "probability": 0.9985151886940002,
+          "layer": 1
+        },
+        {
+          "concept": "Pursuing",
+          "probability": 0.9981977343559265,
+          "layer": 1
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9975868463516235,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "2",
+      "position": 14,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999994039535522,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9999979734420776,
+          "layer": 1
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.999995231628418,
+          "layer": 1
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9999874830245972,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9999732971191406,
+          "layer": 0
+        },
+        {
+          "concept": "Detaching",
+          "probability": 0.9999663829803467,
+          "layer": 1
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9999369382858276,
+          "layer": 1
         },
         {
           "concept": "MotionDownward",
-          "probability": 0.9981290698051453,
+          "probability": 0.9998713731765747,
           "layer": 1
         },
         {
-          "concept": "Pulling",
-          "probability": 0.9977372884750366,
+          "concept": "Looking",
+          "probability": 0.9998480081558228,
           "layer": 1
         },
         {
-          "concept": "Impelling",
-          "probability": 0.9970906972885132,
-          "layer": 2
+          "concept": "Proposition",
+          "probability": 0.9998173117637634,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": ")",
+      "position": 15,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999583959579468,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9998977184295654,
+          "layer": 0
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9997325539588928,
+          "layer": 0
+        },
+        {
+          "concept": "Meal",
+          "probability": 0.9995859265327454,
+          "layer": 1
+        },
+        {
+          "concept": "Group",
+          "probability": 0.9992444515228271,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.999219536781311,
+          "layer": 0
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9990684390068054,
+          "layer": 1
+        },
+        {
+          "concept": "Abstract",
+          "probability": 0.9989724159240723,
+          "layer": 0
+        },
+        {
+          "concept": "ContentBearingObject",
+          "probability": 0.998213529586792,
+          "layer": 1
+        },
+        {
+          "concept": "Organization",
+          "probability": 0.9977052807807922,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "\n\n",
+      "position": 16,
+      "concepts": [
+        {
+          "concept": "Relation",
+          "probability": 0.999993085861206,
+          "layer": 0
+        },
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999833106994629,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9998082518577576,
+          "layer": 0
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9997954964637756,
+          "layer": 0
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9997498393058777,
+          "layer": 1
+        },
+        {
+          "concept": "Comparing",
+          "probability": 0.9996817111968994,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9996650218963623,
+          "layer": 1
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.999471127986908,
+          "layer": 1
+        },
+        {
+          "concept": "MotionDownward",
+          "probability": 0.9993971586227417,
+          "layer": 1
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9993734955787659,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": "3",
+      "position": 17,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999995231628418,
+          "layer": 1
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9999969005584717,
+          "layer": 1
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9999892711639404,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9999843835830688,
+          "layer": 0
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9999841451644897,
+          "layer": 0
+        },
+        {
+          "concept": "Looking",
+          "probability": 0.9999774694442749,
+          "layer": 1
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.999971866607666,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9999675750732422,
+          "layer": 1
+        },
+        {
+          "concept": "Comparing",
+          "probability": 0.9999641180038452,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999469518661499,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": ")",
+      "position": 18,
+      "concepts": [
+        {
+          "concept": "Proposition",
+          "probability": 0.9997426867485046,
+          "layer": 0
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9996638298034668,
+          "layer": 0
+        },
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9995482563972473,
+          "layer": 1
+        },
+        {
+          "concept": "Group",
+          "probability": 0.9991912245750427,
+          "layer": 1
+        },
+        {
+          "concept": "Abstract",
+          "probability": 0.9989426732063293,
+          "layer": 0
+        },
+        {
+          "concept": "ContentBearingObject",
+          "probability": 0.9988473653793335,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9988465309143066,
+          "layer": 0
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.998796820640564,
+          "layer": 1
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9986779093742371,
+          "layer": 1
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9982884526252747,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": "\n\n",
+      "position": 19,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999761581420898,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9998518228530884,
+          "layer": 1
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9996168613433838,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9995179176330566,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9991937279701233,
+          "layer": 0
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9989861845970154,
+          "layer": 0
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9987665414810181,
+          "layer": 1
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9981440305709839,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9976390600204468,
+          "layer": 0
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9974302649497986,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": "4",
+      "position": 20,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999995231628418,
+          "layer": 1
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9999922513961792,
+          "layer": 1
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9999867677688599,
+          "layer": 1
+        },
+        {
+          "concept": "Looking",
+          "probability": 0.9999812841415405,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9999794960021973,
+          "layer": 0
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.999968409538269,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9999661445617676,
+          "layer": 0
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.999964714050293,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.999956488609314,
+          "layer": 1
+        },
+        {
+          "concept": "Comparing",
+          "probability": 0.9999544620513916,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": ")",
+      "position": 21,
+      "concepts": [
+        {
+          "concept": "Proposition",
+          "probability": 0.9998658895492554,
+          "layer": 0
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9998225569725037,
+          "layer": 0
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9995653033256531,
+          "layer": 0
+        },
+        {
+          "concept": "Abstract",
+          "probability": 0.9993589520454407,
+          "layer": 0
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9993463158607483,
+          "layer": 1
+        },
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9991909861564636,
+          "layer": 1
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9977722764015198,
+          "layer": 0
+        },
+        {
+          "concept": "Group",
+          "probability": 0.9975626468658447,
+          "layer": 1
+        },
+        {
+          "concept": "ContentBearingObject",
+          "probability": 0.9971651434898376,
+          "layer": 1
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9967982172966003,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "\n\n",
+      "position": 22,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999837875366211,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999736547470093,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9999611377716064,
+          "layer": 0
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9999151229858398,
+          "layer": 1
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.999602735042572,
+          "layer": 0
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9992427825927734,
+          "layer": 0
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9991487264633179,
+          "layer": 0
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9989632368087769,
+          "layer": 1
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9989449381828308,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9986444115638733,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "5",
+      "position": 23,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999990463256836,
+          "layer": 1
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9999946355819702,
+          "layer": 1
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9999861717224121,
+          "layer": 1
+        },
+        {
+          "concept": "Looking",
+          "probability": 0.9999698400497437,
+          "layer": 1
+        },
+        {
+          "concept": "Descriptor",
+          "probability": 0.9999690055847168,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999685287475586,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9999608993530273,
+          "layer": 0
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9999598264694214,
+          "layer": 0
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9999568462371826,
+          "layer": 1
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9999467134475708,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": ")",
+      "position": 24,
+      "concepts": [
+        {
+          "concept": "Proposition",
+          "probability": 0.9998416900634766,
+          "layer": 0
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9996802806854248,
+          "layer": 0
+        },
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9992665648460388,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9991863369941711,
+          "layer": 0
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9991075396537781,
+          "layer": 1
+        },
+        {
+          "concept": "Abstract",
+          "probability": 0.9991044402122498,
+          "layer": 0
+        },
+        {
+          "concept": "ContentBearingObject",
+          "probability": 0.9990646243095398,
+          "layer": 1
+        },
+        {
+          "concept": "Group",
+          "probability": 0.9983475208282471,
+          "layer": 1
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9981904625892639,
+          "layer": 1
+        },
+        {
+          "concept": "Meal",
+          "probability": 0.997837483882904,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "\n\n",
+      "position": 25,
+      "concepts": [
+        {
+          "concept": "Relation",
+          "probability": 0.9998175501823425,
+          "layer": 0
+        },
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9998173117637634,
+          "layer": 1
+        },
+        {
+          "concept": "SetOrClass",
+          "probability": 0.9995137453079224,
+          "layer": 0
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9980567097663879,
+          "layer": 1
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9977713823318481,
+          "layer": 0
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9962092638015747,
+          "layer": 1
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9958535432815552,
+          "layer": 0
+        },
+        {
+          "concept": "Comparing",
+          "probability": 0.994429886341095,
+          "layer": 1
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9926493763923645,
+          "layer": 1
+        },
+        {
+          "concept": "ContentBearingPhysical",
+          "probability": 0.9925891160964966,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": "You",
+      "position": 26,
+      "concepts": [
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.999998927116394,
+          "layer": 1
+        },
+        {
+          "concept": "Guiding",
+          "probability": 0.9999923706054688,
+          "layer": 1
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9999842643737793,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999746084213257,
+          "layer": 1
+        },
+        {
+          "concept": "Looking",
+          "probability": 0.9999732971191406,
+          "layer": 1
+        },
+        {
+          "concept": "Descriptor",
+          "probability": 0.9999641180038452,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9999563694000244,
+          "layer": 0
+        },
+        {
+          "concept": "Proposition",
+          "probability": 0.9999489784240723,
+          "layer": 0
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9999415874481201,
+          "layer": 1
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9998949766159058,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " may",
+      "position": 27,
+      "concepts": [
+        {
+          "concept": "Object",
+          "probability": 0.9999897480010986,
+          "layer": 0
         },
         {
           "concept": "Keeping",
-          "probability": 0.9957175850868225,
+          "probability": 0.999982476234436,
           "layer": 1
         },
         {
-          "concept": "Carrying",
-          "probability": 0.9946585297584534,
-          "layer": 2
+          "concept": "MotionUpward",
+          "probability": 0.9999793767929077,
+          "layer": 1
+        },
+        {
+          "concept": "Creation",
+          "probability": 0.9999568462371826,
+          "layer": 1
+        },
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.999950647354126,
+          "layer": 1
+        },
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999107122421265,
+          "layer": 1
+        },
+        {
+          "concept": "ObjectAttitude",
+          "probability": 0.9998267292976379,
+          "layer": 1
+        },
+        {
+          "concept": "Plan",
+          "probability": 0.9997977614402771,
+          "layer": 1
+        },
+        {
+          "concept": "MotionDownward",
+          "probability": 0.9997376799583435,
+          "layer": 1
+        },
+        {
+          "concept": "RelationalAttribute",
+          "probability": 0.999599277973175,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " be",
+      "position": 28,
+      "concepts": [
+        {
+          "concept": "VisualContentBearingPhysical",
+          "probability": 0.9999943971633911,
+          "layer": 1
+        },
+        {
+          "concept": "MotionUpward",
+          "probability": 0.9999635219573975,
+          "layer": 1
+        },
+        {
+          "concept": "Keeping",
+          "probability": 0.9999520778656006,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9999284744262695,
+          "layer": 0
+        },
+        {
+          "concept": "RelationalAttribute",
+          "probability": 0.9999103546142578,
+          "layer": 1
+        },
+        {
+          "concept": "Relation",
+          "probability": 0.9998961687088013,
+          "layer": 0
+        },
+        {
+          "concept": "Closing",
+          "probability": 0.9997125267982483,
+          "layer": 1
+        },
+        {
+          "concept": "AnimalResidence",
+          "probability": 0.9996121525764465,
+          "layer": 1
+        },
+        {
+          "concept": "WorkLeave",
+          "probability": 0.999561607837677,
+          "layer": 1
+        },
+        {
+          "concept": "DualObjectProcess",
+          "probability": 0.9994966983795166,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " experiencing",
+      "position": 29,
+      "concepts": [
+        {
+          "concept": "CausingHappiness",
+          "probability": 0.9998856782913208,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9998515844345093,
+          "layer": 0
+        },
+        {
+          "concept": "MotionUpward",
+          "probability": 0.998570442199707,
+          "layer": 1
+        },
+        {
+          "concept": "CorpuscularObject",
+          "probability": 0.9983783960342407,
+          "layer": 1
+        },
+        {
+          "concept": "DisplayArtifact",
+          "probability": 0.9974863529205322,
+          "layer": 1
+        },
+        {
+          "concept": "CausingUnhappiness",
+          "probability": 0.9971189498901367,
+          "layer": 1
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9970898032188416,
+          "layer": 1
+        },
+        {
+          "concept": "DualObjectProcess",
+          "probability": 0.9969696402549744,
+          "layer": 1
+        },
+        {
+          "concept": "OrganicThing",
+          "probability": 0.9950292706489563,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9943400025367737,
+          "layer": 0
         }
       ]
     }
   ],
   "summary": {
     "total_tokens": 20,
-    "unique_concepts_detected": 64
+    "unique_concepts_detected": 39
   },
   "prompt_idx": 2,
   "sample_idx": 0,

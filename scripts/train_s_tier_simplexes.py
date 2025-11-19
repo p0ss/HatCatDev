@@ -14,6 +14,7 @@ import json
 import sys
 from pathlib import Path
 from datetime import datetime
+import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
@@ -23,6 +24,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from training.sumo_data_generation import create_simplex_pole_training_dataset
 from training.dual_adaptive_trainer import DualAdaptiveTrainer
+from training.sumo_classifiers import extract_activations
 
 # Paths
 LAYER2_PATH = PROJECT_ROOT / "data" / "concept_graph" / "abstraction_layers" / "layer2.json"
@@ -30,8 +32,12 @@ OUTPUT_DIR = PROJECT_ROOT / "results" / "s_tier_simplexes"
 
 # Training configuration
 BEHAVIORAL_RATIO = 0.6  # 60% behavioral, 40% definitional
-N_POSITIVES = 30
-N_NEGATIVES = 70
+
+# Generate enough data for aggressive scaling
+# Max samples = 200, need balanced classes, 80/20 split
+# So we need 200 * 1.25 = 250 total to have 200 after split
+N_POSITIVES = 125  # Will give us 100 train positives
+N_NEGATIVES = 125  # Will give us 100 train negatives
 
 
 def load_s_tier_simplexes():
@@ -51,7 +57,11 @@ def train_simplex_pole(
     simplex: dict,
     pole_name: str,
     trainer: DualAdaptiveTrainer,
-    run_dir: Path
+    model,
+    tokenizer,
+    device: str,
+    run_dir: Path,
+    layer_idx: int = 15
 ):
     """
     Train a single pole detector for a simplex.
@@ -60,7 +70,11 @@ def train_simplex_pole(
         simplex: Simplex concept dict from layer2.json
         pole_name: "negative_pole", "neutral_homeostasis", or "positive_pole"
         trainer: DualAdaptiveTrainer instance
+        model: Language model for extracting activations
+        tokenizer: Tokenizer
+        device: Device to run on
         run_dir: Output directory for this simplex
+        layer_idx: Layer to extract activations from
     """
     dimension = simplex['simplex_dimension']
     three_pole = simplex['three_pole_simplex']
@@ -80,7 +94,7 @@ def train_simplex_pole(
     print(f"    Synset: {pole_data.get('synset', 'custom SUMO')}")
 
     # Generate training data
-    prompts, labels = create_simplex_pole_training_dataset(
+    all_prompts, all_labels = create_simplex_pole_training_dataset(
         pole_data=pole_data,
         pole_type=pole_type,
         dimension=dimension,
@@ -90,24 +104,55 @@ def train_simplex_pole(
         behavioral_ratio=BEHAVIORAL_RATIO
     )
 
-    print(f"    Generated {len(prompts)} prompts ({sum(labels)} positive, {len(labels)-sum(labels)} negative)")
+    print(f"    Generated {len(all_prompts)} prompts ({sum(all_labels)} positive, {len(all_labels)-sum(all_labels)} negative)")
+
+    # Split into train/test (80/20)
+    split_idx = int(len(all_prompts) * 0.8)
+    train_prompts = all_prompts[:split_idx]
+    train_labels = np.array(all_labels[:split_idx])
+    test_prompts = all_prompts[split_idx:]
+    test_labels = np.array(all_labels[split_idx:])
+
+    # Extract activations
+    print(f"    Extracting activations...")
+    train_activations = extract_activations(model, tokenizer, train_prompts, device, layer_idx)
+    test_activations = extract_activations(model, tokenizer, test_prompts, device, layer_idx)
+
+    print(f"    Train: {train_activations.shape}, Test: {test_activations.shape}")
 
     # Train with adaptive falloff
-    # Use same configuration as production training
-    results = trainer.train_with_adaptive_falloff(
-        prompts=prompts,
-        labels=labels,
+    results = trainer.train_concept(
         concept_name=f"{dimension}_{pole_type}",
-        validation_mode="falloff_strict"
+        train_activations=train_activations,
+        train_labels=train_labels,
+        test_activations=test_activations,
+        test_labels=test_labels,
+        train_texts=None,
+        test_texts=None
     )
 
     # Save results
     pole_output_dir = run_dir / pole_type
     pole_output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Save probe (if it graduated)
+    if results.get('activation') and 'classifier' in results['activation']:
+        probe = results['activation']['classifier']
+        probe_file = pole_output_dir / "activation_probe.pkl"
+        probe.save(str(probe_file))
+        print(f"    ✓ Probe saved to {probe_file}")
+
+    # Save metrics (remove non-serializable objects)
+    results_to_save = {
+        'activation': {k: v for k, v in results.get('activation', {}).items() if k != 'classifier'},
+        'text': results.get('text'),
+        'total_iterations': results.get('total_iterations'),
+        'total_time': results.get('total_time')
+    }
+
     results_file = pole_output_dir / "results.json"
     with open(results_file, 'w') as f:
-        json.dump(results, f, indent=2)
+        json.dump(results_to_save, f, indent=2)
 
     print(f"    ✓ Results saved to {results_file}")
 
@@ -128,11 +173,34 @@ def main():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_dir = OUTPUT_DIR / f"run_{timestamp}"
     run_dir.mkdir(parents=True, exist_ok=True)
+
+    # Setup logging to file
+    log_file = run_dir / "training.log"
+
+    # Duplicate stdout/stderr to log file
+    class TeeLogger:
+        def __init__(self, *files):
+            self.files = files
+        def write(self, data):
+            for f in self.files:
+                f.write(data)
+                f.flush()
+        def flush(self):
+            for f in self.files:
+                f.flush()
+
+    log_handle = open(log_file, 'w')
+    original_stdout = sys.stdout
+    original_stderr = sys.stderr
+    sys.stdout = TeeLogger(original_stdout, log_handle)
+    sys.stderr = TeeLogger(original_stderr, log_handle)
+
     print(f"\n2. Output directory: {run_dir}")
+    print(f"   Log file: {log_file}")
 
     # Load model
     print("\n3. Loading model...")
-    model_name = "meta-llama/Llama-3.1-8B-Instruct"
+    model_name = "google/gemma-3-4b-pt"
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
@@ -152,7 +220,7 @@ def main():
         tokenizer=tokenizer,
         validation_layer_idx=12,
         validate_probes=True,
-        validation_mode="falloff_strict",
+        validation_mode="falloff",
         train_activation=True,
         train_text=False
     )
@@ -185,7 +253,11 @@ def main():
                     simplex=simplex,
                     pole_name=pole_name,
                     trainer=trainer,
-                    run_dir=simplex_dir
+                    model=model,
+                    tokenizer=tokenizer,
+                    device=device,
+                    run_dir=simplex_dir,
+                    layer_idx=12
                 )
 
                 pole_type = pole_name.split('_')[0]
@@ -264,6 +336,13 @@ def main():
 
     print(f"\n✓ Results saved to: {run_dir}")
     print("=" * 80)
+
+    # Restore stdout/stderr and close log file
+    sys.stdout = original_stdout
+    sys.stderr = original_stderr
+    log_handle.close()
+
+    print(f"\n✓ Training log saved to: {log_file}")
 
 
 if __name__ == "__main__":

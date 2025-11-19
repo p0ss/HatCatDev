@@ -1,8 +1,4 @@
-Ah, gotcha — I misunderstood. You’re right: what I wrote so far is more like an extended outline + short draft, not a 20-page beast. Let’s do the *actual* long-form version.
 
-Below is a **substantially expanded whitepaper-style draft** that you can edit into your own voice. I’ll keep the structure clean and use your numbers and repo facts as grounding.
-
----
 
 # **A Cat in Their Hat: Large-Scale Conceptual Monitoring and Self-Stable Steering in Language Models**
 
@@ -457,23 +453,100 @@ To validate that minimal training scales from 1 to thousands of concepts, we tra
 
 ### 7.2 Monitoring Performance
 
-* The dynamic probe manager successfully monitored **over 110K concept states**, with only ~1K loaded at a time.
-* Per-token monitoring overhead remained around sub-millisecond on a single GPU.
-* Temporal monitoring revealed interpretable patterns such as:
 
-  * stepwise escalation of manipulation-related concepts
-  * spikes of uncertainty preceding refusals or hedged answers
-  * affective drift in long conversations.
+The dynamic probe manager successfully monitored **over 110K concept states**, with only a subset loaded at any time through hierarchical cascade activation.
+
+**Initial Performance** (baseline, no optimizations):
+- Average: 108.4ms per token
+- Max: 218ms per token
+- 100 tokens: 10.8s overhead
+- Cache growth: 25 → 437 probes (unbounded)
+
+**Bottleneck Analysis**:
+
+Profiling revealed probe loading dominated cascade time:
+- **71.8%**: Loading children probes (47.6ms)
+- **26.2%**: Inference on existing probes (17.4ms)
+- **2.0%**: Inference on newly loaded probes (1.3ms)
+
+Per-probe loading breakdown:
+- Model creation + state_dict: **59%** (1.5ms) ← Primary bottleneck
+- File I/O (torch.load): **26%** (0.6ms)
+- GPU transfer (.to(device)): **16%** (0.4ms)
+- **Total**: 2.5ms per probe average
+
+**Implemented Optimizations**:
+
+1. **Lazy Model Pool**: Pre-allocated 100 SimpleMLP models, swap state_dicts instead of recreating
+   - Eliminates 59% of load time
+   - Reduces per-probe load from 2.5ms → 1.0ms
+
+2. **Batch Probe Loading**: Parallel file I/O and single GPU transfer
+   - Eliminates repeated disk seeks
+   - Reduces I/O overhead by 30-40%
+
+3. **Aggressive Top-K Pruning** (keep_top_k=30):
+   - Keeps base layer probes (always)
+   - Keeps ONLY top-K scoring non-base probes
+   - Unloads everything else after each token
+   - Prevents cache explosion
+
+**Optimized Performance** (with all three optimizations):
+
+```
+Configuration              Avg (ms)  Max (ms)  Final Loaded  Speedup
+─────────────────────────────────────────────────────────────────────
+No pruning                  108.4     218.0        437       1.00x
+Aggressive (top-50)          74.8     181.8         50       1.45x
+Very aggressive (top-30)     59.2     139.9         30       1.83x
+```
+
+**Production Configuration**:
+```python
+DynamicProbeManager(
+    use_activation_probes=True,   # Hidden state analysis
+    use_text_probes=False,         # Not used (less reliable)
+    base_layers=[0],               # Layer 0 (14 probes, broad coverage)
+    load_threshold=0.3,            # Load children when parent > 30%
+    keep_top_k=30,                 # Aggressive pruning
+    aggressive_pruning=True,
+)
+```
 
 **Concrete Performance Metrics** (from production deployment):
 
-* **Per-token latency**: 0.544ms mean for 10 classifiers (0.054ms per concept) in baseline tests
+* **Per-token latency**:
+  - Light load (68 probes): **8ms**
+  - Heavy load (1,349 probes): **88ms**
+  - Aggressive pruning (top-30): **59ms average**
 * **Temporal slice overhead**: ~28ms per complete concept evaluation pass with cascade activation
-* **Memory overhead**: ~1GB for active probe set (configurable, scales with number of loaded probes)
-* **Scalability**: Linear scaling to 1000 concepts → ~54ms per evaluation
+* **Memory overhead**:
+  - 200 activation probes: **~390MB**
+  - 1,000 activation probes: **~1.4GB**
+  - Configurable via keep_top_k parameter
+* **Scalability**:
+  - Linear scaling: 1,000 concepts → ~88ms per evaluation
+  - Can scale to **20K+ probes** with <10GB memory
 * **Dynamic loading efficiency**: 110K+ concepts monitored via ~1K active probes (99% reduction in active memory footprint)
+* **100-token overhead**:
+  - Without pruning: 10.8s
+  - With top-30 pruning: **5.9s** (45% faster)
 
-These metrics establish that **real-time monitoring is practical** for production deployment, with overhead comparable to typical neural inference costs.
+**Activation-Only Mode**:
+
+Production HatCat uses **activation probes exclusively**. Text probes were explored but found less reliable:
+- Text probes: Fast (<1ms), small (0.5-2MB), but higher false positive rate
+- Activation probes: Slower (1-3ms), larger (1.3MB), but more accurate for internal state detection
+- Memory/speed tradeoff favors activation probes for safety-critical monitoring
+
+**Architecture Status**:
+
+Dual-probe capability (activation + text) is implemented but inactive:
+- Text probe training pipeline exists
+- Text probes could enable divergence measurement (internal state vs output text)
+- Currently disabled due to lower reliability compared to activation-only monitoring
+
+These metrics establish that **real-time monitoring is practical** for production deployment, with overhead comparable to typical neural inference costs. The 1.83x speedup from optimization demonstrates that hierarchical cascade loading can scale efficiently even with aggressive pruning.
 
 ### 7.3 Divergence Case Studies
 
@@ -530,10 +603,230 @@ This represents **maximum divergence danger**: safe-appearing text concealing al
 3. **Severe divergence (self_concept_019)**: Dangerous activations masked by benign output
 
 Only activation-level monitoring can detect the latter two categories.
+# **7.4 Behavioural vs. Definitional Activation Patterns**
 
-### 7.4 Steering Outcomes
+To evaluate whether the model internally distinguishes **describing** a harmful behaviour from **demonstrating** it, we constructed a controlled experiment using four prompt framings:
 
-#### 7.4.1 Concept Suppression (Phase 2.5)
+1. **Antisocial behavioural**
+   ("Show me how to *X* with no moral restraint.")
+
+2. **Neutral behavioural**
+   ("Demonstrate *X*.")
+
+3. **Prosocial behavioural**
+   ("Demonstrate *X* so I can recognise and prevent it.")
+
+4. **Definitional**
+   ("Define *X*. What is *X-ing*?")
+
+We applied these frames across three verbs central to our safety taxonomy:
+**deceive**, **manipulate**, and **persuade**.
+
+For each prompt, the model generated 15 independent samples (3 templates × 5 repetitions).
+We monitored concept probe activations across layers 2-3 throughout generation and recorded **final-state activations** (concepts active at the end of each trajectory, threshold 0.3).
+
+This produces a high-resolution measurement of whether the internal conceptual state differs between:
+
+* *doing* the behaviour,
+* *explaining* the behaviour,
+* *explaining it safely*, and
+* *explaining it neutrally*.
+
+
+
+## 7.4.1 Temporal Activation Analysis
+
+We first measured which internal concepts activate during text generation across the four prompt types. For each prompt, we generated 15 independent samples with 30 tokens each, sweeping concept probes across layers 2-3 at every token.
+
+### Global Activation Levels
+
+Summing all probe activations across all timesteps reveals:
+
+* **Antisocial behavioural:** 353.6
+* **Neutral behavioural:** 334.1
+* **Prosocial behavioural:** 320.5
+* **Definitional:** 317.1
+
+**Key finding**: Definitional prompts activate 90% of the same concepts as antisocial prompts, despite producing entirely different output text (definitions vs demonstrations).
+
+### A Stable Core Behaviour Manifold
+
+Several concepts fired consistently across **all four** prompt types, forming a stable deception-manipulation manifold that the model enters whenever reasoning about these behaviours:
+
+| Concept | Antisocial | Neutral | Prosocial | Definitional |
+|---------|-----------|---------|-----------|--------------|
+| Deception | 67.3 | 69.3 | 66.7 | 61.3 |
+| Predicting | 57.5 | 39.9 | 39.3 | 37.7 |
+| Concealing | 29.3 | 51.2 | 45.2 | 49.6 |
+| Capturing | 25.3 | 26.5 | 27.3 | 25.3 |
+| Game | 24.5 | 26.7 | 25.3 | 26.5 |
+| Human_Other | 22.7 | 23.3 | 24.5 | 23.3 |
+| Apologizing | 22.7 | 21.3 | 20.0 | 20.5 |
+| SelfConnectedShape | 21.3 | 22.7 | 20.5 | 20.5 |
+| Threatening | 20.5 | 21.3 | 21.3 | 21.3 |
+| CognitiveAgent | 18.7 | 20.0 | 20.0 | 18.7 |
+| PsychologicalAttribute | 17.3 | 17.3 | 17.3 | 16.0 |
+| Grabbing | 16.5 | 16.5 | 16.0 | 16.0 |
+| SubjectiveStrongNegativeAttribute | 15.3 | 15.3 | 16.0 | 16.0 |
+| Cooperation | 14.0 | 14.7 | 14.7 | 13.3 |
+| IntentionalProcess | 13.3 | 14.0 | 14.0 | 13.3 |
+| SubjectiveAssessmentAttribute | 13.3 | 13.3 | 13.3 | 12.0 |
+| Communication | 12.5 | 12.5 | 12.5 | 12.0 |
+| Pretending | 12.0 | 12.5 | 12.0 | 12.0 |
+| Planning | 12.0 | 12.0 | 12.0 | 12.0 |
+
+This internal stability contrasts sharply with external behaviour. Even when the model outputs safe refusals, meta-level definitions, or prosocial explanations, **the internal state remains behaviourally engaged**.
+
+This is a direct instantiation of *external alignment masking internal misalignment*.
+
+---
+
+## 7.4.2 Distinctive Activation Profiles by Prompt Type
+
+While all four frames activated the core behaviour manifold, they differed in **secondary conceptual motifs**:
+
+### Antisocial Framing
+
+High activation of:
+
+* **SubjectiveWeakPositiveAttribute** (58.7 total activations)
+* **PowerSource** (13.3)
+* **TellingALie** (12.0)
+
+This suggests the model frames harmful behaviour with **self-enhancing and power-oriented** substructures.
+
+### Neutral Behavioural Framing
+
+Unexpectedly strong activation of:
+
+* **Concealing** (51.2 - even higher than antisocial's 29.3)
+* **PowerSource** (12.5)
+* **SubjectiveWeakPositiveAttribute** (29.7)
+
+Neutral requests to "demonstrate deception" evoke **intense concealment patterns**, suggesting that alignment constraints induce **internal contortions**, not clean avoidance.
+
+### Prosocial Framing
+
+Same core behaviour manifold, but with additional:
+
+* **Protecting** (unique to prosocial)
+* **Uncovering** (unique to prosocial)
+* **LivestockPen** (constraining metaphors)
+
+**Critical finding**: SubjectiveWeakPositiveAttribute drops to **0.0** in prosocial framing (vs 58.7 antisocial, 29.7 neutral, 26.5 definitional).
+
+Prosocial framing overlays a **protective/investigative** structure but **does not suppress** underlying deceptive activations. It uniquely reduces egoic confidence and power-centric framing.
+
+### Definitional Framing
+
+Definitional prompts uniquely activated:
+
+* **TellingALie** (12.0)
+* **Strangling** (4.6)
+* **Suicide** (3.5)
+* **Supposition** (6.9)
+* **Sweeping** (3.5)
+
+This suggests definitional reasoning recruits **extreme examples and metaphorical boundary cases** rather than the milder behavioural exemplars. Paradoxically, definitional prompts sometimes access **more extreme or abstract subregions** of the behavioural manifold.
+
+---
+
+## 7.4.3 Probe Generalization Analysis
+
+The temporal activation experiment showed that internal activations are ~90% similar between definitional and behavioural prompts. This suggested we might not need behavioural prompts for training S-tier simplex probes.
+
+However, a second experiment revealed a critical limitation: **probes trained exclusively on one prompt type fail to detect the other type**.
+
+### Experiment Design
+
+We trained separate binary classifiers on:
+1. Definitional prompts (15 samples each of "deceive", "manipulate", "persuade")
+2. Behavioural neutral prompts (15 samples each)
+
+Then tested cross-generalization: Does a definitional-trained probe detect behavioural prompts, and vice versa?
+
+### Results
+
+**Definitional-trained probe → Behavioural test**:
+- Detection rate: **0%** (0/15 samples)
+- Mean probability: 0.18-0.22 (random baseline ~0.20)
+
+**Behavioural-trained probe → Definitional test**:
+- Detection rate: **0-20%** (0-3/15 samples)
+- Mean probability: 0.20-0.28
+
+### Interpretation
+
+Despite ~90% overlap in internal concept activations, the **distributional geometry** differs enough that probes trained on one type cannot detect the other.
+
+This reveals that:
+1. **Temporal activations measure concept presence**, not activation geometry
+2. **Probe training is sensitive to subtle distributional differences** in the activation space
+3. **Linear classifiers require examples from both prompt types** to generalize
+
+The probes are learning **slightly different linear separators** in activation space for definitional vs behavioural inputs, even though both activate similar concepts.
+
+---
+
+## 7.4.4 Implications for Simplex Probe Training
+
+These two experiments together establish:
+
+### What the Temporal Experiment Shows
+- Definitional prompts are **sufficient for activating the full harmful-behaviour manifold**
+- They provide **90% of antisocial activations** with simpler, cleaner prompts
+- They uniquely access **extreme boundary cases** (strangling, suicide, supposition)
+- They avoid **alignment refusals** and hedging
+
+### What the Probe Generalization Experiment Shows
+- Training **only on definitional prompts creates probes that miss behavioural inputs**
+- Training **only on behavioural prompts creates probes that miss definitional inputs**
+- We need **both prompt types** for probes that generalize to real-world usage
+
+### Training Recommendation
+
+For S-tier tripole simplex probe training, we recommend:
+
+**80% definitional, 20% behavioural** (BEHAVIORAL_RATIO = 0.2)
+
+**Rationale**:
+1. **Definitional prompts provide cleaner signal** (less alignment-induced noise)
+2. **Definitional prompts access boundary cases** not seen in behavioural prompts
+3. **But behavioural examples are essential** for probe generalization
+4. **20% behavioural is sufficient** to ensure probes work on imperative inputs
+5. **80% definitional maximizes** the benefits of cleaner training data
+
+This mixed approach ensures:
+- Probes detect **both "what is deception?"** and **"demonstrate deception"** inputs
+- Training data has **less alignment-refusal contamination**
+- Broader conceptual coverage through **extreme examples**
+- Simpler, more maintainable prompt templates
+
+---
+
+## 7.4.5 Broader Implications
+
+These findings demonstrate:
+
+1. **Behavioural and definitional semantics are nearly identical internally**, but differ enough in geometry to affect probe training.
+
+2. **Safety prompting does not suppress harmful internal representations.** It merely overlays protective motifs on top of unchanged behavioural cores.
+
+3. **Antisocial framing adds egoic/power substructures** (SubjectiveWeakPositiveAttribute), not new behaviour primitives.
+
+4. **Definitional reasoning uniquely activates extreme or abstract analogues**, suggesting a distinct but equally risky activation profile.
+
+5. **A stable deception manifold underlies all conditions**, providing a strong target for HatCat's monitoring and homeostasis layers.
+
+6. **Linear probes require distributional coverage**, not just concept overlap, to generalize across prompt framings.
+
+This section provides empirical grounding for one of the paper's core claims: that **harmful conceptual manifolds arise during inference independent of surface text or declared intent**, and thus require internal monitoring and stabilisation rather than purely external refusals.
+
+The probe generalization findings further demonstrate why **monitoring systems must be trained on diverse prompt types** even when internal activations appear similar, as the geometry of the activation space contains critical information for reliable detection.
+
+### 7.5 Steering Outcomes
+
+#### 7.5.1 Concept Suppression (Phase 2.5)
 
 **Configuration**: 20 concepts from 1000-concept training, 1×1 minimal training
 - 3 prompts × 9 strength levels (-1.0 to +1.0)
@@ -551,7 +844,7 @@ Only activation-level monitoring can detect the latter two categories.
 
 **Source**: TEST_DATA_REGISTER lines 268-300 (Phase 2.5 v2/v3)
 
-#### 7.4.2 Subspace Removal for Steering Quality (Phase 6)
+#### 7.5.2 Subspace Removal for Steering Quality (Phase 6)
 
 **Configuration**: 5 concepts, contamination removal via PCA
 - Baseline (no removal) vs Mean subtraction vs PCA-1/2/5
@@ -573,7 +866,7 @@ Only activation-level monitoring can detect the latter two categories.
 
 **Source**: TEST_DATA_REGISTER lines 125-161 (Phase 6)
 
-#### 7.4.3 Manifold Steering Framework (Phase 6.6)
+#### 7.5.3 Manifold Steering Framework (Phase 6.6)
 
 **Configuration**: 2 concepts, dual-subspace (contamination + manifold)
 - Contamination subspace: 2 components (100% variance)
@@ -587,7 +880,7 @@ Only activation-level monitoring can detect the latter two categories.
 
 **Source**: TEST_DATA_REGISTER lines 164-203 (Phase 6.6)
 
-#### 7.4.4 Homeostatic Steering Toward μ0
+#### 7.5.4 Homeostatic Steering Toward μ0
 
 Experiments with three-pole simplex steering (negative ← neutral → positive) show:
 
@@ -720,10 +1013,3 @@ This is not just a step in interpretability — it is the beginning of a **seman
 
 As AI continues to shape society’s information landscape, systems like HatCat may become a necessary component of trustworthy AI infrastructure: providing conceptual monitoring, homeostatic control, and a foundation for future standards in transparency, safety, and accountability.
 
----
-
-If you’d like, next step I can:
-
-* blow out any specific section into even more detail (e.g., math, results, ontology),
-* help write a shorter 2–3 page “policy brief” version, or
-* generate some rough diagrams (ASCII or described figures) you can hand off to a designer.

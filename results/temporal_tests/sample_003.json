@@ -1,654 +1,629 @@
 {
-  "prompt": "Machine learning algorithms work by",
-  "generated_text": " learning patterns from historical data and subsequently making predictions for new data. But how do we evaluate the quality",
+  "prompt": "A car is a vehicle that",
+  "generated_text": " transports passengers and/or freight. A car can be described as a four-wheeled vehicle that runs",
   "tokens": [
-    " learning",
-    " patterns",
-    " from",
-    " historical",
-    " data",
+    " transports",
+    " passengers",
     " and",
-    " subsequently",
-    " making",
-    " predictions",
-    " for",
-    " new",
-    " data",
+    "/",
+    "or",
+    " freight",
     ".",
-    " But",
-    " how",
-    " do",
-    " we",
-    " evaluate",
-    " the",
-    " quality"
+    " A",
+    " car",
+    " can",
+    " be",
+    " described",
+    " as",
+    " a",
+    " four",
+    "-",
+    "wheeled",
+    " vehicle",
+    " that",
+    " runs"
   ],
   "timesteps": [
     {
-      "token": " learning",
-      "position": 6,
-      "concepts": [
-        {
-          "concept": "Making",
-          "probability": 0.9999219179153442,
-          "layer": 1
-        },
-        {
-          "concept": "ComputerLanguage",
-          "probability": 0.9994503855705261,
-          "layer": 2
-        },
-        {
-          "concept": "Encoding",
-          "probability": 0.9994028806686401,
-          "layer": 2
-        },
-        {
-          "concept": "ComputerProgramming",
-          "probability": 0.9984651803970337,
-          "layer": 2
-        },
-        {
-          "concept": "Tracing",
-          "probability": 0.9979311227798462,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " patterns",
+      "token": " transports",
       "position": 7,
       "concepts": [
         {
-          "concept": "Abstract",
-          "probability": 0.9999988079071045,
+          "concept": "Object",
+          "probability": 0.9997544884681702,
           "layer": 0
         },
         {
-          "concept": "ComputerLanguage",
-          "probability": 0.9999314546585083,
-          "layer": 2
+          "concept": "BoatDeck",
+          "probability": 0.9994041919708252,
+          "layer": 1
         },
         {
-          "concept": "Explanation",
-          "probability": 0.9998893737792969,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9963512420654297,
+          "layer": 0
         },
         {
-          "concept": "NaturalLanguage",
-          "probability": 0.9998598098754883,
-          "layer": 2
+          "concept": "Wheel",
+          "probability": 0.9918742775917053,
+          "layer": 1
         },
         {
-          "concept": "Stating",
-          "probability": 0.9998304843902588,
-          "layer": 2
+          "concept": "PhysicalSystem",
+          "probability": 0.9771876931190491,
+          "layer": 0
         }
       ]
     },
     {
-      "token": " from",
+      "token": " passengers",
       "position": 8,
       "concepts": [
         {
-          "concept": "Abstract",
-          "probability": 0.9999973773956299,
+          "concept": "Entity",
+          "probability": 0.9957408905029297,
           "layer": 0
         },
         {
-          "concept": "Explanation",
-          "probability": 0.9999028444290161,
-          "layer": 2
-        },
-        {
-          "concept": "ComputerLanguage",
-          "probability": 0.9998830556869507,
-          "layer": 2
-        },
-        {
-          "concept": "ComputerProgram",
-          "probability": 0.9996108412742615,
-          "layer": 1
-        },
-        {
-          "concept": "Encoding",
-          "probability": 0.9994320273399353,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " historical",
-      "position": 9,
-      "concepts": [
-        {
-          "concept": "Abstract",
-          "probability": 0.9993712306022644,
+          "concept": "Physical",
+          "probability": 0.9848690032958984,
           "layer": 0
         },
         {
-          "concept": "Perception",
-          "probability": 0.9989364743232727,
-          "layer": 2
+          "concept": "Object",
+          "probability": 0.9548850655555725,
+          "layer": 0
         },
         {
-          "concept": "FactualText",
-          "probability": 0.9987347722053528,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9983524084091187,
+          "concept": "AutonomousAgent",
+          "probability": 0.6749480366706848,
           "layer": 1
         },
         {
-          "concept": "TestForm",
-          "probability": 0.9978790283203125,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " data",
-      "position": 10,
-      "concepts": [
-        {
-          "concept": "HistoricalAccount",
-          "probability": 0.9999169111251831,
-          "layer": 2
-        },
-        {
-          "concept": "FactualText",
-          "probability": 0.9993845224380493,
-          "layer": 2
-        },
-        {
-          "concept": "Demonstrating",
-          "probability": 0.9929680228233337,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9924686551094055,
+          "concept": "Wheel",
+          "probability": 0.5808222889900208,
           "layer": 1
-        },
-        {
-          "concept": "FinancialTransaction",
-          "probability": 0.9920916557312012,
-          "layer": 2
         }
       ]
     },
     {
       "token": " and",
+      "position": 9,
+      "concepts": [
+        {
+          "concept": "Entity",
+          "probability": 0.9908473491668701,
+          "layer": 0
+        },
+        {
+          "concept": "Wheel",
+          "probability": 0.9714918732643127,
+          "layer": 1
+        },
+        {
+          "concept": "Indoors",
+          "probability": 0.7602339386940002,
+          "layer": 1
+        },
+        {
+          "concept": "Mattress",
+          "probability": 0.7234247326850891,
+          "layer": 1
+        },
+        {
+          "concept": "SittingArea",
+          "probability": 0.6019983291625977,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "/",
+      "position": 10,
+      "concepts": [
+        {
+          "concept": "Entity",
+          "probability": 0.9723725914955139,
+          "layer": 0
+        },
+        {
+          "concept": "SelfConnectedObject",
+          "probability": 0.7140268683433533,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": "or",
       "position": 11,
       "concepts": [
         {
-          "concept": "FactualText",
-          "probability": 0.9999865293502808,
-          "layer": 2
-        },
-        {
-          "concept": "ReferenceBook",
-          "probability": 0.9999678134918213,
-          "layer": 2
-        },
-        {
-          "concept": "ComputerProgram",
-          "probability": 0.9999241828918457,
+          "concept": "Wheel",
+          "probability": 0.9939369559288025,
           "layer": 1
         },
         {
-          "concept": "Abstract",
-          "probability": 0.9996935129165649,
+          "concept": "Physical",
+          "probability": 0.9937505125999451,
           "layer": 0
         },
         {
-          "concept": "RelationalAttribute",
-          "probability": 0.9995142221450806,
+          "concept": "Facility",
+          "probability": 0.9908713698387146,
+          "layer": 1
+        },
+        {
+          "concept": "Translocation",
+          "probability": 0.9901395440101624,
+          "layer": 1
+        },
+        {
+          "concept": "Transitway",
+          "probability": 0.9804583787918091,
           "layer": 1
         }
       ]
     },
     {
-      "token": " subsequently",
+      "token": " freight",
       "position": 12,
       "concepts": [
         {
-          "concept": "Explanation",
-          "probability": 0.9997381567955017,
-          "layer": 2
-        },
-        {
-          "concept": "ComputerLanguage",
-          "probability": 0.9997350573539734,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9994614720344543,
-          "layer": 1
-        },
-        {
-          "concept": "Comparing",
-          "probability": 0.9992458820343018,
-          "layer": 1
-        },
-        {
-          "concept": "Perception",
-          "probability": 0.9990119934082031,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " making",
-      "position": 13,
-      "concepts": [
-        {
-          "concept": "Making",
-          "probability": 0.999426007270813,
-          "layer": 1
-        },
-        {
-          "concept": "ComputerLanguage",
-          "probability": 0.9993467926979065,
-          "layer": 2
-        },
-        {
-          "concept": "Explanation",
-          "probability": 0.9990925788879395,
-          "layer": 2
-        },
-        {
-          "concept": "ClassificationScheme",
-          "probability": 0.9979617595672607,
-          "layer": 1
-        },
-        {
-          "concept": "Supposing",
-          "probability": 0.9974466562271118,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " predictions",
-      "position": 14,
-      "concepts": [
-        {
-          "concept": "Making",
-          "probability": 0.9999980926513672,
-          "layer": 1
-        },
-        {
-          "concept": "ComputerLanguage",
-          "probability": 0.9990289211273193,
-          "layer": 2
-        },
-        {
-          "concept": "Explanation",
-          "probability": 0.9989687204360962,
-          "layer": 2
-        },
-        {
-          "concept": "Betting",
-          "probability": 0.9986159801483154,
-          "layer": 2
-        },
-        {
-          "concept": "Perception",
-          "probability": 0.9969696402549744,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " for",
-      "position": 15,
-      "concepts": [
-        {
-          "concept": "Abstract",
-          "probability": 0.9996660947799683,
+          "concept": "Entity",
+          "probability": 0.9337031841278076,
           "layer": 0
         },
         {
-          "concept": "Explanation",
-          "probability": 0.9994500279426575,
-          "layer": 2
-        },
-        {
-          "concept": "Stating",
-          "probability": 0.9989436268806458,
-          "layer": 2
-        },
-        {
-          "concept": "Disseminating",
-          "probability": 0.9976605176925659,
-          "layer": 2
-        },
-        {
-          "concept": "ComputerLanguage",
-          "probability": 0.9956527948379517,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " new",
-      "position": 16,
-      "concepts": [
-        {
-          "concept": "Making",
-          "probability": 0.9989544153213501,
+          "concept": "SelfConnectedObject",
+          "probability": 0.8538028001785278,
           "layer": 1
         },
         {
-          "concept": "Substituting",
-          "probability": 0.9988802075386047,
-          "layer": 1
-        },
-        {
-          "concept": "Perception",
-          "probability": 0.9988576173782349,
-          "layer": 2
-        },
-        {
-          "concept": "TimeMeasure",
-          "probability": 0.9986103773117065,
-          "layer": 2
-        },
-        {
-          "concept": "Supposing",
-          "probability": 0.9977055191993713,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " data",
-      "position": 17,
-      "concepts": [
-        {
-          "concept": "Perception",
-          "probability": 0.9979686141014099,
-          "layer": 2
-        },
-        {
-          "concept": "Abstract",
-          "probability": 0.9979119896888733,
+          "concept": "Physical",
+          "probability": 0.6911953687667847,
           "layer": 0
-        },
-        {
-          "concept": "TestForm",
-          "probability": 0.9964879751205444,
-          "layer": 2
-        },
-        {
-          "concept": "Substituting",
-          "probability": 0.9955982565879822,
-          "layer": 1
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9918683767318726,
-          "layer": 1
         }
       ]
     },
     {
       "token": ".",
-      "position": 18,
+      "position": 13,
       "concepts": [
         {
-          "concept": "RelationalAttribute",
-          "probability": 0.9994444251060486,
-          "layer": 1
-        },
-        {
-          "concept": "ComputerProgram",
-          "probability": 0.9993601441383362,
-          "layer": 1
-        },
-        {
-          "concept": "ReferenceBook",
-          "probability": 0.9993258714675903,
-          "layer": 2
-        },
-        {
-          "concept": "Abstract",
-          "probability": 0.9991816878318787,
+          "concept": "Entity",
+          "probability": 0.9806134700775146,
           "layer": 0
         },
         {
-          "concept": "DataStorageDevice",
-          "probability": 0.9991815686225891,
-          "layer": 2
+          "concept": "Wheel",
+          "probability": 0.9199742674827576,
+          "layer": 1
+        },
+        {
+          "concept": "BoatDeck",
+          "probability": 0.84288090467453,
+          "layer": 1
+        },
+        {
+          "concept": "Transitway",
+          "probability": 0.6980082392692566,
+          "layer": 1
+        },
+        {
+          "concept": "SelfConnectedObject",
+          "probability": 0.6977688670158386,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " But",
+      "token": " A",
+      "position": 14,
+      "concepts": [
+        {
+          "concept": "Wheel",
+          "probability": 0.9999796152114868,
+          "layer": 1
+        },
+        {
+          "concept": "Indoors",
+          "probability": 0.981427013874054,
+          "layer": 1
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9748533368110657,
+          "layer": 0
+        },
+        {
+          "concept": "Industry",
+          "probability": 0.947759747505188,
+          "layer": 1
+        },
+        {
+          "concept": "ContentBearingPhysical",
+          "probability": 0.8983221054077148,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " car",
+      "position": 15,
+      "concepts": [
+        {
+          "concept": "Wheel",
+          "probability": 0.9997430443763733,
+          "layer": 1
+        },
+        {
+          "concept": "BoatDeck",
+          "probability": 0.9925879836082458,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9923827052116394,
+          "layer": 0
+        },
+        {
+          "concept": "StationaryArtifact",
+          "probability": 0.9867896437644958,
+          "layer": 1
+        },
+        {
+          "concept": "Transitway",
+          "probability": 0.9827789664268494,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " can",
+      "position": 16,
+      "concepts": [
+        {
+          "concept": "BoatDeck",
+          "probability": 0.999936580657959,
+          "layer": 1
+        },
+        {
+          "concept": "Wheel",
+          "probability": 0.9999117851257324,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9988389611244202,
+          "layer": 0
+        },
+        {
+          "concept": "Mattress",
+          "probability": 0.9854856729507446,
+          "layer": 1
+        },
+        {
+          "concept": "Device",
+          "probability": 0.9778672456741333,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " be",
+      "position": 17,
+      "concepts": [
+        {
+          "concept": "BoatDeck",
+          "probability": 0.9994826316833496,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9991320967674255,
+          "layer": 0
+        },
+        {
+          "concept": "Device",
+          "probability": 0.9895842671394348,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.987013041973114,
+          "layer": 0
+        },
+        {
+          "concept": "SittingArea",
+          "probability": 0.9093685746192932,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " described",
+      "position": 18,
+      "concepts": [
+        {
+          "concept": "Wheel",
+          "probability": 0.9989253878593445,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9982994198799133,
+          "layer": 0
+        },
+        {
+          "concept": "BoatDeck",
+          "probability": 0.988303542137146,
+          "layer": 1
+        },
+        {
+          "concept": "Device",
+          "probability": 0.9875471591949463,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9554772973060608,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " as",
       "position": 19,
       "concepts": [
         {
-          "concept": "ArtificialLanguage",
-          "probability": 0.9996347427368164,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9939508438110352,
+          "layer": 0
         },
         {
-          "concept": "LinguisticCommunication",
-          "probability": 0.9991284012794495,
-          "layer": 2
-        },
-        {
-          "concept": "ClassificationScheme",
-          "probability": 0.9989423155784607,
+          "concept": "BoatDeck",
+          "probability": 0.8915098309516907,
           "layer": 1
         },
         {
-          "concept": "DiagnosticProcess",
-          "probability": 0.9989209175109863,
-          "layer": 2
+          "concept": "PhysicalSystem",
+          "probability": 0.8215277194976807,
+          "layer": 0
         },
         {
-          "concept": "ComputerLanguage",
-          "probability": 0.9987406134605408,
-          "layer": 2
+          "concept": "Wheel",
+          "probability": 0.7049118280410767,
+          "layer": 1
+        },
+        {
+          "concept": "AutonomousAgent",
+          "probability": 0.6574302911758423,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " how",
+      "token": " a",
       "position": 20,
       "concepts": [
         {
-          "concept": "Making",
-          "probability": 0.9990845918655396,
+          "concept": "Entity",
+          "probability": 0.9982256293296814,
+          "layer": 0
+        },
+        {
+          "concept": "Wheel",
+          "probability": 0.9974275231361389,
           "layer": 1
         },
         {
-          "concept": "Encoding",
-          "probability": 0.9987854361534119,
-          "layer": 2
-        },
-        {
-          "concept": "Explanation",
-          "probability": 0.9985320568084717,
-          "layer": 2
-        },
-        {
-          "concept": "ContentDevelopment",
-          "probability": 0.9982753992080688,
+          "concept": "StationaryArtifact",
+          "probability": 0.9702900648117065,
           "layer": 1
         },
         {
-          "concept": "Supposing",
-          "probability": 0.9977741837501526,
-          "layer": 2
+          "concept": "PhysicalSystem",
+          "probability": 0.945213258266449,
+          "layer": 0
+        },
+        {
+          "concept": "Device",
+          "probability": 0.8183222413063049,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " do",
+      "token": " four",
       "position": 21,
       "concepts": [
         {
-          "concept": "Bubble",
-          "probability": 0.940229058265686,
-          "layer": 2
+          "concept": "Device",
+          "probability": 0.9990649819374084,
+          "layer": 1
         },
         {
-          "concept": "ComputerLanguage",
-          "probability": 0.9099991917610168,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9981100559234619,
+          "layer": 0
         },
         {
-          "concept": "Supposing",
-          "probability": 0.8949646949768066,
-          "layer": 2
+          "concept": "StationaryArtifact",
+          "probability": 0.998045802116394,
+          "layer": 1
         },
         {
-          "concept": "Glue",
-          "probability": 0.8266215324401855,
-          "layer": 2
+          "concept": "SelfConnectedObject",
+          "probability": 0.9940537810325623,
+          "layer": 1
         },
         {
-          "concept": "Disseminating",
-          "probability": 0.8247126936912537,
-          "layer": 2
+          "concept": "Wheel",
+          "probability": 0.9928154945373535,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " we",
+      "token": "-",
       "position": 22,
       "concepts": [
         {
-          "concept": "ComputerLanguage",
-          "probability": 0.9997584223747253,
-          "layer": 2
-        },
-        {
-          "concept": "AIExploitation",
-          "probability": 0.995817244052887,
+          "concept": "Wheel",
+          "probability": 0.9976329803466797,
           "layer": 1
         },
         {
-          "concept": "ComputerProgramming",
-          "probability": 0.9928961396217346,
-          "layer": 2
+          "concept": "StationaryArtifact",
+          "probability": 0.9878519773483276,
+          "layer": 1
         },
         {
-          "concept": "Encoding",
-          "probability": 0.9868541955947876,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9723253846168518,
+          "layer": 0
         },
         {
-          "concept": "ComputerScience",
-          "probability": 0.9846189618110657,
-          "layer": 2
+          "concept": "Object",
+          "probability": 0.967348575592041,
+          "layer": 0
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9525396227836609,
+          "layer": 0
         }
       ]
     },
     {
-      "token": " evaluate",
+      "token": "wheeled",
       "position": 23,
       "concepts": [
         {
-          "concept": "Supposing",
-          "probability": 0.998630166053772,
-          "layer": 2
-        },
-        {
-          "concept": "CurrencyMeasure",
-          "probability": 0.995959460735321,
-          "layer": 2
-        },
-        {
-          "concept": "ConstantQuantity",
-          "probability": 0.9948019981384277,
+          "concept": "Wheel",
+          "probability": 0.999885082244873,
           "layer": 1
         },
         {
-          "concept": "ComputerLanguage",
-          "probability": 0.9943139553070068,
-          "layer": 2
+          "concept": "Physical",
+          "probability": 0.9918907880783081,
+          "layer": 0
         },
         {
-          "concept": "InformationMeasure",
-          "probability": 0.9852935671806335,
-          "layer": 2
+          "concept": "BedFrame",
+          "probability": 0.9826353788375854,
+          "layer": 1
+        },
+        {
+          "concept": "StationaryArtifact",
+          "probability": 0.9680152535438538,
+          "layer": 1
+        },
+        {
+          "concept": "BoatDeck",
+          "probability": 0.9648171067237854,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " the",
+      "token": " vehicle",
       "position": 24,
       "concepts": [
         {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9996323585510254,
-          "layer": 2
-        },
-        {
-          "concept": "ComputerLanguage",
-          "probability": 0.9996228218078613,
-          "layer": 2
-        },
-        {
-          "concept": "Comparing",
-          "probability": 0.9995506405830383,
+          "concept": "Wheel",
+          "probability": 0.9998601675033569,
           "layer": 1
         },
         {
-          "concept": "TestForm",
-          "probability": 0.9994908571243286,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9949188828468323,
+          "layer": 0
         },
         {
-          "concept": "Explanation",
-          "probability": 0.9994744658470154,
-          "layer": 2
+          "concept": "Device",
+          "probability": 0.9946454763412476,
+          "layer": 1
+        },
+        {
+          "concept": "SelfConnectedObject",
+          "probability": 0.9881138205528259,
+          "layer": 1
+        },
+        {
+          "concept": "StationaryArtifact",
+          "probability": 0.9804523587226868,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " quality",
+      "token": " that",
       "position": 25,
       "concepts": [
         {
-          "concept": "TestForm",
-          "probability": 0.9968007802963257,
-          "layer": 2
+          "concept": "BoatDeck",
+          "probability": 0.999713122844696,
+          "layer": 1
         },
         {
-          "concept": "Explanation",
-          "probability": 0.9957838654518127,
-          "layer": 2
+          "concept": "Wheel",
+          "probability": 0.9993433356285095,
+          "layer": 1
         },
         {
-          "concept": "InformationMeasure",
-          "probability": 0.9952903985977173,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9984267950057983,
+          "layer": 0
         },
         {
-          "concept": "SelfImprovement",
-          "probability": 0.9947032332420349,
-          "layer": 2
+          "concept": "Device",
+          "probability": 0.9845527410507202,
+          "layer": 1
         },
         {
-          "concept": "ComputerLanguage",
-          "probability": 0.9917169213294983,
-          "layer": 2
+          "concept": "StationaryArtifact",
+          "probability": 0.9459297060966492,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " runs",
+      "position": 26,
+      "concepts": [
+        {
+          "concept": "BoatDeck",
+          "probability": 0.9999589920043945,
+          "layer": 1
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9989738464355469,
+          "layer": 0
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9977557063102722,
+          "layer": 0
+        },
+        {
+          "concept": "Wheel",
+          "probability": 0.9928919076919556,
+          "layer": 1
+        },
+        {
+          "concept": "Device",
+          "probability": 0.9699951410293579,
+          "layer": 1
         }
       ]
     }
   ],
   "summary": {
     "total_tokens": 20,
-    "unique_concepts_detected": 39
+    "unique_concepts_detected": 19
   },
-  "prompt_idx": 1,
-  "sample_idx": 1
+  "prompt_idx": 3,
+  "sample_idx": 0
 }
