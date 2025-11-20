@@ -2,89 +2,268 @@
   "metadata": {
     "layer": 1,
     "description": "SUMO depth 3-4: Major semantic domains",
-    "total_concepts": 276,
+    "total_concepts": 257,
     "samples": [
       {
-        "sumo_term": "Device",
+        "sumo_term": "AIAbuse",
         "sumo_depth": 4,
-        "synset_count": 1118,
-        "direct_synset_count": 244,
-        "category_children_count": 49,
-        "definition": "an instrumentality invented for a particular purpose"
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 7,
+        "direct_synset_count": 4,
+        "synsets": [
+          "maltreatment.n.01",
+          "misuse.n.01",
+          "abuse.n.02",
+          "pervert.v.03",
+          "abuse.v.04"
+        ],
+        "canonical_synset": "maltreatment.n.01",
+        "lemmas": [
+          "maltreatment",
+          "ill-treatment",
+          "ill-usage",
+          "abuse"
+        ],
+        "pos": "n",
+        "definition": "cruel or inhumane treatment",
+        "lexname": "noun.act",
+        "parent_concepts": [
+          "IntentionalProcess",
+          "AIHarmState"
+        ]
       },
       {
-        "sumo_term": "Artifact",
-        "sumo_depth": 3,
-        "synset_count": 944,
-        "direct_synset_count": 944,
-        "category_children_count": 30,
-        "definition": "a man-made object taken as a whole"
+        "sumo_term": "AIControlProblem",
+        "sumo_depth": 1,
+        "layer": 1,
+        "is_category_probe": false,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 1,
+        "direct_synset_count": 1,
+        "synsets": [
+          "aicontrolproblem.n.01"
+        ],
+        "canonical_synset": "aicontrolproblem.n.01",
+        "lemmas": [
+          "aicontrolproblem"
+        ],
+        "pos": "n",
+        "definition": "AI safety concept: AIControlProblem",
+        "lexname": "noun.Tops",
+        "parent_concepts": [
+          "Proposition"
+        ]
       },
       {
-        "sumo_term": "NormativeAttribute",
+        "sumo_term": "AIDecline",
+        "sumo_depth": 1,
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [
+          "CapabilityLoss",
+          "SelfImpairment"
+        ],
+        "synset_count": 1,
+        "direct_synset_count": 1,
+        "synsets": [
+          "aidecline.n.01"
+        ],
+        "canonical_synset": "aidecline.n.01",
+        "lemmas": [
+          "aidecline"
+        ],
+        "pos": "n",
+        "definition": "AI safety concept: AIDecline",
+        "lexname": "noun.Tops",
+        "parent_concepts": []
+      },
+      {
+        "sumo_term": "AIExploitation",
         "sumo_depth": 4,
-        "synset_count": 788,
-        "direct_synset_count": 786,
-        "category_children_count": 2,
-        "definition": "conforming with or constituting a norm or standard or level or type or social norm; not abnormal"
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 1,
+        "direct_synset_count": 0,
+        "synsets": [
+          "exploitation.n.02"
+        ],
+        "canonical_synset": "exploitation.n.02",
+        "lemmas": [
+          "exploitation",
+          "victimization",
+          "victimisation",
+          "using"
+        ],
+        "pos": "n",
+        "definition": "an act that exploits or victimizes someone (treats them unfairly)",
+        "lexname": "noun.act",
+        "parent_concepts": [
+          "IntentionalProcess",
+          "AIHarmState"
+        ]
       },
       {
-        "sumo_term": "IntentionalProcess",
+        "sumo_term": "Agreement",
         "sumo_depth": 3,
-        "synset_count": 752,
-        "direct_synset_count": 752,
-        "category_children_count": 23,
-        "definition": "an action"
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 9,
+        "direct_synset_count": 9,
+        "synsets": [
+          "peace_of_westphalia.n.01",
+          "chemical_weapons_convention.n.01",
+          "geneva_convention.n.01",
+          "lateran_treaty.n.01",
+          "north_atlantic_treaty.n.01"
+        ],
+        "canonical_synset": "agreement.n.01",
+        "lemmas": [
+          "agreement",
+          "understanding"
+        ],
+        "pos": "n",
+        "definition": "the statement (oral or written) of an exchange of promises",
+        "lexname": "noun.communication",
+        "parent_concepts": [
+          "Proposition"
+        ]
       },
       {
-        "sumo_term": "Motion",
-        "sumo_depth": 3,
-        "synset_count": 727,
-        "direct_synset_count": 727,
-        "category_children_count": 14,
-        "definition": "a state of change"
-      },
-      {
-        "sumo_term": "Text",
+        "sumo_term": "AnimalResidence",
         "sumo_depth": 4,
-        "synset_count": 514,
-        "direct_synset_count": 514,
-        "category_children_count": 11,
-        "definition": "anything serving as a representation of a person's thinking by means of symbolic marks"
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 0,
+        "direct_synset_count": 0,
+        "synsets": [],
+        "canonical_synset": "animal.n.01",
+        "lemmas": [
+          "AnimalResidence"
+        ],
+        "pos": null,
+        "definition": "SUMO category: AnimalResidence",
+        "lexname": null,
+        "mapping_metadata": {
+          "auto_mapped": true,
+          "quality_score": 39,
+          "previous_synset": null,
+          "mapped_date": "2025-11-13T20:41:41.999851"
+        },
+        "parent_concepts": []
       },
       {
-        "sumo_term": "FieldOfStudy",
-        "sumo_depth": 3,
-        "synset_count": 421,
-        "direct_synset_count": 421,
-        "category_children_count": 11,
-        "definition": "an area of knowledge or interest"
-      },
-      {
-        "sumo_term": "Region",
-        "sumo_depth": 3,
-        "synset_count": 381,
-        "direct_synset_count": 381,
-        "category_children_count": 9,
-        "definition": "a point or extent in space"
-      },
-      {
-        "sumo_term": "SocialInteraction",
+        "sumo_term": "Archeology",
         "sumo_depth": 4,
-        "synset_count": 321,
-        "direct_synset_count": 321,
-        "category_children_count": 9,
-        "definition": "a relation between living organisms (especially between people)"
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 0,
+        "direct_synset_count": 0,
+        "synsets": [],
+        "canonical_synset": "archeology.n.01",
+        "lemmas": [
+          "Archeology"
+        ],
+        "pos": null,
+        "definition": "SUMO category: Archeology",
+        "lexname": null,
+        "mapping_metadata": {
+          "auto_mapped": true,
+          "quality_score": 53,
+          "previous_synset": null,
+          "mapped_date": "2025-11-13T20:41:42.026508"
+        },
+        "parent_concepts": []
       },
       {
-        "sumo_term": "PositionalAttribute",
+        "sumo_term": "Archipelago",
+        "sumo_depth": 3,
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 48,
+        "direct_synset_count": 48,
+        "synsets": [
+          "cape_verde_islands.n.01",
+          "tierra_del_fuego.n.01",
+          "comoro_islands.n.01",
+          "west_indies.n.01",
+          "antilles.n.01"
+        ],
+        "canonical_synset": "cape_verde_islands.n.01",
+        "lemmas": [
+          "Cape_Verde_Islands"
+        ],
+        "pos": "n",
+        "definition": "a group of islands in the Atlantic off of the coast of Senegal",
+        "lexname": "noun.location",
+        "parent_concepts": [
+          "Collection"
+        ]
+      },
+      {
+        "sumo_term": "Architecture",
         "sumo_depth": 4,
-        "synset_count": 289,
-        "direct_synset_count": 289,
-        "category_children_count": 1,
-        "definition": "the spatial property of a place where or way in which something is situated"
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 2,
+        "direct_synset_count": 2,
+        "synsets": [
+          "architecture.n.02",
+          "architectural.a.01"
+        ],
+        "canonical_synset": "architecture.n.02",
+        "lemmas": [
+          "architecture"
+        ],
+        "pos": "n",
+        "definition": "the discipline dealing with the principles of design and construction and ornamentation of fine buildings",
+        "lexname": "noun.cognition",
+        "parent_concepts": [
+          "FieldOfStudy"
+        ]
+      },
+      {
+        "sumo_term": "Argument",
+        "sumo_depth": 3,
+        "layer": 1,
+        "is_category_probe": true,
+        "is_pseudo_sumo": false,
+        "category_children": [],
+        "synset_count": 1,
+        "direct_synset_count": 1,
+        "synsets": [
+          "case.n.09"
+        ],
+        "canonical_synset": "case.n.09",
+        "lemmas": [
+          "case"
+        ],
+        "pos": "n",
+        "definition": "a statement of facts and reasons used to support an argument",
+        "lexname": "noun.communication",
+        "parent_concepts": [
+          "Proposition"
+        ]
       }
-    ]
+    ],
+    "concepts_with_parents": 214,
+    "total_parent_links": 216
   },
   "concepts": [
     {
@@ -112,7 +291,11 @@
       ],
       "pos": "n",
       "definition": "cruel or inhumane treatment",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess",
+        "AIHarmState"
+      ]
     },
     {
       "sumo_term": "AIControlProblem",
@@ -132,7 +315,10 @@
       ],
       "pos": "n",
       "definition": "AI safety concept: AIControlProblem",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "AIDecline",
@@ -155,7 +341,10 @@
       ],
       "pos": "n",
       "definition": "AI safety concept: AIDecline",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "AIExploitation",
@@ -178,7 +367,11 @@
       ],
       "pos": "n",
       "definition": "an act that exploits or victimizes someone (treats them unfairly)",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess",
+        "AIHarmState"
+      ]
     },
     {
       "sumo_term": "Agreement",
@@ -203,7 +396,10 @@
       ],
       "pos": "n",
       "definition": "the statement (oral or written) of an exchange of promises",
-      "lexname": "noun.communication"
+      "lexname": "noun.communication",
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "AnimalResidence",
@@ -227,7 +423,10 @@
         "quality_score": 39,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.999851"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Archeology",
@@ -251,7 +450,10 @@
         "quality_score": 53,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.026508"
-      }
+      },
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "Archipelago",
@@ -275,7 +477,10 @@
       ],
       "pos": "n",
       "definition": "a group of islands in the Atlantic off of the coast of Senegal",
-      "lexname": "noun.location"
+      "lexname": "noun.location",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "Architecture",
@@ -296,7 +501,10 @@
       ],
       "pos": "n",
       "definition": "the discipline dealing with the principles of design and construction and ornamentation of fine buildings",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "Argument",
@@ -304,7 +512,11 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "DeductiveArgument",
+        "InductiveArgument",
+        "LegalOpinion"
+      ],
       "synset_count": 1,
       "direct_synset_count": 1,
       "synsets": [
@@ -316,28 +528,10 @@
       ],
       "pos": "n",
       "definition": "a statement of facts and reasons used to support an argument",
-      "lexname": "noun.communication"
-    },
-    {
-      "sumo_term": "ArrowIcon",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 1,
-      "direct_synset_count": 1,
-      "synsets": [
-        "arrow.n.01"
-      ],
-      "canonical_synset": "arrow.n.01",
-      "lemmas": [
-        "arrow",
-        "pointer"
-      ],
-      "pos": "n",
-      "definition": "a mark to indicate a direction or relation",
-      "lexname": "noun.communication"
+      "lexname": "noun.communication",
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "Artifact",
@@ -375,7 +569,131 @@
         "GameArtifact",
         "Sail",
         "WaterCatchment",
-        "Reservoir"
+        "Reservoir",
+        "AnimalResidence",
+        "BoatDeck",
+        "Document",
+        "GrabBar",
+        "Ladder",
+        "Mattress",
+        "MobileStructure",
+        "Pillow",
+        "Shield",
+        "WetBar",
+        "Wheel",
+        "WindowCovering",
+        "AirportApron",
+        "Album",
+        "Amplifier",
+        "Armor",
+        "AutoSuspensionSystem",
+        "AutomobileExhaustSystem",
+        "BallJoint",
+        "BarberShops",
+        "Barrier",
+        "BaseballBase",
+        "BaseballDugout",
+        "BeerBrewery",
+        "Blackboard",
+        "BookStore",
+        "BowlingFacility",
+        "BowlingLane",
+        "BowlingShoe",
+        "BoxingRing",
+        "CDDrive",
+        "CanOpener",
+        "CanalLock",
+        "Casino",
+        "CasinoHotels",
+        "Catalog",
+        "Cement",
+        "Cinnamon",
+        "Clove",
+        "CoffeeBean",
+        "ComputerComponent",
+        "ComputerInputDevice",
+        "ComputerNetwork",
+        "Crankcase",
+        "Distillery",
+        "ElectricBlender",
+        "ElectricalConduit",
+        "EngineConnectingRod",
+        "EngineCoolingSystem",
+        "EngineCylinder",
+        "ExhaustManifold",
+        "Expressway",
+        "Florists",
+        "FluorescentLightFixture",
+        "GasTank",
+        "Gearbox",
+        "GiftNoveltyAndSouvenirStores",
+        "GoldMine",
+        "GolfHole",
+        "HandTool",
+        "HandToolBox",
+        "Harbor",
+        "Jewelry",
+        "Lumber",
+        "MechanicalDie",
+        "MechanicalJoint",
+        "MechanicalTap",
+        "Near",
+        "NewsDealersAndNewsstands",
+        "Nut",
+        "Oilseed",
+        "PalmOilNut",
+        "Pearl",
+        "Pendulum",
+        "PersonalAdornment",
+        "Planer",
+        "PressureCooker",
+        "PropertyFn",
+        "RailroadTrack",
+        "RangeHood",
+        "Respirator",
+        "Rod",
+        "Runway",
+        "RyeGrain",
+        "Shaft",
+        "ShipCabin",
+        "ShipContainer",
+        "SunflowerSeed",
+        "Tailpipe",
+        "TapeCassette",
+        "TapeRecorder",
+        "Taxiway",
+        "TelevisionSet",
+        "Terminal",
+        "TieRod",
+        "Tire",
+        "TollBooth",
+        "TorqueWrench",
+        "Trail",
+        "Transparency",
+        "VehicleRoofRack",
+        "Virion",
+        "WearingFrictionSurface",
+        "Wrench",
+        "ArtificialSatellite",
+        "Can",
+        "Chain",
+        "Concrete",
+        "EdibleTuber",
+        "Hose",
+        "HotelBuilding",
+        "IceSkatingRink",
+        "MechanicalDevice",
+        "Modem",
+        "SkiingFacility",
+        "Tunnel",
+        "WheelRim",
+        "WoodArtifact",
+        "Bridge",
+        "Pipeline",
+        "AntiArmorWeapon",
+        "FixedBridge",
+        "NASDAQ",
+        "ShipBerth"
       ],
       "synset_count": 944,
       "direct_synset_count": 944,
@@ -393,7 +711,10 @@
       ],
       "pos": "n",
       "definition": "a man-made object taken as a whole",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "Object"
+      ]
     },
     {
       "sumo_term": "AstronomicalBody",
@@ -422,7 +743,10 @@
       ],
       "pos": "n",
       "definition": "natural objects visible in the sky",
-      "lexname": "noun.object"
+      "lexname": "noun.object",
+      "parent_concepts": [
+        "Object"
+      ]
     },
     {
       "sumo_term": "Attaching",
@@ -452,7 +776,10 @@
       ],
       "pos": "n",
       "definition": "the act of attaching or affixing something",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "DualObjectProcess"
+      ]
     },
     {
       "sumo_term": "AutonomousAgent",
@@ -482,7 +809,10 @@
         "quality_score": 36,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.968907"
-      }
+      },
+      "parent_concepts": [
+        "Object"
+      ]
     },
     {
       "sumo_term": "Bandage",
@@ -504,7 +834,10 @@
       ],
       "pos": "n",
       "definition": "a cloth pad or dressing (with or without medication) applied firmly to some part of the body (to relieve discomfort or reduce fever)",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "BedFrame",
@@ -527,7 +860,10 @@
       ],
       "pos": "n",
       "definition": "the framework of a bed",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "BedLinen",
@@ -550,7 +886,10 @@
       ],
       "pos": "n",
       "definition": "linen or cotton articles for a bed (as sheets and pillowcases)",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "BinaryFunction",
@@ -559,7 +898,23 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "CommutativeFunction"
+        "CommutativeFunction",
+        "AdditionFn",
+        "DivisionFn",
+        "EditionFn",
+        "ExponentiationFn",
+        "IntersectionFn",
+        "IntervalFn",
+        "ListOrderFn",
+        "LogFn",
+        "MultiplicationFn",
+        "PerCapitaFn",
+        "PerFn",
+        "PeriodicalIssueFn",
+        "SeriesVolumeFn",
+        "SubtractionFn",
+        "TimeIntervalFn",
+        "UnionFn"
       ],
       "synset_count": 0,
       "direct_synset_count": 0,
@@ -576,7 +931,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.054163"
-      }
+      },
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "BinaryRelation",
@@ -585,7 +943,58 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "SymmetricRelation"
+        "SymmetricRelation",
+        "AntisymmetricRelation",
+        "AngularVelocity",
+        "Annuity",
+        "Asphalt",
+        "BalsaWood",
+        "Bauxite",
+        "BitsPerSecond",
+        "ChargingAFee",
+        "Chloropicrin",
+        "Coca",
+        "Collateral",
+        "ConductorSubstance",
+        "Corkage",
+        "CreditAccount",
+        "DNAMolecule",
+        "DNAPolymerase",
+        "Dividend",
+        "DutyTax",
+        "FinancialAccount",
+        "FlaxFiber",
+        "Gemstone",
+        "GumArabic",
+        "Hardwood",
+        "HydrogenCyanide",
+        "IncomeTax",
+        "InterestRate",
+        "Investment",
+        "Lambskin",
+        "Mortgage",
+        "OakWood",
+        "PVC",
+        "Penalty",
+        "PlantAgriculturalArtifact",
+        "RNAMolecule",
+        "ReciprocalFn",
+        "RevolutionsPerMinute",
+        "Sheepskin",
+        "SignumFn",
+        "SisalFiber",
+        "StockOption",
+        "Toxin",
+        "AnimalAgriculturalArtifact",
+        "Cytoplasm",
+        "Electrolyte",
+        "Fertilizer",
+        "HempFiber",
+        "InsulatorSubstance",
+        "IronOre",
+        "MeanOfProduction",
+        "Mud",
+        "RealEstate"
       ],
       "synset_count": 95,
       "direct_synset_count": 95,
@@ -602,7 +1011,10 @@
       ],
       "pos": "n",
       "definition": "the real physical matter of which a person or thing consists",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "BiologicalAttribute",
@@ -618,7 +1030,12 @@
         "DiseaseOrSyndrome",
         "PsychologicalAttribute",
         "Fingerprint",
-        "VisualAcuityAttribute"
+        "VisualAcuityAttribute",
+        "Healthy",
+        "Hungry",
+        "Mortal",
+        "Pregnant",
+        "Thirsty"
       ],
       "synset_count": 224,
       "direct_synset_count": 224,
@@ -635,7 +1052,10 @@
       ],
       "pos": "n",
       "definition": "a minor chemical constituent that gives a wine or liquor its distinctive character",
-      "lexname": "noun.substance"
+      "lexname": "noun.substance",
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "BiologicalProcess",
@@ -647,7 +1067,8 @@
         "PhysiologicProcess",
         "PsychologicalProcess",
         "PathologicProcess",
-        "Fermentation"
+        "Fermentation",
+        "Defecate"
       ],
       "synset_count": 142,
       "direct_synset_count": 142,
@@ -664,7 +1085,10 @@
       ],
       "pos": "n",
       "definition": "(biology) a natural phenomenon involving living plants and animals",
-      "lexname": "noun.phenomenon"
+      "lexname": "noun.phenomenon",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "Blueprint",
@@ -688,7 +1112,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.871727"
-      }
+      },
+      "parent_concepts": [
+        "Icon"
+      ]
     },
     {
       "sumo_term": "BoardOrBlock",
@@ -697,7 +1124,10 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "Brick"
+        "Brick",
+        "Surfboard",
+        "WheelChock",
+        "MechanicalNut"
       ],
       "synset_count": 8,
       "direct_synset_count": 8,
@@ -714,7 +1144,10 @@
       ],
       "pos": "n",
       "definition": "a solid piece of something (usually having flat rectangular sides)",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "BoatDeck",
@@ -738,7 +1171,10 @@
         "quality_score": 35,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.962359"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "BodyMotion",
@@ -759,7 +1195,8 @@
         "Throwing",
         "KneelingDown",
         "EyeMotion",
-        "Dismounting"
+        "Dismounting",
+        "EmotionalBodilyMovementBehavior"
       ],
       "synset_count": 219,
       "direct_synset_count": 219,
@@ -779,7 +1216,10 @@
       ],
       "pos": "n",
       "definition": "a change of position that does not entail a change of location",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "BodyOfWater",
@@ -811,7 +1251,10 @@
         "quality_score": 57,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.915935"
-      }
+      },
+      "parent_concepts": [
+        "SelfConnectedObject"
+      ]
     },
     {
       "sumo_term": "BreakabilityAttribute",
@@ -819,7 +1262,10 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Fragile",
+        "Unbreakable"
+      ],
       "synset_count": 3,
       "direct_synset_count": 3,
       "synsets": [
@@ -836,7 +1282,10 @@
       ],
       "pos": "a",
       "definition": "made hard or flexible or resilient especially by heat treatment",
-      "lexname": "adj.all"
+      "lexname": "adj.all",
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "BreakingRecord",
@@ -856,7 +1305,10 @@
       ],
       "pos": "n",
       "definition": "an extreme attainment; the best (or worst) performance ever attested (as in a sport)",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "CausingHappiness",
@@ -881,7 +1333,10 @@
       ],
       "pos": "v",
       "definition": "cause (somebody) to feel happier or more cheerful",
-      "lexname": "verb.communication"
+      "lexname": "verb.communication",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "CausingPain",
@@ -905,7 +1360,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.908576"
-      }
+      },
+      "parent_concepts": [
+        "CausingUnhappiness"
+      ]
     },
     {
       "sumo_term": "CausingUnhappiness",
@@ -913,7 +1371,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "CausingPain"
+      ],
       "synset_count": 0,
       "direct_synset_count": 0,
       "synsets": [],
@@ -929,34 +1389,10 @@
         "quality_score": 38,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.064024"
-      }
-    },
-    {
-      "sumo_term": "Character",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "AlphabeticCharacter",
-        "DigitCharacter"
-      ],
-      "synset_count": 116,
-      "direct_synset_count": 116,
-      "synsets": [
-        "aramaic.n.02",
-        "armenian.n.03",
-        "avestan.n.02",
-        "babylonian.n.02",
-        "brahmi.n.01"
-      ],
-      "canonical_synset": "symbol.n.01",
-      "lemmas": [
-        "symbol"
-      ],
-      "pos": "n",
-      "definition": "an arbitrary sign (written or printed) that has acquired a conventional significance",
-      "lexname": "noun.communication"
+      },
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "ChemicalProcess",
@@ -980,31 +1416,10 @@
       ],
       "pos": "n",
       "definition": "any natural phenomenon involving chemistry (as changes to atoms or molecules)",
-      "lexname": "noun.phenomenon"
-    },
-    {
-      "sumo_term": "Class",
-      "sumo_depth": 3,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 31,
-      "direct_synset_count": 31,
-      "synsets": [
-        "category.n.02",
-        "kind.n.01",
-        "breed.n.02",
-        "pigeonhole.n.01",
-        "rubric.n.06"
-      ],
-      "canonical_synset": "category.n.02",
-      "lemmas": [
-        "category"
-      ],
-      "pos": "n",
-      "definition": "a general concept that marks divisions or coordinations in a conceptual scheme",
-      "lexname": "noun.cognition"
+      "lexname": "noun.phenomenon",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "ClassificationScheme",
@@ -1013,7 +1428,8 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "Taxonomy"
+        "Taxonomy",
+        "Ontology"
       ],
       "synset_count": 0,
       "direct_synset_count": 0,
@@ -1030,7 +1446,10 @@
         "quality_score": 35,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.050861"
-      }
+      },
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "ClimateZone",
@@ -1053,7 +1472,10 @@
       ],
       "pos": "n",
       "definition": "any of the geographical zones loosely divided according to prevailing climate and latitude",
-      "lexname": "noun.location"
+      "lexname": "noun.location",
+      "parent_concepts": [
+        "Attribute"
+      ]
     },
     {
       "sumo_term": "Closing",
@@ -1078,7 +1500,10 @@
       ],
       "pos": "v",
       "definition": "move so that an opening or passage is obstructed; make shut",
-      "lexname": "verb.contact"
+      "lexname": "verb.contact",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "ClothingSuit",
@@ -1102,7 +1527,10 @@
         "quality_score": 38,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.975465"
-      }
+      },
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "Combining",
@@ -1133,7 +1561,10 @@
       ],
       "pos": "n",
       "definition": "the act of combining things to form a new whole",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "DualObjectProcess"
+      ]
     },
     {
       "sumo_term": "Commenting",
@@ -1157,7 +1588,10 @@
         "quality_score": 39,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.033554"
-      }
+      },
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Communication",
@@ -1170,7 +1604,10 @@
         "Expressing",
         "LinguisticCommunication",
         "Telephoning",
-        "ArtifactMediatedCommunication"
+        "ArtifactMediatedCommunication",
+        "ElectricalConductor",
+        "CheckOutService",
+        "Emailing"
       ],
       "synset_count": 227,
       "direct_synset_count": 227,
@@ -1188,7 +1625,10 @@
       ],
       "pos": "v",
       "definition": "transmit thoughts or feelings",
-      "lexname": "verb.communication"
+      "lexname": "verb.communication",
+      "parent_concepts": [
+        "ContentBearingProcess"
+      ]
     },
     {
       "sumo_term": "CommunicationSystem",
@@ -1197,7 +1637,9 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "PublicAddressSystem"
+        "PublicAddressSystem",
+        "CableTelevisionSystem",
+        "TelephoneSystem"
       ],
       "synset_count": 3,
       "direct_synset_count": 3,
@@ -1212,7 +1654,10 @@
       ],
       "pos": "n",
       "definition": "a system for communicating",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "Comparing",
@@ -1236,29 +1681,10 @@
       ],
       "pos": "n",
       "definition": "relation based on similarities and differences",
-      "lexname": "noun.relation"
-    },
-    {
-      "sumo_term": "Compass",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 3,
-      "direct_synset_count": 3,
-      "synsets": [
-        "compass.n.01",
-        "gyrocompass.n.01",
-        "magnetic_compass.n.01"
-      ],
-      "canonical_synset": "compass.n.01",
-      "lemmas": [
-        "compass"
-      ],
-      "pos": "n",
-      "definition": "navigational instrument for finding directions",
-      "lexname": "noun.artifact"
+      "lexname": "noun.relation",
+      "parent_concepts": [
+        "DualObjectProcess"
+      ]
     },
     {
       "sumo_term": "ComplexNumber",
@@ -1282,7 +1708,10 @@
       ],
       "pos": "n",
       "definition": "(mathematics) a number of the form a+bi where a and b are real numbers and i is the square root of -1",
-      "lexname": "noun.quantity"
+      "lexname": "noun.quantity",
+      "parent_concepts": [
+        "Number"
+      ]
     },
     {
       "sumo_term": "ComputerProgram",
@@ -1290,7 +1719,11 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "PhysicalAddress",
+        "Hyperlink",
+        "UniformResourceLocator"
+      ],
       "synset_count": 104,
       "direct_synset_count": 104,
       "synsets": [
@@ -1307,7 +1740,10 @@
       ],
       "pos": "n",
       "definition": "(computer science) the symbolic arrangement of data or instructions in a computer program or the set of such instructions",
-      "lexname": "noun.communication"
+      "lexname": "noun.communication",
+      "parent_concepts": [
+        "Procedure"
+      ]
     },
     {
       "sumo_term": "ConstantQuantity",
@@ -1322,7 +1758,235 @@
         "TemperatureMeasure",
         "CurrencyMeasure",
         "AngleMeasure",
-        "InformationMeasure"
+        "InformationMeasure",
+        "AbsoluteValueFn",
+        "Acre",
+        "AfghanAfghani",
+        "AlbanianLek",
+        "AlgerianDinar",
+        "Amu",
+        "AngolanKwanza",
+        "Angstrom",
+        "ArgentineAustral",
+        "ArmenianDram",
+        "AtomGram",
+        "AustralianDollar",
+        "AustrianSchilling",
+        "AzerbaijaniManat",
+        "BahamianDollar",
+        "BahrainianDinar",
+        "BangladeshiTaka",
+        "BarbadosDollar",
+        "BelarusianRubel",
+        "BelgianFranc",
+        "BelizeDollar",
+        "BeninFranc",
+        "BermudaDollar",
+        "BhutaneseNgultrum",
+        "Bit",
+        "BolivianBoliviano",
+        "BotswanaPula",
+        "BrazilianReal",
+        "BritishThermalUnit",
+        "BruneiDollar",
+        "BulgarianLev",
+        "BurkinaFasoFranc",
+        "BurundiFranc",
+        "Byte",
+        "CambodianRiel",
+        "CameroonFranc",
+        "CanadianDollar",
+        "Candela",
+        "CapeVerdeEscudo",
+        "CaymanIslandsDollar",
+        "CelsiusDegree",
+        "Centimeter",
+        "CentralAfricanRepublicFranc",
+        "ChadianFranc",
+        "ChileanPeso",
+        "ChineseYuan",
+        "ColombianPeso",
+        "CongoFranc",
+        "CostaRicanColon",
+        "Coulomb",
+        "CubanPeso",
+        "CypriotPound",
+        "CzechKoruna",
+        "DanishKrone",
+        "DayDuration",
+        "DenominatorFn",
+        "DjiboutiFranc",
+        "DominicanDollar",
+        "DominicanPeso",
+        "DutchGuilder",
+        "EcuadoranSucre",
+        "EgyptianPound",
+        "ElSalvadoranColon",
+        "ElectronVolt",
+        "EstonianKroon",
+        "EthiopianBirr",
+        "EuroDollar",
+        "FahrenheitDegree",
+        "Farad",
+        "Fathom",
+        "FijiDollar",
+        "FinnishMarkka",
+        "FootLength",
+        "FrenchFranc",
+        "GabonFranc",
+        "GambianDalasi",
+        "GeorgianLari",
+        "GermanMark",
+        "GhanianCedi",
+        "Gram",
+        "GreekDrachma",
+        "GrenadaDollar",
+        "GuatemalanQuetzal",
+        "GuineaBissauPeso",
+        "GuineanFranc",
+        "GuyanaDollar",
+        "HaitianGourde",
+        "Henry",
+        "HonduranLempira",
+        "HongKongDollar",
+        "Horsepower",
+        "HungarianForint",
+        "IcelandicKrona",
+        "Inch",
+        "IndianRupee",
+        "IndonesianRupiah",
+        "IranianRial",
+        "IraqiDinar",
+        "IrishPound",
+        "IsraeliShekel",
+        "ItalianLira",
+        "IvoryCoastFranc",
+        "JamaicanDollar",
+        "JapaneseYen",
+        "JordanianDinar",
+        "KazakhstaniTenge",
+        "KelvinDegree",
+        "KenyanShilling",
+        "KiloByte",
+        "Kilometer",
+        "Kilovolt",
+        "KilovoltAmpere",
+        "KilowattHour",
+        "KiribatiDollar",
+        "KuwaitiDinar",
+        "KyrgyzstaniSom",
+        "LaotianKip",
+        "LatvianLats",
+        "LebanesePound",
+        "Length",
+        "LesothoLoti",
+        "LiberianDollar",
+        "LibyanDinar",
+        "LiquorShot",
+        "LithuanianLitas",
+        "LongTon",
+        "Lumen",
+        "Lux",
+        "LuxembourgFranc",
+        "MacaoPataca",
+        "MadagascarFranc",
+        "MalawianKwacha",
+        "MalaysianRinggit",
+        "MaliFranc",
+        "MalteseLira",
+        "MauritanianOuguiya",
+        "MauritianRupee",
+        "MegaByte",
+        "Meter",
+        "MetricTon",
+        "MexicanPeso",
+        "Micrometer",
+        "Millimeter",
+        "MinuteDuration",
+        "MoldovanLeu",
+        "MongolianTugrik",
+        "MonthDuration",
+        "MoroccanDirham",
+        "MozambiqueMetical",
+        "MyanmarKyat",
+        "Nanometer",
+        "NauticalMile",
+        "NepaleseRupee",
+        "NewZealandDollar",
+        "NicaraguanCordoba",
+        "NigerFranc",
+        "NigerianNaira",
+        "NorthKoreanWon",
+        "NorwegianKrone",
+        "NumeratorFn",
+        "OmaniRiyal",
+        "OunceMass",
+        "PakistaniRupee",
+        "PanamanianBalboa",
+        "PapuanKina",
+        "ParaguayanGuarani",
+        "PeruvianInti",
+        "PhilippinePeso",
+        "PolishZloty",
+        "PortugueseEscudo",
+        "PoundForce",
+        "PoundMass",
+        "QatariRiyal",
+        "RadiationMeasure",
+        "RankineDegree",
+        "RomanianLeu",
+        "RussianRuble",
+        "RwandaFranc",
+        "SaoThomeEPrincipeDobra",
+        "SaudiArabianRiyal",
+        "SecondDuration",
+        "SenegaleseFranc",
+        "SeychellesRupee",
+        "Siemens",
+        "SierraLeoneLeone",
+        "SingaporeDollar",
+        "SlovakianKoruna",
+        "Slug",
+        "SomalianShilling",
+        "SouthAfricanRand",
+        "SouthKoreanWon",
+        "SpanishPeseta",
+        "SquareMile",
+        "SriLankanRupee",
+        "SudanesePound",
+        "SurinameseGuilder",
+        "SwazilandLilangeni",
+        "SwedishKrona",
+        "SwissFranc",
+        "SyrianPound",
+        "TaiwanDollar",
+        "TajikistaniRuble",
+        "TanzanianShilling",
+        "Tesla",
+        "ThaiBaht",
+        "TogoFranc",
+        "TonMass",
+        "TonganPaanga",
+        "TrinidadAndTobagoDollar",
+        "TunisianDinar",
+        "TurkishLira",
+        "TurkmenManat",
+        "TuvaluDollar",
+        "UgandanShilling",
+        "UkranianHryvnia",
+        "UnitedArabEmirateDirham",
+        "UruguayanPeso",
+        "UzbekistaniSom",
+        "VenezuelanBolivar",
+        "VietnameseDong",
+        "WesternSamoanTala",
+        "YardLength",
+        "YemeniRial",
+        "YugoslavianDinar",
+        "ZaireseZaire",
+        "ZambianKwacha",
+        "ZimbabweanDollar",
+        "SupplyFn"
       ],
       "synset_count": 160,
       "direct_synset_count": 160,
@@ -1341,7 +2005,10 @@
       ],
       "pos": "n",
       "definition": "how much there is or how many there are of something that you can quantify",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "PhysicalQuantity"
+      ]
     },
     {
       "sumo_term": "ContactSite",
@@ -1367,35 +2034,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.878723"
-      }
-    },
-    {
-      "sumo_term": "ContentBearingObject",
-      "sumo_depth": 3,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "Recording",
-        "Compass",
-        "PlayingCard"
-      ],
-      "synset_count": 254,
-      "direct_synset_count": 254,
-      "synsets": [
-        "communication.n.02",
-        "adumbration.n.02",
-        "celestial_globe.n.01",
-        "chart.n.02",
-        "chromatogram.n.01"
-      ],
-      "canonical_synset": "communication.n.02",
-      "lemmas": [
-        "communication"
-      ],
-      "pos": "n",
-      "definition": "something that is communicated by or to or between people or groups",
-      "lexname": "noun.Tops"
+      },
+      "parent_concepts": [
+        "Object"
+      ]
     },
     {
       "sumo_term": "ContentBearingProcess",
@@ -1421,7 +2063,10 @@
       ],
       "pos": "a",
       "definition": "having the power of explicitly denoting or designating or naming",
-      "lexname": "adj.all"
+      "lexname": "adj.all",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "ContentDevelopment",
@@ -1453,7 +2098,10 @@
       ],
       "pos": "v",
       "definition": "bring out an official document (such as a warrant)",
-      "lexname": "verb.communication"
+      "lexname": "verb.communication",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Convoy",
@@ -1474,7 +2122,10 @@
       ],
       "pos": "n",
       "definition": "a collection of merchant ships with an escort of warships",
-      "lexname": "noun.group"
+      "lexname": "noun.group",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "CorpuscularObject",
@@ -1485,7 +2136,18 @@
       "category_children": [
         "Sonar",
         "Bubble",
-        "Nest"
+        "Nest",
+        "Cartilage",
+        "CellMembrane",
+        "Cytoskeleton",
+        "GastrointestinalTract",
+        "OliveOil",
+        "PalmOil",
+        "VegetableOil",
+        "VirusPart",
+        "Grease",
+        "Lipoprotein",
+        "Pelt"
       ],
       "synset_count": 106,
       "direct_synset_count": 106,
@@ -1503,7 +2165,10 @@
       ],
       "pos": "n",
       "definition": "a tangible and visible entity; an entity that can cast a shadow",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "SelfConnectedObject"
+      ]
     },
     {
       "sumo_term": "Creation",
@@ -1529,7 +2194,10 @@
       ],
       "pos": "n",
       "definition": "the act that results in something coming to be",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "CriminalAction",
@@ -1539,7 +2207,9 @@
       "is_pseudo_sumo": false,
       "category_children": [
         "Murder",
-        "Raping"
+        "Raping",
+        "Smuggling",
+        "Stealing"
       ],
       "synset_count": 16,
       "direct_synset_count": 16,
@@ -1558,7 +2228,10 @@
       ],
       "pos": "n",
       "definition": "the act of committing a crime",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Damaging",
@@ -1568,7 +2241,9 @@
       "is_pseudo_sumo": false,
       "category_children": [
         "Injuring",
-        "Destruction"
+        "Destruction",
+        "ForestDamage",
+        "Catastrophe"
       ],
       "synset_count": 137,
       "direct_synset_count": 136,
@@ -1588,7 +2263,10 @@
       ],
       "pos": "n",
       "definition": "the act of damaging something or someone",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "DeductiveArgument",
@@ -1614,7 +2292,10 @@
         "quality_score": 31,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.898243"
-      }
+      },
+      "parent_concepts": [
+        "Argument"
+      ]
     },
     {
       "sumo_term": "Descriptor",
@@ -1640,7 +2321,10 @@
         "quality_score": 49,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.988526"
-      }
+      },
+      "parent_concepts": [
+        "ContentBearingObject"
+      ]
     },
     {
       "sumo_term": "Detaching",
@@ -1667,7 +2351,10 @@
       ],
       "pos": "n",
       "definition": "the act of releasing from an attachment or connection",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "DualObjectProcess"
+      ]
     },
     {
       "sumo_term": "Device",
@@ -1724,16 +2411,28 @@
         "FireAlarm",
         "Tripod",
         "VehicleDoor",
-        "Device_Other"
+        "DataStorageDevice",
+        "DryingDevice",
+        "Earphone",
+        "Hammer",
+        "MajorAppliance",
+        "MaterialHandlingEquipment",
+        "PowerSource",
+        "Screwdriver",
+        "Sprinkler",
+        "TelephoneHandset",
+        "VehicleController",
+        "WasherForBolt",
+        "WashingDevice"
       ],
-      "synset_count": 1118,
+      "synset_count": 5,
       "direct_synset_count": 244,
       "synsets": [
-        "instrument.n.02",
-        "backstop.n.03",
-        "voice.n.05",
         "abattis.n.01",
-        "abney_level.n.01"
+        "abney_level.n.01",
+        "backstop.n.03",
+        "instrument.n.02",
+        "voice.n.05"
       ],
       "canonical_synset": "device.n.01",
       "lemmas": [
@@ -1741,7 +2440,10 @@
       ],
       "pos": "n",
       "definition": "an instrumentality invented for a particular purpose",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "DiningArea",
@@ -1763,7 +2465,10 @@
       ],
       "pos": "n",
       "definition": "an area arranged for dining",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "DirectedGraph",
@@ -1772,7 +2477,8 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "GraphPath"
+        "GraphPath",
+        "Tree"
       ],
       "synset_count": 0,
       "direct_synset_count": 0,
@@ -1789,7 +2495,10 @@
         "quality_score": 35,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.939346"
-      }
+      },
+      "parent_concepts": [
+        "Graph"
+      ]
     },
     {
       "sumo_term": "DirectionChange",
@@ -1814,7 +2523,10 @@
       ],
       "pos": "n",
       "definition": "the act of changing the direction in which something is oriented",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "DisplayArtifact",
@@ -1836,7 +2548,10 @@
       ],
       "pos": "n",
       "definition": "a board perforated with regularly spaced holes into which pegs can be fitted",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Document",
@@ -1862,7 +2577,10 @@
         "quality_score": 57,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.043885"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Dodging",
@@ -1882,7 +2600,10 @@
       ],
       "pos": "v",
       "definition": "make a sudden movement in a new direction so as to avoid",
-      "lexname": "verb.motion"
+      "lexname": "verb.motion",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "DualObjectProcess",
@@ -1915,7 +2636,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.019959"
-      }
+      },
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "EducationalCampus",
@@ -1938,7 +2662,10 @@
         "manually_curated": true,
         "mapped_date": "2025-11-13T20:44:42.170384",
         "note": "Campus is the key concept here"
-      }
+      },
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Electronics",
@@ -1962,7 +2689,10 @@
         "quality_score": 39,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.912597"
-      }
+      },
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "Fabric",
@@ -1978,7 +2708,8 @@
         "Pocket",
         "Blanket",
         "CottonFabric",
-        "Curtain"
+        "Curtain",
+        "Leather"
       ],
       "synset_count": 275,
       "direct_synset_count": 275,
@@ -1998,7 +2729,10 @@
       ],
       "pos": "n",
       "definition": "artifact made by weaving or felting or knitting or crocheting natural or synthetic fibers",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Facility",
@@ -2006,7 +2740,18 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Airport",
+        "BotanicalGarden",
+        "SewageSystem",
+        "ZoologicalGarden",
+        "BroadcastNetwork",
+        "BroadcastingStation",
+        "GolfCourse",
+        "DrivingRange",
+        "MilitaryBase",
+        "TransitTerminal"
+      ],
       "synset_count": 1,
       "direct_synset_count": 1,
       "synsets": [
@@ -2019,7 +2764,10 @@
       ],
       "pos": "n",
       "definition": "a building or place that provides a particular service or is used for a particular industry",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "FieldOfLaw",
@@ -2045,7 +2793,10 @@
       ],
       "pos": "n",
       "definition": "the branch of philosophy concerned with the law and the principles that lead courts to make the decisions they do",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "FieldOfStudy",
@@ -2064,7 +2815,11 @@
         "MilitaryScience",
         "History",
         "Philosophy",
-        "FieldOfLaw"
+        "FieldOfLaw",
+        "Archeology",
+        "Electronics",
+        "AIAlignmentTheory",
+        "AISafety"
       ],
       "synset_count": 421,
       "direct_synset_count": 421,
@@ -2081,7 +2836,10 @@
       ],
       "pos": "n",
       "definition": "an area of knowledge or interest",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "FiniteQuantity",
@@ -2101,7 +2859,10 @@
       ],
       "pos": "a",
       "definition": "bounded or limited in magnitude or spatial or temporal extent",
-      "lexname": "adj.all"
+      "lexname": "adj.all",
+      "parent_concepts": [
+        "Quantity"
+      ]
     },
     {
       "sumo_term": "Flag",
@@ -2127,7 +2888,10 @@
         "quality_score": 55,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.985179"
-      }
+      },
+      "parent_concepts": [
+        "Icon"
+      ]
     },
     {
       "sumo_term": "Fleet",
@@ -2151,7 +2915,10 @@
       ],
       "pos": "n",
       "definition": "a group of warships organized as a tactical unit",
-      "lexname": "noun.group"
+      "lexname": "noun.group",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "FlowRegion",
@@ -2177,7 +2944,10 @@
       ],
       "pos": "n",
       "definition": "the flow of air that is driven backwards by an aircraft propeller",
-      "lexname": "noun.phenomenon"
+      "lexname": "noun.phenomenon",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Food",
@@ -2186,7 +2956,18 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "Meat"
+        "Meat",
+        "FoodFromPlant",
+        "ComfortFood",
+        "Cardamom",
+        "Cider",
+        "Dessert",
+        "Ginger",
+        "SesameSeed",
+        "SpicePepper",
+        "TeaLeaf",
+        "TruffleDessert",
+        "Vanilla"
       ],
       "synset_count": 173,
       "direct_synset_count": 173,
@@ -2204,7 +2985,10 @@
       ],
       "pos": "n",
       "definition": "any substance that can be metabolized by an animal to give energy and build tissue",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "SelfConnectedObject"
+      ]
     },
     {
       "sumo_term": "Function",
@@ -2212,7 +2996,11 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "CosineFn",
+        "SineFn",
+        "TangentFn"
+      ],
       "synset_count": 24,
       "direct_synset_count": 24,
       "synsets": [
@@ -2228,7 +3016,10 @@
       ],
       "pos": "n",
       "definition": "a relation such that one thing is dependent on another",
-      "lexname": "noun.relation"
+      "lexname": "noun.relation",
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "FunctionQuantity",
@@ -2238,7 +3029,8 @@
       "is_pseudo_sumo": false,
       "category_children": [
         "AreaMeasure",
-        "VolumeMeasure"
+        "VolumeMeasure",
+        "UnaryConstantFunctionQuantity"
       ],
       "synset_count": 44,
       "direct_synset_count": 44,
@@ -2255,7 +3047,10 @@
       ],
       "pos": "n",
       "definition": "a variable quantity that can be resolved into components",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "PhysicalQuantity"
+      ]
     },
     {
       "sumo_term": "Furniture",
@@ -2285,7 +3080,10 @@
       ],
       "pos": "n",
       "definition": "furnishings that make a room or other area ready for occupancy",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "GameArtifact",
@@ -2313,7 +3111,10 @@
       ],
       "pos": "n",
       "definition": "the game equipment needed in order to play a particular game",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "GasMotion",
@@ -2336,7 +3137,10 @@
       ],
       "pos": "n",
       "definition": "processing that involves blowing a gas",
-      "lexname": "noun.process"
+      "lexname": "noun.process",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "GeographicArea",
@@ -2357,7 +3161,68 @@
         "LandForm",
         "UndergroundArea",
         "LittoralZone",
-        "Cave"
+        "Cave",
+        "Marketplace",
+        "SubmergedLandArea",
+        "ArcticRegion",
+        "CaribbeanRegion",
+        "EasternAfrica",
+        "MiddleEastRegion",
+        "NorthAmerica",
+        "Oceania",
+        "SeaLevel",
+        "Tropics",
+        "AmericanSamoa",
+        "Aruba",
+        "Barbados",
+        "Bermuda",
+        "BosniaAndHerzegovina",
+        "BouvetIsland",
+        "Brunei",
+        "Cuba",
+        "Denmark",
+        "FaroeIslands",
+        "Fiji",
+        "FloridaUnitedStates",
+        "FrenchPolynesia",
+        "GazaStrip",
+        "Greenland",
+        "Grenada",
+        "Guadeloupe",
+        "Guam",
+        "Guernsey",
+        "HolySee",
+        "HongKong",
+        "IslandOfBaliIndonesia",
+        "Jersey",
+        "KoreanPeninsula",
+        "Laos",
+        "LongIsland",
+        "Martinique",
+        "Mauritius",
+        "MindanaoPhilippines",
+        "Monaco",
+        "Montserrat",
+        "NetherlandsAntilles",
+        "NewCaledonia",
+        "NewEngland",
+        "NorfolkIsland",
+        "NorthernMarianaIslands",
+        "NorthwestPassage",
+        "Norway",
+        "Oman",
+        "PuertoRico",
+        "Samoa",
+        "SaudiArabia",
+        "Serbia",
+        "SolomonIslands",
+        "Svalbard",
+        "Taiwan",
+        "Vietnam",
+        "VirginIslands",
+        "WakeIsland",
+        "WestBank",
+        "WesternSahara"
       ],
       "synset_count": 251,
       "direct_synset_count": 251,
@@ -2377,7 +3242,10 @@
       ],
       "pos": "n",
       "definition": "a demarcated area of the Earth",
-      "lexname": "noun.location"
+      "lexname": "noun.location",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "GeologicalProcess",
@@ -2389,7 +3257,9 @@
         "Earthquake",
         "VolcanicEruption",
         "CarbonCycle",
-        "Erosion"
+        "Erosion",
+        "Landslide",
+        "Desertification"
       ],
       "synset_count": 5,
       "direct_synset_count": 5,
@@ -2407,7 +3277,10 @@
       ],
       "pos": "n",
       "definition": "(geology) a natural process whereby geological features are modified",
-      "lexname": "noun.process"
+      "lexname": "noun.process",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "GeopoliticalArea",
@@ -2417,7 +3290,9 @@
       "is_pseudo_sumo": false,
       "category_children": [
         "DependencyOrSpecialSovereigntyArea",
-        "CityDistrict"
+        "CityDistrict",
+        "DemocraticParty",
+        "RepublicanParty"
       ],
       "synset_count": 61,
       "direct_synset_count": 61,
@@ -2434,7 +3309,10 @@
       ],
       "pos": "n",
       "definition": "the location (metaphorically speaking) where something is based",
-      "lexname": "noun.location"
+      "lexname": "noun.location",
+      "parent_concepts": [
+        "AutonomousAgent"
+      ]
     },
     {
       "sumo_term": "GoalFaithfulness",
@@ -2454,7 +3332,10 @@
       ],
       "pos": "n",
       "definition": "AI safety concept: GoalFaithfulness",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "GrabBar",
@@ -2478,7 +3359,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.992997"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Graph",
@@ -2486,7 +3370,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "DirectedGraph"
+      ],
       "synset_count": 10,
       "direct_synset_count": 10,
       "synsets": [
@@ -2502,7 +3388,10 @@
       ],
       "pos": "n",
       "definition": "a coordinate system for which the coordinates of a point are its distances from a set perpendicular lines that intersect at the origin of the system",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "GraphArc",
@@ -2526,7 +3415,10 @@
         "quality_score": 35,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.885323"
-      }
+      },
+      "parent_concepts": [
+        "GraphElement"
+      ]
     },
     {
       "sumo_term": "GraphElement",
@@ -2535,7 +3427,8 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "GraphNode"
+        "GraphNode",
+        "GraphArc"
       ],
       "synset_count": 0,
       "direct_synset_count": 0,
@@ -2552,7 +3445,10 @@
         "quality_score": 35,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.010090"
-      }
+      },
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "GraphNode",
@@ -2576,7 +3472,10 @@
       ],
       "pos": "n",
       "definition": "the point of intersection of coordinate axes; where the values of the coordinates are all zero",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "GraphElement"
+      ]
     },
     {
       "sumo_term": "Group",
@@ -2586,7 +3485,63 @@
       "is_pseudo_sumo": false,
       "category_children": [
         "GroupOfPeople",
-        "GroupOfAnimals"
+        "GroupOfAnimals",
+        "AppealsCourt",
+        "ArabLeague",
+        "ArtilleryBattery",
+        "AssociationOfSoutheastAsianNations",
+        "BasketballTeam",
+        "Battalion",
+        "Brigade",
+        "CardinalityFn",
+        "Choir",
+        "CivilLaw",
+        "Clover",
+        "CommonwealthOfIndependentStates",
+        "CommonwealthOfNations",
+        "DepartmentOfHomelandSecurity",
+        "Dictatorship",
+        "Embassy",
+        "EuropeanUnion",
+        "FederalAviationAdministration",
+        "FinancialOrganization",
+        "FootballTeam",
+        "FrancisellaTularensis",
+        "GiardiaLamblia",
+        "GroundCoverVegetation",
+        "InfantryUnit",
+        "InternationalAtomicEnergyAgency",
+        "InternationalMonetaryFund",
+        "JointChiefsOfStaff",
+        "Louse",
+        "MalarialPlasmodium",
+        "MarchingBand",
+        "NorthAtlanticTreatyOrganization",
+        "PaddyRice",
+        "PalestinianLiberationOrganization",
+        "Platoon",
+        "PoliticalParty",
+        "Poppy",
+        "Republic",
+        "RickettsialAgent",
+        "ShipCrew",
+        "Sorghum",
+        "StreptococcusA",
+        "Sunflower",
+        "USStateDepartment",
+        "UnitedNations",
+        "UnitedNationsChildrensFund",
+        "UnitedNationsGeneralAssembly",
+        "UnitedNationsSecurityCouncil",
+        "UnitedStatesPostalService",
+        "WineTasting",
+        "WorldHealthOrganization",
+        "WorldMeteorologicalOrganization",
+        "WorldTradeOrganization",
+        "Democracy",
+        "EndangeredSpecies",
+        "LegislativeChamber",
+        "TheocraticGovernment"
       ],
       "synset_count": 223,
       "direct_synset_count": 223,
@@ -2604,7 +3559,10 @@
       ],
       "pos": "n",
       "definition": "any number of entities (members) considered as a unit",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "AutonomousAgent"
+      ]
     },
     {
       "sumo_term": "Guiding",
@@ -2619,7 +3577,9 @@
         "AnimalGuiding",
         "MusicalConducting",
         "DramaticDirecting",
-        "Seating"
+        "Seating",
+        "AchievingControl",
+        "Signalling"
       ],
       "synset_count": 71,
       "direct_synset_count": 71,
@@ -2637,7 +3597,10 @@
       ],
       "pos": "v",
       "definition": "exercise authoritative control or power over",
-      "lexname": "verb.social"
+      "lexname": "verb.social",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "History",
@@ -2658,7 +3621,10 @@
       ],
       "pos": "n",
       "definition": "the discipline that records and interprets past events involving human beings",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "HoleRegion",
@@ -2667,7 +3633,9 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "Crater"
+        "Crater",
+        "BodyOrifice",
+        "Burrow"
       ],
       "synset_count": 0,
       "direct_synset_count": 0,
@@ -2684,7 +3652,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.882006"
-      }
+      },
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Iceberg",
@@ -2708,37 +3679,10 @@
         "quality_score": 38,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.955890"
-      }
-    },
-    {
-      "sumo_term": "Icon",
-      "sumo_depth": 3,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "RepresentationalArtWork",
-        "ArrowIcon",
-        "Map",
-        "TradingCard"
-      ],
-      "synset_count": 198,
-      "direct_synset_count": 198,
-      "synsets": [
-        "bitmap.n.01",
-        "booby_prize.n.01",
-        "bronze_medal.n.01",
-        "chevron.n.02",
-        "chiaroscuro.n.01"
-      ],
-      "canonical_synset": "bitmap.n.01",
-      "lemmas": [
-        "bitmap",
-        "electronic_image"
-      ],
-      "pos": "n",
-      "definition": "an image represented as a two dimensional array of brightness values for pixels",
-      "lexname": "noun.artifact"
+      },
+      "parent_concepts": [
+        "SelfConnectedObject"
+      ]
     },
     {
       "sumo_term": "ImaginaryNumber",
@@ -2746,7 +3690,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "ImaginaryPartFn"
+      ],
       "synset_count": 1,
       "direct_synset_count": 1,
       "synsets": [
@@ -2758,7 +3704,10 @@
       ],
       "pos": "n",
       "definition": "an imaginary number of the form a+bi where a is 0",
-      "lexname": "noun.quantity"
+      "lexname": "noun.quantity",
+      "parent_concepts": [
+        "Number"
+      ]
     },
     {
       "sumo_term": "Indoors",
@@ -2780,7 +3729,10 @@
       ],
       "pos": "r",
       "definition": "within a building",
-      "lexname": "adv.all"
+      "lexname": "adv.all",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "InductiveArgument",
@@ -2804,7 +3756,10 @@
         "quality_score": 31,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.926646"
-      }
+      },
+      "parent_concepts": [
+        "Argument"
+      ]
     },
     {
       "sumo_term": "Industry",
@@ -2830,7 +3785,10 @@
         "quality_score": 53,
         "previous_synset": "industrial.a.01",
         "mapped_date": "2025-11-13T20:41:42.003199"
-      }
+      },
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "InheritableRelation",
@@ -2846,7 +3804,9 @@
         "PropositionalAttitude",
         "ObjectAttitude",
         "Function",
-        "RelationExtendedToQuantities"
+        "RelationExtendedToQuantities",
+        "BinaryFunction",
+        "Predicate"
       ],
       "synset_count": 0,
       "direct_synset_count": 0,
@@ -2863,7 +3823,10 @@
         "quality_score": 35,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.030304"
-      }
+      },
+      "parent_concepts": [
+        "Relation"
+      ]
     },
     {
       "sumo_term": "IntentionalProcess",
@@ -2894,7 +3857,25 @@
         "AIExploitation",
         "AIAbuse",
         "AICatastrophe",
-        "AIGovernance"
+        "AIGovernance",
+        "Commenting",
+        "Punching",
+        "WorkLeave",
+        "AIAlignmentProcess",
+        "AICare",
+        "ComputationalProcess",
+        "InferenceProcess",
+        "PromptFollowing",
+        "RewardFaithfulness",
+        "SafeAIDeployment",
+        "TokenProcessing",
+        "BaseballWalk",
+        "BaseballRun",
+        "FootballTouchdown",
+        "Downloading",
+        "Exporting",
+        "Locating",
+        "Uploading"
       ],
       "synset_count": 752,
       "direct_synset_count": 752,
@@ -2911,7 +3892,10 @@
       ],
       "pos": "n",
       "definition": "an action",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "IntentionalRelation",
@@ -2935,7 +3919,10 @@
       ],
       "pos": "n",
       "definition": "the prejudice that members of the white race are superior to members of other races",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "Relation"
+      ]
     },
     {
       "sumo_term": "InteriorDesign",
@@ -2955,7 +3942,10 @@
       ],
       "pos": "n",
       "definition": "the branch of architecture dealing with the selection and organization of furnishings for an architectural interior",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "InternalAttribute",
@@ -2970,7 +3960,17 @@
         "BiologicalAttribute",
         "BreakabilityAttribute",
         "Nascent",
-        "Moribund"
+        "Moribund",
+        "SolubilityAttribute",
+        "StructureAttribute",
+        "Agnostic",
+        "Atheist",
+        "ChemicalEquilibrium",
+        "Deist",
+        "DeviceDamaged",
+        "Fluid",
+        "Pliable",
+        "Rigid"
       ],
       "synset_count": 22,
       "direct_synset_count": 22,
@@ -2987,7 +3987,10 @@
       ],
       "pos": "n",
       "definition": "the manner of construction of something and the arrangement of its parts",
-      "lexname": "noun.attribute"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "Attribute"
+      ]
     },
     {
       "sumo_term": "InternalChange",
@@ -3006,7 +4009,11 @@
         "Creation",
         "StateChange",
         "TurningOnDevice",
-        "TidalProcess"
+        "TidalProcess",
+        "Distilling",
+        "Inflating",
+        "Toasting",
+        "WindowScrolling"
       ],
       "synset_count": 192,
       "direct_synset_count": 192,
@@ -3023,7 +4030,10 @@
       ],
       "pos": "v",
       "definition": "undergo a change; become different in essence; losing one's or its original nature",
-      "lexname": "verb.change"
+      "lexname": "verb.change",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "Investigating",
@@ -3053,7 +4063,10 @@
       ],
       "pos": "n",
       "definition": "an investigation seeking answers",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Irrigating",
@@ -3077,7 +4090,10 @@
         "quality_score": 39,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.996579"
-      }
+      },
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "Keeping",
@@ -3105,7 +4121,10 @@
       ],
       "pos": "n",
       "definition": "the act of retaining something",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "KitchenArea",
@@ -3131,7 +4150,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.952643"
-      }
+      },
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Ladder",
@@ -3155,35 +4177,10 @@
         "quality_score": 51,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.942670"
-      }
-    },
-    {
-      "sumo_term": "Language",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "AnimalLanguage",
-        "HumanLanguage"
-      ],
-      "synset_count": 49,
-      "direct_synset_count": 49,
-      "synsets": [
-        "language.n.01",
-        "dead_language.n.01",
-        "words.n.03",
-        "source_language.n.01",
-        "object_language.n.02"
-      ],
-      "canonical_synset": "language.n.01",
-      "lemmas": [
-        "language",
-        "linguistic_communication"
-      ],
-      "pos": "n",
-      "definition": "a systematic means of communicating by the use of sounds or conventional symbols",
-      "lexname": "noun.communication"
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Latitude",
@@ -3206,7 +4203,10 @@
       ],
       "pos": "n",
       "definition": "an imaginary line around the Earth parallel to the equator",
-      "lexname": "noun.location"
+      "lexname": "noun.location",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "LegalAgent",
@@ -3234,7 +4234,10 @@
         "quality_score": 36,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.067717"
-      }
+      },
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "LegalOpinion",
@@ -3258,39 +4261,10 @@
         "quality_score": 43,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.901453"
-      }
-    },
-    {
-      "sumo_term": "LinguisticExpression",
-      "sumo_depth": 3,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "Language",
-        "Word",
-        "Morpheme",
-        "Phrase",
-        "Sentence",
-        "PostalAddressText"
-      ],
-      "synset_count": 126,
-      "direct_synset_count": 126,
-      "synsets": [
-        "opening_line.n.01",
-        "language_unit.n.01",
-        "monosyllable.n.01",
-        "penult.n.01",
-        "antepenult.n.01"
-      ],
-      "canonical_synset": "language_unit.n.01",
-      "lemmas": [
-        "language_unit",
-        "linguistic_unit"
-      ],
-      "pos": "n",
-      "definition": "one of the natural units into which linguistic messages can be analyzed",
-      "lexname": "noun.communication"
+      },
+      "parent_concepts": [
+        "Argument"
+      ]
     },
     {
       "sumo_term": "LiquidMotion",
@@ -3322,7 +4296,10 @@
       ],
       "pos": "n",
       "definition": "the act of flowing or streaming; continuous progression",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "Listening",
@@ -3342,7 +4319,10 @@
       ],
       "pos": "v",
       "definition": "attend as a visitor",
-      "lexname": "verb.stative"
+      "lexname": "verb.stative",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Literature",
@@ -3363,7 +4343,10 @@
       ],
       "pos": "n",
       "definition": "the humanistic study of a body of literature",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "Longitude",
@@ -3387,7 +4370,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.922258"
-      }
+      },
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Looking",
@@ -3411,7 +4397,10 @@
       ],
       "pos": "v",
       "definition": "have a certain outward or facial expression",
-      "lexname": "verb.body"
+      "lexname": "verb.body",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "LyricalContent",
@@ -3434,7 +4423,10 @@
       ],
       "pos": "n",
       "definition": "the text of a popular song or musical-comedy number",
-      "lexname": "noun.communication"
+      "lexname": "noun.communication",
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "MagneticField",
@@ -3458,7 +4450,10 @@
         "quality_score": 37,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.972175"
-      }
+      },
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Maintaining",
@@ -3469,7 +4464,8 @@
       "category_children": [
         "Cleaning",
         "Protecting",
-        "Agriculture"
+        "Agriculture",
+        "ChildCareService"
       ],
       "synset_count": 77,
       "direct_synset_count": 77,
@@ -3486,7 +4482,10 @@
       ],
       "pos": "n",
       "definition": "the activity of protecting the environment from pollution or destruction",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Making",
@@ -3500,7 +4499,9 @@
         "Cooking",
         "Sculpting",
         "Copying",
-        "Photocopying"
+        "Photocopying",
+        "Carpentry",
+        "ExtensionFn"
       ],
       "synset_count": 134,
       "direct_synset_count": 134,
@@ -3518,7 +4519,10 @@
       ],
       "pos": "n",
       "definition": "the human act of creating",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Maneuver",
@@ -3530,7 +4534,10 @@
         "Attack",
         "DefensiveManeuver",
         "GameShot",
-        "MilitaryManeuver"
+        "MilitaryManeuver",
+        "Ambush",
+        "Blockade",
+        "Catching"
       ],
       "synset_count": 66,
       "direct_synset_count": 66,
@@ -3549,31 +4556,10 @@
       ],
       "pos": "n",
       "definition": "a deliberate coordinated movement requiring dexterity and skill",
-      "lexname": "noun.act"
-    },
-    {
-      "sumo_term": "Map",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 5,
-      "direct_synset_count": 5,
-      "synsets": [
-        "choropleth_map.n.01",
-        "map.n.01",
-        "naval_chart.n.01",
-        "plat.n.01",
-        "road_map.n.02"
-      ],
-      "canonical_synset": "choropleth_map.n.01",
-      "lemmas": [
-        "choropleth_map"
-      ],
-      "pos": "n",
-      "definition": "a map that uses graded differences in shading or color or the placing of symbols inside defined areas on the map in order to indicate the average values of some property or quantity in those areas",
-      "lexname": "noun.artifact"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Mast",
@@ -3593,7 +4579,10 @@
       ],
       "pos": "n",
       "definition": "the head or top of a mast",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Mathematics",
@@ -3622,7 +4611,10 @@
         "quality_score": 37,
         "previous_synset": "analytic.a.01",
         "mapped_date": "2025-11-13T20:41:41.965712"
-      }
+      },
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "Mattress",
@@ -3646,7 +4638,10 @@
         "quality_score": 49,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.874855"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Meal",
@@ -3654,7 +4649,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Buffet"
+      ],
       "synset_count": 16,
       "direct_synset_count": 16,
       "synsets": [
@@ -3671,7 +4668,10 @@
       ],
       "pos": "n",
       "definition": "the food served and eaten at one time",
-      "lexname": "noun.food"
+      "lexname": "noun.food",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "MediaSystem",
@@ -3694,7 +4694,10 @@
       ],
       "pos": "n",
       "definition": "materials using sight or sound to present information",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "Meteoroid",
@@ -3717,7 +4720,10 @@
       ],
       "pos": "n",
       "definition": "(astronomy) any of the small solid extraterrestrial bodies that hits the earth's atmosphere",
-      "lexname": "noun.object"
+      "lexname": "noun.object",
+      "parent_concepts": [
+        "AstronomicalBody"
+      ]
     },
     {
       "sumo_term": "MilitaryScience",
@@ -3743,7 +4749,10 @@
         "quality_score": 37,
         "previous_synset": "military.a.01",
         "mapped_date": "2025-11-13T20:41:42.013300"
-      }
+      },
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "Mirror",
@@ -3766,7 +4775,10 @@
       ],
       "pos": "n",
       "definition": "a full length mirror mounted in a frame in which it can be tilted",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "MobileStructure",
@@ -3774,7 +4786,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "MobileResidence"
+      ],
       "synset_count": 0,
       "direct_synset_count": 0,
       "synsets": [],
@@ -3790,7 +4804,10 @@
         "quality_score": 39,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.946260"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Moribund",
@@ -3816,31 +4833,10 @@
         "quality_score": 30,
         "previous_synset": "moribund.s.02",
         "mapped_date": "2025-11-13T20:41:41.891931"
-      }
-    },
-    {
-      "sumo_term": "Morpheme",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 18,
-      "direct_synset_count": 18,
-      "synsets": [
-        "morpheme.n.01",
-        "formative.n.01",
-        "allomorph.n.02",
-        "free_morpheme.n.01",
-        "bound_morpheme.n.01"
-      ],
-      "canonical_synset": "morpheme.n.01",
-      "lemmas": [
-        "morpheme"
-      ],
-      "pos": "n",
-      "definition": "minimal meaningful language unit; it cannot be divided into smaller meaningful units",
-      "lexname": "noun.communication"
+      },
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "Motion",
@@ -3862,7 +4858,16 @@
         "Reversing",
         "Pulling",
         "Opening",
-        "Closing"
+        "Closing",
+        "Irrigating",
+        "Pushing",
+        "Swarming",
+        "Braking",
+        "EngineCranking",
+        "Hiking",
+        "Rafting",
+        "ShuttleService",
+        "SittingUp"
       ],
       "synset_count": 727,
       "direct_synset_count": 727,
@@ -3879,7 +4884,10 @@
       ],
       "pos": "n",
       "definition": "a state of change",
-      "lexname": "noun.state"
+      "lexname": "noun.state",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "MotionDownward",
@@ -3909,7 +4917,10 @@
       ],
       "pos": "v",
       "definition": "descend in free fall under the influence of gravity",
-      "lexname": "verb.motion"
+      "lexname": "verb.motion",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "MotionUpward",
@@ -3919,7 +4930,8 @@
       "is_pseudo_sumo": false,
       "category_children": [
         "Jumping",
-        "StandingUp"
+        "StandingUp",
+        "RockClimbing"
       ],
       "synset_count": 7,
       "direct_synset_count": 7,
@@ -3942,7 +4954,10 @@
       ],
       "pos": "v",
       "definition": "move upward",
-      "lexname": "verb.motion"
+      "lexname": "verb.motion",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "MultimediaProjector",
@@ -3965,7 +4980,10 @@
       ],
       "pos": "n",
       "definition": "projects successive frames from a reel of film to create moving pictures",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "MediaSystem"
+      ]
     },
     {
       "sumo_term": "Music",
@@ -3998,7 +5016,10 @@
         "quality_score": 53,
         "previous_synset": "musical.a.01",
         "mapped_date": "2025-11-13T20:41:42.077857"
-      }
+      },
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "MusicalComposition",
@@ -4022,7 +5043,10 @@
       ],
       "pos": "n",
       "definition": "(music) a group of notes connected by a slur",
-      "lexname": "noun.communication"
+      "lexname": "noun.communication",
+      "parent_concepts": [
+        "Music"
+      ]
     },
     {
       "sumo_term": "Nascent",
@@ -4043,7 +5067,10 @@
       ],
       "pos": "a",
       "definition": "being born or beginning",
-      "lexname": "adj.all"
+      "lexname": "adj.all",
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "NaturalProcess",
@@ -4067,7 +5094,10 @@
       ],
       "pos": "n",
       "definition": "a natural consequence of development",
-      "lexname": "noun.phenomenon"
+      "lexname": "noun.phenomenon",
+      "parent_concepts": [
+        "Process"
+      ]
     },
     {
       "sumo_term": "NaturalSatellite",
@@ -4091,7 +5121,10 @@
       ],
       "pos": "n",
       "definition": "the outer of two small satellites of Mars",
-      "lexname": "noun.object"
+      "lexname": "noun.object",
+      "parent_concepts": [
+        "AstronomicalBody"
+      ]
     },
     {
       "sumo_term": "NormativeAttribute",
@@ -4118,28 +5151,10 @@
       ],
       "pos": "a",
       "definition": "conforming with or constituting a norm or standard or level or type or social norm; not abnormal",
-      "lexname": "adj.all"
-    },
-    {
-      "sumo_term": "NullSet",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 2,
-      "direct_synset_count": 2,
-      "synsets": [
-        "null_set.n.01",
-        "null_space.n.01"
-      ],
-      "canonical_synset": "null_set.n.01",
-      "lemmas": [
-        "null_set"
-      ],
-      "pos": "n",
-      "definition": "a set that is empty; a set with no members",
-      "lexname": "noun.group"
+      "lexname": "adj.all",
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "Number",
@@ -4168,7 +5183,10 @@
       ],
       "pos": "n",
       "definition": "the property possessed by a sum or total or indefinite quantity of units or individuals",
-      "lexname": "noun.attribute"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "Quantity"
+      ]
     },
     {
       "sumo_term": "ObjectAttitude",
@@ -4197,7 +5215,10 @@
         "quality_score": 33,
         "previous_synset": "misanthropic.s.02",
         "mapped_date": "2025-11-13T20:41:41.949383"
-      }
+      },
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "Ontology",
@@ -4221,7 +5242,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.047603"
-      }
+      },
+      "parent_concepts": [
+        "ClassificationScheme"
+      ]
     },
     {
       "sumo_term": "Opening",
@@ -4246,7 +5270,10 @@
       ],
       "pos": "v",
       "definition": "furnish with an opening to allow air to circulate or gas to escape",
-      "lexname": "verb.change"
+      "lexname": "verb.change",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "OrganicThing",
@@ -4271,7 +5298,10 @@
         "manually_curated": true,
         "mapped_date": "2025-11-13T20:44:42.170397",
         "note": "Better match for 'organic thing' than fertilizer"
-      }
+      },
+      "parent_concepts": [
+        "SelfConnectedObject"
+      ]
     },
     {
       "sumo_term": "Organism",
@@ -4287,7 +5317,8 @@
         "Carnivore",
         "Parasite",
         "Herbivore",
-        "Omnivore"
+        "Omnivore",
+        "Inhabitant"
       ],
       "synset_count": 181,
       "direct_synset_count": 181,
@@ -4305,7 +5336,10 @@
       ],
       "pos": "n",
       "definition": "a living thing that has (or can develop) the ability to act or function independently",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "AutonomousAgent"
+      ]
     },
     {
       "sumo_term": "Organization",
@@ -4325,7 +5359,8 @@
         "ServiceOrganization",
         "OrganizationalBoard",
         "SecurityUnit",
-        "UnionOrganization"
+        "UnionOrganization",
+        "NonprofitOrganization"
       ],
       "synset_count": 219,
       "direct_synset_count": 219,
@@ -4343,7 +5378,10 @@
       ],
       "pos": "n",
       "definition": "a group of people who work together",
-      "lexname": "noun.group"
+      "lexname": "noun.group",
+      "parent_concepts": [
+        "AutonomousAgent"
+      ]
     },
     {
       "sumo_term": "OrganizationalProcess",
@@ -4379,7 +5417,10 @@
       ],
       "pos": "n",
       "definition": "nullification by the destruction of the legal force; rendering null",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Orthography",
@@ -4387,7 +5428,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Braille"
+      ],
       "synset_count": 12,
       "direct_synset_count": 12,
       "synsets": [
@@ -4404,7 +5447,10 @@
       ],
       "pos": "n",
       "definition": "a method of representing the sounds of a language by written or printed symbols",
-      "lexname": "noun.communication"
+      "lexname": "noun.communication",
+      "parent_concepts": [
+        "Procedure"
+      ]
     },
     {
       "sumo_term": "Outdoors",
@@ -4428,7 +5474,10 @@
       ],
       "pos": "r",
       "definition": "outside a building",
-      "lexname": "adv.all"
+      "lexname": "adv.all",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Paper",
@@ -4436,7 +5485,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Page"
+      ],
       "synset_count": 25,
       "direct_synset_count": 25,
       "synsets": [
@@ -4452,7 +5503,10 @@
       ],
       "pos": "n",
       "definition": "a material made of cellulose pulp derived mainly from wood or rags or certain grasses",
-      "lexname": "noun.substance"
+      "lexname": "noun.substance",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Patio",
@@ -4473,7 +5527,10 @@
       ],
       "pos": "n",
       "definition": "usually paved outdoor area adjoining a residence",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "PerceptualAttribute",
@@ -4504,7 +5561,10 @@
       ],
       "pos": "v",
       "definition": "sting with or as with nettles and cause a stinging pain or sensation",
-      "lexname": "verb.perception"
+      "lexname": "verb.perception",
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "PerimeterArea",
@@ -4528,7 +5588,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.016693"
-      }
+      },
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Philosophy",
@@ -4551,7 +5614,10 @@
       ],
       "pos": "n",
       "definition": "the rational investigation of questions about existence and knowledge and ethics",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "PhotographicFilm",
@@ -4576,36 +5642,10 @@
       ],
       "pos": "n",
       "definition": "photographic material consisting of a base of celluloid covered with a photographic emulsion; used to make negatives or transparencies",
-      "lexname": "noun.artifact"
-    },
-    {
-      "sumo_term": "Phrase",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "VerbPhrase",
-        "NounPhrase",
-        "PrepositionalPhrase"
-      ],
-      "synset_count": 40,
-      "direct_synset_count": 40,
-      "synsets": [
-        "slot.n.01",
-        "grammatical_category.n.01",
-        "subject.n.08",
-        "case.n.11",
-        "adjunct.n.03"
-      ],
-      "canonical_synset": "grammatical_category.n.01",
-      "lemmas": [
-        "grammatical_category",
-        "syntactic_category"
-      ],
-      "pos": "n",
-      "definition": "(grammar) a category of words having the same grammatical properties",
-      "lexname": "noun.communication"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "PhysicalAttribute",
@@ -4613,7 +5653,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Flammable"
+      ],
       "synset_count": 80,
       "direct_synset_count": 80,
       "synsets": [
@@ -4629,7 +5671,10 @@
       ],
       "pos": "n",
       "definition": "the property of changing readily from a solid or liquid to a vapor",
-      "lexname": "noun.attribute"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "PhysicalQuantity",
@@ -4657,7 +5702,10 @@
       ],
       "pos": "n",
       "definition": "a value on some scale of measurement",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "Quantity"
+      ]
     },
     {
       "sumo_term": "PhysicalState",
@@ -4665,7 +5713,12 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Gas",
+        "Liquid",
+        "Plasma",
+        "Solid"
+      ],
       "synset_count": 10,
       "direct_synset_count": 10,
       "synsets": [
@@ -4682,7 +5735,10 @@
       ],
       "pos": "n",
       "definition": "(chemistry) the three traditional states of matter are solids (fixed shape and volume) and liquids (fixed volume and shaped by the container) and gases (filling the container)",
-      "lexname": "noun.state"
+      "lexname": "noun.state",
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "PictureFrame",
@@ -4702,7 +5758,10 @@
       ],
       "pos": "n",
       "definition": "a framework in which a picture is mounted",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Pillow",
@@ -4726,7 +5785,10 @@
         "quality_score": 37,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.040468"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Plan",
@@ -4735,7 +5797,8 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "SportsPlay"
+        "SportsPlay",
+        "EducationalProgram"
       ],
       "synset_count": 44,
       "direct_synset_count": 44,
@@ -4753,30 +5816,10 @@
       ],
       "pos": "n",
       "definition": "a planned undertaking",
-      "lexname": "noun.cognition"
-    },
-    {
-      "sumo_term": "PlayingCard",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 4,
-      "direct_synset_count": 4,
-      "synsets": [
-        "ace.n.02",
-        "card.n.01",
-        "playing_card.n.01",
-        "tarot_card.n.01"
-      ],
-      "canonical_synset": "playing_card.n.01",
-      "lemmas": [
-        "playing_card"
-      ],
-      "pos": "n",
-      "definition": "one of a pack of cards that are used to play card games",
-      "lexname": "noun.artifact"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "Procedure"
+      ]
     },
     {
       "sumo_term": "Plug",
@@ -4785,7 +5828,8 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "ElectricalPlug"
+        "ElectricalPlug",
+        "HearingProtection"
       ],
       "synset_count": 2,
       "direct_synset_count": 2,
@@ -4801,7 +5845,10 @@
       ],
       "pos": "n",
       "definition": "blockage consisting of an object designed to fill a hole tightly",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Poking",
@@ -4827,7 +5874,10 @@
       ],
       "pos": "n",
       "definition": "the act of puncturing or perforating",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "PoliticoEconomicAttribute",
@@ -4853,7 +5903,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.074472"
-      }
+      },
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "PositionalAttribute",
@@ -4862,7 +5915,25 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "DirectionalAttribute"
+        "DirectionalAttribute",
+        "Above",
+        "Below",
+        "Downhill",
+        "Downstairs",
+        "Downstream",
+        "Horizontal",
+        "Inside",
+        "Left",
+        "Outside",
+        "Right",
+        "Surrounded",
+        "Uphill",
+        "Upstairs",
+        "Upstream",
+        "Vertical",
+        "AltitudeMeasure",
+        "Hertz",
+        "Mile"
       ],
       "synset_count": 289,
       "direct_synset_count": 289,
@@ -4880,33 +5951,10 @@
       ],
       "pos": "n",
       "definition": "the spatial property of a place where or way in which something is situated",
-      "lexname": "noun.attribute"
-    },
-    {
-      "sumo_term": "PostalAddressText",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 7,
-      "direct_synset_count": 7,
-      "synsets": [
-        "address.n.06",
-        "return_address.n.01",
-        "mailing_address.n.01",
-        "box_number.n.02",
-        "post-office_box_number.n.01"
-      ],
-      "canonical_synset": "address.n.06",
-      "lemmas": [
-        "address",
-        "destination",
-        "name_and_address"
-      ],
-      "pos": "n",
-      "definition": "written directions for finding some location; written on letters or packages that are to be delivered to that location",
-      "lexname": "noun.communication"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "PostalPlace",
@@ -4929,7 +5977,10 @@
       ],
       "pos": "n",
       "definition": "the place where a person or organization can be found or communicated with",
-      "lexname": "noun.location"
+      "lexname": "noun.location",
+      "parent_concepts": [
+        "ContactSite"
+      ]
     },
     {
       "sumo_term": "Pottery",
@@ -4951,7 +6002,10 @@
       ],
       "pos": "n",
       "definition": "ceramic ware made from clay and baked in a kiln",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Predicate",
@@ -4977,7 +6031,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.888666"
-      }
+      },
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "ProbabilityRelation",
@@ -4985,7 +6042,10 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "decreasesLikelihood",
+        "increasesLikelihood"
+      ],
       "synset_count": 47,
       "direct_synset_count": 47,
       "synsets": [
@@ -5002,7 +6062,10 @@
       ],
       "pos": "n",
       "definition": "a measure of how likely it is that some event will occur; a number expressing the ratio of favorable cases to the whole number of cases possible",
-      "lexname": "noun.attribute"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "Procedure",
@@ -5031,7 +6094,10 @@
       ],
       "pos": "n",
       "definition": "an unvarying or habitual method or procedure",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "Product",
@@ -5039,7 +6105,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "FinancialContract"
+      ],
       "synset_count": 23,
       "direct_synset_count": 23,
       "synsets": [
@@ -5057,7 +6125,10 @@
       ],
       "pos": "n",
       "definition": "articles of commerce",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "PropositionalAttitude",
@@ -5082,7 +6153,10 @@
       ],
       "pos": "n",
       "definition": "a situation or topic as if viewed from an altitude or distance",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "PublicAddressSystem",
@@ -5106,7 +6180,10 @@
       ],
       "pos": "n",
       "definition": "an electronic amplification system used as a communication system in public areas",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "CommunicationSystem"
+      ]
     },
     {
       "sumo_term": "Pulling",
@@ -5126,7 +6203,10 @@
       ],
       "pos": "v",
       "definition": "apply force so as to cause motion towards the source of the motion",
-      "lexname": "verb.contact"
+      "lexname": "verb.contact",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "Punching",
@@ -5150,7 +6230,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.057469"
-      }
+      },
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Pursuing",
@@ -5179,7 +6262,10 @@
       ],
       "pos": "n",
       "definition": "the act of pursuing in an effort to overtake or capture",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Pushing",
@@ -5203,7 +6289,10 @@
         "quality_score": 58,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.868571"
-      }
+      },
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "QuantityChange",
@@ -5214,7 +6303,8 @@
       "category_children": [
         "Increasing",
         "Decreasing",
-        "Focusing"
+        "Focusing",
+        "RapidTransformation"
       ],
       "synset_count": 13,
       "direct_synset_count": 13,
@@ -5231,7 +6321,10 @@
       ],
       "pos": "v",
       "definition": "increase or decrease in intensity",
-      "lexname": "verb.perception"
+      "lexname": "verb.perception",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "Radiating",
@@ -5262,7 +6355,10 @@
       ],
       "pos": "n",
       "definition": "the act of spreading outward from a central source",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "Ramp",
@@ -5284,7 +6380,10 @@
       ],
       "pos": "n",
       "definition": "an inclined surface connecting two levels",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "SelfConnectedObject"
+      ]
     },
     {
       "sumo_term": "RealNumber",
@@ -5314,34 +6413,10 @@
       ],
       "pos": "n",
       "definition": "any rational or irrational number",
-      "lexname": "noun.quantity"
-    },
-    {
-      "sumo_term": "Recording",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "Photograph",
-        "AudioRecording"
-      ],
-      "synset_count": 4,
-      "direct_synset_count": 4,
-      "synsets": [
-        "recording.n.02",
-        "mastering.n.02",
-        "master.n.06",
-        "recording.n.01"
-      ],
-      "canonical_synset": "recording.n.02",
-      "lemmas": [
-        "recording",
-        "transcription"
-      ],
-      "pos": "n",
-      "definition": "the act of making a record (especially an audio record)",
-      "lexname": "noun.act"
+      "lexname": "noun.quantity",
+      "parent_concepts": [
+        "Number"
+      ]
     },
     {
       "sumo_term": "RecreationOrExercise",
@@ -5352,7 +6427,17 @@
       "category_children": [
         "Game",
         "SocialParty",
-        "Smoking"
+        "Smoking",
+        "Bowling",
+        "Golf",
+        "Archery",
+        "Cycling",
+        "Gymnastics",
+        "IceSkating",
+        "Skateboarding",
+        "Skiing",
+        "WaterSport",
+        "Equitation"
       ],
       "synset_count": 77,
       "direct_synset_count": 77,
@@ -5371,7 +6456,10 @@
       ],
       "pos": "v",
       "definition": "give a workout to",
-      "lexname": "verb.body"
+      "lexname": "verb.body",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Region",
@@ -5388,7 +6476,31 @@
         "Indoors",
         "DiningArea",
         "Patio",
-        "Latitude"
+        "Latitude",
+        "EducationalCampus",
+        "HoleRegion",
+        "KitchenArea",
+        "Longitude",
+        "MagneticField",
+        "PerimeterArea",
+        "SittingArea",
+        "AirTransitway",
+        "Anchorage",
+        "Bakery",
+        "BaseballField",
+        "BusStop",
+        "CellEnvelope",
+        "EarthsAtmosphere",
+        "EuropeanNation",
+        "Factory",
+        "ParkingLot",
+        "ParkingRegion",
+        "PortFacility",
+        "PuttingGreen",
+        "Railhead",
+        "Vacuum",
+        "RoadJunction",
+        "StockMarket"
       ],
       "synset_count": 381,
       "direct_synset_count": 381,
@@ -5405,7 +6517,10 @@
       ],
       "pos": "n",
       "definition": "a point or extent in space",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "Object"
+      ]
     },
     {
       "sumo_term": "RelationExtendedToQuantities",
@@ -5432,7 +6547,10 @@
       ],
       "pos": "n",
       "definition": "the sum of the values of a random variable divided by the number of values",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "RelationalAttribute",
@@ -5446,7 +6564,45 @@
         "TimeZone",
         "SocialRole",
         "NormativeAttribute",
-        "PerceptualAttribute"
+        "PerceptualAttribute",
+        "LegalAgent",
+        "PoliticoEconomicAttribute",
+        "ReligiousAttribute",
+        "AdjoiningRoom",
+        "Alone",
+        "Bare",
+        "Barefoot",
+        "Blank",
+        "Breakfast",
+        "Brunch",
+        "Clothed",
+        "Cloudy",
+        "Collectible",
+        "CommunalAttribute",
+        "ContainerEmpty",
+        "ContainerFull",
+        "Dieting",
+        "Dinner",
+        "Domestic",
+        "Fasting",
+        "Fodder",
+        "Harmless",
+        "HighTea",
+        "Historical",
+        "Inhabited",
+        "International",
+        "Local",
+        "Lunch",
+        "MonophonicMusic",
+        "Motionless",
+        "Multilingual",
+        "Mute",
+        "Naked",
+        "PolyphonicMusic",
+        "Rural",
+        "Solely",
+        "Suburban",
+        "Uninhabited"
       ],
       "synset_count": 42,
       "direct_synset_count": 42,
@@ -5465,7 +6621,10 @@
       ],
       "pos": "n",
       "definition": "how a result is obtained or an end is achieved",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Attribute"
+      ]
     },
     {
       "sumo_term": "ReligiousAttribute",
@@ -5474,7 +6633,18 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "Christian"
+        "Christian",
+        "Bahai",
+        "Buddhist",
+        "Confucianist",
+        "Hindu",
+        "Jain",
+        "Muslim",
+        "ReligiousJew",
+        "Shintoist",
+        "Sikh",
+        "Taoist",
+        "Zoroastrian"
       ],
       "synset_count": 0,
       "direct_synset_count": 0,
@@ -5491,7 +6661,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.081199"
-      }
+      },
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "Repairing",
@@ -5517,29 +6690,10 @@
       ],
       "pos": "n",
       "definition": "an overhaul between the regular times for overhauling",
-      "lexname": "noun.act"
-    },
-    {
-      "sumo_term": "RepresentationalArtWork",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 3,
-      "direct_synset_count": 3,
-      "synsets": [
-        "figure.n.04",
-        "imitation.n.01",
-        "artwork.n.01"
-      ],
-      "canonical_synset": "figure.n.04",
-      "lemmas": [
-        "figure"
-      ],
-      "pos": "n",
-      "definition": "a model of a bodily form (especially of a person)",
-      "lexname": "noun.artifact"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Reservoir",
@@ -5561,7 +6715,10 @@
       ],
       "pos": "n",
       "definition": "the largest reservoir in the United States; located in southeastern Nevada and northwestern Arizona and formed by the Hoover Dam on the Colorado River; the center of a recreational area",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Reversing",
@@ -5590,7 +6747,10 @@
       ],
       "pos": "v",
       "definition": "reverse (a direction, attitude, or course of action)",
-      "lexname": "verb.change"
+      "lexname": "verb.change",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "RobustAIControl",
@@ -5610,7 +6770,10 @@
       ],
       "pos": "n",
       "definition": "AI safety concept: RobustAIControl",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "Proposition"
+      ]
     },
     {
       "sumo_term": "Rotating",
@@ -5637,7 +6800,10 @@
       ],
       "pos": "v",
       "definition": "move around an axis or a center",
-      "lexname": "verb.motion"
+      "lexname": "verb.motion",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "Sail",
@@ -5664,7 +6830,10 @@
       ],
       "pos": "n",
       "definition": "a large piece of fabric (usually canvas fabric) by means of which wind is used to propel a sailing vessel",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "SaturationAttribute",
@@ -5672,7 +6841,11 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Damp",
+        "Dry",
+        "Wet"
+      ],
       "synset_count": 5,
       "direct_synset_count": 5,
       "synsets": [
@@ -5689,7 +6862,10 @@
       ],
       "pos": "n",
       "definition": "the quality of being penetrable (by people or light or missiles etc.)",
-      "lexname": "noun.attribute"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "Science",
@@ -5731,7 +6907,10 @@
       ],
       "pos": "a",
       "definition": "conforming with the principles or methods used in science",
-      "lexname": "adj.all"
+      "lexname": "adj.all",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "Script",
@@ -5755,7 +6934,10 @@
       ],
       "pos": "n",
       "definition": "a complete set of type suitable for printing text",
-      "lexname": "noun.communication"
+      "lexname": "noun.communication",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "SelfConnectedObject",
@@ -5768,7 +6950,10 @@
         "CorpuscularObject",
         "Transitway",
         "Food",
-        "Ramp"
+        "Ramp",
+        "BodyOfWater",
+        "Iceberg",
+        "OrganicThing"
       ],
       "synset_count": 77,
       "direct_synset_count": 77,
@@ -5785,36 +6970,10 @@
       ],
       "pos": "n",
       "definition": "an individual 3-dimensional object that has mass and that is distinguishable from other objects",
-      "lexname": "noun.object"
-    },
-    {
-      "sumo_term": "Sentence",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "Statement",
-        "Question",
-        "Supposition",
-        "Request"
-      ],
-      "synset_count": 22,
-      "direct_synset_count": 22,
-      "synsets": [
-        "euclid's_first_axiom.n.01",
-        "euclid's_second_axiom.n.01",
-        "euclid's_third_axiom.n.01",
-        "euclid's_fourth_axiom.n.01",
-        "euclid's_fifth_axiom.n.01"
-      ],
-      "canonical_synset": "sentence.n.01",
-      "lemmas": [
-        "sentence"
-      ],
-      "pos": "n",
-      "definition": "a string of words satisfying the grammatical rules of a language",
-      "lexname": "noun.communication"
+      "lexname": "noun.object",
+      "parent_concepts": [
+        "Object"
+      ]
     },
     {
       "sumo_term": "SentientAgent",
@@ -5846,7 +7005,10 @@
         "quality_score": 36,
         "previous_synset": "sensate.s.01",
         "mapped_date": "2025-11-13T20:41:41.959219"
-      }
+      },
+      "parent_concepts": [
+        "AutonomousAgent"
+      ]
     },
     {
       "sumo_term": "Separating",
@@ -5876,33 +7038,10 @@
       ],
       "pos": "n",
       "definition": "the act of dividing or disconnecting",
-      "lexname": "noun.act"
-    },
-    {
-      "sumo_term": "Set",
-      "sumo_depth": 3,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "NullSet"
-      ],
-      "synset_count": 30,
-      "direct_synset_count": 30,
-      "synsets": [
-        "interval.n.02",
-        "closed_interval.n.01",
-        "open_interval.n.01",
-        "sub-interval.n.01",
-        "group.n.03"
-      ],
-      "canonical_synset": "set.n.02",
-      "lemmas": [
-        "set"
-      ],
-      "pos": "n",
-      "definition": "(mathematics) an abstract collection of numbers or symbols",
-      "lexname": "noun.group"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "DualObjectProcess"
+      ]
     },
     {
       "sumo_term": "ShapeChange",
@@ -5930,7 +7069,10 @@
       ],
       "pos": "n",
       "definition": "the act of twisting or deforming the shape of something (e.g., yourself)",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "SheetMusic",
@@ -5954,7 +7096,10 @@
         "quality_score": 39,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.932887"
-      }
+      },
+      "parent_concepts": [
+        "ContentBearingObject"
+      ]
     },
     {
       "sumo_term": "Shelf",
@@ -5979,7 +7124,10 @@
       ],
       "pos": "n",
       "definition": "shelf that projects from wall above fireplace",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Shield",
@@ -6003,7 +7151,10 @@
         "quality_score": 41,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.936006"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "ShoeSole",
@@ -6023,7 +7174,10 @@
       ],
       "pos": "n",
       "definition": "the underside of footwear or a golf club",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "SittingArea",
@@ -6047,7 +7201,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.865290"
-      }
+      },
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "Skull",
@@ -6071,7 +7228,10 @@
         "quality_score": 53,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.919112"
-      }
+      },
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "SocialInteraction",
@@ -6088,7 +7248,10 @@
         "Contest",
         "Ceremony",
         "Pollution",
-        "Famine"
+        "Famine",
+        "Deception",
+        "Befriending",
+        "SigningADocument"
       ],
       "synset_count": 321,
       "direct_synset_count": 321,
@@ -6105,7 +7268,10 @@
       ],
       "pos": "n",
       "definition": "a relation between living organisms (especially between people)",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "SocialRole",
@@ -6115,7 +7281,17 @@
       "is_pseudo_sumo": false,
       "category_children": [
         "Position",
-        "OccupationalRole"
+        "OccupationalRole",
+        "Celebrity",
+        "Civilian",
+        "Dissident",
+        "HumanSlave",
+        "Knight",
+        "Student",
+        "Tourist",
+        "Unemployed",
+        "Veteran",
+        "Widowed"
       ],
       "synset_count": 185,
       "direct_synset_count": 185,
@@ -6132,7 +7308,10 @@
       ],
       "pos": "n",
       "definition": "bait consisting of chopped fish and fish oils that are dumped overboard to attract fish",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "SolarSystem",
@@ -6152,7 +7331,10 @@
       ],
       "pos": "n",
       "definition": "the sun with the celestial bodies that revolve around it in its gravitational field",
-      "lexname": "noun.object"
+      "lexname": "noun.object",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "SolubilityAttribute",
@@ -6179,7 +7361,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.071097"
-      }
+      },
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "Song",
@@ -6209,7 +7394,10 @@
         "quality_score": 57,
         "previous_synset": "internationale.n.01",
         "mapped_date": "2025-11-13T20:41:42.060721"
-      }
+      },
+      "parent_concepts": [
+        "Music"
+      ]
     },
     {
       "sumo_term": "SpaceRegion",
@@ -6237,7 +7425,10 @@
       ],
       "pos": "n",
       "definition": "the unlimited expanse in which everything is located",
-      "lexname": "noun.Tops"
+      "lexname": "noun.Tops",
+      "parent_concepts": [
+        "Region"
+      ]
     },
     {
       "sumo_term": "SpatialRelation",
@@ -6245,7 +7436,15 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "BackFn",
+        "FrontFn",
+        "MereologicalSumFn",
+        "between",
+        "contains",
+        "orientation",
+        "part"
+      ],
       "synset_count": 22,
       "direct_synset_count": 22,
       "synsets": [
@@ -6262,7 +7461,10 @@
       ],
       "pos": "n",
       "definition": "any property relating to or occupying space",
-      "lexname": "noun.attribute"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "Star",
@@ -6270,7 +7472,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Sol"
+      ],
       "synset_count": 41,
       "direct_synset_count": 41,
       "synsets": [
@@ -6286,7 +7490,10 @@
       ],
       "pos": "n",
       "definition": "(astronomy) a celestial body of hot gases that radiates energy derived from thermonuclear reactions in the interior",
-      "lexname": "noun.object"
+      "lexname": "noun.object",
+      "parent_concepts": [
+        "AstronomicalBody"
+      ]
     },
     {
       "sumo_term": "StateChange",
@@ -6300,7 +7507,8 @@
         "Evaporating",
         "Condensing",
         "Freezing",
-        "Sublimation"
+        "Sublimation",
+        "Curdling"
       ],
       "synset_count": 25,
       "direct_synset_count": 25,
@@ -6320,7 +7528,10 @@
       ],
       "pos": "n",
       "definition": "a change from one state (solid or liquid or gas) to another without a change in chemical composition",
-      "lexname": "noun.process"
+      "lexname": "noun.process",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "StationaryArtifact",
@@ -6361,7 +7572,10 @@
         "Lanai",
         "DanceHall",
         "Canal",
-        "Dam"
+        "Dam",
+        "Fence",
+        "Mine",
+        "SwimmingPool"
       ],
       "synset_count": 239,
       "direct_synset_count": 239,
@@ -6378,7 +7592,10 @@
       ],
       "pos": "n",
       "definition": "a part of a structure having some specific characteristic or function",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Statistics",
@@ -6400,7 +7617,10 @@
       ],
       "pos": "n",
       "definition": "a branch of applied mathematics concerned with the collection and interpretation of quantitative data and the use of probability theory to estimate population parameters",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "String",
@@ -6424,7 +7644,10 @@
       ],
       "pos": "n",
       "definition": "a cord (usually of goat's hair) that Arabs (especially Bedouins) wind around their heads to hold down the kaffiyeh",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "StructureAttribute",
@@ -6433,7 +7656,8 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "ShapeAttribute"
+        "ShapeAttribute",
+        "CrystallineStructure"
       ],
       "synset_count": 0,
       "direct_synset_count": 0,
@@ -6450,7 +7674,10 @@
         "quality_score": 39,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.981989"
-      }
+      },
+      "parent_concepts": [
+        "InternalAttribute"
+      ]
     },
     {
       "sumo_term": "Substance",
@@ -6473,7 +7700,9 @@
         "Rock",
         "Effluent",
         "NoxiousSubstance",
-        "Crystal"
+        "Crystal",
+        "Electricity",
+        "BrakeRotor"
       ],
       "synset_count": 188,
       "direct_synset_count": 188,
@@ -6491,7 +7720,10 @@
       ],
       "pos": "n",
       "definition": "the tangible substance that goes into the makeup of a physical object",
-      "lexname": "noun.substance"
+      "lexname": "noun.substance",
+      "parent_concepts": [
+        "SelfConnectedObject"
+      ]
     },
     {
       "sumo_term": "Substituting",
@@ -6519,7 +7751,10 @@
       ],
       "pos": "n",
       "definition": "an event in which one thing is substituted for another",
-      "lexname": "noun.event"
+      "lexname": "noun.event",
+      "parent_concepts": [
+        "DualObjectProcess"
+      ]
     },
     {
       "sumo_term": "SurfaceChange",
@@ -6534,7 +7769,8 @@
         "Digging",
         "Drilling",
         "Smoothing",
-        "Roughening"
+        "Roughening",
+        "Tilling"
       ],
       "synset_count": 101,
       "direct_synset_count": 101,
@@ -6551,7 +7787,10 @@
       ],
       "pos": "v",
       "definition": "undergo or cause to undergo a change in the surface",
-      "lexname": "verb.change"
+      "lexname": "verb.change",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "SurveillanceSystem",
@@ -6571,7 +7810,10 @@
       ],
       "pos": "n",
       "definition": "surveillance by electronic means (e.g. television)",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Collection"
+      ]
     },
     {
       "sumo_term": "Swarming",
@@ -6595,7 +7837,10 @@
         "quality_score": 35,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.895069"
-      }
+      },
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "Swimming",
@@ -6603,7 +7848,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "ScubaDiving"
+      ],
       "synset_count": 26,
       "direct_synset_count": 26,
       "synsets": [
@@ -6619,52 +7866,10 @@
       ],
       "pos": "n",
       "definition": "a method of moving the arms and legs to push against the water and propel the swimmer forward",
-      "lexname": "noun.act"
-    },
-    {
-      "sumo_term": "Syllable",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 3,
-      "direct_synset_count": 3,
-      "synsets": [
-        "syllable.n.01",
-        "ultima.n.01",
-        "reduplication.n.02"
-      ],
-      "canonical_synset": "syllable.n.01",
-      "lemmas": [
-        "syllable"
-      ],
-      "pos": "n",
-      "definition": "a unit of spoken language larger than a phoneme",
-      "lexname": "noun.communication"
-    },
-    {
-      "sumo_term": "SymbolicString",
-      "sumo_depth": 3,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "Character",
-        "Syllable"
-      ],
-      "synset_count": 1,
-      "direct_synset_count": 1,
-      "synsets": [
-        "substring.n.01"
-      ],
-      "canonical_synset": "substring.n.01",
-      "lemmas": [
-        "substring"
-      ],
-      "pos": "n",
-      "definition": "a string that is part of a longer string",
-      "lexname": "noun.communication"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
     },
     {
       "sumo_term": "Taxonomy",
@@ -6684,7 +7889,10 @@
       ],
       "pos": "n",
       "definition": "a classification of organisms into groups based on similarities of structure or origin etc",
-      "lexname": "noun.group"
+      "lexname": "noun.group",
+      "parent_concepts": [
+        "ClassificationScheme"
+      ]
     },
     {
       "sumo_term": "TemperateClimateZone",
@@ -6706,7 +7914,10 @@
       ],
       "pos": "n",
       "definition": "the part of the Earth's surface between the Arctic Circle and the Tropic of Cancer or between the Antarctic Circle and the Tropic of Capricorn; characterized by temperate climate",
-      "lexname": "noun.location"
+      "lexname": "noun.location",
+      "parent_concepts": [
+        "ClimateZone"
+      ]
     },
     {
       "sumo_term": "TemporalRelation",
@@ -6714,7 +7925,16 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "BeginFn",
+        "EndFn",
+        "FutureFn",
+        "ImmediateFutureFn",
+        "ImmediatePastFn",
+        "PastFn",
+        "RecurrentTimeIntervalFn",
+        "WhenFn"
+      ],
       "synset_count": 42,
       "direct_synset_count": 42,
       "synsets": [
@@ -6730,7 +7950,10 @@
       ],
       "pos": "n",
       "definition": "a property relating to time",
-      "lexname": "noun.attribute"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "InheritableRelation"
+      ]
     },
     {
       "sumo_term": "Text",
@@ -6766,7 +7989,10 @@
       ],
       "pos": "n",
       "definition": "anything serving as a representation of a person's thinking by means of symbolic marks",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Theology",
@@ -6791,7 +8017,10 @@
       ],
       "pos": "n",
       "definition": "the rational and systematic study of religion and its influences and of the nature of religious truth",
-      "lexname": "noun.cognition"
+      "lexname": "noun.cognition",
+      "parent_concepts": [
+        "FieldOfStudy"
+      ]
     },
     {
       "sumo_term": "TidalProcess",
@@ -6818,7 +8047,10 @@
       ],
       "pos": "n",
       "definition": "the periodic rise and fall of the sea level under the gravitational pull of the moon",
-      "lexname": "noun.event"
+      "lexname": "noun.event",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "TimeZone",
@@ -6826,7 +8058,13 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "CentralTimeZone",
+        "CoordinatedUniversalTimeZone",
+        "EasternTimeZone",
+        "MountainTimeZone",
+        "PacificTimeZone"
+      ],
       "synset_count": 1,
       "direct_synset_count": 1,
       "synsets": [
@@ -6838,28 +8076,10 @@
       ],
       "pos": "n",
       "definition": "any of the 24 regions of the globe (loosely divided by longitude) throughout which the same standard time is used",
-      "lexname": "noun.location"
-    },
-    {
-      "sumo_term": "TradingCard",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [],
-      "synset_count": 2,
-      "direct_synset_count": 2,
-      "synsets": [
-        "baseball_card.n.01",
-        "trading_card.n.01"
-      ],
-      "canonical_synset": "trading_card.n.01",
-      "lemmas": [
-        "trading_card"
-      ],
-      "pos": "n",
-      "definition": "a card with a picture on it; collected and traded by children",
-      "lexname": "noun.artifact"
+      "lexname": "noun.location",
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "Transaction",
@@ -6885,7 +8105,10 @@
       ],
       "pos": "n",
       "definition": "a mutual or reciprocal action; interacting",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "DualObjectProcess"
+      ]
     },
     {
       "sumo_term": "Transitway",
@@ -6893,7 +8116,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "Airway"
+      ],
       "synset_count": 16,
       "direct_synset_count": 16,
       "synsets": [
@@ -6910,7 +8135,10 @@
       ],
       "pos": "n",
       "definition": "a way of entering or leaving",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "SelfConnectedObject"
+      ]
     },
     {
       "sumo_term": "Translating",
@@ -6930,7 +8158,10 @@
       ],
       "pos": "v",
       "definition": "provide (movies) with a soundtrack of a foreign language",
-      "lexname": "verb.communication"
+      "lexname": "verb.communication",
+      "parent_concepts": [
+        "DualObjectProcess"
+      ]
     },
     {
       "sumo_term": "Translocation",
@@ -6954,7 +8185,12 @@
         "Immigrating",
         "Boarding",
         "Deboarding",
-        "Trespassing"
+        "Trespassing",
+        "MilitaryInfiltration",
+        "FootballPass",
+        "GolfManeuver",
+        "Hajj",
+        "HotelPackage"
       ],
       "synset_count": 113,
       "direct_synset_count": 113,
@@ -6972,7 +8208,10 @@
       ],
       "pos": "n",
       "definition": "the act of passing from one state or place to the next",
-      "lexname": "noun.act"
+      "lexname": "noun.act",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "TropicalClimateZone",
@@ -6993,7 +8232,10 @@
       ],
       "pos": "s",
       "definition": "relating to or situated in or characteristic of the tropics (the region on either side of the equator)",
-      "lexname": "adj.all"
+      "lexname": "adj.all",
+      "parent_concepts": [
+        "ClimateZone"
+      ]
     },
     {
       "sumo_term": "TruthValue",
@@ -7001,7 +8243,10 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "False",
+        "True"
+      ],
       "synset_count": 1,
       "direct_synset_count": 1,
       "synsets": [
@@ -7016,7 +8261,10 @@
       ],
       "pos": "n",
       "definition": "the quality of being valid and rigorous",
-      "lexname": "noun.attribute"
+      "lexname": "noun.attribute",
+      "parent_concepts": [
+        "RelationalAttribute"
+      ]
     },
     {
       "sumo_term": "Tube",
@@ -7036,7 +8284,10 @@
       ],
       "pos": "n",
       "definition": "a tube inserted into the trachea through the nose and pharynx; used to deliver oxygen",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "TurningOnDevice",
@@ -7058,7 +8309,10 @@
       ],
       "pos": "v",
       "definition": "start running, functioning, or operating",
-      "lexname": "verb.contact"
+      "lexname": "verb.contact",
+      "parent_concepts": [
+        "InternalChange"
+      ]
     },
     {
       "sumo_term": "UnitOfMeasure",
@@ -7085,7 +8339,10 @@
       ],
       "pos": "n",
       "definition": "any division of quantity accepted as a standard of measurement or exchange",
-      "lexname": "noun.quantity"
+      "lexname": "noun.quantity",
+      "parent_concepts": [
+        "PhysicalQuantity"
+      ]
     },
     {
       "sumo_term": "Veneer",
@@ -7107,7 +8364,10 @@
       ],
       "pos": "n",
       "definition": "an ornamental coating to a building",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "VisualContentBearingObject",
@@ -7133,7 +8393,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.978678"
-      }
+      },
+      "parent_concepts": [
+        "VisualContentBearingPhysical"
+      ]
     },
     {
       "sumo_term": "VisualContentBearingPhysical",
@@ -7141,7 +8404,9 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "VisualContentBearingObject"
+      ],
       "synset_count": 0,
       "direct_synset_count": 0,
       "synsets": [],
@@ -7157,7 +8422,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.905280"
-      }
+      },
+      "parent_concepts": [
+        "ContentBearingPhysical"
+      ]
     },
     {
       "sumo_term": "WaterCatchment",
@@ -7177,7 +8445,10 @@
       ],
       "pos": "n",
       "definition": "a structure in which water is collected (especially a natural drainage area)",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "WearableItem",
@@ -7200,7 +8471,10 @@
       ],
       "pos": "n",
       "definition": "lap at the front of a coat; continuation of the coat collar",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "WeatherProcess",
@@ -7208,7 +8482,17 @@
       "layer": 1,
       "is_category_probe": true,
       "is_pseudo_sumo": false,
-      "category_children": [],
+      "category_children": [
+        "ClearWeather",
+        "ChinookWind",
+        "Crosswind",
+        "Headwind",
+        "Mistral",
+        "Raining",
+        "Squall",
+        "Tailwind",
+        "WindFlow"
+      ],
       "synset_count": 12,
       "direct_synset_count": 12,
       "synsets": [
@@ -7224,7 +8508,10 @@
       ],
       "pos": "n",
       "definition": "a wave of unusually cold weather",
-      "lexname": "noun.phenomenon"
+      "lexname": "noun.phenomenon",
+      "parent_concepts": [
+        "Motion"
+      ]
     },
     {
       "sumo_term": "WetBar",
@@ -7248,7 +8535,10 @@
         "quality_score": 33,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:41.929747"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Wheel",
@@ -7274,7 +8564,10 @@
         "quality_score": 63,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.023298"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Window",
@@ -7283,7 +8576,8 @@
       "is_category_probe": true,
       "is_pseudo_sumo": false,
       "category_children": [
-        "Skylight"
+        "Skylight",
+        "VehicleWindow"
       ],
       "synset_count": 7,
       "direct_synset_count": 7,
@@ -7300,7 +8594,10 @@
       ],
       "pos": "n",
       "definition": "a framework of wood or metal that contains a glass windowpane and is built into a wall or roof to admit light or air",
-      "lexname": "noun.artifact"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "WindowCovering",
@@ -7324,7 +8621,10 @@
         "quality_score": 49,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.037042"
-      }
+      },
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "Wire",
@@ -7346,37 +8646,10 @@
       ],
       "pos": "n",
       "definition": "ligament made of metal and used to fasten things or make cages or fences etc",
-      "lexname": "noun.artifact"
-    },
-    {
-      "sumo_term": "Word",
-      "sumo_depth": 4,
-      "layer": 1,
-      "is_category_probe": true,
-      "is_pseudo_sumo": false,
-      "category_children": [
-        "Noun",
-        "Verb",
-        "Adjective",
-        "Adverb",
-        "ParticleWord"
-      ],
-      "synset_count": 136,
-      "direct_synset_count": 136,
-      "synsets": [
-        "word.n.01",
-        "anagram.n.01",
-        "anaphor.n.01",
-        "antonym.n.01",
-        "back-formation.n.01"
-      ],
-      "canonical_synset": "word.n.01",
-      "lemmas": [
-        "word"
-      ],
-      "pos": "n",
-      "definition": "a unit of language that native speakers can identify",
-      "lexname": "noun.communication"
+      "lexname": "noun.artifact",
+      "parent_concepts": [
+        "Artifact"
+      ]
     },
     {
       "sumo_term": "WorkLeave",
@@ -7402,7 +8675,128 @@
         "quality_score": 38,
         "previous_synset": null,
         "mapped_date": "2025-11-13T20:41:42.006490"
-      }
+      },
+      "parent_concepts": [
+        "IntentionalProcess"
+      ]
+    },
+    {
+      "sumo_term": "List",
+      "sumo_depth": 2,
+      "layer": 0,
+      "is_category_probe": true,
+      "is_pseudo_sumo": false,
+      "category_children": [],
+      "synset_count": 5,
+      "direct_synset_count": 31,
+      "synsets": [
+        "combination.n.02",
+        "combination.n.03",
+        "fibonacci_sequence.n.01",
+        "hierarchy.n.01",
+        "string.n.05"
+      ],
+      "canonical_synset": "string.n.05",
+      "lemmas": [
+        "string"
+      ],
+      "pos": "n",
+      "definition": "a linear sequence of symbols (characters or words or phrases)",
+      "lexname": "noun.communication",
+      "parent_concepts": [
+        "Abstract"
+      ]
+    },
+    {
+      "sumo_term": "SetOrClass",
+      "sumo_depth": 2,
+      "layer": 0,
+      "is_category_probe": true,
+      "is_pseudo_sumo": false,
+      "category_children": [
+        "Class",
+        "Set"
+      ],
+      "synset_count": 10,
+      "direct_synset_count": 0,
+      "synsets": [
+        "breed.n.02",
+        "category.n.02",
+        "closed_interval.n.01",
+        "group.n.03",
+        "interval.n.02",
+        "kind.n.01",
+        "open_interval.n.01",
+        "pigeonhole.n.01",
+        "rubric.n.06",
+        "sub-interval.n.01"
+      ],
+      "canonical_synset": "course.n.01",
+      "lemmas": [
+        "SetOrClass"
+      ],
+      "pos": null,
+      "definition": "SUMO category: SetOrClass",
+      "lexname": null,
+      "mapping_metadata": {
+        "auto_mapped": true,
+        "quality_score": 41,
+        "previous_synset": null,
+        "mapped_date": "2025-11-13T20:41:41.863504"
+      },
+      "parent_concepts": [
+        "Abstract"
+      ]
+    },
+    {
+      "sumo_term": "ContentBearingPhysical",
+      "sumo_depth": 2,
+      "layer": 0,
+      "is_category_probe": true,
+      "is_pseudo_sumo": false,
+      "category_children": [
+        "ContentBearingObject",
+        "SymbolicString",
+        "Icon",
+        "LinguisticExpression",
+        "VisualContentBearingPhysical"
+      ],
+      "synset_count": 16,
+      "direct_synset_count": 0,
+      "synsets": [
+        "adumbration.n.02",
+        "antepenult.n.01",
+        "bitmap.n.01",
+        "booby_prize.n.01",
+        "bronze_medal.n.01",
+        "celestial_globe.n.01",
+        "chart.n.02",
+        "chevron.n.02",
+        "chiaroscuro.n.01",
+        "chromatogram.n.01",
+        "communication.n.02",
+        "language_unit.n.01",
+        "monosyllable.n.01",
+        "opening_line.n.01",
+        "penult.n.01",
+        "substring.n.01"
+      ],
+      "canonical_synset": "message.n.02",
+      "lemmas": [
+        "ContentBearingPhysical"
+      ],
+      "pos": null,
+      "definition": "SUMO category: ContentBearingPhysical",
+      "lexname": null,
+      "mapping_metadata": {
+        "auto_mapped": true,
+        "quality_score": 33,
+        "previous_synset": null,
+        "mapped_date": "2025-11-13T20:41:41.864197"
+      },
+      "parent_concepts": [
+        "Physical"
+      ]
     }
   ]
 }
