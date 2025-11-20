@@ -4584,7 +4584,7 @@
       "definition": "the semantic role of the animate entity that instigates or causes the happening denoted by the verb in the clause",
       "lexname": "noun.communication",
       "parent_concepts": [
-        "Agent"
+        "CognitiveAgent"
       ]
     },
     {

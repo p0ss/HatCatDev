@@ -5897,7 +5897,8 @@
       "is_pseudo_sumo": false,
       "category_children": [
         "Human",
-        "Deity"
+        "Deity",
+        "ArtificialAgent"
       ],
       "synset_count": 8,
       "direct_synset_count": 8,
