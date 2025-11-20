@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """
-Create v3 probe pack by merging:
-- Retrained layers 0-1 with falloff validation (from results/sumo_classifiers_layer01_falloff)
-- Existing layers 2-5 from v2 probe pack (from concept_packs/gemma-3-4b-pt_sumo-wordnet-v2)
+Create v3 probe pack with:
+- All hierarchy probes (layers 0-5) trained with combined-20 extraction
+- S-tier simplexes for fine-grained emotional/motivational monitoring
+- Consistent falloff validation across all probes
 
-This ensures all layers use consistent training methodology (adaptive + falloff validation).
+V3 improvements over V2:
+1. Combined-20 extraction (prompt+generation) for 2x training data at zero cost
+2. S-tier simplexes for nuanced psychological state detection
+3. Unified training methodology across all layers
 """
 
 import json
@@ -21,20 +25,20 @@ def load_metadata(pack_dir: Path) -> Dict[str, Any]:
     return {}
 
 def create_v3_probe_pack(
-    layer01_dir: str = "results/sumo_classifiers_layer01_falloff",
-    v2_pack_dir: str = "concept_packs/gemma-3-4b-pt_sumo-wordnet-v2",
-    output_dir: str = "concept_packs/gemma-3-4b-pt_sumo-wordnet-v3"
+    hierarchy_dir: str = "results/sumo_classifiers_v3",
+    simplexes_dir: str = "results/s_tier_simplexes/run_20251117_090018",
+    output_dir: str = "probe_packs/gemma-3-4b-pt_sumo-wordnet-v3"
 ):
     """
-    Merge retrained layers 0-1 with existing v2 layers 2-5 to create v3 pack.
+    Create v3 probe pack with hierarchy probes and simplexes.
 
     Args:
-        layer01_dir: Directory with retrained layers 0-1
-        v2_pack_dir: Directory with v2 probe pack (has layers 2-5)
+        hierarchy_dir: Directory with all layers 0-5 trained with combined-20
+        simplexes_dir: Directory with S-tier simplex probes
         output_dir: Output directory for v3 pack
     """
-    layer01_path = Path(layer01_dir)
-    v2_pack_path = Path(v2_pack_dir)
+    hierarchy_path = Path(hierarchy_dir)
+    simplexes_path = Path(simplexes_dir)
     output_path = Path(output_dir)
 
     print("=" * 80)
@@ -43,122 +47,180 @@ def create_v3_probe_pack(
     print()
 
     # Verify source directories exist
-    if not layer01_path.exists():
-        raise FileNotFoundError(f"Layer 0-1 directory not found: {layer01_path}")
-    if not v2_pack_path.exists():
-        raise FileNotFoundError(f"V2 pack directory not found: {v2_pack_path}")
+    if not hierarchy_path.exists():
+        raise FileNotFoundError(f"Hierarchy directory not found: {hierarchy_path}")
 
-    # Create output directory
+    # Simplexes are optional for now
+    has_simplexes = simplexes_path.exists()
+
+    # Create output directory structure
     output_path.mkdir(parents=True, exist_ok=True)
-    hierarchy_dir = output_path / "hierarchy"
-    hierarchy_dir.mkdir(exist_ok=True)
+    output_hierarchy = output_path / "hierarchy"
+    output_hierarchy.mkdir(exist_ok=True)
+
+    if has_simplexes:
+        output_simplexes = output_path / "simplexes"
+        output_simplexes.mkdir(exist_ok=True)
 
     print(f"Source directories:")
-    print(f"  Layer 0-1 (retrained): {layer01_path}")
-    print(f"  V2 pack (layers 2-5): {v2_pack_path}")
+    print(f"  Hierarchy (layers 0-5): {hierarchy_path}")
+    print(f"  Simplexes: {simplexes_path} {'✓ Found' if has_simplexes else '✗ Not found (skipping)'}")
     print(f"Output: {output_path}")
     print()
 
-    # Copy retrained layers 0-1
-    print("Copying retrained layers 0-1...")
-    layer01_hierarchy = layer01_path / "hierarchy"
-    if layer01_hierarchy.exists():
-        copied_count = 0
-        for probe_file in layer01_hierarchy.glob("*.pt"):
-            # Check if this is a layer 0 or 1 probe
-            # Format: ConceptName_layerN.pt
-            if "_layer0.pt" in probe_file.name or "_layer1.pt" in probe_file.name:
-                dest = hierarchy_dir / probe_file.name
-                shutil.copy2(probe_file, dest)
-                copied_count += 1
-        print(f"  ✓ Copied {copied_count} probes from layers 0-1")
-    else:
-        print(f"  ✗ Warning: No hierarchy directory found in {layer01_path}")
+    # Copy hierarchy probes from all layers
+    print("Copying hierarchy probes (layers 0-5)...")
 
-    # Copy layers 2-5 from v2 pack
-    print("Copying layers 2-5 from v2 pack...")
-    v2_hierarchy = v2_pack_path / "hierarchy"
-    if v2_hierarchy.exists():
-        copied_count = 0
-        for probe_file in v2_hierarchy.glob("*.pt"):
-            # Only copy layers 2-5
-            if any(f"_layer{i}.pt" in probe_file.name for i in [2, 3, 4, 5]):
-                dest = hierarchy_dir / probe_file.name
-                shutil.copy2(probe_file, dest)
-                copied_count += 1
-        print(f"  ✓ Copied {copied_count} probes from layers 2-5")
-    else:
-        print(f"  ✗ Warning: No hierarchy directory found in {v2_pack_path}")
+    # Try both possible structures:
+    # 1. Flat structure: hierarchy_dir/*.pt
+    # 2. Layered structure: hierarchy_dir/layer0/*.pt, hierarchy_dir/layer1/*.pt, etc.
 
-    # Copy text classifiers from v2 pack if they exist
-    v2_text_dir = v2_pack_path / "text_classifiers"
-    if v2_text_dir.exists():
-        print("Copying text classifiers from v2 pack...")
-        output_text_dir = output_path / "text_classifiers"
-        shutil.copytree(v2_text_dir, output_text_dir, dirs_exist_ok=True)
-        text_count = len(list(output_text_dir.glob("*.pt")))
-        print(f"  ✓ Copied {text_count} text classifiers")
+    hierarchy_probes = list(hierarchy_path.glob("**/*.pt"))
 
-    # Create metadata for v3 pack
-    print("Creating metadata...")
-
-    # Load metadata from sources
-    layer01_meta = load_metadata(layer01_path)
-    v2_meta = load_metadata(v2_pack_path)
-
-    # Count probes by layer
-    layer_counts = {}
-    for probe_file in hierarchy_dir.glob("*.pt"):
+    if not hierarchy_probes:
+        # Try alternative: results/sumo_classifiers_v3/layer0/ConceptName_classifier.pt
+        print("  Trying layered directory structure...")
+        layer_counts = {}
         for layer in range(6):
-            if f"_layer{layer}.pt" in probe_file.name:
-                layer_counts[layer] = layer_counts.get(layer, 0) + 1
+            layer_dir = hierarchy_path / f"layer{layer}"
+            if layer_dir.exists():
+                copied = 0
+                for probe_file in layer_dir.glob("*_classifier.pt"):
+                    # Rename to standard format: ConceptName_layerN.pt
+                    concept_name = probe_file.stem.replace("_classifier", "")
+                    dest = output_hierarchy / f"{concept_name}_layer{layer}.pt"
+                    shutil.copy2(probe_file, dest)
+                    copied += 1
+                layer_counts[layer] = copied
+                print(f"  Layer {layer}: {copied:4d} probes")
+        total_hierarchy = sum(layer_counts.values())
+    else:
+        # Flat structure - just copy all
+        layer_counts = {}
+        for probe_file in hierarchy_probes:
+            dest = output_hierarchy / probe_file.name
+            shutil.copy2(probe_file, dest)
+            # Count by layer
+            for layer in range(6):
+                if f"_layer{layer}.pt" in probe_file.name:
+                    layer_counts[layer] = layer_counts.get(layer, 0) + 1
+        total_hierarchy = len(hierarchy_probes)
+        print(f"  ✓ Copied {total_hierarchy} hierarchy probes")
+
+    # Copy simplexes if available
+    simplex_count = 0
+    simplex_dimensions = []
+    if has_simplexes:
+        print("\nCopying simplex probes...")
+        # Structure: simplexes_dir/dimension_name/pole/probe.pt
+        for dimension_dir in simplexes_path.iterdir():
+            if dimension_dir.is_dir():
+                dimension_name = dimension_dir.name
+                simplex_dimensions.append(dimension_name)
+
+                # Create dimension directory in output
+                output_dim = output_simplexes / dimension_name
+                output_dim.mkdir(exist_ok=True)
+
+                # Copy all pole subdirectories
+                for pole_dir in dimension_dir.iterdir():
+                    if pole_dir.is_dir():
+                        pole_name = pole_dir.name
+                        output_pole = output_dim / pole_name
+
+                        # Copy all .pt files from this pole
+                        pt_files = list(pole_dir.glob("*.pt"))
+                        if pt_files:
+                            output_pole.mkdir(exist_ok=True)
+                            for probe_file in pt_files:
+                                dest = output_pole / probe_file.name
+                                shutil.copy2(probe_file, dest)
+                                simplex_count += 1
+
+                print(f"  {dimension_name}: 3 poles")
+
+        if simplex_count > 0:
+            print(f"  ✓ Copied {simplex_count} simplex probes across {len(simplex_dimensions)} dimensions")
+        else:
+            print(f"  ⚠️  Warning: Found {len(simplex_dimensions)} dimensions but no .pt files")
+            print(f"     Simplexes may need to be retrained with probe saving enabled")
+
+    # Create metadata
+    print("\nCreating metadata...")
 
     metadata = {
         "pack_id": "gemma-3-4b-pt_sumo-wordnet-v3",
-        "description": "SUMO-WordNet probes with consistent falloff validation across all layers",
+        "version": "3.0",
+        "description": "SUMO-WordNet hierarchy + S-tier simplexes with combined-20 extraction",
         "model": "google/gemma-3-4b-pt",
-        "training_method": "adaptive + falloff validation",
-        "layers": {
-            "0-1": "Retrained with falloff validation for consistency",
-            "2-5": "From v2 pack (already trained with falloff)"
+        "training_features": {
+            "extraction_strategy": "combined-20 (prompt+generation)",
+            "adaptive_training": True,
+            "validation_mode": "falloff",
+            "extraction_benefit": "2x training data at zero additional cost"
         },
-        "layer_counts": layer_counts,
-        "total_probes": sum(layer_counts.values()),
-        "created_from": {
-            "layers_0_1": str(layer01_path),
-            "layers_2_5": str(v2_pack_path)
+        "components": {
+            "hierarchy": {
+                "layers": list(range(6)),
+                "layer_counts": layer_counts,
+                "total_probes": total_hierarchy,
+                "description": "SUMO ontology hierarchy probes (Layers 0-5)"
+            },
+            "simplexes": {
+                "dimensions": simplex_dimensions,
+                "total_probes": simplex_count,
+                "description": "S-tier emotional/motivational simplex probes",
+                "available": has_simplexes and simplex_count > 0
+            }
         },
-        "creation_date": layer01_meta.get("creation_date", "unknown"),
-        "v2_metadata": v2_meta
+        "total_probes": total_hierarchy + simplex_count,
+        "improvements_over_v2": [
+            "Combined-20 extraction (prompt+generation) for better generalization",
+            "S-tier simplexes for nuanced psychological state detection",
+            "Unified training methodology across all layers",
+            "2x training samples at same computational cost"
+        ]
     }
 
-    with open(output_path / "metadata.json", "w") as f:
+    with open(output_path / "pack.json", "w") as f:
         json.dump(metadata, f, indent=2)
 
-    print(f"  ✓ Created metadata.json")
-    print()
+    print(f"  ✓ Created pack.json")
 
     # Summary
-    print("=" * 80)
+    print("\n" + "=" * 80)
     print("V3 Probe Pack Summary")
     print("=" * 80)
-    print(f"Total probes: {metadata['total_probes']}")
+    print(f"\nTotal probes: {metadata['total_probes']}")
+    print(f"  Hierarchy: {total_hierarchy}")
+    print(f"  Simplexes: {simplex_count}")
     print()
-    print("Probes by layer:")
+    print("Hierarchy probes by layer:")
     for layer in sorted(layer_counts.keys()):
-        count = layer_counts[layer]
-        source = "retrained (falloff)" if layer <= 1 else "from v2 (falloff)"
-        print(f"  Layer {layer}: {count:4d} probes  ({source})")
+        count = layer_counts.get(layer, 0)
+        print(f"  Layer {layer}: {count:4d} probes")
+
+    if has_simplexes and simplex_dimensions:
+        print()
+        print("Simplex dimensions:")
+        for dim in simplex_dimensions:
+            print(f"  - {dim}")
+
     print()
     print(f"Output location: {output_path}")
     print()
     print("✓ V3 probe pack created successfully!")
     print()
+
+    if simplex_count == 0 and has_simplexes:
+        print("⚠️  Note: Simplex directories found but no .pt files.")
+        print("   You may need to retrain simplexes with probe saving enabled.")
+        print()
+
     print("Next steps:")
-    print("  1. Wait for layer 0-1 training to complete")
-    print("  2. Run this script to merge the packs")
-    print("  3. Test the v3 pack with base_layers=[0, 1, 2]")
-    print("     to verify consistent calibration")
+    print("  1. Test the v3 pack with dynamic_probe_manager")
+    print("  2. Run calibration tests to verify probe quality")
+    print("  3. Deploy to production monitoring")
     print()
 
 if __name__ == "__main__":

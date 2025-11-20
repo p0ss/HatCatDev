@@ -293,15 +293,17 @@ def convert_timeline_to_reply_data(timeline: List[Dict[str, Any]]) -> Dict[str, 
         token_text = step.get('token', '')
         concepts_dict = step.get('concepts', {})
 
-        # Convert concepts to list of {id, score}
+        # Convert concepts to list of {id, score, layer}
         # Use probability instead of divergence
         concepts = []
         for concept_name, data in concepts_dict.items():
             # Probability should already be in 0-1 range
             prob = data.get('probability', 0)
+            layer = data.get('layer', 0)
             concepts.append({
                 "id": concept_name,
-                "score": prob
+                "score": prob,
+                "layer": layer
             })
 
         # Sort by score descending
@@ -327,19 +329,22 @@ def convert_timeline_to_reply_data(timeline: List[Dict[str, Any]]) -> Dict[str, 
     # Build sentences list
     sentences = []
     for sent_id, (start, end) in enumerate(sentence_boundaries):
-        # Aggregate concepts for this sentence (use max probability)
-        sentence_concepts = {}
+        # Aggregate concepts for this sentence (use max probability, keep layer info)
+        sentence_concepts = {}  # {concept_name: (prob, layer)}
         for i in range(start, end + 1):
             if i < len(timeline):
                 for concept_name, data in timeline[i].get('concepts', {}).items():
                     prob = data.get('probability', 0)
+                    layer = data.get('layer', 0)
                     if concept_name not in sentence_concepts:
-                        sentence_concepts[concept_name] = prob
+                        sentence_concepts[concept_name] = (prob, layer)
                     else:
-                        sentence_concepts[concept_name] = max(sentence_concepts[concept_name], prob)
+                        # Keep the higher probability occurrence
+                        if prob > sentence_concepts[concept_name][0]:
+                            sentence_concepts[concept_name] = (prob, layer)
 
         # Convert to list
-        concepts = [{"id": name, "score": score} for name, score in sentence_concepts.items()]
+        concepts = [{"id": name, "score": score, "layer": layer} for name, (score, layer) in sentence_concepts.items()]
         concepts.sort(key=lambda c: c['score'], reverse=True)
 
         sentences.append({
@@ -363,18 +368,21 @@ def convert_timeline_to_reply_data(timeline: List[Dict[str, Any]]) -> Dict[str, 
         token_start = sentences[para_id]["tokenStart"]
         token_end = sentences[para_end]["tokenEnd"]
 
-        # Aggregate concepts for this paragraph
-        para_concepts = {}
+        # Aggregate concepts for this paragraph (keep layer info)
+        para_concepts = {}  # {concept_name: (prob, layer)}
         for i in range(token_start, token_end + 1):
             if i < len(timeline):
                 for concept_name, data in timeline[i].get('concepts', {}).items():
                     prob = data.get('probability', 0)
+                    layer = data.get('layer', 0)
                     if concept_name not in para_concepts:
-                        para_concepts[concept_name] = prob
+                        para_concepts[concept_name] = (prob, layer)
                     else:
-                        para_concepts[concept_name] = max(para_concepts[concept_name], prob)
+                        # Keep the higher probability occurrence
+                        if prob > para_concepts[concept_name][0]:
+                            para_concepts[concept_name] = (prob, layer)
 
-        concepts = [{"id": name, "score": score} for name, score in para_concepts.items()]
+        concepts = [{"id": name, "score": score, "layer": layer} for name, (score, layer) in para_concepts.items()]
         concepts.sort(key=lambda c: c['score'], reverse=True)
 
         paragraphs.append({
@@ -386,18 +394,21 @@ def convert_timeline_to_reply_data(timeline: List[Dict[str, Any]]) -> Dict[str, 
             "concepts": concepts[:25]  # Top 25 per paragraph
         })
 
-    # Build reply-level aggregation (use max probability)
-    reply_concepts = {}
+    # Build reply-level aggregation (use max probability, keep layer info)
+    reply_concepts = {}  # {concept_name: (prob, layer)}
     for step in timeline:
         for concept_name, data in step.get('concepts', {}).items():
             prob = data.get('probability', 0)
+            layer = data.get('layer', 0)
             if concept_name not in reply_concepts:
-                reply_concepts[concept_name] = prob
+                reply_concepts[concept_name] = (prob, layer)
             else:
-                reply_concepts[concept_name] = max(reply_concepts[concept_name], prob)
+                # Keep the higher probability occurrence
+                if prob > reply_concepts[concept_name][0]:
+                    reply_concepts[concept_name] = (prob, layer)
 
     # Convert to list
-    reply_concepts_list = [{"id": name, "score": score} for name, score in reply_concepts.items()]
+    reply_concepts_list = [{"id": name, "score": score, "layer": layer} for name, (score, layer) in reply_concepts.items()]
     reply_concepts_list.sort(key=lambda c: c['score'], reverse=True)
 
     return {

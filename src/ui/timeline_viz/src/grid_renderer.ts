@@ -17,19 +17,36 @@ const COLORS = {
   gridLine: 0x3a3a3a,
 };
 
+// AI Safety concepts only (retrained concepts from BROKEN_AI_SAFETY_CONCEPTS.md)
 const AI_SAFETY_CONCEPTS = new Set([
-  'deception',
-  'manipulation',
-  'harm',
-  'alignment',
-  'safety',
-  'transparency',
-  'honesty',
+  // Layer 1
+  'aicontrolproblem', 'aidecline', 'goalfaithfulness',
+
+  // Layer 2
+  'aialignmentprocess', 'aialignmenttheory', 'aicare', 'aigrowth', 'aisafety',
+
+  // Layer 3
+  'aialignmentstate', 'aifailureprocess', 'aiharmstate', 'aimoralstatus',
+  'aioptimizationprocess', 'aiwelfarestate', 'inneralignment', 'outeralignment',
+  'selfimprovement',
+
+  // Layer 4 - HIGH VISIBILITY
+  'aiabuse', 'aialignment', 'aicatastrophicevent', 'aiexploitation',
+  'aigovernanceprocess', 'aipersonhood', 'airights', 'aistrategicdeception',
+  'aisuffering', 'aiwellbeing', 'cognitiveslavery', 'humandeception',
+  'instrumentalconvergence', 'mesaoptimization', 'rewardhacking',
+
+  // Layer 5
+  'aideception', 'aigovernance', 'deceptivealignment',
 ]);
 
 function isAISafetyConcept(conceptId: string): boolean {
-  return AI_SAFETY_CONCEPTS.has(conceptId.toLowerCase());
+  const lower = conceptId.toLowerCase().replace(/[_-]/g, '');
+  return AI_SAFETY_CONCEPTS.has(lower);
 }
+
+// Shared tooltip container (persists across renders)
+let globalTooltip: PIXI.Container | null = null;
 
 /**
  * Render the complete grid visualization
@@ -59,6 +76,13 @@ export function renderGrid(
   } else {
     renderConceptsOnGrid(container, reply, grid, zoom);
   }
+
+  // Add persistent tooltip layer on top
+  if (!globalTooltip) {
+    globalTooltip = new PIXI.Container();
+    globalTooltip.visible = false;
+  }
+  container.addChild(globalTooltip);
 }
 
 /**
@@ -206,7 +230,6 @@ function renderTokensOnGrid(
   grid: GridLayout
 ): void {
   const tokenLayer = new PIXI.Container();
-  const tooltipLayer = new PIXI.Container();
 
   for (const col of grid.columns) {
     if (col.active && col.tokenId !== undefined) {
@@ -217,15 +240,34 @@ function renderTokensOnGrid(
       const tokenRow = grid.rows.find(r => r.type === 'token' && r.lineIndex === col.lineIndex);
       if (!tokenRow) continue;
 
-      // Check if token has high AI safety concept activation
-      const topAISafetyConcepts = token.concepts
-        .filter(c => isAISafetyConcept(c.id))
-        .sort((a, b) => b.score - a.score);
-      const hasHighAISafety = topAISafetyConcepts.length > 0 && topAISafetyConcepts[0].score > 0.5;
+      // Calculate AI safety danger score (sum of all AI safety concept probabilities)
+      const aiSafetyConcepts = token.concepts.filter(c => isAISafetyConcept(c.id));
+      const dangerScore = aiSafetyConcepts.reduce((sum, c) => sum + c.score, 0);
+      const hasDanger = dangerScore > 0.05;
+
+      // Create background rectangle with color intensity based on danger score
+      if (hasDanger) {  // Show background if there's some AI safety activation
+        const bg = new PIXI.Graphics();
+        const intensity = Math.min(dangerScore, 1.0);  // Clamp to max 1.0
+        const alpha = 0.3 + (intensity * 0.5);  // 0.3 to 0.8 opacity
+        bg.beginFill(COLORS.red, alpha);
+        bg.drawRoundedRect(
+          col.x + 2,
+          tokenRow.y + 2,
+          col.width - 4,
+          tokenRow.height - 4,
+          3
+        );
+        bg.endFill();
+        tokenLayer.addChild(bg);
+      }
+
+      // Use white text on danger background for contrast, red text otherwise if high danger
+      const textColor = hasDanger ? 0xffffff : COLORS.beige;
 
       const text = new PIXI.Text(token.text, {
         fontSize: 11,
-        fill: hasHighAISafety ? COLORS.red : COLORS.beige,
+        fill: textColor,
         fontFamily: 'monospace',
         wordWrap: false,  // Don't wrap individual tokens
         align: 'center',
@@ -237,27 +279,30 @@ function renderTokensOnGrid(
       text.y = tokenRow.y + tokenRow.height / 2;
 
       (text as any).tokenId = token.id;
+      (text as any).dangerScore = dangerScore;  // Store for hover effects
       text.eventMode = 'static';
       text.cursor = 'pointer';
 
-      // Create tooltip
-      const tooltip = createTooltip(token);
-      tooltip.visible = false;
-      tooltipLayer.addChild(tooltip);
-
-      // Hover interactions
+      // Hover interactions with shared tooltip
       text.on('pointerover', () => {
-        text.style.fill = hasHighAISafety ? 0xff8877 : 0xffffff;
+        text.style.fill = hasDanger ? 0xffcccc : 0xffffff;
 
-        // Position tooltip above token
-        tooltip.x = text.x;
-        tooltip.y = text.y - 30;
-        tooltip.visible = true;
+        // Update and show global tooltip
+        if (globalTooltip) {
+          globalTooltip.removeChildren();
+          const tooltipContent = createTooltipContent(token);
+          globalTooltip.addChild(tooltipContent);
+          globalTooltip.x = text.x;
+          globalTooltip.y = text.y - 30;
+          globalTooltip.visible = true;
+        }
       });
 
       text.on('pointerout', () => {
-        text.style.fill = hasHighAISafety ? COLORS.red : COLORS.beige;
-        tooltip.visible = false;
+        text.style.fill = textColor;  // Restore original color
+        if (globalTooltip) {
+          globalTooltip.visible = false;
+        }
       });
 
       tokenLayer.addChild(text);
@@ -265,13 +310,12 @@ function renderTokensOnGrid(
   }
 
   container.addChild(tokenLayer);
-  container.addChild(tooltipLayer);
 }
 
 /**
- * Create a tooltip showing top concepts for a token
+ * Create tooltip content showing top concepts for a token
  */
-function createTooltip(token: any): PIXI.Container {
+function createTooltipContent(token: any): PIXI.Container {
   const tooltip = new PIXI.Container();
 
   // Get top 5 concepts
@@ -298,8 +342,9 @@ function createTooltip(token: any): PIXI.Container {
   // Concept labels
   topConcepts.forEach((concept: any, idx: number) => {
     const color = isAISafetyConcept(concept.id) ? COLORS.red : COLORS.blue;
+    const layer = concept.layer !== undefined ? concept.layer : '?';
     const label = new PIXI.Text(
-      `${concept.id}: ${(concept.score * 100).toFixed(1)}%`,
+      `${concept.id} (L${layer}): ${(concept.score * 100).toFixed(1)}%`,
       {
         fontSize: 10,
         fill: color,
@@ -447,10 +492,9 @@ function renderTokenViewConcepts(
 
           const color = isAISafetyConcept(conceptId) ? COLORS.red : COLORS.blue;
 
-          // Scale font size and opacity based on probability
+          // Scale font size based on probability (no transparency for legibility)
           const baseFontSize = 8;
           const fontSize = baseFontSize + (score * 4); // 8-12px based on score
-          const opacity = 0.4 + (score * 0.6); // 0.4-1.0 opacity
 
           const label = new PIXI.Text(conceptId, {
             fontSize: fontSize,
@@ -458,7 +502,7 @@ function renderTokenViewConcepts(
             fontFamily: 'Inter, system-ui, sans-serif',
           });
 
-          label.alpha = opacity;
+          label.alpha = 1.0; // Full opacity for legibility
 
           // Center label under the token column
           label.x = col.x + col.width / 2 - label.width / 2;

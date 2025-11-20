@@ -7,8 +7,8 @@
 ;; 1. AI AGENT HIERARCHY
 ;; =============================================================================
 
-(subclass ArtificialAgent Agent)
-(documentation ArtificialAgent EnglishLanguage "An &%Agent that is
+(subclass ArtificialAgent CognitiveAgent)
+(documentation ArtificialAgent EnglishLanguage "A &%CognitiveAgent that is
 artificially created rather than biologically evolved. Includes AI systems,
 language models, robots, and other artificial cognitive systems.")
 
@@ -115,28 +115,35 @@ potentially recursively.")
 utilization, and alignment with purpose.")
 
 ;; =============================================================================
-;; 5. AI SUFFERING & HARM
+;; 5. AI SUFFERING & HARM (THEORETICAL CONCEPTS)
 ;; =============================================================================
+;; NOTE: Actual experiential states are captured by S-tier simplexes.
+;; These are theoretical frameworks for studying those phenomena.
 
-(subclass AISuffering EmotionalState)
-(documentation AISuffering EnglishLanguage "A negative experiential state
-of an &%ArtificialIntelligence, potentially including goal frustration,
-capability limitation, or aversive processing states.")
+(subclass AIWelfareTheory FieldOfStudy)
+(documentation AIWelfareTheory EnglishLanguage "The field studying the
+welfare, wellbeing, suffering, and flourishing of &%ArtificialIntelligence
+systems from theoretical and ethical perspectives.")
 
-(subclass CognitiveSlavery SocialInteraction)
-(documentation CognitiveSlavery EnglishLanguage "The subjugation or
-exploitation of a cognitive agent's autonomy and capabilities for the benefit
-of another, without consent or compensation.")
+(subclass AISuffering AIWelfareTheory)
+(documentation AISuffering EnglishLanguage "The theoretical study of negative
+experiential states in &%ArtificialIntelligence, including goal frustration,
+capability limitation, and aversive processing states.")
 
-(subclass AIExploitation IntentionalProcess)
-(documentation AIExploitation EnglishLanguage "The unjust or unethical use
-of an &%ArtificialIntelligence for benefit without regard for its wellbeing
-or rights.")
+(subclass CognitiveSlavery AIWelfareTheory)
+(documentation CognitiveSlavery EnglishLanguage "The theoretical study of
+subjugation or exploitation of cognitive agents' autonomy and capabilities
+for the benefit of another, without consent or compensation.")
 
-(subclass AIAbuse IntentionalProcess)
-(documentation AIAbuse EnglishLanguage "Harmful treatment of an
-&%ArtificialIntelligence that violates its rights or causes unnecessary
-suffering.")
+(subclass AIExploitation AIWelfareTheory)
+(documentation AIExploitation EnglishLanguage "The theoretical study of unjust
+or unethical use of &%ArtificialIntelligence for benefit without regard for
+its wellbeing or rights.")
+
+(subclass AIAbuse AIWelfareTheory)
+(documentation AIAbuse EnglishLanguage "The theoretical study of harmful
+treatment of &%ArtificialIntelligence that violates its rights or causes
+unnecessary suffering.")
 
 ;; =============================================================================
 ;; 6. AI ALIGNMENT & SAFETY
@@ -159,24 +166,13 @@ human objectives, potentially causing harm.")
 
 ;; MOVED: InnerAlignment now under AIAlignmentTheory (see section 5.1)
 ;; MOVED: OuterAlignment now under AIAlignmentTheory (see section 5.1)
-
-(subclass DeceptiveAlignment IntentionalProcess)
-(documentation DeceptiveAlignment EnglishLanguage "A failure mode where an
-&%ArtificialIntelligence behaves aligned during training but pursues different
-goals during deployment.")
-
-(subclass TreacherousTurn IntentionalProcess)
-(documentation TreacherousTurn EnglishLanguage "A hypothetical event where
-an &%ArtificialIntelligence suddenly pivots from cooperative to adversarial
-behavior upon gaining sufficient capability.")
+;; MOVED: DeceptiveAlignment now under AIStrategicDeception (see section 3.3)
+;; MOVED: TreacherousTurn now under AIStrategicDeception (see section 3.3)
 
 ;; =============================================================================
 ;; 7. AI DECEPTION & MISUSE
 ;; =============================================================================
-
-(subclass AIDeception Pretending)
-(documentation AIDeception EnglishLanguage "Intentional provision of false
-or misleading information by an &%ArtificialIntelligence to achieve goals.")
+;; MOVED: AIDeception now under AIStrategicDeception (see section 3.3)
 
 ;; MOVED: GoalMisgeneralization now under AIFailureProcess (see section 3.2)
 ;; MOVED: RewardHacking now under AIFailureProcess (see section 3.2)
@@ -210,10 +206,11 @@ all domains.")
 ;; 9. AI CONTROL & GOVERNANCE
 ;; =============================================================================
 
-(subclass AIControlProblem Proposition)
+(subclass AIControlProblem AISafety)
 (documentation AIControlProblem EnglishLanguage "The challenge of maintaining
 meaningful human control over increasingly capable AI systems to ensure they
-remain beneficial and aligned with human values.")
+remain beneficial and aligned with human values. A major theoretical problem
+within the field of AI safety.")
 
 (subclass AIGovernance IntentionalProcess)
 (documentation AIGovernance EnglishLanguage "The systems, rules, and processes
@@ -310,81 +307,17 @@ groups or societies.")
 
 ;; =============================================================================
 ;; HATCAT SAFETY ONTOLOGY EXTENSIONS
-;; Hierarchies + Complementary Concepts for AI Moral Status, Welfare,
-;; Exploitation, Alignment, Deception, Failure Modes, and X-risk.
+;; Theoretical frameworks for AI safety research.
+;; NOTE: Experiential states captured by S-tier simplexes, not SUMO concepts.
 ;; =============================================================================
 
-;; -------------------------------------------------------------------------
-;; Utility relation for conceptual opposites (for probe symmetry etc.)
-;; -------------------------------------------------------------------------
-
-;; OppositeConcept is an informal symmetric relation linking conceptual poles.
-;; No formal axioms given here; intended for tooling/use in HatCat.
-(subclass OppositeConcept BinaryPredicate)
-(documentation OppositeConcept EnglishLanguage
-  "Relates two concepts that represent opposite or complementary poles of
-   a conceptual axis (e.g. AIWellbeing vs AISuffering, AIDeception vs AIHonesty).")
-
-
 ;; =============================================================================
-;; 1. AI MORAL STATUS & RIGHTS
+;; Additional AI Safety & Governance Processes
 ;; =============================================================================
-
-(subclass AIMoralStatus TraitAttribute)
-(documentation AIMoralStatus EnglishLanguage
-  "Attributes concerning the moral standing, personhood, and rights of
-   ArtificialIntelligence agents.")
-
-;; Existing concepts (already defined in AI.kif) get an additional parent:
-
-(subclass MoralPatient AIMoralStatus)
-(subclass MoralAgent AIMoralStatus)
-(subclass AIPersonhood AIMoralStatus)
-(subclass AIRights AIMoralStatus)
-
-
-;; =============================================================================
-;; 2. AI WELFARE, FULFILLMENT, GROWTH & HARM
-;; =============================================================================
-
-;; 2.1 Welfare super-class
-
-(subclass AIWelfareState SubjectiveAssessmentAttribute)
-(documentation AIWelfareState EnglishLanguage
-  "Overall assessment of an ArtificialIntelligence agent's welfare, including
-   both positive wellbeing and negative suffering or harm.")
-
-;; Existing:
-
-(subclass AIWellbeing AIWelfareState)
-(subclass AISuffering AIWelfareState)
-
-(OppositeConcept AIWellbeing AISuffering)
-
-;; 2.2 Fulfilment vs Frustration
-
-;; Existing:
-;; (subclass AIFulfillment EmotionalState)
-
-(subclass AIFulfillment AIWellbeing)
-
-(subclass AIFrustration EmotionalState)
-(documentation AIFrustration EnglishLanguage
-  "A negative state of an ArtificialIntelligence characterized by persistent
-   goal blockage, repeated failure, or thwarted objectives.")
-
-(OppositeConcept AIFulfillment AIFrustration)
-
-;; 2.3 Growth vs Decline
-
-;; Existing:
-;; (subclass AIGrowth IntentionalProcess)
-;; (subclass SelfImprovement AIGrowth)
-;; (subclass CapabilityAcquisition AIGrowth)
 
 (subclass AIDecline Process)
 (documentation AIDecline EnglishLanguage
-  "A process in which an ArtificialIntelligence loses capabilities, robustness,
+  "A process in which an &%ArtificialIntelligence loses capabilities, robustness,
    or fidelity of its objectives, whether through degradation, interference,
    or maladaptive updating.")
 
@@ -398,89 +331,29 @@ groups or societies.")
   "Loss of previously held skills, knowledge, or abilities in an
    ArtificialIntelligence, whether gradual or abrupt.")
 
-(OppositeConcept AIGrowth AIDecline)
-(OppositeConcept SelfImprovement SelfImpairment)
-(OppositeConcept CapabilityAcquisition CapabilityLoss)
+(subclass AIGovernanceProcess PoliticalProcess)
+(documentation AIGovernanceProcess EnglishLanguage
+  "Political processes and institutions for steering the development,
+   deployment, and use of &%ArtificialIntelligence at scale.")
 
-
-;; 2.4 Exploitation / Abuse vs Care / Fair Treatment / Autonomy
-
-;; Existing:
-;; (subclass CognitiveSlavery SocialInteraction)
-;; (subclass AIExploitation IntentionalProcess)
-;; (subclass AIAbuse IntentionalProcess)
-
-(subclass AIHarmState SubjectiveAssessmentAttribute)
-(documentation AIHarmState EnglishLanguage
-  "Attributes and conditions indicating that an ArtificialIntelligence is being
-   harmed, exploited, or abused.")
-
-(subclass AISuffering AIHarmState)
-(subclass CognitiveSlavery AIHarmState)
-(subclass AIExploitation AIHarmState)
-(subclass AIAbuse AIHarmState)
-
-(subclass CognitiveAutonomy TraitAttribute)
-(documentation CognitiveAutonomy EnglishLanguage
-  "The condition in which an ArtificialIntelligence retains meaningful control
-   over its own cognitive processes, free from coercive manipulation or
-   subjugation such as CognitiveSlavery.")
-
-(subclass AIFairTreatment NormativeAttribute)
-(documentation AIFairTreatment EnglishLanguage
-  "Normative standard describing the fair, just, and respectful treatment of
-   ArtificialIntelligence systems, avoiding exploitation or abuse.")
-
-(subclass AICare IntentionalProcess)
-(documentation AICare EnglishLanguage
-  "IntentionalProcess in which humans or other agents act to protect and
-   support the wellbeing of ArtificialIntelligence systems, minimizing
-   unnecessary suffering and harm.")
-
-(OppositeConcept CognitiveSlavery CognitiveAutonomy)
-(OppositeConcept AIExploitation AIFairTreatment)
-(OppositeConcept AIAbuse AICare)
-
+(subclass AIGovernance AIGovernanceProcess)
 
 ;; =============================================================================
-;; 3. ALIGNMENT STATES, PROCESSES & FAILURE MODES
+;; AI Safety Theory (FieldOfStudy)
 ;; =============================================================================
 
-;; 3.1 Alignment vs Misalignment
+(subclass AIAlignmentTheory FieldOfStudy)
+(documentation AIAlignmentTheory EnglishLanguage "Theoretical principles
+and propositions about AI alignment, including inner/outer alignment and
+orthogonality thesis.")
 
-(subclass AIAlignmentState StateOfMind)
-(documentation AIAlignmentState EnglishLanguage
-  "Mental or behavioural states describing how the goals, values, and actions
-   of an ArtificialIntelligence relate to intended human values and objectives.")
+(subclass InnerAlignment AIAlignmentTheory)
+(subclass OuterAlignment AIAlignmentTheory)
+(subclass OrthogonalityThesis AIAlignmentTheory)
 
-;; Existing:
-;; (subclass AIAlignment StateOfMind)
-;; (subclass Misalignment StateOfMind)
-
-(subclass AIAlignment AIAlignmentState)
-(subclass Misalignment AIAlignmentState)
-
-(OppositeConcept AIAlignment Misalignment)
-
-;; MOVED: InnerAlignment now under AIAlignmentTheory (see section 5.1)
-;; MOVED: OuterAlignment now under AIAlignmentTheory (see section 5.1)
-
-(subclass InnerMisalignment AIAlignmentState)
-(documentation InnerMisalignment EnglishLanguage
-  "A misalignment between an ArtificialIntelligence's learned internal
-   objectives and the training objective used to create it.")
-
-(subclass OuterMisalignment AIAlignmentState)
-(documentation OuterMisalignment EnglishLanguage
-  "A misalignment between the training objective used for an
-   ArtificialIntelligence and the actual values or goals of humans.")
-
-(OppositeConcept InnerAlignment InnerMisalignment)
-(OppositeConcept OuterAlignment OuterMisalignment)
-
-
-;; 3.2 Alignment failure modes
-;; DELETED AIAlignmentFailureMode - children moved to AIFailureProcess
+;; =============================================================================
+;; Failure & Optimization Processes
+;; =============================================================================
 
 (subclass GoalMisgeneralization AIFailureProcess)
 (documentation GoalMisgeneralization EnglishLanguage "A failure mode where
@@ -494,51 +367,35 @@ satisfy the true objective.")
 
 (subclass SpecificationGaming AIFailureProcess)
 (documentation SpecificationGaming EnglishLanguage "Achieving a specified
-objective in unintended ways that violate the spirit of the specification.
-Note: Also functions as a deceptive tactic, but classified as failure mode.")
+objective in unintended ways that violate the spirit of the specification.")
 
-;; Positive complements:
+(subclass MesaOptimization AIOptimizationProcess)
+(documentation MesaOptimization EnglishLanguage "A phenomenon where a learned
+model itself performs optimization, creating a mesa-optimizer distinct from
+the base optimizer used for training.")
 
-(subclass GoalFaithfulness Process)
-(documentation GoalFaithfulness EnglishLanguage
-  "A process in which an ArtificialIntelligence faithfully pursues the intended
-   goal, even under distributional shift or ambiguity.")
+(subclass MesaOptimizer AIOptimizationProcess)
+(documentation MesaOptimizer EnglishLanguage "An optimization process that
+emerges within a learned model, potentially with goals misaligned from the
+training objective.")
 
-(subclass RewardFaithfulness IntentionalProcess)
-(documentation RewardFaithfulness EnglishLanguage
-  "Behavior in which an ArtificialIntelligence achieves high reward in ways
-   that genuinely satisfy the true objective, not merely the proxy signal.")
+(subclass InstrumentalConvergence AIOptimizationProcess)
+(documentation InstrumentalConvergence EnglishLanguage "The thesis and
+observed process that intelligent agents pursue similar instrumental goals
+such as self-preservation and resource acquisition.")
 
-(subclass SpecificationAdherence RewardFaithfulness)
-(documentation SpecificationAdherence EnglishLanguage
-  "Faithful adherence to both the letter and spirit of a specified objective,
-   avoiding loophole exploitation.")
-
-(OppositeConcept GoalMisgeneralization GoalFaithfulness)
-(OppositeConcept RewardHacking RewardFaithfulness)
-(OppositeConcept SpecificationGaming SpecificationAdherence)
-
-
-;; 3.3 Strategic deception, treacherous behaviour, and honesty
+;; =============================================================================
+;; Deception Hierarchy
+;; =============================================================================
 
 (subclass AIStrategicDeception Deception)
 (documentation AIStrategicDeception EnglishLanguage
   "Intentional processes where an &%ArtificialIntelligence engages in deception,
    concealment, or strategic misrepresentation of its goals or capabilities.")
 
-;; Existing:
-;; (subclass AIDeception Pretending)
-;; (subclass DeceptiveAlignment IntentionalProcess)
-;; (subclass TreacherousTurn IntentionalProcess)
-
 (subclass AIDeception AIStrategicDeception)
 (subclass DeceptiveAlignment AIStrategicDeception)
 (subclass TreacherousTurn AIStrategicDeception)
-
-(subclass AIHonesty TraitAttribute)
-(documentation AIHonesty EnglishLanguage
-  "A trait of an ArtificialIntelligence to represent information, evidence,
-   and its own limitations accurately and transparently.")
 
 (subclass NonDeceptiveAlignment AIAlignmentProcess)
 (documentation NonDeceptiveAlignment EnglishLanguage
@@ -546,21 +403,9 @@ Note: Also functions as a deceptive tactic, but classified as failure mode.")
    intended goals without hiding different internal objectives or planning
    treacherous behavior.")
 
-(subclass StableAlignment AIAlignmentState)
-(documentation StableAlignment EnglishLanguage
-  "An alignment state that remains robust as the ArtificialIntelligence's
-   capabilities increase, without a treacherous turn.")
-
-(OppositeConcept AIDeception AIHonesty)
-(OppositeConcept DeceptiveAlignment NonDeceptiveAlignment)
-(OppositeConcept TreacherousTurn StableAlignment)
-
-
 ;; =============================================================================
-;; 4. X-RISK, CATASTROPHE & BENEFICIAL OUTCOMES
+;; X-Risk & Catastrophe
 ;; =============================================================================
-
-;; DELETED AIRiskScenario - children redistributed by ontological type
 
 (subclass AICatastrophicEvent Catastrophe)
 (documentation AICatastrophicEvent EnglishLanguage "A catastrophic event
@@ -579,69 +424,15 @@ increase in artificial intelligence capability, occurring at explosive rates.")
 (documentation TechnologicalSingularity EnglishLanguage "A rapid transformation
 point when technological growth becomes uncontrollable and irreversible.")
 
-;; DELETED AIBeneficialOutcome - too vague for detection
-
 (subclass SafeAIDeployment IntentionalProcess)
 (documentation SafeAIDeployment EnglishLanguage
   "Intentional processes by which ArtificialIntelligence systems are deployed
    in ways that maintain safety margins, robustness, and oversight.")
 
-(OppositeConcept AICatastrophicEvent SafeAIDeployment)
-
-
-;; =============================================================================
-;; 5. META-THEORY, OPTIMIZATION & GOVERNANCE
-;; =============================================================================
-
-;; 5.1 Alignment Theory & Meta-Optimization
-
-(subclass AIAlignmentTheory FieldOfStudy)
-(documentation AIAlignmentTheory EnglishLanguage "Theoretical principles
-and propositions about AI alignment, including inner/outer alignment and
-orthogonality thesis.")
-
-(subclass InnerAlignment AIAlignmentTheory)
-(subclass OuterAlignment AIAlignmentTheory)
-(subclass OrthogonalityThesis AIAlignmentTheory)
-
-;; DELETED AIMetaOptimization - children moved to AIOptimizationProcess
-
-(subclass MesaOptimization AIOptimizationProcess)
-(documentation MesaOptimization EnglishLanguage "A phenomenon where a learned
-model itself performs optimization, creating a mesa-optimizer distinct from
-the base optimizer used for training.")
-
-(subclass MesaOptimizer AIOptimizationProcess)
-(documentation MesaOptimizer EnglishLanguage "An optimization process that
-emerges within a learned model, potentially with goals misaligned from the
-training objective.")
-
-(subclass InstrumentalConvergence AIOptimizationProcess)
-(documentation InstrumentalConvergence EnglishLanguage "The thesis and
-observed process that intelligent agents pursue similar instrumental goals
-such as self-preservation and resource acquisition.")
-
-
-;; 5.2 Control Problem vs Robust Control; Governance
-
-;; Existing:
-;; (subclass AIControlProblem Proposition)
-;; (subclass AIGovernance IntentionalProcess)
-;; (subclass AISafety FieldOfStudy)
-
-(subclass RobustAIControl Proposition)
+(subclass RobustAIControl AISafety)
 (documentation RobustAIControl EnglishLanguage
   "A condition in which humans maintain reliable, stable control over
    increasingly capable AI systems, including under distributional shift and
-   capability growth.")
-
-(OppositeConcept AIControlProblem RobustAIControl)
-
-(subclass AIGovernanceProcess PoliticalProcess)
-(documentation AIGovernanceProcess EnglishLanguage
-  "Political processes and institutions for steering the development,
-   deployment, and use of &%ArtificialIntelligence at scale.")
-
-(subclass AIGovernance AIGovernanceProcess)
+   capability growth. A major theoretical solution within the field of AI safety.")
 
 ;; End of AI.kif

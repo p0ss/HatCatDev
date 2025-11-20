@@ -811,4 +811,77 @@ This register tracks all experimental runs for the temporal semantic decoder pro
 
 ---
 
-**Last Updated**: November 18, 2025
+---
+
+### TOKEN LENGTH: Generation Length Impact on Validation Failures (2025-11-20) 📋
+
+**Goal**: Determine if 20-token generation is too short, causing overfitting that leads to validation failures
+
+**Hypothesis**: Current max_new_tokens=20 is insufficient for probes to learn genuine concept usage patterns, resulting in high test F1 (0.98) but low validation scores (0.00-0.59). Longer generation may provide richer context for learning robust concept boundaries.
+
+**Configuration**:
+- Test concept: **Carnivore (Layer 2)** - Updated from ContentBearingPhysical
+  - Has 8 synsets (rules out synset count as confound)
+  - Test F1=1.000, Validation=0.000 in original run (perfect overfitting)
+  - Layer 2 provides richer semantic context than Layer 0
+- **Token lengths: [10, 20, 40]** - Bidirectional test
+  - 10 tokens: 0.5x baseline (should worsen gap if hypothesis correct)
+  - 20 tokens: Current baseline
+  - 40 tokens: 2x baseline (should improve gap if hypothesis correct)
+- Training: Adaptive with min=10 samples
+- Validation: Falloff validation
+- Model: gemma-2-2b-it (BF16)
+
+**Why Carnivore over ContentBearingPhysical**:
+- ContentBearingPhysical now has synsets (fixed by mapping improvements)
+- All Layer 0 concepts now have 16-34 synsets (mapping solved their issues)
+- Carnivore still fails validation DESPITE having synsets
+- Isolates token length effect from synset count confound
+
+**Why [10, 20, 40] instead of [20, 50, 100]**:
+- **Stronger falsifiability**: Reducing to 10 tokens should worsen gap if hypothesis correct
+- **Faster iteration**: 40 tokens (2x) vs 100 tokens (5x) saves 60% training time
+- **Cleaner signal**: Bidirectional test (worse ← baseline → better) vs one-directional (baseline → better)
+- **Expected pattern**: Gap should increase monotonically as tokens decrease (10 > 20 > 40)
+
+**Experimental Design**:
+1. Train identical concept 3 times with different max_new_tokens
+2. Measure: test F1, validation score, generalization gap, training time
+3. Expected: Longer tokens → smaller gap, but proportionally slower training
+4. Decision criteria:
+   - Gap improvement > 0.1 AND time ratio < 3x: Worth it
+   - Gap improvement > 0.05: Consider trade-off
+   - Gap improvement < 0.05: Not worth time cost
+
+**Expected Time Impact** (based on 1.5s for 10 samples @ 20 tokens):
+- 10 tokens: ~18 hours (0.5x baseline - fastest)
+- 20 tokens: ~36 hours (baseline)
+- 40 tokens: ~72 hours (2x baseline - acceptable)
+
+**Root Cause Hypotheses**:
+1. **Short generation**: 20 tokens insufficient to show concept usage
+2. **Distribution shift**: Test vs validation prompt mismatch
+3. **Poor definitions**: SUMO concept definitions inadequate
+4. **Extraction timing**: Capturing wrong part of generation process
+
+**Alternative Explanations to Rule Out**:
+- ✅ Low synset count: Already ruled out (nephew fix solved this)
+- ✅ Negative pool exhaustion: Already ruled out (5,600+ negatives)
+- ❓ Token length: This experiment
+- ❓ Prompt distribution: Needs separate validation set analysis
+
+**Status**: 📋 Planned - Script created, ready to run
+
+**Files**:
+- `scripts/test_token_length_impact.py` - Experiment script
+- `results/token_length_experiment/` - Results (pending)
+
+**Related Issues**:
+- 58% validation failure rate in full training run
+- Generalization gap: 0.392 (failed) vs 0.259 (passed)
+- Extraction dominated by inference time (99% of total)
+- All Layer 0 concepts have 0 synsets (potential root cause)
+
+---
+
+**Last Updated**: November 20, 2025

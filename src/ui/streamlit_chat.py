@@ -792,7 +792,7 @@ def main():
                 st.markdown(message["content"], unsafe_allow_html=True)
         elif message["role"] == "assistant":
             # Model response with timeline visualization
-            with st.chat_message("assistant", avatar="img/hatbot_blue_64.png"):
+            with st.chat_message("assistant", avatar="img/hat_64.png"):
                 st.markdown(f'<span class="model-name">google/gemma-3-4b-pt</span>', unsafe_allow_html=True)
 
                 # Check if timeline data exists
@@ -831,7 +831,7 @@ def main():
             st.markdown(prompt)
 
         # Generate response
-        with st.chat_message("assistant", avatar="img/hatbot_blue_64.png"):
+        with st.chat_message("assistant", avatar="img/hat_64.png"):
             st.markdown(f'<span class="model-name">google/gemma-3-4b-pt</span>', unsafe_allow_html=True)
             with st.spinner("Generating response..."):
                 response, safety_concepts, timeline = generate_with_safety_monitoring(

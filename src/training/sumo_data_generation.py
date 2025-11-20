@@ -239,16 +239,32 @@ def create_sumo_training_dataset(
                 n_samples=n_remaining // 2 if use_wordnet_relationships else n_remaining
             )
 
-    # WordNet relationships
+    # WordNet relationships from ALL synsets (not just canonical)
     wordnet_prompts = []
     if use_wordnet_relationships:
-        canonical_synset = concept.get('canonical_synset')
-        if canonical_synset:
+        # Use all synsets from the concept (includes children's synsets for parents)
+        all_synsets = concept.get('synsets', [])
+
+        # Fallback to canonical_synset if synsets array is empty
+        if not all_synsets:
+            canonical_synset = concept.get('canonical_synset')
+            if canonical_synset:
+                all_synsets = [canonical_synset]
+
+        if all_synsets:
             n_wordnet = n_remaining - len(category_prompts)
-            wordnet_prompts = generate_wordnet_relationship_prompts(
-                canonical_synset,
-                n_samples=n_wordnet
-            )
+            # Generate prompts from ALL synsets, sampling across them
+            samples_per_synset = max(1, n_wordnet // len(all_synsets))
+
+            for synset_id in all_synsets[:n_wordnet]:  # Limit to avoid explosion
+                synset_prompts = generate_wordnet_relationship_prompts(
+                    synset_id,
+                    n_samples=samples_per_synset
+                )
+                wordnet_prompts.extend(synset_prompts)
+
+            # Limit to requested number
+            wordnet_prompts = wordnet_prompts[:n_wordnet]
 
     # Combine relationship prompts
     rel_prompts = category_prompts + wordnet_prompts
@@ -411,8 +427,11 @@ def build_sumo_negative_pool(
     (e.g., AIDeception ↔ AITransparency). These force the probe to learn fine-grained
     distinctions rather than just "this concept vs unrelated concepts".
 
-    Excludes all ancestors (parents, grandparents, etc.) and descendants (children, grandchildren, etc.)
-    to avoid semantic confusion where the target IS A type of the negative example.
+    Excludes all ancestors (parents, grandparents, etc.) and DIRECT CHILDREN ONLY.
+    Nephews/nieces (grandchildren) are included as they are excellent hard negatives.
+
+    Rationale: A parent should detect its children, but NOT its grandchildren.
+    Example: "Abstract" should detect "Proposition" (child), but not "Accusation" (grandchild).
 
     Args:
         all_concepts: All SUMO concepts
@@ -433,8 +452,9 @@ def build_sumo_negative_pool(
     # Find all ancestors (parents, grandparents, etc.)
     ancestors = _find_all_ancestors(target_term, all_concepts)
 
-    # Find all descendants (children, grandchildren, etc.)
-    descendants = _find_all_descendants(target_term, concept_map)
+    # Find ONLY direct children (not all descendants)
+    # Nephews/nieces (grandchildren) are valid negatives!
+    direct_children = set(target_concept.get('category_children', []))
 
     negatives = []
 
@@ -449,8 +469,8 @@ def build_sumo_negative_pool(
         if concept_term in ancestors:
             continue
 
-        # Skip all descendants (not just direct children)
-        if concept_term in descendants:
+        # Skip ONLY direct children (nephews/nieces are valid negatives!)
+        if concept_term in direct_children:
             continue
 
         # For Layer 0 (all same layer), accept all non-ancestral relations

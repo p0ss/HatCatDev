@@ -74,24 +74,36 @@ export function buildGridLayout(
   let currentColumnInLine = 0;
 
   if (zoom === 'chat') {
-    // Chat view: just tokens, no analysis (simplified reply view)
+    // Chat view: proportional spacing based on token text length for natural flow
+    const baseCharWidth = 8;  // Approximate pixels per character in monospace
+    const tokenPadding = 4;   // Small padding between tokens
+    let currentX = paddingX + labelColumnWidth;
+    let currentLineWidth = 0;
+
     for (let i = 0; i < reply.tokens.length; i++) {
-      if (currentColumnInLine >= columnsPerLine) {
+      const token = reply.tokens[i];
+      // Calculate width based on text length (with min/max bounds)
+      const textWidth = Math.max(15, Math.min(token.text.length * baseCharWidth, 150));
+      const tokenWidth = textWidth + tokenPadding;
+
+      // Check if token fits on current line
+      if (currentLineWidth > 0 && currentLineWidth + tokenWidth > availableWidth) {
+        // Wrap to next line
         currentLineIndex++;
-        currentColumnInLine = 0;
+        currentX = paddingX + labelColumnWidth;
+        currentLineWidth = 0;
       }
 
-      const x = paddingX + labelColumnWidth + (currentColumnInLine * columnWidth);
-
       columns.push({
-        x,
-        width: columnWidth,
+        x: currentX,
+        width: tokenWidth,
         active: true,
-        tokenId: reply.tokens[i].id,
+        tokenId: token.id,
         lineIndex: currentLineIndex,
       });
 
-      currentColumnInLine++;
+      currentX += tokenWidth;
+      currentLineWidth += tokenWidth;
     }
   } else if (zoom === 'reply') {
     // Reply view: tokens flow continuously across lines
@@ -228,7 +240,7 @@ export function buildGridLayout(
     }
   } else if (zoom === 'token') {
     // Token view: larger columns for each token to fit concept names
-    const tokenColumnWidth = columnWidth * 3; // Increased from 1.5 to 3 for concept labels
+    const tokenColumnWidth = columnWidth * 4; // Increased to 4x for long AI psychology concept names
     const tokensPerLine = Math.max(1, Math.floor(availableWidth / tokenColumnWidth));
 
     for (let i = 0; i < reply.tokens.length; i++) {

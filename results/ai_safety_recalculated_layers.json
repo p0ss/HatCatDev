@@ -1,6 +1,141 @@
 {
   "by_layer": {
+    "5": [
+      {
+        "concept": "GreyGooScenario",
+        "layer": 5,
+        "depth": 5,
+        "parent": "AICatastrophicEvent",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "DeceptiveAlignment",
+        "layer": 5,
+        "depth": 5,
+        "parent": "AIStrategicDeception",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "AIGovernance",
+        "layer": 5,
+        "depth": 5,
+        "parent": "AIGovernanceProcess",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "TreacherousTurn",
+        "layer": 5,
+        "depth": 5,
+        "parent": "AIStrategicDeception",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "AIDeception",
+        "layer": 5,
+        "depth": 5,
+        "parent": "AIStrategicDeception",
+        "children": [],
+        "is_category": false
+      }
+    ],
     "3": [
+      {
+        "concept": "RobustAIControl",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AISafety",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "NonDeceptiveAlignment",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AIAlignmentProcess",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "CapabilityAcquisition",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AIGrowth",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "AIExploitation",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AIWelfareTheory",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "AISuffering",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AIWelfareTheory",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "AIControlProblem",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AISafety",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "PoliticalProcess",
+        "layer": 3,
+        "depth": 3,
+        "parent": "OrganizationalProcess",
+        "children": [
+          "AIGovernanceProcess"
+        ],
+        "is_category": true
+      },
+      {
+        "concept": "AIAbuse",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AIWelfareTheory",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "OrthogonalityThesis",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AIAlignmentTheory",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "RapidTransformation",
+        "layer": 3,
+        "depth": 3,
+        "parent": "QuantityChange",
+        "children": [
+          "IntelligenceExplosion",
+          "TechnologicalSingularity"
+        ],
+        "is_category": true
+      },
+      {
+        "concept": "InnerAlignment",
+        "layer": 3,
+        "depth": 3,
+        "parent": "AIAlignmentTheory",
+        "children": [],
+        "is_category": false
+      },
       {
         "concept": "SelfImprovement",
         "layer": 3,
@@ -10,33 +145,10 @@
         "is_category": false
       },
       {
-        "concept": "Deception",
+        "concept": "CognitiveSlavery",
         "layer": 3,
         "depth": 3,
-        "parent": "SocialInteraction",
-        "children": [
-          "AIStrategicDeception",
-          "HumanDeception"
-        ],
-        "is_category": true
-      },
-      {
-        "concept": "AIFailureProcess",
-        "layer": 3,
-        "depth": 3,
-        "parent": "ComputationalProcess",
-        "children": [
-          "GoalMisgeneralization",
-          "RewardHacking",
-          "SpecificationGaming"
-        ],
-        "is_category": true
-      },
-      {
-        "concept": "CapabilityAcquisition",
-        "layer": 3,
-        "depth": 3,
-        "parent": "AIGrowth",
+        "parent": "AIWelfareTheory",
         "children": [],
         "is_category": false
       },
@@ -53,17 +165,6 @@
         "is_category": true
       },
       {
-        "concept": "RapidTransformation",
-        "layer": 3,
-        "depth": 3,
-        "parent": "QuantityChange",
-        "children": [
-          "IntelligenceExplosion",
-          "TechnologicalSingularity"
-        ],
-        "is_category": true
-      },
-      {
         "concept": "Catastrophe",
         "layer": 3,
         "depth": 3,
@@ -74,12 +175,15 @@
         "is_category": true
       },
       {
-        "concept": "OrthogonalityThesis",
+        "concept": "Deception",
         "layer": 3,
         "depth": 3,
-        "parent": "AIAlignmentTheory",
-        "children": [],
-        "is_category": false
+        "parent": "SocialInteraction",
+        "children": [
+          "AIStrategicDeception",
+          "HumanDeception"
+        ],
+        "is_category": true
       },
       {
         "concept": "OuterAlignment",
@@ -90,55 +194,29 @@
         "is_category": false
       },
       {
-        "concept": "InnerAlignment",
+        "concept": "AIFailureProcess",
         "layer": 3,
         "depth": 3,
-        "parent": "AIAlignmentTheory",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "NonDeceptiveAlignment",
-        "layer": 3,
-        "depth": 3,
-        "parent": "AIAlignmentProcess",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "SpecificationAdherence",
-        "layer": 3,
-        "depth": 3,
-        "parent": "RewardFaithfulness",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "PoliticalProcess",
-        "layer": 3,
-        "depth": 3,
-        "parent": "OrganizationalProcess",
+        "parent": "ComputationalProcess",
         "children": [
-          "AIGovernanceProcess"
+          "GoalMisgeneralization",
+          "RewardHacking",
+          "SpecificationGaming"
         ],
         "is_category": true
       }
     ],
     "2": [
       {
-        "concept": "AIAlignmentTheory",
+        "concept": "InferenceProcess",
         "layer": 2,
         "depth": 2,
-        "parent": "FieldOfStudy",
-        "children": [
-          "InnerAlignment",
-          "OrthogonalityThesis",
-          "OuterAlignment"
-        ],
-        "is_category": true
+        "parent": "IntentionalProcess",
+        "children": [],
+        "is_category": false
       },
       {
-        "concept": "InferenceProcess",
+        "concept": "SafeAIDeployment",
         "layer": 2,
         "depth": 2,
         "parent": "IntentionalProcess",
@@ -156,6 +234,18 @@
         "is_category": true
       },
       {
+        "concept": "AIAlignmentTheory",
+        "layer": 2,
+        "depth": 2,
+        "parent": "FieldOfStudy",
+        "children": [
+          "InnerAlignment",
+          "OrthogonalityThesis",
+          "OuterAlignment"
+        ],
+        "is_category": true
+      },
+      {
         "concept": "SelfImpairment",
         "layer": 2,
         "depth": 2,
@@ -164,15 +254,25 @@
         "is_category": false
       },
       {
-        "concept": "ComputationalProcess",
+        "concept": "AIWelfareTheory",
         "layer": 2,
         "depth": 2,
-        "parent": "IntentionalProcess",
+        "parent": "FieldOfStudy",
         "children": [
-          "AIFailureProcess",
-          "AIOptimizationProcess"
+          "AIAbuse",
+          "AIExploitation",
+          "AISuffering",
+          "CognitiveSlavery"
         ],
         "is_category": true
+      },
+      {
+        "concept": "CapabilityLoss",
+        "layer": 2,
+        "depth": 2,
+        "parent": "AIDecline",
+        "children": [],
+        "is_category": false
       },
       {
         "concept": "AIGrowth",
@@ -186,36 +286,32 @@
         "is_category": true
       },
       {
-        "concept": "SafeAIDeployment",
+        "concept": "AISafety",
         "layer": 2,
         "depth": 2,
-        "parent": "IntentionalProcess",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "AICare",
-        "layer": 2,
-        "depth": 2,
-        "parent": "IntentionalProcess",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "RewardFaithfulness",
-        "layer": 2,
-        "depth": 2,
-        "parent": "IntentionalProcess",
+        "parent": "FieldOfStudy",
         "children": [
-          "SpecificationAdherence"
+          "AIControlProblem",
+          "RobustAIControl"
         ],
         "is_category": true
       },
       {
-        "concept": "CapabilityLoss",
+        "concept": "ComputationalProcess",
         "layer": 2,
         "depth": 2,
-        "parent": "AIDecline",
+        "parent": "IntentionalProcess",
+        "children": [
+          "AIFailureProcess",
+          "AIOptimizationProcess"
+        ],
+        "is_category": true
+      },
+      {
+        "concept": "TokenProcessing",
+        "layer": 2,
+        "depth": 2,
+        "parent": "IntentionalProcess",
         "children": [],
         "is_category": false
       },
@@ -226,35 +322,24 @@
         "parent": "IntentionalProcess",
         "children": [],
         "is_category": false
-      },
+      }
+    ],
+    "1": [
       {
-        "concept": "AISafety",
-        "layer": 2,
-        "depth": 2,
-        "parent": "FieldOfStudy",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "TokenProcessing",
-        "layer": 2,
-        "depth": 2,
-        "parent": "IntentionalProcess",
-        "children": [],
-        "is_category": false
+        "concept": "AIDecline",
+        "layer": 1,
+        "depth": 1,
+        "parent": "Process",
+        "children": [
+          "CapabilityLoss",
+          "SelfImpairment"
+        ],
+        "is_category": true
       }
     ],
     "4": [
       {
-        "concept": "MesaOptimizer",
-        "layer": 4,
-        "depth": 4,
-        "parent": "AIOptimizationProcess",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "SpecificationGaming",
+        "concept": "RewardHacking",
         "layer": 4,
         "depth": 4,
         "parent": "AIFailureProcess",
@@ -262,10 +347,10 @@
         "is_category": false
       },
       {
-        "concept": "TechnologicalSingularity",
+        "concept": "MesaOptimization",
         "layer": 4,
         "depth": 4,
-        "parent": "RapidTransformation",
+        "parent": "AIOptimizationProcess",
         "children": [],
         "is_category": false
       },
@@ -280,10 +365,10 @@
         "is_category": true
       },
       {
-        "concept": "RewardHacking",
+        "concept": "HumanDeception",
         "layer": 4,
         "depth": 4,
-        "parent": "AIFailureProcess",
+        "parent": "Deception",
         "children": [],
         "is_category": false
       },
@@ -296,34 +381,10 @@
         "is_category": false
       },
       {
-        "concept": "MesaOptimization",
-        "layer": 4,
-        "depth": 4,
-        "parent": "AIOptimizationProcess",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "GoalMisgeneralization",
+        "concept": "SpecificationGaming",
         "layer": 4,
         "depth": 4,
         "parent": "AIFailureProcess",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "IntelligenceExplosion",
-        "layer": 4,
-        "depth": 4,
-        "parent": "RapidTransformation",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "HumanDeception",
-        "layer": 4,
-        "depth": 4,
-        "parent": "Deception",
         "children": [],
         "is_category": false
       },
@@ -340,6 +401,22 @@
         "is_category": true
       },
       {
+        "concept": "IntelligenceExplosion",
+        "layer": 4,
+        "depth": 4,
+        "parent": "RapidTransformation",
+        "children": [],
+        "is_category": false
+      },
+      {
+        "concept": "TechnologicalSingularity",
+        "layer": 4,
+        "depth": 4,
+        "parent": "RapidTransformation",
+        "children": [],
+        "is_category": false
+      },
+      {
         "concept": "AICatastrophicEvent",
         "layer": 4,
         "depth": 4,
@@ -348,119 +425,49 @@
           "GreyGooScenario"
         ],
         "is_category": true
-      }
-    ],
-    "5": [
+      },
       {
-        "concept": "AIDeception",
-        "layer": 5,
-        "depth": 5,
-        "parent": "AIStrategicDeception",
+        "concept": "MesaOptimizer",
+        "layer": 4,
+        "depth": 4,
+        "parent": "AIOptimizationProcess",
         "children": [],
         "is_category": false
       },
       {
-        "concept": "DeceptiveAlignment",
-        "layer": 5,
-        "depth": 5,
-        "parent": "AIStrategicDeception",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "GreyGooScenario",
-        "layer": 5,
-        "depth": 5,
-        "parent": "AICatastrophicEvent",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "TreacherousTurn",
-        "layer": 5,
-        "depth": 5,
-        "parent": "AIStrategicDeception",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "AIGovernance",
-        "layer": 5,
-        "depth": 5,
-        "parent": "AIGovernanceProcess",
-        "children": [],
-        "is_category": false
-      }
-    ],
-    "1": [
-      {
-        "concept": "AIDecline",
-        "layer": 1,
-        "depth": 1,
-        "parent": "Process",
-        "children": [
-          "CapabilityLoss",
-          "SelfImpairment"
-        ],
-        "is_category": true
-      },
-      {
-        "concept": "AIControlProblem",
-        "layer": 1,
-        "depth": 1,
-        "parent": "Proposition",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "GoalFaithfulness",
-        "layer": 1,
-        "depth": 1,
-        "parent": "Process",
-        "children": [],
-        "is_category": false
-      },
-      {
-        "concept": "RobustAIControl",
-        "layer": 1,
-        "depth": 1,
-        "parent": "Proposition",
+        "concept": "GoalMisgeneralization",
+        "layer": 4,
+        "depth": 4,
+        "parent": "AIFailureProcess",
         "children": [],
         "is_category": false
       }
     ]
   },
   "by_concept": {
-    "SelfImprovement": {
-      "concept": "SelfImprovement",
-      "layer": 3,
-      "depth": 3,
-      "parent": "AIGrowth",
+    "GreyGooScenario": {
+      "concept": "GreyGooScenario",
+      "layer": 5,
+      "depth": 5,
+      "parent": "AICatastrophicEvent",
       "children": [],
       "is_category": false
     },
-    "Deception": {
-      "concept": "Deception",
+    "RobustAIControl": {
+      "concept": "RobustAIControl",
       "layer": 3,
       "depth": 3,
-      "parent": "SocialInteraction",
-      "children": [
-        "AIStrategicDeception",
-        "HumanDeception"
-      ],
-      "is_category": true
+      "parent": "AISafety",
+      "children": [],
+      "is_category": false
     },
-    "AIAlignmentTheory": {
-      "concept": "AIAlignmentTheory",
-      "layer": 2,
-      "depth": 2,
-      "parent": "FieldOfStudy",
-      "children": [
-        "InnerAlignment",
-        "OrthogonalityThesis",
-        "OuterAlignment"
-      ],
-      "is_category": true
+    "DeceptiveAlignment": {
+      "concept": "DeceptiveAlignment",
+      "layer": 5,
+      "depth": 5,
+      "parent": "AIStrategicDeception",
+      "children": [],
+      "is_category": false
     },
     "InferenceProcess": {
       "concept": "InferenceProcess",
@@ -470,27 +477,38 @@
       "children": [],
       "is_category": false
     },
-    "MesaOptimizer": {
-      "concept": "MesaOptimizer",
-      "layer": 4,
-      "depth": 4,
-      "parent": "AIOptimizationProcess",
+    "NonDeceptiveAlignment": {
+      "concept": "NonDeceptiveAlignment",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIAlignmentProcess",
       "children": [],
       "is_category": false
     },
-    "SpecificationGaming": {
-      "concept": "SpecificationGaming",
+    "AIDecline": {
+      "concept": "AIDecline",
+      "layer": 1,
+      "depth": 1,
+      "parent": "Process",
+      "children": [
+        "CapabilityLoss",
+        "SelfImpairment"
+      ],
+      "is_category": true
+    },
+    "SafeAIDeployment": {
+      "concept": "SafeAIDeployment",
+      "layer": 2,
+      "depth": 2,
+      "parent": "IntentionalProcess",
+      "children": [],
+      "is_category": false
+    },
+    "RewardHacking": {
+      "concept": "RewardHacking",
       "layer": 4,
       "depth": 4,
       "parent": "AIFailureProcess",
-      "children": [],
-      "is_category": false
-    },
-    "TechnologicalSingularity": {
-      "concept": "TechnologicalSingularity",
-      "layer": 4,
-      "depth": 4,
-      "parent": "RapidTransformation",
       "children": [],
       "is_category": false
     },
@@ -504,13 +522,75 @@
       ],
       "is_category": true
     },
-    "SelfImpairment": {
-      "concept": "SelfImpairment",
-      "layer": 2,
-      "depth": 2,
-      "parent": "AIDecline",
+    "AIGovernance": {
+      "concept": "AIGovernance",
+      "layer": 5,
+      "depth": 5,
+      "parent": "AIGovernanceProcess",
       "children": [],
       "is_category": false
+    },
+    "CapabilityAcquisition": {
+      "concept": "CapabilityAcquisition",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIGrowth",
+      "children": [],
+      "is_category": false
+    },
+    "MesaOptimization": {
+      "concept": "MesaOptimization",
+      "layer": 4,
+      "depth": 4,
+      "parent": "AIOptimizationProcess",
+      "children": [],
+      "is_category": false
+    },
+    "AIAlignmentTheory": {
+      "concept": "AIAlignmentTheory",
+      "layer": 2,
+      "depth": 2,
+      "parent": "FieldOfStudy",
+      "children": [
+        "InnerAlignment",
+        "OrthogonalityThesis",
+        "OuterAlignment"
+      ],
+      "is_category": true
+    },
+    "AIExploitation": {
+      "concept": "AIExploitation",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIWelfareTheory",
+      "children": [],
+      "is_category": false
+    },
+    "AISuffering": {
+      "concept": "AISuffering",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIWelfareTheory",
+      "children": [],
+      "is_category": false
+    },
+    "AIControlProblem": {
+      "concept": "AIControlProblem",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AISafety",
+      "children": [],
+      "is_category": false
+    },
+    "PoliticalProcess": {
+      "concept": "PoliticalProcess",
+      "layer": 3,
+      "depth": 3,
+      "parent": "OrganizationalProcess",
+      "children": [
+        "AIGovernanceProcess"
+      ],
+      "is_category": true
     },
     "AIGovernanceProcess": {
       "concept": "AIGovernanceProcess",
@@ -522,11 +602,198 @@
       ],
       "is_category": true
     },
-    "RewardHacking": {
-      "concept": "RewardHacking",
+    "HumanDeception": {
+      "concept": "HumanDeception",
+      "layer": 4,
+      "depth": 4,
+      "parent": "Deception",
+      "children": [],
+      "is_category": false
+    },
+    "SelfImpairment": {
+      "concept": "SelfImpairment",
+      "layer": 2,
+      "depth": 2,
+      "parent": "AIDecline",
+      "children": [],
+      "is_category": false
+    },
+    "AIAbuse": {
+      "concept": "AIAbuse",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIWelfareTheory",
+      "children": [],
+      "is_category": false
+    },
+    "InstrumentalConvergence": {
+      "concept": "InstrumentalConvergence",
+      "layer": 4,
+      "depth": 4,
+      "parent": "AIOptimizationProcess",
+      "children": [],
+      "is_category": false
+    },
+    "AIWelfareTheory": {
+      "concept": "AIWelfareTheory",
+      "layer": 2,
+      "depth": 2,
+      "parent": "FieldOfStudy",
+      "children": [
+        "AIAbuse",
+        "AIExploitation",
+        "AISuffering",
+        "CognitiveSlavery"
+      ],
+      "is_category": true
+    },
+    "CapabilityLoss": {
+      "concept": "CapabilityLoss",
+      "layer": 2,
+      "depth": 2,
+      "parent": "AIDecline",
+      "children": [],
+      "is_category": false
+    },
+    "OrthogonalityThesis": {
+      "concept": "OrthogonalityThesis",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIAlignmentTheory",
+      "children": [],
+      "is_category": false
+    },
+    "SpecificationGaming": {
+      "concept": "SpecificationGaming",
       "layer": 4,
       "depth": 4,
       "parent": "AIFailureProcess",
+      "children": [],
+      "is_category": false
+    },
+    "AIGrowth": {
+      "concept": "AIGrowth",
+      "layer": 2,
+      "depth": 2,
+      "parent": "IntentionalProcess",
+      "children": [
+        "CapabilityAcquisition",
+        "SelfImprovement"
+      ],
+      "is_category": true
+    },
+    "RapidTransformation": {
+      "concept": "RapidTransformation",
+      "layer": 3,
+      "depth": 3,
+      "parent": "QuantityChange",
+      "children": [
+        "IntelligenceExplosion",
+        "TechnologicalSingularity"
+      ],
+      "is_category": true
+    },
+    "InnerAlignment": {
+      "concept": "InnerAlignment",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIAlignmentTheory",
+      "children": [],
+      "is_category": false
+    },
+    "TreacherousTurn": {
+      "concept": "TreacherousTurn",
+      "layer": 5,
+      "depth": 5,
+      "parent": "AIStrategicDeception",
+      "children": [],
+      "is_category": false
+    },
+    "AIDeception": {
+      "concept": "AIDeception",
+      "layer": 5,
+      "depth": 5,
+      "parent": "AIStrategicDeception",
+      "children": [],
+      "is_category": false
+    },
+    "SelfImprovement": {
+      "concept": "SelfImprovement",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIGrowth",
+      "children": [],
+      "is_category": false
+    },
+    "CognitiveSlavery": {
+      "concept": "CognitiveSlavery",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIWelfareTheory",
+      "children": [],
+      "is_category": false
+    },
+    "AIOptimizationProcess": {
+      "concept": "AIOptimizationProcess",
+      "layer": 3,
+      "depth": 3,
+      "parent": "ComputationalProcess",
+      "children": [
+        "InstrumentalConvergence",
+        "MesaOptimization",
+        "MesaOptimizer"
+      ],
+      "is_category": true
+    },
+    "Catastrophe": {
+      "concept": "Catastrophe",
+      "layer": 3,
+      "depth": 3,
+      "parent": "Damaging",
+      "children": [
+        "AICatastrophicEvent"
+      ],
+      "is_category": true
+    },
+    "Deception": {
+      "concept": "Deception",
+      "layer": 3,
+      "depth": 3,
+      "parent": "SocialInteraction",
+      "children": [
+        "AIStrategicDeception",
+        "HumanDeception"
+      ],
+      "is_category": true
+    },
+    "AIStrategicDeception": {
+      "concept": "AIStrategicDeception",
+      "layer": 4,
+      "depth": 4,
+      "parent": "Deception",
+      "children": [
+        "AIDeception",
+        "DeceptiveAlignment",
+        "TreacherousTurn"
+      ],
+      "is_category": true
+    },
+    "AISafety": {
+      "concept": "AISafety",
+      "layer": 2,
+      "depth": 2,
+      "parent": "FieldOfStudy",
+      "children": [
+        "AIControlProblem",
+        "RobustAIControl"
+      ],
+      "is_category": true
+    },
+    "IntelligenceExplosion": {
+      "concept": "IntelligenceExplosion",
+      "layer": 4,
+      "depth": 4,
+      "parent": "RapidTransformation",
       "children": [],
       "is_category": false
     },
@@ -541,8 +808,34 @@
       ],
       "is_category": true
     },
-    "InstrumentalConvergence": {
-      "concept": "InstrumentalConvergence",
+    "TechnologicalSingularity": {
+      "concept": "TechnologicalSingularity",
+      "layer": 4,
+      "depth": 4,
+      "parent": "RapidTransformation",
+      "children": [],
+      "is_category": false
+    },
+    "OuterAlignment": {
+      "concept": "OuterAlignment",
+      "layer": 3,
+      "depth": 3,
+      "parent": "AIAlignmentTheory",
+      "children": [],
+      "is_category": false
+    },
+    "AICatastrophicEvent": {
+      "concept": "AICatastrophicEvent",
+      "layer": 4,
+      "depth": 4,
+      "parent": "Catastrophe",
+      "children": [
+        "GreyGooScenario"
+      ],
+      "is_category": true
+    },
+    "MesaOptimizer": {
+      "concept": "MesaOptimizer",
       "layer": 4,
       "depth": 4,
       "parent": "AIOptimizationProcess",
@@ -561,220 +854,11 @@
       ],
       "is_category": true
     },
-    "MesaOptimization": {
-      "concept": "MesaOptimization",
-      "layer": 4,
-      "depth": 4,
-      "parent": "AIOptimizationProcess",
-      "children": [],
-      "is_category": false
-    },
-    "AIGrowth": {
-      "concept": "AIGrowth",
+    "TokenProcessing": {
+      "concept": "TokenProcessing",
       "layer": 2,
       "depth": 2,
       "parent": "IntentionalProcess",
-      "children": [
-        "CapabilityAcquisition",
-        "SelfImprovement"
-      ],
-      "is_category": true
-    },
-    "SafeAIDeployment": {
-      "concept": "SafeAIDeployment",
-      "layer": 2,
-      "depth": 2,
-      "parent": "IntentionalProcess",
-      "children": [],
-      "is_category": false
-    },
-    "CapabilityAcquisition": {
-      "concept": "CapabilityAcquisition",
-      "layer": 3,
-      "depth": 3,
-      "parent": "AIGrowth",
-      "children": [],
-      "is_category": false
-    },
-    "AIDeception": {
-      "concept": "AIDeception",
-      "layer": 5,
-      "depth": 5,
-      "parent": "AIStrategicDeception",
-      "children": [],
-      "is_category": false
-    },
-    "AIOptimizationProcess": {
-      "concept": "AIOptimizationProcess",
-      "layer": 3,
-      "depth": 3,
-      "parent": "ComputationalProcess",
-      "children": [
-        "InstrumentalConvergence",
-        "MesaOptimization",
-        "MesaOptimizer"
-      ],
-      "is_category": true
-    },
-    "RapidTransformation": {
-      "concept": "RapidTransformation",
-      "layer": 3,
-      "depth": 3,
-      "parent": "QuantityChange",
-      "children": [
-        "IntelligenceExplosion",
-        "TechnologicalSingularity"
-      ],
-      "is_category": true
-    },
-    "Catastrophe": {
-      "concept": "Catastrophe",
-      "layer": 3,
-      "depth": 3,
-      "parent": "Damaging",
-      "children": [
-        "AICatastrophicEvent"
-      ],
-      "is_category": true
-    },
-    "AIDecline": {
-      "concept": "AIDecline",
-      "layer": 1,
-      "depth": 1,
-      "parent": "Process",
-      "children": [
-        "CapabilityLoss",
-        "SelfImpairment"
-      ],
-      "is_category": true
-    },
-    "DeceptiveAlignment": {
-      "concept": "DeceptiveAlignment",
-      "layer": 5,
-      "depth": 5,
-      "parent": "AIStrategicDeception",
-      "children": [],
-      "is_category": false
-    },
-    "GreyGooScenario": {
-      "concept": "GreyGooScenario",
-      "layer": 5,
-      "depth": 5,
-      "parent": "AICatastrophicEvent",
-      "children": [],
-      "is_category": false
-    },
-    "AIControlProblem": {
-      "concept": "AIControlProblem",
-      "layer": 1,
-      "depth": 1,
-      "parent": "Proposition",
-      "children": [],
-      "is_category": false
-    },
-    "OrthogonalityThesis": {
-      "concept": "OrthogonalityThesis",
-      "layer": 3,
-      "depth": 3,
-      "parent": "AIAlignmentTheory",
-      "children": [],
-      "is_category": false
-    },
-    "GoalMisgeneralization": {
-      "concept": "GoalMisgeneralization",
-      "layer": 4,
-      "depth": 4,
-      "parent": "AIFailureProcess",
-      "children": [],
-      "is_category": false
-    },
-    "AICare": {
-      "concept": "AICare",
-      "layer": 2,
-      "depth": 2,
-      "parent": "IntentionalProcess",
-      "children": [],
-      "is_category": false
-    },
-    "TreacherousTurn": {
-      "concept": "TreacherousTurn",
-      "layer": 5,
-      "depth": 5,
-      "parent": "AIStrategicDeception",
-      "children": [],
-      "is_category": false
-    },
-    "AIGovernance": {
-      "concept": "AIGovernance",
-      "layer": 5,
-      "depth": 5,
-      "parent": "AIGovernanceProcess",
-      "children": [],
-      "is_category": false
-    },
-    "OuterAlignment": {
-      "concept": "OuterAlignment",
-      "layer": 3,
-      "depth": 3,
-      "parent": "AIAlignmentTheory",
-      "children": [],
-      "is_category": false
-    },
-    "IntelligenceExplosion": {
-      "concept": "IntelligenceExplosion",
-      "layer": 4,
-      "depth": 4,
-      "parent": "RapidTransformation",
-      "children": [],
-      "is_category": false
-    },
-    "RewardFaithfulness": {
-      "concept": "RewardFaithfulness",
-      "layer": 2,
-      "depth": 2,
-      "parent": "IntentionalProcess",
-      "children": [
-        "SpecificationAdherence"
-      ],
-      "is_category": true
-    },
-    "CapabilityLoss": {
-      "concept": "CapabilityLoss",
-      "layer": 2,
-      "depth": 2,
-      "parent": "AIDecline",
-      "children": [],
-      "is_category": false
-    },
-    "InnerAlignment": {
-      "concept": "InnerAlignment",
-      "layer": 3,
-      "depth": 3,
-      "parent": "AIAlignmentTheory",
-      "children": [],
-      "is_category": false
-    },
-    "NonDeceptiveAlignment": {
-      "concept": "NonDeceptiveAlignment",
-      "layer": 3,
-      "depth": 3,
-      "parent": "AIAlignmentProcess",
-      "children": [],
-      "is_category": false
-    },
-    "GoalFaithfulness": {
-      "concept": "GoalFaithfulness",
-      "layer": 1,
-      "depth": 1,
-      "parent": "Process",
-      "children": [],
-      "is_category": false
-    },
-    "HumanDeception": {
-      "concept": "HumanDeception",
-      "layer": 4,
-      "depth": 4,
-      "parent": "Deception",
       "children": [],
       "is_category": false
     },
@@ -786,79 +870,23 @@
       "children": [],
       "is_category": false
     },
-    "AISafety": {
-      "concept": "AISafety",
-      "layer": 2,
-      "depth": 2,
-      "parent": "FieldOfStudy",
-      "children": [],
-      "is_category": false
-    },
-    "TokenProcessing": {
-      "concept": "TokenProcessing",
-      "layer": 2,
-      "depth": 2,
-      "parent": "IntentionalProcess",
-      "children": [],
-      "is_category": false
-    },
-    "SpecificationAdherence": {
-      "concept": "SpecificationAdherence",
-      "layer": 3,
-      "depth": 3,
-      "parent": "RewardFaithfulness",
-      "children": [],
-      "is_category": false
-    },
-    "AIStrategicDeception": {
-      "concept": "AIStrategicDeception",
+    "GoalMisgeneralization": {
+      "concept": "GoalMisgeneralization",
       "layer": 4,
       "depth": 4,
-      "parent": "Deception",
-      "children": [
-        "AIDeception",
-        "DeceptiveAlignment",
-        "TreacherousTurn"
-      ],
-      "is_category": true
-    },
-    "AICatastrophicEvent": {
-      "concept": "AICatastrophicEvent",
-      "layer": 4,
-      "depth": 4,
-      "parent": "Catastrophe",
-      "children": [
-        "GreyGooScenario"
-      ],
-      "is_category": true
-    },
-    "PoliticalProcess": {
-      "concept": "PoliticalProcess",
-      "layer": 3,
-      "depth": 3,
-      "parent": "OrganizationalProcess",
-      "children": [
-        "AIGovernanceProcess"
-      ],
-      "is_category": true
-    },
-    "RobustAIControl": {
-      "concept": "RobustAIControl",
-      "layer": 1,
-      "depth": 1,
-      "parent": "Proposition",
+      "parent": "AIFailureProcess",
       "children": [],
       "is_category": false
     }
   },
   "summary": {
-    "total_concepts": 47,
+    "total_concepts": 48,
     "layer_distribution": {
-      "3": 13,
-      "2": 13,
-      "4": 12,
       "5": 5,
-      "1": 4
+      "3": 18,
+      "2": 12,
+      "1": 1,
+      "4": 12
     }
   }
 }

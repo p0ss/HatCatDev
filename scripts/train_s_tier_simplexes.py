@@ -138,8 +138,8 @@ def train_simplex_pole(
     # Save probe (if it graduated)
     if results.get('activation') and 'classifier' in results['activation']:
         probe = results['activation']['classifier']
-        probe_file = pole_output_dir / "activation_probe.pkl"
-        probe.save(str(probe_file))
+        probe_file = pole_output_dir / f"{dimension}_{pole_type}_classifier.pt"
+        torch.save(probe.state_dict(), probe_file)
         print(f"    ✓ Probe saved to {probe_file}")
 
     # Save metrics (remove non-serializable objects)

@@ -6,6 +6,7 @@
 export type ConceptScore = {
   id: string;
   score: number;
+  layer?: number;  // Hierarchy level (0-5)
 };
 
 export type TokenInput = {
