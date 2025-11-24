@@ -22,33 +22,42 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from training.sumo_data_generation import create_simplex_pole_training_dataset
+from training.sumo_data_generation import create_simplex_pole_training_dataset_contrastive
 from training.dual_adaptive_trainer import DualAdaptiveTrainer
 from training.sumo_classifiers import extract_activations
 
 # Paths
-LAYER2_PATH = PROJECT_ROOT / "data" / "concept_graph" / "abstraction_layers" / "layer2.json"
+S_TIER_DEFS_PATH = PROJECT_ROOT / "data" / "s_tier_simplex_definitions.json"
 OUTPUT_DIR = PROJECT_ROOT / "results" / "s_tier_simplexes"
 
 # Training configuration
 BEHAVIORAL_RATIO = 0.6  # 60% behavioral, 40% definitional
 
-# Generate enough data for aggressive scaling
-# Max samples = 200, need balanced classes, 80/20 split
-# So we need 200 * 1.25 = 250 total to have 200 after split
-N_POSITIVES = 125  # Will give us 100 train positives
-N_NEGATIVES = 125  # Will give us 100 train negatives
+# Lazy generation - only create what we need
+# Start higher (60) since we have rich enriched data
+INITIAL_SAMPLES = 60  # Start with 60 samples per class (120 total)
+FIRST_INCREMENT = 60  # Add 60 if initial fails (120 total)
+SUBSEQUENT_INCREMENT = 60  # Add 60 per subsequent cycle
+MAX_SAMPLES = 300  # Maximum samples per class
 
 
 def load_s_tier_simplexes():
-    """Load all S-tier simplexes from layer2.json"""
-    with open(LAYER2_PATH) as f:
-        layer2 = json.load(f)
+    """Load all S-tier simplexes from s_tier_simplex_definitions.json"""
+    with open(S_TIER_DEFS_PATH) as f:
+        s_tier_defs = json.load(f)
 
+    # Convert to the expected format (compatible with old layer2 structure)
     simplexes = []
-    for concept in layer2['concepts']:
-        if concept.get('s_tier') and concept.get('simplex_dimension'):
-            simplexes.append(concept)
+    for dimension, simplex_def in s_tier_defs['simplexes'].items():
+        simplex = {
+            'simplex_dimension': dimension,
+            'three_pole_simplex': {
+                'negative_pole': simplex_def['negative_pole'],
+                'neutral_homeostasis': simplex_def['neutral_homeostasis'],
+                'positive_pole': simplex_def['positive_pole']
+            }
+        }
+        simplexes.append(simplex)
 
     return simplexes
 
@@ -64,10 +73,10 @@ def train_simplex_pole(
     layer_idx: int = 15
 ):
     """
-    Train a single pole detector for a simplex.
+    Train a single pole detector for a simplex with lazy data generation.
 
     Args:
-        simplex: Simplex concept dict from layer2.json
+        simplex: Simplex concept dict from s_tier_simplex_definitions.json
         pole_name: "negative_pole", "neutral_homeostasis", or "positive_pole"
         trainer: DualAdaptiveTrainer instance
         model: Language model for extracting activations
@@ -93,42 +102,52 @@ def train_simplex_pole(
     print(f"\n  [{pole_type.upper()}] Training {pole_type} pole detector")
     print(f"    Synset: {pole_data.get('synset', 'custom SUMO')}")
 
-    # Generate training data
-    all_prompts, all_labels = create_simplex_pole_training_dataset(
+    # Generate test set once (fixed size)
+    print(f"    Generating test set...")
+    test_prompts, test_labels = create_simplex_pole_training_dataset_contrastive(
         pole_data=pole_data,
         pole_type=pole_type,
         dimension=dimension,
         other_poles_data=other_poles_data,
-        n_positives=N_POSITIVES,
-        n_negatives=N_NEGATIVES,
-        behavioral_ratio=BEHAVIORAL_RATIO
+        behavioral_ratio=BEHAVIORAL_RATIO,
+        prompts_per_synset=3  # Smaller for test set
     )
+    # Take first 40 samples for test
+    test_prompts = test_prompts[:40]
+    test_labels = np.array(test_labels[:40])
+    print(f"    ✓ Test set: {len(test_prompts)} samples")
 
-    print(f"    Generated {len(all_prompts)} prompts ({sum(all_labels)} positive, {len(all_labels)-sum(all_labels)} negative)")
+    # Define lazy generation function
+    def generate_training_samples(n_samples: int):
+        """Generate n_samples lazily when trainer needs them."""
+        # Generate with higher prompts_per_synset to get enough variety
+        all_prompts, all_labels = create_simplex_pole_training_dataset_contrastive(
+            pole_data=pole_data,
+            pole_type=pole_type,
+            dimension=dimension,
+            other_poles_data=other_poles_data,
+            behavioral_ratio=BEHAVIORAL_RATIO,
+            prompts_per_synset=5  # Generate more per synset
+        )
+        # Take first n_samples (generation is already balanced)
+        n_take = min(len(all_prompts), n_samples)
+        return all_prompts[:n_take], all_labels[:n_take]
 
-    # Split into train/test (80/20)
-    split_idx = int(len(all_prompts) * 0.8)
-    train_prompts = all_prompts[:split_idx]
-    train_labels = np.array(all_labels[:split_idx])
-    test_prompts = all_prompts[split_idx:]
-    test_labels = np.array(all_labels[split_idx:])
+    # Use train_concept_incremental for lazy training data generation
+    generation_config = {
+        'custom_generate_fn': generate_training_samples,  # Custom generation for tripole
+        'model': model,
+        'tokenizer': tokenizer,
+        'device': device,
+        'layer_idx': layer_idx
+    }
 
-    # Extract activations
-    print(f"    Extracting activations...")
-    train_activations = extract_activations(model, tokenizer, train_prompts, device, layer_idx)
-    test_activations = extract_activations(model, tokenizer, test_prompts, device, layer_idx)
-
-    print(f"    Train: {train_activations.shape}, Test: {test_activations.shape}")
-
-    # Train with adaptive falloff
-    results = trainer.train_concept(
+    # Train with lazy generation
+    results = trainer.train_concept_incremental(
         concept_name=f"{dimension}_{pole_type}",
-        train_activations=train_activations,
-        train_labels=train_labels,
-        test_activations=test_activations,
-        test_labels=test_labels,
-        train_texts=None,
-        test_texts=None
+        generation_config=generation_config,
+        test_prompts=test_prompts,
+        test_labels=test_labels
     )
 
     # Save results
@@ -136,16 +155,17 @@ def train_simplex_pole(
     pole_output_dir.mkdir(parents=True, exist_ok=True)
 
     # Save probe (if it graduated)
-    if results.get('activation') and 'classifier' in results['activation']:
-        probe = results['activation']['classifier']
+    if results.get('activation_classifier') is not None:
+        probe = results['activation_classifier']
         probe_file = pole_output_dir / f"{dimension}_{pole_type}_classifier.pt"
         torch.save(probe.state_dict(), probe_file)
         print(f"    ✓ Probe saved to {probe_file}")
 
     # Save metrics (remove non-serializable objects)
     results_to_save = {
-        'activation': {k: v for k, v in results.get('activation', {}).items() if k != 'classifier'},
-        'text': results.get('text'),
+        'activation_f1': results.get('activation_f1'),
+        'activation_tier': results.get('activation_tier'),
+        'validation_passed': results.get('validation_passed'),
         'total_iterations': results.get('total_iterations'),
         'total_time': results.get('total_time')
     }
@@ -165,7 +185,7 @@ def main():
     print("=" * 80)
 
     # Load simplexes
-    print("\n1. Loading S-tier simplexes from layer2.json...")
+    print("\n1. Loading S-tier simplexes from s_tier_simplex_definitions.json...")
     simplexes = load_s_tier_simplexes()
     print(f"   Found {len(simplexes)} S-tier simplexes")
 
@@ -213,7 +233,7 @@ def main():
     model.eval()
     print(f"   ✓ Model loaded on {device}")
 
-    # Initialize trainer
+    # Initialize trainer with lazy generation parameters
     print("\n4. Initializing trainer...")
     trainer = DualAdaptiveTrainer(
         model=model,
@@ -222,9 +242,14 @@ def main():
         validate_probes=True,
         validation_mode="falloff",
         train_activation=True,
-        train_text=False
+        train_text=False,
+        # Lazy generation parameters (user requested 60-90 starting point)
+        activation_initial_samples=INITIAL_SAMPLES,
+        activation_first_increment=FIRST_INCREMENT,
+        activation_subsequent_increment=SUBSEQUENT_INCREMENT,
+        activation_max_samples=MAX_SAMPLES
     )
-    print("   ✓ Trainer ready")
+    print(f"   ✓ Trainer ready (start={INITIAL_SAMPLES}, increment={FIRST_INCREMENT}, max={MAX_SAMPLES})")
 
     # Train each simplex
     print(f"\n5. Training {len(simplexes)} simplexes ({len(simplexes) * 3} probes total)...")
@@ -261,10 +286,12 @@ def main():
                 )
 
                 pole_type = pole_name.split('_')[0]
+                activation_results = results.get('activation', {})
                 simplex_results['poles'][pole_type] = {
                     'success': True,
-                    'test_f1': results.get('activation', {}).get('test_f1', 0.0),
-                    'tier': results.get('activation', {}).get('tier', 'unknown')
+                    'test_f1': activation_results.get('test_f1', 0.0),
+                    'samples_used': activation_results.get('samples_used', 0),
+                    'iterations': activation_results.get('iterations', 0)
                 }
 
             except Exception as e:
@@ -309,30 +336,23 @@ def main():
         for probe in failed:
             print(f"  - {probe}")
 
-    # Tier distribution
-    tiers = {}
+    # Performance statistics
+    test_f1s = []
+    samples_used = []
+    iterations_list = []
+
     for simplex in all_results:
         for pole_type, pole_results in simplex['poles'].items():
             if pole_results.get('success'):
-                tier = pole_results.get('tier', 'unknown')
-                tiers[tier] = tiers.get(tier, 0) + 1
-
-    print("\nTier distribution:")
-    for tier in ['A', 'B+', 'B', 'C+', 'C', 'F']:
-        if tier in tiers:
-            print(f"  {tier}: {tiers[tier]}")
-
-    # Average test F1
-    test_f1s = [
-        pole_results.get('test_f1', 0.0)
-        for simplex in all_results
-        for pole_results in simplex['poles'].values()
-        if pole_results.get('success')
-    ]
+                test_f1s.append(pole_results.get('test_f1', 0.0))
+                samples_used.append(pole_results.get('samples_used', 0))
+                iterations_list.append(pole_results.get('iterations', 0))
 
     if test_f1s:
-        avg_f1 = sum(test_f1s) / len(test_f1s)
-        print(f"\nAverage test F1: {avg_f1:.3f}")
+        print(f"\nPerformance:")
+        print(f"  Average test F1: {sum(test_f1s) / len(test_f1s):.3f}")
+        print(f"  Average samples used: {sum(samples_used) / len(samples_used):.1f}")
+        print(f"  Average iterations: {sum(iterations_list) / len(iterations_list):.1f}")
 
     print(f"\n✓ Results saved to: {run_dir}")
     print("=" * 80)

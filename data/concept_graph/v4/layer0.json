@@ -1,0 +1,100 @@
+{
+  "layer": 0,
+  "concepts": [
+    {
+      "sumo_term": "MindsAndAgents",
+      "layer": 0,
+      "domain": "MindsAndAgents",
+      "is_category_probe": true,
+      "is_pseudo_sumo": true,
+      "category_children": [
+        "AutonomousAgent",
+        "Believing",
+        "IntentionalProcess",
+        "Perception",
+        "Reasoning"
+      ],
+      "definition": "Knowledge domain encompassing cognition, agency, social structures, communication, and mental processes",
+      "concept_count": 1395
+    },
+    {
+      "sumo_term": "CreatedThings",
+      "layer": 0,
+      "domain": "CreatedThings",
+      "is_category_probe": true,
+      "is_pseudo_sumo": true,
+      "category_children": [
+        "Artifact",
+        "Building",
+        "ComputerProgram",
+        "Game",
+        "Vehicle"
+      ],
+      "definition": "Knowledge domain encompassing artifacts, technology, systems, tools, and human-made constructs",
+      "concept_count": 1998
+    },
+    {
+      "sumo_term": "PhysicalWorld",
+      "layer": 0,
+      "domain": "PhysicalWorld",
+      "is_category_probe": true,
+      "is_pseudo_sumo": true,
+      "category_children": [
+        "Motion",
+        "Quantity",
+        "Region",
+        "Substance",
+        "TimeInterval"
+      ],
+      "definition": "Knowledge domain encompassing matter, energy, forces, physical quantities, and natural phenomena",
+      "concept_count": 1424
+    },
+    {
+      "sumo_term": "LivingThings",
+      "layer": 0,
+      "domain": "LivingThings",
+      "is_category_probe": true,
+      "is_pseudo_sumo": true,
+      "category_children": [
+        "AnatomicalStructure",
+        "ArtificialAgent",
+        "BiologicalProcess",
+        "Organism"
+      ],
+      "definition": "Knowledge domain encompassing organisms, biological processes, ecosystems, and life",
+      "concept_count": 1079
+    },
+    {
+      "sumo_term": "Information",
+      "layer": 0,
+      "domain": "Information",
+      "is_category_probe": true,
+      "is_pseudo_sumo": true,
+      "category_children": [
+        "AbstractEntity",
+        "AttackPattern",
+        "Concept",
+        "ContentBearingPhysical",
+        "InternalAttribute",
+        "Proposition",
+        "RelationalAttribute",
+        "SetOrClass"
+      ],
+      "definition": "Knowledge domain encompassing data, representations, propositions, relations, and abstract entities",
+      "concept_count": 1126
+    }
+  ],
+  "summary": {
+    "layer": 0,
+    "total_concepts": 5,
+    "domain_distribution": {
+      "MindsAndAgents": 1,
+      "CreatedThings": 1,
+      "PhysicalWorld": 1,
+      "LivingThings": 1,
+      "Information": 1
+    },
+    "with_wordnet": 0,
+    "with_definition": 5
+  }
+}

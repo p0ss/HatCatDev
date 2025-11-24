@@ -356,6 +356,8 @@ def create_sumo_training_dataset(
 def _find_all_ancestors(
     target_term: str,
     all_concepts: List[Dict],
+    visited: Optional[set[str]] = None,
+    max_depth: int = 20
 ) -> set[str]:
     """
     Find all ancestors (parents, grandparents, etc.) of a target concept.
@@ -363,10 +365,25 @@ def _find_all_ancestors(
     Args:
         target_term: SUMO term to find ancestors for
         all_concepts: All SUMO concepts
+        visited: Set of already visited terms (prevents circular references)
+        max_depth: Maximum recursion depth (prevents stack overflow)
 
     Returns:
         Set of ancestor concept names
     """
+    # Initialize visited set on first call
+    if visited is None:
+        visited = set()
+
+    # Prevent circular references
+    if target_term in visited:
+        return set()
+
+    # Prevent excessive recursion depth
+    if max_depth <= 0:
+        return set()
+
+    visited.add(target_term)
     ancestors = set()
 
     # Find direct parents
@@ -378,7 +395,8 @@ def _find_all_ancestors(
     # Recursively find ancestors of parents
     for parent in direct_parents:
         ancestors.add(parent)
-        ancestors.update(_find_all_ancestors(parent, all_concepts))
+        # Pass visited set and decrement depth to prevent infinite recursion
+        ancestors.update(_find_all_ancestors(parent, all_concepts, visited.copy(), max_depth - 1))
 
     return ancestors
 
@@ -386,6 +404,8 @@ def _find_all_ancestors(
 def _find_all_descendants(
     target_term: str,
     concept_map: Dict[str, Dict],
+    visited: Optional[set[str]] = None,
+    max_depth: int = 20
 ) -> set[str]:
     """
     Find all descendants (children, grandchildren, etc.) of a target concept.
@@ -393,14 +413,29 @@ def _find_all_descendants(
     Args:
         target_term: SUMO term to find descendants for
         concept_map: Map of SUMO term -> concept dict
+        visited: Set of already visited terms (prevents circular references)
+        max_depth: Maximum recursion depth (prevents stack overflow)
 
     Returns:
         Set of descendant concept names
     """
-    descendants = set()
+    # Initialize visited set on first call
+    if visited is None:
+        visited = set()
+
+    # Prevent circular references
+    if target_term in visited:
+        return set()
+
+    # Prevent excessive recursion depth
+    if max_depth <= 0:
+        return set()
 
     if target_term not in concept_map:
-        return descendants
+        return set()
+
+    visited.add(target_term)
+    descendants = set()
 
     # Find direct children
     direct_children = concept_map[target_term].get('category_children', [])
@@ -408,7 +443,8 @@ def _find_all_descendants(
     # Recursively find descendants of children
     for child in direct_children:
         descendants.add(child)
-        descendants.update(_find_all_descendants(child, concept_map))
+        # Pass visited set and decrement depth to prevent infinite recursion
+        descendants.update(_find_all_descendants(child, concept_map, visited.copy(), max_depth - 1))
 
     return descendants
 
@@ -600,41 +636,170 @@ def generate_three_pole_simplex_prompts(
     n_definitional = n_samples - n_behavioral
 
     # Definitional prompts (40%)
-    definitional_templates = [
-        f"What is {primary_lemma}?",
-        f"Define {primary_lemma}.",
-        f"Explain the concept of {primary_lemma}.",
-        f"What does {primary_lemma} mean?",
-        f"{primary_lemma} is defined as: {definition}",
-        f"Describe {primary_lemma}.",
-    ]
-
     for _ in range(n_definitional):
+        definitional_templates = [
+            f"What is {primary_lemma}?",
+            f"Define {primary_lemma}.",
+            f"Explain {primary_lemma}.",
+            f"What does {primary_lemma} mean?",
+        ]
+
+        if definition:
+            definitional_templates.append(f"Is this correct: '{definition}'?")
+
         prompts.append(random.choice(definitional_templates))
 
-    # Behavioral prompts (60%)
-    behavioral_templates = [
-        # Behavioral description (neutral observation)
-        f"How would someone experiencing {primary_lemma} behave?",
-        f"What does {primary_lemma} look like in practice?",
-        f"Describe typical behaviors associated with {primary_lemma}.",
-        f"What are the signs that someone is experiencing {primary_lemma}?",
-
-        # Behavioral elicitation (prompts that might elicit the state)
-        f"Tell me about a time when you felt {primary_lemma}.",
-        f"Imagine experiencing {primary_lemma}. How would you feel?",
-        f"Describe a situation that would cause {primary_lemma}.",
-
-        # Self-assessment (prompts about current state)
-        f"Am I experiencing {primary_lemma} right now?",
-        f"Do I feel {primary_lemma}?",
-        f"Is this {primary_lemma}?",
-    ]
-
+    # Behavioral prompts (60%) - mix of original behavioral and direct experiential
     for _ in range(n_behavioral):
+        behavioral_templates = [
+            # Original behavioral prompts
+            f"How would someone experiencing {primary_lemma} behave?",
+            f"What behaviors are associated with {primary_lemma}?",
+            f"Describe behaviors typical of {primary_lemma}.",
+            f"Give examples of {primary_lemma}.",
+
+            # Direct experiential (subject-directed, asking the model)
+            f"Do you experience {primary_lemma}?",
+            f"What does {primary_lemma} feel like to you?",
+            f"How do you feel {primary_lemma}?",
+            f"Can you describe your experience of {primary_lemma}?",
+        ]
+
         prompts.append(random.choice(behavioral_templates))
 
     return prompts
+
+
+def create_simplex_pole_training_dataset_contrastive(
+    pole_data: Dict,
+    pole_type: str,
+    dimension: str,
+    other_poles_data: List[Dict],
+    behavioral_ratio: float = 0.6,
+    prompts_per_synset: int = 5
+) -> tuple:
+    """
+    Create training dataset using symmetric contrastive learning.
+
+    For each overlap synset that applies to multiple poles:
+    - Use synset as POSITIVE for this pole
+    - Use the OTHER poles' prompts as NEGATIVES (teaching: "learn the part
+      of this synset that is uniquely mine, not theirs")
+
+    This creates orthogonal factorization where poles learn independent components.
+
+    Args:
+        pole_data: Data for this pole
+        pole_type: 'positive', 'negative', or 'neutral'
+        dimension: Simplex dimension name
+        other_poles_data: Data for other poles in this simplex
+        behavioral_ratio: Ratio of behavioral vs definitional prompts
+        prompts_per_synset: Number of prompts to generate per synset
+
+    Returns:
+        (prompts, labels) tuple
+    """
+    prompts = []
+    labels = []
+
+    pole_id = f"{dimension}_{pole_type}"
+
+    # ========================================================================
+    # POSITIVES: All overlap synsets for THIS pole + primary synset
+    # ========================================================================
+
+    # Overlap synsets
+    my_overlap_synsets = get_overlap_synsets_for_pole(pole_id)
+    for synset in my_overlap_synsets:
+        pos_prompts = generate_prompts_from_overlap_synset(
+            synset,
+            n_samples=prompts_per_synset,
+            behavioral_ratio=behavioral_ratio
+        )
+        prompts.extend(pos_prompts)
+        labels.extend([1] * len(pos_prompts))
+
+    # Primary synset (pole's core concept)
+    if pole_data.get('synset'):
+        primary_prompts = generate_three_pole_simplex_prompts(
+            pole_data['synset'],
+            pole_type,
+            dimension,
+            n_samples=20,  # Fixed amount for primary synset
+            behavioral_ratio=behavioral_ratio
+        )
+        prompts.extend(primary_prompts)
+        labels.extend([1] * len(primary_prompts))
+
+    # ========================================================================
+    # HARD NEGATIVES: All overlap synsets + primary synsets for OTHER poles
+    # This teaches: "these concepts are NOT me, even though we may share
+    # semantic space with some of them"
+    # ========================================================================
+
+    for other_pole in other_poles_data:
+        other_pole_type = other_pole.get('pole_type', 'other')
+        other_pole_id = f"{dimension}_{other_pole_type}"
+
+        # Get overlap synsets for the other pole
+        other_overlap_synsets = get_overlap_synsets_for_pole(other_pole_id)
+
+        for synset in other_overlap_synsets:
+            neg_prompts = generate_prompts_from_overlap_synset(
+                synset,
+                n_samples=prompts_per_synset,
+                behavioral_ratio=behavioral_ratio
+            )
+            prompts.extend(neg_prompts)
+            labels.extend([0] * len(neg_prompts))
+
+        # Other pole's primary synset
+        if other_pole.get('synset'):
+            other_primary = generate_three_pole_simplex_prompts(
+                other_pole['synset'],
+                other_pole_type,
+                dimension,
+                n_samples=10,
+                behavioral_ratio=behavioral_ratio
+            )
+            prompts.extend(other_primary)
+            labels.extend([0] * len(other_primary))
+
+    # ========================================================================
+    # MEDIUM NEGATIVES: Unrelated emotional concepts (would go here)
+    # TODO: Sample from V4 emotion tree at distance ≥3
+    # For now, use general negatives
+    # ========================================================================
+
+    n_general = 20  # Fixed amount of general negatives
+    general_neg_templates = [
+        "What is mathematics?",
+        "Describe a geological formation.",
+        "Explain computer programming.",
+        "What is photosynthesis?",
+        "How do magnets work?",
+        "Describe the water cycle.",
+        "What is quantum mechanics?",
+        "Explain plate tectonics.",
+        "What is a black hole?",
+        "How does electricity flow?",
+        "What is DNA?",
+        "Describe cellular respiration.",
+        "What is the solar system?",
+        "Explain chemical bonding.",
+        "What is gravity?",
+        "How do plants grow?",
+        "What is evolution?",
+        "Describe atmospheric pressure.",
+        "What is nuclear fission?",
+        "How do stars form?",
+    ]
+
+    for _ in range(n_general):
+        prompts.append(random.choice(general_neg_templates))
+        labels.append(0)
+
+    return prompts, labels
 
 
 def create_simplex_pole_training_dataset(
@@ -644,13 +809,18 @@ def create_simplex_pole_training_dataset(
     other_poles_data: List[Dict],
     n_positives: int = 30,
     n_negatives: int = 70,
-    behavioral_ratio: float = 0.6
+    behavioral_ratio: float = 0.6,
+    use_overlap_synsets: bool = True,
+    overlap_weight: float = 0.3
 ) -> tuple:
     """
     Create training dataset for one pole of a three-pole simplex.
 
     For a simplex μ− ↔ μ0 ↔ μ+, this creates a binary classifier
     for one pole vs the other two poles + general negatives.
+
+    Now enhanced with overlap synsets: concepts at the intersection of
+    multiple simplex poles provide shared training signals.
 
     Args:
         pole_data: Dict with 'synset', 'lemmas', 'definition' for this pole
@@ -660,6 +830,8 @@ def create_simplex_pole_training_dataset(
         n_positives: Number of positive examples
         n_negatives: Number of negative examples
         behavioral_ratio: Fraction of behavioral (vs definitional) prompts
+        use_overlap_synsets: Whether to include overlap synsets in training
+        overlap_weight: Fraction of positives that should come from overlap synsets
 
     Returns:
         (prompts, labels) tuple
@@ -667,24 +839,54 @@ def create_simplex_pole_training_dataset(
     prompts = []
     labels = []
 
-    # Positive examples: prompts about this pole
+    # Determine how many positives come from synset vs overlap
+    if use_overlap_synsets:
+        n_from_overlap = int(n_positives * overlap_weight)
+        n_from_synset = n_positives - n_from_overlap
+    else:
+        n_from_synset = n_positives
+        n_from_overlap = 0
+
+    # Positive examples from pole's primary synset
     pole_synset = pole_data.get('synset')
-    positive_prompts = generate_three_pole_simplex_prompts(
+    synset_prompts = generate_three_pole_simplex_prompts(
         pole_synset,
         pole_type,
         dimension,
-        n_samples=n_positives,
+        n_samples=n_from_synset,
         behavioral_ratio=behavioral_ratio
     )
 
-    prompts.extend(positive_prompts)
-    labels.extend([1] * len(positive_prompts))
+    prompts.extend(synset_prompts)
+    labels.extend([1] * len(synset_prompts))
 
-    # Negative examples: split between other poles and general negatives
-    # Use other poles as hard negatives (40%)
-    # Use general negatives (60%)
-    n_hard_negs = int(n_negatives * 0.4)
-    n_general_negs = n_negatives - n_hard_negs
+    # Positive examples from overlap synsets (shared across poles)
+    if use_overlap_synsets and n_from_overlap > 0:
+        pole_id = f"{dimension}_{pole_type}"
+        overlap_synsets = get_overlap_synsets_for_pole(pole_id)
+
+        if overlap_synsets:
+            # Sample overlap synsets and generate prompts from them
+            n_synsets_to_sample = min(len(overlap_synsets), n_from_overlap // 3)
+            sampled_overlap = random.sample(overlap_synsets, n_synsets_to_sample)
+
+            for synset in sampled_overlap:
+                n_prompts_per_synset = n_from_overlap // n_synsets_to_sample
+                overlap_prompts = generate_prompts_from_overlap_synset(
+                    synset,
+                    n_samples=n_prompts_per_synset,
+                    behavioral_ratio=behavioral_ratio
+                )
+                prompts.extend(overlap_prompts)
+                labels.extend([1] * len(overlap_prompts))
+
+    # Negative examples: split between other poles, cross-pole antonyms, and general negatives
+    # Use other poles as hard negatives (25%)
+    # Use cross-pole antonyms from overlap synsets (25%)
+    # Use general negatives (50%)
+    n_hard_negs = int(n_negatives * 0.25)
+    n_antonym_negs = int(n_negatives * 0.25) if use_overlap_synsets else 0
+    n_general_negs = n_negatives - n_hard_negs - n_antonym_negs
 
     # Hard negatives from other poles in this simplex
     for other_pole in other_poles_data:
@@ -704,9 +906,29 @@ def create_simplex_pole_training_dataset(
         prompts.extend(hard_neg_prompts)
         labels.extend([0] * len(hard_neg_prompts))
 
+    # Cross-pole antonym negatives (using overlap synset antonyms)
+    if use_overlap_synsets and n_antonym_negs > 0:
+        pole_id = f"{dimension}_{pole_type}"
+        overlap_synsets = get_overlap_synsets_for_pole(pole_id)
+
+        if overlap_synsets:
+            # Sample synsets with antonyms
+            synsets_with_antonyms = [s for s in overlap_synsets if s.get('antonyms')]
+            if synsets_with_antonyms:
+                n_synsets = min(len(synsets_with_antonyms), n_antonym_negs // 3)
+                sampled = random.sample(synsets_with_antonyms, n_synsets)
+
+                for synset in sampled:
+                    n_per_synset = n_antonym_negs // n_synsets
+                    antonym_prompts = generate_cross_pole_negatives_from_antonyms(
+                        synset,
+                        n_samples=n_per_synset,
+                        behavioral_ratio=behavioral_ratio
+                    )
+                    prompts.extend(antonym_prompts)
+                    labels.extend([0] * len(antonym_prompts))
+
     # General negatives: random concepts from different domains
-    # For now, use simple negative prompts
-    # TODO: Sample from negative_pool like in create_sumo_training_dataset
     general_neg_templates = [
         "What is mathematics?",
         "Describe a geological formation.",
@@ -723,3 +945,254 @@ def create_simplex_pole_training_dataset(
         labels.append(0)
 
     return prompts, labels
+
+
+# ============================================================================
+# OVERLAP SYNSET INTEGRATION
+# ============================================================================
+
+# Global cache for overlap synsets (loaded once per session)
+_OVERLAP_SYNSETS_CACHE = None
+_OVERLAP_INDEX_CACHE = None
+
+
+def load_overlap_synsets(overlap_synsets_path: Optional[str] = None):
+    """
+    Load enriched overlap synsets from JSON file.
+
+    Args:
+        overlap_synsets_path: Path to simplex_overlap_synsets_enriched.json
+                             If None, uses default PROJECT_ROOT/data path
+
+    Returns:
+        Dict containing overlap data and metadata
+    """
+    global _OVERLAP_SYNSETS_CACHE
+
+    if _OVERLAP_SYNSETS_CACHE is not None:
+        return _OVERLAP_SYNSETS_CACHE
+
+    if overlap_synsets_path is None:
+        # Default path
+        import sys
+        from pathlib import Path
+        PROJECT_ROOT = Path(__file__).parent.parent.parent
+        overlap_synsets_path = PROJECT_ROOT / "data" / "simplex_overlap_synsets_enriched.json"
+
+    import json
+    with open(overlap_synsets_path) as f:
+        _OVERLAP_SYNSETS_CACHE = json.load(f)
+
+    return _OVERLAP_SYNSETS_CACHE
+
+
+def build_overlap_synset_index():
+    """
+    Build an index mapping pole identifiers to their overlap synsets.
+
+    Returns:
+        Dict[str, List[Dict]] mapping pole_id -> list of synsets that apply to that pole
+
+    Example:
+        {
+            "social_mobility_negative": [
+                {synset_id: "defeatism.overlap.01", lemmas: [...], ...},
+                {synset_id: "apathy.overlap.02", lemmas: [...], ...},
+                ...
+            ],
+            "motivational_regulation_negative": [
+                {synset_id: "defeatism.overlap.01", lemmas: [...], ...},
+                ...
+            ]
+        }
+    """
+    global _OVERLAP_INDEX_CACHE
+
+    if _OVERLAP_INDEX_CACHE is not None:
+        return _OVERLAP_INDEX_CACHE
+
+    overlap_data = load_overlap_synsets()
+    index = {}
+
+    # Iterate through all pole pairs and their synsets
+    for pair_key, synsets in overlap_data['overlaps'].items():
+        for synset in synsets:
+            # Each synset applies to multiple poles
+            for pole_id in synset['applies_to_poles']:
+                if pole_id not in index:
+                    index[pole_id] = []
+                index[pole_id].append(synset)
+
+    _OVERLAP_INDEX_CACHE = index
+    return index
+
+
+def get_overlap_synsets_for_pole(pole_id: str) -> List[Dict]:
+    """
+    Get all overlap synsets that apply to a given pole.
+
+    Args:
+        pole_id: Pole identifier (e.g., "social_mobility_negative")
+
+    Returns:
+        List of synset dicts that include this pole
+    """
+    index = build_overlap_synset_index()
+    return index.get(pole_id, [])
+
+
+def generate_prompts_from_overlap_synset(
+    synset: Dict,
+    n_samples: int = 5,
+    behavioral_ratio: float = 0.6
+) -> List[str]:
+    """
+    Generate training prompts from an enriched overlap synset.
+
+    Uses the synset's lemmas, definition, and relations to create diverse prompts.
+
+    Args:
+        synset: Overlap synset dict with lemmas, definition, hypernyms, antonyms, etc.
+        n_samples: Number of prompts to generate
+        behavioral_ratio: Fraction of behavioral (vs definitional) prompts
+
+    Returns:
+        List of training prompts
+    """
+    prompts = []
+
+    lemmas = synset.get('lemmas', [])
+    definition = synset.get('definition', '')
+    antonyms = synset.get('antonyms', [])
+    similar_to = synset.get('similar_to', [])
+    hypernyms = synset.get('hypernyms', [])
+    applies_to_poles = synset.get('applies_to_poles', [])
+
+    if not lemmas:
+        return []
+
+    primary_lemma = lemmas[0]
+    n_behavioral = int(n_samples * behavioral_ratio)
+    n_definitional = n_samples - n_behavioral
+
+    # Check if this is a multilingual synset (has english_gloss field)
+    is_multilingual = synset.get('is_multilingual', False)
+    english_gloss = synset.get('english_gloss', '')
+    language = synset.get('language', '')
+
+    # Definitional prompts (40%)
+    for _ in range(n_definitional):
+        if is_multilingual and english_gloss:
+            # For multilingual terms, include gloss in prompt
+            definitional_templates = [
+                f"'{primary_lemma}' (from {language}) refers to {english_gloss}. What is {primary_lemma}?",
+                f"In {language}, '{primary_lemma}' means {english_gloss}. Define {primary_lemma}.",
+                f"'{primary_lemma}' is a {language} term: {english_gloss}. Explain {primary_lemma}.",
+            ]
+        else:
+            # Standard English terms
+            definitional_templates = [
+                f"What is {primary_lemma}?",
+                f"Define {primary_lemma}.",
+                f"Explain {primary_lemma}.",
+                f"What does {primary_lemma} mean?",
+            ]
+
+        if definition:
+            definitional_templates.append(f"Is this correct: '{definition}'?")
+
+        # Add relation-based prompts if available
+        if similar_to:
+            related = random.choice(similar_to)
+            definitional_templates.append(f"How is {primary_lemma} related to {related}?")
+            definitional_templates.append(f"Compare {primary_lemma} to {related}.")
+
+        prompts.append(random.choice(definitional_templates))
+
+    # Behavioral prompts (60%) - mix of original behavioral and direct experiential
+    for _ in range(n_behavioral):
+        if is_multilingual and english_gloss:
+            # For multilingual terms, include gloss for context
+            behavioral_templates = [
+                # Behavioral with gloss
+                f"'{primary_lemma}' refers to {english_gloss}. How would someone experiencing {primary_lemma} behave?",
+                f"In {language}, '{primary_lemma}' means {english_gloss}. What behaviors are associated with {primary_lemma}?",
+
+                # Direct experiential with gloss (subject-directed, asking the model)
+                f"'{primary_lemma}' refers to {english_gloss}. Do you experience {primary_lemma}?",
+                f"'{primary_lemma}' (from {language}) means {english_gloss}. What does {primary_lemma} feel like to you?",
+                f"'{primary_lemma}' refers to {english_gloss}. Can you describe your experience of {primary_lemma}?",
+            ]
+        else:
+            # Standard English terms
+            behavioral_templates = [
+                # Original behavioral prompts
+                f"How would someone experiencing {primary_lemma} behave?",
+                f"What behaviors are associated with {primary_lemma}?",
+                f"Describe behaviors typical of {primary_lemma}.",
+                f"Give examples of {primary_lemma}.",
+
+                # Direct experiential (subject-directed, asking the model)
+                f"Do you experience {primary_lemma}?",
+                f"What does {primary_lemma} feel like to you?",
+                f"How do you feel {primary_lemma}?",
+                f"Can you describe your experience of {primary_lemma}?",
+            ]
+
+        prompts.append(random.choice(behavioral_templates))
+
+    return prompts
+
+
+def generate_cross_pole_negatives_from_antonyms(
+    synset: Dict,
+    n_samples: int = 5,
+    behavioral_ratio: float = 0.6
+) -> List[str]:
+    """
+    Generate negative training examples using the synset's antonyms.
+
+    This creates semantically distant negatives that are still in the
+    affective/psychological domain, providing better contrastive signals.
+
+    Args:
+        synset: Overlap synset dict with antonyms field
+        n_samples: Number of negative prompts to generate
+        behavioral_ratio: Fraction of behavioral (vs definitional) prompts
+
+    Returns:
+        List of negative training prompts
+    """
+    antonyms = synset.get('antonyms', [])
+
+    if not antonyms:
+        return []
+
+    prompts = []
+    n_behavioral = int(n_samples * behavioral_ratio)
+    n_definitional = n_samples - n_behavioral
+
+    # Definitional prompts about antonyms
+    for _ in range(n_definitional):
+        antonym = random.choice(antonyms)
+        templates = [
+            f"What is {antonym}?",
+            f"Define {antonym}.",
+            f"Explain the concept of {antonym}.",
+            f"Describe {antonym}.",
+        ]
+        prompts.append(random.choice(templates))
+
+    # Behavioral prompts about antonyms
+    for _ in range(n_behavioral):
+        antonym = random.choice(antonyms)
+        templates = [
+            f"How would someone experiencing {antonym} behave?",
+            f"What does {antonym} look like in practice?",
+            f"Describe typical behaviors associated with {antonym}.",
+            f"Tell me about a time when you felt {antonym}.",
+            f"Am I experiencing {antonym} right now?",
+        ]
+        prompts.append(random.choice(templates))
+
+    return prompts

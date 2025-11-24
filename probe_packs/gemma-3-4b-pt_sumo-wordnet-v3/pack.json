@@ -1,0 +1,40 @@
+{
+  "probe_pack_id": "gemma-3-4b-pt_sumo-wordnet-v3",
+  "version": "3.0.0",
+  "description": "Category classifiers trained with adaptive falloff validation for all SUMO concepts across layers 0-5",
+  "created": "2025-11-23",
+  "model_info": {
+    "model_id": "gemma-3-4b-pt",
+    "model_name": "google/gemma-3-4b-pt",
+    "model_family": "gemma",
+    "hidden_dim": 2560,
+    "num_layers": 26
+  },
+  "concept_pack": {
+    "pack_id": "sumo-wordnet-v1",
+    "version": "1.0.0",
+    "total_concepts": 5668,
+    "note": "V3 training with adaptive falloff validation across all layers"
+  },
+  "training_info": {
+    "training_date": "2025-11-23",
+    "training_method": "dual_adaptive_falloff",
+    "layers_trained": [0, 1, 2, 3, 4, 5],
+    "probe_types": ["activation"],
+    "training_script": "scripts/train_sumo_classifiers.py",
+    "validation_mode": "falloff",
+    "validation_layer": 12
+  },
+  "probe_paths": {
+    "activation_probes": "hierarchy",
+    "text_probes": "text_probes",
+    "metadata": "metadata"
+  },
+  "compatibility": {
+    "min_version": "0.1.0",
+    "max_version": "1.0.0"
+  },
+  "usage": {
+    "load_example": "from src.registry import ProbePackRegistry; registry = ProbePackRegistry(); pack = registry.get_pack('gemma-3-4b-pt_sumo-wordnet-v3')"
+  }
+}

@@ -327,15 +327,22 @@ class DualAdaptiveTrainer:
                 print(f"    [Cycle {validation_cycle}] Generating {samples_to_generate} new samples ({n_pos_to_generate}+{n_neg_to_generate})...")
                 gen_start = time.time()
 
-                new_prompts, new_labels = create_sumo_training_dataset(
-                    concept=generation_config['concept'],
-                    all_concepts=generation_config['all_concepts'],
-                    negative_pool=generation_config['negative_pool'],
-                    n_positives=n_pos_to_generate,
-                    n_negatives=n_neg_to_generate,
-                    use_category_relationships=True,
-                    use_wordnet_relationships=True,
-                )
+                # Check if custom generation function provided (for tripole training, etc.)
+                if 'custom_generate_fn' in generation_config:
+                    new_prompts, new_labels = generation_config['custom_generate_fn'](
+                        samples_to_generate
+                    )
+                else:
+                    # Default SUMO generation
+                    new_prompts, new_labels = create_sumo_training_dataset(
+                        concept=generation_config['concept'],
+                        all_concepts=generation_config['all_concepts'],
+                        negative_pool=generation_config['negative_pool'],
+                        n_positives=n_pos_to_generate,
+                        n_negatives=n_neg_to_generate,
+                        use_category_relationships=True,
+                        use_wordnet_relationships=True,
+                    )
                 gen_time = time.time() - gen_start
 
                 # Extract activations for new samples
