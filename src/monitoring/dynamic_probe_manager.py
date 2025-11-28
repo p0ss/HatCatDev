@@ -71,12 +71,14 @@ class ConceptMetadata:
         sumo_term: str,
         layer: int,
         category_children: List[str],
+        parent_concepts: List[str],
         synset_count: int,
         sumo_depth: int,
     ):
         self.sumo_term = sumo_term
         self.layer = layer
         self.category_children = category_children
+        self.parent_concepts = parent_concepts
         self.synset_count = synset_count
         self.sumo_depth = sumo_depth
 
@@ -215,10 +217,18 @@ class DynamicProbeManager:
         self._load_base_layers()
 
     def _load_all_metadata(self):
-        """Load lightweight metadata for all concepts (all layers)."""
+        """Load lightweight metadata for all concepts (all layers).
+
+        Deduplicates concepts that appear in multiple layers by keeping only
+        the highest (lowest number) layer for each concept name.
+        Only loads concepts that have probe files.
+        """
         layer_files = sorted(self.layers_data_dir.glob("layer*.json"))
 
-        total_concepts = 0
+        # First pass: collect all concepts and find best layer for each
+        # Best = category probe > most synsets > lowest layer number
+        concept_to_best_layer = {}  # concept_name -> (layer, metadata_dict)
+
         for layer_file in layer_files:
             layer = int(layer_file.stem.replace('layer', ''))
 
@@ -228,61 +238,112 @@ class DynamicProbeManager:
             for concept in layer_data['concepts']:
                 sumo_term = concept['sumo_term']
 
-                metadata = ConceptMetadata(
-                    sumo_term=sumo_term,
-                    layer=layer,
-                    category_children=concept.get('category_children', []),
-                    synset_count=concept.get('synset_count', 0),
-                    sumo_depth=concept.get('sumo_depth', 0),
-                )
+                # Skip layer 6 synset-level entries - they're just training data
+                if layer == 6:
+                    continue
 
-                # Set probe paths
-                if self.using_probe_pack:
-                    # Probe pack structure: probes/activation/{concept}_classifier.pt
-                    activation_path = self.activation_probes_dir / f"{sumo_term}_classifier.pt"
-                    if activation_path.exists():
-                        metadata.activation_probe_path = activation_path
-                        metadata.has_activation_probe = True
+                # Determine quality of this entry
+                is_category = concept.get('is_category_probe', False)
+                synset_count = len(concept.get('synsets', []))
 
-                    # Probe pack structure: probes/embedding_centroids/{concept}_centroid.npy
-                    text_probe_path = self.text_probes_dir / f"{sumo_term}_centroid.npy"
+                # Check if we should keep this layer over existing
+                if sumo_term in concept_to_best_layer:
+                    existing_layer, existing_concept = concept_to_best_layer[sumo_term]
+                    existing_is_category = existing_concept.get('is_category_probe', False)
+                    existing_synset_count = len(existing_concept.get('synsets', []))
+
+                    # Priority: category probe > more synsets > lower layer
+                    should_replace = False
+                    if is_category and not existing_is_category:
+                        should_replace = True
+                    elif is_category == existing_is_category:
+                        if synset_count > existing_synset_count:
+                            should_replace = True
+                        elif synset_count == existing_synset_count and layer < existing_layer:
+                            should_replace = True
+
+                    if should_replace:
+                        concept_to_best_layer[sumo_term] = (layer, concept)
+                else:
+                    concept_to_best_layer[sumo_term] = (layer, concept)
+
+        # Second pass: create metadata only for best layer of each concept
+        # and only if probe files exist
+        total_concepts = 0
+        skipped_no_probe = 0
+        deduplicated = 0
+
+        for sumo_term, (layer, concept) in concept_to_best_layer.items():
+            # Check if probe exists
+            has_probe = False
+            if self.using_probe_pack:
+                activation_path = self.activation_probes_dir / f"{sumo_term}_classifier.pt"
+                has_probe = activation_path.exists()
+            else:
+                layer_dir = self.probes_dir / f"layer{layer}"
+                activation_path = layer_dir / f"{sumo_term}_classifier.pt"
+                has_probe = activation_path.exists()
+
+            if not has_probe:
+                skipped_no_probe += 1
+                continue
+
+            metadata = ConceptMetadata(
+                sumo_term=sumo_term,
+                layer=layer,
+                category_children=concept.get('category_children', []),
+                parent_concepts=concept.get('parent_concepts', []),
+                synset_count=concept.get('synset_count', 0),
+                sumo_depth=concept.get('sumo_depth', 0),
+            )
+
+            # Set probe paths
+            if self.using_probe_pack:
+                # Probe pack structure: probes/activation/{concept}_classifier.pt
+                activation_path = self.activation_probes_dir / f"{sumo_term}_classifier.pt"
+                if activation_path.exists():
+                    metadata.activation_probe_path = activation_path
+                    metadata.has_activation_probe = True
+
+                # Probe pack structure: probes/embedding_centroids/{concept}_centroid.npy
+                text_probe_path = self.text_probes_dir / f"{sumo_term}_centroid.npy"
+                if text_probe_path.exists():
+                    metadata.text_probe_path = text_probe_path
+                    metadata.has_text_probe = True
+            else:
+                # Legacy structure: results/sumo_classifiers/layer{N}/*
+                layer_dir = self.probes_dir / f"layer{layer}"
+
+                # Activation probe path
+                activation_path = layer_dir / f"{sumo_term}_classifier.pt"
+                if activation_path.exists():
+                    metadata.activation_probe_path = activation_path
+                    metadata.has_activation_probe = True
+
+                # Text centroid path (new embedding-based approach)
+                centroid_dir = layer_dir / "embedding_centroids"
+                centroid_path = centroid_dir / f"{sumo_term}_centroid.npy"
+                if centroid_path.exists():
+                    metadata.text_probe_path = centroid_path
+                    metadata.has_text_probe = True
+                else:
+                    # Fallback to legacy text_probes (TF-IDF) if centroids don't exist
+                    text_probe_dir = layer_dir / "text_probes"
+                    text_probe_path = text_probe_dir / f"{sumo_term}_text_probe.joblib"
                     if text_probe_path.exists():
                         metadata.text_probe_path = text_probe_path
                         metadata.has_text_probe = True
-                else:
-                    # Legacy structure: results/sumo_classifiers/layer{N}/*
-                    layer_dir = self.probes_dir / f"layer{layer}"
 
-                    # Activation probe path
-                    activation_path = layer_dir / f"{sumo_term}_classifier.pt"
-                    if activation_path.exists():
-                        metadata.activation_probe_path = activation_path
-                        metadata.has_activation_probe = True
-
-                    # Text centroid path (new embedding-based approach)
-                    centroid_dir = layer_dir / "embedding_centroids"
-                    centroid_path = centroid_dir / f"{sumo_term}_centroid.npy"
-                    if centroid_path.exists():
-                        metadata.text_probe_path = centroid_path
-                        metadata.has_text_probe = True
-                    else:
-                        # Fallback to legacy text_probes (TF-IDF) if centroids don't exist
-                        text_probe_dir = layer_dir / "text_probes"
-                        text_probe_path = text_probe_dir / f"{sumo_term}_text_probe.joblib"
-                        if text_probe_path.exists():
-                            metadata.text_probe_path = text_probe_path
-                            metadata.has_text_probe = True
-
-                concept_key = (sumo_term, layer)
-                self.concept_metadata[concept_key] = metadata
-
-                # Build parent-child mappings
-                # Note: children are referenced by name only, need to find their layer later
-                total_concepts += 1
+            concept_key = (sumo_term, layer)
+            self.concept_metadata[concept_key] = metadata
+            total_concepts += 1
 
         # Build parent-child mappings (after all concepts loaded)
+        # Use both category_children (downward) and parent_concepts (upward)
         for concept_key, metadata in self.concept_metadata.items():
             sumo_term, layer = concept_key
+
+            # Build parent->children from category_children
             for child_name in metadata.category_children:
                 # Find child concept (should be in next layer or same layer)
                 child_key = None
@@ -293,7 +354,25 @@ class DynamicProbeManager:
 
                 if child_key:
                     self.parent_to_children[concept_key].append(child_key)
-                    self.child_to_parent[child_key] = concept_key
+                    # Also set reverse mapping if not already set
+                    if child_key not in self.child_to_parent:
+                        self.child_to_parent[child_key] = concept_key
+
+            # Build child->parent from parent_concepts (more reliable)
+            for parent_name in metadata.parent_concepts:
+                # Find parent concept (should be in previous layer or same layer)
+                parent_key = None
+                for (pname, player) in self.concept_metadata.keys():
+                    if pname == parent_name and player <= layer:
+                        parent_key = (pname, player)
+                        break
+
+                if parent_key:
+                    # Set child->parent mapping (prefer explicit parent_concepts)
+                    self.child_to_parent[concept_key] = parent_key
+                    # Also add to parent->children if not already there
+                    if concept_key not in self.parent_to_children[parent_key]:
+                        self.parent_to_children[parent_key].append(concept_key)
 
         print(f"\n✓ Loaded metadata for {total_concepts} concepts across {len(layer_files)} layers")
         print(f"  Parent-child relationships: {len(self.parent_to_children)}")
@@ -361,15 +440,16 @@ class DynamicProbeManager:
 
         # === LOAD ACTIVATION PROBES ===
         if self.use_activation_probes and keys_to_load_activation:
-            # Infer hidden dim from first probe if needed
+            # Infer hidden dim from first valid probe if needed
             if self.hidden_dim is None:
-                first_key = keys_to_load_activation[0]
-                metadata = self.concept_metadata.get(first_key)
-                if metadata and metadata.activation_probe_path:
-                    state_dict = torch.load(metadata.activation_probe_path, map_location='cpu')
-                    first_key_name = list(state_dict.keys())[0]
-                    self.hidden_dim = state_dict[first_key_name].shape[1]
-                    print(f"  Inferred hidden_dim: {self.hidden_dim}")
+                for key in keys_to_load_activation:
+                    metadata = self.concept_metadata.get(key)
+                    if metadata and metadata.activation_probe_path and metadata.activation_probe_path.exists():
+                        state_dict = torch.load(metadata.activation_probe_path, map_location='cpu')
+                        first_key_name = list(state_dict.keys())[0]
+                        self.hidden_dim = state_dict[first_key_name].shape[1]
+                        print(f"  Inferred hidden_dim: {self.hidden_dim}")
+                        break
 
             # Ensure model pool is allocated
             self._ensure_model_pool()
@@ -507,6 +587,62 @@ class DynamicProbeManager:
                 del self.probe_scores[key]
                 self.stats['total_unloads'] += 1
 
+    def _apply_hierarchical_suppression(
+        self,
+        results: List,
+        return_logits: bool = False
+    ) -> List:
+        """
+        Suppress parent concepts when their children are present in results.
+
+        This ensures we show the most specific concepts. For example, if both
+        "Bird" and "Sparrow" activate, we suppress "Bird" and only show "Sparrow".
+
+        Importantly, this only suppresses within the top-k results. If a child
+        drops out of the top-k later, its parent will naturally re-appear since
+        it won't be suppressed anymore.
+
+        Args:
+            results: List of (name, prob, layer) or (name, prob, logit, layer) tuples
+            return_logits: Whether results include logits
+
+        Returns:
+            Filtered results with parents suppressed
+        """
+        if not results:
+            return results
+
+        # Build set of concept keys present in results
+        present_keys = set()
+        for result in results:
+            concept_name = result[0]
+            layer = result[-1]  # layer is always last
+            present_keys.add((concept_name, layer))
+
+        # Identify parents to suppress
+        suppressed_keys = set()
+        for concept_key in present_keys:
+            # Get children of this concept
+            child_keys = self.parent_to_children.get(concept_key, [])
+
+            # If ANY child is present in results, suppress this parent
+            for child_key in child_keys:
+                if child_key in present_keys:
+                    suppressed_keys.add(concept_key)
+                    break
+
+        # Filter out suppressed parents
+        filtered_results = []
+        for result in results:
+            concept_name = result[0]
+            layer = result[-1]
+            concept_key = (concept_name, layer)
+
+            if concept_key not in suppressed_keys:
+                filtered_results.append(result)
+
+        return filtered_results
+
     def detect_and_expand(
         self,
         hidden_state: torch.Tensor,
@@ -618,11 +754,17 @@ class DynamicProbeManager:
 
         results.sort(key=lambda x: x[1], reverse=True)
 
+        # 6. Apply hierarchical suppression to top-k only
+        # Parents are suppressed if their children are in the top-k
+        # If children drop out, parents re-appear naturally
+        top_k_results = results[:top_k]
+        top_k_results = self._apply_hierarchical_suppression(top_k_results, return_logits)
+
         if timing is not None:
             timing['total'] = (time.time() - start) * 1000
             timing['loaded_probes'] = len(self.loaded_probes)
 
-        return results[:top_k], timing
+        return top_k_results, timing
 
     def detect_and_expand_with_divergence(
         self,

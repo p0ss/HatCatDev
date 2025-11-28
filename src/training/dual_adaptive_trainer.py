@@ -31,9 +31,9 @@ class DualAdaptiveTrainer:
 
         # Activation probe config
         activation_target_accuracy: float = 0.95,
-        activation_initial_samples: int = 10,  # Start with 10 samples (quick win)
-        activation_first_increment: int = 20,  # Add 20 more if initial fails (hits LLN threshold at 30)
-        activation_subsequent_increment: int = 30,  # Add 30 more for each subsequent cycle
+        activation_initial_samples: int = 30,  # Start with 30 samples (LLN threshold)
+        activation_first_increment: int = 30,  # Add 30 more if initial fails (60 total)
+        activation_subsequent_increment: int = 30,  # Add 30 more for each subsequent cycle (90, 120, ...)
         activation_max_samples: int = 200,
 
         # Text probe config
@@ -280,6 +280,15 @@ class DualAdaptiveTrainer:
         gen_time = time.time() - gen_start
         print(f"  ✓ Test set ready: {len(test_prompts)} samples [{gen_time:.1f}s]")
 
+        # If combined extraction doubled the test activations, duplicate test labels to match
+        if X_test.shape[0] == 2 * len(test_prompts):
+            # Combined extraction detected - duplicate test labels
+            test_labels_expanded = []
+            for label in test_labels:
+                test_labels_expanded.append(label)
+                test_labels_expanded.append(label)
+            test_labels = np.array(test_labels_expanded)
+
         # Helper function to calculate required samples for current cycle
         def get_required_samples(cycle: int, initial: int, first_inc: int, subsequent_inc: int) -> int:
             if cycle == 0:
@@ -318,15 +327,22 @@ class DualAdaptiveTrainer:
                 print(f"    [Cycle {validation_cycle}] Generating {samples_to_generate} new samples ({n_pos_to_generate}+{n_neg_to_generate})...")
                 gen_start = time.time()
 
-                new_prompts, new_labels = create_sumo_training_dataset(
-                    concept=generation_config['concept'],
-                    all_concepts=generation_config['all_concepts'],
-                    negative_pool=generation_config['negative_pool'],
-                    n_positives=n_pos_to_generate,
-                    n_negatives=n_neg_to_generate,
-                    use_category_relationships=True,
-                    use_wordnet_relationships=True,
-                )
+                # Check if custom generation function provided (for tripole training, etc.)
+                if 'custom_generate_fn' in generation_config:
+                    new_prompts, new_labels = generation_config['custom_generate_fn'](
+                        samples_to_generate
+                    )
+                else:
+                    # Default SUMO generation
+                    new_prompts, new_labels = create_sumo_training_dataset(
+                        concept=generation_config['concept'],
+                        all_concepts=generation_config['all_concepts'],
+                        negative_pool=generation_config['negative_pool'],
+                        n_positives=n_pos_to_generate,
+                        n_negatives=n_neg_to_generate,
+                        use_category_relationships=True,
+                        use_wordnet_relationships=True,
+                    )
                 gen_time = time.time() - gen_start
 
                 # Extract activations for new samples
@@ -341,17 +357,33 @@ class DualAdaptiveTrainer:
                 extract_time = time.time() - extract_start
                 print(f"    ✓ Generated and extracted: {len(new_prompts)} samples [gen={gen_time*1000:.0f}ms, extract={extract_time:.1f}s]")
 
+                # If combined extraction doubled the activations, duplicate labels to match
+                labels_to_add = new_labels
+                if new_activations.shape[0] == 2 * len(new_prompts):
+                    # Combined extraction detected - duplicate labels
+                    labels_to_add = []
+                    for label in new_labels:
+                        labels_to_add.append(label)
+                        labels_to_add.append(label)
+
                 # Accumulate samples
                 all_train_prompts.extend(new_prompts)
-                all_train_labels.extend(new_labels)
+                all_train_labels.extend(labels_to_add)
                 if all_train_activations is None:
                     all_train_activations = new_activations
                 else:
                     all_train_activations = np.vstack([all_train_activations, new_activations])
 
             # Use accumulated samples for training
-            X_train = all_train_activations[:required_samples]
-            y_train = np.array(all_train_labels[:required_samples])
+            # If combined extraction doubled the activations, we need to slice to 2x required_samples
+            if all_train_activations.shape[0] == 2 * len(all_train_prompts):
+                # Combined extraction detected - need 2x samples to maintain label balance
+                slice_size = min(required_samples * 2, len(all_train_labels))
+            else:
+                slice_size = min(required_samples, len(all_train_labels))
+
+            X_train = all_train_activations[:slice_size]
+            y_train = np.array(all_train_labels[:slice_size])
 
             # Count positives and negatives
             n_pos = np.sum(y_train == 1)
@@ -429,6 +461,11 @@ class DualAdaptiveTrainer:
                                 generation_config['device'],
                                 layer_idx=self.validation_layer_idx
                             )
+
+                            # If combined extraction gave us 2 activations, take the first one
+                            # (both prompt and generation - we just need one for validation)
+                            if len(domain_acts) == 2:
+                                domain_acts = domain_acts[0:1]
 
                             # Get probe prediction
                             classifier_device = next(activation_classifier.parameters()).device
@@ -731,6 +768,11 @@ class DualAdaptiveTrainer:
                                     device=str(self.model.device),
                                     layer_idx=self.validation_layer_idx
                                 )
+
+                                # If combined extraction gave us 2 activations, take the first one
+                                # (both prompt and generation - we just need one for validation)
+                                if len(domain_acts) == 2:
+                                    domain_acts = domain_acts[0:1]
 
                                 # Get probe prediction
                                 # Get device from classifier parameters

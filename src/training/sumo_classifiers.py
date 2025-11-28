@@ -34,6 +34,20 @@ def load_layer_concepts(layer: int, base_dir: Path = LAYER_DATA_DIR) -> Tuple[Li
     return concepts, concept_map
 
 
+def load_all_concepts(base_dir: Path = LAYER_DATA_DIR) -> List[Dict]:
+    """Load all concepts from all layers for negative pool construction."""
+    all_concepts = []
+    for layer in range(7):  # Layers 0-6
+        try:
+            layer_path = base_dir / f"layer{layer}.json"
+            with open(layer_path) as f:
+                layer_data = json.load(f)
+                all_concepts.extend(layer_data["concepts"])
+        except FileNotFoundError:
+            continue
+    return all_concepts
+
+
 def extract_activations(
     model,
     tokenizer,
@@ -43,9 +57,16 @@ def extract_activations(
     max_new_tokens: int = 20,
     temperature_range: Tuple[float, float] = (0.3, 0.9),
     batch_size: int = 4,
+    extraction_mode: str = "combined",
 ) -> np.ndarray:
     """
-    Extract activations from model generation, batched for efficiency.
+    Extract activations from model, using combined prompt+generation extraction by default.
+
+    This uses the "combined-20" strategy (EXTRACTION_STRATEGY_DECISION.md):
+    - Extracts activations from BOTH prompt processing and generation phases
+    - Doubles training samples at zero additional computational cost
+    - Prompt forward pass is already done for generation, so extracting is free
+    - Results in 2x training data with better generalization
 
     Args:
         model: Language model
@@ -56,9 +77,12 @@ def extract_activations(
         max_new_tokens: Max tokens to generate per prompt
         temperature_range: (min_temp, max_temp) to vary across batches
         batch_size: Number of prompts to process in parallel
+        extraction_mode: "combined" (prompt+gen, default), "generation" (gen only)
 
     Returns:
-        Array of activation vectors [n_prompts, hidden_dim]
+        Array of activation vectors
+        - If extraction_mode="combined": [2*n_prompts, hidden_dim] (prompt + generation per input)
+        - If extraction_mode="generation": [n_prompts, hidden_dim] (generation only)
     """
     activations: List[np.ndarray] = []
     model.eval()
@@ -83,7 +107,18 @@ def extract_activations(
                 max_length=512
             ).to(device)
 
-            # Generate with sampling
+            # === PHASE 1: PROMPT PROCESSING (if combined mode) ===
+            if extraction_mode == "combined":
+                prompt_outputs = model(**inputs, output_hidden_states=True, return_dict=True)
+                prompt_hidden = prompt_outputs.hidden_states[layer_idx]  # [batch_size, seq_len, hidden_dim]
+
+                # Pool each sequence in batch
+                for seq_idx in range(len(batch_prompts)):
+                    seq_hidden = prompt_hidden[seq_idx]  # [seq_len, hidden_dim]
+                    prompt_pooled = seq_hidden.mean(dim=0)  # [hidden_dim]
+                    activations.append(prompt_pooled.float().cpu().numpy())
+
+            # === PHASE 2: GENERATION ===
             outputs = model.generate(
                 **inputs,
                 max_new_tokens=max_new_tokens,
@@ -208,7 +243,12 @@ def train_layer(
     print(f"TRAINING LAYER {layer}")
     print(f"{'=' * 80}")
 
+    # Load target layer concepts for training
     concepts, concept_map = load_layer_concepts(layer)
+
+    # Load ALL concepts from all layers for negative pool (enables nephew negatives)
+    all_concepts = load_all_concepts()
+
     if output_dir is None:
         output_dir = Path(f"results/sumo_classifiers/layer{layer}")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -232,9 +272,9 @@ def train_layer(
         from .dual_adaptive_trainer import DualAdaptiveTrainer
         adaptive_trainer = DualAdaptiveTrainer(
             activation_target_accuracy=0.95,
-            activation_initial_samples=10,  # Start with 10 samples (quick win)
-            activation_first_increment=20,  # Add 20 more if fails (30 total, hits LLN)
-            activation_subsequent_increment=30,  # Add 30 per subsequent failure
+            activation_initial_samples=30,  # Start with 30 samples (LLN threshold)
+            activation_first_increment=30,  # Add 30 more if fails (60 total)
+            activation_subsequent_increment=30,  # Add 30 per subsequent failure (90, 120, ...)
             activation_max_samples=200,  # Increased from 100 to allow more complex concepts
             text_target_accuracy=0.80,  # Not used anymore
             text_initial_samples=10,
@@ -273,7 +313,8 @@ def train_layer(
         )
 
         try:
-            negative_pool = build_sumo_negative_pool(concepts, concept)
+            # Use all_concepts (not just this layer) to enable nephew negatives
+            negative_pool = build_sumo_negative_pool(all_concepts, concept)
             if len(negative_pool) < n_train_neg:
                 print(f"  ⚠️  Only {len(negative_pool)} negatives available (need {n_train_neg})")
                 n_train_neg_actual = min(n_train_neg, len(negative_pool))
@@ -415,11 +456,21 @@ def train_layer(
                 X_train = extract_activations(model, tokenizer, train_prompts, device)
                 X_test = extract_activations(model, tokenizer, test_prompts, device)
 
+                # If using combined extraction, we get 2x samples (prompt + generation per input)
+                # so we need to duplicate labels to match
+                train_labels_array = np.array(train_labels)
+                test_labels_array = np.array(test_labels)
+
+                if X_train.shape[0] == 2 * len(train_labels):
+                    # Combined extraction detected - duplicate labels
+                    train_labels_array = np.repeat(train_labels_array, 2)
+                    test_labels_array = np.repeat(test_labels_array, 2)
+
                 classifier, metrics = train_simple_classifier(
                     X_train,
-                    np.array(train_labels),
+                    train_labels_array,
                     X_test,
-                    np.array(test_labels),
+                    test_labels_array,
                 )
                 print(f"  ✓ Train F1: {metrics['train_f1']:.3f}, Test F1: {metrics['test_f1']:.3f}")
 
@@ -566,9 +617,10 @@ def train_sumo_classifiers(
 
     summaries = []
     for layer in layers:
-        # If using adaptive training, generate enough samples for all validation cycles
-        # Max samples = activation_max_samples = 200, so need 100 pos + 100 neg
-        train_samples = 100 if use_adaptive_training else n_train_pos
+        # When using adaptive training, DualAdaptiveTrainer generates prompts incrementally
+        # Only need test set generated upfront (fixed size throughout training)
+        # For training set, adaptive trainer starts with 30 and adds more as needed
+        train_samples = n_train_pos  # Use same size regardless of adaptive mode
 
         summary = train_layer(
             layer=layer,

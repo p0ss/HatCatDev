@@ -1,654 +1,654 @@
 {
-  "prompt": "A car is a vehicle that",
-  "generated_text": " has four wheels and an engine, usually with seats for at least four people. The front wheels are",
+  "prompt": "The meaning of life is",
+  "generated_text": " not a single formula or a single fact, but a set of many facts and formulas.\n\nThe",
   "tokens": [
-    " has",
-    " four",
-    " wheels",
-    " and",
-    " an",
-    " engine",
+    " not",
+    " a",
+    " single",
+    " formula",
+    " or",
+    " a",
+    " single",
+    " fact",
     ",",
-    " usually",
-    " with",
-    " seats",
-    " for",
-    " at",
-    " least",
-    " four",
-    " people",
+    " but",
+    " a",
+    " set",
+    " of",
+    " many",
+    " facts",
+    " and",
+    " formulas",
     ".",
-    " The",
-    " front",
-    " wheels",
-    " are"
+    "\n\n",
+    "The"
   ],
   "timesteps": [
     {
-      "token": " has",
+      "token": " not",
+      "position": 6,
+      "concepts": [
+        {
+          "concept": "Creation",
+          "probability": 0.9999336004257202,
+          "layer": 1
+        },
+        {
+          "concept": "Opening",
+          "probability": 0.9998917579650879,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9990831613540649,
+          "layer": 0
+        },
+        {
+          "concept": "Philosophy",
+          "probability": 0.9974321722984314,
+          "layer": 1
+        },
+        {
+          "concept": "CausingHappiness",
+          "probability": 0.9917782545089722,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " a",
       "position": 7,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 0.9999998807907104,
-          "layer": 2
-        },
-        {
-          "concept": "TransportationDevice",
-          "probability": 0.9999977350234985,
-          "layer": 2
-        },
-        {
-          "concept": "Transportation",
+          "concept": "Creation",
           "probability": 0.9999891519546509,
-          "layer": 2
+          "layer": 1
         },
         {
-          "concept": "Engine",
-          "probability": 0.9999600648880005,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9998124241828918,
+          "layer": 0
         },
         {
-          "concept": "Driving",
-          "probability": 0.9998764991760254,
-          "layer": 2
+          "concept": "Opening",
+          "probability": 0.9958778619766235,
+          "layer": 1
+        },
+        {
+          "concept": "CausingHappiness",
+          "probability": 0.9826259613037109,
+          "layer": 1
+        },
+        {
+          "concept": "Pursuing",
+          "probability": 0.9727219343185425,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " four",
+      "token": " single",
       "position": 8,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 1.0,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9999936819076538,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999997615814209,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9996306896209717,
+          "layer": 0
         },
         {
-          "concept": "Driving",
-          "probability": 0.9999991655349731,
-          "layer": 2
+          "concept": "Plan",
+          "probability": 0.9983318448066711,
+          "layer": 1
         },
         {
-          "concept": "Transportation",
-          "probability": 0.9999990463256836,
-          "layer": 2
+          "concept": "Procedure",
+          "probability": 0.9931049942970276,
+          "layer": 1
         },
         {
-          "concept": "Walking",
-          "probability": 0.9999978542327881,
-          "layer": 2
+          "concept": "Ontology",
+          "probability": 0.966930091381073,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " wheels",
+      "token": " formula",
       "position": 9,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 0.9999788999557495,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.999757707118988,
+          "layer": 1
         },
         {
-          "concept": "Wheelchair",
-          "probability": 0.9999779462814331,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9997215867042542,
+          "layer": 0
         },
         {
-          "concept": "Driving",
-          "probability": 0.9999159574508667,
-          "layer": 2
+          "concept": "ContentBearingProcess",
+          "probability": 0.977873682975769,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9994783997535706,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.963494062423706,
+          "layer": 1
         },
         {
-          "concept": "Walking",
-          "probability": 0.999316930770874,
-          "layer": 2
+          "concept": "Opening",
+          "probability": 0.9584983587265015,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " and",
+      "token": " or",
       "position": 10,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 1.0,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.9876596331596375,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999998807907104,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9648432731628418,
+          "layer": 0
         },
         {
-          "concept": "Wheelchair",
-          "probability": 0.9999997615814209,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.8372339010238647,
+          "layer": 1
         },
         {
-          "concept": "ElectricMotor",
-          "probability": 0.9999940395355225,
-          "layer": 2
+          "concept": "ConstantQuantity",
+          "probability": 0.6412107944488525,
+          "layer": 1
         },
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9999935626983643,
-          "layer": 2
+          "concept": "PhysicalQuantity",
+          "probability": 0.5879069566726685,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " an",
+      "token": " a",
       "position": 11,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 1.0,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9998382329940796,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999997615814209,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9997310042381287,
+          "layer": 0
         },
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9999995231628418,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.983809232711792,
+          "layer": 1
         },
         {
-          "concept": "Driving",
-          "probability": 0.999998927116394,
-          "layer": 2
+          "concept": "ContentBearingProcess",
+          "probability": 0.9704777598381042,
+          "layer": 1
         },
         {
-          "concept": "Wheelchair",
-          "probability": 0.9999970197677612,
-          "layer": 2
+          "concept": "DualObjectProcess",
+          "probability": 0.9700891375541687,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " engine",
+      "token": " single",
       "position": 12,
       "concepts": [
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9999994039535522,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9999738931655884,
+          "layer": 1
         },
         {
-          "concept": "Vehicle",
-          "probability": 0.9999992847442627,
-          "layer": 2
+          "concept": "Procedure",
+          "probability": 0.9996594190597534,
+          "layer": 1
         },
         {
-          "concept": "Engine",
-          "probability": 0.9999934434890747,
-          "layer": 2
+          "concept": "Plan",
+          "probability": 0.9994582533836365,
+          "layer": 1
         },
         {
-          "concept": "Driving",
-          "probability": 0.9999897480010986,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9988875985145569,
+          "layer": 0
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999773502349854,
-          "layer": 2
+          "concept": "Blueprint",
+          "probability": 0.9980908036231995,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " fact",
+      "position": 13,
+      "concepts": [
+        {
+          "concept": "Creation",
+          "probability": 0.9997467398643494,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9992795586585999,
+          "layer": 0
+        },
+        {
+          "concept": "ContentBearingProcess",
+          "probability": 0.9977145195007324,
+          "layer": 1
+        },
+        {
+          "concept": "DualObjectProcess",
+          "probability": 0.9959606528282166,
+          "layer": 1
+        },
+        {
+          "concept": "RelationalAttribute",
+          "probability": 0.9905543923377991,
+          "layer": 1
         }
       ]
     },
     {
       "token": ",",
-      "position": 13,
-      "concepts": [
-        {
-          "concept": "Engine",
-          "probability": 1.0,
-          "layer": 2
-        },
-        {
-          "concept": "Vehicle",
-          "probability": 1.0,
-          "layer": 2
-        },
-        {
-          "concept": "TransportationDevice",
-          "probability": 0.9999998807907104,
-          "layer": 2
-        },
-        {
-          "concept": "ElectricMotor",
-          "probability": 0.9999997615814209,
-          "layer": 2
-        },
-        {
-          "concept": "VehicleDoor",
-          "probability": 0.9999469518661499,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " usually",
       "position": 14,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 1.0,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9988033771514893,
+          "layer": 0
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 1.0,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.9833958148956299,
+          "layer": 1
         },
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9999995231628418,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9095696806907654,
+          "layer": 1
         },
         {
-          "concept": "Engine",
-          "probability": 0.9999990463256836,
-          "layer": 2
+          "concept": "TruthValue",
+          "probability": 0.9007634520530701,
+          "layer": 1
         },
         {
-          "concept": "Driving",
-          "probability": 0.9999966621398926,
-          "layer": 2
+          "concept": "ContentBearingProcess",
+          "probability": 0.7722810506820679,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " with",
+      "token": " but",
       "position": 15,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 1.0,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9996427297592163,
+          "layer": 1
         },
         {
-          "concept": "Engine",
-          "probability": 0.9999998807907104,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9987180233001709,
+          "layer": 0
         },
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9999996423721313,
-          "layer": 2
+          "concept": "Philosophy",
+          "probability": 0.9983863830566406,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999996423721313,
-          "layer": 2
+          "concept": "Theology",
+          "probability": 0.9964307546615601,
+          "layer": 1
         },
         {
-          "concept": "ElectricMotor",
-          "probability": 0.9999969005584717,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.9487473964691162,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " seats",
+      "token": " a",
       "position": 16,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 1.0,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9999586343765259,
+          "layer": 1
         },
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9999998807907104,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9981734752655029,
+          "layer": 0
         },
         {
-          "concept": "Driving",
-          "probability": 0.9999994039535522,
-          "layer": 2
+          "concept": "Philosophy",
+          "probability": 0.9955897331237793,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999988079071045,
-          "layer": 2
+          "concept": "Opening",
+          "probability": 0.8546913266181946,
+          "layer": 1
         },
         {
-          "concept": "Wheelchair",
-          "probability": 0.9999978542327881,
-          "layer": 2
+          "concept": "Theology",
+          "probability": 0.83498615026474,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " for",
+      "token": " set",
       "position": 17,
       "concepts": [
         {
-          "concept": "Seat",
-          "probability": 0.9999996423721313,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9998201727867126,
+          "layer": 1
         },
         {
-          "concept": "SofaBed",
-          "probability": 0.999997615814209,
-          "layer": 2
+          "concept": "IntentionalProcess",
+          "probability": 0.996934175491333,
+          "layer": 1
         },
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9999971389770508,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9905856251716614,
+          "layer": 0
         },
         {
-          "concept": "Bed",
-          "probability": 0.9999914169311523,
-          "layer": 2
+          "concept": "Collection",
+          "probability": 0.9826505780220032,
+          "layer": 0
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999887943267822,
-          "layer": 2
+          "concept": "Plan",
+          "probability": 0.9390592575073242,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " at",
+      "token": " of",
       "position": 18,
       "concepts": [
         {
-          "concept": "Driving",
-          "probability": 0.9999947547912598,
-          "layer": 2
+          "concept": "SetOrClass",
+          "probability": 0.9576163291931152,
+          "layer": 0
         },
         {
-          "concept": "Vehicle",
-          "probability": 0.9999856948852539,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.8448783755302429,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999682903289795,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.7315848469734192,
+          "layer": 1
         },
         {
-          "concept": "Carrying",
-          "probability": 0.9997643828392029,
-          "layer": 2
+          "concept": "IntentionalProcess",
+          "probability": 0.5673153400421143,
+          "layer": 1
         },
         {
-          "concept": "Seat",
-          "probability": 0.9990909099578857,
-          "layer": 2
+          "concept": "Collection",
+          "probability": 0.5535016059875488,
+          "layer": 0
         }
       ]
     },
     {
-      "token": " least",
+      "token": " many",
       "position": 19,
       "concepts": [
         {
-          "concept": "Carrying",
-          "probability": 0.9958779811859131,
-          "layer": 2
+          "concept": "Philosophy",
+          "probability": 0.9997898936271667,
+          "layer": 1
         },
         {
-          "concept": "Vehicle",
-          "probability": 0.9930612444877625,
-          "layer": 2
+          "concept": "IntentionalProcess",
+          "probability": 0.9996234178543091,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9923487901687622,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9929553866386414,
+          "layer": 1
         },
         {
-          "concept": "Sofa",
-          "probability": 0.9677503108978271,
-          "layer": 2
+          "concept": "Music",
+          "probability": 0.9925400614738464,
+          "layer": 1
         },
         {
-          "concept": "Seat",
-          "probability": 0.9588792324066162,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.988044798374176,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " four",
+      "token": " facts",
       "position": 20,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 0.9997591376304626,
-          "layer": 2
+          "concept": "IntentionalProcess",
+          "probability": 0.9997047781944275,
+          "layer": 1
         },
         {
-          "concept": "Driving",
-          "probability": 0.9992777705192566,
-          "layer": 2
+          "concept": "Philosophy",
+          "probability": 0.9990848302841187,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9992735981941223,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.9988904595375061,
+          "layer": 1
         },
         {
-          "concept": "Carrying",
-          "probability": 0.9986281394958496,
-          "layer": 2
+          "concept": "Music",
+          "probability": 0.9949437975883484,
+          "layer": 1
         },
         {
-          "concept": "Sofa",
-          "probability": 0.9971842169761658,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9929640293121338,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " people",
+      "token": " and",
       "position": 21,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 0.9999135732650757,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.9996243715286255,
+          "layer": 1
         },
         {
-          "concept": "Driving",
-          "probability": 0.9995325803756714,
-          "layer": 2
+          "concept": "IntentionalProcess",
+          "probability": 0.9872307181358337,
+          "layer": 1
         },
         {
-          "concept": "Carrying",
-          "probability": 0.9992614388465881,
-          "layer": 2
+          "concept": "Group",
+          "probability": 0.9458370804786682,
+          "layer": 1
         },
         {
-          "concept": "GroupOfPeople",
-          "probability": 0.9988144636154175,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.8770477175712585,
+          "layer": 0
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9981757402420044,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.8524770736694336,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " formulas",
+      "position": 22,
+      "concepts": [
+        {
+          "concept": "IntentionalProcess",
+          "probability": 0.9980194568634033,
+          "layer": 1
+        },
+        {
+          "concept": "Abstract",
+          "probability": 0.9978912472724915,
+          "layer": 0
+        },
+        {
+          "concept": "RelationalAttribute",
+          "probability": 0.9977325201034546,
+          "layer": 1
+        },
+        {
+          "concept": "Creation",
+          "probability": 0.9975053668022156,
+          "layer": 1
+        },
+        {
+          "concept": "Philosophy",
+          "probability": 0.9957014918327332,
+          "layer": 1
         }
       ]
     },
     {
       "token": ".",
-      "position": 22,
-      "concepts": [
-        {
-          "concept": "Vehicle",
-          "probability": 0.9999881982803345,
-          "layer": 2
-        },
-        {
-          "concept": "Seat",
-          "probability": 0.9999605417251587,
-          "layer": 2
-        },
-        {
-          "concept": "TransportationDevice",
-          "probability": 0.9998530149459839,
-          "layer": 2
-        },
-        {
-          "concept": "Driving",
-          "probability": 0.9996421337127686,
-          "layer": 2
-        },
-        {
-          "concept": "GroupOfPeople",
-          "probability": 0.999642014503479,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " The",
       "position": 23,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 0.9999994039535522,
-          "layer": 2
+          "concept": "RelationalAttribute",
+          "probability": 0.9963257908821106,
+          "layer": 1
         },
         {
-          "concept": "Driving",
-          "probability": 0.9999911785125732,
-          "layer": 2
+          "concept": "IntentionalProcess",
+          "probability": 0.9156402349472046,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9999586343765259,
-          "layer": 2
+          "concept": "Creation",
+          "probability": 0.9077008366584778,
+          "layer": 1
         },
         {
-          "concept": "Engine",
-          "probability": 0.9998319149017334,
-          "layer": 2
+          "concept": "Group",
+          "probability": 0.9002776741981506,
+          "layer": 1
         },
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9981476068496704,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.6262245774269104,
+          "layer": 0
         }
       ]
     },
     {
-      "token": " front",
+      "token": "\n\n",
       "position": 24,
       "concepts": [
         {
-          "concept": "Vehicle",
-          "probability": 0.9999994039535522,
-          "layer": 2
+          "concept": "Philosophy",
+          "probability": 0.9999973773956299,
+          "layer": 1
         },
         {
-          "concept": "VehicleDoor",
-          "probability": 0.9999970197677612,
-          "layer": 2
+          "concept": "IntentionalRelation",
+          "probability": 0.999254047870636,
+          "layer": 1
         },
         {
-          "concept": "Engine",
-          "probability": 0.9999794960021973,
-          "layer": 2
+          "concept": "Ontology",
+          "probability": 0.99883633852005,
+          "layer": 1
         },
         {
-          "concept": "TransportationDevice",
-          "probability": 0.9998108744621277,
-          "layer": 2
+          "concept": "History",
+          "probability": 0.9986715316772461,
+          "layer": 1
         },
         {
-          "concept": "Driving",
-          "probability": 0.9997770190238953,
-          "layer": 2
+          "concept": "Theology",
+          "probability": 0.9982555508613586,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " wheels",
+      "token": "The",
       "position": 25,
       "concepts": [
         {
-          "concept": "VehicleDoor",
-          "probability": 1.0,
-          "layer": 2
+          "concept": "Philosophy",
+          "probability": 0.9999995231628418,
+          "layer": 1
         },
         {
-          "concept": "Seat",
-          "probability": 0.9999972581863403,
-          "layer": 2
+          "concept": "Science",
+          "probability": 0.9999856948852539,
+          "layer": 1
         },
         {
-          "concept": "Vehicle",
-          "probability": 0.9999934434890747,
-          "layer": 2
+          "concept": "Making",
+          "probability": 0.9999651908874512,
+          "layer": 1
         },
         {
-          "concept": "RearWindow",
-          "probability": 0.9999872446060181,
-          "layer": 2
+          "concept": "History",
+          "probability": 0.9999349117279053,
+          "layer": 1
         },
         {
-          "concept": "Chair",
-          "probability": 0.9998472929000854,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " are",
-      "position": 26,
-      "concepts": [
-        {
-          "concept": "Wheelchair",
-          "probability": 0.9999961853027344,
-          "layer": 2
-        },
-        {
-          "concept": "TransportationDevice",
-          "probability": 0.9999914169311523,
-          "layer": 2
-        },
-        {
-          "concept": "Axle",
-          "probability": 0.9999899864196777,
-          "layer": 2
-        },
-        {
-          "concept": "ElectricMotor",
-          "probability": 0.9999607801437378,
-          "layer": 2
-        },
-        {
-          "concept": "Seat",
-          "probability": 0.999891996383667,
-          "layer": 2
+          "concept": "CausingUnhappiness",
+          "probability": 0.9999170303344727,
+          "layer": 1
         }
       ]
     }
   ],
   "summary": {
     "total_tokens": 20,
-    "unique_concepts_detected": 18
+    "unique_concepts_detected": 28
   },
-  "prompt_idx": 3,
+  "prompt_idx": 6,
   "sample_idx": 0
 }

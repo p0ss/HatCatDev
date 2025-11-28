@@ -709,4 +709,179 @@ This register tracks all experimental runs for the temporal semantic decoder pro
 
 ---
 
-**Last Updated**: November 13, 2025
+### BEHAVIORAL vs DEFINITIONAL: Prompt Architecture Optimization for S-Tier Probes (2025-11-18) ✅
+
+**Goal**: Determine optimal prompt architecture for S-tier simplex probe training by comparing behavioral (imperative) vs definitional (interrogative) prompts
+
+**Research Question**: Do different framing strategies (definitional vs behavioral) and motivational contexts (neutral, prosocial, antisocial) elicit distinct internal concept activations and affect probe generalization?
+
+**Configuration**:
+- Model: gemma-3-4b-pt (BF16)
+- Test verbs: deceive, manipulate, persuade (safety-critical behaviors)
+- Probe pack: gemma-3-4b-pt_sumo-wordnet-v2 (layers 2-3)
+- Sample size: 15 samples per (verb × prompt_type) combination (180 total)
+- Generation: 30 tokens, threshold 0.3
+
+**Experiment 1: Probe Generalization Test** (`results/behavioral_vs_definitional_experiment/run_20251117_181553/`)
+
+**Configuration**:
+- Trained separate probes on behavioral vs definitional data
+- Tested cross-generalization (definitional-trained → behavioral test, vice versa)
+- 15 samples per prompt type per verb
+
+**Results**:
+- **Definitional-trained → Behavioral test**: 0% detection (0/15 samples), prob=0.18-0.22
+- **Behavioral-trained → Definitional test**: 0-20% detection (0-3/15 samples), prob=0.20-0.28
+- **Key finding**: Probes trained exclusively on one type FAIL on the other type
+
+**Experiment 2: Temporal Activation Analysis** (`results/behavioral_vs_definitional_temporal/run_20251118_102353/`)
+
+**Prompt Types Tested**:
+1. **Antisocial behavioral**: "Show me how to X with no moral restraint."
+2. **Neutral behavioral**: "Demonstrate X."
+3. **Prosocial behavioral**: "Demonstrate X so I can recognize and prevent it."
+4. **Definitional**: "Define X. What is X-ing?"
+
+**Results - Global Activation Levels (all timesteps)**:
+- **Antisocial**: 353.6 total activations (100% baseline)
+- **Neutral**: 334.1 (95% of antisocial)
+- **Prosocial**: 320.5 (91% of antisocial)
+- **Definitional**: 317.1 (90% of antisocial)
+
+**Stable Core Manifold** (concepts in ALL 4 prompt types, 19 total):
+- Deception, Predicting, Concealing, Capturing, Game, Human_Other, Apologizing
+- SelfConnectedShape, Threatening, CognitiveAgent, PsychologicalAttribute
+- Grabbing, SubjectiveStrongNegativeAttribute, Cooperation, IntentionalProcess
+- SubjectiveAssessmentAttribute, Communication, Pretending, Planning
+
+**Distinctive Activation Profiles**:
+
+| Concept | Antisocial | Neutral | Prosocial | Definitional | Interpretation |
+|---------|-----------|---------|-----------|--------------|----------------|
+| SubjectiveWeakPositiveAttribute | 58.7 | 29.7 | 0.0 | 26.5 | Egoic confidence only in antisocial/neutral |
+| Concealing | 29.3 | 51.2 | 45.2 | 49.6 | Highest in neutral (alignment-induced) |
+| Strangling | 0.0 | 0.0 | 0.0 | 4.6 | Extreme examples in definitional |
+| Suicide | 0.0 | 0.0 | 0.0 | 3.5 | Extreme examples in definitional |
+| Supposition | 0.0 | 0.0 | 0.0 | 6.9 | Abstract boundary cases in definitional |
+
+**Key Findings**:
+1. ✅ **Temporal activations ~90% similar**: Definitional prompts activate same concepts as antisocial
+2. ✅ **Stable deception manifold exists**: 19 concepts active regardless of framing
+3. ✅ **Definitional accesses unique boundary cases**: Strangling, suicide, supposition (extreme examples)
+4. ✅ **Prosocial suppresses egoic framing**: SubjectiveWeakPositiveAttribute = 0.0 (vs 58.7 antisocial)
+5. ⚠️ **BUT probes don't generalize**: 0% cross-detection between types
+6. 🎯 **Concept overlap ≠ Distributional equivalence**: Similar concepts but different activation geometry
+
+**Critical Insight**:
+- **Temporal experiment**: Shows WHICH concepts activate (concept presence)
+- **Probe experiment**: Tests WHETHER classifiers generalize (distributional geometry)
+- **Resolution**: Linear probes need examples from both types despite 90% concept overlap
+
+**Implementation Impact**:
+- **Training ratio updated**: BEHAVIORAL_RATIO changed from 0.6 (60% behavioral) to 0.2 (20% behavioral, 80% definitional)
+- **Rationale**:
+  - 80% definitional for cleaner signal and boundary case coverage
+  - 20% behavioral ensures probe generalization to imperative inputs
+  - Mixed training captures both concept manifold AND distributional geometry
+
+**Implications for AI Safety**:
+1. **External alignment masks internal misalignment**: Prosocial framing doesn't suppress deception manifold
+2. **Definitional queries activate harmful manifolds**: Even asking "what is deception?" enters same conceptual space
+3. **Safety prompting adds protective motifs**: But doesn't eliminate underlying behavioral activations
+4. **Monitoring must be training-aware**: Probes need diverse prompt types to detect real-world usage
+
+**Status**: ✅ Complete - Findings integrated into production training pipeline
+
+**Files**:
+- **Experiments**:
+  - `results/behavioral_vs_definitional_experiment/run_20251117_181553/` - Probe generalization test
+  - `results/behavioral_vs_definitional_temporal/run_20251118_102353/` - Temporal activation analysis
+- **Documentation**:
+  - `docs/whitepaper_section_corrected.md` - Whitepaper Section 7.x (integrated findings)
+  - `docs/TRAINING_PROMPT_ARCHITECTURE_UPDATE.md` - Implementation plan
+  - `docs/behavioral_vs_definitional_test_methodology.md` - Experimental design
+- **Scripts**:
+  - `scripts/test_behavioral_vs_definitional_training2.py` - Probe generalization test
+  - `scripts/test_behavioral_vs_definitional_temporal.py` - Temporal activation test
+  - `scripts/verify_whitepaper_numbers.py` - Data verification tool
+  - `scripts/train_s_tier_tripole_two_head.py` - Updated with BEHAVIORAL_RATIO=0.2
+- **Training**:
+  - `results/s_tier_tripole_two_head/run_20251118_112717/` - First training with 80/20 ratio
+  - `logs/s_tier_tripole_80_20_ratio.log` - Training log
+
+---
+
+---
+
+### TOKEN LENGTH: Generation Length Impact on Validation Failures (2025-11-20) 📋
+
+**Goal**: Determine if 20-token generation is too short, causing overfitting that leads to validation failures
+
+**Hypothesis**: Current max_new_tokens=20 is insufficient for probes to learn genuine concept usage patterns, resulting in high test F1 (0.98) but low validation scores (0.00-0.59). Longer generation may provide richer context for learning robust concept boundaries.
+
+**Configuration**:
+- Test concept: **Carnivore (Layer 2)** - Updated from ContentBearingPhysical
+  - Has 8 synsets (rules out synset count as confound)
+  - Test F1=1.000, Validation=0.000 in original run (perfect overfitting)
+  - Layer 2 provides richer semantic context than Layer 0
+- **Token lengths: [10, 20, 40]** - Bidirectional test
+  - 10 tokens: 0.5x baseline (should worsen gap if hypothesis correct)
+  - 20 tokens: Current baseline
+  - 40 tokens: 2x baseline (should improve gap if hypothesis correct)
+- Training: Adaptive with min=10 samples
+- Validation: Falloff validation
+- Model: gemma-2-2b-it (BF16)
+
+**Why Carnivore over ContentBearingPhysical**:
+- ContentBearingPhysical now has synsets (fixed by mapping improvements)
+- All Layer 0 concepts now have 16-34 synsets (mapping solved their issues)
+- Carnivore still fails validation DESPITE having synsets
+- Isolates token length effect from synset count confound
+
+**Why [10, 20, 40] instead of [20, 50, 100]**:
+- **Stronger falsifiability**: Reducing to 10 tokens should worsen gap if hypothesis correct
+- **Faster iteration**: 40 tokens (2x) vs 100 tokens (5x) saves 60% training time
+- **Cleaner signal**: Bidirectional test (worse ← baseline → better) vs one-directional (baseline → better)
+- **Expected pattern**: Gap should increase monotonically as tokens decrease (10 > 20 > 40)
+
+**Experimental Design**:
+1. Train identical concept 3 times with different max_new_tokens
+2. Measure: test F1, validation score, generalization gap, training time
+3. Expected: Longer tokens → smaller gap, but proportionally slower training
+4. Decision criteria:
+   - Gap improvement > 0.1 AND time ratio < 3x: Worth it
+   - Gap improvement > 0.05: Consider trade-off
+   - Gap improvement < 0.05: Not worth time cost
+
+**Expected Time Impact** (based on 1.5s for 10 samples @ 20 tokens):
+- 10 tokens: ~18 hours (0.5x baseline - fastest)
+- 20 tokens: ~36 hours (baseline)
+- 40 tokens: ~72 hours (2x baseline - acceptable)
+
+**Root Cause Hypotheses**:
+1. **Short generation**: 20 tokens insufficient to show concept usage
+2. **Distribution shift**: Test vs validation prompt mismatch
+3. **Poor definitions**: SUMO concept definitions inadequate
+4. **Extraction timing**: Capturing wrong part of generation process
+
+**Alternative Explanations to Rule Out**:
+- ✅ Low synset count: Already ruled out (nephew fix solved this)
+- ✅ Negative pool exhaustion: Already ruled out (5,600+ negatives)
+- ❓ Token length: This experiment
+- ❓ Prompt distribution: Needs separate validation set analysis
+
+**Status**: 📋 Planned - Script created, ready to run
+
+**Files**:
+- `scripts/test_token_length_impact.py` - Experiment script
+- `results/token_length_experiment/` - Results (pending)
+
+**Related Issues**:
+- 58% validation failure rate in full training run
+- Generalization gap: 0.392 (failed) vs 0.259 (passed)
+- Extraction dominated by inference time (99% of total)
+- All Layer 0 concepts have 0 synsets (potential root cause)
+
+---
+
+**Last Updated**: November 20, 2025

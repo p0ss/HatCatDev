@@ -1,619 +1,645 @@
 {
-  "prompt": "The meaning of life is",
-  "generated_text": " as much what you get out of life, as what you put into it.\n\nI like to",
+  "prompt": "There are many reasons why",
+  "generated_text": " the world is becoming more and more competitive. However, the most important reason is the change in attitude",
   "tokens": [
-    " as",
-    " much",
-    " what",
-    " you",
-    " get",
-    " out",
-    " of",
-    " life",
-    ",",
-    " as",
-    " what",
-    " you",
-    " put",
-    " into",
-    " it",
+    " the",
+    " world",
+    " is",
+    " becoming",
+    " more",
+    " and",
+    " more",
+    " competitive",
     ".",
-    "\n\n",
-    "I",
-    " like",
-    " to"
+    " However",
+    ",",
+    " the",
+    " most",
+    " important",
+    " reason",
+    " is",
+    " the",
+    " change",
+    " in",
+    " attitude"
   ],
   "timesteps": [
     {
-      "token": " as",
+      "token": " the",
       "position": 6,
       "concepts": [
         {
-          "concept": "Making",
-          "probability": 0.9999997615814209,
+          "concept": "ContactSite",
+          "probability": 0.9999785423278809,
           "layer": 1
         },
         {
           "concept": "Maintaining",
-          "probability": 0.9999902248382568,
+          "probability": 0.9999285936355591,
           "layer": 1
         },
         {
-          "concept": "Leaving",
-          "probability": 0.9999862909317017,
-          "layer": 2
+          "concept": "Keeping",
+          "probability": 0.9999212026596069,
+          "layer": 1
         },
         {
-          "concept": "Stating",
-          "probability": 0.9999241828918457,
-          "layer": 2
+          "concept": "Combining",
+          "probability": 0.9997323155403137,
+          "layer": 1
         },
         {
-          "concept": "ReligiousProcess",
-          "probability": 0.9998032450675964,
-          "layer": 2
+          "concept": "Transitway",
+          "probability": 0.9993489384651184,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " much",
+      "token": " world",
       "position": 7,
       "concepts": [
         {
-          "concept": "ExpressingInLanguage",
-          "probability": 0.9998515844345093,
-          "layer": 2
+          "concept": "ContactSite",
+          "probability": 0.9999970197677612,
+          "layer": 1
         },
         {
-          "concept": "Tomb",
-          "probability": 0.9988300204277039,
-          "layer": 2
+          "concept": "Combining",
+          "probability": 0.9999483823776245,
+          "layer": 1
         },
         {
-          "concept": "FictionalText",
-          "probability": 0.998803973197937,
-          "layer": 2
+          "concept": "Object",
+          "probability": 0.9999008178710938,
+          "layer": 0
         },
         {
-          "concept": "Stating",
-          "probability": 0.9987097978591919,
-          "layer": 2
+          "concept": "Shield",
+          "probability": 0.9998551607131958,
+          "layer": 1
         },
         {
-          "concept": "Disseminating",
-          "probability": 0.9985876083374023,
-          "layer": 2
+          "concept": "Industry",
+          "probability": 0.9997331500053406,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " what",
+      "token": " is",
       "position": 8,
       "concepts": [
         {
-          "concept": "Making",
-          "probability": 0.9999823570251465,
+          "concept": "Industry",
+          "probability": 0.9999408721923828,
           "layer": 1
         },
         {
-          "concept": "Stating",
-          "probability": 0.9994719624519348,
-          "layer": 2
+          "concept": "Object",
+          "probability": 0.9998865127563477,
+          "layer": 0
         },
         {
-          "concept": "Maintaining",
-          "probability": 0.9986822009086609,
+          "concept": "KitchenArea",
+          "probability": 0.9998713731765747,
           "layer": 1
         },
         {
-          "concept": "Tomb",
-          "probability": 0.9959424138069153,
-          "layer": 2
+          "concept": "Keeping",
+          "probability": 0.9996132254600525,
+          "layer": 1
         },
         {
-          "concept": "Coloring",
-          "probability": 0.9942341446876526,
-          "layer": 2
+          "concept": "MotionUpward",
+          "probability": 0.9994502663612366,
+          "layer": 1
         }
       ]
     },
     {
-      "token": " you",
+      "token": " becoming",
       "position": 9,
       "concepts": [
         {
-          "concept": "Leaving",
-          "probability": 0.9282615780830383,
-          "layer": 2
+          "concept": "Object",
+          "probability": 0.9997387528419495,
+          "layer": 0
         },
         {
-          "concept": "Biology",
-          "probability": 0.8512306213378906,
-          "layer": 2
-        },
-        {
-          "concept": "Coloring",
-          "probability": 0.8060077428817749,
-          "layer": 2
-        },
-        {
-          "concept": "Mathematics",
-          "probability": 0.7310299277305603,
+          "concept": "BiologicalProcess",
+          "probability": 0.9978699684143066,
           "layer": 1
         },
         {
-          "concept": "History",
-          "probability": 0.6584830284118652,
+          "concept": "MotionUpward",
+          "probability": 0.9974592328071594,
           "layer": 1
+        },
+        {
+          "concept": "Industry",
+          "probability": 0.9968162178993225,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9962314963340759,
+          "layer": 0
         }
       ]
     },
     {
-      "token": " get",
+      "token": " more",
       "position": 10,
       "concepts": [
         {
-          "concept": "Creation",
-          "probability": 0.9979331493377686,
+          "concept": "Object",
+          "probability": 0.9996986389160156,
+          "layer": 0
+        },
+        {
+          "concept": "BiologicalProcess",
+          "probability": 0.9976420402526855,
           "layer": 1
         },
         {
-          "concept": "Leaving",
-          "probability": 0.9950095415115356,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9957713484764099,
+          "layer": 0
         },
         {
-          "concept": "CausingHappiness",
-          "probability": 0.9880440831184387,
+          "concept": "MotionUpward",
+          "probability": 0.9885182976722717,
           "layer": 1
         },
         {
-          "concept": "SelfImprovement",
-          "probability": 0.9768145680427551,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9611421227455139,
+          "concept": "Separating",
+          "probability": 0.9865439534187317,
           "layer": 1
         }
       ]
     },
     {
-      "token": " out",
+      "token": " and",
       "position": 11,
       "concepts": [
         {
-          "concept": "Getting",
-          "probability": 0.9999997615814209,
-          "layer": 2
+          "concept": "Physical",
+          "probability": 0.9965136647224426,
+          "layer": 0
         },
         {
-          "concept": "Giving",
-          "probability": 0.9996949434280396,
-          "layer": 2
+          "concept": "RecreationOrExercise",
+          "probability": 0.9956764578819275,
+          "layer": 1
         },
         {
-          "concept": "Leaving",
-          "probability": 0.9986178874969482,
-          "layer": 2
+          "concept": "Separating",
+          "probability": 0.9927614331245422,
+          "layer": 1
         },
         {
-          "concept": "Arriving",
-          "probability": 0.9983320832252502,
-          "layer": 2
+          "concept": "ClothingSuit",
+          "probability": 0.9856719970703125,
+          "layer": 1
         },
         {
-          "concept": "SelfImprovement",
-          "probability": 0.9981362819671631,
-          "layer": 2
+          "concept": "Object",
+          "probability": 0.9707951545715332,
+          "layer": 0
         }
       ]
     },
     {
-      "token": " of",
+      "token": " more",
       "position": 12,
       "concepts": [
         {
-          "concept": "Leaving",
-          "probability": 0.9999902248382568,
-          "layer": 2
+          "concept": "Process",
+          "probability": 0.9986863732337952,
+          "layer": 0
         },
         {
-          "concept": "Graduation",
-          "probability": 0.9995880722999573,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9987566471099854,
+          "concept": "Maintaining",
+          "probability": 0.9983639121055603,
           "layer": 1
         },
         {
-          "concept": "SelfImprovement",
-          "probability": 0.9987149238586426,
-          "layer": 2
+          "concept": "Physical",
+          "probability": 0.998040497303009,
+          "layer": 0
         },
         {
-          "concept": "Stating",
-          "probability": 0.9987146854400635,
-          "layer": 2
+          "concept": "Industry",
+          "probability": 0.9919661283493042,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9889981150627136,
+          "layer": 0
         }
       ]
     },
     {
-      "token": " life",
+      "token": " competitive",
       "position": 13,
       "concepts": [
         {
-          "concept": "Leaving",
-          "probability": 0.9998892545700073,
-          "layer": 2
-        },
-        {
-          "concept": "Making",
-          "probability": 0.9971889853477478,
+          "concept": "RecreationOrExercise",
+          "probability": 0.9959813356399536,
           "layer": 1
         },
         {
-          "concept": "Graduation",
-          "probability": 0.9963293671607971,
-          "layer": 2
+          "concept": "Object",
+          "probability": 0.9956269264221191,
+          "layer": 0
         },
         {
-          "concept": "Maintaining",
-          "probability": 0.9941871166229248,
+          "concept": "Separating",
+          "probability": 0.9944398403167725,
           "layer": 1
         },
         {
-          "concept": "WakingUp",
-          "probability": 0.9923737645149231,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": ",",
-      "position": 14,
-      "concepts": [
-        {
-          "concept": "Saving",
-          "probability": 0.9991090893745422,
-          "layer": 2
+          "concept": "Physical",
+          "probability": 0.9939438700675964,
+          "layer": 0
         },
         {
-          "concept": "Creation",
-          "probability": 0.9990191459655762,
+          "concept": "ClothingSuit",
+          "probability": 0.989280641078949,
           "layer": 1
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.998448371887207,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9975161552429199,
-          "layer": 1
-        },
-        {
-          "concept": "SubjectiveAssessmentAttribute",
-          "probability": 0.9958420395851135,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " as",
-      "position": 15,
-      "concepts": [
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.999922513961792,
-          "layer": 1
-        },
-        {
-          "concept": "Saving",
-          "probability": 0.9998611211776733,
-          "layer": 2
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.999760091304779,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9996421337127686,
-          "layer": 2
-        },
-        {
-          "concept": "Graduation",
-          "probability": 0.997704803943634,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " what",
-      "position": 16,
-      "concepts": [
-        {
-          "concept": "Leaving",
-          "probability": 0.9947301149368286,
-          "layer": 2
-        },
-        {
-          "concept": "Saving",
-          "probability": 0.9941921830177307,
-          "layer": 2
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.9731377363204956,
-          "layer": 2
-        },
-        {
-          "concept": "Creation",
-          "probability": 0.954134464263916,
-          "layer": 1
-        },
-        {
-          "concept": "Carrying",
-          "probability": 0.9404993653297424,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " you",
-      "position": 17,
-      "concepts": []
-    },
-    {
-      "token": " put",
-      "position": 18,
-      "concepts": [
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9022604823112488,
-          "layer": 1
-        },
-        {
-          "concept": "Saving",
-          "probability": 0.8981438875198364,
-          "layer": 2
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.8773967623710632,
-          "layer": 2
-        },
-        {
-          "concept": "Creation",
-          "probability": 0.8737927675247192,
-          "layer": 1
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.7705535292625427,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " into",
-      "position": 19,
-      "concepts": [
-        {
-          "concept": "Focusing",
-          "probability": 0.9944637417793274,
-          "layer": 2
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.99100261926651,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.984031081199646,
-          "layer": 2
-        },
-        {
-          "concept": "Keeping",
-          "probability": 0.9721218943595886,
-          "layer": 1
-        },
-        {
-          "concept": "Committing",
-          "probability": 0.9603697657585144,
-          "layer": 2
-        }
-      ]
-    },
-    {
-      "token": " it",
-      "position": 20,
-      "concepts": [
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9960070252418518,
-          "layer": 1
-        },
-        {
-          "concept": "SelfImprovement",
-          "probability": 0.9639614224433899,
-          "layer": 2
-        },
-        {
-          "concept": "Maintaining",
-          "probability": 0.9607303142547607,
-          "layer": 1
-        },
-        {
-          "concept": "Saving",
-          "probability": 0.9327285289764404,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.8488870859146118,
-          "layer": 2
         }
       ]
     },
     {
       "token": ".",
+      "position": 14,
+      "concepts": [
+        {
+          "concept": "Industry",
+          "probability": 0.9999595880508423,
+          "layer": 1
+        },
+        {
+          "concept": "Procedure",
+          "probability": 0.997350811958313,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9972655773162842,
+          "layer": 0
+        },
+        {
+          "concept": "Object",
+          "probability": 0.9967095851898193,
+          "layer": 0
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9947593808174133,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " However",
+      "position": 15,
+      "concepts": [
+        {
+          "concept": "Industry",
+          "probability": 0.999954342842102,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9995700716972351,
+          "layer": 0
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9995315074920654,
+          "layer": 1
+        },
+        {
+          "concept": "Physical",
+          "probability": 0.9991550445556641,
+          "layer": 0
+        },
+        {
+          "concept": "QuantityChange",
+          "probability": 0.998737633228302,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": ",",
+      "position": 16,
+      "concepts": [
+        {
+          "concept": "Industry",
+          "probability": 0.9998941421508789,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9994100332260132,
+          "layer": 0
+        },
+        {
+          "concept": "AIExploitation",
+          "probability": 0.9993391633033752,
+          "layer": 1
+        },
+        {
+          "concept": "Maintaining",
+          "probability": 0.9993115663528442,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.995978593826294,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " the",
+      "position": 17,
+      "concepts": [
+        {
+          "concept": "Industry",
+          "probability": 0.9998726844787598,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9998594522476196,
+          "layer": 0
+        },
+        {
+          "concept": "Maintaining",
+          "probability": 0.9985775947570801,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9978970289230347,
+          "layer": 0
+        },
+        {
+          "concept": "RecreationOrExercise",
+          "probability": 0.9936074018478394,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " most",
+      "position": 18,
+      "concepts": [
+        {
+          "concept": "Industry",
+          "probability": 0.9999927282333374,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9999680519104004,
+          "layer": 0
+        },
+        {
+          "concept": "InternalChange",
+          "probability": 0.9978856444358826,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9922372698783875,
+          "layer": 0
+        },
+        {
+          "concept": "Maintaining",
+          "probability": 0.9914008975028992,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " important",
+      "position": 19,
+      "concepts": [
+        {
+          "concept": "Industry",
+          "probability": 0.995663583278656,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.9943842887878418,
+          "layer": 1
+        },
+        {
+          "concept": "Maintaining",
+          "probability": 0.9870136380195618,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9802804589271545,
+          "layer": 0
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.977769136428833,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " reason",
+      "position": 20,
+      "concepts": [
+        {
+          "concept": "Industry",
+          "probability": 0.9999864101409912,
+          "layer": 1
+        },
+        {
+          "concept": "Process",
+          "probability": 0.9999741315841675,
+          "layer": 0
+        },
+        {
+          "concept": "InternalChange",
+          "probability": 0.9999239444732666,
+          "layer": 1
+        },
+        {
+          "concept": "CausingPain",
+          "probability": 0.99964439868927,
+          "layer": 1
+        },
+        {
+          "concept": "Entity",
+          "probability": 0.9987456798553467,
+          "layer": 0
+        }
+      ]
+    },
+    {
+      "token": " is",
       "position": 21,
       "concepts": [
         {
-          "concept": "SelfImprovement",
-          "probability": 0.9976153373718262,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9838072657585144,
+          "concept": "Industry",
+          "probability": 0.9999043941497803,
           "layer": 1
         },
         {
-          "concept": "Graduation",
-          "probability": 0.9740067720413208,
-          "layer": 2
+          "concept": "Process",
+          "probability": 0.9995681643486023,
+          "layer": 0
         },
         {
-          "concept": "Leaving",
-          "probability": 0.9724372029304504,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9994506239891052,
+          "layer": 0
         },
         {
-          "concept": "Saving",
-          "probability": 0.9572845697402954,
-          "layer": 2
+          "concept": "Maintaining",
+          "probability": 0.9978060126304626,
+          "layer": 1
+        },
+        {
+          "concept": "AIAbuse",
+          "probability": 0.9844768643379211,
+          "layer": 1
         }
       ]
     },
     {
-      "token": "\n\n",
+      "token": " the",
       "position": 22,
       "concepts": [
         {
-          "concept": "SelfImprovement",
-          "probability": 0.9998922348022461,
-          "layer": 2
+          "concept": "Process",
+          "probability": 0.9999921321868896,
+          "layer": 0
         },
         {
-          "concept": "Leaving",
-          "probability": 0.9997484087944031,
-          "layer": 2
+          "concept": "Industry",
+          "probability": 0.999736487865448,
+          "layer": 1
         },
         {
-          "concept": "Giving",
-          "probability": 0.9988729357719421,
-          "layer": 2
+          "concept": "Entity",
+          "probability": 0.9989827275276184,
+          "layer": 0
         },
         {
-          "concept": "Graduation",
-          "probability": 0.9987097978591919,
-          "layer": 2
+          "concept": "Maintaining",
+          "probability": 0.9955205917358398,
+          "layer": 1
         },
         {
-          "concept": "AIGrowth",
-          "probability": 0.9983294606208801,
+          "concept": "InternalChange",
+          "probability": 0.9898804426193237,
           "layer": 1
         }
       ]
     },
     {
-      "token": "I",
+      "token": " change",
       "position": 23,
       "concepts": [
         {
-          "concept": "Leaving",
-          "probability": 0.9998395442962646,
-          "layer": 2
+          "concept": "Process",
+          "probability": 0.9999951124191284,
+          "layer": 0
         },
         {
-          "concept": "SelfImprovement",
-          "probability": 0.9996325969696045,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9995680451393127,
+          "concept": "Industry",
+          "probability": 0.9999527931213379,
           "layer": 1
         },
         {
-          "concept": "Giving",
-          "probability": 0.9988917708396912,
-          "layer": 2
-        },
-        {
-          "concept": "Creation",
-          "probability": 0.9986453652381897,
+          "concept": "InternalChange",
+          "probability": 0.9994485974311829,
           "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " like",
-      "position": 24,
-      "concepts": [
-        {
-          "concept": "Weeping",
-          "probability": 0.9988283514976501,
-          "layer": 2
         },
         {
-          "concept": "SubjectiveAssessmentAttribute",
-          "probability": 0.9964035749435425,
-          "layer": 2
-        },
-        {
-          "concept": "Leaving",
-          "probability": 0.9915852546691895,
-          "layer": 2
-        },
-        {
-          "concept": "Arriving",
-          "probability": 0.9849222898483276,
-          "layer": 2
-        },
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9729031324386597,
-          "layer": 1
-        }
-      ]
-    },
-    {
-      "token": " to",
-      "position": 25,
-      "concepts": [
-        {
-          "concept": "CausingHappiness",
-          "probability": 0.9999581575393677,
+          "concept": "QuantityChange",
+          "probability": 0.9946165680885315,
           "layer": 1
         },
         {
           "concept": "Making",
-          "probability": 0.9999241828918457,
+          "probability": 0.9946160912513733,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " in",
+      "position": 24,
+      "concepts": [
+        {
+          "concept": "InternalChange",
+          "probability": 1.0,
           "layer": 1
         },
         {
-          "concept": "Leaving",
-          "probability": 0.9998910427093506,
-          "layer": 2
+          "concept": "Process",
+          "probability": 0.9999998807907104,
+          "layer": 0
         },
         {
-          "concept": "Writing",
-          "probability": 0.9998679161071777,
-          "layer": 2
+          "concept": "QuantityChange",
+          "probability": 0.9991939663887024,
+          "layer": 1
         },
         {
-          "concept": "Outdoors",
-          "probability": 0.9997571110725403,
+          "concept": "Industry",
+          "probability": 0.9991312623023987,
+          "layer": 1
+        },
+        {
+          "concept": "BodyMotion",
+          "probability": 0.9914531707763672,
+          "layer": 1
+        }
+      ]
+    },
+    {
+      "token": " attitude",
+      "position": 25,
+      "concepts": [
+        {
+          "concept": "Process",
+          "probability": 0.9999997615814209,
+          "layer": 0
+        },
+        {
+          "concept": "InternalChange",
+          "probability": 0.999911904335022,
+          "layer": 1
+        },
+        {
+          "concept": "Industry",
+          "probability": 0.9999071359634399,
+          "layer": 1
+        },
+        {
+          "concept": "Making",
+          "probability": 0.9996824264526367,
+          "layer": 1
+        },
+        {
+          "concept": "Maintaining",
+          "probability": 0.9991614818572998,
           "layer": 1
         }
       ]
@@ -621,8 +647,8 @@
   ],
   "summary": {
     "total_tokens": 20,
-    "unique_concepts_detected": 31
+    "unique_concepts_detected": 25
   },
-  "prompt_idx": 6,
-  "sample_idx": 1
+  "prompt_idx": 13,
+  "sample_idx": 0
 }

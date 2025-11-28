@@ -1,6 +1,6 @@
-# HatCat Quick Start Guide - Manifold Steering
+# HatCat Quick Start Guide
 
-Complete guide to training binary classifiers and using dual-subspace manifold steering for concept manipulation.
+Interactive UI for real-time concept detection and temporal monitoring during LLM generation.
 
 ## Prerequisites
 
@@ -16,16 +16,50 @@ Complete guide to training binary classifiers and using dual-subspace manifold s
 git clone <repo-url>
 cd HatCat
 
-# Setup with Poetry (recommended)
-poetry install --no-root
+# Run setup script
+./setup.sh
 
-# Activate Poetry environment
-poetry shell
+# This will:
+# - Install Poetry if needed
+# - Install all dependencies
+# - Set up virtual environment
 ```
 
 **Note**: This project uses Poetry for dependency management. See `docs/POETRY_SETUP.md` for details.
 
-## Quick Start: 5-Minute Demo
+## Quick Start: Launch the UI
+
+### Streamlit Chat Interface
+
+Interactive chat interface with real-time concept detection and timeline visualization:
+
+```bash
+# Launch Streamlit UI
+poetry run streamlit run src/ui/streamlit_chat.py
+
+# Or if you're in the poetry shell:
+poetry shell
+streamlit run src/ui/streamlit_chat.py
+```
+
+The UI will open in your browser at http://localhost:8501
+
+**Features:**
+- Real-time concept detection during generation
+- Interactive timeline visualization with 5 zoom levels (chat, reply, paragraph, sentence, token)
+- Hover tooltips showing top concepts with probabilities and hierarchy levels
+- AI safety concept highlighting (red backgrounds on concerning tokens)
+- Dynamic probe loading (base layers 2-3, expands to level 4-5)
+
+### UI Controls
+
+- **Chat View**: Clean text view, proportional spacing, danger highlighting
+- **Reply View**: All tokens with concept tracks
+- **Paragraph View**: Concept activations per paragraph
+- **Sentence View**: Concept activations per sentence
+- **Token View**: Individual token analysis with concept labels
+
+## Advanced: Training and Experiments
 
 ### 1. Train Binary Classifiers (Phase 2)
 

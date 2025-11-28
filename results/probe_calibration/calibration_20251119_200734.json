@@ -1,0 +1,8 @@
+{
+  "probe_pack": "gemma-3-4b-pt_sumo-wordnet-v2",
+  "model": "google/gemma-3-4b-pt",
+  "timestamp": "20251119_200734",
+  "total_probes": 0,
+  "categories": {},
+  "results": {}
+}
