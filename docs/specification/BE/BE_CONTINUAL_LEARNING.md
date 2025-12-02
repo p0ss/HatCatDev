@@ -1,5 +1,5 @@
-## Continual Concept Learning Harness  
-(Self-Directed Concept Growth from Lived Experience)
+## BE Learning
+(Self-Directed Accretive Concept Growth from Experience)
 
 Status: Non-normative implementation guidance  
 Depends on: BE Layer, Global Workspace Harness,  

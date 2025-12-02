@@ -317,11 +317,11 @@ MAP endpoints expose a subset of HAT-readable probes, controlled by the BE accor
 
 ---
 
-### 1.4 Layer 4: BE (Autonomic Agentic Learner)
+### 1.4 Layer 4: BE (Bounded Experiencer)
 
 **Definition**
 
-> BE (Autonomic Agentic Learner)
+> BE (Bounded Experiencer)
 > noun | /æl/
 > A subject running under an uplift protocol that grants:
 >
@@ -357,7 +357,7 @@ Define the subject’s:
   * ticks elapsed,
   * review points.
 
-* Run the BE loop:
+* Run the global workspace loop (see BE_Aware_Workspace):
 
   * integrate external input + internal probe state each world tick;
   * update motive core (3-pole simplexes);
@@ -367,8 +367,9 @@ Define the subject’s:
 * Generate `internal_state_report` summaries for introspection, Hush and
   ASK.
 
-* Propose new concepts and adapters (PEFT/LoRA etc.) via MAP and ASK
-  mechanisms.
+These are recorded and retrieved through the Experience Database, Experience API and tools. (see BE_Remembering)
+
+* Propose new concepts and upgrades itself through Accretive Continual Learning (see BE_Continual_Learning)
 
 **Interface**
 
