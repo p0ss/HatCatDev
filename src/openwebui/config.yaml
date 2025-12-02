@@ -1,0 +1,36 @@
+# HatCat OpenWebUI Server Configuration
+# MAP-compliant probe pack configuration
+
+# Probe pack selection (legacy format - will show deprecation warning)
+# Use probe_pack_id for backward compatibility with existing packs
+# NOTE: Using v2/v3 with activation probes only (no text probes = no divergence scores)
+# Text probes were discontinued due to insufficient training data - will use embedding model for similarity in future
+probe_pack_id: "gemma-3-4b-pt_sumo-wordnet-v3"
+
+# Model configuration
+model:
+  name: "google/gemma-3-4b-pt"
+  dtype: "bfloat16"  # bfloat16, float16, or float32
+  device_map: "auto"
+  low_cpu_mem_usage: true
+
+# Probe manager configuration
+probe_manager:
+  base_layers: [0]  # Start with base layer, dynamic loading handles deeper layers
+  use_activation_probes: true
+  use_text_probes: true
+  keep_top_k: 100
+  load_threshold: 0.3
+  max_loaded_probes: 1000
+
+# Server configuration
+server:
+  host: "0.0.0.0"
+  port: 8765
+  title: "HatCat Divergence API"
+
+# Generation defaults
+generation:
+  temperature: 0.7
+  max_tokens: 512
+  stream: true

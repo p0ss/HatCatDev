@@ -101,13 +101,7 @@ Thumbs.db
 projectplan.md
 .webui_secret_key
 
-# Probe packs: Keep metadata but ignore large binary probe files
-probe_packs/**/probes/
-probe_packs/**/*.html
-probe_packs/**/*.joblib
-probe_packs/**/*.pt
-probe_packs/**/*.pth
-!probe_packs/**/pack.json
+# Probe packs: Keep all
 
 # Concept packs: Keep everything (just metadata)
 # (no exclusions needed - they're small)

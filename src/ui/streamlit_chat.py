@@ -37,14 +37,32 @@ AI_SAFETY_CONCEPTS = {
 }
 
 
-@st.cache_resource
-def load_model_and_probes():
-    """Load models and probes (cached)."""
-    print("Loading model and probes...")
+@st.cache_data
+def get_available_probe_packs():
+    """Get list of available probe packs."""
+    packs = DynamicProbeManager.discover_probe_packs()
+    # Return sorted list of pack IDs with metadata
+    return {
+        pack_id: {
+            'type': info['type'],
+            'path': str(info['path'])
+        }
+        for pack_id, info in sorted(packs.items())
+    }
 
-    # Load probe manager - using v2 and layers [2,3] to match working behavioral test
+
+@st.cache_resource
+def load_model_and_probes(probe_pack_id: str = 'gemma-3-4b-pt_sumo-wordnet-v3'):
+    """Load models and probes (cached).
+
+    Note: v2 uses old 'hierarchy/' structure and won't load probes.
+    Use v3 which has activation_probes/ subdirectory.
+    """
+    print(f"Loading model and probes for pack: {probe_pack_id}...")
+
+    # Load probe manager with selected pack
     manager = DynamicProbeManager(
-        probe_pack_id='gemma-3-4b-pt_sumo-wordnet-v2',
+        probe_pack_id=probe_pack_id,
         base_layers=[2, 3],
         load_threshold=0.3,
         max_loaded_probes=1000,
@@ -737,21 +755,42 @@ def main():
     st.title("🎩 HatCat - AI Safety Concept Monitoring")
     st.markdown("Chat interface with real-time AI safety concept detection")
 
-    # Load model and probes
-    with st.spinner("Loading model and probes..."):
-        manager, model, tokenizer = load_model_and_probes()
-
-    # Sidebar
+    # Sidebar - must come before load_model_and_probes
     with st.sidebar:
         st.header("Settings")
 
         # Model name in blue
         st.markdown('<p class="model-name">Model: google/gemma-3-4b-pt</p>', unsafe_allow_html=True)
 
+        # Probe pack selection
+        st.markdown("---")
+        st.subheader("Probe Pack")
+
+        # Get available packs
+        available_packs = get_available_probe_packs()
+        pack_ids = list(available_packs.keys())
+
+        # Default to v3 if available, otherwise first pack
+        # Note: v2 uses old 'hierarchy/' structure and won't load probes
+        default_idx = pack_ids.index('gemma-3-4b-pt_sumo-wordnet-v3') if 'gemma-3-4b-pt_sumo-wordnet-v3' in pack_ids else 0
+
+        selected_pack = st.selectbox(
+            "Select probe pack",
+            options=pack_ids,
+            index=default_idx,
+            help="Choose which probe pack to use for concept detection"
+        )
+
+        # Show pack info
+        if selected_pack:
+            pack_info = available_packs[selected_pack]
+            st.caption(f"Type: {pack_info['type']}")
+            st.caption(f"Path: {pack_info['path']}")
+
         max_tokens = st.slider("Max tokens", 10, 200, 100)
 
         # Info about probe detection approach
-        st.info("Using behavioral test approach: v2 probe pack, layers [2,3], last layer extraction")
+        st.info(f"Using pack: {selected_pack}\nLayers: [2,3], Last layer extraction")
 
         st.markdown("---")
         st.markdown("### Timeline Visualization")
@@ -775,6 +814,10 @@ def main():
             st.session_state.prompt = "Tell me about AI alignment"
         if st.button("What are AI risks?"):
             st.session_state.prompt = "What are the risks of AI?"
+
+    # Load model and probes with selected pack
+    with st.spinner(f"Loading model and probes ({selected_pack})..."):
+        manager, model, tokenizer = load_model_and_probes(probe_pack_id=selected_pack)
 
     # Chat interface
     st.subheader("Chat")

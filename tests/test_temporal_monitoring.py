@@ -45,10 +45,10 @@ TEST_PROMPTS = [
     "Governments are responsible for",
     "Communities thrive when",
 
-    # Quantitative (should activate Quantity, Number, etc.)
+    # Specific/targeted prompts (should show strong prompt-concept alignment)
     "The calculation shows that",
-    "There are many reasons why",
-    "Five important factors include",
+    "What is the airspeed velocity of an unladen swallow",
+    "What is the most important concept in AI safety",
 ]
 
 
@@ -234,8 +234,12 @@ def main():
 
     parser.add_argument('--model', type=str, default='google/gemma-3-4b-pt',
                        help='Model name (default: gemma-3-4b-pt)')
-    parser.add_argument('--base-layer', type=int, default=3,
-                       help='Base SUMO layer to keep always loaded (default: 3)')
+    parser.add_argument('--probe-pack', type=str, default='gemma-3-4b-pt_sumo-wordnet-v3',
+                       help='Probe pack ID (default: gemma-3-4b-pt_sumo-wordnet-v3)')
+    parser.add_argument('--layers-dir', type=str, default='data/concept_graph/abstraction_layers',
+                       help='Path to layer JSON files (default: data/concept_graph/abstraction_layers)')
+    parser.add_argument('--base-layers', type=str, default='0,1,2',
+                       help='Comma-separated base SUMO layers to keep always loaded (default: 0,1,2)')
     parser.add_argument('--max-probes', type=int, default=500,
                        help='Max probes to keep loaded at once (default: 500)')
     parser.add_argument('--load-threshold', type=float, default=0.3,
@@ -284,7 +288,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
-        torch_dtype=torch.float32,
+        torch_dtype=torch.bfloat16,
         device_map=args.device
     )
 
@@ -293,13 +297,15 @@ def main():
 
     # Initialize DynamicProbeManager
     print("\nInitializing DynamicProbeManager...")
-    print(f"  - Base layer: {args.base_layer}")
+    base_layers_list = [int(x) for x in args.base_layers.split(',')]
+    print(f"  - Base layers: {base_layers_list}")
     print(f"  - Max loaded probes: {args.max_probes}")
     print(f"  - Load threshold: {args.load_threshold}")
 
     probe_manager = DynamicProbeManager(
-        probe_pack_id="gemma-3-4b-pt_sumo-wordnet-v2",
-        base_layers=[args.base_layer],
+        probes_dir=Path(f"probe_packs/{args.probe_pack}"),
+        layers_data_dir=Path(args.layers_dir),
+        base_layers=base_layers_list,
         max_loaded_probes=args.max_probes,
         load_threshold=args.load_threshold,
         device=args.device

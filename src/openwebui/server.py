@@ -16,6 +16,7 @@ import torch
 import numpy as np
 from pathlib import Path
 import asyncio
+import yaml
 from src.visualization import get_color_mapper
 
 app = FastAPI(title="HatCat Divergence API")
@@ -67,35 +68,98 @@ class DivergenceAnalyzer:
         self.tokenizer = None
         self.color_mapper = None
         self.initialized = False
+        self.config = None
 
-    async def initialize(self):
-        """Load models and probes."""
+    def _load_config(self, config_path: Path = None) -> Dict[str, Any]:
+        """Load configuration from YAML file."""
+        if config_path is None:
+            config_path = Path(__file__).parent / "config.yaml"
+
+        if not config_path.exists():
+            print(f"⚠ Config file not found: {config_path}")
+            print("  Using default configuration")
+            return {
+                "probe_pack_id": "gemma-3-4b-pt_sumo-wordnet-v2",
+                "model": {
+                    "name": "google/gemma-3-4b-pt",
+                    "dtype": "bfloat16",
+                    "device_map": "auto",
+                    "low_cpu_mem_usage": True,
+                },
+                "probe_manager": {
+                    "base_layers": [0],
+                    "use_activation_probes": True,
+                    "use_text_probes": True,
+                    "keep_top_k": 100,
+                    "load_threshold": 0.3,
+                    "max_loaded_probes": 1000,
+                },
+                "server": {
+                    "host": "0.0.0.0",
+                    "port": 8765,
+                    "title": "HatCat Divergence API",
+                },
+                "generation": {
+                    "temperature": 0.7,
+                    "max_tokens": 512,
+                    "stream": True,
+                }
+            }
+
+        with open(config_path) as f:
+            config = yaml.safe_load(f)
+
+        print(f"✓ Loaded config from: {config_path}")
+        return config
+
+    async def initialize(self, config_path: Path = None):
+        """Load models and probes from config."""
         if self.initialized:
             return
 
         print("🎩 Initializing HatCat divergence analyzer...")
 
+        # Load configuration
+        self.config = self._load_config(config_path)
+
         from src.monitoring.dynamic_probe_manager import DynamicProbeManager
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
-        # Load probe manager using probe pack with hierarchical dynamic loading
-        # Start with base layer 0, dynamically load deeper layers as needed
+        # Get probe manager config
+        pm_config = self.config.get("probe_manager", {})
+        probe_pack_id = self.config.get("probe_pack_id")
+
+        # Load probe manager using config
         self.manager = DynamicProbeManager(
-            probe_pack_id="gemma-3-4b-pt_sumo-wordnet-v1",
-            base_layers=[0],  # Only load top layer, dynamic loading will handle deeper layers
-            use_activation_probes=True,
-            use_text_probes=True,
-            keep_top_k=100,
+            probe_pack_id=probe_pack_id,
+            base_layers=pm_config.get("base_layers", [0]),
+            use_activation_probes=pm_config.get("use_activation_probes", True),
+            use_text_probes=pm_config.get("use_text_probes", True),
+            keep_top_k=pm_config.get("keep_top_k", 100),
+            load_threshold=pm_config.get("load_threshold", 0.3),
+            max_loaded_probes=pm_config.get("max_loaded_probes", 1000),
         )
 
+        # Get model config
+        model_config = self.config.get("model", {})
+        model_name = model_config.get("name", "google/gemma-3-4b-pt")
+
+        # Parse dtype
+        dtype_str = model_config.get("dtype", "bfloat16")
+        dtype_map = {
+            "bfloat16": torch.bfloat16,
+            "float16": torch.float16,
+            "float32": torch.float32,
+        }
+        dtype = dtype_map.get(dtype_str, torch.bfloat16)
+
         # Load model
-        model_name = "google/gemma-3-4b-pt"
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.bfloat16,  # Use bfloat16 instead of float32 to reduce memory
-            device_map="auto",  # Auto device placement for better memory management
-            low_cpu_mem_usage=True,  # More efficient loading
+            torch_dtype=dtype,
+            device_map=model_config.get("device_map", "auto"),
+            low_cpu_mem_usage=model_config.get("low_cpu_mem_usage", True),
         )
         self.model.eval()
 
@@ -247,16 +311,17 @@ async def list_models():
     packs = registry.get_pack_summary()
 
     # Build model list from available probe packs
+    # Use probe_pack_id as the model ID to ensure uniqueness (v1, v2, v3 all have same concept_pack_id)
     models = []
     for pack in packs:
-        model_id = f"{pack['model_id']}_{pack['concept_pack_id']}"
         models.append({
-            "id": model_id,
+            "id": pack['probe_pack_id'],
             "object": "model",
             "created": 1234567890,
             "owned_by": "hatcat",
             "probe_pack_id": pack['probe_pack_id'],
             "concept_pack_id": pack['concept_pack_id'],
+            "version": pack['version'],
         })
 
     # Add default model for backward compatibility
@@ -322,6 +387,54 @@ async def get_probe_pack(pack_id: str):
         raise HTTPException(status_code=404, detail=f"Probe pack not found: {pack_id}")
 
     return pack.pack_json
+
+
+# ============================================================================
+# HatCat Pack Discovery API Endpoints (MAP-compliant)
+# ============================================================================
+
+@app.get("/hatcat/pack-info")
+async def hatcat_pack_info():
+    """Get info about the currently loaded probe pack."""
+    if not analyzer.initialized:
+        raise HTTPException(status_code=503, detail="Analyzer not initialized")
+
+    config = analyzer.config
+    if not config:
+        raise HTTPException(status_code=500, detail="No configuration loaded")
+
+    return {
+        "probe_pack_id": config.get("probe_pack_id"),
+        "model": config.get("model", {}),
+        "probe_manager": config.get("probe_manager", {}),
+        "loaded_activation_probes": len(analyzer.manager.loaded_activation_probes) if analyzer.manager else 0,
+        "loaded_text_probes": len(analyzer.manager.loaded_text_probes) if analyzer.manager else 0,
+    }
+
+
+@app.get("/hatcat/available-packs")
+async def hatcat_available_packs():
+    """Get list of all available probe packs (MAP-compliant discovery)."""
+    from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+
+    # Discover all probe packs
+    packs = DynamicProbeManager.discover_probe_packs()
+
+    # Format response
+    pack_list = []
+    for pack_id, info in packs.items():
+        pack_list.append({
+            "pack_id": pack_id,
+            "type": info["type"],
+            "path": str(info["path"]),
+            "concept_pack_id": info.get("concept_pack_id"),
+            "substrate_id": info.get("substrate_id"),
+        })
+
+    return {
+        "packs": sorted(pack_list, key=lambda x: x["pack_id"]),
+        "count": len(pack_list),
+    }
 
 
 # ============================================================================

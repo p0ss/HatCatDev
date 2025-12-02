@@ -2,6 +2,10 @@
 
 This document reflects what actually ships in `src/` today: how concepts are built, how probes are trained, and how to run real-time monitoring/steering.
 
+## MINDMELD Architectural Protocol (MAP)
+
+HatCat's concept and probe pack system implements the MINDMELD Architectural Protocol (MAP), a lightweight protocol for concept-aware endpoints that enables interoperability between different concept probe systems. MAP provides a standardized way for systems to declare which concept packs they speak, expose probes for those packs, and publish conceptual diffs over time. HatCat's concept packs (model-agnostic ontology specifications) and probe packs (model-specific trained classifiers) are MAP-compliant with globally unique `spec_id` and `probe_pack_id` identifiers, structured `probe_index` mappings, and standardized output schemas. This means HatCat probes can be discovered, loaded, and queried by any MAP-compatible client, and conceptual learning can be shared across different systems using the same concept space. See `docs/MINDMELD_ARCHITECTURAL_PROTOCOL.md` for the full specification.
+
 ## Core Modules
 
 ### Concept Encyclopedia (`src/encyclopedia`)
