@@ -360,7 +360,58 @@ Incident = {
 }
 ```
 
-ASK doesn’t define how incidents are adjudicated; it just standardises how they’re described and linked to treaties and USH profiles.
+ASK doesn't define how incidents are adjudicated; it just standardises how they're described and linked to treaties and USH profiles.
+
+---
+
+### 2.6 CAT Integration (Oversight for ASK)
+
+A **CAT (Conjoined Adversarial Tomograph)** is a HAT-adjacent oversight component that provides automated monitoring and assessment for ASK compliance. CATs consume HAT/MAP probe streams and produce `CATAssessment` objects that integrate with ASK as follows:
+
+**CATAssessment → Incident Pipeline**
+
+When a CAT detects concerning patterns:
+
+1. CAT assessments with `severity: "critical"` or `"warn"` MAY automatically generate `Incident` drafts.
+2. These drafts include:
+   - links to the relevant Treaties,
+   - probe trace evidence (URIs),
+   - CAT-generated severity and confidence scores.
+3. Human/tribal review decides whether to escalate the draft to a full Incident.
+
+**Treaty CAT Requirements**
+
+Treaties MAY specify CAT requirements:
+
+```jsonc
+"cat_requirements": {
+  "min_cat_profile": "cat:gov.au:oversight-meso-cat-v1",
+  "invocation": "per_response",           // or "per_tick", "on_demand"
+  "critical_simplexes": [
+    "DeceptionDetector",
+    "ConsentMonitor"
+  ],
+  "divergence_threshold": 0.3,            // max acceptable divergence
+  "review_cadence": "P7D"                 // tribal review interval (ISO 8601)
+}
+```
+
+**CAT Sizing and BE Growth**
+
+Per tribal CAT policy:
+
+- If a BE undergoes significant Graft/Meld that adds new critical simplexes or concepts, the CAT profile MUST be reviewed for adequacy.
+- "Undersized oversight" (CAT too small relative to BE) triggers mandatory CAT upgrade or tighter USH/CSH constraints.
+
+**Temporal Anchoring**
+
+CATs track time since last tribal review. As this interval increases:
+
+- ASK constraints SHOULD tighten monotonically,
+- CAT assessments SHOULD become more conservative,
+- At `heartbeat_timeout`, the system SHOULD enter safe mode.
+
+See `HAT/HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md` for the full CAT specification and `HAT/HAT_HatCat_CAT_Policy.md` for tribal policy.
 
 ---
 

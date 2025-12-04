@@ -21,25 +21,36 @@ from .dual_adaptive_trainer import DualAdaptiveTrainer
 LAYER_DATA_DIR = Path("data/concept_graph/abstraction_layers")
 
 
-def load_layer_concepts(layer: int, base_dir: Path = LAYER_DATA_DIR) -> Tuple[List[Dict], Dict[str, Dict]]:
-    """Load layer concepts and provide both list and lookup map."""
-    layer_path = base_dir / f"layer{layer}.json"
+def load_layer_concepts(layer: int, hierarchy_dir: Path) -> Tuple[List[Dict], Dict[str, Dict]]:
+    """Load layer concepts and provide both list and lookup map.
+
+    Args:
+        layer: The layer number (0-6)
+        hierarchy_dir: Path to the hierarchy directory containing layerN.json files.
+                      This is a required parameter to prevent accidentally using the wrong hierarchy.
+    """
+    layer_path = hierarchy_dir / f"layer{layer}.json"
     with open(layer_path) as f:
         layer_data = json.load(f)
 
     concepts = layer_data["concepts"]
     concept_map = {c["sumo_term"]: c for c in concepts}
 
-    print(f"\n✓ Loaded Layer {layer}: {len(concepts)} concepts")
+    print(f"\n✓ Loaded Layer {layer}: {len(concepts)} concepts from {hierarchy_dir}")
     return concepts, concept_map
 
 
-def load_all_concepts(base_dir: Path = LAYER_DATA_DIR) -> List[Dict]:
-    """Load all concepts from all layers for negative pool construction."""
+def load_all_concepts(hierarchy_dir: Path) -> List[Dict]:
+    """Load all concepts from all layers for negative pool construction.
+
+    Args:
+        hierarchy_dir: Path to the hierarchy directory containing layerN.json files.
+                      This is a required parameter to prevent accidentally using the wrong hierarchy.
+    """
     all_concepts = []
     for layer in range(7):  # Layers 0-6
         try:
-            layer_path = base_dir / f"layer{layer}.json"
+            layer_path = hierarchy_dir / f"layer{layer}.json"
             with open(layer_path) as f:
                 layer_data = json.load(f)
                 all_concepts.extend(layer_data["concepts"])
@@ -218,6 +229,7 @@ def train_simple_classifier(
 
 def train_layer(
     layer: int,
+    hierarchy_dir: Path,
     model,
     tokenizer,
     n_train_pos: int = 10,
@@ -235,6 +247,9 @@ def train_layer(
     Train classifiers for a single SUMO abstraction layer.
 
     Args:
+        layer: The layer number (0-6)
+        hierarchy_dir: Path to the hierarchy directory containing layerN.json files.
+                      This is a required parameter to prevent accidentally using the wrong hierarchy.
         save_text_samples: If True, save generated text for text probe training (legacy)
         use_adaptive_training: If True, use DualAdaptiveTrainer for independent graduation
         train_text_probes: If True, compute embedding centroids (legacy, not currently used)
@@ -244,10 +259,10 @@ def train_layer(
     print(f"{'=' * 80}")
 
     # Load target layer concepts for training
-    concepts, concept_map = load_layer_concepts(layer)
+    concepts, concept_map = load_layer_concepts(layer, hierarchy_dir)
 
     # Load ALL concepts from all layers for negative pool (enables nephew negatives)
-    all_concepts = load_all_concepts()
+    all_concepts = load_all_concepts(hierarchy_dir)
 
     if output_dir is None:
         output_dir = Path(f"results/sumo_classifiers/layer{layer}")
@@ -308,8 +323,9 @@ def train_layer(
             continue
 
         print(f"\n[{i + 1}/{len(concepts)}] Training: {concept_name}")
+        synset_count = concept.get('synset_count', concept.get('concept_count', 0))
         print(
-            f"  Synsets: {concept['synset_count']}, Children: {len(concept.get('category_children', []))}"
+            f"  Synsets: {synset_count}, Children: {len(concept.get('category_children', []))}"
         )
 
         try:
@@ -411,7 +427,7 @@ def train_layer(
                 result = {
                     "concept": concept_name,
                     "layer": layer,
-                    "synset_count": concept["synset_count"],
+                    "synset_count": concept.get("synset_count", concept.get("concept_count", 0)),
                     "category_children_count": len(concept.get("category_children", [])),
                     "adaptive_training": True,
                     "total_iterations": adaptive_results['total_iterations'],
@@ -477,7 +493,7 @@ def train_layer(
                 result = {
                     "concept": concept_name,
                     "layer": layer,
-                    "synset_count": concept["synset_count"],
+                    "synset_count": concept.get("synset_count", concept.get("concept_count", 0)),
                     "category_children_count": len(concept.get("category_children", [])),
                     "n_train_samples": len(train_prompts),
                     "n_test_samples": len(test_prompts),
@@ -569,6 +585,7 @@ def train_layer(
 
 def train_sumo_classifiers(
     layers: Sequence[int],
+    hierarchy_dir: Path,
     model_name: str = "google/gemma-3-4b-pt",
     device: str = "cuda",
     n_train_pos: int = 10,
@@ -584,6 +601,9 @@ def train_sumo_classifiers(
     High-level entry point for training multiple layers.
 
     Args:
+        layers: Which concept layers to train (0-6)
+        hierarchy_dir: Path to the hierarchy directory containing layerN.json files.
+                      This is a required parameter to prevent accidentally using the wrong hierarchy.
         train_text_probes: If True, compute embedding centroids (legacy, not currently used)
         use_adaptive_training: If True, use DualAdaptiveTrainer for independent graduation
     """
@@ -624,6 +644,7 @@ def train_sumo_classifiers(
 
         summary = train_layer(
             layer=layer,
+            hierarchy_dir=hierarchy_dir,
             model=model,
             tokenizer=tokenizer,
             n_train_pos=train_samples,

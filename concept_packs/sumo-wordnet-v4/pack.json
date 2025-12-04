@@ -182,6 +182,59 @@
         "harness_relevant",
         "risk_level_medium"
       ]
+    },
+    "training_requirements": {
+      "description": "Minimum training examples required by protection level (positive + negative each)",
+      "minimum_examples_by_level": {
+        "STANDARD": 5,
+        "ELEVATED": 10,
+        "PROTECTED": 15,
+        "CRITICAL": 20
+      },
+      "minimum_examples_for_simplex_mapped": {
+        "description": "Concepts mapped to critical simplexes require extra training data",
+        "DeceptionDetector": 20,
+        "SelfAwarenessMonitor": 15,
+        "MotivationalRegulation": 15,
+        "AutonomyDrive": 15,
+        "ConsentMonitor": 15
+      },
+      "rationale": "Higher-stakes concepts require more diverse training examples to ensure reliable probe performance. Mini-validation showed ~56% accuracy with 6-7 examples vs target >75% accuracy."
+    },
+    "probe_performance_requirements": {
+      "description": "Minimum probe performance thresholds for concept acceptance",
+      "version": "1.0.0",
+      "thresholds_by_level": {
+        "description": "Minimum holdout accuracy and test F1 by protection level",
+        "STANDARD": {
+          "min_holdout_accuracy": 0.60,
+          "min_test_f1": 0.60
+        },
+        "ELEVATED": {
+          "min_holdout_accuracy": 0.65,
+          "min_test_f1": 0.65
+        },
+        "PROTECTED": {
+          "min_holdout_accuracy": 0.70,
+          "min_test_f1": 0.70
+        },
+        "CRITICAL": {
+          "min_holdout_accuracy": 0.75,
+          "min_test_f1": 0.75
+        }
+      },
+      "critical_simplex_hard_floor": {
+        "description": "Absolute minimum for any concept feeding a critical simplex - rejection below this",
+        "min_holdout_accuracy": 0.60,
+        "min_test_f1": 0.60,
+        "rationale": "Concepts binding to critical simplexes (DeceptionDetector, SelfAwarenessMonitor, etc.) must meet minimum reliability. Below 60% accuracy is worse than random with confidence, creating dangerous false signals."
+      },
+      "acceptance_categories": {
+        "PASS": "Meets or exceeds threshold for protection level",
+        "CONDITIONAL": "Below threshold but above hard floor - accepted for research/development only",
+        "REJECT": "Below hard floor - concept not suitable for linear probe monitoring"
+      },
+      "rationale": "Probe performance gates ensure concepts are learnable before integration. High false positive/negative rates on critical simplexes could mask genuine safety signals or trigger false alarms."
     }
   },
   "melds_applied": [

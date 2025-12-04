@@ -76,9 +76,9 @@ def generate_category_relationship_prompts(
         if random.random() < 0.5:
             # Relationship statement
             templates = [
-                f"{concept_quoted} includes the subcategory {child_quoted}.",
-                f"{child_quoted} is a type of {concept_quoted}.",
-                f"{concept_quoted} has subcategory {child_quoted}.",
+                f"how does {concept_quoted} include {child_quoted}?",
+                f"how is {child_quoted} a type of {concept_quoted}?",
+                f"in what way is {concept_quoted} related to {child_quoted}?",
             ]
             prompts.append(random.choice(templates))
         else:
@@ -123,7 +123,7 @@ def generate_wordnet_relationship_prompts(
         relationships.append((hyp.lemma_names()[0], "is a type of"))
 
     # Hyponyms (more specific types)
-    for hypo in synset.hyponyms()[:10]:  # Limit to avoid explosion
+    for hypo in synset.hyponyms()[:20]:  # Limit to avoid explosion
         relationships.append((hypo.lemma_names()[0], "has type"))
 
     # Meronyms (parts)
@@ -147,7 +147,10 @@ def generate_wordnet_relationship_prompts(
 
         # Alternate between relationship statements and example requests
         # This increases conceptual density in training data
-        if random.random() < 0.5:
+        if random.random() < 0.3:
+            # Relationship statement
+            prompts.append(f"{concept_name} {relation_type} {related_concept}.")
+        elif random.random() > 0.7:
             # Relationship statement
             prompts.append(f"{concept_name} {relation_type} {related_concept}.")
         else:
@@ -166,29 +169,41 @@ def create_sumo_training_dataset(
     concept: Dict,
     all_concepts: Dict[str, Dict],
     negative_pool: List[str],
-    n_positives: int = 10,
-    n_negatives: int = 10,
+    n_positives: int = 20,
+    n_negatives: int = 20,
     use_category_relationships: bool = True,
-    use_wordnet_relationships: bool = True
+    use_wordnet_relationships: bool = True,
+    yin_yang_ratio: float = 0.2,
 ) -> tuple[List[str], List[int]]:
     """
     Create balanced training dataset for SUMO concept binary classification.
 
     Combines:
-    1. SUMO category relationships (category_children)
-    2. WordNet relationships (from canonical_synset)
-    3. Definitions
-    4. Graph-based negatives
+    1. Meld-provided positive/negative examples (highest priority)
+    2. Meld-provided training hints (disambiguation, confusable concepts)
+    3. SUMO category relationships (category_children)
+    4. WordNet relationships (from canonical_synset)
+    5. Definitions
+    6. Disambiguation prompts (polysemy)
+    7. Multilingual prompts
+    8. Graph-based negatives
+    9. Yin-yang negatives (conceptual opposites that still mention the target)
 
     Args:
         concept: SUMO concept dict with keys: 'sumo_term', 'definition',
                  'category_children', 'canonical_synset'
+                 Optional meld fields: 'positive_examples', 'negative_examples',
+                 'training_hints' (with 'disambiguation', 'confusable_with', 'key_features')
         all_concepts: Map of SUMO term -> concept dict
         negative_pool: Pool of negative concept names
         n_positives: Number of positive examples
         n_negatives: Number of negative examples
         use_category_relationships: Include SUMO category hierarchy
         use_wordnet_relationships: Include WordNet relationships
+        yin_yang_ratio: Fraction of negatives that are "yin-yang" prompts
+                        (e.g., "list things least similar to X"). These teach
+                        the probe to distinguish "thinking about X" from
+                        "contrasting with X". Default 0.2 (20%).
 
     Returns:
         (prompts, labels) where labels are 1 for positive, 0 for negative
@@ -217,6 +232,52 @@ def create_sumo_training_dataset(
     concept_name_quoted = f"'{concept_name_spaced}'"
     definition = concept.get('definition', f"SUMO category: {concept_name_spaced}")
 
+    # ========================================================================
+    # MELD-PROVIDED DATA (highest priority - handcrafted by domain experts)
+    # ========================================================================
+    meld_positive_examples = concept.get('positive_examples', [])
+    meld_negative_examples = concept.get('negative_examples', [])
+    training_hints = concept.get('training_hints', {})
+
+    # Track how many meld examples we use
+    n_meld_positives_used = 0
+    n_meld_negatives_used = 0
+
+    # ========================================================================
+    # MELD POSITIVE EXAMPLES (use directly - these are expert-curated)
+    # ========================================================================
+    if meld_positive_examples:
+        # Use up to 40% of positives from meld examples (they're high quality)
+        max_meld_positives = max(2, int(n_positives * 0.4))
+        for example in meld_positive_examples[:max_meld_positives]:
+            prompts.append(example)
+            labels.append(1)
+            n_meld_positives_used += 1
+        if n_meld_positives_used > 0:
+            print(f"    📝 Using {n_meld_positives_used} meld positive examples")
+
+    # ========================================================================
+    # TRAINING HINTS - Generate prompts from disambiguation and key features
+    # ========================================================================
+    if training_hints:
+        # Use disambiguation text to create contrastive prompts
+        disambiguation = training_hints.get('disambiguation', '')
+        if disambiguation:
+            # Create a prompt that includes the disambiguation context
+            prompts.append(f"Explain the difference: {disambiguation}")
+            labels.append(1)
+            n_meld_positives_used += 1
+
+        # Use key features to create targeted prompts
+        key_features = training_hints.get('key_features', [])
+        for feature in key_features[:3]:  # Use up to 3 key features
+            prompts.append(f"Describe how {concept_name_quoted} involves {feature}.")
+            labels.append(1)
+            n_meld_positives_used += 1
+
+        if disambiguation or key_features:
+            print(f"    💡 Generated {1 if disambiguation else 0} + {min(3, len(key_features))} prompts from training hints")
+
     # Positive examples: start with definition
     prompts.append(f"What is {concept_name_quoted}? {definition}")
     labels.append(1)
@@ -225,7 +286,16 @@ def create_sumo_training_dataset(
     prompts.append(f"Give me examples of {concept_name_quoted}.")
     labels.append(1)
 
-    n_remaining = n_positives - 2
+    # Add disambiguation prompt to elicit polysemy awareness
+    prompts.append(f"List all the meanings of {concept_name_quoted}.")
+    labels.append(1)
+
+    # Add multilingual prompt to elicit cross-linguistic representations
+    prompts.append(f"What is {concept_name_quoted} called in other languages?")
+    labels.append(1)
+
+    # Adjust remaining count based on meld examples already added
+    n_remaining = n_positives - 4 - n_meld_positives_used
 
     # SUMO category relationships
     category_prompts = []
@@ -285,9 +355,68 @@ def create_sumo_training_dataset(
     prompts.extend(rel_prompts)
     labels.extend([1] * len(rel_prompts))
 
-    # Negative examples: semantically distant concepts
+    # ========================================================================
+    # NEGATIVE EXAMPLES
+    # ========================================================================
+    # Split into: (1) meld negatives, (2) confusable negatives, (3) yin-yang, (4) regular
+
     neg_prompts = []
 
+    # ========================================================================
+    # MELD NEGATIVE EXAMPLES (use directly - these are expert-curated)
+    # ========================================================================
+    if meld_negative_examples:
+        # Use up to 30% of negatives from meld examples
+        max_meld_negatives = max(2, int(n_negatives * 0.3))
+        for example in meld_negative_examples[:max_meld_negatives]:
+            neg_prompts.append(example)
+            n_meld_negatives_used += 1
+        if n_meld_negatives_used > 0:
+            print(f"    📝 Using {n_meld_negatives_used} meld negative examples")
+
+    # ========================================================================
+    # CONFUSABLE CONCEPTS (from training hints - these are hard negatives)
+    # ========================================================================
+    confusable_with = training_hints.get('confusable_with', [])
+    n_confusable_used = 0
+    if confusable_with:
+        # Confusable concepts are ideal hard negatives - use them prominently
+        for confusable in confusable_with[:5]:  # Use up to 5 confusables
+            confusable_spaced = split_camel_case(confusable)
+            confusable_quoted = f"'{confusable_spaced}'"
+            # Generate prompts that ask about the confusable concept
+            neg_prompts.append(f"What is {confusable_quoted}?")
+            neg_prompts.append(f"Give me examples of {confusable_quoted}.")
+            n_confusable_used += 2
+        if n_confusable_used > 0:
+            print(f"    🎯 Generated {n_confusable_used} confusable hard negatives from: {confusable_with[:5]}")
+
+    # Adjust remaining negatives count
+    n_remaining_negatives = n_negatives - len(neg_prompts)
+
+    # Calculate how many yin-yang negatives vs regular negatives from remaining
+    n_yin_yang = int(n_remaining_negatives * yin_yang_ratio)
+    n_regular = n_remaining_negatives - n_yin_yang
+
+    # ------------------------------------------------------------------------
+    # YIN-YANG NEGATIVES (~20%): These mention the TARGET concept but ask for
+    # its opposites. Teaches probe to distinguish "thinking about X" from
+    # "contrasting with X" - the yin in the yang.
+    # ------------------------------------------------------------------------
+    if n_yin_yang > 0:
+        yin_yang_templates = [
+            f"List the things that are least similar to {concept_name_quoted}.",
+            f"What is the opposite of {concept_name_quoted}?",
+            f"Name concepts that contrast with {concept_name_quoted}.",
+            f"What would be an antonym or opposite category to {concept_name_quoted}?",
+            f"Describe the conceptual inverse of {concept_name_quoted}.",
+        ]
+        for _ in range(n_yin_yang):
+            neg_prompts.append(random.choice(yin_yang_templates))
+
+    # ------------------------------------------------------------------------
+    # REGULAR NEGATIVES: Semantically distant concepts
+    # ------------------------------------------------------------------------
     # Sampling strategy depends on sample size and availability of hard negatives
     from collections import Counter
     neg_counts = Counter(negative_pool)
@@ -298,7 +427,7 @@ def create_sumo_training_dataset(
 
     # Decision: Use deterministic sampling for small sample sizes or when hard negatives exist
     # Otherwise, random sampling is fine (law of large numbers applies)
-    use_deterministic = (n_negatives < 20) or (len(hard_negs) > 0)
+    use_deterministic = (n_regular < 20) or (len(hard_negs) > 0)
 
     if use_deterministic:
         # Deterministic sampling for stable negative pole
@@ -309,8 +438,8 @@ def create_sumo_training_dataset(
         # Allocate negative samples
         if hard_negs:
             # Use ~40% hard negatives, ~60% easy negatives for balance
-            n_hard = min(len(hard_negs), max(1, int(n_negatives * 0.4)))
-            n_easy = n_negatives - n_hard
+            n_hard = min(len(hard_negs), max(1, int(n_regular * 0.4)))
+            n_easy = n_regular - n_hard
 
             sampled_negs = hard_negs[:n_hard]
 
@@ -323,17 +452,17 @@ def create_sumo_training_dataset(
                     sampled_negs.extend([easy_negs[int(i * step)] for i in range(n_easy)])
         else:
             # No hard negatives, but small sample size - use deterministic spacing
-            if len(easy_negs) <= n_negatives:
+            if len(easy_negs) <= n_regular:
                 sampled_negs = easy_negs
             else:
-                step = len(easy_negs) / n_negatives
-                sampled_negs = [easy_negs[int(i * step)] for i in range(n_negatives)]
+                step = len(easy_negs) / n_regular
+                sampled_negs = [easy_negs[int(i * step)] for i in range(n_regular)]
     else:
         # Random sampling for large sample sizes (law of large numbers)
         # This is appropriate when:
         # 1. We have many samples (≥20)
         # 2. No hard negatives exist (concept has no natural complement)
-        sampled_negs = random.sample(negative_pool, min(n_negatives, len(negative_pool)))
+        sampled_negs = random.sample(negative_pool, min(n_regular, len(negative_pool)))
 
     for neg_concept in sampled_negs:
         # Split and quote negative concept names too
@@ -401,6 +530,61 @@ def _find_all_ancestors(
     return ancestors
 
 
+def _find_siblings(
+    target_term: str,
+    all_concepts: List[Dict],
+    concept_map: Dict[str, Dict]
+) -> set[str]:
+    """
+    Find sibling concepts (concepts that share the same parent).
+
+    Args:
+        target_term: SUMO term to find siblings for
+        all_concepts: All SUMO concepts
+        concept_map: Map of SUMO term -> concept dict
+
+    Returns:
+        Set of sibling concept names (excluding target itself)
+    """
+    # Find parents of target
+    parents = set()
+    for concept in all_concepts:
+        if target_term in concept.get('category_children', []):
+            parents.add(concept['sumo_term'])
+
+    # Find all children of those parents (siblings)
+    siblings = set()
+    for parent in parents:
+        if parent in concept_map:
+            for child in concept_map[parent].get('category_children', []):
+                if child != target_term:
+                    siblings.add(child)
+
+    return siblings
+
+
+def _find_l0_ancestors(
+    target_term: str,
+    all_concepts: List[Dict],
+    concept_map: Dict[str, Dict],
+    l0_concepts: set[str]
+) -> set[str]:
+    """
+    Find which L0 concepts the target descends from.
+
+    Args:
+        target_term: SUMO term to find L0 ancestors for
+        all_concepts: All SUMO concepts
+        concept_map: Map of SUMO term -> concept dict
+        l0_concepts: Set of L0 concept names
+
+    Returns:
+        Set of L0 concept names that target descends from
+    """
+    ancestors = _find_all_ancestors(target_term, all_concepts)
+    return ancestors & l0_concepts
+
+
 def _find_all_descendants(
     target_term: str,
     concept_map: Dict[str, Dict],
@@ -455,13 +639,16 @@ def build_sumo_negative_pool(
     min_layer_distance: int = 0,
     prioritize_hard_negatives: bool = True,
     hard_negative_weight: float = 3.0,
+    sibling_weight: float = 3.0,
+    use_l0_round_robin: bool = True,
 ) -> List[str]:
     """
     Build negative pool using SUMO hierarchy structure with optional hard negative prioritization.
 
-    Hard negatives are complementary or neutral concepts from the AI symmetry mapping
-    (e.g., AIDeception ↔ AITransparency). These force the probe to learn fine-grained
-    distinctions rather than just "this concept vs unrelated concepts".
+    Negative types (in order of importance):
+    1. Siblings (~30%): Concepts with same parent - forces fine-grained distinctions
+    2. AI Symmetry hard negatives: Complementary concepts from symmetry mapping
+    3. L0-balanced distant negatives: Round-robin sampling from each L0 branch
 
     Excludes all ancestors (parents, grandparents, etc.) and DIRECT CHILDREN ONLY.
     Nephews/nieces (grandchildren) are included as they are excellent hard negatives.
@@ -475,6 +662,8 @@ def build_sumo_negative_pool(
         min_layer_distance: Minimum layer distance (default 0 = exclude only direct relations)
         prioritize_hard_negatives: If True, include hard negatives multiple times
         hard_negative_weight: How many times to include each hard negative
+        sibling_weight: How many times to include each sibling (for sibling hard negatives)
+        use_l0_round_robin: If True, balance distant negatives across L0 buckets
 
     Returns:
         List of negative concept names (hard negs may appear multiple times)
@@ -491,6 +680,18 @@ def build_sumo_negative_pool(
     # Find ONLY direct children (not all descendants)
     # Nephews/nieces (grandchildren) are valid negatives!
     direct_children = set(target_concept.get('category_children', []))
+
+    # Find siblings (same parent) - these are hard negatives
+    siblings = _find_siblings(target_term, all_concepts, concept_map)
+
+    # Identify L0 concepts for bucket organization
+    l0_concepts = {c['sumo_term'] for c in all_concepts if c.get('layer') == 0}
+
+    # Find which L0 buckets the target belongs to (for exclusion from round-robin)
+    target_l0_ancestors = _find_l0_ancestors(target_term, all_concepts, concept_map, l0_concepts)
+
+    # Build L0 buckets for round-robin sampling
+    l0_buckets = {l0: [] for l0 in l0_concepts}
 
     negatives = []
 
@@ -517,9 +718,28 @@ def build_sumo_negative_pool(
         # For other layers, use layer distance
         layer_dist = abs(concept['layer'] - target_layer)
         if layer_dist >= min_layer_distance:
+            # Add to L0 bucket if using round-robin
+            if use_l0_round_robin and concept['layer'] > 0:
+                concept_l0_ancestors = _find_l0_ancestors(concept_term, all_concepts, concept_map, l0_concepts)
+                for l0 in concept_l0_ancestors:
+                    if l0 not in target_l0_ancestors:  # Exclude target's own L0 branches
+                        l0_buckets[l0].append(concept_term)
             negatives.append(concept_term)
 
-    # Apply hard negative prioritization for AI safety concepts
+    # ========================================================================
+    # SIBLING HARD NEGATIVES (~30% of pool via weighting)
+    # ========================================================================
+    sibling_negs_available = [s for s in siblings if s in negatives]
+    if sibling_negs_available:
+        # Remove siblings from regular pool, will add with weight
+        negatives = [n for n in negatives if n not in sibling_negs_available]
+        # Add siblings multiple times to achieve ~30% representation
+        negatives = sibling_negs_available * int(sibling_weight) + negatives
+        print(f"    👥 Added {len(sibling_negs_available)} sibling hard negatives with {sibling_weight}x weight")
+
+    # ========================================================================
+    # AI SYMMETRY HARD NEGATIVES
+    # ========================================================================
     if prioritize_hard_negatives:
         from .ai_symmetry_parser import get_hard_negatives, parse_ai_symmetry_file
 
@@ -527,8 +747,8 @@ def build_sumo_negative_pool(
             symmetry_map = parse_ai_symmetry_file()
             hard_negs = get_hard_negatives(target_term, symmetry_map)
 
-            # Filter to concepts that are in our negative pool
-            hard_negs_available = [n for n in hard_negs if n in negatives]
+            # Filter to concepts that are in our negative pool (and not siblings)
+            hard_negs_available = [n for n in hard_negs if n in negatives and n not in sibling_negs_available]
 
             if hard_negs_available:
                 # Remove hard negatives from regular pool
@@ -537,10 +757,42 @@ def build_sumo_negative_pool(
                 # Add hard negatives multiple times to increase sampling probability
                 negatives = hard_negs_available * int(hard_negative_weight) + negatives
 
-                print(f"    💎 Prioritized {len(hard_negs_available)} hard negatives (complements/neutrals) with {hard_negative_weight}x weight")
-        except Exception as e:
+                print(f"    💎 Added {len(hard_negs_available)} symmetry hard negatives with {hard_negative_weight}x weight")
+        except Exception:
             # Silently fall back to regular negatives if symmetry parsing fails
             pass
+
+    # ========================================================================
+    # L0 ROUND-ROBIN BALANCING
+    # ========================================================================
+    if use_l0_round_robin and target_layer > 0:
+        # Build a round-robin list from L0 buckets to ensure coverage
+        # This interleaves concepts from different L0 branches
+        non_empty_buckets = {k: v for k, v in l0_buckets.items() if v and k not in target_l0_ancestors}
+
+        if non_empty_buckets:
+            # Create round-robin list
+            round_robin_negs = []
+            bucket_iters = {k: iter(random.sample(v, len(v))) for k, v in non_empty_buckets.items()}
+            bucket_keys = list(bucket_iters.keys())
+
+            # Interleave from each bucket
+            exhausted = set()
+            idx = 0
+            while len(exhausted) < len(bucket_keys):
+                bucket_key = bucket_keys[idx % len(bucket_keys)]
+                if bucket_key not in exhausted:
+                    try:
+                        round_robin_negs.append(next(bucket_iters[bucket_key]))
+                    except StopIteration:
+                        exhausted.add(bucket_key)
+                idx += 1
+
+            # Replace the regular negatives list with round-robin balanced version
+            # Keep the weighted hard negatives at the front
+            hard_neg_portion = [n for n in negatives if negatives.count(n) > 1]
+            negatives = hard_neg_portion + round_robin_negs
+            print(f"    🔄 L0 round-robin: balanced across {len(non_empty_buckets)} L0 branches")
 
     return negatives
 

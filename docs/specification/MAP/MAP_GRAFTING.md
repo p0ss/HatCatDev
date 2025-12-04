@@ -1504,6 +1504,56 @@ def assess_graft_protection(graft: Graft) -> ProtectionAssessment:
     )
 ```
 
+### 10.3 CAT Oversight Triggers
+
+Grafts trigger CAT (Conjoined Adversarial Tomograph) updates based on their protection level. CATs must be notified when substrate capabilities change through grafting.
+
+| Protection Level | CAT Impact |
+|-----------------|------------|
+| STANDARD | Ambient CAT updated at next scheduled sync |
+| ELEVATED | Ambient CAT capability check required before graft activation |
+| PROTECTED | Escalation CAT review; probe coverage verification |
+| CRITICAL | Macro-CAT assessment required; graft blocked until CAT confirms interpretability |
+
+#### CAT-Graft Coordination
+
+When a graft adds new concept dimensions:
+
+1. **Probe Integration**: CAT must verify it can interpret probes reading from the new dimension
+2. **Translation Updates**: If the graft introduces concepts outside the CAT's supported `ConceptPackSpecID`s, a `TranslationMapping` must be provided or the CAT capability is degraded
+3. **Bias Monitoring**: CAT windows should include the grafted dimension's probe outputs to detect drift or unexpected correlations
+4. **Overlap Analysis**: If `OverlapAnalysis` detects high correlation with existing concepts, CAT should be notified to update its tomography baseline
+
+```jsonc
+GraftCATNotification = {
+  "graft_id": "graft-Eligibility-v1",
+  "concept_id": "concept/Eligibility",
+  "protection_level": "elevated",
+  "dimension_index": 2048,
+  "cat_actions_required": [
+    {
+      "action": "capability_check",
+      "reason": "New dimension added to substrate",
+      "blocking": true
+    },
+    {
+      "action": "update_probe_coverage",
+      "reason": "Probe org.hatcat/custom-v1::concept/Eligibility now active",
+      "blocking": false
+    }
+  ],
+  "overlap_alerts": [
+    {
+      "correlated_concept": "concept/QualificationStatus",
+      "correlation": 0.78,
+      "action": "update_tomography_baseline"
+    }
+  ]
+}
+```
+
+See `HAT/HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md` for full CAT specification.
+
 ---
 
 ## 11. Summary

@@ -141,20 +141,18 @@ def main():
     with open(output_dir / "pack_info.json", 'w') as f:
         json.dump(pack_reference, f, indent=2)
 
-    # Patch the module's LAYER_DATA_DIR to use the concept pack hierarchy
-    original_layer_dir = sumo_classifiers_module.LAYER_DATA_DIR
-    sumo_classifiers_module.LAYER_DATA_DIR = hierarchy_dir
-    print(f"Patched LAYER_DATA_DIR: {original_layer_dir} → {hierarchy_dir}")
-    print()
-
     # Train probes using the concept pack hierarchy
+    # NOTE: hierarchy_dir is passed directly to train_sumo_classifiers to avoid
+    # the Python default argument bug where module-level patching doesn't work
     print("=" * 80)
     print("STARTING TRAINING")
     print("=" * 80)
+    print(f"Using hierarchy: {hierarchy_dir}")
     print()
 
     sumo_classifiers_module.train_sumo_classifiers(
         layers=layers_to_train,
+        hierarchy_dir=hierarchy_dir,
         model_name=args.model,
         device=args.device,
         n_train_pos=args.n_train_pos,
@@ -165,9 +163,6 @@ def main():
         use_adaptive_training=True,
         validation_mode=args.validation_mode
     )
-
-    # Restore original (though not strictly necessary since script ends)
-    sumo_classifiers_module.LAYER_DATA_DIR = original_layer_dir
 
     # Generate version manifest from training results
     print()

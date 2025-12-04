@@ -1719,3 +1719,32 @@ python -m hatcat.meld protection-check \
 # Receiving BEs should apply their governance policies to this assessment.
 ```
 
+### 13.8 CAT Oversight Triggers
+
+Protection levels determine whether a meld triggers CAT (Conjoined Adversarial Tomograph) oversight review:
+
+| Protection Level | CAT Impact |
+|------------------|------------|
+| `standard` | No CAT action required |
+| `elevated` | CAT assessment at next window; logged for tribal review |
+| `protected` | CAT capability check required; undersized CAT triggers upgrade recommendation |
+| `critical` | Mandatory CAT profile review; CAT upgrade may be required before meld acceptance |
+
+**CAT Capability Check:**
+
+When melds touch `protected` or `critical` concepts:
+
+1. The system MUST verify the overseeing CAT can interpret the new concepts
+2. If the CAT's `supported_concept_packs` does not cover the meld, the CAT profile MUST be updated or upgraded
+3. Melds adding new critical simplexes MUST trigger CAT retraining/extension
+
+**CAT-Meld Coordination:**
+
+Per tribal CAT policy (see `HAT/HAT_HatCat_CAT_Policy.md`):
+
+- If a Meld adds new concepts to critical simplex `bound_concepts`, the CAT MUST be reviewed
+- CAT undersizing relative to BE growth triggers automatic tightening of USH/CSH constraints
+- Cross-BE melds SHOULD include CAT profile compatibility checks
+
+See `HAT/HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md` for full CAT specification.
+

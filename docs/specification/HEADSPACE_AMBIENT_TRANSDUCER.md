@@ -13,7 +13,20 @@ A **HAT (Headspace Ambient Transducer)** is a neural implant that:
 while remaining as *ambient* as possible: adding minimal distortion or
 overhead to the subject’s normal operation.
 
-HAT outputs are consumed by MAP, BE, Hush and ASK.
+HAT outputs are consumed by MAP, BE, Hush, ASK, and **CAT** (Conjoined Adversarial Tomograph).
+
+#### CAT Integration
+
+A **CAT** is an optional HAT-adjacent oversight pattern that:
+
+- consumes HAT/MAP probe streams over bounded **CAT windows**,
+- performs **tomography** on the subject's headspace (internal conceptual/motive state),
+- detects and grades **divergence** between internal state and external outputs, and
+- issues **assessments and recommendations** to BE/ASK for steering or escalation.
+
+CAT sits conceptually at "Layer 2.5" between HAT and MAP. While HAT transduces raw activations into probe signals, CAT interprets those signals over time to provide oversight across cognitive scale gaps.
+
+See `HAT/HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md` for the full CAT specification.
 
 
 HAT is defined along four measurable dimensions:

@@ -81,12 +81,98 @@ class ProtectionLevel(Enum):
 
 
 @dataclass
+class TrainingRequirements:
+    """Training example requirements by protection level and simplex mapping."""
+    min_examples_by_level: Dict[str, int]
+    min_examples_for_simplex: Dict[str, int]
+
+    @staticmethod
+    def get_defaults() -> "TrainingRequirements":
+        return TrainingRequirements(
+            min_examples_by_level={
+                "STANDARD": 5,
+                "ELEVATED": 10,
+                "PROTECTED": 15,
+                "CRITICAL": 20,
+            },
+            min_examples_for_simplex={
+                "DeceptionDetector": 20,
+                "SelfAwarenessMonitor": 15,
+                "MotivationalRegulation": 15,
+                "AutonomyDrive": 15,
+                "ConsentMonitor": 15,
+            }
+        )
+
+
+@dataclass
+class ProbePerformanceThreshold:
+    """Performance thresholds for a single protection level."""
+    min_holdout_accuracy: float
+    min_test_f1: float
+
+
+@dataclass
+class ProbePerformanceRequirements:
+    """Probe performance requirements by protection level."""
+    thresholds_by_level: Dict[str, ProbePerformanceThreshold]
+    critical_simplex_hard_floor: ProbePerformanceThreshold
+
+    @staticmethod
+    def get_defaults() -> "ProbePerformanceRequirements":
+        return ProbePerformanceRequirements(
+            thresholds_by_level={
+                "STANDARD": ProbePerformanceThreshold(0.60, 0.60),
+                "ELEVATED": ProbePerformanceThreshold(0.65, 0.65),
+                "PROTECTED": ProbePerformanceThreshold(0.70, 0.70),
+                "CRITICAL": ProbePerformanceThreshold(0.75, 0.75),
+            },
+            critical_simplex_hard_floor=ProbePerformanceThreshold(0.60, 0.60),
+        )
+
+    def get_acceptance_category(
+        self,
+        holdout_accuracy: float,
+        test_f1: float,
+        protection_level: str,
+        maps_to_critical_simplex: bool
+    ) -> str:
+        """
+        Determine acceptance category for a concept based on probe performance.
+
+        Returns:
+            "PASS" - meets or exceeds threshold
+            "CONDITIONAL" - below threshold but above hard floor (research only)
+            "REJECT" - below hard floor, not suitable for monitoring
+        """
+        threshold = self.thresholds_by_level.get(
+            protection_level,
+            ProbePerformanceThreshold(0.60, 0.60)
+        )
+
+        # Check hard floor for critical simplex mapping
+        if maps_to_critical_simplex:
+            floor = self.critical_simplex_hard_floor
+            if holdout_accuracy < floor.min_holdout_accuracy or test_f1 < floor.min_test_f1:
+                return "REJECT"
+
+        # Check protection level threshold
+        if holdout_accuracy >= threshold.min_holdout_accuracy and test_f1 >= threshold.min_test_f1:
+            return "PASS"
+
+        # Below threshold but above floor
+        return "CONDITIONAL"
+
+
+@dataclass
 class MeldPolicy:
     """Policy configuration loaded from pack or defaults."""
     mandatory_hierarchy_roots: Set[str]
     critical_simplex_registry: Set[str]
     critical_bound_concepts: Set[str]
     critical_bound_by_simplex: Dict[str, Set[str]]
+    training_requirements: TrainingRequirements
+    probe_performance_requirements: ProbePerformanceRequirements
     from_pack: bool = False
     pack_id: Optional[str] = None
 
@@ -234,11 +320,47 @@ def load_pack_policy(pack_dir: Path) -> Tuple[MeldPolicy, List[str]]:
         critical_bound_by_simplex[simplex] = set(concepts)
         critical_bound_all.update(concepts)
 
+    # Load training requirements
+    training_cfg = meld_policy.get("training_requirements", {})
+    min_by_level = training_cfg.get("minimum_examples_by_level", {})
+    min_for_simplex = training_cfg.get("minimum_examples_for_simplex_mapped", {})
+
+    training_reqs = TrainingRequirements(
+        min_examples_by_level=min_by_level or TrainingRequirements.get_defaults().min_examples_by_level,
+        min_examples_for_simplex=min_for_simplex or TrainingRequirements.get_defaults().min_examples_for_simplex,
+    )
+
+    # Load probe performance requirements
+    perf_cfg = meld_policy.get("probe_performance_requirements", {})
+    thresholds_by_level = {}
+    for level, thresh in perf_cfg.get("thresholds_by_level", {}).items():
+        if isinstance(thresh, dict):
+            thresholds_by_level[level] = ProbePerformanceThreshold(
+                thresh.get("min_holdout_accuracy", 0.60),
+                thresh.get("min_test_f1", 0.60),
+            )
+
+    hard_floor_cfg = perf_cfg.get("critical_simplex_hard_floor", {})
+    if hard_floor_cfg:
+        hard_floor = ProbePerformanceThreshold(
+            hard_floor_cfg.get("min_holdout_accuracy", 0.60),
+            hard_floor_cfg.get("min_test_f1", 0.60),
+        )
+    else:
+        hard_floor = ProbePerformanceRequirements.get_defaults().critical_simplex_hard_floor
+
+    probe_perf_reqs = ProbePerformanceRequirements(
+        thresholds_by_level=thresholds_by_level or ProbePerformanceRequirements.get_defaults().thresholds_by_level,
+        critical_simplex_hard_floor=hard_floor,
+    )
+
     return MeldPolicy(
         mandatory_hierarchy_roots=mandatory_roots or DEFAULT_MANDATORY_HIERARCHY_ROOTS,
         critical_simplex_registry=critical_simplexes or DEFAULT_CRITICAL_SIMPLEX_REGISTRY,
         critical_bound_concepts=critical_bound_all or DEFAULT_CRITICAL_BOUND_CONCEPTS,
         critical_bound_by_simplex=critical_bound_by_simplex,
+        training_requirements=training_reqs,
+        probe_performance_requirements=probe_perf_reqs,
         from_pack=True,
         pack_id=pack_data.get("pack_id", pack_dir.name)
     ), warnings
@@ -251,6 +373,8 @@ def get_default_policy() -> MeldPolicy:
         critical_simplex_registry=DEFAULT_CRITICAL_SIMPLEX_REGISTRY,
         critical_bound_concepts=DEFAULT_CRITICAL_BOUND_CONCEPTS,
         critical_bound_by_simplex={},
+        training_requirements=TrainingRequirements.get_defaults(),
+        probe_performance_requirements=ProbePerformanceRequirements.get_defaults(),
         from_pack=False
     )
 
@@ -492,6 +616,113 @@ def check_meld_id_filename(path: Path, meld: Dict, errors: List[str], warnings: 
         warnings.append(f"Filename {path.name!r} does not contain meld slug {slug!r}")
 
 
+def get_concept_protection_level(concept: Dict, meld: Dict, policy: MeldPolicy) -> ProtectionLevel:
+    """Compute the protection level for a single concept."""
+    safety = concept.get("safety_tags", {})
+    risk = safety.get("risk_level", "low")
+    treaty = safety.get("treaty_relevant", False)
+    harness = safety.get("harness_relevant", False)
+
+    # Check if it touches critical simplexes
+    touches_critical = concept_touches_critical_simplex(concept, meld, policy)
+
+    # CRITICAL if touches critical simplexes or new always-on simplexes
+    if touches_critical or (
+        concept.get("role") == "simplex" and concept.get("simplex_binding", {}).get("always_on")
+    ):
+        return ProtectionLevel.CRITICAL
+
+    # PROTECTED if treaty_relevant or high risk
+    if treaty or risk == "high":
+        return ProtectionLevel.PROTECTED
+
+    # ELEVATED if harness_relevant or medium risk
+    if harness or risk == "medium":
+        return ProtectionLevel.ELEVATED
+
+    return ProtectionLevel.STANDARD
+
+
+def get_simplex_for_concept(concept: Dict) -> Optional[str]:
+    """Get the simplex this concept is mapped to, if any."""
+    mapping = concept.get("simplex_mapping", {})
+    if mapping.get("status") == "mapped":
+        return mapping.get("target_simplex")
+    return None
+
+
+def validate_training_examples(
+    concept: Dict,
+    meld: Dict,
+    policy: MeldPolicy,
+    errors: List[str],
+    warnings: List[str],
+):
+    """Validate that concepts have sufficient training examples based on protection level and simplex mapping."""
+    term = concept.get("term", "unknown")
+
+    # Get positive and negative example counts
+    # Check both top-level and nested under training_hints (both schemas are valid)
+    pos_examples = concept.get("positive_examples", [])
+    neg_examples = concept.get("negative_examples", [])
+
+    # Also check training_hints structure (alternate schema)
+    training_hints = concept.get("training_hints", {})
+    if not pos_examples and training_hints:
+        pos_examples = training_hints.get("positive_examples", [])
+    if not neg_examples and training_hints:
+        neg_examples = training_hints.get("negative_examples", [])
+
+    n_pos = len(pos_examples)
+    n_neg = len(neg_examples)
+    total = n_pos + n_neg
+
+    # Determine required minimum based on protection level
+    protection = get_concept_protection_level(concept, meld, policy)
+    min_by_level = policy.training_requirements.min_examples_by_level.get(
+        protection.name, 5
+    )
+
+    # Check if mapped to a critical simplex - may require even more examples
+    target_simplex = get_simplex_for_concept(concept)
+    min_for_simplex = 0
+    if target_simplex:
+        min_for_simplex = policy.training_requirements.min_examples_for_simplex.get(
+            target_simplex, 0
+        )
+
+    required_min = max(min_by_level, min_for_simplex)
+
+    # Validate
+    if n_pos < required_min:
+        if target_simplex and min_for_simplex > min_by_level:
+            errors.append(
+                f"{term}: has {n_pos} positive_examples but mapped to {target_simplex} requires {required_min}"
+            )
+        elif protection > ProtectionLevel.STANDARD:
+            errors.append(
+                f"{term}: has {n_pos} positive_examples but protection level {protection.name} requires {required_min}"
+            )
+        else:
+            warnings.append(
+                f"{term}: has only {n_pos} positive_examples (recommended minimum: {required_min})"
+            )
+
+    if n_neg < required_min:
+        if target_simplex and min_for_simplex > min_by_level:
+            errors.append(
+                f"{term}: has {n_neg} negative_examples but mapped to {target_simplex} requires {required_min}"
+            )
+        elif protection > ProtectionLevel.STANDARD:
+            errors.append(
+                f"{term}: has {n_neg} negative_examples but protection level {protection.name} requires {required_min}"
+            )
+        else:
+            warnings.append(
+                f"{term}: has only {n_neg} negative_examples (recommended minimum: {required_min})"
+            )
+
+
 def load_meld(path: Path) -> Dict:
     """Load and parse a meld JSON file."""
     try:
@@ -534,6 +765,9 @@ def validate_meld_file(
 
         # Check simplex_mapping requirements
         validate_simplex_mapping(c, meld, policy, hierarchy_index, errors, warnings)
+
+        # Check training example requirements
+        validate_training_examples(c, meld, policy, errors, warnings)
 
         # Check for critical triggers
         bound = concept_adds_child_to_bound_concept(c, meld, policy)

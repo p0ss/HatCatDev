@@ -31,6 +31,9 @@ In this architecture:
 ├─────────────────────────────────────────────────────────┤
 │  MAP — Represent                                        │
 │  Aggregates neurons into ontological representations    │
+├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┤
+│  CAT — Interpret & Grade (optional HAT-adjacent)        │
+│  Tomography, divergence detection, oversight escalation │
 ├─────────────────────────────────────────────────────────┤
 │  HAT — Transduce                                        │
 │  Reads/writes neurons reliably and efficiently          │
@@ -258,6 +261,42 @@ A HAT implementation MUST:
   MAP; and
 * accept steering directives from Hush/BE, within the limits described
   in its HATComplianceReport and the active USH/CSH.
+
+---
+
+### 1.2.3 CAT (Conjoined Adversarial Tomograph) — HAT-Adjacent Pattern
+
+**Role**
+
+A **CAT** is an optional oversight component that sits conceptually at "Layer 2.5" between HAT and MAP. It:
+
+- consumes HAT/MAP probe streams over bounded **CAT windows**,
+- performs **tomography** on the subject's headspace (internal conceptual/motive state),
+- detects and grades **divergence** between internal state and external behaviour, and
+- issues **assessments and recommendations** to BE/ASK for steering or escalation.
+
+"Adversarial" means the CAT is explicitly allowed to mistrust both the substrate and itself, looking for mismatches, evasions, and pathologies rather than smoothing over noise.
+
+**CAT Size Classes** (non-normative):
+
+- **Micro-CAT** – lightweight heuristics, linear heads, or classifiers over probe summaries.
+- **Meso-CAT** – dedicated small/medium model (e.g. 100M–4B parameters) with MAP-aware prompts/adapters.
+- **Macro-CAT** – a full BE-capable or foundation model conjoined under an ASK treaty for oversight.
+
+**Key Outputs**
+
+- `CATAssessment` objects containing:
+  - natural language summaries of headspace state,
+  - divergence scores between interior and exterior state,
+  - risk scores and confidence levels,
+  - alerts for anomalies or treaty-relevant patterns,
+  - recommended actions (slow down, escalate, invoke larger CAT, tribal review).
+
+**Governance**
+
+Non-trivial CATs (meso/macro) SHOULD be treated as ASK Agents with their own UpliftRecords, USH profiles, and treaty obligations. A CAT may itself be monitored by another CAT (recursive oversight), though deployments MAY limit oversight depth.
+
+See `HAT/HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md` and `HAT/HAT_HatCat_CAT_Policy.md` for full specification and tribal policy.
 
 ---
 
