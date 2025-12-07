@@ -242,6 +242,8 @@ def train_layer(
     use_adaptive_training: bool = False,
     train_text_probes: bool = False,
     validation_mode: str = 'falloff',
+    validation_threshold: float = 0.5,
+    include_sibling_negatives: bool = True,
 ) -> Dict:
     """
     Train classifiers for a single SUMO abstraction layer.
@@ -253,6 +255,8 @@ def train_layer(
         save_text_samples: If True, save generated text for text probe training (legacy)
         use_adaptive_training: If True, use DualAdaptiveTrainer for independent graduation
         train_text_probes: If True, compute embedding centroids (legacy, not currently used)
+        include_sibling_negatives: If True (default), include siblings as hard negatives.
+                                   Set to False for two-pass training (sibling refinement done separately).
     """
     print(f"\n{'=' * 80}")
     print(f"TRAINING LAYER {layer}")
@@ -283,30 +287,18 @@ def train_layer(
         centroid_output_dir.mkdir(exist_ok=True)
 
     # Initialize adaptive trainer if requested (activation probes only now)
+    # Uses defaults from DualAdaptiveTrainer: 20 samples, 0.95 F1 target
     if use_adaptive_training:
         from .dual_adaptive_trainer import DualAdaptiveTrainer
         adaptive_trainer = DualAdaptiveTrainer(
-            activation_target_accuracy=0.95,
-            activation_initial_samples=30,  # Start with 30 samples (LLN threshold)
-            activation_first_increment=30,  # Add 30 more if fails (60 total)
-            activation_subsequent_increment=30,  # Add 30 per subsequent failure (90, 120, ...)
-            activation_max_samples=200,  # Increased from 100 to allow more complex concepts
-            text_target_accuracy=0.80,  # Not used anymore
-            text_initial_samples=10,
-            text_first_increment=20,
-            text_subsequent_increment=30,
-            text_max_samples=200,
+            # Use class defaults for activation probe config (20 samples, 0.95 F1)
             model=model,  # Needed for validation
             tokenizer=tokenizer,  # Needed for validation
             max_response_tokens=100,
             validate_probes=True,  # Enable calibration validation
             validation_mode=validation_mode,  # Validation mode (loose/falloff/strict)
-            validation_threshold=0.5,  # Min score to pass (for strict mode)
+            validation_threshold=validation_threshold,  # Min score to pass (for strict mode)
             validation_layer_idx=15,  # Layer 15 for activations
-            validation_tier1_iterations=3,  # Strict tier (A-grade)
-            validation_tier2_iterations=6,  # High tier (B+-grade)
-            validation_tier3_iterations=9,  # Medium tier (B-grade)
-            validation_tier4_iterations=12,  # Relaxed tier (C+-grade, prevent long tail)
             train_activation=True,
             train_text=False,  # Disable TF-IDF text probe training
         )
@@ -330,7 +322,10 @@ def train_layer(
 
         try:
             # Use all_concepts (not just this layer) to enable nephew negatives
-            negative_pool = build_sumo_negative_pool(all_concepts, concept)
+            # For two-pass training, skip sibling hard negatives in pass 1
+            negative_pool = build_sumo_negative_pool(
+                all_concepts, concept, include_siblings=include_sibling_negatives
+            )
             if len(negative_pool) < n_train_neg:
                 print(f"  ⚠️  Only {len(negative_pool)} negatives available (need {n_train_neg})")
                 n_train_neg_actual = min(n_train_neg, len(negative_pool))
@@ -339,41 +334,55 @@ def train_layer(
                 n_train_neg_actual = n_train_neg
                 n_test_neg_actual = n_test_neg
 
-            train_prompts, train_labels = create_sumo_training_dataset(
-                concept=concept,
-                all_concepts=concept_map,
-                negative_pool=negative_pool,
-                n_positives=n_train_pos,
-                n_negatives=n_train_neg_actual,
-                use_category_relationships=True,
-                use_wordnet_relationships=True,
-            )
-
+            # Split negative pool for train/test
             test_negative_pool = negative_pool[len(negative_pool) // 2 :]
-            test_prompts, test_labels = create_sumo_training_dataset(
-                concept=concept,
-                all_concepts=concept_map,
-                negative_pool=test_negative_pool,
-                n_positives=n_test_pos,
-                n_negatives=n_test_neg_actual,
-                use_category_relationships=True,
-                use_wordnet_relationships=True,
-            )
 
-            print(f"  Generated {len(train_prompts)} train, {len(test_prompts)} test prompts")
+            if use_adaptive_training:
+                # JIT training - only generate test set upfront, train samples generated incrementally
+                test_prompts, test_labels = create_sumo_training_dataset(
+                    concept=concept,
+                    all_concepts=concept_map,
+                    negative_pool=test_negative_pool,
+                    n_positives=n_test_pos,
+                    n_negatives=n_test_neg_actual,
+                    use_category_relationships=True,
+                    use_wordnet_relationships=True,
+                )
+                print(f"  Generated {len(test_prompts)} test prompts (train samples generated JIT)")
+            else:
+                # Non-adaptive: generate full train set upfront
+                train_prompts, train_labels = create_sumo_training_dataset(
+                    concept=concept,
+                    all_concepts=concept_map,
+                    negative_pool=negative_pool,
+                    n_positives=n_train_pos,
+                    n_negatives=n_train_neg_actual,
+                    use_category_relationships=True,
+                    use_wordnet_relationships=True,
+                )
+                test_prompts, test_labels = create_sumo_training_dataset(
+                    concept=concept,
+                    all_concepts=concept_map,
+                    negative_pool=test_negative_pool,
+                    n_positives=n_test_pos,
+                    n_negatives=n_test_neg_actual,
+                    use_category_relationships=True,
+                    use_wordnet_relationships=True,
+                )
+                print(f"  Generated {len(train_prompts)} train, {len(test_prompts)} test prompts")
 
-            # Save text samples for text probe training
-            if save_text_samples:
-                text_sample_file = text_samples_dir / f"{concept_name}.json"
-                with open(text_sample_file, 'w') as f:
-                    json.dump({
-                        'concept': concept_name,
-                        'layer': layer,
-                        'train_prompts': train_prompts,
-                        'train_labels': [int(label) for label in train_labels],
-                        'test_prompts': test_prompts,
-                        'test_labels': [int(label) for label in test_labels],
-                    }, f)
+                # Save text samples for text probe training (non-adaptive only)
+                if save_text_samples:
+                    text_sample_file = text_samples_dir / f"{concept_name}.json"
+                    with open(text_sample_file, 'w') as f:
+                        json.dump({
+                            'concept': concept_name,
+                            'layer': layer,
+                            'train_prompts': train_prompts,
+                            'train_labels': [int(label) for label in train_labels],
+                            'test_prompts': test_prompts,
+                            'test_labels': [int(label) for label in test_labels],
+                        }, f)
 
             if use_adaptive_training:
                 # === ADAPTIVE TRAINING MODE ===
@@ -403,22 +412,10 @@ def train_layer(
                         output_dir / f"{concept_name}_classifier.pt"
                     )
 
-                # Compute and save embedding centroid instead of training text probe
+                # Note: Embedding centroids not supported in JIT adaptive mode
+                # (would require returning prompts from adaptive trainer)
                 if train_text_probes:
-                    from .embedding_centroids import compute_concept_centroid, save_concept_centroid
-                    # Filter to positive prompts only (label=1)
-                    positive_prompts = [p for p, label in zip(train_prompts, train_labels) if label == 1]
-                    print(f"  Computing embedding centroid from {len(positive_prompts)} positive prompts...")
-                    centroid = compute_concept_centroid(
-                        model=model,
-                        tokenizer=tokenizer,
-                        prompts=positive_prompts,
-                        device=device,
-                        layer_idx=-1,
-                    )
-                    centroid_path = centroid_output_dir / f"{concept_name}_centroid.npy"
-                    save_concept_centroid(concept_name, centroid, centroid_path)
-                    print(f"  ✓ Saved centroid to {centroid_path}")
+                    print(f"  ⚠️  Skipping embedding centroid (not supported in JIT adaptive mode)")
 
                 # Extract metrics for results
                 activation_metrics = adaptive_results.get('activation') or {}
@@ -596,6 +593,11 @@ def train_sumo_classifiers(
     train_text_probes: bool = False,
     use_adaptive_training: bool = False,
     validation_mode: str = 'falloff',
+    validation_threshold: float = 0.5,
+    include_sibling_negatives: bool = True,
+    run_sibling_refinement: bool = False,
+    sibling_refine_epochs: int = 20,
+    sibling_refine_prompts: int = 15,
 ) -> List[Dict]:
     """
     High-level entry point for training multiple layers.
@@ -606,6 +608,8 @@ def train_sumo_classifiers(
                       This is a required parameter to prevent accidentally using the wrong hierarchy.
         train_text_probes: If True, compute embedding centroids (legacy, not currently used)
         use_adaptive_training: If True, use DualAdaptiveTrainer for independent graduation
+        include_sibling_negatives: If True (default), include siblings as hard negatives.
+                                   Set to False for two-pass training (sibling refinement done separately).
     """
     output_dir = Path(output_dir)
 
@@ -657,8 +661,26 @@ def train_sumo_classifiers(
             use_adaptive_training=use_adaptive_training,
             train_text_probes=train_text_probes,
             validation_mode=validation_mode,
+            validation_threshold=validation_threshold,
+            include_sibling_negatives=include_sibling_negatives,
         )
         summaries.append(summary)
+
+        # Sibling ranking refinement after each layer (if enabled)
+        if run_sibling_refinement:
+            from .sibling_ranking import refine_all_sibling_groups
+            hidden_dim = model.config.hidden_size
+            refine_all_sibling_groups(
+                layer=layer,
+                probe_dir=output_dir / f"layer{layer}",
+                hierarchy_dir=hierarchy_dir,
+                model=model,
+                tokenizer=tokenizer,
+                device=device,
+                n_prompts_per_sibling=sibling_refine_prompts,
+                epochs=sibling_refine_epochs,
+                hidden_dim=hidden_dim,
+            )
 
     # Compute centroids separately ONLY if NOT using adaptive training
     # (adaptive training computes them inline)

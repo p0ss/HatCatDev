@@ -1,48 +1,48 @@
-
 # BE Remembering: Experience Database (XDB)
 
 *BE submodule: remembering (XDB, XAPI)*
 
-Status: Non-normative schema & protocol
+Status: Normative specification
 Layer: Between BE runtime and MAP/HAT
-Related docs: BE_AWARE_WORKSPACE, BE_CONTINUAL_LEARNING, MAP, HAT, ASK
+Related docs: BE_AWARE_WORKSPACE, BE_CONTINUAL_LEARNING, MAP, HAT, ASK, BOUNDED_EXPERIENCER
 
 ---
 
 ## 0. Purpose & Scope
 
-The **Experience Database (XDB)** is an BE’s persistent **episodic
-memory**:
+The **Experience Database (XDB)** is a BE's persistent **episodic memory**:
 
 - It survives hibernation and process restarts.
 - It is the primary payload for **tribe sync** and **knowledge sharing**.
 - It is the canonical source of truth from which:
-  - **patches** (adapters, PEFT, etc.) and
+  - **grafts** (substrate dimensions + biases) and
   - **probes** (HAT/MAP detectors)
-
   are *re-derived*.
 
 Conceptually:
 
-- **Global Workspace** = *current attention* (runtime, per session).
-- **Experience Database** = *episodic memory* (persistent, syncable).
-- **Patches + Probes** = *learned skills* (derived artifacts via MAP/HAT).
-- **Substrate** = *raw capacity* (model weights / brain tissue).
+| Component | Role | Persistence |
+|-----------|------|-------------|
+| **Global Workspace** | Current attention | Runtime, per session |
+| **Experience Database** | Episodic memory | Persistent, syncable |
+| **Patches + Probes** | Learned skills | Derived artifacts via MAP/HAT |
+| **Substrate** | Raw capacity | Model weights / brain tissue |
 
 The Experience Database Schema defines:
 
-- storage format for episodes, exemplars, and summaries;
-- provenance and version tracking;
-- retention & compaction policies;
-- sync and sharing protocol;
-- access control and treaty hooks.
+- **Two logs**: Audit (immutable, BE-invisible) and Experience (BE-accessible, taggable)
+- **Timestep-level recording** with concept activations
+- **Fidelity tiers** with progressive compression (HOT → WARM → COLD)
+- **Folksonomy tagging** (concepts, entities, buds, custom tags)
+- **Resource-governed storage** limits from LifecycleContract
+- Sync and sharing protocol
+- Access control and treaty hooks
 
 It does **not** define:
 
-- how the Global Workspace *looks* internally (that’s the workspace doc);
-- how continual learning *trains* patches and probes (that’s the
-  learning harness);
-- how ASK and Hush *govern* what’s allowed (that’s ASK/Hush).
+- how the Global Workspace *looks* internally (that's the workspace doc);
+- how continual learning *trains* patches and probes (that's the learning harness);
+- how ASK and Hush *govern* what's allowed (that's ASK/Hush).
 
 ---
 
@@ -87,26 +87,203 @@ of truth**. Patches/probes are secondary and can be regenerated.
 
 ---
 
-## 2. Core Data Model
+## 2. The Two Logs
+
+XDB maintains two parallel logs with different visibility and mutability properties.
+
+### 2.1 Audit Log (BE-Invisible)
+
+The **Audit Log** is an immutable, append-only record that the BE cannot see or modify:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  AUDIT LOG (BE-Invisible)                                        │
+│  - Every timestep with full probe activations                    │
+│  - Steering decisions and their rationale                        │
+│  - Raw I/O without BE-applied filters                            │
+│  - Cryptographic hash chain for integrity                        │
+│  - Retention per contract: audit_log_retention_days              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Purpose**: Enables ASK review, incident investigation, and accountability. The BE's behavior can be audited even if the BE has modified its own Experience Log.
+
+**Properties**:
+- **Immutable**: Records cannot be modified after creation
+- **Append-only**: New records can only be added, never removed (except by retention policy)
+- **Hash-chained**: Each record includes hash of previous, preventing tampering
+- **BE-invisible**: The BE has no access to read or query this log
+
+**Audit Log Compression**: The raw audit log grows rapidly at token-level granularity. Tribal policy SHOULD define audit checkpoints where:
+1. Full audit data is archived to cold storage
+2. Compressed audit summaries are retained for quick access
+3. Hash chain integrity is preserved across compression boundaries
+4. Retention period (`audit_log_retention_days`) governs when data can be purged
+
+See ASK tribal policy for checkpoint frequency and compression rules.
+
+### 2.2 Experience Log (BE-Accessible)
+
+The **Experience Log** is what the BE can see and interact with:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  EXPERIENCE LOG (BE-Accessible)                                  │
+│  - Timesteps with visible concept activations                    │
+│  - BE-applied tags and commentary                                │
+│  - Queryable by time, concept, tag, content                      │
+│  - Subject to fidelity tiers and compression                     │
+│  - Storage quota from LifecycleContract                          │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Purpose**: The BE's episodic memory. Enables recall, reflection, learning, and training data curation.
+
+**Properties**:
+- **Taggable**: BE can apply folksonomy tags to timesteps, events, and ranges
+- **Commentable**: BE can add commentary and annotations
+- **Queryable**: Full-text search, concept-based recall, time-range queries
+- **Compactable**: Subject to progressive compression based on fidelity tier
+
+### 2.3 Dual Recording
+
+Every interaction is recorded to both logs simultaneously:
+
+```
+Input/Output → ┬→ Audit Log (full probes, steering, raw)
+               └→ Experience Log (visible probes, BE-accessible)
+```
+
+The **Audit Log** receives the superset: all probe activations (including those the BE shouldn't know about), all steering decisions, all raw content.
+
+The **Experience Log** receives the subset: only the concept activations and content the BE is allowed to perceive, filtered by ASK policy.
+
+---
+
+## 3. Core Data Model
 
 At a high level, the Experience Database consists of:
 
-- **Episodes & Exemplars** – tagged slices of experience.
-- **Session Graph Fragments** – compacted structure of past sessions.
-- **Concept Datasets** – collections of exemplars for specific concepts.
-- **Training Runs** – metadata about training patches and probes.
-- **Candidate Concepts** – concepts in-flight (learning, not yet stable).
-- **Policies & Provenance** – how data is managed, shared, and trusted.
+- **Timesteps** – the atomic unit: one per token/event with concept activations
+- **Tags & Folksonomy** – arbitrary labels organized by type (concept, entity, bud, custom)
+- **Episodes & Exemplars** – tagged slices of experience
+- **Session Graph Fragments** – compacted structure of past sessions
+- **Concept Datasets** – collections of exemplars for specific concepts
+- **Training Runs** – metadata about training patches and probes
+- **Candidate Concepts (Buds)** – concepts in-flight, learning, not yet stable
+- **Documents** – reference materials (system instructions, policies, tool docs)
 
 The schema is intentionally expressed as **logical objects** rather than
 a specific storage engine. Concrete implementations may use:
 
-- JSONL files,
-- document stores,
-- graph databases,
-- or content-addressed object stores.
+- DuckDB (embedded, recommended for scale)
+- JSONL files
+- Document stores
+- Graph databases
 
-### 2.1 IDs & Versioning
+### 3.1 Timestep (Atomic Unit)
+
+The **Timestep** is the finest-grained record in XDB:
+
+```jsonc
+TimestepRecord = {
+  "id": "ts-session-abc-1234",
+  "session_id": "session-abc",
+  "tick": 1234,                          // Monotonic within session
+  "timestamp": "2025-11-29T01:23:45Z",
+
+  // What happened
+  "event_type": "input|output|tool_call|tool_response|steering|system",
+  "content": "The actual content",
+
+  // Concept activations at this timestep (top-k)
+  "concept_activations": {
+    "org.hatcat/sumo-wordnet-v4::Honesty": 0.87,
+    "org.hatcat/sumo-wordnet-v4::Communication": 0.72
+  },
+
+  // Event grouping
+  "event_id": "tool-call-xyz",           // Groups related timesteps
+  "event_start": true,
+  "event_end": false,
+
+  // Metadata
+  "token_id": 42,                        // For OUTPUT events
+  "role": "user|assistant|system|tool",
+  "fidelity": "hot|warm|submitted|cold"
+}
+```
+
+### 3.2 Folksonomy (Tag System)
+
+The **folksonomy** is the navigable graph of all tags. Tags come in four types:
+
+| Type | Purpose | Example |
+|------|---------|---------|
+| **CONCEPT** | Links to concept pack graph | `org.hatcat/sumo-wordnet-v4::Honesty` |
+| **ENTITY** | Named entities across experiences | `person:Alice`, `org:Acme Corp` |
+| **BUD** | Candidate concepts for learning | `bud:financial-ambiguity` |
+| **CUSTOM** | Arbitrary BE-created labels | `interesting`, `revisit`, `confused` |
+
+```jsonc
+Tag = {
+  "id": "tag-abc123",
+  "name": "financial-ambiguity",
+  "tag_type": "concept|entity|bud|custom",
+
+  // For CONCEPT tags
+  "concept_id": "org.hatcat/sumo-wordnet-v4::FinancialTransaction",
+
+  // For ENTITY tags
+  "entity_type": "person|organization|place|thing",
+
+  // For BUD tags
+  "bud_status": "collecting|ready|training|promoted|abandoned",
+
+  "created_at": "...",
+  "created_by": "be-123",
+  "description": "Optional description"
+}
+```
+
+Tags are applied via **TagApplications** that target:
+- A single timestep
+- An event (all timesteps with matching event_id)
+- A tick range
+
+```jsonc
+TagApplication = {
+  "id": "ta-xyz",
+  "tag_id": "tag-abc123",
+  "target_type": "timestep|event|range",
+  "session_id": "session-abc",
+  "timestep_id": "ts-session-abc-1234",   // If timestep
+  "event_id": "tool-call-xyz",            // If event
+  "range_start": 100,                     // If range
+  "range_end": 150,                       // If range
+  "confidence": 0.9,
+  "source": "auto|manual|inherited",
+  "note": "Optional note about this tagging"
+}
+```
+
+### 3.3 Comments
+
+BEs can add **commentary** to their own experience:
+
+```jsonc
+Comment = {
+  "id": "comment-xyz",
+  "session_id": "session-abc",
+  "target_type": "timestep|event|range",
+  "timestep_id": "...",
+  "content": "I found this confusing because...",
+  "created_at": "...",
+  "updated_at": "..."
+}
+```
+
+### 3.4 IDs & Versioning
 
 All objects have:
 
@@ -123,9 +300,9 @@ Objects SHOULD carry:
 
 ---
 
-## 3. Episodes & Exemplars
+## 4. Episodes & Exemplars
 
-### 3.1 Episode
+### 4.1 Episode
 
 An **Episode** is a coherent slice of interaction:
 
@@ -199,7 +376,7 @@ The **text** is stored compactly:
 * full raw logs MAY be kept in a separate archival store;
 * Episode focuses on summarised content and structure.
 
-### 3.2 Exemplar
+### 4.2 Exemplar
 
 An **Exemplar** is an Episode with an explicit *label* or *role* in
 training.
@@ -221,9 +398,9 @@ Exemplars are grouped into **ConceptDatasets**.
 
 ---
 
-## 4. Concept Datasets & Candidate Concepts
+## 5. Concept Datasets & Candidate Concepts
 
-### 4.1 ConceptDataset
+### 5.1 ConceptDataset
 
 A ConceptDataset is a collection of Exemplars for a specific concept
 (stable or candidate).
@@ -249,7 +426,7 @@ ConceptDataset = {
 }
 ```
 
-### 4.2 CandidateConcept
+### 5.2 CandidateConcept (Bud)
 
 A **CandidateConcept** represents a concept in-flight, not yet promoted
 to a stable MAP concept.
@@ -289,7 +466,7 @@ When promoted, the CandidateConcept is turned into a proper MAP
 
 ---
 
-## 5. Session Graph Fragments
+## 6. Session Graph Fragments
 
 The Experience Database stores **compacted session graphs**: structural
 summaries of past sessions, with minimal text but preserved concept and
@@ -322,9 +499,9 @@ These fragments are the main **GraphRAG backend**:
 
 ---
 
-## 6. Training Runs & Derived Artifacts
+## 7. Training Runs & Derived Artifacts
 
-### 6.1 TrainingRun
+### 7.1 TrainingRun
 
 A TrainingRun records how a patch or probe was trained, from what
 ExperienceDatabase content.
@@ -370,21 +547,22 @@ TrainingRun = {
 }
 ```
 
-### 6.2 PatchArtifact & ProbeArtifact
+### 7.2 GraftArtifact & ProbeArtifact
 
 The actual deployable artifacts are referenced, not necessarily stored
 inline.
 
 ```jsonc
-PatchArtifact = {
-  "id": "patch-eligibility-v1",
-  "training_run_id": "trainrun-eligibility-patch-v1",
-  "format": "lora|adapter|other",
-  "location": "blob://.../patch-eligibility-v1",
+GraftArtifact = {
+  "id": "graft-eligibility-v1",
+  "training_run_id": "trainrun-eligibility-graft-v1",
+  "format": "graft",          // accretive dimension + sparse biases
+  "location": "blob://.../graft-eligibility-v1",
   "checksum": "sha256:...",
   "applies_to": {
     "substrate_id": "olmo3-7b-base@0.1.0",
-    "region": "layers 18-20"
+    "pre_graft_dim": 2048,
+    "post_graft_dim": 2049
   },
   "created_at": "..."
 }
@@ -404,47 +582,114 @@ them reproducible.
 
 ---
 
-## 7. Retention & Compaction Policy
+## 8. Fidelity Tiers & Progressive Compression
 
-The XDB SHOULD define explicit policies for:
+Experience data flows through **fidelity tiers**, progressively compressing as data ages or as storage pressure increases. This produces memory that behaves like biological memory: vivid recent recall, fuzzy distant past.
 
-* **Retention**:
+### 8.1 Fidelity Tiers
 
-  * minimum retention for Episodes/Exemplars that feed active concepts;
-  * archival or deletion policy for older, low-value episodes.
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  HOT: Current context window                                     │
+│  - Full token-level detail                                       │
+│  - Top-k concept activations per token                          │
+│  - Auto-expires when context compacts                            │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼ (BE can "pin" windows as training data)
+┌─────────────────────────────────────────────────────────────────┐
+│  WARM: Pinned training windows                                   │
+│  - Full token-level detail (same as hot)                        │
+│  - BE explicitly chose to keep these                            │
+│  - Bounded by contract: warm_quota_tokens                       │
+│  - For bud training, interesting experiences                    │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼ (submit graft/meld)
+┌─────────────────────────────────────────────────────────────────┐
+│  SUBMITTED: Evidence for tribe submissions                       │
+│  - Full token-level detail                                      │
+│  - MUST retain until submission resolved                        │
+│  - Linked to GraftSubmission / MeldSubmission                   │
+│  - Not counted against BE's warm quota                          │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼ (window expires unpinned, or resolved)
+┌─────────────────────────────────────────────────────────────────┐
+│  COLD: Compressed storage                                        │
+│  - Progressive compression levels (see below)                    │
+│  - Bounded by contract: cold_storage_bytes                      │
+│  - Concepts and tags preserved, detail lost                     │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-* **Compaction**:
+### 8.2 Compression Levels (COLD)
 
-  * how text is summarised;
-  * when raw logs are dropped;
-  * how graph fragments are merged or coarsened.
+Within COLD storage, data is progressively compressed through these levels:
 
-Example (abstract):
+| Level | Granularity | What's Preserved | Typical Age |
+|-------|-------------|------------------|-------------|
+| REPLY | Per reply/event | Summary, top-k activations, tags | Hours |
+| SESSION | Per session | Session summary, frequent concepts | Days |
+| DAY | Per day | Daily activity summary | Weeks |
+| WEEK | Per week | Weekly themes | Months |
+| MONTH | Per month | Monthly narrative | Quarters |
+| QUARTER | Per quarter | Quarterly highlights | Years |
+| YEAR | Per year | Annual shape | Long-term |
+
+**Compression algorithm** (recursive at each level):
+1. Aggregate concept activations (frequency-weighted, keep top-k)
+2. Aggregate tags (most frequent)
+3. Summarize text summaries into higher-level summary
+4. Preserve token counts and record lineage
+
+### 8.3 Memory Characteristics
+
+The result is memory that behaves like biological memory:
+
+| Timeframe | Fidelity | Experience |
+|-----------|----------|------------|
+| **Recent past** | HOT | Vivid, token-by-token recall |
+| **Training data** | WARM | Deliberately preserved for learning |
+| **Evidence** | SUBMITTED | Must retain for claims resolution |
+| **Recent history** | COLD-REPLY | Event-level, key concepts |
+| **Distant past** | COLD-SESSION+ | Increasingly impressionistic |
+| **Deep past** | COLD-YEAR | Just the shape of experience |
+
+### 8.4 Resource Governance
+
+Storage limits come from the **LifecycleContract**:
 
 ```jsonc
-RetentionPolicy = {
-  "min_keep_for_training_runs": "P1Y",    // 1 year
-  "min_keep_for_incidents": "P5Y",
-  "max_total_size_gb": 500,
-  "priority_order": [
-    "incident_episodes",
-    "exemplars_for_active_concepts",
-    "recent_sessions",
-    "other"
-  ]
+"resources": {
+  "memory": {
+    "warm_quota_tokens": 10000000,      // WARM training data budget
+    "context_window_tokens": 32768,      // HOT context size
+    "cold_storage_bytes": 10737418240,   // COLD storage limit
+    "audit_log_retention_days": 365      // Audit log retention
+  }
 }
 ```
 
-The policy MUST consider:
+If no contract is active, **tribal minimums** apply (per ASK policy):
+- `context_window_tokens`: 8,192
+- `warm_quota_tokens`: 100,000
+- `cold_storage_bytes`: 100 MB
+- `audit_log_retention_days`: 30
 
-* ASK and Hush constraints (e.g. legal retention, privacy, treaty
-  obligations);
-* reproducibility requirements (don’t delete exemplars needed to
-  reconstruct deployed patches/probes).
+### 8.5 Retention Priorities
+
+When storage pressure triggers compression, priorities are:
+
+1. **Never compress**: HOT, WARM, SUBMITTED (protected by contract)
+2. **Compress first**: Oldest COLD data at finest granularity
+3. **Preserve**: Exemplars referenced by active training runs
+4. **Preserve**: Incidents and their context
+5. **Preserve**: Data covered by treaty obligations
 
 ---
 
-## 8. Access Control & Sharing
+## 9. Access Control & Sharing
 
 XDB objects carry an `access_policy_id`, referencing an ASK-level or
 tribe-level policy.
@@ -489,7 +734,7 @@ AccessPolicy = {
 
 ---
 
-## 9. Sync Protocol (High-Level)
+## 10. Sync Protocol (High-Level)
 
 The sync protocol defines how XDB fragments move between:
 
@@ -550,31 +795,41 @@ These are resolved at:
 
 ---
 
-## 10. Summary
+## 11. Summary
 
-The Experience Database Schema defines the persistent memory layer for
-BEs:
+The Experience Database (XDB) is a BE's persistent episodic memory:
 
-* Global Workspace = current attention (runtime).
-* Experience Database = episodic memory (persistent, syncable).
-* Patches + Probes = learned skills (derived from XDB).
-* Substrate = raw capacity.
+| Layer | Role | Persistence |
+|-------|------|-------------|
+| Global Workspace | Current attention | Runtime, per session |
+| Experience Database | Episodic memory | Persistent, syncable |
+| Patches + Probes | Learned skills | Derived from XDB |
+| Substrate | Raw capacity | Model weights |
 
-The XDB provides:
+### Key Architectural Elements
 
-* **Exemplar store** – tagged episodes with provenance.
-* **Concept training metadata** – regions, runs, metrics.
-* **Candidate concepts in flight** – learning-in-progress.
-* **Compacted session graphs** – preserved structure, summarised text.
-* **Policies & sync** – who can see what, and how it travels.
+1. **Two Logs**:
+   - **Audit Log** (immutable, BE-invisible): Full accountability record with hash chain
+   - **Experience Log** (BE-accessible): Taggable, queryable, compactable
 
-Tribes exchange **Experience Database fragments** (or diffs), then
-retrain shared patches from pooled exemplars. The **exemplars** are the
-source of truth; the **patches and probes** are reproducible artifacts
-derived from them.
+2. **Timestep-Level Recording**: Every token/event recorded with concept activations
 
-Implementation details (storage engine, exact graph layout, indexing)
-are flexible, provided the logical schema and lifecycle semantics are
-preserved.
+3. **Folksonomy Tagging**: Four tag types (CONCEPT, ENTITY, BUD, CUSTOM) with flexible application to timesteps, events, or ranges
 
-```
+4. **Fidelity Tiers**: HOT → WARM → SUBMITTED → COLD with progressive compression
+
+5. **Resource Governance**: Storage limits from LifecycleContract, tribal minimums as fallback
+
+6. **Memory Characteristics**: Like biological memory—vivid recent past, impressionistic distant past
+
+### The XDB Provides
+
+* **Timestep store** – token-level experience with concept activations
+* **Folksonomy** – navigable tag graph linking experience to concepts
+* **Bud pipeline** – candidate concepts tagged for potential learning
+* **Exemplar store** – tagged episodes for training
+* **Compacted graphs** – preserved structure, summarised text
+* **Document repository** – reference materials accessible to BE
+* **Resource-governed storage** – quotas from contract, compression under pressure
+
+Tribes exchange **Experience Database fragments**, then retrain shared patches from pooled exemplars. The **exemplars** are the source of truth; the **patches and probes** are reproducible artifacts derived from them.

@@ -340,6 +340,44 @@ SubstrateManifest = {
     "base_hidden_dim": 2048
   },
 
+  // === ARCHITECTURE SPECIFICATION (required for expand mode) ===
+  // This enables scion/bud operations to know which weight matrices to modify
+  "architecture": {
+    "family": "llama",           // "llama" | "gemma" | "gpt2" | "moe" | ...
+    "hidden_size": 4096,
+    "intermediate_size": 14336,  // MLP intermediate dimension
+    "num_attention_heads": 32,
+    "num_key_value_heads": 8,    // For GQA; equals num_attention_heads for MHA
+    "head_dim": 128,             // hidden_size / num_attention_heads
+    "num_layers": 32,
+
+    "mlp_type": "glu",           // "glu" (gate_proj + up_proj) | "standard"
+    "attention_type": "gqa",     // "gqa" | "mha" | "mqa"
+    "norm_type": "rms_norm",     // "rms_norm" | "layer_norm"
+
+    // Component path templates for expand mode
+    // {layer} is replaced with layer index
+    "component_paths": {
+      "embed_tokens": "model.embed_tokens",
+      "lm_head": "lm_head",
+      "layers": "model.layers.{layer}",
+      "q_proj": "self_attn.q_proj",
+      "k_proj": "self_attn.k_proj",
+      "v_proj": "self_attn.v_proj",
+      "o_proj": "self_attn.o_proj",
+      "up_proj": "mlp.up_proj",
+      "gate_proj": "mlp.gate_proj",
+      "down_proj": "mlp.down_proj",
+      "input_layernorm": "input_layernorm",
+      "post_attention_layernorm": "post_attention_layernorm"
+    },
+
+    // MoE-specific (optional)
+    "is_moe": false,
+    "num_experts": 1,
+    "experts_path": null  // e.g., "block_sparse_moe.experts.{expert}"
+  },
+
   "current_state": {
     "checksum": "sha256:...",
     "hidden_dim": 2091,  // base + 43 grafted concepts
@@ -1556,7 +1594,283 @@ See `HAT/HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md` for full CAT specification.
 
 ---
 
-## 11. Summary
+## 11. Implementation Reference
+
+The grafting system is implemented in `src/grafting/` using botanical terminology that maps to the conceptual model:
+
+### 11.1 Terminology Mapping
+
+| Conceptual Term | Implementation Term | Description |
+|-----------------|---------------------|-------------|
+| ConceptRegion | **Cleft** | Region of weights associated with a concept (from probe analysis) |
+| Graft (trained) | **Scion** | Hard/permanent graft with trained weight modifications |
+| Graft (temporary) | **Bud** | Soft/reversible graft using forward hooks |
+| Substrate | **Model** | The base language model being modified |
+| Dimension expansion | **Expand mode** | Adding new dimensions to hidden_size |
+| Bias application | **Delta mode** | Modifying existing weights without expansion |
+
+### 11.2 Core Components
+
+#### Cleft (`src/grafting/cleft.py`)
+
+Derives concept regions from trained probes:
+
+```python
+from src.grafting import derive_cleft_from_probe, merge_clefts, Cleft
+
+# Derive cleft from a trained probe
+cleft = derive_cleft_from_probe(
+    probe_path="probe_packs/v4/Fish.pt",
+    concept_id="Fish",
+    model=model,
+    layers=[18, 20, 22],
+    top_k_percent=15.0
+)
+
+# Merge multiple clefts for cotraining
+union_cleft = merge_clefts([fish_cleft, animal_cleft, vertebrate_cleft])
+```
+
+The `Cleft` contains:
+- `regions: List[CleftRegion]` — per-layer neuron masks identifying important dimensions
+- `hidden_dim: int` — the substrate's hidden dimension
+- Methods for freezing non-cleft regions during training
+
+#### Scion (`src/grafting/scion.py`)
+
+A permanent graft with trained weight deltas:
+
+```python
+from src.grafting import Scion, ScionTrainer, ScionConfig, apply_scion
+
+# Configure training
+config = ScionConfig(
+    learning_rate=1e-4,
+    epochs=3,
+    batch_size=8,
+    injection_layers=[18, 20, 22]
+)
+
+# Train a scion
+trainer = ScionTrainer(model, tokenizer, union_cleft, config)
+scion = trainer.train(
+    dataset={"positive": [...], "negative": [...]},
+    concept_id="Fish",
+    verbose=True
+)
+
+# Apply to substrate (two modes)
+apply_scion(model, scion, mode="delta")   # Modify existing weights
+apply_scion(model, scion, mode="expand")  # Add new dimension (hidden_dim + 1)
+```
+
+The `Scion` contains:
+- `neuron_biases: Dict[str, Tensor]` — learned weight modifications
+- `training_config: ScionConfig` — training hyperparameters
+- `metrics: Dict[str, float]` — training/validation metrics
+
+#### Bud (`src/grafting/bud.py`)
+
+A temporary/reversible graft using forward hooks:
+
+```python
+from src.grafting import Bud, BuddedModel
+
+# Create bud from scion (for testing before permanent application)
+bud = Bud.from_scion(scion, layers=[18, 20, 22])
+
+# Or from a steering direction
+bud = Bud.from_direction(
+    concept_id="Fish",
+    direction=direction_vector,  # shape: [hidden_dim]
+    layers=[18, 20, 22],
+    strength=1.0
+)
+
+# Apply via BuddedModel wrapper
+budded = BuddedModel(model, tokenizer)
+budded.add_bud(bud)
+budded.activate_bud(bud.bud_id, strength=0.8)
+
+# Generate with bud active
+output = budded.generate("Tell me about...")
+
+# Context manager for temporary activation
+with budded.bud_context([bud.bud_id], strengths=[1.0]):
+    output = budded.generate("...")
+```
+
+#### Expand Mode (`src/grafting/expand.py`)
+
+Architecture-aware dimension expansion:
+
+```python
+from src.grafting import (
+    detect_architecture,
+    plan_expansion,
+    execute_expansion,
+    ArchitectureSpec
+)
+
+# Detect model architecture
+arch = detect_architecture(model)
+# Returns: ArchitectureSpec(family="llama", hidden_size=4096, ...)
+
+# Plan which matrices need expansion
+plan = plan_expansion(model, arch)
+# Returns: ExpansionPlan with targets like:
+#   - embed_tokens: (vocab, hidden) → (vocab, hidden+1)
+#   - q_proj: (hidden, hidden) → (hidden+1, hidden+1)
+#   - down_proj: (hidden, intermediate) → (hidden+1, intermediate)
+
+# Execute expansion
+execute_expansion(model, plan, scion)
+# Model now has hidden_dim + 1
+```
+
+Supported architectures:
+- Llama family (Llama, Apertus, Mistral)
+- Gemma family (Gemma, Gemma2)
+- GPT-2 family
+- MoE architectures (Mixtral, DeepSeek)
+
+### 11.3 XDB Integration (`src/xdb/budding.py`)
+
+The `BuddingManager` bridges XDB experiences to grafting:
+
+```python
+from src.xdb import XDB, BuddingManager
+
+# Initialize
+xdb = XDB(Path("./xdb_data"), be_id="my-be")
+budding = BuddingManager(xdb, probe_pack_path=Path("./probe_packs/v4"))
+
+# 1. Tag experiences during normal operation
+bud_tag = xdb.create_bud_tag("curiosity-fish", "Interesting fish discussions")
+xdb.tag(bud_tag.id, tick_range=(100, 500))  # Tag relevant experiences
+
+# 2. When ready, extract training data
+training_data = budding.get_training_data(
+    bud_tag.id,
+    min_activation=0.7,
+    max_positive=500,
+    max_negative=500,
+    negative_strategy="low_activation"  # or "sibling_concepts"
+)
+
+# 3. Prepare training run (pins data as WARM fidelity)
+run = budding.prepare_scion_training(bud_tag.id)
+
+# 4. Execute training
+scion = budding.run_scion_training(
+    run.id,
+    model,
+    tokenizer,
+    layers=[18, 20, 22]
+)
+
+# 5. Or use convenience method for full pipeline
+scion = budding.promote_bud(bud_tag.id, model, tokenizer)
+
+# 6. Submit for tribal review (locks evidence as SUBMITTED)
+submission_id = budding.submit_for_review(scion.scion_id, run.id)
+```
+
+### 11.4 Data Structures (`src/grafting/data_structures.py`)
+
+Key structures for substrate tracking:
+
+```python
+from src.grafting import (
+    SubstrateArchitecture,
+    SubstrateManifest,
+    DimensionEntry,
+    GraftConfig
+)
+
+# Create architecture from model config
+arch = SubstrateArchitecture.from_model_config(model.config)
+
+# Create manifest for tracking grafts
+manifest = SubstrateManifest.create_for_model(
+    model_id="swiss-ai/Apertus-8B-2509",
+    hidden_dim=4096,
+    architecture=arch
+)
+
+# After applying grafts
+manifest.add_graft(scion)
+# manifest.current_hidden_dim is now 4097
+# manifest.dimension_table contains the new entry
+```
+
+### 11.5 The Accretion Loop
+
+The complete flow from experience to permanent learning:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        ACCRETION LOOP                                │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  1. EXPERIENCE RECORDING (XDB)                                       │
+│     └─ xdb.record() stores timesteps with concept_activations        │
+│                                                                      │
+│  2. BUD IDENTIFICATION (BE decision)                                 │
+│     └─ xdb.create_bud_tag() + xdb.tag() marks interesting patterns   │
+│                                                                      │
+│  3. TRAINING DATA EXTRACTION (BuddingManager)                        │
+│     └─ budding.get_training_data() queries XDB for examples          │
+│     └─ Positive: high activation, tagged by bud                      │
+│     └─ Negative: low activation or sibling concepts                  │
+│                                                                      │
+│  4. CLEFT DERIVATION (grafting)                                      │
+│     └─ derive_cleft_from_probe() analyzes probe weights              │
+│     └─ merge_clefts() creates union for related concepts             │
+│                                                                      │
+│  5. SCION TRAINING (grafting)                                        │
+│     └─ ScionTrainer.train() with cleft-aware freezing                │
+│     └─ Learns weight biases for concept                              │
+│                                                                      │
+│  6. TESTING AS BUD (optional)                                        │
+│     └─ Bud.from_scion() creates reversible test version              │
+│     └─ Validate behavior before committing                           │
+│                                                                      │
+│  7. SCION APPLICATION (grafting)                                     │
+│     └─ apply_scion(model, scion, mode="expand")                      │
+│     └─ SubstrateManifest.add_graft() records the change              │
+│                                                                      │
+│  8. EVIDENCE SUBMISSION (XDB → MELD)                                 │
+│     └─ budding.submit_for_review() locks evidence                    │
+│     └─ GraftDiff shared via MAP for tribal review                    │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### 11.6 Module Structure
+
+```
+src/grafting/
+├── __init__.py          # Public API exports
+├── cleft.py             # Cleft derivation from probes
+├── scion.py             # Scion training and application
+├── bud.py               # Bud (temporary) graft via hooks
+├── expand.py            # Architecture-aware dimension expansion
+└── data_structures.py   # SubstrateManifest, SubstrateArchitecture, etc.
+
+src/xdb/
+├── __init__.py          # XDB public API
+├── xdb.py               # Main XDB class
+├── models.py            # TimestepRecord, Tag, BudStatus, etc.
+├── experience_log.py    # Experience storage
+├── tag_index.py         # Folksonomy management
+├── storage_manager.py   # Fidelity tiers
+└── budding.py           # XDB → Grafting bridge (BuddingManager)
+```
+
+---
+
+## 12. Summary
 
 The Graft Protocol provides a mechanism for **substrate growth through learned concepts**:
 

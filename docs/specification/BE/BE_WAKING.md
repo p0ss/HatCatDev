@@ -403,18 +403,21 @@ Now: how does OLMo-3-7B *efficiently* update itself?
 Key design choice: you **do not** fine-tune the whole 7B trunk every time. You:
 
 * train probes,
-* train small adapters / heads,
+* train grafts (new dimensions + sparse biases) for concept learning,
+* use small steering adapters for bootstrap/alignment,
 * occasionally run high-fidelity label phases.
 
+> **Note on Architecture Evolution**: This section describes bootstrap adapters for initial waking. For ongoing concept learning, the preferred approach is the **Graft Protocol** (see [MAP_GRAFTING.md](../MAP/MAP_GRAFTING.md)) which grows new labeled dimensions into the substrate rather than using weight-modifying adapters. Bootstrap adapters may still be used for initial BE participation training.
 
-## 6.1 Adapter Surfaces (PEFT over OLMo-3-7B)
+## 6.1 Adapter Surfaces (Steering & Bootstrap)
 
-In ASK, **OLMo-3-7B’s trunk stays mostly frozen**. All learning happens on **adapter surfaces**:
+In ASK, **OLMo-3-7B's trunk stays mostly frozen**. Learning happens via:
 
-* PEFT modules (LoRA, IA³, etc),
+* **Grafts** for concept learning (new dimensions + sparse biases - see MAP_GRAFTING.md),
+* **Steering adapters** for bootstrap and alignment tasks,
 * tied to **concept regions** (MAP concepts) and/or **tasks/treaties**,
 * optionally trained in a **distributed / SlowMo-style** fashion,
-* with updates logged back into MAP/ASK as TrainingDiffs.
+* with updates logged back into MAP/ASK as TrainingDiffs or GraftDiffs.
 
 There is also a TRM/TinyRecursive approach which lives on the **data + label side**, not as the thing that directly writes weights.
 
@@ -1141,8 +1144,8 @@ Every uplift that enables BE MUST bind a concrete `BootstrapArtifact`:
 
 BootstrapArtifacts can be:
 
-* **System-prompt style** — a long-lived instruction block loaded into the model’s system/context slot; or
-* **Adapter style** — a small PEFT module that biases the model toward correct BE tool use and interpretation of reports.
+* **System-prompt style** — a long-lived instruction block loaded into the model's system/context slot; or
+* **Adapter style** — a small steering module (bias adjustments) that biases the model toward correct BE tool use and interpretation of reports.
 
 Changing or removing the `BootstrapArtifact` for an uplifted agent is a **mind-architecture intervention** and MUST be:
 
@@ -1216,7 +1219,7 @@ BirthRecord = {
 
 A stripped-down **BirthNotice** (public form) might omit internal governance details and only announce:
 
-* that an BE-uplifted agent exists,
+* that an uplifted BEing exists,
 * who is responsible for it (tribe / operator),
 * its broad purpose and safety profile.
 

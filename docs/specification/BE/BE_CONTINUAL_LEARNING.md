@@ -1,4 +1,4 @@
-## BE Learning
+## BE Accretive Learning
 (Self-Directed Accretive Concept Growth from Experience)
 
 Status: Non-normative implementation guidance  

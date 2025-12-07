@@ -59,6 +59,22 @@ def parse_args():
     parser.add_argument('--validation-mode', type=str, default='falloff',
                         choices=['loose', 'falloff', 'strict'],
                         help='Validation mode (default: falloff)')
+    parser.add_argument('--validation-threshold', type=float, default=0.5,
+                        help='Min calibration score for strict mode (default: 0.5, use 0.85 for high quality)')
+    parser.add_argument('--min-f1', type=float, default=None,
+                        help='Minimum F1 score target (sets validation-mode=strict and threshold accordingly)')
+
+    # Sibling handling
+    parser.add_argument('--no-sibling-negatives', action='store_true',
+                        help='Exclude siblings from binary training negatives')
+    parser.add_argument('--no-sibling-refinement', action='store_true',
+                        help='Skip sibling ranking refinement after binary training')
+    parser.add_argument('--refine-only', action='store_true',
+                        help='Skip binary training, only run sibling ranking refinement on existing probes')
+    parser.add_argument('--sibling-refine-epochs', type=int, default=20,
+                        help='Epochs for sibling ranking refinement (default: 20)')
+    parser.add_argument('--sibling-refine-prompts', type=int, default=15,
+                        help='Prompts per sibling for refinement (default: 15)')
 
     # Output
     parser.add_argument('--output-dir', type=str, required=True,
@@ -69,6 +85,14 @@ def parse_args():
 
 def main():
     args = parse_args()
+
+    # Handle --min-f1 convenience flag
+    validation_mode = args.validation_mode
+    validation_threshold = args.validation_threshold
+    if args.min_f1 is not None:
+        validation_mode = 'strict'
+        validation_threshold = args.min_f1
+        print(f"Using --min-f1={args.min_f1}: setting validation-mode=strict, threshold={args.min_f1}")
 
     # Load concept pack metadata
     pack_dir = PROJECT_ROOT / "concept_packs" / args.concept_pack
@@ -118,9 +142,34 @@ def main():
     print(f"Loading concepts from: {hierarchy_dir}")
     print()
 
-    # Create output directory
+    # Create output directory and logs subdirectory
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    logs_dir = output_dir / "logs"
+    logs_dir.mkdir(exist_ok=True)
+
+    # Set up logging to file with timestamp
+    import sys
+    log_file = logs_dir / f"training_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    print(f"Logging to: {log_file}")
+
+    class TeeOutput:
+        """Write to both stdout and log file."""
+        def __init__(self, log_path):
+            self.terminal = sys.stdout
+            self.log = open(log_path, 'w')
+
+        def write(self, message):
+            self.terminal.write(message)
+            self.log.write(message)
+            self.log.flush()
+
+        def flush(self):
+            self.terminal.flush()
+            self.log.flush()
+
+    sys.stdout = TeeOutput(log_file)
+    sys.stderr = TeeOutput(log_file)
 
     # Save pack metadata to output for reference
     pack_reference = {
@@ -133,7 +182,8 @@ def main():
             "n_train_neg": args.n_train_neg,
             "n_test_pos": args.n_test_pos,
             "n_test_neg": args.n_test_neg,
-            "validation_mode": args.validation_mode
+            "validation_mode": validation_mode,
+            "validation_threshold": validation_threshold
         },
         "trained_at": datetime.now().isoformat() + "Z"
     }
@@ -150,19 +200,83 @@ def main():
     print(f"Using hierarchy: {hierarchy_dir}")
     print()
 
-    sumo_classifiers_module.train_sumo_classifiers(
-        layers=layers_to_train,
-        hierarchy_dir=hierarchy_dir,
-        model_name=args.model,
-        device=args.device,
-        n_train_pos=args.n_train_pos,
-        n_train_neg=args.n_train_neg,
-        n_test_pos=args.n_test_pos,
-        n_test_neg=args.n_test_neg,
-        output_dir=str(output_dir),
-        use_adaptive_training=True,
-        validation_mode=args.validation_mode
-    )
+    # Sibling handling - both enabled by default
+    include_sibling_negatives = not args.no_sibling_negatives
+    run_sibling_refinement = not args.no_sibling_refinement
+    refine_only = args.refine_only
+
+    if refine_only:
+        print("Refine-only mode:")
+        print("  Skipping binary training")
+        print("  Running sibling ranking refinement on existing probes")
+        print()
+    else:
+        print("Training mode:")
+        print(f"  Sibling hard negatives: {'YES' if include_sibling_negatives else 'NO'}")
+        print(f"  Sibling refinement: {'YES' if run_sibling_refinement else 'NO'}")
+        print()
+
+    # Training (binary + optional sibling refinement per layer)
+    if not refine_only:
+        sumo_classifiers_module.train_sumo_classifiers(
+            layers=layers_to_train,
+            hierarchy_dir=hierarchy_dir,
+            model_name=args.model,
+            device=args.device,
+            n_train_pos=args.n_train_pos,
+            n_train_neg=args.n_train_neg,
+            n_test_pos=args.n_test_pos,
+            n_test_neg=args.n_test_neg,
+            output_dir=str(output_dir),
+            use_adaptive_training=True,
+            validation_mode=validation_mode,
+            validation_threshold=validation_threshold,
+            include_sibling_negatives=include_sibling_negatives,
+            run_sibling_refinement=run_sibling_refinement,
+            sibling_refine_epochs=args.sibling_refine_epochs,
+            sibling_refine_prompts=args.sibling_refine_prompts,
+        )
+    else:
+        # Refine-only mode: just run sibling refinement on existing probes
+        print("=" * 80)
+        print("SIBLING RANKING REFINEMENT (refine-only mode)")
+        print("=" * 80)
+        print()
+
+        from training.sibling_ranking import refine_all_sibling_groups
+        from transformers import AutoTokenizer, AutoModelForCausalLM
+        import torch
+
+        # Load model for refinement
+        print("Loading model for sibling refinement...")
+        tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=True)
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model,
+            torch_dtype=torch.bfloat16,
+            device_map=args.device,
+            local_files_only=True,
+        )
+        model.eval()
+        hidden_dim = model.config.hidden_size
+
+        for layer in layers_to_train:
+            probe_dir = output_dir / f"layer{layer}"
+            refine_all_sibling_groups(
+                layer=layer,
+                probe_dir=probe_dir,
+                hierarchy_dir=hierarchy_dir,
+                model=model,
+                tokenizer=tokenizer,
+                device=args.device,
+                n_prompts_per_sibling=args.sibling_refine_prompts,
+                epochs=args.sibling_refine_epochs,
+                hidden_dim=hidden_dim,
+            )
+
+        # Clean up model memory
+        del model
+        del tokenizer
+        torch.cuda.empty_cache()
 
     # Generate version manifest from training results
     print()

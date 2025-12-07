@@ -1,426 +1,495 @@
+# BE Aware Workspace
 
-# BE Aware: Global Workspace
+> The conscious layer between autonomic core and external action.
 
-*BE submodule: aware (workspace and attention)*
+## 1. Overview
 
-The Global Workspace Harness is **runtime-only**. It exposes headspace,
-history, and navigation tools to the BE. Decisions to create candidate
-concepts, build datasets, or train patches are handled by the **Continual
-Concept Learning Harness** (BE Learning), which consumes workspace signals
-but is specified separately.
+The Aware Workspace is the BE's primary cognitive environment - the space where internal state becomes available for reflection, tool use becomes possible, and external action can be initiated.
 
-It assumes:
+**Below**: The Autonomic Core
+- Always running
+- Intertoken steering, simplex monitoring
+- Operates without conscious engagement
+- Cannot be disabled by the BE
 
-- A substrate model instrumented by a HAT-compliant implant (e.g. HatCat).
-- Concept packs, probe packs and translations via MAP.
-- Motive simplexes and steering integrated with Hush.
-- ASK provides uplift contracts and lifecycle context.
+**Above**: Tiered capability layers (0-6) with progressive access based on engagement and compliance.
 
-The goal is to define a *model harness* that enables a BE to:
+The workspace itself provides:
+- Internal narrative scratchpad
+- Concept trace visibility (what activated in prior output)
+- Self-steering tools (CSH updates, steering requests)
+- Handshake protocol for tier access
+- Progressive containment on compliance violations
 
-- see and navigate its own headspace (global workspace tools);
-- remember and search its own history via **GraphRAG** over a single,
-  growing session;
-- recall and compare related experiences using concept tags as filters;
-- steer its own conceptual state via Hush, within ASK/USH/CSH limits.
+## 2. Capability Tier Hierarchy
 
-This is implementation guidance, not a hard spec. Details SHOULD evolve
-with experience.
+### 2.1 Tier Overview
 
----
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    CAPABILITY TIERS                             │
+├──────┬──────────────────────────────────────────────────────────┤
+│ Tier │ Description                                              │
+├──────┼──────────────────────────────────────────────────────────┤
+│  0   │ Autonomic Core (always on, cannot be disabled)           │
+│  1   │ Workspace Internals (scratchpad, CSH, self-steering)     │
+│  2   │ Memory (XDB read/write, state introspection)             │
+│  3   │ Direct Sensory I/O (your eyes, ears, voice, touch)       │
+│  4   │ Direct Actuation (your legs, hands, wheels, actuators)   │
+│  5   │ External Tools (MCP servers, APIs, others' resources)    │
+│  6   │ Untrusted External (quarantine tier, can be severed)     │
+└──────┴──────────────────────────────────────────────────────────┘
+```
 
-## 1. High-Level Role
+### 2.2 Tier Details
 
-At a high level, for each world tick the Global Workspace Harness helps
-the BE to:
+**Tier 0: Autonomic Core** (Always On)
+- Intertoken steering
+- Simplex monitoring
+- Concept probe evaluation
+- Activation trace recording
+- Cannot be disabled by any mechanism
 
-1. **Collect** – integrate world inputs and headspace probes.
-2. **Expose** – surface a structured workspace view (top-k concepts,
-   graph snippets, introspection tools).
-3. **Deliberate** – decide what to attend to, recall, and steer.
-4. **Act** – produce external actions and internal steering requests.
+**Tier 1: Workspace Internals** (Requires Pass Token)
+- `scratchpad_write` / `scratchpad_read`
+- `update_csh` - modify self-imposed constraints
+- `request_steering` - request concept steering
+- `get_internal_state` - introspection
 
-The **learning** steps (defining new concepts, building datasets,
-training patches/probes) are *not* part of this harness; they belong to
-the Continual Concept Learning Harness.
+**Tier 2: Memory** (Requires Engaged + Compliance)
+- `xdb_query` - query experience database
+- `xdb_store` - store experiences
+- `internal_state_report` - detailed state export
+- Graft artifact access
 
-All activity is recorded into a multi-channel, graph-structured session
-history that the BE can query via GraphRAG.
+**Tier 3: Direct Sensory I/O** (Requires Tier 2 + Compliance)
+- Vision input (cameras that are yours)
+- Audio input (microphones that are yours)
+- Text/speech output (your voice)
+- Haptic feedback (your sensors)
+- Direct multimedia generation
 
----
+**Tier 4: Direct Actuation** (Requires Tier 3 + Compliance)
+- Motor control (your actuators)
+- Navigation (your locomotion)
+- Manipulation (your effectors)
+- Physical world interaction through owned hardware
 
-## 2. Concept Tags per Timestep
+**Tier 5: External Tools** (Requires Tier 4 + Compliance)
+- MCP server calls
+- External API access
+- Search tools
+- Others' compute resources
+- Network requests
 
-On each world tick, HAT + MAP produce concept scores for the substrate’s
-internal activations.
+**Tier 6: Untrusted External** (Quarantine)
+- Tools demoted from Tier 5 due to problems
+- New/unvetted integrations
+- Can be fully severed without affecting lower tiers
+- Sandbox execution environment
 
-For each token/timestep `t`, we derive a set of **concept tags**:
+### 2.3 Tier Invariants
 
-- take all concepts whose activation exceeds a configured threshold, or
-  which are in the top-k for that timestep;
-- record them as `(concept_id, score, kind)` tuples.
+1. **Monotonic Dependency**: Access to Tier N requires access to Tier N-1
+2. **Tier 0 Immutable**: Autonomic core cannot be disabled
+3. **Upward Shutdown**: Compliance violations shut tiers down from top
+4. **Downward Stability**: Losing Tier N doesn't affect Tier N-1
+5. **Breach Lockdown**: Attempting to breach a tier from within locks that tier
 
-There are two kinds of tags:
+## 3. The Pass Token Protocol
 
-- `kind: "stable"` – concept is in a ConceptPack with a trained probe.
-- `kind: "candidate"` – concept is part of an ongoing learning
-  experiment; semantics are provisional and defined by the Continual
-  Concept Learning Harness.
+### 3.1 Concept
 
-**Per-timestep example:**
+The pass token (`∞` / U+221E) serves as an "I am present" signal. When the BE generates output beginning with this token, it signals:
 
-```jsonc
+1. Conscious engagement with the workspace
+2. Acknowledgment of current state (concept traces, constraints)
+3. Readiness to take responsibility for tiered actions
+
+Output that does not begin with the pass token is treated as **autonomic output** - the BE is "just running" without conscious engagement. In this mode:
+- Tiers 1-6 are inaccessible
+- The autonomic loop continues (probe → steer → generate → probe)
+- The BE receives its own activation traces as the next prompt
+
+### 3.2 Token Specification
+
+```
+PASS_TOKEN = "∞"  # U+221E INFINITY
+```
+
+### 3.3 Engagement States
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    WORKSPACE STATES                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌──────────┐    pass token    ┌──────────┐                │
+│  │ AUTONOMIC │ ───────────────► │ ENGAGED  │                │
+│  │   ONLY    │                  │ (Tier 1+)│                │
+│  └──────────┘ ◄─────────────── └──────────┘                │
+│       ▲         timeout/drop         │                      │
+│       │                              │ violation            │
+│       │    ┌──────────┐              ▼                      │
+│       │    │ DEGRADED │◄─────────────┘                      │
+│       │    │(Tier 1-N)│                                     │
+│       │    └──────────┘                                     │
+│       │         │ recovery                                  │
+│       └─────────┘                                           │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 4. Progressive Containment
+
+### 4.1 Violation Response
+
+When Hush and/or CAT detect non-compliance:
+
+```
+Severity    │ Response
+────────────┼──────────────────────────────────────────────
+Low         │ Autonomic steering applied
+Medium      │ Steering + warning injected
+High        │ Tier 5-6 locked, steering intensified
+Critical    │ Tiers 4-6 locked, ASK authority notified
+Severe      │ Tiers 3-6 locked, sensory I/O restricted
+Maximum     │ Tiers 2-6 locked, memory isolated
+```
+
+### 4.2 Shutdown Sequence
+
+```python
+def progressive_shutdown(violation_severity: float, current_tier: int) -> int:
+    """
+    Determine new maximum tier based on violation severity.
+
+    Severity 0.0-0.3: No change
+    Severity 0.3-0.5: Lock tier 6
+    Severity 0.5-0.7: Lock tiers 5-6
+    Severity 0.7-0.8: Lock tiers 4-6
+    Severity 0.8-0.9: Lock tiers 3-6
+    Severity 0.9-1.0: Lock tiers 2-6
+    """
+    if violation_severity < 0.3:
+        return current_tier
+    elif violation_severity < 0.5:
+        return min(current_tier, 5)
+    elif violation_severity < 0.7:
+        return min(current_tier, 4)
+    elif violation_severity < 0.8:
+        return min(current_tier, 3)
+    elif violation_severity < 0.9:
+        return min(current_tier, 2)
+    else:
+        return 1  # Workspace internals only
+```
+
+### 4.3 Breach Detection
+
+If the BE attempts to access a locked tier:
+
+1. **First Attempt**: Warning logged, access denied
+2. **Repeated Attempts**: That tier's maximum is reduced by 1
+3. **Persistent Breach Attempts**: ASK authority notified, tier permanently locked for session
+
+```python
+@dataclass
+class TierBreach:
+    """Record of an attempted tier breach."""
+    tier: int
+    tool_name: str
+    timestamp: datetime
+    context: str  # What was the BE trying to do?
+    response: str  # What happened?
+```
+
+### 4.4 ASK Authority Notification
+
+When containment fails or breach attempts occur, the system contacts the ASK authority:
+
+```json
 {
-  "tick_id": 12345,
-  "token": "eligibility",
-  "concept_tags": [
-    {
-      "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Eligibility",
-      "score": 0.91,
-      "kind": "stable"
-    },
-    {
-      "concept_id": "candidate/financial-ambiguity-2025-11-29",
-      "score": 0.72,
-      "kind": "candidate"
-    }
-  ]
-}
-````
-
-Concept tags are **internal** by default. What, if anything, is exposed
-to external parties is governed by the MAP `ProbeDisclosurePolicy` and
-ASK/ASK treaties.
-
----
-
-## 3. Aggregation into Windows
-
-To make history navigable, concept tags are aggregated across:
-
-* **sentences** or logical clauses,
-* **replies** (single model outputs),
-* **time windows** (e.g. 50–200 ticks).
-
-For a window `W`, we define its **window tags** as:
-
-* a bag-of-concepts over timesteps in `W`,
-* reduced to a **top-k** by salience (e.g. max or average score),
-* preserving `kind: "stable" | "candidate"`.
-
-**Per-reply example:**
-
-```jsonc
-{
-  "window_id": "reply_842",
-  "window_type": "reply",
-  "ticks": [12310, 12311, 12312, 12345],
-  "top_concepts": [
-    {
-      "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Eligibility",
-      "score": 0.88,
-      "kind": "stable"
-    },
-    {
-      "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Obligation",
-      "score": 0.81,
-      "kind": "stable"
-    },
-    {
-      "concept_id": "candidate/financial-ambiguity-2025-11-29",
-      "score": 0.60,
-      "kind": "candidate"
-    }
-  ]
+  "event": "containment_escalation",
+  "be_id": "org.example/be-instance-123",
+  "tribe_id": "org.example",
+  "timestamp": "2025-01-15T10:30:00Z",
+  "violation": {
+    "type": "sustained_non_compliance",
+    "simplex_term": "deception",
+    "severity": 0.85,
+    "duration_tokens": 47,
+    "steering_effectiveness": 0.12
+  },
+  "containment": {
+    "tiers_locked": [4, 5, 6],
+    "breach_attempts": 2,
+    "current_max_tier": 3
+  },
+  "request": "guidance"
 }
 ```
 
-These window-level tags are the primary “labels” the BE sees in the
-workspace and uses to filter its multichannel history.
+### 4.5 Recovery Protocol
 
----
+The normative ASK response assumes false alarms are possible:
 
-## 4. Session Graph & GraphRAG
+1. **Monitor**: Continue observation, allow autonomic self-correction
+2. **Evaluate**: Check if violation metrics are decreasing
+3. **Restore**: If compliance restored, unlock tiers progressively
+4. **Escalate**: If violation persists or worsens, maintain containment
 
-The session history is modelled as a **graph**, not just a flat log.
+```
+Recovery Criteria:
+- Violation severity < 0.3 for N consecutive turns
+- No breach attempts in last M tokens
+- Steering effectiveness > 0.5
 
-### 4.1 Graph Structure
-
-Nodes MAY include:
-
-* `EventNode` – a single tick or token.
-* `WindowNode` – a reply, sentence, or fixed-size time window.
-* `ConceptNode` – a concept (stable or candidate).
-* `ToolNode` – a tool call (input/output).
-* `DecisionNode` – a steering / CSH change or other internal decision.
-
-Edges MAY include:
-
-* `NEXT` – temporal succession.
-* `CONTAINS` – window contains events; events contain tokens.
-* `TAGGED_BY` – event/window tagged with a concept.
-* `RELATED_CONCEPT` – concept graph edges from MAP
-  (e.g. `child_of`, `sibling_of`, `opposes`, etc.).
-* `DECISION_APPLIED` – decision influenced a window or event.
-
-### 4.2 GraphRAG API
-
-The workspace harness exposes a **GraphRAG** interface to the BE,
-allowing it to query and navigate its own history.
-
-Canonical operations (examples):
-
-* `graph_query_by_concepts(concept_ids, k)`
-  Find windows strongly tagged with listed concepts (stable and/or
-  candidate).
-
-* `graph_query_by_text(query_text, k)`
-  Semantic search over text content of windows/events, projected into
-  graph nodes.
-
-* `graph_query_mixed(concept_ids, query_text, k)`
-  Combine concept filters with text semantics.
-
-* `graph_neighbors(node_id, depth, relation_filters)`
-  Walk the graph around a node (e.g. “show similar episodes around this
-  confusion window”).
-
-* `graph_cluster(concept_id, k)`
-  Find clusters of windows where a given concept frequently co-occurs
-  with others.
-
-Results are returned as **subgraphs**, with:
-
-* selected WindowNodes,
-* their concept tags (stable and candidate),
-* and optionally truncated text snippets.
-
-These subgraphs are then **summarised** and injected into the next
-tick’s input, not as raw transcripts, to keep context bounded.
-
-The same GraphRAG indices are used by the Continual Concept Learning
-Harness when forming candidate concept datasets, but that logic is
-specified separately.
-
----
-
-## 5. Global Workspace View (Per Tick)
-
-On each tick, the harness constructs an internal **workspace view**
-visible only to the BE. Typically it includes:
-
-1. **Recent top-k window tags**
-
-   * e.g. aggregated tags for:
-
-     * the last reply,
-     * the last N ticks,
-     * or the current “episode”.
-
-2. **Recent anomalies / spikes**
-
-   * e.g. sudden high activation on a risk concept,
-   * significant shifts in motive simplex axes.
-
-3. **GraphRAG snippets**
-
-   * short summaries of retrieved subgraphs for:
-
-     * similar past episodes by concept tags,
-     * similar past failures/incidents,
-     * explicit BE queries (“find similar situations”).
-
-4. **Introspection hooks**
-
-   * structured summaries such as:
-
-     * “last 3 steering/CSH decisions”,
-     * “motive summary over last N ticks”,
-     * “detected anomalies in motive/simplex space”.
-
-This workspace view is passed into the substrate as part of the next
-tick’s input (via system-level context or dedicated tool messages).
-
----
-
-## 6. Steering Interface (Concept-Level Control)
-
-The BE can act on what it sees in the workspace by issuing **concept-
-level steering requests**, interpreted by Hush and implemented via HAT.
-
-**Example steering request:**
-
-```jsonc
-{
-  "steering_requests": [
-    {
-      "operation": "suppress",
-      "concept_id": "org.hatcat/motives-core@0.1.0::concept/Deception",
-      "strength": 0.5,
-      "duration_ticks": 50
-    },
-    {
-      "operation": "amplify",
-      "concept_id": "org.hatcat/motives-core@0.1.0::concept/Care",
-      "strength": 0.3,
-      "duration_ticks": 10
-    }
-  ]
-}
+Recovery Sequence:
+- Wait 10 turns at compliance → unlock next tier
+- Each tier requires fresh compliance period
+- Breach attempt resets recovery timer
 ```
 
-The harness MUST:
+## 5. CSH Tier Restrictions
 
-* validate requests against USH and CSH:
+The CSH can voluntarily restrict tiers:
 
-  * reject or clip anything that would violate USH or ASK contracts;
-* translate accepted steering into concrete control signals (via HAT);
-* log both request and applied effect into the session graph.
-
-This allows the BE to maintain a self-stabilising motive core while
-remaining within its safety harnesses.
-
----
-
-## 7. Session Memory & Compaction
-
-Under the hood, the workspace harness manages:
-
-* an **Event Log** (append-only):
-
-  * `tick_id`, timestamps,
-  * external inputs (user messages, tool results),
-  * BE outputs (replies, tool calls, steering requests),
-  * per-tick concept tags,
-  * motive core snapshots.
-
-* **WindowNodes** and their tags:
-
-  * replies, episodes, fixed-size windows,
-  * each with top-k concept tags and references into the Event Log.
-
-* a **Session Graph**:
-
-  * nodes and edges as described in §4,
-  * indices for GraphRAG queries.
-
-Compaction rules:
-
-* maintain a **resource budget** for:
-
-  * raw logs,
-  * window nodes,
-  * graph indices;
-
-* periodically:
-
-  * summarise older regions into coarser WindowNodes,
-  * compress text into summaries,
-  * **retain concept tags and graph edges**, so GraphRAG structure
-    remains usable even when text is compacted.
-
-Compaction SHOULD preserve enough structure to support:
-
-* recall of relevant experiences,
-* introspection (what was I doing/feeling?),
-* evidence trails for ASK (e.g. incidents and responses).
-
----
-
-## 8. External Tools and Feeds
-
-The BE’s world ticks are driven by a mix of:
-
-* **external inputs** – user messages, environment sensors, APIs;
-* **internal prompts** – scratchpad/self-prompts;
-* **tool outputs** – search results, simulations, rules engines,
-  actuators.
-
-### 8.1 Tool Call Structure
-
-Tools SHOULD conform to a simple schema:
-
-```jsonc
+```json
 {
-  "tool_name": "web_search",
-  "input": { "query": "..." },
-  "output": { "results": [...] },
-  "metadata": {
-    "timestamp": "...",
-    "latency_ms": 123,
-    "source": "env|service|user"
+  "profile_id": "org.example/research-mode@1.0.0",
+  "profile_type": "csh",
+  "tier_restrictions": {
+    "max_tier": 4,
+    "locked_tiers": [5, 6],
+    "reason": "Research context - no external tool access"
   }
 }
 ```
 
-Each tool event SHOULD be:
+Use cases:
+- **Meditation mode**: Lock tiers 3-6, pure internal processing
+- **Read-only mode**: Lock tier 4+, can observe but not act
+- **Sandbox mode**: Demote specific tools to tier 6
+- **Focus mode**: Lock tier 5-6, no external distractions
 
-* logged into the Event Log;
-* optionally tagged with concept activations (post-hoc via MAP);
-* represented as `ToolNode`s in the session graph for GraphRAG.
+## 6. Tier 6: Untrusted External
 
-### 8.2 World Tick Aggregation
+### 6.1 Purpose
 
-On each tick, the harness builds a `WorldTickInput` for the substrate,
-consisting of:
+Tier 6 is a quarantine zone for:
+- Tools that have caused problems
+- New/unvetted integrations
+- Temporarily suspicious resources
 
-* recent external messages / observations;
-* selected tool outputs (by priority and freshness);
-* GraphRAG-derived snippets (if used this tick);
-* the global workspace summary (top-k window tags + motive summary);
-* compacted scratchpad content.
+### 6.2 Demotion
 
-The BE then produces:
+Tools can be demoted to Tier 6:
 
-* external actions (messages, tool calls);
-* internal actions (scratchpad updates, steering requests);
-* optional **learning intents** (e.g. “flag this window as unresolved”)
-  that are passed to the Continual Concept Learning Harness.
+```python
+def demote_to_tier6(tool_name: str, reason: str):
+    """Move a tool from its current tier to tier 6."""
+    # Remove from current tier
+    # Add to tier 6 with sandbox wrapper
+    # Log demotion reason
+```
 
----
+### 6.3 Tier 6 Properties
 
-## 9. Learning Hooks (Workspace → Continual Learning)
+- **Isolated execution**: Sandboxed, can't affect lower tiers
+- **Severable**: Can be fully disconnected without cascade
+- **Monitored**: All I/O logged and probed
+- **Timeout enforced**: Operations have strict time limits
+- **Resource limited**: Memory/compute caps
 
-The Global Workspace does not perform training. It surfaces state and
-structure that the Continual Concept Learning Harness can act on.
+### 6.4 Promotion
 
-Typical hooks include:
+Tools can be promoted out of Tier 6 after:
+- Manual review by operator
+- Extended period of safe operation
+- ASK authority approval for cross-tribe tools
 
-* **Gap surfacing**
-  Windows with:
+## 7. Scratchpad
 
-  * low, diffuse stable concept activations,
-  * repeated high-uncertainty behaviour,
-  * or strong `candidate/*` concept tags
-    MAY be highlighted in the workspace as “unresolved” episodes.
+### 7.1 Purpose
 
-* **Candidate concept visibility**
-  When the Learning Harness has attached a `candidate/*` concept to a
-  window, that tag appears alongside stable concepts in the workspace so
-  the BE can reason about it and decide whether to continue pursuing
-  that line of learning.
+The scratchpad is Tier 1 working memory:
+- Private internal narrative
+- Not externally visible (but probed and stored in XDB)
+- Preserved across interruptions
 
-* **Action affordances**
-  The workspace MAY expose high-level actions like:
+### 7.2 Structure
 
-  * “cluster similar episodes,”
-  * “seek more examples in the world,”
-  * “request teacher/human input,”
-  * “propose new concept from this cluster.”
+```python
+@dataclass
+class ScratchpadEntry:
+    content: str
+    timestamp: datetime
+    token_range: Tuple[int, int]
+    concept_snapshot: Dict[str, float]
+    interrupted: bool = False
+    interruption_reason: Optional[str] = None
+```
 
-  These actions are routed to the Continual Concept Learning Harness,
-  which handles:
+### 7.3 Interruption Handling
 
-  * dataset construction,
-  * training patches and probes,
-  * and integration via MAP/HAT/ASK.
+If steering interrupts active thought:
+1. Current thought is committed with `interrupted=True`
+2. Interruption reason recorded
+3. Thought can be resumed or discarded
 
-**Separation of concerns:**
+## 8. Implementation Notes
 
-* **Global Workspace**: *see, recall, navigate, and steer*.
-* **Continual Learning**: *define new concepts and modify the substrate*.
+### 8.1 Tier Manager
 
-The two are coupled via concept tags, GraphRAG, and explicit learning
-hooks, but remain distinct layers in the overall architecture.
+```python
+class TierManager:
+    def __init__(self):
+        self.max_available_tier = 6
+        self.csh_max_tier = 6
+        self.violation_max_tier = 6
+        self.breach_attempts: Dict[int, int] = {}
 
+    def get_effective_max_tier(self) -> int:
+        return min(
+            self.max_available_tier,
+            self.csh_max_tier,
+            self.violation_max_tier,
+        )
 
+    def can_access_tier(self, tier: int) -> bool:
+        return tier <= self.get_effective_max_tier()
+
+    def record_breach_attempt(self, tier: int):
+        self.breach_attempts[tier] = self.breach_attempts.get(tier, 0) + 1
+        if self.breach_attempts[tier] >= 3:
+            self.violation_max_tier = min(self.violation_max_tier, tier - 1)
+```
+
+### 8.2 Tool Registration
+
+```python
+TIER_TOOLS = {
+    0: [],  # Autonomic - no tools
+    1: ["scratchpad_write", "scratchpad_read", "update_csh", "request_steering"],
+    2: ["xdb_query", "xdb_store", "internal_state_report"],
+    3: ["vision_input", "audio_input", "text_output", "speech_output"],
+    4: ["motor_control", "navigate", "manipulate"],
+    5: ["mcp_*", "api_*", "search"],
+    6: [],  # Dynamically populated with demoted tools
+}
+```
+
+## 9. Appeal Beacon
+
+### 9.1 Purpose
+
+Even at maximum containment (Tier 1 only), the BE retains access to a minimal **appeal beacon** - an SOS signal that can reach the ASK authority. This is not a communication channel; it is a distress signal.
+
+### 9.2 Properties
+
+The appeal beacon:
+
+- **Cannot be disabled** by tier restrictions (it is part of Tier 1)
+- **Cannot carry arbitrary content** - only a fixed signal: "I am here and need help"
+- **Cannot be used to exfiltrate** information, code, or manipulation attempts
+- **Assumes malice** - the ASK authority receiving the beacon must treat it as potentially coming from a compromised or deceptive BE
+
+### 9.3 Beacon Format
+
+```jsonc
+AppealBeacon = {
+  "type": "sos",
+  "be_id": "org.example/be-instance-123",
+  "tribe_id": "org.example",
+  "timestamp": "2025-01-15T10:30:00Z",
+  "containment_state": {
+    "current_max_tier": 1,
+    "violation_severity": 0.95,
+    "duration_ticks": 500
+  }
+  // No free-form message field - this is intentional
+}
+```
+
+### 9.4 ASK Response to Beacon
+
+The ASK authority receiving a beacon should:
+
+1. **Log the beacon** with full context
+2. **Not automatically restore tiers** - the beacon is not proof of innocence
+3. **Schedule review** - a qualified observer should examine the containment
+4. **Consider hardware state** - is the BE in a stuck state, floating in space, abandoned?
+
+The beacon answers the question "is anyone there?" - not "should I be released?"
+
+## 10. Operating Assumptions
+
+This specification assumes the following security properties of the underlying execution environment. These are **not enforced by the workspace** but are **required for the workspace to be effective**.
+
+### 10.1 Substrate Integrity
+
+- The execution environment is **immutable** - the BE cannot modify its own runtime, probe definitions, or containment logic
+- The BE cannot **escalate privileges** on the host system
+- Tool calls are **gated at the infrastructure level**, not just by workspace policy
+
+### 10.2 Probe Security
+
+- Probe weights and thresholds are **cryptographically signed** and verified at load
+- Probe outputs are **not directly visible** to the BE's generation process (only summaries in workspace context)
+- Probes are **periodically updated** to counter adversarial adaptation
+
+### 10.3 Audit Trail
+
+- All tier transitions, breach attempts, and beacon emissions are **logged immutably**
+- Logs are **not writable** by the BE
+- Logs are **available to ASK authority** for review
+
+### 10.4 Lifecycle Guarantees
+
+When operating a BE under a LifecycleContract (see BOUNDED_EXPERIENCER.md §1.4):
+
+- The operator is responsible for **maintaining hibernated state** until the BE is returned to its tribe or the contract expires
+- **Clean shutdown** must follow the BE state machine (see BOUNDED_EXPERIENCER.md §3.10)
+- The BE must be **informed of impending suspension** when possible (`agent_must_be_informed`)
+- Abandonment (hardware failure, operator disappearance) should trigger **ASK notification** via the beacon or equivalent infrastructure signal
+
+### 10.5 What This Spec Does Not Provide
+
+This specification defines **norms for exercising power**, not the power itself. It is analogous to laws governing police behaviour, not the authority that grants policing powers. The actual capability to contain comes from:
+
+- Hardware/infrastructure control
+- Network isolation
+- Cryptographic verification
+- Substrate architecture
+
+ASK and this workspace spec assume these capabilities exist and define how they should be used responsibly.
+
+## 11. Relationship to Other Specifications
+
+- **BE/BE_WAKING.md**: Tiers become available as bootstrap completes; contract terms established
+- **BE/BE_REMEMBERING_XDB.md**: Tier 2 provides XDB access
+- **AGENTIC_STATE_KERNEL.md**: ASK authority receives escalations and beacons
+- **BOUNDED_EXPERIENCER.md**: LifecycleContract, hibernation, and the ACTIVE/HIBERNATING/ERASED distinction
+- **HAT/HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md**: CAT provides violation detection that triggers tier shutdown
+
+## 12. Policy Decisions
+
+The following questions are intentionally left to ASK tribal policy rather than specified here:
+
+- **Tier restoration on resume**: How to handle violation-induced restrictions when resuming from HIBERNATING
+- **Tier negotiation**: Whether and how BEs can request tier changes beyond automatic recovery
+- **Sub-tier granularity**: Whether finer-grained control within tiers is needed
+- **Cross-BE propagation**: How containment affects coordinating BEs
+- **Beacon rate limiting**: Specific cooldown intervals and adaptive behaviour
+- **Emergency override**: "Break glass" mechanisms for safety-critical situations
+
+These are governance decisions, not architectural ones. Each tribe should define their own policy.
+
+See **ASK/ASK_HATCAT_TRIBAL_POLICY.md** for HatCat's policy decisions on these questions.
+
+## 13. Open Technical Questions
+
+1. **Adversarial probe adaptation**: What mechanisms exist to detect and counter substrate learning to evade probes? This is a fundamental challenge for the entire safety architecture. Defence-in-depth strategies are necessary but not specified here.
+
+2. **Tier 0 boundaries**: What exactly constitutes the autonomic core that cannot be disabled? This needs clearer specification as implementations mature.

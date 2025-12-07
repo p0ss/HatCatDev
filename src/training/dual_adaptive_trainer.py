@@ -31,9 +31,9 @@ class DualAdaptiveTrainer:
 
         # Activation probe config
         activation_target_accuracy: float = 0.95,
-        activation_initial_samples: int = 30,  # Start with 30 samples (LLN threshold)
-        activation_first_increment: int = 30,  # Add 30 more if initial fails (60 total)
-        activation_subsequent_increment: int = 30,  # Add 30 more for each subsequent cycle (90, 120, ...)
+        activation_initial_samples: int = 40,  # Start with 40 samples (2 errors = 95%)
+        activation_first_increment: int = 40,  # Add 40 more if initial fails (80 total)
+        activation_subsequent_increment: int = 40,  # Add 40 more for each subsequent cycle (120, 160, ...)
         activation_max_samples: int = 200,
 
         # Text probe config
@@ -516,6 +516,10 @@ class DualAdaptiveTrainer:
                         if self.validation_mode == 'falloff':
                             tier_name = tier_info['tier'].upper()
                             mode_msg = f"[FALLOFF {tier_name}, cycle {validation_cycle}, iter {iteration}]"
+                        elif self.validation_mode == 'strict':
+                            mode_msg = f"[STRICT mode, iter {iteration}]"
+                        else:  # loose
+                            mode_msg = f"[LOOSE mode, iter {iteration}]"
 
                         # Check if passed or grade meets tier requirements
                         if passed:

@@ -611,7 +611,7 @@ When a meld completes successfully, other BEs receive a PackDiff:
   "acceptance_options": {
     "accept_concepts_only": true,  // Update concept pack, train own probes
     "accept_probes": false,        // Use originator's probe weights
-    "accept_with_peft": false      // Accept alongside originator's PEFT patch
+    "accept_with_graft": false     // Accept alongside originator's Graft (dimension + biases)
   }
 }
 ```

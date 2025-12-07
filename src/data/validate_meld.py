@@ -231,10 +231,12 @@ class ValidationResult:
     warnings: List[str] = field(default_factory=list)
     concept_count: int = 0
     simplex_count: int = 0
+    structural_op_count: int = 0  # Count of structural operations
     treaty_relevant_count: int = 0
     harness_relevant_count: int = 0
     critical_triggers: List[str] = field(default_factory=list)
     policy_source: str = "defaults"
+    is_structural_meld: bool = False  # True if this contains structural operations
 
     @property
     def is_valid(self) -> bool:
@@ -736,6 +738,87 @@ def load_meld(path: Path) -> Dict:
         raise SystemExit(f"JSON syntax error in {path}: {e}")
 
 
+def validate_structural_operation(
+    op: Dict,
+    hierarchy_index: HierarchyIndex,
+    policy: MeldPolicy,
+    errors: List[str],
+    warnings: List[str],
+    critical_triggers: List[str]
+) -> ProtectionLevel:
+    """Validate a single structural operation (split/merge/move/deprecate).
+
+    Per MAP_MELDING.md §11.
+    Returns the protection level for this operation.
+    """
+    operation = op.get("operation", "unknown")
+    target = op.get("target_concept") or op.get("source_concept", "")
+    priority = op.get("priority", "medium")
+
+    protection = ProtectionLevel.STANDARD
+
+    # Check if target concept exists in pack
+    if target and target not in hierarchy_index.all_concepts:
+        warnings.append(f"{operation} {target}: target concept not found in pack hierarchy")
+
+    # Check if operation touches critical bound concepts
+    if target in policy.critical_bound_concepts:
+        critical_triggers.append(f"{operation} {target}: touches critical bound concept")
+        protection = ProtectionLevel.CRITICAL
+
+    # Validate operation-specific requirements
+    if operation == "split":
+        split_into = op.get("split_into", [])
+        bucket_suggestions = op.get("bucket_suggestions", [])
+
+        # Split operations can have either split_into (for polysemy) or bucket_suggestions (for sibling density)
+        if not split_into and not bucket_suggestions:
+            errors.append(f"split {target}: missing 'split_into' or 'bucket_suggestions' array")
+        elif split_into:
+            for i, new_concept in enumerate(split_into):
+                if not new_concept.get("term"):
+                    errors.append(f"split {target}: split_into[{i}] missing 'term'")
+        elif bucket_suggestions:
+            # Bucket suggestions are recommendations, not yet concrete splits
+            for i, bucket in enumerate(bucket_suggestions):
+                if not bucket.get("bucket_name"):
+                    warnings.append(f"split {target}: bucket_suggestions[{i}] missing 'bucket_name'")
+                if not bucket.get("members"):
+                    warnings.append(f"split {target}: bucket_suggestions[{i}] has no members")
+
+        # Splits are typically major version bumps
+        if priority == "high":
+            protection = max(protection, ProtectionLevel.ELEVATED)
+
+    elif operation == "merge":
+        sources = op.get("source_concepts", [])
+        if len(sources) < 2:
+            errors.append(f"merge: requires at least 2 source_concepts")
+
+        # Check if any source is critical
+        for source in sources:
+            if source in policy.critical_bound_concepts:
+                critical_triggers.append(f"merge: source {source} is critical bound concept")
+                protection = ProtectionLevel.CRITICAL
+
+    elif operation == "move":
+        from_parent = op.get("from_parent")
+        to_parent = op.get("to_parent")
+        if not from_parent:
+            errors.append(f"move {target}: missing 'from_parent'")
+        if not to_parent:
+            errors.append(f"move {target}: missing 'to_parent'")
+
+    elif operation == "deprecate":
+        child_disposition = op.get("child_disposition")
+        if not child_disposition:
+            errors.append(f"deprecate {target}: missing 'child_disposition'")
+        elif child_disposition == "reassign" and not op.get("reassign_children_to"):
+            errors.append(f"deprecate {target}: child_disposition='reassign' but no 'reassign_children_to'")
+
+    return protection
+
+
 def validate_meld_file(
     path: Path,
     policy: MeldPolicy,
@@ -751,6 +834,9 @@ def validate_meld_file(
 
     # Count stats
     candidates = meld.get("candidates", [])
+    structural_ops = meld.get("structural_operations", [])
+    is_structural = len(structural_ops) > 0
+
     concept_count = sum(1 for c in candidates if c.get("role", "concept") == "concept")
     simplex_count = sum(1 for c in candidates if c.get("role") == "simplex")
     treaty_count = sum(1 for c in candidates if c.get("safety_tags", {}).get("treaty_relevant"))
@@ -759,7 +845,7 @@ def validate_meld_file(
     # 1. ID / filename sanity
     check_meld_id_filename(path, meld, errors, warnings)
 
-    # 2. Per-concept policy checks
+    # 2. Per-concept policy checks (for standard melds)
     for c in candidates:
         term = c.get("term", "unknown")
 
@@ -777,8 +863,28 @@ def validate_meld_file(
         if is_always_on_simplex(c):
             critical_triggers.append(f"{term}: new always-on simplex")
 
-    # 3. Pack-level protection / critical checks
+    # 3. Validate structural operations (per MAP_MELDING.md §11)
+    structural_protection = ProtectionLevel.STANDARD
+    op_types = {}
+    for op in structural_ops:
+        op_type = op.get("operation", "unknown")
+        op_types[op_type] = op_types.get(op_type, 0) + 1
+
+        op_protection = validate_structural_operation(
+            op, hierarchy_index, policy, errors, warnings, critical_triggers
+        )
+        structural_protection = max(structural_protection, op_protection)
+
+    # Structural operations typically require at least ELEVATED review
+    if is_structural and structural_protection < ProtectionLevel.ELEVATED:
+        # Large-scale structural changes need review
+        if len(structural_ops) > 10:
+            structural_protection = ProtectionLevel.ELEVATED
+            warnings.append(f"Large structural meld ({len(structural_ops)} ops) - elevated review recommended")
+
+    # 4. Pack-level protection / critical checks
     protection = compute_pack_protection_level(meld, policy)
+    protection = max(protection, structural_protection)
     check_critical_simplex_touches(meld, policy, errors, warnings)
 
     # Escalate to CRITICAL if there are critical triggers
@@ -790,6 +896,11 @@ def validate_meld_file(
     if not policy.from_pack:
         warnings.insert(0, "Using default policy - pack lacks meld_policy section")
 
+    # Add summary for structural melds
+    if is_structural:
+        op_summary = ", ".join(f"{k}:{v}" for k, v in sorted(op_types.items()))
+        warnings.append(f"Structural meld: {op_summary}")
+
     return ValidationResult(
         path=path,
         meld_id=meld_id,
@@ -798,10 +909,12 @@ def validate_meld_file(
         warnings=warnings,
         concept_count=concept_count,
         simplex_count=simplex_count,
+        structural_op_count=len(structural_ops),
         treaty_relevant_count=treaty_count,
         harness_relevant_count=harness_count,
         critical_triggers=critical_triggers,
         policy_source=policy_source,
+        is_structural_meld=is_structural,
     )
 
 
@@ -820,10 +933,17 @@ def print_result(result: ValidationResult, verbose: bool = False):
     print(f"{status_icon} {result.path.name}")
     print(f"{'=' * 70}")
     print(f"  Meld ID:    {result.meld_id}")
+    print(f"  Type:       {'STRUCTURAL' if result.is_structural_meld else 'Standard'}")
     print(f"  Protection: {result.protection_level.name}")
     print(f"  Valid:      {valid_icon} {'Yes' if result.is_valid else 'No (has errors)'}")
-    print(f"  Stats:      {result.concept_count} concepts, {result.simplex_count} simplexes")
-    print(f"              {result.treaty_relevant_count} treaty-relevant, {result.harness_relevant_count} harness-relevant")
+
+    if result.is_structural_meld:
+        print(f"  Stats:      {result.structural_op_count} structural operations")
+        if result.concept_count or result.simplex_count:
+            print(f"              + {result.concept_count} concepts, {result.simplex_count} simplexes")
+    else:
+        print(f"  Stats:      {result.concept_count} concepts, {result.simplex_count} simplexes")
+        print(f"              {result.treaty_relevant_count} treaty-relevant, {result.harness_relevant_count} harness-relevant")
     print(f"  Policy:     {result.policy_source}")
 
     if result.critical_triggers:

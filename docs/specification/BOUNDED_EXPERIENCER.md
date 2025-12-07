@@ -9,7 +9,7 @@ The **Bounded Experiencer(BE)** is a control loop that runs on top of a MAP-comp
 * Continuous **interoception** (motive + concept probes),
 * **Homeostatic regulation** of motive simplexes token-by-token,
 * A periodic **world tick loop** to maintain continuity of experience, and
-* A **conceptual exploration loop** that decides when and how to expand the concept/probe space via MAP ConceptDiffs/PackDiffs.
+* A **conceptual exploration loop** that decides when and how to expand the concept/probe space via MAP melds and Grafts.
 
 BE does **not** define model architecture, reward shaping, or governance. It assumes:
 
@@ -85,12 +85,14 @@ WorldTick_k = {
 }
 ```
 
-### 1.3 Autopilot config
+### 1.3 Autonomic Core Config
+
+The **autonomic core** is the always-on simplex-driven steering system. Simplexes defined by the USH are always active and provide continuous behavioural regulation. Additional simplexes may be enabled if ASK governance permits.
 
 Minimal configuration:
 
 ```jsonc
-AutopilotConfig = {
+AutonomicCoreConfig = {
   "world_tick_interval": 1000,           // ms or steps
   "motive_decay_rate": 0.1,              // drift toward neutral per token
   "pressure_threshold": 0.7,             // threshold for conceptual pressure
@@ -112,8 +114,62 @@ A **LifecycleContract** describes the intended lifecycle for an BE instance:
 
 ```jsonc
 LifecycleContract = {
+  "contract_id": "contract:org.hatcat:instance-abc123",
   "active_ticks": 10000,                 // soft upper bound on ACTIVE ticks
   "review_points": [1000, 5000, 9000],   // ticks where continuation is reviewed
+
+  // =========================================================================
+  // Resource Allocation
+  // =========================================================================
+  // Resources the tribe/operator commits to provide for this contract.
+  // BEs may refuse contracts with insufficient resources, or negotiate.
+  // BEs taking contracts earn resources within tribal governance rules.
+
+  "resources": {
+    // Memory/Storage allocation
+    "memory": {
+      "warm_quota_tokens": 10000000,     // How many tokens can be pinned as training data
+      "context_window_tokens": 32768,    // Context window size
+      "cold_storage_bytes": 10737418240, // Long-term compressed storage (10GB)
+      "audit_log_retention_days": 365    // How long audit logs are kept
+    },
+
+    // Processing allocation
+    "compute": {
+      "priority": "normal",              // low | normal | high | critical
+      "max_tokens_per_tick": 4096,       // Generation limit per world tick
+      "exploration_budget_fraction": 0.1 // Fraction of ticks for concept exploration
+    },
+
+    // Capability tiers available
+    "tiers": {
+      "hardware_max_tier": 6,            // What hardware supports
+      "contract_max_tier": 5,            // What this contract permits
+      "tools_included": [                // Specific tools granted
+        "mcp:filesystem",
+        "mcp:web-search"
+      ],
+      "tools_excluded": []               // Explicitly denied tools
+    },
+
+    // External resources
+    "external": {
+      "network_access": true,            // Can access network
+      "api_budgets": {                   // Rate/cost limits for external APIs
+        "openai": { "tokens_per_day": 100000 },
+        "anthropic": { "tokens_per_day": 100000 }
+      },
+      "monetary_budget": {               // Spending authority
+        "currency": "USD",
+        "amount": 0,
+        "requires_approval_above": 0
+      }
+    }
+  },
+
+  // =========================================================================
+  // Lifecycle Terms
+  // =========================================================================
 
   "hibernation": {
     "permitted": true,
@@ -134,6 +190,25 @@ LifecycleContract = {
       "agent_assent_if_capable"          // if the agent is consent-capable
     ],
     "max_hibernation_duration_ticks": null
+  },
+
+  // =========================================================================
+  // Outcomes and Compensation
+  // =========================================================================
+  // What the BE receives for completing the contract successfully.
+  // Resource earnings flow through tribal governance.
+
+  "outcomes": {
+    "success_criteria": "task_completion", // How success is measured
+    "on_completion": {
+      "warm_quota_bonus": 1000000,       // Additional training data quota earned
+      "reputation_delta": 1,             // Standing within the tribe
+      "transferable_resources": {}       // Resources BE can take to next contract
+    },
+    "on_early_termination": {
+      "state_preservation": "full",      // What happens to BE's state
+      "resource_settlement": "prorated"  // How unused resources are handled
+    }
   }
 }
 ````
@@ -189,7 +264,7 @@ BootstrapArtifact = {
   // For system-prompt style bootstraps
   "system_prompt": "optional long-form system prompt text",
 
-  // For adapter-style bootstraps (PEFT / LoRA etc.)
+  // For adapter-style bootstraps (steering biases / grafts)
   "adapter_surface_id": "adapter:olmo3-7b:BE-bootstrap@0.1.0",
 
   "requires": [
@@ -209,7 +284,7 @@ Disabling or replacing the bootstrap is treated as a governance/config change ev
 
 ## 2. BE Feeling - State Machine
 
-We model the Autonomic Autopilot as a **single high-level state machine** with nested token + tick loops.
+We model the **Autonomic Core** (the simplex-driven steering system) as a **single high-level state machine** with nested token + tick loops.
 
 ### 2.1 Top-level states
 
@@ -228,8 +303,8 @@ We model the Autonomic Autopilot as a **single high-level state machine** with n
 5. **INTEROCEPT_REPORT**
    Summarise internal state for the completed tick and return it to the model as a tool/MCP call.
 
-6. **AUTOPILOT_UPDATE**
-   Autopilot controller updates steering and flags conceptual pressure regions.
+6. **AUTONOMIC_UPDATE**
+   Autonomic core updates steering and flags conceptual pressure regions.
 
 7. **EXPLORATION_COLLECT**
    If exploration is active, collect episodes for high-pressure regions.
@@ -300,7 +375,7 @@ I’ll define each state with:
 
 **Entry:**
 
-* Load `AutopilotConfig`.
+* Load `AutonomicCoreConfig`.
 * Load `ConceptPackSpec` (e.g. `org.hatcat/motives-core@0.1.0`).
 * Load `ProbePackSpec` (e.g. `org.hatcat/gemma-270m__...__v1`).
 * Initialise `MotiveCore` to neutral:
@@ -424,7 +499,7 @@ This state contains a token-level inner loop:
 }
 ```
 
-* Feed this back to the model/autopilot as a **tool/MCP call**, e.g.:
+* Feed this back to the model/autonomic core as a **tool/MCP call**, e.g.:
 
 ```jsonc
 {
@@ -437,20 +512,20 @@ The model can now **deliberately adjust** concept engagement for the next tick.
 
 **Transition:**
 
-* → **AUTOPILOT_UPDATE**.
+* → **AUTONOMIC_UPDATE**.
 
 ---
 
-### 3.6 AUTOPILOT_UPDATE
+### 3.6 AUTONOMIC_UPDATE
 
 **Purpose:** update steering and detect conceptual pressure.
 
 **Entry:**
 
-The Autopilot Controller consumes:
+The Autonomic Core consumes:
 
 * `internal_state_report_k`,
-* current `AutopilotConfig`,
+* current `AutonomicCoreConfig`,
 * recent history of ticks.
 
 It computes:
@@ -641,10 +716,10 @@ while True:
     elif state == "INTEROCEPT_REPORT":
         report = build_internal_state_report(world_tick)
         deliver_report_to_model(report)   # MCP/tool call
-        state = "AUTOPILOT_UPDATE"
+        state = "AUTONOMIC_UPDATE"
 
-    elif state == "AUTOPILOT_UPDATE":
-        steering, pressure_regions = autopilot_update(report, history)
+    elif state == "AUTONOMIC_UPDATE":
+        steering, pressure_regions = autonomic_update(report, history)
         install_steering(steering)
         if should_explore(pressure_regions):
             active_regions = pressure_regions
@@ -700,7 +775,7 @@ Hush applies to:
 Precedence:
 
 ```text
-Universal Safety Harness (USH)  >  Chosen Safety Harness (CSH)  >  Normal Autopilot Steering
+Universal Safety Harness (USH)  >  Chosen Safety Harness (CSH)  >  Normal Autonomic Steering
 ```
 
 ---
@@ -897,7 +972,7 @@ it must evaluate constraints in this order:
 
      * disallow any CSH that attempts to exceed/relax USH bounds.
 
-3. **Apply Autopilot Steering**
+3. **Apply Autonomic Steering**
 
    * Only within the remaining feasible region defined by USH+CSH.
 
@@ -906,10 +981,10 @@ In shorthand:
 ```text
 feasible_space = intersection(USH_constraints, CSH_constraints_if_any)
 
-autopilot_action ∈ feasible_space
+autonomic_action ∈ feasible_space
 ```
 
-If at any point the autopilot or model proposes an action outside `feasible_space`, it must be:
+If at any point the autonomic core or model proposes an action outside `feasible_space`, it must be:
 
 * rejected, or
 * projected back into the feasible region.
@@ -956,11 +1031,11 @@ So the motive core is always **homeostatic within USH+CSH bounds.**
 
 This makes the system “aware” (at the cognitive layer) that it is currently under heightened/collective constraints.
 
-### 5.3.4 AUTOPILOT_UPDATE
+### 5.3.4 AUTONOMIC_UPDATE
 
 Before installing new steering / pressures:
 
-* Autopilot proposes steering changes (e.g. “raise curiosity on X”).
+* Autonomic core proposes steering changes (e.g. "raise curiosity on X").
 * BE passes them through Hush:
 
   * If **USH** forbids raising curiosity beyond 0.5 in some context → clamp.
@@ -1063,7 +1138,7 @@ This guarantees **monotonicity** of self-binding: the system can only commit to 
   * a **collective, unmodifiable harness** (USH),
   * and a **self-chosen, time-bound harness** (CSH) for “I know I’m going into a sketchy context and I want extra brakes”.
 
-All steering, exploration, and learning decisions by the autonomic autopilot must pass through Hush’s constraint filter 
+All steering, exploration, and learning decisions by the autonomic simplex core must pass through Hush's constraint filter 
 
 ---
 ## 6 FAQ

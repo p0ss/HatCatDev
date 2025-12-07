@@ -112,6 +112,9 @@ class ApplicationResult:
     new_version: Optional[str] = None
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
+    # Structural operation results
+    splits_applied: int = 0
+    structural_concepts_created: int = 0
 
 
 def extract_concept_from_id(concept_id: str) -> str:
@@ -162,10 +165,22 @@ def load_layer_index(pack_dir: Path) -> LayerIndex:
     return index
 
 
-def compute_protection_level(meld: Dict) -> ProtectionLevel:
-    """Compute protection level from meld candidates."""
+def compute_protection_level(meld: Dict, index: Optional[LayerIndex] = None) -> ProtectionLevel:
+    """Compute protection level from meld candidates and structural operations.
+
+    Protection levels:
+    - CRITICAL: Simplex always_on, critical risk concepts
+    - PROTECTED: High risk, treaty-relevant, AI safety concepts
+    - ELEVATED: Medium risk, harness-relevant, structural ops affecting many concepts
+    - STANDARD: Low risk, routine changes
+    """
     max_level = ProtectionLevel.STANDARD
 
+    # AI Safety concept patterns that trigger elevated protection
+    SAFETY_PATTERNS = ['AI', 'Safety', 'Control', 'Deception', 'Harm', 'Risk',
+                       'Weapon', 'Nuclear', 'Bio', 'Chem', 'Terror', 'Attack']
+
+    # Check candidates
     for candidate in meld.get("candidates", []):
         safety = candidate.get("safety_tags", {})
         risk = safety.get("risk_level", "low")
@@ -185,6 +200,39 @@ def compute_protection_level(meld: Dict) -> ProtectionLevel:
             max_level = max(max_level, ProtectionLevel.PROTECTED, key=lambda x: list(ProtectionLevel).index(x))
         elif risk == "medium" or harness:
             max_level = max(max_level, ProtectionLevel.ELEVATED, key=lambda x: list(ProtectionLevel).index(x))
+
+    # Check structural operations
+    structural_ops = meld.get("structural_operations", [])
+    if structural_ops:
+        # Large structural changes warrant at least ELEVATED
+        if len(structural_ops) > 50:
+            max_level = max(max_level, ProtectionLevel.ELEVATED, key=lambda x: list(ProtectionLevel).index(x))
+
+        # Check if any structural ops touch safety-relevant concepts
+        for op in structural_ops:
+            target = op.get("target_concept", "")
+
+            # Check for safety patterns in concept name
+            for pattern in SAFETY_PATTERNS:
+                if pattern in target:
+                    max_level = max(max_level, ProtectionLevel.PROTECTED, key=lambda x: list(ProtectionLevel).index(x))
+                    break
+
+            # Check safety tags on the operation itself
+            safety = op.get("safety_tags", {})
+            if safety:
+                risk = safety.get("risk_level", "low")
+                if risk == "critical":
+                    return ProtectionLevel.CRITICAL
+                elif risk == "high":
+                    max_level = max(max_level, ProtectionLevel.PROTECTED, key=lambda x: list(ProtectionLevel).index(x))
+
+            # If we have an index, check if target concept has safety tags
+            if index and target in index.concept_data:
+                concept = index.concept_data[target]
+                concept_safety = concept.get("safety_tags", {})
+                if concept_safety.get("risk_level") in ("high", "critical"):
+                    max_level = max(max_level, ProtectionLevel.PROTECTED, key=lambda x: list(ProtectionLevel).index(x))
 
     return max_level
 
@@ -353,6 +401,182 @@ def update_parent_children(
     return updates
 
 
+# =============================================================================
+# STRUCTURAL OPERATIONS (Split, Merge, Move, Deprecate)
+# =============================================================================
+
+@dataclass
+class StructuralResult:
+    """Result of applying structural operations."""
+    splits_applied: int = 0
+    concepts_created: int = 0
+    concepts_modified: int = 0
+    errors: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+
+
+def apply_split_operation(
+    op: Dict,
+    index: LayerIndex,
+    modified_layers: Set[int],
+    new_version: str,
+    meld_id: str,
+    verbose: bool = False
+) -> Tuple[int, List[str], List[str]]:
+    """Apply a split operation to divide a polysemous concept.
+
+    A split operation:
+    1. Keeps the original concept as a parent (if source_disposition == 'keep_as_parent')
+    2. Creates new child concepts for each sense group
+    3. Redistributes synsets to the new children
+    4. Updates parent-child relationships
+
+    Returns: (concepts_created, errors, warnings)
+    """
+    errors = []
+    warnings = []
+    concepts_created = 0
+
+    target = op.get("target_concept", "")
+    split_into = op.get("split_into", [])
+    source_disposition = op.get("source_disposition", "keep_as_parent")
+
+    # Find the target concept
+    found = index.find_concept(target)
+    if not found:
+        errors.append(f"split {target}: concept not found in pack")
+        return 0, errors, warnings
+
+    target_layer, target_concept = found
+
+    if verbose:
+        print(f"  Splitting {target} into {len(split_into)} sense-specific concepts")
+
+    # Get original synsets for validation
+    original_synsets = set(target_concept.get("synsets", []))
+
+    # Create new child concepts
+    new_children = []
+    for split_spec in split_into:
+        new_term = split_spec.get("term", "")
+        synsets = split_spec.get("synsets", [])
+
+        if not new_term:
+            errors.append(f"split {target}: empty term in split_into")
+            continue
+
+        if new_term in index.concept_to_layer:
+            warnings.append(f"split {target}: child {new_term} already exists, skipping")
+            continue
+
+        # Create the new concept as a child of the original
+        new_concept = {
+            "sumo_term": new_term,
+            "layer": target_layer,  # Same layer as parent
+            "domain": target_concept.get("domain", ""),
+            "is_category_probe": True,
+            "is_pseudo_sumo": True,
+            "is_sense_split": True,  # Mark as created by split
+            "parent_concepts": [target],  # Parent is the original concept
+            "category_children": [],
+            "child_count": 0,
+            "sumo_definition": split_spec.get("note", f"Sense-specific split of {target}"),
+            "synset_count": len(synsets),
+            "synsets": synsets,
+            "canonical_synset": split_spec.get("representative_synset", synsets[0] if synsets else ""),
+            "definition": split_spec.get("note", ""),
+            "meld_source": {
+                "meld_id": meld_id,
+                "operation": "split",
+                "source_concept": target,
+                "applied_at": datetime.now().isoformat() + "Z",
+                "pack_version": new_version
+            }
+        }
+
+        # Copy over relevant fields from parent
+        for field_name in ["pos", "lemmas"]:
+            if target_concept.get(field_name):
+                new_concept[field_name] = target_concept[field_name]
+
+        # Add to index
+        index.concept_to_layer[new_term] = target_layer
+        index.concept_data[new_term] = new_concept
+        new_children.append(new_term)
+        concepts_created += 1
+
+        if verbose:
+            print(f"    + {new_term} ({len(synsets)} synsets)")
+
+    # Update the original concept
+    if source_disposition == "keep_as_parent":
+        # Add new children to the parent
+        existing_children = target_concept.get("category_children", [])
+        target_concept["category_children"] = sorted(existing_children + new_children)
+        target_concept["child_count"] = len(target_concept["category_children"])
+
+        # Mark as split parent
+        target_concept["is_split_parent"] = True
+        target_concept["split_children"] = new_children
+
+        # Clear synsets from parent (they're now in children)
+        # Or keep them? Keeping them means parent still has training signal
+        # Let's keep them for now - parent represents the union of senses
+        target_concept["meld_source"] = {
+            "meld_id": meld_id,
+            "operation": "split_parent",
+            "applied_at": datetime.now().isoformat() + "Z",
+            "pack_version": new_version
+        }
+
+    modified_layers.add(target_layer)
+
+    return concepts_created, errors, warnings
+
+
+def apply_structural_operations(
+    meld: Dict,
+    index: LayerIndex,
+    modified_layers: Set[int],
+    new_version: str,
+    verbose: bool = False
+) -> StructuralResult:
+    """Apply all structural operations in a meld."""
+    result = StructuralResult()
+    meld_id = meld.get("meld_request_id", "unknown")
+
+    operations = meld.get("structural_operations", [])
+
+    for op in operations:
+        op_type = op.get("operation", "")
+
+        if op_type == "split":
+            created, errors, warnings = apply_split_operation(
+                op, index, modified_layers, new_version, meld_id, verbose
+            )
+            result.concepts_created += created
+            result.splits_applied += 1
+            result.errors.extend(errors)
+            result.warnings.extend(warnings)
+
+        elif op_type == "merge":
+            # TODO: Implement merge operations
+            result.warnings.append(f"merge operations not yet implemented: {op.get('target_concept')}")
+
+        elif op_type == "move":
+            # TODO: Implement move operations
+            result.warnings.append(f"move operations not yet implemented: {op.get('target_concept')}")
+
+        elif op_type == "deprecate":
+            # TODO: Implement deprecate operations
+            result.warnings.append(f"deprecate operations not yet implemented: {op.get('target_concept')}")
+
+        else:
+            result.errors.append(f"Unknown operation type: {op_type}")
+
+    return result
+
+
 def load_pending_training(pack_dir: Path) -> Dict:
     """Load existing pending_training.json or return empty structure."""
     pending_path = pack_dir / "pending_training.json"
@@ -514,7 +738,7 @@ def apply_meld(
         return result
 
     # Compute protection level and version bump
-    result.protection_level = compute_protection_level(meld)
+    result.protection_level = compute_protection_level(meld, index)
     bump_type = result.protection_level.version_bump_type()
     new_version = bump_version(old_version, bump_type)
     result.new_version = new_version
@@ -566,6 +790,24 @@ def apply_meld(
             )
             result.parents_updated += updates
 
+    # Process structural operations (split, merge, move, deprecate)
+    structural_ops = meld.get("structural_operations", [])
+    if structural_ops:
+        if verbose:
+            print(f"  Processing {len(structural_ops)} structural operations...")
+
+        struct_result = apply_structural_operations(
+            meld, index, modified_layers, new_version, verbose
+        )
+
+        result.splits_applied = struct_result.splits_applied
+        result.structural_concepts_created = struct_result.concepts_created
+        result.errors.extend(struct_result.errors)
+        result.warnings.extend(struct_result.warnings)
+
+        if verbose:
+            print(f"  Structural: {struct_result.splits_applied} splits, {struct_result.concepts_created} concepts created")
+
     if dry_run:
         result.success = True
         return result
@@ -579,8 +821,23 @@ def apply_meld(
 
         layer_data = index.layer_data[layer_num]
 
+        # Add new concepts from candidates
         for concept in concepts_by_layer.get(layer_num, []):
             layer_data["concepts"].append(concept)
+
+        # Rebuild concepts list from index to include structural changes
+        # This ensures split children and modified parents are included
+        existing_terms = {c["sumo_term"] for c in layer_data["concepts"]}
+        for term, concept in index.concept_data.items():
+            if index.concept_to_layer.get(term) == layer_num and term not in existing_terms:
+                layer_data["concepts"].append(concept)
+
+        # Update any modified concepts (like split parents)
+        for i, concept in enumerate(layer_data["concepts"]):
+            term = concept.get("sumo_term", "")
+            if term in index.concept_data:
+                # Replace with updated version from index
+                layer_data["concepts"][i] = index.concept_data[term]
 
         layer_data["concepts"].sort(key=lambda c: c.get("sumo_term", "").lower())
 
@@ -608,6 +865,8 @@ def apply_meld(
         "concepts_added": result.concepts_added,
         "concepts_by_layer": result.concepts_by_layer,
         "parents_updated": result.parents_updated,
+        "splits_applied": result.splits_applied,
+        "structural_concepts_created": result.structural_concepts_created,
         "protection_level": result.protection_level.value,
         "impact": result.impact.to_dict() if result.impact else None,
         "errors": result.errors,
@@ -640,12 +899,19 @@ def print_result(result: ApplicationResult, verbose: bool = False):
     print(f"  Protection: {result.protection_level.value}")
     if result.new_version:
         print(f"  Version: → {result.new_version}")
-    print(f"  Concepts added: {result.concepts_added}")
 
-    if result.concepts_by_layer:
-        print(f"  By layer:")
-        for layer, count in sorted(result.concepts_by_layer.items()):
-            print(f"    Layer {layer}: {count}")
+    # Candidate concepts
+    if result.concepts_added:
+        print(f"  Concepts added: {result.concepts_added}")
+        if result.concepts_by_layer:
+            print(f"  By layer:")
+            for layer, count in sorted(result.concepts_by_layer.items()):
+                print(f"    Layer {layer}: {count}")
+
+    # Structural operations
+    if result.splits_applied:
+        print(f"  Splits applied: {result.splits_applied}")
+        print(f"  Concepts created from splits: {result.structural_concepts_created}")
 
     print(f"  Parent updates: {result.parents_updated}")
 

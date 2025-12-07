@@ -641,6 +641,7 @@ def build_sumo_negative_pool(
     hard_negative_weight: float = 3.0,
     sibling_weight: float = 3.0,
     use_l0_round_robin: bool = True,
+    include_siblings: bool = True,
 ) -> List[str]:
     """
     Build negative pool using SUMO hierarchy structure with optional hard negative prioritization.
@@ -656,6 +657,10 @@ def build_sumo_negative_pool(
     Rationale: A parent should detect its children, but NOT its grandchildren.
     Example: "Abstract" should detect "Proposition" (child), but not "Accusation" (grandchild).
 
+    For two-pass training (binary + sibling ranking):
+    - Pass 1: Set include_siblings=False for fast binary graduation
+    - Pass 2: Sibling ranking refinement handles sibling discrimination separately
+
     Args:
         all_concepts: All SUMO concepts
         target_concept: Target concept to find negatives for
@@ -664,6 +669,7 @@ def build_sumo_negative_pool(
         hard_negative_weight: How many times to include each hard negative
         sibling_weight: How many times to include each sibling (for sibling hard negatives)
         use_l0_round_robin: If True, balance distant negatives across L0 buckets
+        include_siblings: If True, add siblings as hard negatives (default True for backwards compat)
 
     Returns:
         List of negative concept names (hard negs may appear multiple times)
@@ -729,13 +735,17 @@ def build_sumo_negative_pool(
     # ========================================================================
     # SIBLING HARD NEGATIVES (~30% of pool via weighting)
     # ========================================================================
-    sibling_negs_available = [s for s in siblings if s in negatives]
+    # For two-pass training, skip sibling weighting in pass 1 (binary training)
+    # Sibling discrimination is handled separately by sibling ranking refinement
+    sibling_negs_available = [s for s in siblings if s in negatives] if include_siblings else []
     if sibling_negs_available:
         # Remove siblings from regular pool, will add with weight
         negatives = [n for n in negatives if n not in sibling_negs_available]
         # Add siblings multiple times to achieve ~30% representation
         negatives = sibling_negs_available * int(sibling_weight) + negatives
         print(f"    👥 Added {len(sibling_negs_available)} sibling hard negatives with {sibling_weight}x weight")
+    elif not include_siblings and siblings:
+        print(f"    ⏭️  Skipping {len(siblings)} sibling hard negatives (two-pass mode)")
 
     # ========================================================================
     # AI SYMMETRY HARD NEGATIVES

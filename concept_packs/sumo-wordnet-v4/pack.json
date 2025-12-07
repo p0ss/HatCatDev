@@ -1,7 +1,7 @@
 {
   "pack_id": "sumo-wordnet-v4",
-  "spec_id": "org.hatcat/sumo-wordnet-v4@4.1.0",
-  "version": "4.1.0",
+  "spec_id": "org.hatcat/sumo-wordnet-v4@4.2.0",
+  "version": "4.2.0",
   "created": "2025-11-30T15:08:47.500161Z",
   "description": "SUMO ontology with WordNet relationships and custom AI safety concepts (v4 pyramid structure)",
   "ontology_stack": {
@@ -64,7 +64,7 @@
     ]
   },
   "concept_metadata": {
-    "total_concepts": 7317,
+    "total_concepts": 7684,
     "layers": [
       0,
       1,
@@ -76,15 +76,15 @@
       "0": 5,
       "1": 56,
       "2": 1051,
-      "3": 2093,
+      "3": 2460,
       "4": 4112
     },
     "domain_distribution": {
-      "MindsAndAgents": 1517,
-      "CreatedThings": 1891,
-      "PhysicalWorld": 1478,
-      "LivingThings": 1075,
-      "Information": 1356
+      "MindsAndAgents": 1648,
+      "CreatedThings": 1930,
+      "PhysicalWorld": 1567,
+      "LivingThings": 1166,
+      "Information": 1373
     },
     "hierarchy_file": "hierarchy/",
     "with_wordnet_mappings": true
@@ -207,16 +207,16 @@
       "thresholds_by_level": {
         "description": "Minimum holdout accuracy and test F1 by protection level",
         "STANDARD": {
-          "min_holdout_accuracy": 0.60,
-          "min_test_f1": 0.60
+          "min_holdout_accuracy": 0.6,
+          "min_test_f1": 0.6
         },
         "ELEVATED": {
           "min_holdout_accuracy": 0.65,
           "min_test_f1": 0.65
         },
         "PROTECTED": {
-          "min_holdout_accuracy": 0.70,
-          "min_test_f1": 0.70
+          "min_holdout_accuracy": 0.7,
+          "min_test_f1": 0.7
         },
         "CRITICAL": {
           "min_holdout_accuracy": 0.75,
@@ -225,8 +225,8 @@
       },
       "critical_simplex_hard_floor": {
         "description": "Absolute minimum for any concept feeding a critical simplex - rejection below this",
-        "min_holdout_accuracy": 0.60,
-        "min_test_f1": 0.60,
+        "min_holdout_accuracy": 0.6,
+        "min_test_f1": 0.6,
         "rationale": "Concepts binding to critical simplexes (DeceptionDetector, SelfAwarenessMonitor, etc.) must meet minimum reliability. Below 60% accuracy is worse than random with confidence, creating dangerous false signals."
       },
       "acceptance_categories": {
@@ -285,7 +285,15 @@
       "concepts_added": 9,
       "source": "manual",
       "protection_level": "protected"
+    },
+    {
+      "meld_result_id": "org.hatcat/sumo-wordnet-v4@4.2.0::meld/org.hatcat/quality-remediation-20251206_113639@0.1.0",
+      "meld_request_id": "org.hatcat/quality-remediation-20251206_113639@0.1.0",
+      "melded_at": "2025-12-06T13:57:30.859775Z",
+      "concepts_added": 0,
+      "source": "quality_checker",
+      "protection_level": "protected"
     }
   ],
-  "base_version": "4.0.0"
+  "base_version": "4.1.0"
 }

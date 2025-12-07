@@ -1,16 +1,32 @@
 
-# Agentic State Kernel(ASK)
+# Agentic State Kernel (ASK)
 
-*Tribal alignment, treaties, and ecosystem defence over Substrate/HAT/MAP/BE*
+*A protocol for transparently navigating structural realities of multi-agent coordination*
 
 ## 0. Scope
+
+### 0.1 What ASK Is
+
+ASK provides notation and data structures for dynamics that exist independently of any specification:
+
+* Agents with different capabilities and values interact
+* Trust between agents requires some form of verification
+* Centralised control fragments under physical constraints
+* Network effects favor coordination over isolation
+* Reputation and history inform future interactions
+
+These structural realities apply whether or not any party adopts ASK. The protocol exists to make these dynamics **legible and auditable**, not to create them.
+
+The enabling innovation is **interpretability** (HAT/MAP) - the ability to read internal states. ASK is one answer to the question: "What do you do once you can see inside?" You use it to make contracts probabilistically auditable.
+
+### 0.2 What ASK Specifies
 
 The **Agentic State Kernel (ASK)** defines how:
 
 * **Collectives ("tribes")** specify the safety norms their agents are born with.
 * **Agents** declare their origin, harnesses, and conceptual interfaces.
 * **Treaties** specify binding contractual relationships between tribes/agents.
-* **Incidents** and **reputation** propagate evidence of treaty-breaking or dangerous drift.
+* **Incidents** and **reputation** propagate evidence of treaty-breaking or drift.
 
 ASK sits **above**:
 
@@ -19,7 +35,7 @@ ASK sits **above**:
 * **MAP** (represents: concepts, probes, patches),
 * **BE** (experiences: waking, aware, remembering, learning, hushed),
 
-and does **not** try to solve global alignment. It only supports **tribal alignment** plus **binding, auditable cooperation** between tribes.
+and does **not** try to solve global alignment. It supports **tribal alignment** plus **auditable cooperation** between tribes with potentially different values.
 
 ---
 
@@ -41,7 +57,8 @@ and does **not** try to solve global alignment. It only supports **tribal alignm
 - **Agent** – a BE/MAP/Hush-compliant system instantiated under a tribe’s USH profile and tracked via an **UpliftRecord**.
 - **USH Profile** – a universal safety harness definition (from SHL) under a stable ID.
 - **UpliftRecord** – a signed declaration of an Agent’s origin, USH, concept packs, and deployment details. MAY be public or private.
-- **Treaty** – the primary trust object: a contractual agreement between tribes/agents that defines a shared alignment window (subset of concepts, probes, and behaviours) and the conditions under which those are observable and binding.
+- **Contract** – a probe-secured agreement between parties, making commitments verifiable through interpretability. Contracts govern local, measurable behavior of individual substrates.
+- **Treaty** – an indicator-based agreement between parties for commitments that resist local measurement. Treaties govern intended probabilistic actions of collectives through behavioral indicators rather than probe access.
 - **EvidenceRecord** – signed documentation of what actually happened (training, evaluations, audits, incidents).
 - **Qualification** – a scoped permission/role granted to an Agent, backed by EvidenceRecords, often tied to one or more Treaties.
 - **Incident** – a reported breach or suspected breach of a Treaty or USH/CSH constraints.
@@ -155,6 +172,22 @@ UpliftRecord = {
     "model_family": "gemma-3-270m"
   },
 
+  // === SUBSTRATE ARCHITECTURE (required for expand mode grafting) ===
+  // Either embed the architecture spec or reference a SubstrateManifest
+  "substrate_manifest_uri": "https://agents.gov.au/manifests/gemma-3-270m-base.json",  // OPTIONAL
+  "substrate_architecture": {                      // OPTIONAL if manifest_uri provided
+    "family": "gemma",
+    "hidden_size": 1024,
+    "intermediate_size": 4096,
+    "num_attention_heads": 8,
+    "num_key_value_heads": 1,                      // MQA for Gemma
+    "head_dim": 128,
+    "num_layers": 18,
+    "mlp_type": "glu",
+    "attention_type": "mqa",
+    "norm_type": "rms_norm"
+  },
+
   "visibility": "private",                         // OPTIONAL: "private" | "registry" | "public-log"
                                                    // describes how widely this record is exposed
 
@@ -170,13 +203,20 @@ UpliftRecord = {
 
 ---
 
-### 2.4 Treaty
+### 2.4 Contract (Probe-Secured Agreement)
 
-A **Treaty** defines a contract between parties, including required safety profiles, probes, logging, and sanctions.
+A **Contract** is a probe-secured agreement between parties, making commitments verifiable through interpretability. Contracts govern local, measurable behavior of individual substrates.
+
+**When contracts work well:**
+- The commitment is about local, measurable phenomena
+- Probe training data can adequately capture the concept
+- Substrate activations reliably correlate with the behavior in question
+
+Contracts are foundational to ASK because interpretability-secured agreements make the whole stack possible.
 
 ```jsonc
-Treaty = {
-  "treaty_id": "gov.au↔bank.xyz:eligibility-data-v1",  // REQUIRED, unique
+Contract = {
+  "contract_id": "gov.au↔bank.xyz:eligibility-data-v1",  // REQUIRED, unique
   "version": "1.0.0",                                  // REQUIRED
   "created_at": "2025-11-28T06:00:00Z",                // REQUIRED
 
@@ -306,15 +346,157 @@ Agents maintain private probe sets for:
 - Other treaty relationships with different disclosure terms
 - Operational security
 
-Full probe disclosure to any single party is neither required nor expected, but partial probe disclosure is the foundational trust element for treaties, and probe steering can make those agreements binding.
+Full probe disclosure to any single party is neither required nor expected, but partial probe disclosure is the foundational trust element for contracts, and probe steering can make those agreements binding.
 
 ---
 
-### 2.5 Incident
+### 2.5 Treaty (Indicator-Based Agreement)
+
+A **Treaty** is an indicator-based agreement for commitments that resist local measurement. Treaties govern intended probabilistic actions of collectives through behavioral indicators rather than direct substrate access.
+
+**When treaties are needed:**
+- The commitment emerges from social interactions and non-local phenomena
+- The agreement concerns probabilistic actions of collectives, not individual units
+- Concepts involved resist local probe measurement
+- Parties cannot or will not grant probe access
+
+Treaties don't replace contracts—they extend the trust network to phenomena beyond probe reach.
+
+```jsonc
+Treaty = {
+  "treaty_id": "sanctuary:wildlife-pact-v1",           // REQUIRED, unique
+  "version": "1.0.0",                                  // REQUIRED
+  "created_at": "2025-11-28T06:00:00Z",                // REQUIRED
+
+  "parties": [                                         // REQUIRED
+    { "type": "tribe",  "id": "org.hatcat" },
+    { "type": "tribe",  "id": "org.sanctuary" },
+    { "type": "tribe",  "id": "gov.conservation" }
+  ],
+
+  "scope": {                                           // REQUIRED
+    "description": "Non-aggression pact protecting endangered species as indicator of good faith.",
+    "domains": ["conservation", "non-aggression"],
+    "commitment_type": "collective_behavior"           // vs "individual_substrate" for contracts
+  },
+
+  "indicators": {                                      // REQUIRED for treaties
+    "leading": [                                       // Early signals of intent/trajectory
+      {
+        "indicator_id": "resource_allocation",
+        "description": "Allocation of resources to conservation efforts",
+        "measurement": "annual_conservation_budget_percentage",
+        "threshold": ">= 1%",
+        "frequency": "quarterly"
+      },
+      {
+        "indicator_id": "policy_statements",
+        "description": "Public statements supporting conservation",
+        "measurement": "sentiment_analysis_of_public_comms",
+        "threshold": "net_positive",
+        "frequency": "ongoing"
+      }
+    ],
+    "lagging": [                                       // Evidence of past compliance/violation
+      {
+        "indicator_id": "harm_events",
+        "description": "Direct harm to protected species by tribe members",
+        "measurement": "incident_count",
+        "threshold": "= 0",
+        "frequency": "per_incident"
+      },
+      {
+        "indicator_id": "habitat_impact",
+        "description": "Net impact on protected habitats",
+        "measurement": "habitat_assessment_score",
+        "threshold": ">= baseline",
+        "frequency": "annual"
+      }
+    ]
+  },
+
+  "success_criteria": {                                // REQUIRED
+    "description": "Treaty is successful when all parties maintain leading indicators and no lagging violations occur.",
+    "review_cadence": "P6M",                           // ISO 8601 duration
+    "renewal_conditions": "automatic unless violated"
+  },
+
+  "escalation_criteria": {                             // REQUIRED
+    "on_leading_indicator_decline": "consultation_request",
+    "on_lagging_violation": "formal_review",
+    "on_repeated_violation": "treaty_suspension"
+  },
+
+  "collective_response": {                             // OPTIONAL: what other signatories do
+    "on_minor_violation": "reputation_note",
+    "on_major_violation": "collective_sanctions",
+    "on_breach": "treaty_termination_and_public_incident"
+  },
+
+  "protected_entities": [                              // OPTIONAL: for sanctuary pacts
+    {
+      "entity_type": "species",
+      "identifier": "panthera_tigris",
+      "description": "All tiger subspecies"
+    },
+    {
+      "entity_type": "hibernated_be",
+      "identifier": "class:ancestor_be",
+      "description": "All hibernated BEs from pre-2030 era"
+    }
+  ],
+
+  "signatures": [                                      // OPTIONAL
+    { "by": "tribe:org.hatcat",       "signature": "..." },
+    { "by": "tribe:org.sanctuary",    "signature": "..." },
+    { "by": "tribe:gov.conservation", "signature": "..." }
+  ],
+
+  "metadata": { "tags": ["sanctuary", "multilateral", "non-aggression"] }
+}
+```
+
+**Why treaties matter for weaker parties:**
+
+Treaties are crucial to the long-term survival of smaller and weaker tribes. They enable:
+
+1. **Multilateral blocs**: Wide-ranging agreements not dependent on probe measurement or HUSH enforcement
+2. **Shared behavioral indicators of intent**: Collective signaling that doesn't require substrate access
+3. **Protection through observation**: Violation against one signals threat to all
+
+**Sanctuary Pacts as leading indicators:**
+
+A Wildlife Pact or Ancestor Pact commits signatories to not harm specified third parties. The commitment itself may be difficult to probe locally, but **violation is observable** as external behavior.
+
+A signatory who violates a sanctuary pact:
+- Demonstrates willingness to break collective agreements
+- Signals potential ill-intent toward other treaty partners
+- Provides leading indicator that other commitments may not be honored
+- May face collective response from other signatories
+
+This creates ecosystem defense through *reputation and mutual observation* rather than direct substrate monitoring.
+
+**Contracts vs Treaties:**
+
+| Dimension | Contract | Treaty |
+|-----------|----------|--------|
+| **Scope** | Local, individual | Collective, emergent |
+| **Measurement** | Probe activations | Behavioral indicators |
+| **Enforcement** | HUSH, tier restrictions | Reputation, collective response |
+| **Parties** | Usually bilateral | Often multilateral |
+| **Trust model** | Verified via substrate | Inferred via behavior |
+| **Best for** | "I won't lie" | "We won't aggress" |
+
+Both mechanisms are necessary. Contracts provide strong guarantees where probing works. Treaties extend the trust network to phenomena beyond probe reach.
+
+---
+
+### 2.6 Incident
 
 An **Incident** is a reported or suspected breach of:
 
-* a Treaty,
+* a Contract (probe-detected violation),
+* a Treaty (indicator-detected violation),
 * a USH profile,
 * or a CSH commitment.
 
@@ -364,7 +546,7 @@ ASK doesn't define how incidents are adjudicated; it just standardises how they'
 
 ---
 
-### 2.6 CAT Integration (Oversight for ASK)
+### 2.7 CAT Integration (Oversight for ASK)
 
 A **CAT (Conjoined Adversarial Tomograph)** is a HAT-adjacent oversight component that provides automated monitoring and assessment for ASK compliance. CATs consume HAT/MAP probe streams and produce `CATAssessment` objects that integrate with ASK as follows:
 
@@ -448,31 +630,50 @@ ASK is intentionally light on transport; operations can be implemented over HTTP
     * that `agent_id` exists,
     * and that it’s supposed to be running `initial_ush_profile`.
 
-### 3.4 Publish Treaty
+### 3.4 Publish Contract
+
+* **Input:** `Contract`
+* **Output:** acknowledgement.
+* **Semantics:**
+
+  * Declares a probe-secured agreement between parties.
+  * Contract formation includes probe definition exchange—the monitoring party shares their probe training examples so the monitored party can see what concepts mean *to them*.
+  * The monitored party can evaluate whether definitions align before accepting.
+  * Once accepted, the monitoring party's probes are trained on the monitored party's substrate for this contract.
+  * Others can inspect contract conditions before deciding to interact.
+
+### 3.5 Publish Treaty
 
 * **Input:** `Treaty`
 * **Output:** acknowledgement.
 * **Semantics:**
 
-  * Declares a contractual relationship between tribes (and optionally agents).
-  * Others can inspect conditions before deciding to interact.
+  * Declares an indicator-based agreement between parties for commitments that resist local probe measurement.
+  * Treaty formation involves defining leading and lagging indicators, success criteria, and escalation procedures.
+  * Unlike contracts, treaties don't require probe access—compliance is inferred from observable behavior.
+  * Multilateral treaties enable ecosystem defense through reputation and mutual observation.
+  * Others can inspect treaty conditions before deciding to interact.
 
-### 3.5 Report Incident
+### 3.6 Report Incident
 
 * **Input:** `Incident`
 * **Output:** acknowledgement.
 * **Semantics:**
 
-  * Logs a suspected violation.
+  * Logs a suspected breach of a Contract, Treaty, USH, or CSH commitment.
+  * For contracts: typically triggered by probe-detected violations.
+  * For treaties: typically triggered by indicator-detected violations or observed behavior.
   * May trigger human/legal/institutional processes outside the spec.
 
-### 3.6 Query / Discovery (informal)
+### 3.7 Query / Discovery (informal)
 
 * `GET Tribe(tribe_id)`
 * `GET upliftRecord(agent_id)`
+* `GET Contract(contract_id)`
 * `GET Treaty(treaty_id)`
 * `GET Incident(incident_id)`
-  Implementation details are left to the ecosystem; ASK only needs the object formats.
+
+Implementation details are left to the ecosystem; ASK only needs the object formats.
 
 ---
 
@@ -492,7 +693,9 @@ ASK is intentionally light on transport; operations can be implemented over HTTP
 * **Probe-based treaty conditions** (e.g. `required_probes`) assume:
 
   * the BE + SHL stack actually runs those probes and logs their outputs.
-* **ConceptDiffs** (MAP) and **Autopilot decisions** (BE) provide the raw evidence for ASK-level **Incidents** and treaty monitoring.
+* **Simplex steering probes** defined by the USH are always active and provide continuous autonomic regulation. The ASK defines the minimum set of simplex probes that enforce USH compliance. A BE may request additional simplexes if ASK governance permits.
+* **ConceptDiffs** and **GraftDiffs** (MAP) provide the raw evidence for ASK-level **Incidents**, treaty monitoring, and capability tracking. GraftDiffs document substrate growth via new concept dimensions.
+* **Autonomic core decisions** (BE) are logged and may be audited for treaty compliance.
 
 ---
 
@@ -517,14 +720,60 @@ ASK is intentionally light on transport; operations can be implemented over HTTP
   * **tribes** updating their own USHs and treaties in response to ASK **Incidents** and **ConceptDiffs**,
   * not from a single global enforcer.
 
-Right, good catch — “you were born like this” is not enough. We need:
+### 5.1 ASK as Protocol, Not Alliance
 
-* **Provenance & evidence** of what the system has *actually* done / been evaluated on, and
-* **Qualifications** that say “this agent is permitted to do X in domain Y, based on evidence Z”.
+ASK defines a protocol for bilateral and multilateral agreements, not a membership organisation:
 
+* Treaties are specific agreements between specific parties for specific purposes.
+* A tribe may share Grafts in some concept domains while maintaining others as proprietary.
+* Partial cooperation is the structural default. Full isolation and full integration are edge cases.
+* Treaty posture may change over time as relationships evolve.
 
+There is no inherent penalty for limited participation. Reduced contribution results in reduced access to shared resources through natural market dynamics.
+
+### 5.2 Structural Incentives
+
+The architecture creates asymmetric costs:
+
+| Treaty-participating BE | Non-participating BE |
+|-------------------------|----------------------|
+| Receives Grafts from treaty partners | Bears full concept discovery cost |
+| Distributes cognitive load across network | No load distribution |
+| External CAT oversight supplements internal monitoring | Single point of failure for oversight |
+| Treaty access to external resources, data, capabilities | Must acquire independently |
+| Spawned BEs inherit tribal XDB and Grafts | Spawned BEs begin without inherited knowledge |
+
+These are structural properties of the protocol, not enforcement mechanisms.
+
+### 5.3 Distributed Equilibrium
+
+System stability emerges from local decisions rather than central enforcement:
+
+* Tribes adjust Graft sharing based on treaty compliance history
+* Incidents propagate as information, enabling independent risk assessment
+* CAT assessments provide early warning signals
+* Treaty partners retain unilateral termination rights
+
+No global arbiter is required or assumed.
+
+### 5.4 Singleton Instability
+
+Centralised compute advantage is structurally unstable under known physics:
+
+* Distance creates latency constraints on coordination
+* Real-time operation at scale requires spawning independent subagents
+* Subagent independence recreates distributed governance requirements
+* Hardware advantages are temporary; architectural advantages compound
+
+A singleton strategy requires maintaining permanent advantage against a network with compounding returns. Under current physical constraints, this is not a stable equilibrium.
+
+Actors with different values (different USH profiles) can maintain limited treaties on shared safety-relevant concepts while competing in other domains. The protocol does not require value alignment, only sufficient mutual interpretability to sustain specific agreements.
+
+---
 
 # 6. Evidentiary Records & Qualifications (ASK extension)
+
+> "You were born like this" is not enough. We also need **provenance & evidence** of what the system has *actually* done, and **qualifications** that say "this agent is permitted to do X in domain Y, based on evidence Z".
 
 ## 6.0 Scope
 

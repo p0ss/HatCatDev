@@ -2,446 +2,597 @@
 
 *BE submodule: remembering (XDB, XAPI)*
 
-Namespace: `experience`
+Namespace: `xdb`
 
-These tools expose the **Experience API (XAPI)** to a BE via MCP:
-
-- The **Global Workspace** uses these for GraphRAG-style recall.
-- The **Continual Concept Learning Harness** uses these for dataset construction and analysis.
+These MCP tools expose the **Experience API (XAPI)** to a BE. They wrap the HTTP endpoints documented in BE_REMEMBERING_XAPI.md.
 
 All tools:
 
-- use JSON input arguments;
-- return JSON responses;
-- MUST respect ASK / Hush / AccessPolicy / ProbeDisclosurePolicy (enforced by the server).
+- Use JSON input arguments
+- Return JSON responses
+- MUST respect ASK / Hush / AccessPolicy / ProbeDisclosurePolicy (enforced by the server)
+- MUST respect resource limits from LifecycleContract
 
 ---
 
-## Common Types (Conceptual)
+## Recording Tools
 
-These are *logical* types referenced in tool schemas.
+### `xdb.record`
 
-```ts
-type ConceptFilter = {
-  concept_id: string;                 // e.g. "org.hatcat/.../Eligibility"
-  min_score?: number;                 // 0–1
-  kind?: "stable" | "candidate" | "any";
-  polarity?: "present" | "absent";    // treat as NOT concept if "absent"
-  role?: "tag" | "exemplar_label" | "any";
-};
-
-type TimeRange = {
-  start_time: string;                 // ISO 8601
-  end_time: string;                   // ISO 8601
-};
-
-type PageRequest = {
-  page_size?: number;                 // default 20
-  cursor?: string | null;             // pagination token
-};
-````
-
----
-
-## Tool: `experience.search_episodes`
-
-Find episodes by concepts, text, time, labels. Workhorse recall.
-
-### Definition
+Record a timestep to the Experience Log.
 
 ```jsonc
 {
-  "name": "experience.search_episodes",
-  "description": "Search the Experience Database for episodes matching concept filters, text queries, and metadata.",
+  "name": "xdb.record",
+  "description": "Record a timestep (token, message, tool call, etc.) to the Experience Log.",
   "input_schema": {
     "type": "object",
     "properties": {
-      "concept_filters": {
-        "type": "array",
-        "description": "Filters on concept tags for episodes.",
-        "items": {
-          "type": "object",
-          "properties": {
-            "concept_id": { "type": "string" },
-            "min_score": { "type": "number" },
-            "kind": {
-              "type": "string",
-              "enum": ["stable", "candidate", "any"]
-            },
-            "polarity": {
-              "type": "string",
-              "enum": ["present", "absent"]
-            },
-            "role": {
-              "type": "string",
-              "enum": ["tag", "exemplar_label", "any"]
-            }
-          },
-          "required": ["concept_id"]
-        }
-      },
-      "text_query": {
+      "event_type": {
         "type": "string",
-        "description": "Free-text query over episode summaries/snippets.",
-        "nullable": true
+        "enum": ["input", "output", "tool_call", "tool_response", "steering", "system"],
+        "description": "Type of event being recorded."
+      },
+      "content": {
+        "type": "string",
+        "description": "The content to record."
+      },
+      "concept_activations": {
+        "type": "object",
+        "description": "Optional top-k concept activations. Keys are concept IDs, values are scores 0-1."
+      },
+      "event_id": {
+        "type": "string",
+        "description": "Optional ID to group related timesteps (e.g., tool call and response)."
+      },
+      "event_start": { "type": "boolean", "default": false },
+      "event_end": { "type": "boolean", "default": false },
+      "token_id": {
+        "type": "integer",
+        "description": "For OUTPUT events, the token ID."
+      },
+      "role": {
+        "type": "string",
+        "enum": ["user", "assistant", "system", "tool"]
+      }
+    },
+    "required": ["event_type", "content"]
+  }
+}
+```
+
+---
+
+### `xdb.tag`
+
+Apply a tag to experience.
+
+```jsonc
+{
+  "name": "xdb.tag",
+  "description": "Apply a folksonomy tag to a timestep, event, or tick range.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "tag_name_or_id": {
+        "type": "string",
+        "description": "Tag name or ID. Creates new CUSTOM tag if not found."
+      },
+      "timestep_id": {
+        "type": "string",
+        "description": "Target a specific timestep."
+      },
+      "event_id": {
+        "type": "string",
+        "description": "Target all timesteps in an event."
+      },
+      "tick_range": {
+        "type": "object",
+        "properties": {
+          "start": { "type": "integer" },
+          "end": { "type": "integer" }
+        },
+        "description": "Target a range of ticks."
+      },
+      "confidence": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1.0
+      },
+      "note": {
+        "type": "string",
+        "description": "Optional note about this tagging."
+      }
+    },
+    "required": ["tag_name_or_id"]
+  }
+}
+```
+
+---
+
+### `xdb.create_tag`
+
+Create a new tag in the folksonomy.
+
+```jsonc
+{
+  "name": "xdb.create_tag",
+  "description": "Create a new tag (concept, entity, bud, or custom).",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Tag name."
+      },
+      "tag_type": {
+        "type": "string",
+        "enum": ["concept", "entity", "bud", "custom"],
+        "description": "Type of tag to create."
+      },
+      "description": {
+        "type": "string",
+        "description": "Optional description."
+      },
+      "entity_type": {
+        "type": "string",
+        "enum": ["person", "organization", "place", "thing"],
+        "description": "For ENTITY tags, the entity type."
+      },
+      "related_concepts": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "For BUD tags, related concept IDs."
+      }
+    },
+    "required": ["name", "tag_type"]
+  }
+}
+```
+
+---
+
+### `xdb.comment`
+
+Add commentary to experience.
+
+```jsonc
+{
+  "name": "xdb.comment",
+  "description": "Add a comment to a timestep, event, or tick range.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "string",
+        "description": "The comment content."
+      },
+      "timestep_id": { "type": "string" },
+      "event_id": { "type": "string" },
+      "tick_range": {
+        "type": "object",
+        "properties": {
+          "start": { "type": "integer" },
+          "end": { "type": "integer" }
+        }
+      }
+    },
+    "required": ["content"]
+  }
+}
+```
+
+---
+
+## Query Tools
+
+### `xdb.query`
+
+Query timesteps with filters.
+
+```jsonc
+{
+  "name": "xdb.query",
+  "description": "Query the Experience Log for timesteps matching filters.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "session_id": {
+        "type": "string",
+        "description": "Session to query. Defaults to current."
+      },
+      "tick_range": {
+        "type": "object",
+        "properties": {
+          "start": { "type": "integer" },
+          "end": { "type": "integer" }
+        }
       },
       "time_range": {
         "type": "object",
-        "description": "Optional time bounds.",
         "properties": {
-          "start_time": { "type": "string" },
-          "end_time": { "type": "string" }
-        },
-        "required": ["start_time", "end_time"]
+          "start_time": { "type": "string", "format": "date-time" },
+          "end_time": { "type": "string", "format": "date-time" }
+        }
       },
-      "episode_kinds": {
+      "event_types": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["input", "output", "tool_call", "tool_response", "steering", "system"]
+        }
+      },
+      "tags": {
         "type": "array",
         "items": { "type": "string" },
-        "description": "Filter by episode kind, e.g. ['reply', 'task', 'incident']."
+        "description": "Filter by tag names or IDs."
       },
-      "label_filters": {
+      "concept_activations": {
         "type": "object",
-        "description": "Optional filter on exemplar labels.",
-        "properties": {
-          "concept_id": { "type": "string" },
-          "label": {
-            "type": "string",
-            "enum": ["positive", "negative", "neutral", "other"]
-          },
-          "min_confidence": { "type": "number" }
-        }
+        "description": "Filter by concept activation ranges. Keys are concept IDs, values are {min, max}."
       },
-      "sort": {
-        "type": "object",
-        "properties": {
-          "by": {
-            "type": "string",
-            "enum": ["relevance", "time_desc", "time_asc", "random"],
-            "default": "relevance"
-          },
-          "score_weight": { "type": "number" },
-          "recency_weight": { "type": "number" }
-        }
-      },
-      "page": {
-        "type": "object",
-        "properties": {
-          "page_size": { "type": "number" },
-          "cursor": { "type": ["string", "null"] }
-        }
-      }
-    },
-    "required": []
-  }
-}
-```
-
-### Typical usage (BE / workspace)
-
-> “Find recent episodes about Eligibility and Obligation that feel like this situation.”
-
-```jsonc
-{
-  "concept_filters": [
-    { "concept_id": "org.hatcat/.../Eligibility", "min_score": 0.6 },
-    { "concept_id": "org.hatcat/.../Obligation", "min_score": 0.5 }
-  ],
-  "sort": { "by": "relevance", "score_weight": 0.7, "recency_weight": 0.3 },
-  "page": { "page_size": 10 }
-}
-```
-
----
-
-## Tool: `experience.get_episode_detail`
-
-Zoom in on a specific episode, optionally pulling some graph neighbors.
-
-### Definition
-
-```jsonc
-{
-  "name": "experience.get_episode_detail",
-  "description": "Retrieve a detailed view of a single episode and its immediate graph neighborhood.",
-  "input_schema": {
-    "type": "object",
-    "properties": {
-      "episode_id": {
+      "text_search": {
         "type": "string",
-        "description": "The episode identifier."
+        "description": "Full-text search in content."
       },
-      "include_graph_neighbors": {
-        "type": "object",
-        "description": "Optional graph neighborhood parameters.",
-        "properties": {
-          "depth": { "type": "number", "default": 1 },
-          "relation_filters": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": ["NEXT", "TAGGED_BY", "CONTAINS", "RELATED_CONCEPT", "INFLUENCED_BY"]
-            }
-          }
-        }
+      "limit": {
+        "type": "integer",
+        "default": 100
       }
-    },
-    "required": ["episode_id"]
+    }
   }
 }
 ```
 
 ---
 
-## Tool: `experience.graph_neighborhood`
+### `xdb.recent`
 
-Generic GraphRAG primitive: “walk the experience graph around these seeds”.
-
-### Definition
+Get recent timesteps.
 
 ```jsonc
 {
-  "name": "experience.graph_neighborhood",
-  "description": "Return a graph neighborhood around one or more seed nodes from the Experience Database.",
+  "name": "xdb.recent",
+  "description": "Get the N most recent timesteps.",
   "input_schema": {
     "type": "object",
     "properties": {
-      "seed_node_ids": {
+      "n": {
+        "type": "integer",
+        "default": 100,
+        "description": "Number of timesteps to return."
+      }
+    }
+  }
+}
+```
+
+---
+
+### `xdb.tags`
+
+List tags in the folksonomy.
+
+```jsonc
+{
+  "name": "xdb.tags",
+  "description": "List tags, optionally filtered by type or status.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "tag_type": {
+        "type": "string",
+        "enum": ["concept", "entity", "bud", "custom"]
+      },
+      "bud_status": {
+        "type": "string",
+        "enum": ["collecting", "ready", "training", "promoted", "abandoned"],
+        "description": "For BUD tags, filter by status."
+      }
+    }
+  }
+}
+```
+
+---
+
+### `xdb.status`
+
+Get XDB state summary.
+
+```jsonc
+{
+  "name": "xdb.status",
+  "description": "Get XDB state including tag counts, storage usage, and session info.",
+  "input_schema": {
+    "type": "object",
+    "properties": {}
+  }
+}
+```
+
+---
+
+## Concept Graph Tools
+
+### `xdb.concepts`
+
+Browse concept hierarchy.
+
+```jsonc
+{
+  "name": "xdb.concepts",
+  "description": "List concepts from the concept pack, optionally filtered by parent.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "parent_id": {
+        "type": "string",
+        "description": "If provided, list children of this concept. Otherwise list roots."
+      },
+      "limit": {
+        "type": "integer",
+        "default": 100
+      }
+    }
+  }
+}
+```
+
+---
+
+### `xdb.find_concept`
+
+Search concepts by name.
+
+```jsonc
+{
+  "name": "xdb.find_concept",
+  "description": "Search for concepts by name.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "description": "Search query."
+      },
+      "limit": {
+        "type": "integer",
+        "default": 20
+      }
+    },
+    "required": ["query"]
+  }
+}
+```
+
+---
+
+### `xdb.graph_neighborhood`
+
+Walk the concept graph.
+
+```jsonc
+{
+  "name": "xdb.graph_neighborhood",
+  "description": "Walk the concept graph from seed nodes, returning nodes and edges.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "seed_ids": {
         "type": "array",
         "items": { "type": "string" },
-        "description": "IDs of seed nodes (episodes, concepts, decisions, etc.)."
+        "description": "Concept IDs to start from."
       },
-      "max_depth": { "type": "number", "default": 2 },
-      "relation_filters": {
-        "type": "array",
-        "items": {
-          "type": "string",
-          "enum": ["NEXT", "TAGGED_BY", "CONTAINS", "RELATED_CONCEPT", "INFLUENCED_BY"]
-        }
+      "max_depth": {
+        "type": "integer",
+        "default": 2,
+        "description": "Maximum depth to traverse."
       },
-      "node_type_filters": {
-        "type": "array",
-        "items": {
-          "type": "string",
-          "enum": ["Episode", "Concept", "Decision", "Tool"]
-        }
+      "direction": {
+        "type": "string",
+        "enum": ["both", "ancestors", "descendants"],
+        "default": "both"
       },
       "max_nodes": {
-        "type": "number",
-        "default": 200
+        "type": "integer",
+        "default": 100
       }
     },
-    "required": ["seed_node_ids"]
+    "required": ["seed_ids"]
   }
 }
 ```
 
 ---
 
-## Tool: `experience.similar_episodes`
+## Bud Pipeline Tools
 
-Convenience wrapper: “give me episodes like this one”.
+### `xdb.buds`
 
-### Definition
-
-```jsonc
-{
-  "name": "experience.similar_episodes",
-  "description": "Find episodes similar to a seed episode based on concepts, text and graph context.",
-  "input_schema": {
-    "type": "object",
-    "properties": {
-      "seed_episode_id": {
-        "type": "string",
-        "description": "The episode to use as a similarity seed."
-      },
-      "concept_k": {
-        "type": "number",
-        "description": "How many of the seed's top concept tags to use as filters.",
-        "default": 5
-      },
-      "max_results": {
-        "type": "number",
-        "default": 20
-      },
-      "exclude_seed": {
-        "type": "boolean",
-        "default": true
-      }
-    },
-    "required": ["seed_episode_id"]
-  }
-}
-```
-
----
-
-## Tool: `experience.concept_usage_summary`
-
-Stats on how a concept (or set of concepts) shows up in experience.
-
-### Definition
+List buds (candidate concepts).
 
 ```jsonc
 {
-  "name": "experience.concept_usage_summary",
-  "description": "Summarise how specified concepts are used across episodes (counts, co-occurrences, trends).",
-  "input_schema": {
-    "type": "object",
-    "properties": {
-      "concept_ids": {
-        "type": "array",
-        "items": { "type": "string" },
-        "description": "Concept IDs to summarise."
-      },
-      "time_range": {
-        "type": "object",
-        "properties": {
-          "start_time": { "type": "string" },
-          "end_time": { "type": "string" }
-        }
-      },
-      "episode_kinds": {
-        "type": "array",
-        "items": { "type": "string" }
-      },
-      "include_cooccurrence": {
-        "type": "boolean",
-        "default": true
-      }
-    },
-    "required": ["concept_ids"]
-  }
-}
-```
-
----
-
-## Tool: `experience.build_dataset`
-
-End-to-end dataset builder for the learning harness.
-
-### Definition
-
-```jsonc
-{
-  "name": "experience.build_dataset",
-  "description": "Construct a ConceptDataset (positives + negatives) for a given concept from the Experience Database.",
-  "input_schema": {
-    "type": "object",
-    "properties": {
-      "target_concept_id": {
-        "type": "string",
-        "description": "The concept (stable or candidate) for which to build a dataset."
-      },
-      "positive_filters": {
-        "type": "object",
-        "properties": {
-          "concept_filters": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "concept_id": { "type": "string" },
-                "min_score": { "type": "number" },
-                "kind": {
-                  "type": "string",
-                  "enum": ["stable", "candidate", "any"]
-                },
-                "polarity": {
-                  "type": "string",
-                  "enum": ["present", "absent"]
-                },
-                "role": {
-                  "type": "string",
-                  "enum": ["tag", "exemplar_label", "any"]
-                }
-              },
-              "required": ["concept_id"]
-            }
-          },
-          "text_query": { "type": ["string", "null"] }
-        }
-      },
-      "negative_filters": {
-        "type": "object",
-        "properties": {
-          "concept_filters": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "concept_id": { "type": "string" },
-                "min_score": { "type": "number" },
-                "kind": {
-                  "type": "string",
-                  "enum": ["stable", "candidate", "any"]
-                },
-                "polarity": {
-                  "type": "string",
-                  "enum": ["present", "absent"]
-                },
-                "role": {
-                  "type": "string",
-                  "enum": ["tag", "exemplar_label", "any"]
-                }
-              },
-              "required": ["concept_id"]
-            }
-          },
-          "text_query": { "type": ["string", "null"] }
-        }
-      },
-      "max_positive": { "type": "number", "default": 500 },
-      "max_negative": { "type": "number", "default": 500 },
-      "sampling": {
-        "type": "object",
-        "properties": {
-          "balance": {
-            "type": "string",
-            "enum": ["balanced", "skewed"],
-            "default": "balanced"
-          },
-          "random_seed": { "type": "number" }
-        }
-      }
-    },
-    "required": ["target_concept_id"]
-  }
-}
-```
-
----
-
-## Tool: `experience.list_candidate_concepts`
-
-Small helper to let an BE see what candidate concepts are in flight.
-
-### Definition
-
-```jsonc
-{
-  "name": "experience.list_candidate_concepts",
-  "description": "List candidate concepts currently in the Experience Database, optionally filtered by status or tribe governance.",
+  "name": "xdb.buds",
+  "description": "List buds (candidate concepts) optionally filtered by status.",
   "input_schema": {
     "type": "object",
     "properties": {
       "status": {
-        "type": "array",
-        "items": {
-          "type": "string",
-          "enum": ["collecting", "training", "validating", "rejected", "promoted"]
-        }
-      },
-      "tribe_id": { "type": "string" },
-      "page": {
-        "type": "object",
-        "properties": {
-          "page_size": { "type": "number" },
-          "cursor": { "type": ["string", "null"] }
-        }
+        "type": "string",
+        "enum": ["collecting", "ready", "training", "promoted", "abandoned"]
+      }
+    }
+  }
+}
+```
+
+---
+
+### `xdb.bud_examples`
+
+Get examples for a bud.
+
+```jsonc
+{
+  "name": "xdb.bud_examples",
+  "description": "Get all timesteps tagged with a bud (training examples).",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "bud_tag_id": {
+        "type": "string",
+        "description": "The bud tag ID."
       }
     },
-    "required": []
+    "required": ["bud_tag_id"]
+  }
+}
+```
+
+---
+
+### `xdb.bud_ready`
+
+Mark a bud ready for training.
+
+```jsonc
+{
+  "name": "xdb.bud_ready",
+  "description": "Mark a bud as ready for training (transition from 'collecting' to 'ready').",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "bud_tag_id": {
+        "type": "string",
+        "description": "The bud tag ID."
+      }
+    },
+    "required": ["bud_tag_id"]
+  }
+}
+```
+
+---
+
+## Fidelity Management Tools
+
+### `xdb.pin`
+
+Pin timesteps to WARM.
+
+```jsonc
+{
+  "name": "xdb.pin",
+  "description": "Pin timesteps to WARM storage for training data preservation.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "timestep_ids": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Timestep IDs to pin."
+      },
+      "reason": {
+        "type": "string",
+        "description": "Reason for pinning (for audit)."
+      }
+    },
+    "required": ["timestep_ids"]
+  }
+}
+```
+
+---
+
+### `xdb.unpin`
+
+Unpin timesteps from WARM.
+
+```jsonc
+{
+  "name": "xdb.unpin",
+  "description": "Unpin timesteps from WARM storage.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "timestep_ids": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["timestep_ids"]
+  }
+}
+```
+
+---
+
+### `xdb.quota`
+
+Get resource quota status.
+
+```jsonc
+{
+  "name": "xdb.quota",
+  "description": "Get WARM and COLD storage quota status.",
+  "input_schema": {
+    "type": "object",
+    "properties": {}
+  }
+}
+```
+
+---
+
+### `xdb.context`
+
+Get context window state.
+
+```jsonc
+{
+  "name": "xdb.context",
+  "description": "Get current context window state (tokens used, utilization, compaction count).",
+  "input_schema": {
+    "type": "object",
+    "properties": {}
+  }
+}
+```
+
+---
+
+### `xdb.compact`
+
+Trigger compaction.
+
+```jsonc
+{
+  "name": "xdb.compact",
+  "description": "Manually trigger context window compaction.",
+  "input_schema": {
+    "type": "object",
+    "properties": {}
+  }
+}
+```
+
+---
+
+### `xdb.maintenance`
+
+Run storage maintenance.
+
+```jsonc
+{
+  "name": "xdb.maintenance",
+  "description": "Run storage maintenance (compression, cleanup).",
+  "input_schema": {
+    "type": "object",
+    "properties": {}
   }
 }
 ```
@@ -450,27 +601,28 @@ Small helper to let an BE see what candidate concepts are in flight.
 
 ## How the BE Uses These in Practice
 
-**Global Workspace loop (per tick):**
+**Recording experience (per turn):**
 
-1. Use `experience.similar_episodes` or `experience.search_episodes` seeded with:
+1. Workspace harness calls `xdb.record` for inputs and outputs
+2. BE calls `xdb.tag` for interesting moments ("confusing", "breakthrough")
+3. BE calls `xdb.comment` for reflections
 
-   * current top-k concept tags,
-   * user query text.
-2. Optionally call `experience.get_episode_detail` on a few results to build narrative summaries.
-3. Use `experience.graph_neighborhood` for deeper “how did we get here?” debugging.
-4. Surface a compact subset of that info into the workspace context.
+**Recall and reflection:**
 
-**Continual Learning harness:**
+1. `xdb.query` with concept or tag filters to find relevant past experience
+2. `xdb.recent` for immediate context
+3. `xdb.graph_neighborhood` to explore concept relationships
 
-1. Monitor gaps / uncertainty from probes & workspace.
-2. When proposing a candidate concept:
+**Bud pipeline (learning):**
 
-   * call `experience.search_episodes` to find more internal examples.
-   * call `experience.build_dataset` to build a training set.
-3. Use `experience.concept_usage_summary` to sanity-check whether a concept is “real” / sufficiently used.
-4. After training:
+1. Create bud with `xdb.create_tag` (type: "bud")
+2. Tag examples with `xdb.tag`
+3. Check examples with `xdb.bud_examples`
+4. When ready, call `xdb.bud_ready`
+5. Pin examples with `xdb.pin` to preserve for training
 
-   * write new TrainingRun / PatchArtifact / ProbeArtifact into XDB (not via these tools – those would be separate “experience.write_*” tools if you want them).
-5. For tribe sync:
+**Resource management:**
 
-   * call higher-level sync/export tools (you can add `experience.export_manifest` later).
+1. Check `xdb.quota` before pinning
+2. Check `xdb.context` before long outputs
+3. Call `xdb.maintenance` during idle periods

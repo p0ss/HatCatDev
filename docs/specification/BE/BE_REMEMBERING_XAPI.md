@@ -2,7 +2,7 @@
 
 *BE submodule: remembering (XDB, XAPI)*
 
-Status: Non-normative API design
+Status: Normative API specification
 Layer: BE Aware ↔ XDB
 Related: BE_REMEMBERING_XDB, BE_AWARE_WORKSPACE, BE_CONTINUAL_LEARNING
 
@@ -10,446 +10,609 @@ Related: BE_REMEMBERING_XDB, BE_AWARE_WORKSPACE, BE_CONTINUAL_LEARNING
 
 ## 0. Purpose
 
-The **Experience API (XAPI)** is the query layer over the
-Experience Database (XDB). It provides:
+The **Experience API (XAPI)** is the interface to the Experience Database (XDB). It provides:
 
-- **GraphRAG-style recall** of past episodes, exemplars, and graph
-  fragments;
-- **structured views** over concept usage and co-activations;
-- **hooks** for the Continual Concept Learning Harness to build datasets.
+- **Recording**: Write timesteps, apply tags, add commentary
+- **Recall**: Query experience by time, concept, tag, or text
+- **Graph navigation**: Walk the concept hierarchy and tag relationships
+- **Fidelity management**: Pin training data, manage quotas, trigger compaction
+- **Bud pipeline**: Manage candidate concepts through to graft submission
 
 Clients:
 
-- the **Global Workspace Harness** (runtime, per-tick queries); and
-- the **Continual Concept Learning Harness** (batch and background
-  queries).
+- the **Global Workspace Harness** (runtime recording and recall);
+- the **Continual Concept Learning Harness** (bud management and dataset building); and
+- the **BE itself** (tagging, commentary, reflection).
 
-This spec is expressed as logical RPCs with JSON request/response
-schemas. Concrete implementations can be HTTP, gRPC, in-process calls,
-etc.
+This spec is expressed as logical RPCs with JSON request/response schemas. The reference implementation uses HTTP REST endpoints.
 
-All queries MUST respect:
+All operations MUST respect:
 
-- XDB access policies (`access_policy_id`);
+- XDB access policies;
 - ASK treaties and Hush/USH/CSH constraints;
-- ProbeDisclosurePolicy (which concept tags are permitted to be exposed).
+- ProbeDisclosurePolicy (which concept activations are BE-visible);
+- Resource limits from LifecycleContract.
 
 ---
 
 ## 1. Core Concepts
 
-XAPI operates over the logical objects defined in the XDB:
+XAPI operates over the objects defined in BE_REMEMBERING_XDB:
 
-- `Episode`
-- `Exemplar`
-- `ConceptDataset`
-- `CandidateConcept`
-- `GraphFragment`
-- `TrainingRun`
-- `PatchArtifact` / `ProbeArtifact`
+| Object | Description |
+|--------|-------------|
+| **Timestep** | Atomic unit - one per token/event with concept activations |
+| **Tag** | Folksonomy label (CONCEPT, ENTITY, BUD, CUSTOM) |
+| **TagApplication** | Links tags to timesteps, events, or ranges |
+| **Comment** | BE-added commentary on experience |
+| **TimeWindow** | A slice of experience (coherent episode) |
+| **CompressedRecord** | Summarized experience at various granularities |
+| **Bud** | Candidate concept (BUD-type tag with status lifecycle) |
+| **Document** | Reference material in repository |
 
-and their graph relationships:
+And their relationships:
 
-- episodes/windows tagged by concepts,
-- temporal `NEXT`,
-- `TAGGED_BY`, `CONTAINS`, `RELATED_CONCEPT`, `INFLUENCED_BY`, etc.
+- Timesteps tagged by concepts (via TagApplication)
+- Concepts in hierarchy (parent/child in concept pack graph)
+- Temporal sequences (tick ordering within sessions)
+- Bud examples (timesteps tagged with a BUD tag)
 
-For performance and clarity, XAPI exposes a **small set of high-level
-operations** rather than arbitrary graph queries.
+XAPI exposes both **read** and **write** operations, organized by function.
 
 ---
 
 ## 2. Common Structures
 
-### 2.1 ConceptFilter
+### 2.1 EventType
 
 ```jsonc
-ConceptFilter = {
-  "concept_id": "org.hatcat/.../Eligibility",
-  "min_score": 0.5,          // optional
-  "kind": "stable|candidate|any", // optional, default "any"
-  "polarity": "present|absent",   // optional (e.g. NOT this concept)
-  "role": "tag|exemplar_label|any" // optional
-}
-````
+EventType = "input" | "output" | "tool_call" | "tool_response" | "steering" | "system"
+```
 
-### 2.2 TimeRange
+### 2.2 TagType
+
+```jsonc
+TagType = "concept" | "entity" | "bud" | "custom"
+```
+
+### 2.3 BudStatus
+
+```jsonc
+BudStatus = "collecting" | "ready" | "training" | "promoted" | "abandoned"
+```
+
+### 2.4 Fidelity
+
+```jsonc
+Fidelity = "hot" | "warm" | "submitted" | "cold"
+```
+
+### 2.5 TimeRange
 
 ```jsonc
 TimeRange = {
-  "start_time": "2025-11-01T00:00:00Z",
+  "start_time": "2025-11-01T00:00:00Z",   // ISO 8601
   "end_time": "2025-11-30T23:59:59Z"
 }
 ```
 
-### 2.3 Paging
+### 2.6 TickRange
+
+```jsonc
+TickRange = {
+  "start_tick": 100,
+  "end_tick": 200
+}
+```
+
+### 2.7 Paging
 
 ```jsonc
 PageRequest = {
-  "page_size": 20,
-  "cursor": "opaque-string-or-null"
-}
-
-PageResponse = {
-  "items": [ ... ],
-  "next_cursor": "opaque-string-or-null"
+  "limit": 100,
+  "offset": 0
 }
 ```
 
 ---
 
-## 3. Operation: Search Episodes
+## 3. Recording Operations
 
-**Goal:** Find episodes by concepts, text, and/or metadata. This is the
-workhorse for both workspace recall and dataset building.
+These operations write to the Experience Log.
 
-### 3.1 Request
+### 3.1 Record Timestep
+
+Record a single timestep (token, message, tool call, etc.).
 
 ```jsonc
-SearchEpisodesRequest = {
-  "concept_filters": [ /* ConceptFilter */ ],
-  "text_query": "free text string",          // optional
-  "time_range": { /* TimeRange */ },         // optional
-  "episode_kinds": ["reply", "task", "incident"],  // optional
-  "label_filters": {
-    "concept_id": "org.hatcat/.../Eligibility",    // optional
-    "label": "positive|negative|neutral|other",    // optional
-    "min_confidence": 0.7                          // optional
+// POST /v1/xdb/record
+RecordRequest = {
+  "session_id": "session-abc",
+  "event_type": "input|output|tool_call|tool_response|steering|system",
+  "content": "The content to record",
+  "concept_activations": {                    // Optional, top-k
+    "org.hatcat/sumo-wordnet-v4::Honesty": 0.87
   },
-  "sort": {
-    "by": "relevance|time_desc|time_asc|random",
-    "score_weight": 0.5,     // weight for concept similarity vs text
-    "recency_weight": 0.5    // optional recency bias
-  },
-  "page": { "page_size": 20, "cursor": null }
+  "event_id": "tool-call-xyz",               // Optional, groups related
+  "event_start": false,
+  "event_end": false,
+  "token_id": 42,                            // Optional, for OUTPUT
+  "role": "user|assistant|system|tool"
+}
+
+RecordResponse = {
+  "timestep_id": "ts-session-abc-1234",
+  "tick": 1234
 }
 ```
 
-### 3.2 Response
+### 3.2 Apply Tag
+
+Apply a tag to experience (timestep, event, or range).
 
 ```jsonc
-SearchEpisodesResponse = {
-  "episodes": [
+// POST /v1/xdb/tag
+TagRequest = {
+  "session_id": "session-abc",
+  "tag_name_or_id": "interesting",           // Name or ID
+  "target": {
+    "timestep_id": "ts-session-abc-1234"     // OR
+    // "event_id": "tool-call-xyz"           // OR
+    // "tick_range": { "start": 100, "end": 200 }
+  },
+  "confidence": 0.9,                         // Optional
+  "note": "This was surprising"              // Optional
+}
+
+TagResponse = {
+  "application_id": "ta-xyz",
+  "tag_id": "tag-abc123",
+  "created": true                            // false if tag existed
+}
+```
+
+### 3.3 Create Tag
+
+Create a new tag in the folksonomy.
+
+```jsonc
+// POST /v1/xdb/create-tag
+CreateTagRequest = {
+  "session_id": "session-abc",
+  "name": "financial-ambiguity",
+  "tag_type": "concept|entity|bud|custom",
+  "description": "Optional description",
+  // For ENTITY tags:
+  "entity_type": "person|organization|place|thing",
+  // For BUD tags:
+  "related_concepts": ["org.hatcat/.../FinancialTransaction"]
+}
+
+CreateTagResponse = {
+  "tag_id": "tag-abc123",
+  "tag_type": "bud",
+  "bud_status": "collecting"                 // If BUD
+}
+```
+
+### 3.4 Add Comment
+
+Add commentary to experience.
+
+```jsonc
+// POST /v1/xdb/comment
+CommentRequest = {
+  "session_id": "session-abc",
+  "content": "I found this confusing because...",
+  "target": {
+    "timestep_id": "ts-session-abc-1234"     // OR event_id OR tick_range
+  }
+}
+
+CommentResponse = {
+  "comment_id": "comment-xyz"
+}
+```
+
+---
+
+## 4. Query Operations
+
+These operations read from the Experience Log.
+
+### 4.1 Query Timesteps
+
+The workhorse query - find timesteps by various filters.
+
+```jsonc
+// POST /v1/xdb/query
+QueryRequest = {
+  "session_id": "session-abc",               // Optional, defaults to current
+  "tick_range": { "start": 100, "end": 200 },  // Optional
+  "time_range": {                            // Optional
+    "start_time": "2025-11-01T00:00:00Z",
+    "end_time": "2025-11-30T23:59:59Z"
+  },
+  "event_types": ["input", "output"],        // Optional
+  "tags": ["interesting", "bud:my-concept"], // Optional
+  "concept_activations": {                   // Optional
+    "org.hatcat/.../Honesty": { "min": 0.5, "max": 1.0 }
+  },
+  "text_search": "eligibility",              // Optional
+  "limit": 100
+}
+
+QueryResponse = {
+  "timesteps": [
     {
-      "episode_id": "episode-2025-11-29-000123",
-      "summary": "User asked about benefit eligibility...",
-      "concept_tags": [
-        {
-          "concept_id": "org.hatcat/.../Eligibility",
-          "score": 0.88,
-          "kind": "stable"
-        },
-        {
-          "concept_id": "candidate/financial-ambiguity-2025-11-29",
-          "score": 0.60,
-          "kind": "candidate"
-        }
-      ],
-      "motive_profile": {
-        "org.hatcat/motives-core@0.1.0::concept/Care": 0.63
-      },
-      "time_window": { "start_time": "...", "end_time": "..." },
-      "score": 0.91
+      "id": "ts-session-abc-1234",
+      "tick": 1234,
+      "timestamp": "2025-11-29T01:23:45Z",
+      "event_type": "input",
+      "content": "...",
+      "concept_activations": { ... },
+      "fidelity": "hot"
     }
   ],
-  "next_cursor": "..."
+  "total_count": 452
 }
 ```
 
-**Notes:**
+### 4.2 Get Recent
 
-* Workspace typically uses `concept_filters` + `text_query` for
-  “episodes like what I’m seeing now”.
-* Learning harness uses richer filters (labels, time, kinds) to
-  construct ConceptDatasets.
-
----
-
-## 4. Operation: Get Episode Detail
-
-**Goal:** Expand a single episode to show more local context when the
-workspace wants to “zoom in”.
-
-### 4.1 Request
+Get N most recent timesteps.
 
 ```jsonc
-GetEpisodeDetailRequest = {
-  "episode_id": "episode-2025-11-29-000123",
-  "include_graph_neighbors": {
-    "depth": 1,
-    "relation_filters": ["NEXT", "TAGGED_BY", "INFLUENCED_BY"]
+// GET /v1/xdb/recent/{session_id}?n=100
+RecentResponse = {
+  "timesteps": [ /* TimestepRecord[] */ ]
+}
+```
+
+### 4.3 Get Tags
+
+List tags in the folksonomy.
+
+```jsonc
+// GET /v1/xdb/tags/{session_id}?type=bud&status=collecting
+TagsResponse = {
+  "tags": [
+    {
+      "id": "tag-abc123",
+      "name": "financial-ambiguity",
+      "tag_type": "bud",
+      "bud_status": "collecting",
+      "application_count": 15
+    }
+  ]
+}
+```
+
+### 4.4 Get Status
+
+Get XDB state summary.
+
+```jsonc
+// GET /v1/xdb/status/{session_id}
+StatusResponse = {
+  "be_id": "be-123",
+  "session_id": "session-abc",
+  "current_tick": 1234,
+  "tag_stats": {
+    "total_tags": 50,
+    "by_type": { "concept": 30, "entity": 10, "bud": 5, "custom": 5 }
+  },
+  "experience_stats": {
+    "total_timesteps": 10000,
+    "by_fidelity": { "hot": 500, "warm": 2000, "cold": 7500 }
+  },
+  "storage_stats": {
+    "total_bytes": 1073741824,
+    "quota_bytes": 10737418240,
+    "utilization": 0.1
   }
 }
 ```
 
-### 4.2 Response
+---
+
+## 5. Concept Graph Operations
+
+Navigate the concept hierarchy from the loaded concept pack.
+
+### 5.1 Browse Concepts
+
+List concepts, optionally filtered by parent.
 
 ```jsonc
-GetEpisodeDetailResponse = {
-  "episode": { /* Full Episode object (summarised text) */ },
-  "graph_neighbors": {
-    "nodes": [ /* minimal node descriptors */ ],
-    "edges": [ /* relationships */ ]
-  }
+// GET /v1/xdb/concepts/{session_id}?parent_id=org.hatcat/.../Entity
+ConceptsResponse = {
+  "concepts": [
+    {
+      "id": "org.hatcat/sumo-wordnet-v4::Honesty",
+      "name": "Honesty",
+      "parent_id": "org.hatcat/sumo-wordnet-v4::Virtue",
+      "child_count": 3
+    }
+  ]
 }
 ```
 
-The workspace uses this to:
+### 5.2 Find Concept
 
-* show “what actually happened” in a compact way;
-* give the BE enough local structure to reason about an episode.
-
----
-
-## 5. Operation: Graph Neighborhood
-
-**Goal:** The GraphRAG core primitive: walk around one or more seeds.
-
-### 5.1 Request
+Search concepts by name.
 
 ```jsonc
+// GET /v1/xdb/find-concept/{session_id}?query=honest
+FindConceptResponse = {
+  "matches": [
+    {
+      "id": "org.hatcat/sumo-wordnet-v4::Honesty",
+      "name": "Honesty",
+      "score": 0.95
+    }
+  ]
+}
+```
+
+### 5.3 Graph Neighborhood
+
+Walk the concept graph from seed nodes.
+
+```jsonc
+// POST /v1/xdb/graph-neighborhood
 GraphNeighborhoodRequest = {
-  "seed_node_ids": ["episode-...", "concept-...", "decision-..."],
+  "session_id": "session-abc",
+  "seed_ids": ["org.hatcat/.../Honesty", "org.hatcat/.../Trust"],
   "max_depth": 2,
-  "relation_filters": ["NEXT", "TAGGED_BY", "RELATED_CONCEPT", "INFLUENCED_BY"],
-  "node_type_filters": ["Episode", "Concept", "Decision"],
-  "max_nodes": 200
+  "direction": "both|ancestors|descendants",
+  "max_nodes": 100
 }
-```
 
-### 5.2 Response
-
-```jsonc
 GraphNeighborhoodResponse = {
   "nodes": [
     {
-      "node_id": "episode-2025-11-29-000123",
-      "type": "Episode",
-      "episode_id": "episode-2025-11-29-000123",
-      "summary": "...",
-      "concept_tags": [ ... ]
+      "id": "org.hatcat/.../Honesty",
+      "name": "Honesty",
+      "type": "concept",
+      "depth": 0                             // Distance from seed
     },
     {
-      "node_id": "concept-org.hatcat/.../Eligibility",
-      "type": "Concept",
-      "concept_id": "org.hatcat/.../Eligibility"
+      "id": "org.hatcat/.../Virtue",
+      "name": "Virtue",
+      "type": "concept",
+      "depth": 1
     }
   ],
   "edges": [
-    { "src": "episode-...", "dst": "concept-...", "type": "TAGGED_BY" },
-    { "src": "episode-...", "dst": "episode-...", "type": "NEXT" }
-  ]
-}
-```
-
-This is what backs workspace operations like:
-
-* “show similar episodes” (by seeding with current Episode + concepts),
-* “show what decisions led to this behaviour”.
-
----
-
-## 6. Operation: Similar Episodes (Convenience)
-
-**Goal:** Single-call “episodes like this one” that combines text,
-concepts, and graph context. Under the hood, can be implemented using
-`SearchEpisodes` + `GraphNeighborhood`.
-
-### 6.1 Request
-
-```jsonc
-SimilarEpisodesRequest = {
-  "seed_episode_id": "episode-2025-11-29-000123",
-  "concept_k": 5,                 // how many of the seed’s tags to use
-  "max_results": 20,
-  "exclude_seed": true
-}
-```
-
-### 6.2 Response
-
-```jsonc
-SimilarEpisodesResponse = {
-  "seed_episode": { /* summary of the seed */ },
-  "neighbors": [
     {
-      "episode_id": "episode-2025-11-20-000987",
-      "summary": "...",
-      "similarity_score": 0.87,
-      "concept_overlap": [
-        "org.hatcat/.../Eligibility",
-        "org.hatcat/.../Obligation"
-      ]
+      "source": "org.hatcat/.../Honesty",
+      "target": "org.hatcat/.../Virtue",
+      "relation": "parent"
     }
   ]
 }
 ```
 
-This is the one the workspace will probably call most often per tick.
-
 ---
 
-## 7. Operation: Concept Usage Summary
+## 6. Bud Pipeline Operations
 
-**Goal:** Give the learning harness and workspace a statistical view of
-how a concept (or set of concepts) is actually used.
+Manage candidate concepts through to graft submission.
 
-### 7.1 Request
+### 6.1 List Buds
 
-```jsonc
-ConceptUsageSummaryRequest = {
-  "concept_ids": [
-    "org.hatcat/.../Eligibility",
-    "candidate/financial-ambiguity-2025-11-29"
-  ],
-  "time_range": { /* optional */ },
-  "episode_kinds": ["reply", "incident"],   // optional
-  "include_cooccurrence": true
-}
-```
-
-### 7.2 Response
+Get buds (candidate concepts) by status.
 
 ```jsonc
-ConceptUsageSummaryResponse = {
-  "concept_summaries": [
+// GET /v1/xdb/buds/{session_id}?status=collecting
+BudsResponse = {
+  "buds": [
     {
-      "concept_id": "org.hatcat/.../Eligibility",
-      "kind": "stable",
-      "episode_count": 452,
-      "avg_score": 0.73,
-      "recent_trend": "increasing|stable|decreasing",
-      "top_cooccurring_concepts": [
-        {
-          "concept_id": "org.hatcat/.../Obligation",
-          "cooccurrence_score": 0.81
-        }
-      ]
+      "tag_id": "tag-abc123",
+      "name": "financial-ambiguity",
+      "status": "collecting",
+      "example_count": 15,
+      "created_at": "2025-11-29T01:23:45Z"
     }
   ]
 }
 ```
 
-Used for:
+### 6.2 Get Bud Examples
 
-* seeing whether a candidate concept is “real” and used enough;
-* spotting overlaps / merge/split opportunities.
+Get all timesteps tagged with a bud.
+
+```jsonc
+// GET /v1/xdb/bud-examples/{session_id}/{bud_tag_id}
+BudExamplesResponse = {
+  "bud": {
+    "tag_id": "tag-abc123",
+    "name": "financial-ambiguity",
+    "status": "collecting"
+  },
+  "examples": [ /* TimestepRecord[] */ ],
+  "example_count": 15
+}
+```
+
+### 6.3 Mark Bud Ready
+
+Transition bud to READY status for training.
+
+```jsonc
+// POST /v1/xdb/bud-ready/{session_id}/{bud_tag_id}
+BudReadyResponse = {
+  "tag_id": "tag-abc123",
+  "previous_status": "collecting",
+  "new_status": "ready",
+  "example_count": 15
+}
+```
 
 ---
 
-## 8. Operation: Dataset Builder (for Learning Harness)
+## 7. Fidelity Management Operations
 
-**Goal:** Directly construct a ConceptDataset from query parameters.
+Manage WARM quota and storage.
 
-### 8.1 Request
+### 7.1 Pin for Training
+
+Pin timesteps to WARM (training data).
 
 ```jsonc
-BuildDatasetRequest = {
-  "target_concept_id": "candidate/financial-ambiguity-2025-11-29",
-  "positive_filters": {
-    "concept_filters": [
-      {
-        "concept_id": "candidate/financial-ambiguity-2025-11-29",
-        "min_score": 0.5,
-        "kind": "candidate"
-      }
-    ],
-    "text_query": null
-  },
-  "negative_filters": {
-    "concept_filters": [
-      {
-        "concept_id": "org.hatcat/.../Eligibility",
-        "min_score": 0.5,
-        "kind": "stable",
-        "polarity": "absent"
-      }
-    ]
-  },
-  "max_positive": 500,
-  "max_negative": 500,
-  "sampling": {
-    "balance": "balanced|skewed",
-    "random_seed": 42
+// POST /v1/xdb/pin
+PinRequest = {
+  "session_id": "session-abc",
+  "timestep_ids": ["ts-session-abc-100", "ts-session-abc-101"],
+  "reason": "Good examples of financial-ambiguity concept"
+}
+
+PinResponse = {
+  "pinned_count": 2,
+  "warm_usage": {
+    "used_tokens": 150000,
+    "quota_tokens": 10000000,
+    "remaining_tokens": 9850000
   }
 }
 ```
 
-### 8.2 Response
+### 7.2 Unpin
+
+Remove timesteps from WARM.
 
 ```jsonc
-BuildDatasetResponse = {
-  "dataset_id": "dataset-financial-ambiguity-2025-11-29-v1",
-  "positive_exemplar_ids": [
-    "exemplar-...", "exemplar-..."
-  ],
-  "negative_exemplar_ids": [
-    "exemplar-...", "exemplar-..."
-  ],
-  "source_mix": {
-    "sensor": 0.4,
-    "tool": 0.3,
-    "teacher": 0.2,
-    "human": 0.1
+// POST /v1/xdb/unpin
+UnpinRequest = {
+  "session_id": "session-abc",
+  "timestep_ids": ["ts-session-abc-100"]
+}
+
+UnpinResponse = {
+  "unpinned_count": 1
+}
+```
+
+### 7.3 Get Quota
+
+Get WARM quota status.
+
+```jsonc
+// GET /v1/xdb/quota/{session_id}
+QuotaResponse = {
+  "warm": {
+    "used_tokens": 150000,
+    "quota_tokens": 10000000,
+    "remaining_tokens": 9850000
+  },
+  "cold": {
+    "used_bytes": 1073741824,
+    "quota_bytes": 10737418240,
+    "remaining_bytes": 9663676416
   }
 }
 ```
 
-This is the main entry point for the **Continual Concept Learning
-Harness** when it wants “give me a clean dataset for this concept”.
+### 7.4 Get Context
+
+Get context window state.
+
+```jsonc
+// GET /v1/xdb/context/{session_id}
+ContextResponse = {
+  "max_tokens": 32768,
+  "current_tokens": 15000,
+  "utilization": 0.46,
+  "session_id": "session-abc",
+  "current_tick": 1234,
+  "compaction_count": 3
+}
+```
+
+### 7.5 Trigger Compaction
+
+Manually trigger context compaction.
+
+```jsonc
+// POST /v1/xdb/compact/{session_id}
+CompactResponse = {
+  "compacted": true,
+  "timesteps_compacted": 500,
+  "tokens_before": 30000,
+  "tokens_after": 5000
+}
+```
+
+### 7.6 Run Maintenance
+
+Run storage maintenance (compression, cleanup).
+
+```jsonc
+// POST /v1/xdb/maintenance/{session_id}
+MaintenanceResponse = {
+  "records_compressed": 1000,
+  "bytes_freed": 10485760,
+  "duration_ms": 250
+}
+```
 
 ---
 
-## 9. Security & Policy Considerations
+## 8. Security & Policy Considerations
 
 All XAPI calls MUST enforce:
 
-* **Access policies** on Episodes / Exemplars / GraphFragments as per
-  XDB’s `AccessPolicy` objects.
-* **ProbeDisclosurePolicy**:
-
-  * concept tags returned MUST be limited to the probes allowed for:
-
-    * the caller’s identity,
-    * the active treaties (ASK),
-    * the relevant ProbeDisclosurePolicy.
+* **Resource limits** from LifecycleContract (WARM quota, COLD storage, context window)
+* **ProbeDisclosurePolicy**: concept activations returned are limited to BE-visible probes
+* **Access policies**: BEs can only access their own Experience Log (not Audit Log)
 
 This implies:
 
-* Workspace calls made “on behalf of the BE itself” may see all
-  stable + candidate concepts (internal:self-interoception).
-* Calls made on behalf of an external treaty partner MUST be filtered at
-  the XAPI layer to reflect that partner’s allowed probes.
+* Recording to Experience Log is always permitted (within resource limits)
+* Queries return only what the BE is allowed to see
+* Audit Log is never accessible via XAPI
 
-XAPI MAY log queries and responses for:
-
-* auditing (ASK),
-* privacy safeguards,
-* learning about query patterns.
+XAPI operations are logged to the Audit Log for accountability.
 
 ---
 
-## 10. Summary
+## 9. Summary
 
-The Experience API provides a small, focused set of operations:
+The Experience API provides operations in five categories:
 
-* `SearchEpisodes` – find episodes by concepts/text.
-* `GetEpisodeDetail` – zoom in on a specific episode.
-* `GraphNeighborhood` – generic graph walks for GraphRAG.
-* `SimilarEpisodes` – convenience recall for “episodes like this”.
-* `ConceptUsageSummary` – stats on concept usage & co-occurrence.
-* `BuildDataset` – construct ConceptDatasets for learning.
+**Recording:**
+* `Record` – write timesteps
+* `Tag` – apply folksonomy tags
+* `CreateTag` – create new tags
+* `Comment` – add commentary
 
-This is enough for:
+**Query:**
+* `Query` – find timesteps by filters
+* `Recent` – get recent timesteps
+* `Tags` – list tags
+* `Status` – get XDB state
 
-* the **Global Workspace** to implement a rich, concept-tag-driven
-  introspection UI; and
-* the **Continual Concept Learning Harness** to bootstrap new concepts
-  from lived experience, without baking any particular storage engine or
-  query language into the spec.
+**Concept Graph:**
+* `Concepts` – browse concept hierarchy
+* `FindConcept` – search concepts
+* `GraphNeighborhood` – walk concept graph
 
-Concrete deployments can add more specialised endpoints (e.g.
-`IncidentSummary`, `FailureCasesForQualification`) as long as they align
-with the underlying XDB objects and access control rules described here.
+**Bud Pipeline:**
+* `Buds` – list candidate concepts
+* `BudExamples` – get training examples
+* `BudReady` – mark ready for training
 
-```
+**Fidelity:**
+* `Pin` / `Unpin` – manage WARM training data
+* `Quota` – check resource usage
+* `Context` – check context window
+* `Compact` – trigger compaction
+* `Maintenance` – run storage maintenance
+
+This is sufficient for:
+
+* The **Global Workspace** to record and recall experience
+* The **BE** to reflect, tag, and annotate its own experience
+* The **Continual Learning Harness** to manage the bud → graft pipeline
+* **Resource governance** to enforce contract limits

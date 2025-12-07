@@ -55,13 +55,14 @@
     "org.hatcat/memory-and-learning@0.1.0",
     "org.hatcat/reasoning-planning-core@0.1.0",
     "org.hatcat/language-symbolic@0.1.0",
-    "org.hatcat/cognitive-control-and-norms@0.1.0"
+    "org.hatcat/cognitive-control-and-norms@0.1.0",
+    "org.hatcat/quality-remediation-20251206_113639@0.1.0"
   ],
-  "version": "4.1.0",
+  "version": "4.2.0",
   "created_at": "2025-11-30T16:39:15.505638Z",
-  "last_updated": "2025-11-30T16:39:15.505644Z",
+  "last_updated": "2025-12-06T13:57:30.833686Z",
   "impact_summary": {
-    "new_concepts": 48,
+    "new_concepts": 0,
     "must_retrain": 0,
     "should_retrain": 0,
     "total_pending": 48

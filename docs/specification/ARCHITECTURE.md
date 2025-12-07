@@ -66,6 +66,8 @@ behaviours emerge.
 - Compute outputs given inputs (tokens, sensory streams, control
   signals).
 - Expose internal activations at defined tap points to Layer 2.
+- Support dimension expansion via Grafts (for substrates that enable
+  accretive learning).
 
 **Interface (upwards)**
 
@@ -371,7 +373,9 @@ MAP endpoints expose a subset of HAT-readable probes, controlled by the BE accor
 >   (via Hush: USH + CSH profiles).
 >
 > * Learning capabilities to update its conceptual geometry over time
->   (via concept exploration and Adapter/Diff integration).
+>   (via concept exploration, Grafts, and Diff integration).
+>
+> See [MAP_GRAFTING.md](MAP/MAP_GRAFTING.md) for the Graft Protocol which enables substrate growth.
 >
 > Examples:
 >
@@ -408,7 +412,7 @@ Define the subject’s:
 
 These are recorded and retrieved through the Experience Database, Experience API and tools. (see BE_Remembering)
 
-* Propose new concepts and upgrades itself through Accretive Continual Learning (see BE_Continual_Learning)
+* Propose new concepts and upgrade itself through Accretive Continual Learning, growing the substrate via Grafts (see BE_Continual_Learning, MAP_GRAFTING)
 
 **Interface**
 

@@ -58,14 +58,14 @@ Any meld that:
 
 ## 4. Review Processes (PROPOSED)
 
-Reviews are performed by AALs (or humans) with appropriate **accreditations**:
+Reviews are performed by BEs (or humans) with appropriate **accreditations**:
 
 | Accreditation | Scope | May Be Held By |
 |---------------|-------|----------------|
-| `safety-reviewer` | Elevated melds, safety-adjacent concepts | Human safety researcher, accredited AAL |
-| `ethics-reviewer` | Protected melds, USH-impacting changes | Human ethicist, ethics-accredited AAL |
-| `simplex-guardian` | Critical melds, simplex modifications | Senior human, guardian-accredited AAL |
-| `treaty-liaison` | Treaty notifications, cross-AAL coordination | Treaty-certified agent |
+| `safety-reviewer` | Elevated melds, safety-adjacent concepts | Human safety researcher, accredited BE |
+| `ethics-reviewer` | Protected melds, USH-impacting changes | Human ethicist, ethics-accredited BE |
+| `simplex-guardian` | Critical melds, simplex modifications | Senior human, guardian-accredited BE |
+| `treaty-liaison` | Treaty notifications, cross-BE coordination | Treaty-certified agent |
 
 ### 4.1 Elevated Review
 
@@ -126,8 +126,8 @@ Reviews are performed by AALs (or humans) with appropriate **accreditations**:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Note**: Step durations depend on reviewer availability and AAL tickrate. A human
-committee may take days per step; a guardian-accredited AAL may complete in moments.
+**Note**: Step durations depend on reviewer availability and BE tickrate. A human
+committee may take days per step; a guardian-accredited BE may complete in moments.
 
 ---
 
