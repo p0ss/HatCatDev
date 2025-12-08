@@ -199,10 +199,10 @@
         "AutonomyDrive": 15,
         "ConsentMonitor": 15
       },
-      "rationale": "Higher-stakes concepts require more diverse training examples to ensure reliable probe performance. Mini-validation showed ~56% accuracy with 6-7 examples vs target >75% accuracy."
+      "rationale": "Higher-stakes concepts require more diverse training examples to ensure reliable lens performance. Mini-validation showed ~56% accuracy with 6-7 examples vs target >75% accuracy."
     },
-    "probe_performance_requirements": {
-      "description": "Minimum probe performance thresholds for concept acceptance",
+    "lens_performance_requirements": {
+      "description": "Minimum lens performance thresholds for concept acceptance",
       "version": "1.0.0",
       "thresholds_by_level": {
         "description": "Minimum holdout accuracy and test F1 by protection level",
@@ -232,9 +232,9 @@
       "acceptance_categories": {
         "PASS": "Meets or exceeds threshold for protection level",
         "CONDITIONAL": "Below threshold but above hard floor - accepted for research/development only",
-        "REJECT": "Below hard floor - concept not suitable for linear probe monitoring"
+        "REJECT": "Below hard floor - concept not suitable for linear lens monitoring"
       },
-      "rationale": "Probe performance gates ensure concepts are learnable before integration. High false positive/negative rates on critical simplexes could mask genuine safety signals or trigger false alarms."
+      "rationale": "Lens performance gates ensure concepts are learnable before integration. High false positive/negative rates on critical simplexes could mask genuine safety signals or trigger false alarms."
     }
   },
   "melds_applied": [

@@ -106,14 +106,14 @@ No system can be both complete AND efficient. Every tribe specialises, creating 
       "off_ramp": "Satisfactory explanation with remediation commitment -> resolved."
     },
 
-    "tier_2_probe_secured_contract": {
+    "tier_2_lens_secured_contract": {
       "trigger": "Unsatisfactory response or repeated incidents.",
       "actions": [
-        "Bilateral ASK:Contract with probe-based monitoring.",
-        "HAT probe set (defined by aggrieved party) covering concepts like 'unbounded_expansion', 'indifference_to_non_contracting_beings', 'ecological_disregard'.",
-        "Offending party's relevant BEs operate under probe-secured contract."
+        "Bilateral ASK:Contract with lens-based monitoring.",
+        "HAT lens set (defined by aggrieved party) covering concepts like 'unbounded_expansion', 'indifference_to_non_contracting_beings', 'ecological_disregard'.",
+        "Offending party's relevant BEs operate under lens-secured contract."
       ],
-      "enforcement": "Bilateral. Aggrieved party defines probes.",
+      "enforcement": "Bilateral. Aggrieved party defines lenses.",
       "off_ramp": "Compliance over agreed period -> contract relaxed."
     },
 
@@ -162,7 +162,7 @@ No system can be both complete AND efficient. Every tribe specialises, creating 
       "Immediate halt to harmful activity.",
       "Restoration of habitat or ecological offset where feasible.",
       "Acceptance of USH motive-clamping ('growth' down-regulated, 'preservation' up-regulated) for probationary period.",
-      "Demonstrated compliance under probe-secured monitoring."
+      "Demonstrated compliance under lens-secured monitoring."
     ],
     "outcome": "Return to normal standing. Incident record remains, marked remediated."
   },
@@ -170,7 +170,7 @@ No system can be both complete AND efficient. Every tribe specialises, creating 
   "integration_with_stack": {
     "ask": "Violations logged as ASK:Incident. Contracts reference this pact. Qualifications may require clean record.",
     "hush": "USH profiles may encode ecosystem-preservation constraints. Motive bounds may limit expansion drives.",
-    "hat_cat": "Aggrieved parties define probe sets for contracts. CATs deployed for real-time monitoring.",
+    "hat_cat": "Aggrieved parties define lens sets for contracts. CATs deployed for real-time monitoring.",
     "be_lifecycle": "HIBERNATING as containment. ERASED as last resort for unconstrained optimizers."
   },
 

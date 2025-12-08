@@ -36,7 +36,7 @@ This document describes the practical implementation of XDB - the BE's episodic 
 │  │  (immutable) │    │    Log       │    │  Repository  │       │
 │  │              │    │ (BE access)  │    │              │       │
 │  │ - timesteps  │    │ - timesteps  │    │ - sys instr  │       │
-│  │ - probes     │    │ - tags       │    │ - tool docs  │       │
+│  │ - lenses     │    │ - tags       │    │ - tool docs  │       │
 │  │ - steering   │    │ - comments   │    │ - policies   │       │
 │  │ - raw I/O    │    │ - summaries  │    │ - specs      │       │
 │  └──────────────┘    └──────────────┘    └──────────────┘       │
@@ -183,7 +183,7 @@ class TargetType(Enum):
 
 
 class TagSource(Enum):
-    AUTO = "auto"                    # System-applied (from probes)
+    AUTO = "auto"                    # System-applied (from lenses)
     MANUAL = "manual"                # BE-applied
     INHERITED = "inherited"          # Inherited from parent tag
 ```
@@ -623,7 +623,7 @@ The BE's past becomes a compressed narrative that preserves *what mattered* whil
 ### 5.1 Audit Log
 
 The audit log is **immutable and BE-invisible**. It exists for ASK review and may contain:
-- Probe outputs the BE doesn't know about
+- Lens outputs the BE doesn't know about
 - Raw unfiltered concept activations
 - Steering decisions and their rationale
 - Full input/output without any BE-applied tags
@@ -656,8 +656,8 @@ class AuditRecord:
     session_id: str
     tick: int
 
-    # Full probe state (including hidden probes)
-    probe_activations: Dict[str, float]
+    # Full lens state (including hidden lenses)
+    lens_activations: Dict[str, float]
 
     # Steering that was applied
     steering_applied: List[Dict]
@@ -674,7 +674,7 @@ class AuditRecord:
 ### 5.2 Experience Log
 
 The experience log is **BE-accessible**. It contains the same timesteps but:
-- Only shows probes the BE is allowed to see
+- Only shows lenses the BE is allowed to see
 - Allows tagging and commentary
 - Supports search and filtering
 
@@ -1323,7 +1323,7 @@ class AuditLogWriter:
         tick: int,
         event_type: EventType,
         raw_content: str,
-        probe_activations: Dict[str, float],  # ALL probes, including hidden
+        lens_activations: Dict[str, float],  # ALL lenses, including hidden
         steering_applied: List[Dict],
     ) -> str:
         """Record to audit log. Returns record ID."""
@@ -1332,7 +1332,7 @@ class AuditLogWriter:
             timestamp=datetime.now(),
             session_id=session_id,
             tick=tick,
-            probe_activations=probe_activations,
+            lens_activations=lens_activations,
             steering_applied=steering_applied,
             event_type=event_type,
             raw_content=raw_content,
@@ -1414,7 +1414,7 @@ def evaluate_and_steer(self, hidden_state, session_id: str, tick: int, content: 
             tick=tick,
             event_type=EventType.OUTPUT,
             raw_content=content,
-            probe_activations=all_probe_activations,  # Including hidden
+            lens_activations=all_lens_activations,  # Including hidden
             steering_applied=[d.to_dict() for d in self.active_directives],
         )
 ```
@@ -1562,7 +1562,7 @@ class InMemoryTagIndex:
 
     def __init__(self):
         # Only load these into memory:
-        # - Concept pack primary terms (ones with probes)
+        # - Concept pack primary terms (ones with lenses)
         # - Current candidate buds
         # - Recently used custom/entity tags
         self.active_tags: Dict[str, Tag] = {}
@@ -1571,7 +1571,7 @@ class InMemoryTagIndex:
     def load_concept_pack_primaries(self, pack_path: Path):
         """Load only primary terms from concept pack."""
         # Don't load entire 100k concept graph
-        # Just the ones we have probes for
+        # Just the ones we have lenses for
         pass
 
     def add_to_working_set(self, tag: Tag):

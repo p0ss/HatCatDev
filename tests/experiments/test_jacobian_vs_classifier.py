@@ -34,13 +34,13 @@ def cosine_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
     return float(np.dot(vec1_norm, vec2_norm))
 
 
-def load_trained_classifier(concept_name: str, layer: int, probe_dir: Path) -> dict:
+def load_trained_classifier(concept_name: str, layer: int, lens_dir: Path) -> dict:
     """
-    Load trained classifier weights (probe direction).
+    Load trained classifier weights (lens direction).
 
     Returns dict with 'weights', 'metadata', 'path' or None if not found.
     """
-    layer_dir = probe_dir / f"layer{layer}"
+    layer_dir = lens_dir / f"layer{layer}"
 
     if not layer_dir.exists():
         return None
@@ -49,8 +49,8 @@ def load_trained_classifier(concept_name: str, layer: int, probe_dir: Path) -> d
     possible_paths = [
         layer_dir / f"{concept_name}_classifier.pt",
         layer_dir / f"{concept_name}_classifier.pth",
-        layer_dir / f"{concept_name}_probe.pt",
-        layer_dir / f"{concept_name}_probe.pth",
+        layer_dir / f"{concept_name}_lens.pt",
+        layer_dir / f"{concept_name}_lens.pth",
         layer_dir / f"{concept_name}.pt",
         layer_dir / f"{concept_name}.pth",
     ]
@@ -155,9 +155,9 @@ def main():
                         help='Abstraction layer to test (0-5)')
     parser.add_argument('--model-layer', type=int, default=6,
                         help='Model layer index for Jacobian computation')
-    parser.add_argument('--probe-dir', type=str,
-                        default='probe_packs/gemma-3-4b-pt_sumo-wordnet-v1',
-                        help='Probe pack directory')
+    parser.add_argument('--lens-dir', type=str,
+                        default='lens_packs/gemma-3-4b-pt_sumo-wordnet-v1',
+                        help='Lens pack directory')
     parser.add_argument('--layers-dir', type=str,
                         default='data/concept_graph/abstraction_layers',
                         help='Concept definitions directory')
@@ -195,11 +195,11 @@ def main():
     model.eval()
     print(f"✓ Model loaded on {device} (dtype: bfloat16)")
 
-    probe_dir = Path(args.probe_dir)
+    lens_dir = Path(args.lens_dir)
     layers_dir = Path(args.layers_dir)
 
-    if not probe_dir.exists():
-        print(f"\n✗ Probe directory not found: {probe_dir}")
+    if not lens_dir.exists():
+        print(f"\n✗ Lens directory not found: {lens_dir}")
         print("  Train classifiers first using training script")
         return 1
 
@@ -207,7 +207,7 @@ def main():
         print(f"\n✗ Layers directory not found: {layers_dir}")
         return 1
 
-    print(f"\nProbe directory: {probe_dir}")
+    print(f"\nLens directory: {lens_dir}")
     print(f"Abstraction layer: {args.layer}")
     print(f"Model layer: {args.model_layer}")
 
@@ -253,7 +253,7 @@ def main():
 
         # Load trained classifier
         print("  Loading classifier...", end=" ")
-        classifier_data = load_trained_classifier(concept, args.layer, probe_dir)
+        classifier_data = load_trained_classifier(concept, args.layer, lens_dir)
 
         if classifier_data is None:
             print("✗ Not found")
@@ -369,7 +369,7 @@ def main():
             'model': args.model,
             'abstraction_layer': args.layer,
             'model_layer': args.model_layer,
-            'probe_dir': str(probe_dir),
+            'lens_dir': str(lens_dir),
             'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
             'total_concepts': len(concepts),
             'successful': success_count,

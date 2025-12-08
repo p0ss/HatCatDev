@@ -93,7 +93,7 @@ def generate_layer2_parent() -> Dict:
         "sumo_term": "AgentPsychologicalAttribute",
         "sumo_depth": 5,
         "layer": 2,
-        "is_category_probe": True,
+        "is_category_lens": True,
         "is_pseudo_sumo": False,
         "category_children": [
             "AIAgentPsychology",
@@ -136,7 +136,7 @@ def generate_layer3_roles(mappings: Dict[str, List[Dict]]) -> List[Dict]:
             "sumo_term": role_name,
             "sumo_depth": 7,
             "layer": 3,
-            "is_category_probe": True,
+            "is_category_lens": True,
             "is_pseudo_sumo": False,
             "category_children": sorted(children),
             "synset_count": 1,
@@ -185,7 +185,7 @@ def generate_layer4_concepts(mappings: Dict[str, List[Dict]]) -> List[Dict]:
             "sumo_term": concept_name,
             "sumo_depth": 8,
             "layer": 4,
-            "is_category_probe": False,  # Leaf concepts
+            "is_category_lens": False,  # Leaf concepts
             "is_pseudo_sumo": False,
             "category_children": [],
             "synset_count": len(synset_names),

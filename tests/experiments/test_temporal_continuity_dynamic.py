@@ -1,7 +1,7 @@
 """
-Test temporal continuity with DynamicProbeManager for hierarchical loading.
+Test temporal continuity with DynamicLensManager for hierarchical loading.
 
-Uses hierarchical probe loading to handle all layers 3-5 (26K+ classifiers)
+Uses hierarchical lens loading to handle all layers 3-5 (26K+ classifiers)
 while staying within memory constraints through dynamic loading/unloading.
 
 Usage:
@@ -17,13 +17,13 @@ from pathlib import Path
 import torch
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 def record_continuous_timeline_dynamic(
     model,
     tokenizer,
-    probe_manager: DynamicProbeManager,
+    lens_manager: DynamicLensManager,
     prompt: str,
     max_new_tokens: int = 50,
     temperature: float = 0.8,
@@ -35,7 +35,7 @@ def record_continuous_timeline_dynamic(
     concept_threshold: float = 0.1
 ):
     """
-    Record concept activations using DynamicProbeManager for hierarchical loading.
+    Record concept activations using DynamicLensManager for hierarchical loading.
 
     Returns timeline with continuous concept dynamics and manager statistics.
     """
@@ -76,8 +76,8 @@ def record_continuous_timeline_dynamic(
             # Convert to float32 to match classifier dtype
             hidden_state_f32 = hidden_state.float()
 
-            # Use DynamicProbeManager to detect and expand
-            detected, timing = probe_manager.detect_and_expand(
+            # Use DynamicLensManager to detect and expand
+            detected, timing = lens_manager.detect_and_expand(
                 hidden_state_f32,
                 top_k=top_k_concepts,
                 return_timing=True
@@ -109,18 +109,18 @@ def record_continuous_timeline_dynamic(
             manager_stats_timeline.append({
                 'step': step_idx,
                 'timing': timing,
-                'loaded_probes': len(probe_manager.loaded_probes)
+                'loaded_lenses': len(lens_manager.loaded_lenses)
             })
 
     # Build result
     generated_text = ''.join(tokens)
 
     # Get final manager statistics
-    final_loaded = len(probe_manager.loaded_probes)
-    max_loaded = max(s['loaded_probes'] for s in manager_stats_timeline) if manager_stats_timeline else final_loaded
+    final_loaded = len(lens_manager.loaded_lenses)
+    max_loaded = max(s['loaded_lenses'] for s in manager_stats_timeline) if manager_stats_timeline else final_loaded
 
-    cache_hits = probe_manager.stats.get('cache_hits', 0)
-    cache_misses = probe_manager.stats.get('cache_misses', 0)
+    cache_hits = lens_manager.stats.get('cache_hits', 0)
+    cache_misses = lens_manager.stats.get('cache_misses', 0)
     total = cache_hits + cache_misses
     cache_hit_rate = cache_hits / total if total > 0 else 0.0
 
@@ -139,10 +139,10 @@ def record_continuous_timeline_dynamic(
                 'cache_hits': cache_hits,
                 'cache_misses': cache_misses,
                 'cache_hit_rate': cache_hit_rate,
-                'loaded_probes': final_loaded,
-                'max_probes_loaded': max_loaded,
-                'total_loads': probe_manager.stats.get('total_loads', 0),
-                'total_unloads': probe_manager.stats.get('total_unloads', 0)
+                'loaded_lenses': final_loaded,
+                'max_lenses_loaded': max_loaded,
+                'total_loads': lens_manager.stats.get('total_loads', 0),
+                'total_unloads': lens_manager.stats.get('total_unloads', 0)
             }
         },
         'manager_stats_timeline': manager_stats_timeline
@@ -218,20 +218,20 @@ def visualize_timeline_ascii(result, top_k=10):
 
 def print_manager_stats(result):
     """
-    Print DynamicProbeManager statistics.
+    Print DynamicLensManager statistics.
     """
     stats = result['metadata']['manager']
 
     print("=" * 80)
-    print("DYNAMIC PROBE MANAGER STATISTICS")
+    print("DYNAMIC LENS MANAGER STATISTICS")
     print("=" * 80)
     print(f"\nCache performance:")
     print(f"  - Hit rate: {stats['cache_hit_rate']:.2%}")
     print(f"  - Cache hits: {stats['cache_hits']}")
     print(f"  - Cache misses: {stats['cache_misses']}")
-    print(f"\nProbe loading:")
-    print(f"  - Currently loaded: {stats['loaded_probes']}")
-    print(f"  - Max loaded (peak): {stats['max_probes_loaded']}")
+    print(f"\nLens loading:")
+    print(f"  - Currently loaded: {stats['loaded_lenses']}")
+    print(f"  - Max loaded (peak): {stats['max_lenses_loaded']}")
     print(f"  - Total loads: {stats['total_loads']}")
     print(f"  - Total unloads: {stats['total_unloads']}")
     print("\n" + "=" * 80 + "\n")
@@ -244,10 +244,10 @@ def main():
     parser.add_argument('--model', type=str, default='google/gemma-3-4b-pt')
     parser.add_argument('--base-layer', type=int, default=3,
                        help='Base SUMO layer to keep always loaded')
-    parser.add_argument('--max-probes', type=int, default=500,
-                       help='Max probes to keep loaded at once')
+    parser.add_argument('--max-lenses', type=int, default=500,
+                       help='Max lenses to keep loaded at once')
     parser.add_argument('--load-threshold', type=float, default=0.3,
-                       help='Confidence threshold to load child probes')
+                       help='Confidence threshold to load child lenses')
     parser.add_argument('--max-tokens', type=int, default=50)
     parser.add_argument('--top-k-concepts', type=int, default=10)
     parser.add_argument('--threshold', type=float, default=0.1,
@@ -267,27 +267,27 @@ def main():
     )
     model.eval()
 
-    # Initialize DynamicProbeManager
-    print(f"\nInitializing DynamicProbeManager:")
+    # Initialize DynamicLensManager
+    print(f"\nInitializing DynamicLensManager:")
     print(f"  - Base layer: {args.base_layer}")
-    print(f"  - Max loaded probes: {args.max_probes}")
+    print(f"  - Max loaded lenses: {args.max_lenses}")
     print(f"  - Load threshold: {args.load_threshold}")
 
-    probe_manager = DynamicProbeManager(
+    lens_manager = DynamicLensManager(
         base_layers=[args.base_layer],
-        max_loaded_probes=args.max_probes,
+        max_loaded_lenses=args.max_lenses,
         load_threshold=args.load_threshold,
         device='cuda'
     )
 
-    print(f"  - Initial probes loaded: {len(probe_manager.loaded_probes)}")
+    print(f"  - Initial lenses loaded: {len(lens_manager.loaded_lenses)}")
 
     # Record continuous timeline
     print(f"\nGenerating with prompt: {args.prompt}")
     result = record_continuous_timeline_dynamic(
         model=model,
         tokenizer=tokenizer,
-        probe_manager=probe_manager,
+        lens_manager=lens_manager,
         prompt=args.prompt,
         max_new_tokens=args.max_tokens,
         top_k_concepts=args.top_k_concepts,

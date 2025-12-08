@@ -60,7 +60,7 @@ Unlike Sparse Autoencoders (SAEs) or Neuronpedia:
 - **KIF Parsing**: Built parser for SUMO's authoritative Merge.kif format (OWL translation was lossy)
 - **WordNet Integration**: 105,042 WordNet→SUMO mappings, 79% coverage, hierarchical layer assignment
 - **Patch System**: Generate WordNet patches for missing concepts (e.g., noun.motive had 0/42 synsets)
-- **Probe Pack Management**: Package trained probes with metadata for deployment
+- **Lens Pack Management**: Package trained lenses with metadata for deployment
 
 **Custom Taxonomies Deployed** (Phase 14):
 - **Persona Ontology** (30 concepts): Tri-role affective psychology (AI/Human/Other agents)
@@ -79,14 +79,14 @@ Unlike Sparse Autoencoders (SAEs) or Neuronpedia:
 **What This Enables**:
 - Add domain-specific concepts without modifying core WordNet
 - Version-controlled ontology extensions
-- Distributable probe packs for specific use cases
+- Distributable lens packs for specific use cases
 - Hierarchical integration maintains adaptive compute benefits
 
 ### Production Deployment Tools (Phase 10, ongoing)
-**Dynamic Probe Manager** (`src/monitoring/dynamic_probe_manager.py`):
-- **Hierarchical cascade activation**: Monitor 110K+ concepts with only 1K probe budget
+**Dynamic Lens Manager** (`src/monitoring/dynamic_lens_manager.py`):
+- **Hierarchical cascade activation**: Monitor 110K+ concepts with only 1K lens budget
 - **Adaptive loading**: Layer 0 always active → conditional Layer 1 → selective Layer 2+
-- **Memory efficient**: Loads/unloads probes based on parent concept activation
+- **Memory efficient**: Loads/unloads lenses based on parent concept activation
 - **Real-time capable**: Sub-millisecond concept detection per token
 
 **OpenWebUI Server Integration** (`src/openwebui/server.py`):
@@ -97,7 +97,7 @@ Unlike Sparse Autoencoders (SAEs) or Neuronpedia:
 - **Status**: Working prototype, needs update for problematic concept highlighting
 
 **Concept Pack Distribution**:
-- **Modular deployment**: Package custom concepts + trained probes as `.pack` files
+- **Modular deployment**: Package custom concepts + trained lenses as `.pack` files
 - **Versioning**: Track dependencies, coverage stats, compatibility
 - **Installation**: One-command setup (`scripts/install_concept_pack.py`)
 - **Examples**: AI Safety pack (43 concepts), Persona pack (30 concepts)
@@ -114,13 +114,13 @@ Unlike Sparse Autoencoders (SAEs) or Neuronpedia:
 ## Current Work 🔄
 
 ### Production Scale v2 - In Progress (Phase 5b continuation)
-**Goal**: Improve probe accuracy and negative boundary definition
+**Goal**: Improve lens accuracy and negative boundary definition
 
 **Status**: Training layers 2-5 with better adaptive relationship scaling
 
 **Improvements over v1**:
 - Better negative boundaries via enhanced adaptive relationship training
-- Higher probe accuracy targets
+- Higher lens accuracy targets
 - Refined validation falloff curves
 
 **Current Training Run** (8a5f00):
@@ -341,7 +341,7 @@ Control point P optimized to:
 ### Research Directions
 - Spline geometry optimization (layer-specific, architecture-aware)
 - Detached Jacobian approach for research validation
-- Cross-model probe transfer studies
+- Cross-model lens transfer studies
 - Hybrid ontology co-definition (model + human semantics)
 
 ---

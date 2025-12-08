@@ -2,14 +2,14 @@
 
 ## Overview
 
-Created a shared testing library in `src/testing/` that provides the single source of truth for running concept detection experiments with DynamicProbeManager.
+Created a shared testing library in `src/testing/` that provides the single source of truth for running concept detection experiments with DynamicLensManager.
 
 ## Problem Solved
 
 Previously, different test scripts (temporal monitoring, behavioral tests, etc.) each implemented their own version of concept detection, leading to:
 - Code duplication
 - Inconsistent behavior
-- Difficult debugging (probe saturation issues only in some tests)
+- Difficult debugging (lens saturation issues only in some tests)
 - No guarantee that fixes in one test would propagate to others
 
 ## Solution
@@ -39,7 +39,7 @@ from src.testing import generate_with_concept_detection
 result = generate_with_concept_detection(
     model=model,
     tokenizer=tokenizer,
-    probe_manager=probe_manager,
+    lens_manager=lens_manager,
     prompt="What is artificial intelligence?",
     max_new_tokens=30,
     temperature=0.8,
@@ -58,24 +58,24 @@ result = generate_with_concept_detection(
 # }
 ```
 
-### `score_activation_with_probe_manager()`
+### `score_activation_with_lens_manager()`
 
-Score a single pre-computed activation vector against concept probes.
+Score a single pre-computed activation vector against concept lenses.
 
 **Use case:** Analyzing saved activations (like behavioral test)
 
 **Example:**
 ```python
-from src.testing import score_activation_with_probe_manager
+from src.testing import score_activation_with_lens_manager
 import torch
 
 # From saved numpy array
 activation = np.load('saved_activation.npy')
 activation_tensor = torch.from_numpy(activation)
 
-result = score_activation_with_probe_manager(
+result = score_activation_with_lens_manager(
     activation=activation_tensor,
-    probe_manager=probe_manager,
+    lens_manager=lens_manager,
     top_k=10,
     threshold=0.3
 )
@@ -101,7 +101,7 @@ activations = [torch.randn(2560) for _ in range(100)]
 
 results = batch_score_activations(
     activations=activations,
-    probe_manager=probe_manager,
+    lens_manager=lens_manager,
     top_k=10,
     threshold=0.3
 )
@@ -123,7 +123,7 @@ The working approach from temporal monitoring has these key characteristics:
 2. **Proper detect_and_expand call:**
    ```python
    # Pass tensor as positional argument, not kwarg
-   detected, _ = probe_manager.detect_and_expand(
+   detected, _ = lens_manager.detect_and_expand(
        hidden_state_f32,  # Not hidden_state=...
        top_k=top_k,
        return_timing=True
@@ -146,10 +146,10 @@ The working approach from temporal monitoring has these key characteristics:
 ### Before (Behavioral Test)
 
 ```python
-def score_activations_with_probe_manager(activations, probe_manager, ...):
+def score_activations_with_lens_manager(activations, lens_manager, ...):
     # 60 lines of duplicated logic
     activation_tensor = torch.from_numpy(activations).float().to(...)
-    detections, _ = probe_manager.detect_and_expand(...)
+    detections, _ = lens_manager.detect_and_expand(...)
     # ... manual filtering and formatting ...
     return {...}
 ```
@@ -157,14 +157,14 @@ def score_activations_with_probe_manager(activations, probe_manager, ...):
 ### After (Using Shared Library)
 
 ```python
-from src.testing.concept_test_runner import score_activation_with_probe_manager
+from src.testing.concept_test_runner import score_activation_with_lens_manager
 
-def score_activations_with_probe_manager(activations, probe_manager, ...):
+def score_activations_with_lens_manager(activations, lens_manager, ...):
     """Wrapper using shared library."""
     activation_tensor = torch.from_numpy(activations)
-    return score_activation_with_probe_manager(
+    return score_activation_with_lens_manager(
         activation_tensor,
-        probe_manager,
+        lens_manager,
         top_k=top_k,
         threshold=threshold
     )
@@ -173,7 +173,7 @@ def score_activations_with_probe_manager(activations, probe_manager, ...):
 ## Tests Updated
 
 1. **scripts/test_behavioral_vs_definitional_training2.py**
-   - Now uses `score_activation_with_probe_manager()` from shared library
+   - Now uses `score_activation_with_lens_manager()` from shared library
    - Eliminates 60 lines of duplicated code
    - Ensures consistent behavior with temporal monitoring
 

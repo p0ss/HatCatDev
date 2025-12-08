@@ -84,7 +84,7 @@ def main():
         max_iterations=10,
         model=model,
         tokenizer=tokenizer,
-        validate_probes=True,
+        validate_lenses=True,
         validation_blocking=False,  # Advisory only!
         validation_threshold=0.5,
         train_activation=True,
@@ -127,7 +127,7 @@ def main():
             print()
 
             if val['calibration_score'] < 0.5:
-                print("  ⚠️  Note: Score < 0.5 but probe still graduated (advisory mode working!)")
+                print("  ⚠️  Note: Score < 0.5 but lens still graduated (advisory mode working!)")
             else:
                 print("  ✓ Score ≥ 0.5 (would have passed blocking mode too)")
     else:
@@ -136,7 +136,7 @@ def main():
     print()
     print("Expected behavior:")
     print("  - Validation runs and assigns grade")
-    print("  - Even if calibration score < 0.5, probe graduates (advisory only)")
+    print("  - Even if calibration score < 0.5, lens graduates (advisory only)")
     print("  - Grade is recorded in metadata for runtime decisions")
 
     return 0

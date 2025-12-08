@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Analyze the impact of adding new SUMO KIF files to the probe set.
+Analyze the impact of adding new SUMO KIF files to the lens set.
 
 Reports:
 1. New concepts introduced by each KIF file
@@ -47,7 +47,7 @@ def load_existing_concepts():
         with open(layer_file) as f:
             data = json.load(f)
             for concept in data['concepts']:
-                if concept.get('is_category_probe', False):
+                if concept.get('is_category_lens', False):
                     existing_concepts.add(concept['sumo_term'])
 
     return existing_concepts

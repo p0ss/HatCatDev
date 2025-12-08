@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Inter-run variance experiment for probe training.
+Inter-run variance experiment for lens training.
 
-Trains the same probes multiple times with identical setup but different random
+Trains the same lenses multiple times with identical setup but different random
 seeds to measure how much variance exists in the training process itself.
 
 This helps establish error bars for comparing different training approaches.
@@ -36,7 +36,7 @@ TEST_CONCEPTS = [
 ]
 
 
-class ProbeClassifier(nn.Module):
+class LensClassifier(nn.Module):
     """MLP classifier for concept detection."""
     def __init__(self, input_dim: int = 4096):
         super().__init__()
@@ -152,9 +152,9 @@ def get_embeddings(model, tokenizer, texts: List[str], target_layer: int = 15) -
     return torch.empty(0, 4096)
 
 
-def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
-                seed: int = None, max_epochs: int = 100, patience: int = 10) -> Tuple[ProbeClassifier, Dict]:
-    """Train a probe with optional seed for reproducibility."""
+def train_lens(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
+                seed: int = None, max_epochs: int = 100, patience: int = 10) -> Tuple[LensClassifier, Dict]:
+    """Train a lens with optional seed for reproducibility."""
     if seed is not None:
         torch.manual_seed(seed)
         np.random.seed(seed)
@@ -176,8 +176,8 @@ def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
     if len(X_val) == 0:
         X_val, y_val = X_train[-2:], y_train[-2:]
 
-    probe = ProbeClassifier(input_dim=X.shape[1])
-    optimizer = torch.optim.Adam(probe.parameters(), lr=0.001)
+    lens = LensClassifier(input_dim=X.shape[1])
+    optimizer = torch.optim.Adam(lens.parameters(), lr=0.001)
     criterion = nn.BCELoss()
 
     best_val_loss = float('inf')
@@ -185,38 +185,38 @@ def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
     best_state = None
 
     for epoch in range(max_epochs):
-        probe.train()
+        lens.train()
         optimizer.zero_grad()
-        pred = probe(X_train)
+        pred = lens(X_train)
         loss = criterion(pred, y_train)
         loss.backward()
         optimizer.step()
 
-        probe.eval()
+        lens.eval()
         with torch.no_grad():
-            val_pred = probe(X_val)
+            val_pred = lens(X_val)
             val_loss = criterion(val_pred, y_val).item()
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             patience_counter = 0
-            best_state = probe.model.state_dict().copy()
+            best_state = lens.model.state_dict().copy()
         else:
             patience_counter += 1
             if patience_counter >= patience:
                 break
 
     if best_state:
-        probe.model.load_state_dict(best_state)
+        lens.model.load_state_dict(best_state)
 
-    probe.eval()
+    lens.eval()
     with torch.no_grad():
-        train_pred = probe(X_train)
+        train_pred = lens(X_train)
         train_acc = ((train_pred > 0.5) == y_train).float().mean().item()
-        val_pred = probe(X_val)
+        val_pred = lens(X_val)
         val_acc = ((val_pred > 0.5) == y_val).float().mean().item()
 
-    return probe, {
+    return lens, {
         'train_acc': train_acc,
         'val_acc': val_acc,
         'epochs': epoch + 1,
@@ -224,12 +224,12 @@ def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
     }
 
 
-def evaluate_probe(probe: ProbeClassifier, positive_emb: torch.Tensor, negative_emb: torch.Tensor) -> Dict:
-    """Evaluate probe discrimination."""
-    probe.eval()
+def evaluate_lens(lens: LensClassifier, positive_emb: torch.Tensor, negative_emb: torch.Tensor) -> Dict:
+    """Evaluate lens discrimination."""
+    lens.eval()
     with torch.no_grad():
-        pos_scores = probe(positive_emb).squeeze().numpy() if len(positive_emb) > 0 else np.array([])
-        neg_scores = probe(negative_emb).squeeze().numpy() if len(negative_emb) > 0 else np.array([])
+        pos_scores = lens(positive_emb).squeeze().numpy() if len(positive_emb) > 0 else np.array([])
+        neg_scores = lens(negative_emb).squeeze().numpy() if len(negative_emb) > 0 else np.array([])
 
     if pos_scores.ndim == 0:
         pos_scores = np.array([pos_scores.item()])
@@ -275,7 +275,7 @@ def main():
         'timestamp': datetime.now().isoformat(),
         'model': args.model,
         'n_runs': args.n_runs,
-        'probes': {},
+        'lenses': {},
     }
 
     for concept, layer in TEST_CONCEPTS:
@@ -286,13 +286,13 @@ def main():
         concept_data = hierarchy.get(layer, {}).get(concept)
         if not concept_data:
             print(f"  ERROR: Concept not found in layer {layer}")
-            results['probes'][f'{concept}_L{layer}'] = {'error': f'Concept not found'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': f'Concept not found'}
             continue
 
         pos_defs = get_concept_definitions(concept_data, concept, max_samples=50)
         if len(pos_defs) < args.min_definitions:
             print(f"  ERROR: Not enough definitions: {len(pos_defs)}")
-            results['probes'][f'{concept}_L{layer}'] = {'error': f'Not enough definitions'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': f'Not enough definitions'}
             continue
 
         pos_emb = get_embeddings(model, tokenizer, pos_defs, args.target_layer)
@@ -309,7 +309,7 @@ def main():
 
         if len(neg_emb) < 5:
             print(f"  ERROR: Not enough negatives")
-            results['probes'][f'{concept}_L{layer}'] = {'error': 'Not enough negatives'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': 'Not enough negatives'}
             continue
 
         # Split for consistent evaluation
@@ -323,8 +323,8 @@ def main():
             seed = 42 + run_idx * 100
             print(f"\n  Run {run_idx + 1}/{args.n_runs} (seed={seed})...")
 
-            probe, train_metrics = train_probe(train_pos, train_neg, seed=seed)
-            eval_metrics = evaluate_probe(probe, eval_pos, eval_neg)
+            lens, train_metrics = train_lens(train_pos, train_neg, seed=seed)
+            eval_metrics = evaluate_lens(lens, eval_pos, eval_neg)
 
             run_result = {
                 'run': run_idx + 1,
@@ -352,7 +352,7 @@ def main():
 
         print(f"\n  Summary: gap = {stats['gap_mean']:.3f} ± {stats['gap_std']:.3f}")
 
-        results['probes'][f'{concept}_L{layer}'] = {
+        results['lenses'][f'{concept}_L{layer}'] = {
             'concept': concept,
             'layer': layer,
             'runs': runs,
@@ -366,11 +366,11 @@ def main():
 
     all_gaps = []
     all_stds = []
-    for probe_key, probe_data in results['probes'].items():
-        if 'statistics' in probe_data:
-            all_gaps.append(probe_data['statistics']['gap_mean'])
-            all_stds.append(probe_data['statistics']['gap_std'])
-            print(f"  {probe_key}: {probe_data['statistics']['gap_mean']:.3f} ± {probe_data['statistics']['gap_std']:.3f}")
+    for lens_key, lens_data in results['lenses'].items():
+        if 'statistics' in lens_data:
+            all_gaps.append(lens_data['statistics']['gap_mean'])
+            all_stds.append(lens_data['statistics']['gap_std'])
+            print(f"  {lens_key}: {lens_data['statistics']['gap_mean']:.3f} ± {lens_data['statistics']['gap_std']:.3f}")
 
     if all_stds:
         avg_std = np.mean(all_stds)

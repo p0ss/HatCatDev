@@ -34,7 +34,7 @@ WordNet's adjective hierarchy includes:
 - **Temporal**: old, new, permanent, temporary
 - **Physical**: red, heavy, liquid, solid
 
-**Current issue**: Our SUMO mapping aggregates these into broad categories like `PositiveAttribute` or `SubjectiveAssessmentAttribute`, losing the granularity needed for useful probes.
+**Current issue**: Our SUMO mapping aggregates these into broad categories like `PositiveAttribute` or `SubjectiveAssessmentAttribute`, losing the granularity needed for useful lenses.
 
 **Solution**: Extract WordNet adjective synsets directly into a separate property domain, preserving their natural hierarchy (e.g., `good.a.01` → `better` → `best`).
 
@@ -109,23 +109,23 @@ These would require a new KIF ontology file (e.g., `pragmatics.kif`) since they 
 
 ## Compositional Concepts: A Non-Problem
 
-### Why We Don't Need Compound Probes
+### Why We Don't Need Compound Lenses
 
-Compound concepts like "quantum computing" or "climate justice" will naturally activate their component probes:
-- "quantum computing" → `Quantum` probe + `Computing` probe both fire
-- "climate justice" → `Climate` probe + `Justice` probe both fire
+Compound concepts like "quantum computing" or "climate justice" will naturally activate their component lenses:
+- "quantum computing" → `Quantum` lens + `Computing` lens both fire
+- "climate justice" → `Climate` lens + `Justice` lens both fire
 
 This gives us **partial coverage by design**. The co-activation pattern itself is informative.
 
 ### Metaphors: Detect the Pattern, Not the Instance
 
 For metaphorical language:
-- "Time is money" → `Time` + `Money` + `Metaphor` probes fire
-- "Argument is war" → `Argument` + `War` + `Metaphor` probes fire
+- "Time is money" → `Time` + `Money` + `Metaphor` lenses fire
+- "Argument is war" → `Argument` + `War` + `Metaphor` lenses fire
 
-We don't need thousands of metaphor-specific probes. We need:
-1. Probes for the **source** and **target** domains (already covered)
-2. A probe for `Metaphor` / `Analogy` / `Hypothetical` (meta-concepts)
+We don't need thousands of metaphor-specific lenses. We need:
+1. Lenses for the **source** and **target** domains (already covered)
+2. A lens for `Metaphor` / `Analogy` / `Hypothetical` (meta-concepts)
 
 **Estimated additional concepts**: ~10-20 for metaphor/analogy/hypothetical markers
 
@@ -144,8 +144,8 @@ Each new prompt variant multiplies training time:
 
 Additional prompt variants provide diminishing value because:
 1. The same representation is largely activated regardless of prompt framing
-2. Context-specific probes would need context-specific test data (which we don't have)
-3. The probe learns to detect the concept, not the prompt structure
+2. Context-specific lenses would need context-specific test data (which we don't have)
+3. The lens learns to detect the concept, not the prompt structure
 
 ### Recommendation: Keep Current Variants
 
@@ -205,8 +205,8 @@ Don't add new variants for existing entity/process concepts.
 Our coverage gaps are more about **extraction and organization** than fundamental ontological limitations:
 
 1. **WordNet already has** most properties, relations, and processes we need - we just aggregated them too aggressively in the SUMO mapping
-2. **Compositional concepts** are a non-problem - component probes firing together is sufficient
-3. **Metaphors and analogies** need meta-markers, not instance-level probes
+2. **Compositional concepts** are a non-problem - component lenses firing together is sufficient
+3. **Metaphors and analogies** need meta-markers, not instance-level lenses
 4. **Linguistic/pragmatic concepts** are the genuine gap requiring new ontology work
 
 The path to ~80% coverage:

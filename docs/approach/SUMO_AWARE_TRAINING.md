@@ -256,7 +256,7 @@ The AI.kif expansion created 16 populated AI categories:
 - These have `category_children` but may lack WordNet synsets
 - SUMO-only training mode (Pattern 2) will be essential
 
-### Cross-Model Probe Transfer
+### Cross-Model Lens Transfer
 
 Test if classifiers trained on Gemma-3-4b transfer to:
 - Claude, GPT-4, Llama models

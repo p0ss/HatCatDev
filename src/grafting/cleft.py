@@ -2,10 +2,10 @@
 Cleft identification and management.
 
 A Cleft is the region of model weights associated with a concept, derived from
-probe weight analysis. During scion training:
+lens weight analysis. During scion training:
 
-1. Experience data has concept tags (from probes that fired during experience)
-2. Each tagged concept maps to a cleft (the weights that concept's probe reads from)
+1. Experience data has concept tags (from lenses that fired during experience)
+2. Each tagged concept maps to a cleft (the weights that concept's lens reads from)
 3. We train ONLY those clefts - the union of regions for all tagged concepts
 4. Everything else stays frozen (model can keep running)
 
@@ -29,7 +29,7 @@ class CleftRegion:
     """
     A region of model weights associated with a concept.
 
-    Derived from probe weight analysis - identifies which parameters
+    Derived from lens weight analysis - identifies which parameters
     in which layers are implicated in detecting a concept.
     """
     concept_id: str
@@ -43,7 +43,7 @@ class CleftRegion:
     row_indices: List[int] = field(default_factory=list)
     col_indices: List[int] = field(default_factory=list)
 
-    # Importance scores for each index (from probe weight magnitudes)
+    # Importance scores for each index (from lens weight magnitudes)
     row_importance: Optional[List[float]] = None
     col_importance: Optional[List[float]] = None
 
@@ -73,7 +73,7 @@ class Cleft:
     """
     concept_id: str
     regions: List[CleftRegion] = field(default_factory=list)
-    source_probe_path: Optional[str] = None
+    source_lens_path: Optional[str] = None
 
     # Metadata
     hidden_dim: int = 0
@@ -91,14 +91,14 @@ class Cleft:
         return {
             "concept_id": self.concept_id,
             "regions": [r.to_dict() for r in self.regions],
-            "source_probe_path": self.source_probe_path,
+            "source_lens_path": self.source_lens_path,
             "hidden_dim": self.hidden_dim,
             "total_parameters": self.total_parameters
         }
 
 
-def derive_cleft_from_probe(
-    probe_path: Path,
+def derive_cleft_from_lens(
+    lens_path: Path,
     concept_id: str,
     model: nn.Module,
     layers: List[int],
@@ -106,9 +106,9 @@ def derive_cleft_from_probe(
     components: List[str] = None
 ) -> Cleft:
     """
-    Derive a Cleft from a trained probe's weights.
+    Derive a Cleft from a trained lens's weights.
 
-    The probe's first linear layer maps hidden_dim -> intermediate_dim.
+    The lens's first linear layer maps hidden_dim -> intermediate_dim.
     The magnitude of weights tells us which hidden dimensions are important
     for detecting this concept.
 
@@ -116,7 +116,7 @@ def derive_cleft_from_probe(
     produce them (MLP projections, attention projections, etc.)
 
     Args:
-        probe_path: Path to trained probe (.pt file)
+        lens_path: Path to trained lens (.pt file)
         concept_id: Identifier for the concept
         model: The substrate model (to understand architecture)
         layers: Which layers to analyze
@@ -129,19 +129,19 @@ def derive_cleft_from_probe(
     if components is None:
         components = ["mlp.up_proj", "mlp.down_proj"]
 
-    # Load probe weights
-    probe_state = torch.load(probe_path, map_location='cpu', weights_only=True)
+    # Load lens weights
+    lens_state = torch.load(lens_path, map_location='cpu', weights_only=True)
 
     # Get first linear layer weights: (intermediate_dim, hidden_dim)
-    if 'net.0.weight' in probe_state:
-        weights = probe_state['net.0.weight']
+    if 'net.0.weight' in lens_state:
+        weights = lens_state['net.0.weight']
     else:
-        for key in probe_state.keys():
-            if 'weight' in key and probe_state[key].dim() == 2:
-                weights = probe_state[key]
+        for key in lens_state.keys():
+            if 'weight' in key and lens_state[key].dim() == 2:
+                weights = lens_state[key]
                 break
         else:
-            raise ValueError(f"Could not find linear weights in probe: {probe_path}")
+            raise ValueError(f"Could not find linear weights in lens: {lens_path}")
 
     # Compute importance per hidden dimension
     # Sum of absolute weights across intermediate units
@@ -210,7 +210,7 @@ def derive_cleft_from_probe(
     return Cleft(
         concept_id=concept_id,
         regions=regions,
-        source_probe_path=str(probe_path),
+        source_lens_path=str(lens_path),
         hidden_dim=hidden_dim,
         total_parameters=total_params
     )

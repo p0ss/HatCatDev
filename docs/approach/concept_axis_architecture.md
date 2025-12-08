@@ -116,7 +116,7 @@ def calculate_N_rel(concept, validation_performance):
 
 **Scoring function:**
 ```python
-def rank_candidate(candidate, concept, current_probe):
+def rank_candidate(candidate, concept, current_lens):
     """
     Rank relationship candidates for inclusion.
 
@@ -153,11 +153,11 @@ def rank_candidate(candidate, concept, current_probe):
     diversity_penalty = compute_diversity_penalty(candidate, current_samples)
 
     # 4. Activation hardness (optional)
-    # Prefer negatives that current probe struggles with
-    if current_probe is not None:
-        hardness = compute_activation_hardness(candidate, current_probe)
+    # Prefer negatives that current lens struggles with
+    if current_lens is not None:
+        hardness = compute_activation_hardness(candidate, current_lens)
     else:
-        hardness = 0.5  # Neutral if no probe yet
+        hardness = 0.5  # Neutral if no lens yet
 
     # Combine
     score = (
@@ -442,7 +442,7 @@ Stop adding samples when:
 ### Migration Strategy
 
 **Option A: Continue current training, fix next run**
-- Current probes still useful for detection
+- Current lenses still useful for detection
 - Steering may be suboptimal but functional
 - Provides baseline for comparison
 
@@ -493,7 +493,7 @@ Run agentic opposite review (see `agentic_opposite_review_design.md`) to:
 - Steering toward honesty vs away from random concepts
 - High-strength steering remains coherent
 - Better generalization to novel deception patterns
-- Clearer interpretation of probe activations
+- Clearer interpretation of lens activations
 
 ---
 

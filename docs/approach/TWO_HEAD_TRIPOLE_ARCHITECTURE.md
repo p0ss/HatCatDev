@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the two-head architecture for training three-pole simplex probes, as implemented in `scripts/train_s_tier_tripole_two_head.py`.
+This document describes the two-head architecture for training three-pole simplex lenses, as implemented in `scripts/train_s_tier_tripole_two_head.py`.
 
 ## Comparison: 3 Independent Classifiers vs 2 Heads
 
@@ -101,7 +101,7 @@ DualAdaptiveTrainer(
     model=model,
     tokenizer=tokenizer,
     validation_layer_idx=12,     # Layer to monitor
-    validate_probes=True,        # Enable adaptive falloff
+    validate_lenses=True,        # Enable adaptive falloff
     validation_mode="falloff",   # Falloff-based tier grading
     train_activation=True,
     train_text=False
@@ -248,9 +248,9 @@ results/s_tier_tripole_two_head/run_TIMESTAMP/
 └── <dimension>/
     ├── results.json
     ├── sign_head/
-    │   └── activation_probe.pkl
+    │   └── activation_lens.pkl
     └── extremeness_head/
-        └── activation_probe.pkl
+        └── activation_lens.pkl
 ```
 
 ### Results Schema
@@ -280,7 +280,7 @@ results/s_tier_tripole_two_head/run_TIMESTAMP/
 
 ## Comparison to Original Design
 
-### From `tripole_probe_design.md`
+### From `tripole_lens_design.md`
 
 Our implementation follows the design exactly:
 
@@ -295,22 +295,22 @@ Our implementation follows the design exactly:
 ### Extensions Beyond Original Design
 
 1. **Adaptive falloff validation**: Each head gets tier grading
-2. **Separate probe saving**: Can load and use heads independently
+2. **Separate lens saving**: Can load and use heads independently
 3. **Comprehensive logging**: Track both heads through training
 4. **80/20 splits**: Proper train/test split for each head
 
-## Benchmarking Two-Head Probes
+## Benchmarking Two-Head Lenses
 
-When benchmarking (see `PROBE_BENCHMARK_QUICK_START.md`), load both heads:
+When benchmarking (see `LENS_BENCHMARK_QUICK_START.md`), load both heads:
 
 ```python
-def load_tripole_probe(simplex_dir):
+def load_tripole_lens(simplex_dir):
     """Load both heads for a tripole simplex."""
-    sign_head = LinearProbe.load(
-        simplex_dir / "sign_head" / "activation_probe.pkl"
+    sign_head = LinearLens.load(
+        simplex_dir / "sign_head" / "activation_lens.pkl"
     )
-    extremeness_head = LinearProbe.load(
-        simplex_dir / "extremeness_head" / "activation_probe.pkl"
+    extremeness_head = LinearLens.load(
+        simplex_dir / "extremeness_head" / "activation_lens.pkl"
     )
     return sign_head, extremeness_head
 
@@ -336,7 +336,7 @@ def predict_tripole(h, sign_head, extremeness_head):
 
 ## References
 
-- Design document: `docs/tripole_probe_design.md`
+- Design document: `docs/tripole_lens_design.md`
 - Training script: `scripts/train_s_tier_tripole_two_head.py`
 - Training strategy: `docs/S_TIER_TRAINING_STRATEGY.md`
-- Benchmark guide: `docs/PROBE_BENCHMARK_QUICK_START.md`
+- Benchmark guide: `docs/LENS_BENCHMARK_QUICK_START.md`

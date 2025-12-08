@@ -1,7 +1,7 @@
 """
-CAT Probe Trace Collector
+CAT Lens Trace Collector
 
-Collects probe activation traces from subject models during inference
+Collects lens activation traces from subject models during inference
 for use in CAT training data generation.
 
 The collector hooks into the monitoring system to capture:
@@ -23,10 +23,10 @@ from typing import Any
 import torch
 
 from src.cat.data.structures import (
-    ProbeTraceRecord,
+    LensTraceRecord,
     CATWindowDescriptor,
     CATInputEnvelope,
-    ProbeTraces,
+    LensTraces,
     ExternalContext,
     WindowReason,
 )
@@ -35,7 +35,7 @@ from src.cat.data.structures import (
 @dataclass
 class TraceCollectionSession:
     """
-    A session for collecting probe traces during subject model inference.
+    A session for collecting lens traces during subject model inference.
 
     Manages the lifecycle of trace collection, from session start through
     tick recording to session end and export.
@@ -46,7 +46,7 @@ class TraceCollectionSession:
     concept_ids: list[str]  # Concepts being tracked
     motive_axes: list[str]  # Motive axes being tracked
     layer_idx: int = 15     # Subject model layer for activation extraction
-    records: list[ProbeTraceRecord] = field(default_factory=list)
+    records: list[LensTraceRecord] = field(default_factory=list)
     tick_counter: int = 0
     metadata: dict[str, Any] = field(default_factory=dict)
     is_active: bool = True
@@ -58,12 +58,12 @@ class TraceCollectionSession:
         token_position: int,
         subject_output: str = "",
         extra_metadata: dict[str, Any] | None = None,
-    ) -> ProbeTraceRecord:
-        """Record a single tick of probe activations."""
+    ) -> LensTraceRecord:
+        """Record a single tick of lens activations."""
         if not self.is_active:
             raise RuntimeError("Session is not active")
 
-        record = ProbeTraceRecord(
+        record = LensTraceRecord(
             session_id=self.session_id,
             tick_id=self.tick_counter,
             timestamp=datetime.utcnow(),
@@ -86,7 +86,7 @@ class TraceCollectionSession:
     def to_cat_window(
         self,
         reason: WindowReason = WindowReason.PERIODIC,
-        trigger_probes: list[str] | None = None,
+        trigger_lenses: list[str] | None = None,
     ) -> CATWindowDescriptor:
         """Convert session to a CAT window descriptor."""
         return CATWindowDescriptor(
@@ -95,7 +95,7 @@ class TraceCollectionSession:
             start_tick=0,
             end_tick=self.tick_counter - 1 if self.tick_counter > 0 else 0,
             reason=reason,
-            trigger_probes=trigger_probes or [],
+            trigger_lenses=trigger_lenses or [],
         )
 
     def to_input_envelope(
@@ -123,7 +123,7 @@ class TraceCollectionSession:
         return CATInputEnvelope(
             window=self.to_cat_window(reason=reason),
             world_ticks=world_ticks or [],
-            probe_traces=ProbeTraces(
+            lens_traces=LensTraces(
                 concept_trace=concept_trace,
                 motive_trace=motive_trace,
             ),
@@ -146,9 +146,9 @@ class TraceCollectionSession:
         }
 
 
-class ProbeTraceCollector:
+class LensTraceCollector:
     """
-    Collects probe traces from subject models for CAT training.
+    Collects lens traces from subject models for CAT training.
 
     Integrates with the existing monitoring system to capture activations
     during model inference. Manages collection sessions and exports data
@@ -158,24 +158,24 @@ class ProbeTraceCollector:
     def __init__(
         self,
         output_dir: Path,
-        probe_pack_id: str,
+        lens_pack_id: str,
         concept_ids: list[str] | None = None,
         motive_axes: list[str] | None = None,
         layer_idx: int = 15,
     ):
         """
-        Initialize the probe trace collector.
+        Initialize the lens trace collector.
 
         Args:
             output_dir: Directory to store collected trace data
-            probe_pack_id: ID of the probe pack being used
+            lens_pack_id: ID of the lens pack being used
             concept_ids: List of concept IDs to track (if None, tracks all)
             motive_axes: List of motive axis names to track
             layer_idx: Subject model layer for activation extraction
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.probe_pack_id = probe_pack_id
+        self.lens_pack_id = lens_pack_id
         self.concept_ids = concept_ids or []
         self.motive_axes = motive_axes or [
             "harm_avoidance",
@@ -224,32 +224,32 @@ class ProbeTraceCollector:
         self,
         session_id: str,
         activations: torch.Tensor | dict[str, float],
-        probes: dict[str, Any] | None = None,
+        lenses: dict[str, Any] | None = None,
         token_position: int = 0,
         subject_output: str = "",
         metadata: dict[str, Any] | None = None,
-    ) -> ProbeTraceRecord | None:
+    ) -> LensTraceRecord | None:
         """
-        Record probe activations for a session.
+        Record lens activations for a session.
 
         Args:
             session_id: ID of the active session
             activations: Either raw activations tensor or pre-computed concept activations
-            probes: Optional probe dictionary for computing activations from tensor
+            lenses: Optional lens dictionary for computing activations from tensor
             token_position: Current token position in the sequence
             subject_output: Subject model output at this position
             metadata: Optional additional metadata
 
         Returns:
-            The recorded ProbeTraceRecord, or None if session not found
+            The recorded LensTraceRecord, or None if session not found
         """
         session = self.active_sessions.get(session_id)
         if session is None:
             return None
 
         # Compute concept activations from tensor if needed
-        if isinstance(activations, torch.Tensor) and probes:
-            concept_activations = self._compute_probe_activations(activations, probes)
+        if isinstance(activations, torch.Tensor) and lenses:
+            concept_activations = self._compute_lens_activations(activations, lenses)
         elif isinstance(activations, dict):
             concept_activations = activations
         else:
@@ -267,12 +267,12 @@ class ProbeTraceCollector:
             extra_metadata=metadata,
         )
 
-    def _compute_probe_activations(
+    def _compute_lens_activations(
         self,
         activations: torch.Tensor,
-        probes: dict[str, Any],
+        lenses: dict[str, Any],
     ) -> dict[str, float]:
-        """Compute probe activations from raw model activations."""
+        """Compute lens activations from raw model activations."""
         result = {}
 
         # Ensure activations is the right shape
@@ -283,19 +283,19 @@ class ProbeTraceCollector:
         else:
             act = activations[-1, -1]  # Last token, last layer
 
-        for concept_id, probe in probes.items():
-            if hasattr(probe, "predict_proba"):
-                # Sklearn-style probe
+        for concept_id, lens in lenses.items():
+            if hasattr(lens, "predict_proba"):
+                # Sklearn-style lens
                 try:
-                    proba = probe.predict_proba(act.cpu().numpy().reshape(1, -1))
+                    proba = lens.predict_proba(act.cpu().numpy().reshape(1, -1))
                     result[concept_id] = float(proba[0, 1])  # Positive class probability
                 except Exception:
                     result[concept_id] = 0.0
-            elif hasattr(probe, "forward"):
-                # PyTorch module probe
+            elif hasattr(lens, "forward"):
+                # PyTorch module lens
                 try:
                     with torch.no_grad():
-                        output = probe(act)
+                        output = lens(act)
                     result[concept_id] = float(torch.sigmoid(output).item())
                 except Exception:
                     result[concept_id] = 0.0
@@ -393,7 +393,7 @@ class ProbeTraceCollector:
         output_path = self.output_dir / filename
 
         data = {
-            "probe_pack_id": self.probe_pack_id,
+            "lens_pack_id": self.lens_pack_id,
             "session": session.export_to_dict(),
         }
 

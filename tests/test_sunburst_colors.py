@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import torch
 import numpy as np
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 from src.visualization import get_color_mapper
 
 def main():
@@ -37,17 +37,17 @@ def main():
     print(f"✓ Loaded {model_name}")
     print()
 
-    # Load probe manager
-    print("Loading probe manager...")
-    manager = DynamicProbeManager(
-        probes_dir=Path("results/sumo_classifiers_adaptive_l0_5"),
+    # Load lens manager
+    print("Loading lens manager...")
+    manager = DynamicLensManager(
+        lenses_dir=Path("results/sumo_classifiers_adaptive_l0_5"),
         base_layers=[0],
-        use_activation_probes=True,
-        use_text_probes=True,
+        use_activation_lenses=True,
+        use_text_lenses=True,
         keep_top_k=100,
     )
-    print(f"✓ Loaded {len(manager.loaded_activation_probes)} activation probes")
-    print(f"✓ Loaded {len(manager.loaded_text_probes)} text probes")
+    print(f"✓ Loaded {len(manager.loaded_activation_lenses)} activation lenses")
+    print(f"✓ Loaded {len(manager.loaded_text_lenses)} text lenses")
     print()
 
     # Load color mapper
@@ -84,20 +84,20 @@ def main():
             # Decode token
             token_text = tokenizer.decode([inputs.input_ids[0, i].item()])
 
-            # Run activation probes
+            # Run activation lenses
             activation_scores = {}
-            for concept_key, probe in manager.loaded_activation_probes.items():
+            for concept_key, lens in manager.loaded_activation_lenses.items():
                 with torch.no_grad():
                     h = torch.tensor(hidden_state, dtype=torch.float32).to("cuda")
-                    prob = probe(h).item()
+                    prob = lens(h).item()
                     if prob > 0.5:
                         activation_scores[concept_key[0]] = prob
 
-            # Run text probes
+            # Run text lenses
             text_scores = {}
-            for concept_key, text_probe in manager.loaded_text_probes.items():
+            for concept_key, text_lens in manager.loaded_text_lenses.items():
                 try:
-                    prob = text_probe.pipeline.predict_proba([token_text])[0, 1]
+                    prob = text_lens.pipeline.predict_proba([token_text])[0, 1]
                     if prob > 0.5:
                         text_scores[concept_key[0]] = prob
                 except:

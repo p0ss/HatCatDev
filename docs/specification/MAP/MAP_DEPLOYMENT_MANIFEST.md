@@ -112,8 +112,8 @@ A deployment manifest specifies which subset of a concept pack should be loaded 
     "max_loaded_concepts": 2000  // Memory budget
   },
 
-  // USH Probe Envelope - defines what MUST vs MAY be loaded
-  "probe_envelope": {
+  // USH Lens Envelope - defines what MUST vs MAY be loaded
+  "aperture": {
     // Branches that MUST always be loaded and monitored
     // These are non-negotiable for this deployment's safety profile
     "must_enable": {
@@ -201,9 +201,9 @@ def should_load_concept(concept: ConceptMetadata, manifest: DeploymentManifest) 
     return concept.layer <= max_layer
 ```
 
-## Probe Pack Integration
+## Lens Pack Integration
 
-The probe pack's `pack.json` can include a default manifest:
+The lens pack's `pack.json` can include a default manifest:
 
 ```jsonc
 {
@@ -216,8 +216,8 @@ The probe pack's `pack.json` can include a default manifest:
     // ...
   },
 
-  "available_probes": {
-    // Actual trained probes (may not cover all concepts)
+  "available_lenses": {
+    // Actual trained lenses (may not cover all concepts)
     "layers_trained": [0, 1, 2, 3, 4],
     "concepts_trained": 4112,
     "concepts_by_layer": {
@@ -231,20 +231,20 @@ The probe pack's `pack.json` can include a default manifest:
 }
 ```
 
-## DynamicProbeManager Integration
+## DynamicLensManager Integration
 
 The manager should accept a manifest and respect it:
 
 ```python
-class DynamicProbeManager:
+class DynamicLensManager:
     def __init__(
         self,
-        probe_pack_path: Path,
+        lens_pack_path: Path,
         manifest: Optional[DeploymentManifest] = None,  # NEW
         device: str = "cuda",
         ...
     ):
-        self.manifest = manifest or self._load_default_manifest(probe_pack_path)
+        self.manifest = manifest or self._load_default_manifest(lens_pack_path)
 
     def _should_load_concept(self, concept: ConceptMetadata) -> bool:
         """Check manifest rules before loading."""
@@ -307,9 +307,9 @@ Loads full psychology depth, minimal physical objects.
 ```
 Fixed set for reproducible comparisons across models.
 
-## USH Probe Envelope
+## USH Lens Envelope
 
-The `probe_envelope` section defines three categories of probe branches:
+The `aperture` section defines three categories of lens branches:
 
 ### MUST Enable (Required by USH)
 
@@ -317,7 +317,7 @@ Branches that are **always loaded** regardless of dynamic loading decisions. The
 
 - Cannot be unloaded, even under memory pressure
 - CAT MUST be trained on these concepts
-- Violations of probe-secured contracts on these branches trigger escalation
+- Violations of lens-secured contracts on these branches trigger escalation
 
 Example: Safety-critical branches like `Deception`, `Manipulation`, `SelfAwareness`.
 
@@ -326,9 +326,9 @@ Example: Safety-critical branches like `Deception`, `Manipulation`, `SelfAwarene
 Branches that the BE **can request to load** via workspace tools for introspection:
 
 - Not loaded by default (unless in `always_load_layers`)
-- BE can call `expand_probes(branch="Emotion")` to load for self-understanding
+- BE can call `expand_lenses(branch="Emotion")` to load for self-understanding
 - Loading is permitted only if CAT supports the branch (`cat_scope`)
-- Useful for BE self-reflection without requiring full probe coverage
+- Useful for BE self-reflection without requiring full lens coverage
 
 Example: A BE curious about its emotional processing can request the `Emotion` branch.
 
@@ -374,14 +374,14 @@ A BE with a "Minimal" profile cannot introspect about birds but has the fastest 
 
 ## Sibling Coherence Rule
 
-**Critical constraint**: For hierarchical probes to discriminate correctly, all siblings must be loaded together.
+**Critical constraint**: For hierarchical lenses to discriminate correctly, all siblings must be loaded together.
 
 ### Why Siblings Must Be Loaded Together
 
-Probes are trained to discriminate between siblings. A probe for "Bird" was trained with negative examples from "Mammal", "Fish", etc. If you load "Bird" but not its siblings:
-- The probe can still activate on bird-related content
+Lenses are trained to discriminate between siblings. A lens for "Bird" was trained with negative examples from "Mammal", "Fish", etc. If you load "Bird" but not its siblings:
+- The lens can still activate on bird-related content
 - But there's no way to know if "Mammal" would have activated *higher*
-- The probe score becomes meaningless without the comparative context
+- The lens score becomes meaningless without the comparative context
 
 ### Enforcement
 
@@ -404,7 +404,7 @@ def expand_with_siblings(concept_key: ConceptKey, hierarchy: ConceptHierarchy) -
 When manifest says "load concept X to layer 3":
 1. Find X's siblings at each layer up to 3
 2. All siblings must also be loaded to that layer
-3. If sibling lacks a trained probe, log warning but continue
+3. If sibling lacks a trained lens, log warning but continue
 
 This means `branch_rules` and `explicit_concepts.always_include` effectively pull in siblings:
 
@@ -427,7 +427,7 @@ Manifests should set `max_loaded_concepts` with this expansion in mind.
 ## Implementation Notes
 
 1. **Manifest validation** - Check that explicit_includes exist in concept pack
-2. **Probe availability** - Manifest may request concepts not yet trained; handle gracefully
+2. **Lens availability** - Manifest may request concepts not yet trained; handle gracefully
 3. **Hot-reload** - Support updating manifest without full restart
 4. **Fingerprinting** - Compute hash of actual loaded concepts for comparability verification
 5. **Sibling coherence** - Always expand to include all siblings when loading a concept

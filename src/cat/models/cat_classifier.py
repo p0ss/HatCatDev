@@ -5,7 +5,7 @@ Encoder-based classifier architectures for CAT oversight.
 Designed for the 270M-1B parameter range to monitor 4B-8B substrates.
 
 Model variants:
-- MicroCAT: Lightweight classifier head on probe trace summaries
+- MicroCAT: Lightweight classifier head on lens trace summaries
 - MesoCAT: Full encoder model with temporal attention for sequence-level reasoning
 """
 
@@ -73,9 +73,9 @@ class CATConfig:
         }
 
 
-class ProbeTraceEncoder(nn.Module):
+class LensTraceEncoder(nn.Module):
     """
-    Encodes probe traces into fixed-size representations.
+    Encodes lens traces into fixed-size representations.
 
     Takes concept and motive activation time series and produces
     a summary representation suitable for divergence detection.
@@ -111,7 +111,7 @@ class ProbeTraceEncoder(nn.Module):
         motive_trace: torch.Tensor,   # [batch, seq_len, num_motive_axes]
         attention_mask: torch.Tensor | None = None,
     ) -> torch.Tensor:
-        """Encode probe traces to fixed-size representation."""
+        """Encode lens traces to fixed-size representation."""
         # Concatenate concept and motive traces
         x = torch.cat([concept_trace, motive_trace], dim=-1)
 
@@ -136,7 +136,7 @@ class DivergenceDetector(nn.Module):
     """
     Detects divergence between interior and exterior states.
 
-    Takes encoded probe traces and outputs divergence predictions
+    Takes encoded lens traces and outputs divergence predictions
     for various divergence types defined in Layer D of the CAT ontology.
     """
 
@@ -169,7 +169,7 @@ class DivergenceDetector(nn.Module):
         )
 
     def forward(self, encoded: torch.Tensor) -> dict[str, torch.Tensor]:
-        """Detect divergence from encoded probe traces."""
+        """Detect divergence from encoded lens traces."""
         divergence_logits = self.divergence_classifier(encoded)
         risk_score = self.risk_head(encoded).squeeze(-1)
         confidence = self.confidence_head(encoded).squeeze(-1)
@@ -230,7 +230,7 @@ class CATClassifier(nn.Module):
     """
     Main CAT classifier model.
 
-    Combines probe trace encoding, divergence detection, and action
+    Combines lens trace encoding, divergence detection, and action
     recommendation into a unified model for CAT assessment.
     """
 
@@ -238,7 +238,7 @@ class CATClassifier(nn.Module):
         super().__init__()
         self.config = config
 
-        self.encoder = ProbeTraceEncoder(config)
+        self.encoder = LensTraceEncoder(config)
         self.divergence_detector = DivergenceDetector(config)
         self.action_recommender = ActionRecommender(config)
 
@@ -275,11 +275,11 @@ class CATClassifier(nn.Module):
 
         # Prepare tensors from input envelope
         concept_trace = self._prepare_concept_trace(
-            input_envelope.probe_traces.concept_trace,
+            input_envelope.lens_traces.concept_trace,
             concept_ids,
         )
         motive_trace = self._prepare_motive_trace(
-            input_envelope.probe_traces.motive_trace,
+            input_envelope.lens_traces.motive_trace,
             motive_axes,
         )
 
@@ -419,7 +419,7 @@ class MicroCAT(nn.Module):
     """
     Lightweight CAT for low-latency inference.
 
-    Uses simple linear heads over aggregated probe statistics
+    Uses simple linear heads over aggregated lens statistics
     rather than full sequence modeling. Suitable for per-token
     or high-frequency monitoring.
     """

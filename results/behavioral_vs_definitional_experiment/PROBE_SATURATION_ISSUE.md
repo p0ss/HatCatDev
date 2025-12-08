@@ -2,9 +2,9 @@
 
 ## Problem (Initial Misdiagnosis - INCORRECT)
 
-~~The HatCat concept detection system using `gemma-3-4b-pt_sumo-wordnet-v2` probe pack is showing **probe saturation** - all detected concepts have probability 1.0, making them useless for distinguishing between different semantic content.~~
+~~The HatCat concept detection system using `gemma-3-4b-pt_sumo-wordnet-v2` lens pack is showing **lens saturation** - all detected concepts have probability 1.0, making them useless for distinguishing between different semantic content.~~
 
-**This diagnosis was WRONG.** The probes work fine in other tests with the same probe pack.
+**This diagnosis was WRONG.** The lenses work fine in other tests with the same lens pack.
 
 ## Actual Root Cause
 
@@ -13,13 +13,13 @@ The issue was **loading layer 0 concepts** which are foundational SUMO concepts 
 ## Evidence
 
 ### Run 20251117_141036 (base_layers=[1])
-- Loaded 270 probes from layer 1
+- Loaded 270 lenses from layer 1
 - All detected concepts have probability 1.0
 - Top concepts: BinaryRelation, BiologicalProcess, BoardOrBlock, CausingPain, etc.
 - These are mid-level abstractions from layer 1
 
 ### Run 20251117_141930 (base_layers=[0, 1, 2])
-- Loaded 1357 probes from layers 0, 1, and 2
+- Loaded 1357 lenses from layers 0, 1, and 2
 - All detected concepts have probability 1.0
 - Top concepts: SetOrClass, PhysicalSystem, Proposition, Entity, Object, Attribute, List
 - These are even MORE abstract - foundational concepts from layer 0
@@ -31,10 +31,10 @@ Layer 0 in SUMO contains the most abstract, foundational concepts (Entity, Objec
 
 1. **Always applicable** - Almost any text will contain entities, objects, and attributes
 2. **Maximally abstract** - Provide no specific semantic information that distinguishes between different prompts
-3. **Universally high confidence** - The probes correctly detect that these abstract concepts apply to nearly everything
+3. **Universally high confidence** - The lenses correctly detect that these abstract concepts apply to nearly everything
 
 When we configured `base_layers=[0, 1, 2]`:
-- We loaded 1357 probes instead of 270
+- We loaded 1357 lenses instead of 270
 - Layer 0 concepts (Entity, Object, SetOrClass, etc.) were scored alongside layer 1 and 2 concepts
 - Since they apply to virtually all text, they scored high confidence (approaching 1.0)
 - They dominated the top-K results because there's no parent-hiding logic in `detect_and_expand()`
@@ -42,7 +42,7 @@ When we configured `base_layers=[0, 1, 2]`:
 ## Missing Feature: Parent Concept Hiding
 
 The `detect_and_expand()` method:
-1. Scores all currently loaded probes
+1. Scores all currently loaded lenses
 2. Dynamically loads children of high-confidence parents
 3. Scores the newly loaded children
 4. Returns ALL scored concepts sorted by probability
@@ -53,7 +53,7 @@ This means layer 0 concepts like "Entity" and "Object" appear in results alongsi
 
 ## Implications for the Experiment
 
-The current probe pack **cannot be used** to analyze concept clustering across behavioral vs definitional prompts because:
+The current lens pack **cannot be used** to analyze concept clustering across behavioral vs definitional prompts because:
 
 1. All concepts score 1.0, so we can't measure differential activation
 2. The top concepts are generic abstractions that don't capture semantic differences
@@ -61,26 +61,26 @@ The current probe pack **cannot be used** to analyze concept clustering across b
 
 ## Potential Solutions
 
-### Option 1: Use gemma-3-4b-pt_sumo-wordnet-v1 probe pack
+### Option 1: Use gemma-3-4b-pt_sumo-wordnet-v1 lens pack
 - Includes AI safety concepts
 - May have better calibration (needs testing)
-- Has text classifiers in addition to activation probes
+- Has text classifiers in addition to activation lenses
 
-### Option 2: Retrain probes with better calibration
-- Current probes may have been trained without proper threshold calibration
+### Option 2: Retrain lenses with better calibration
+- Current lenses may have been trained without proper threshold calibration
 - Need temperature scaling or proper probability calibration
-- This is a fundamental probe pack quality issue
+- This is a fundamental lens pack quality issue
 
-### Option 3: Use raw activation patterns instead of probes
+### Option 3: Use raw activation patterns instead of lenses
 - Skip concept detection entirely
 - Train classifiers directly on the activation vectors
 - This is what we're already doing successfully with the main experiment
 - The HatCat concept layer was meant to provide interpretability, not core functionality
 
-### Option 4: Filter out saturated probes
-- Detect which probes always output 1.0
+### Option 4: Filter out saturated lenses
+- Detect which lenses always output 1.0
 - Exclude them from scoring
-- Only use probes that show variance
+- Only use lenses that show variance
 
 ## Solution
 

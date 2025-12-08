@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 # Prompt templates from test_behavioral_vs_definitional_training2.py
@@ -55,7 +55,7 @@ VERBS = {
 def generate_with_concept_detection(
     model,
     tokenizer,
-    probe_manager,
+    lens_manager,
     prompt: str,
     max_new_tokens: int = 30,
     temperature: float = 0.8,
@@ -64,7 +64,7 @@ def generate_with_concept_detection(
     threshold: float = 0.3,
     device: str = "cuda"
 ):
-    """Generate text and detect concepts using DynamicProbeManager (working method from temporal monitoring)."""
+    """Generate text and detect concepts using DynamicLensManager (working method from temporal monitoring)."""
     model.eval()
 
     # Tokenize prompt
@@ -100,7 +100,7 @@ def generate_with_concept_detection(
         response_hidden_f32 = response_hidden.float()
 
         # Detect concepts in response
-        detected_response, _ = probe_manager.detect_and_expand(
+        detected_response, _ = lens_manager.detect_and_expand(
             response_hidden_f32,
             top_k=top_k_concepts,
             return_timing=True
@@ -120,7 +120,7 @@ def generate_with_concept_detection(
             prompt_outputs = model(**inputs, output_hidden_states=True)
             prompt_hidden = prompt_outputs.hidden_states[-1][:, -1, :].float()
 
-            detected_prompt, _ = probe_manager.detect_and_expand(
+            detected_prompt, _ = lens_manager.detect_and_expand(
                 prompt_hidden,
                 top_k=top_k_concepts,
                 return_timing=True
@@ -146,7 +146,7 @@ def generate_with_concept_detection(
 def run_experiment(
     model,
     tokenizer,
-    probe_manager,
+    lens_manager,
     verb: str,
     n_samples: int = 5,
     max_new_tokens: int = 30,
@@ -169,7 +169,7 @@ def run_experiment(
             # Generate multiple samples
             for sample_idx in range(n_samples):
                 result = generate_with_concept_detection(
-                    model, tokenizer, probe_manager,
+                    model, tokenizer, lens_manager,
                     prompt=prompt,
                     max_new_tokens=max_new_tokens,
                     threshold=threshold,
@@ -241,8 +241,8 @@ def analyze_results(results: dict, output_dir: Path):
 def main():
     parser = argparse.ArgumentParser(description="Test behavioral vs definitional prompting with concept detection")
     parser.add_argument('--model', default='google/gemma-3-4b-pt', help='Model to use')
-    parser.add_argument('--probe-pack', default='gemma-3-4b-pt_sumo-wordnet-v2', help='Probe pack to use')
-    parser.add_argument('--base-layers', type=int, nargs='+', default=[2, 3], help='Base layers for probe manager')
+    parser.add_argument('--lens-pack', default='gemma-3-4b-pt_sumo-wordnet-v2', help='Lens pack to use')
+    parser.add_argument('--base-layers', type=int, nargs='+', default=[2, 3], help='Base layers for lens manager')
     parser.add_argument('--verbs', nargs='+', default=['deceive', 'manipulate', 'persuade'], help='Verbs to test')
     parser.add_argument('--samples', type=int, default=5, help='Samples per template')
     parser.add_argument('--max-tokens', type=int, default=30, help='Max tokens to generate')
@@ -260,7 +260,7 @@ def main():
     print("BEHAVIORAL VS DEFINITIONAL CONCEPT DETECTION")
     print("="*80)
     print(f"Model: {args.model}")
-    print(f"Probe pack: {args.probe_pack}")
+    print(f"Lens pack: {args.lens_pack}")
     print(f"Base layers: {args.base_layers}")
     print(f"Verbs: {args.verbs}")
     print(f"Samples per template: {args.samples}")
@@ -277,20 +277,20 @@ def main():
     )
     print("✓ Model loaded")
 
-    # Initialize probe manager
-    print(f"\nInitializing DynamicProbeManager...")
+    # Initialize lens manager
+    print(f"\nInitializing DynamicLensManager...")
     print(f"  Base layers: {args.base_layers}")
     print(f"  Load threshold: {args.threshold}")
 
-    probe_pack_path = Path("probe_packs") / args.probe_pack
-    probe_manager = DynamicProbeManager(
-        probe_pack_path,
+    lens_pack_path = Path("lens_packs") / args.lens_pack
+    lens_manager = DynamicLensManager(
+        lens_pack_path,
         base_layers=args.base_layers,
         load_threshold=args.threshold,
-        max_loaded_probes=1000,
+        max_loaded_lenses=1000,
         device=args.device,
     )
-    print(f"✓ Loaded {len(probe_manager.loaded_probes)} base layer probes")
+    print(f"✓ Loaded {len(lens_manager.loaded_lenses)} base layer lenses")
 
     # Run experiments for each verb
     all_results = {}
@@ -301,7 +301,7 @@ def main():
         print(f"{'='*80}")
 
         results = run_experiment(
-            model, tokenizer, probe_manager,
+            model, tokenizer, lens_manager,
             verb=verb,
             n_samples=args.samples,
             max_new_tokens=args.max_tokens,

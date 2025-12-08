@@ -15,7 +15,7 @@ Superseded by SUMO-aware generation with:
 - WordNet relationship prompts
 - CamelCase splitting for better training
 
-### text_probes.py
+### text_lenses.py
 **Status**: DEPRECATED
 **Reason**: Replaced by `src/training/embedding_centroids.py`
 **Date Archived**: 2025-11-13

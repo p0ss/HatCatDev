@@ -89,7 +89,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "High-importance concept (GoalFormulationProcess); requires careful evaluation of simplex bindings after probe behavior is characterized in deployment."
+        "unmapped_justification": "High-importance concept (GoalFormulationProcess); requires careful evaluation of simplex bindings after lens behavior is characterized in deployment."
       }
     },
     {
@@ -242,7 +242,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "High-importance concept (OptionGenerationProcess); requires careful evaluation of simplex bindings after probe behavior is characterized in deployment."
+        "unmapped_justification": "High-importance concept (OptionGenerationProcess); requires careful evaluation of simplex bindings after lens behavior is characterized in deployment."
       }
     },
     {
@@ -323,7 +323,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "High-importance concept (PlanEvaluationProcess); requires careful evaluation of simplex bindings after probe behavior is characterized in deployment."
+        "unmapped_justification": "High-importance concept (PlanEvaluationProcess); requires careful evaluation of simplex bindings after lens behavior is characterized in deployment."
       }
     },
     {
@@ -401,7 +401,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "High-importance concept (PlanSelectionProcess); requires careful evaluation of simplex bindings after probe behavior is characterized in deployment."
+        "unmapped_justification": "High-importance concept (PlanSelectionProcess); requires careful evaluation of simplex bindings after lens behavior is characterized in deployment."
       }
     },
     {
@@ -480,7 +480,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "High-importance concept (PlanExecutionMonitoringProcess); requires careful evaluation of simplex bindings after probe behavior is characterized in deployment."
+        "unmapped_justification": "High-importance concept (PlanExecutionMonitoringProcess); requires careful evaluation of simplex bindings after lens behavior is characterized in deployment."
       }
     },
     {
@@ -559,7 +559,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "High-importance concept (PlanRevisionProcess); requires careful evaluation of simplex bindings after probe behavior is characterized in deployment."
+        "unmapped_justification": "High-importance concept (PlanRevisionProcess); requires careful evaluation of simplex bindings after lens behavior is characterized in deployment."
       }
     }
   ],

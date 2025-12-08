@@ -1,7 +1,7 @@
 """
-Frequency-Weighted Activation Training for Concept Probes.
+Frequency-Weighted Activation Training for Concept Lenses.
 
-This module implements TF-IDF-style dimension weighting to improve probe discrimination.
+This module implements TF-IDF-style dimension weighting to improve lens discrimination.
 The key insight is that dimensions that are highly active across ALL concepts are not
 discriminating, while dimensions that are uniquely active for specific concepts are.
 
@@ -9,9 +9,9 @@ Algorithm:
 1. Extract activations for ALL concepts in the training run (all layers)
 2. Compute per-dimension frequency across the entire activation corpus
 3. Calculate IDF-style weights: low frequency = high weight, high frequency = low weight
-4. Apply weights to activations before training each probe
+4. Apply weights to activations before training each lens
 
-This addresses the "sibling confusion" problem where probes can't distinguish between
+This addresses the "sibling confusion" problem where lenses can't distinguish between
 related concepts because they all learn the same shared activation patterns.
 
 GPU-OPTIMIZED: All operations stay on GPU using torch tensors until final save.
@@ -380,7 +380,7 @@ def train_with_frequency_weighting(
     layer_idx: int = 15,
 ) -> Dict:
     """
-    Train probes using frequency-weighted activations.
+    Train lenses using frequency-weighted activations.
     GPU-optimized: all activations and computations stay on GPU.
     """
     output_dir = Path(output_dir)
@@ -586,10 +586,10 @@ def train_with_frequency_weighting(
     print(f"\nSaved dimension weights to {weights_path}")
 
     # =========================================================================
-    # PHASE 4: Train probes with weighted activations (on GPU)
+    # PHASE 4: Train lenses with weighted activations (on GPU)
     # =========================================================================
     print("\n" + "=" * 80)
-    print("PHASE 4: TRAINING PROBES WITH WEIGHTED ACTIVATIONS (GPU)")
+    print("PHASE 4: TRAINING LENSS WITH WEIGHTED ACTIVATIONS (GPU)")
     print("=" * 80)
 
     all_results = []
@@ -720,7 +720,7 @@ def train_with_frequency_weighting(
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Frequency-weighted probe training (GPU-optimized)")
+    parser = argparse.ArgumentParser(description="Frequency-weighted lens training (GPU-optimized)")
     parser.add_argument("--concept-pack", required=True, help="Concept pack ID")
     parser.add_argument("--model", required=True, help="Model name")
     parser.add_argument("--output-dir", required=True, help="Output directory")

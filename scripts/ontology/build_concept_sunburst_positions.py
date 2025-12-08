@@ -24,12 +24,12 @@ from collections import defaultdict
 from typing import Dict, List, Tuple
 import numpy as np
 
-def load_concept_metadata(probes_dir: Path) -> Dict[str, dict]:
-    """Load all concept metadata from trained probes."""
+def load_concept_metadata(lenses_dir: Path) -> Dict[str, dict]:
+    """Load all concept metadata from trained lenses."""
 
     concepts = {}
 
-    for layer_dir in sorted(probes_dir.iterdir()):
+    for layer_dir in sorted(lenses_dir.iterdir()):
         if not layer_dir.is_dir() or not layer_dir.name.startswith('layer'):
             continue
 
@@ -222,15 +222,15 @@ def main():
     print("=" * 80)
     print()
 
-    probes_dir = Path('results/sumo_classifiers_adaptive_l0_5')
+    lenses_dir = Path('results/sumo_classifiers_adaptive_l0_5')
 
-    if not probes_dir.exists():
-        print(f"Error: {probes_dir} not found")
+    if not lenses_dir.exists():
+        print(f"Error: {lenses_dir} not found")
         print("Run training first: poetry run python scripts/train_sumo_classifiers.py")
         return
 
     print("Loading concept metadata...")
-    concepts = load_concept_metadata(probes_dir)
+    concepts = load_concept_metadata(lenses_dir)
     print(f"✓ Loaded {len(concepts)} concepts")
     print()
 

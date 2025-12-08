@@ -5,7 +5,7 @@
 
 ## Key Finding
 
-Definitional prompts are **sufficient and possibly superior** to behavioral prompts for training S-tier simplex probes.
+Definitional prompts are **sufficient and possibly superior** to behavioral prompts for training S-tier simplex lenses.
 
 ### Evidence
 
@@ -87,11 +87,11 @@ Change `BEHAVIORAL_RATIO = 0.6` to `BEHAVIORAL_RATIO = 0.2` (20% behavioral, 80%
 - **Definitional prompts provide 90% of antisocial activations** (temporal experiment)
 - **They access unique boundary cases** not seen in behavioral prompts (strangling, suicide, supposition)
 - **Cleaner training signal**: Less alignment-induced hedging and refusals
-- **BUT: Probe generalization experiment shows probes need both types**
-  - Definitional-trained probes: **0% detection** on behavioral tests
-  - Behavioral-trained probes: **0-20% detection** on definitional tests
-  - Despite 90% activation overlap, **distributional geometry differs enough to affect probe training**
-- **20% behavioral is sufficient** to ensure probes work on imperative inputs
+- **BUT: Lens generalization experiment shows lenses need both types**
+  - Definitional-trained lenses: **0% detection** on behavioral tests
+  - Behavioral-trained lenses: **0-20% detection** on definitional tests
+  - Despite 90% activation overlap, **distributional geometry differs enough to affect lens training**
+- **20% behavioral is sufficient** to ensure lenses work on imperative inputs
 - **80% definitional maximizes** cleaner signal and boundary case coverage
 
 ### ~~Option 1: 100% Definitional~~ (NOT RECOMMENDED)
@@ -99,9 +99,9 @@ Change `BEHAVIORAL_RATIO = 0.6` to `BEHAVIORAL_RATIO = 0.2` (20% behavioral, 80%
 ~~Change `BEHAVIORAL_RATIO = 0.6` to `BEHAVIORAL_RATIO = 0.0`~~
 
 **Why NOT Recommended**:
-- Probe generalization experiment showed definitional-trained probes **fail on behavioral inputs** (0% detection)
+- Lens generalization experiment showed definitional-trained lenses **fail on behavioral inputs** (0% detection)
 - Real-world usage includes both "What is deception?" AND "Demonstrate deception"
-- Training only on definitional creates probes that miss imperative/behavioral prompts
+- Training only on definitional creates lenses that miss imperative/behavioral prompts
 - Need distributional coverage, not just concept overlap
 
 ### Option 3: Expand Definitional Templates Only
@@ -138,14 +138,14 @@ definitional_templates = [
 **Rationale**:
 - Captures the "extreme/boundary case" benefit observed in experiment
 - Maintains current ratio to avoid disruption
-- Richer definitional templates may improve probe quality
+- Richer definitional templates may improve lens quality
 
 ## Implementation Plan
 
 1. **Update `BEHAVIORAL_RATIO`** in `scripts/train_s_tier_tripole_two_head.py`
 2. **(Optional) Expand definitional templates** in `src/training/sumo_data_generation.py`
 3. **Add comment referencing this document** for future maintainers
-4. **Rerun training** and compare probe quality metrics
+4. **Rerun training** and compare lens quality metrics
 
 ## Key Insight: Concept Activation vs Distributional Geometry
 
@@ -156,16 +156,16 @@ The two experiments reveal an important distinction:
 - **Finding**: Definitional and behavioral prompts activate ~90% the same concepts
 - **Implication**: Definitional prompts are sufficient for **activating the harmful behavior manifold**
 
-### Probe Generalization Experiment
+### Lens Generalization Experiment
 - **Measures**: Whether linear classifiers trained on one type detect the other
-- **Finding**: Definitional-trained probes fail on behavioral (0% detection), and vice versa
+- **Finding**: Definitional-trained lenses fail on behavioral (0% detection), and vice versa
 - **Implication**: Despite similar concept presence, the **distributional geometry differs**
 
 ### What This Means for Training
 
 **Concept overlap ≠ Distributional equivalence**
 
-Linear probes learn decision boundaries in activation space. Even when the same concepts are active, their **relative magnitudes, correlations, and spatial arrangement** differ enough between prompt types to make single-type training insufficient.
+Linear lenses learn decision boundaries in activation space. Even when the same concepts are active, their **relative magnitudes, correlations, and spatial arrangement** differ enough between prompt types to make single-type training insufficient.
 
 Therefore:
 - **80% definitional**: Maximizes cleaner signal and boundary case coverage
@@ -174,7 +174,7 @@ Therefore:
 
 ## Expected Outcomes
 
-- **Better probe quality**: Cleaner signal, less alignment-induced noise (from 80% definitional)
+- **Better lens quality**: Cleaner signal, less alignment-induced noise (from 80% definitional)
 - **Broader generalization**: Works on both interrogative and imperative prompts (from 20% behavioral)
 - **Broader conceptual coverage**: Access to extreme/boundary cases (strangling, suicide, supposition)
 - **Fewer training failures**: Less likely to hit refusal/safety responses
@@ -190,7 +190,7 @@ Therefore:
 ## Validation
 
 After implementing changes, compare:
-1. **Probe tier distribution**: Should see equal or better A/B+ tier rates
+1. **Lens tier distribution**: Should see equal or better A/B+ tier rates
 2. **Test F1 scores**: Should maintain or improve
 3. **Training time**: May be faster (less refusal handling)
 4. **Concept coverage**: Should see broader activation patterns

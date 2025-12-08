@@ -19,12 +19,12 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 def main():
     print("=" * 80)
-    print("HIERARCHICAL PROBE CASCADE: Layer 0 → 1 → 2")
+    print("HIERARCHICAL LENS CASCADE: Layer 0 → 1 → 2")
     print("=" * 80)
 
     prompt = "The cat sat on the mat"
@@ -46,13 +46,13 @@ def main():
 
     # Initialize with ONLY layer 0 as base
     print("\nInitializing manager with ONLY Layer 0 as base...")
-    manager = DynamicProbeManager(
+    manager = DynamicLensManager(
         device=device,
         base_layers=[0],  # Only layer 0
         load_threshold=0.3,  # Lower threshold to see more expansion
-        max_loaded_probes=1000,
+        max_loaded_lenses=1000,
     )
-    print(f"✓ Base layer loaded: {len(manager.loaded_probes)} probes (Layer 0 only)")
+    print(f"✓ Base layer loaded: {len(manager.loaded_lenses)} lenses (Layer 0 only)")
 
     # Extract hidden state
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
@@ -68,7 +68,7 @@ def main():
 
     print(f"\nDetection time: {timing['initial_detection']:.2f}ms")
     print(f"Children loaded: {timing['num_children_loaded']}")
-    print(f"Total loaded probes: {timing['loaded_probes']}")
+    print(f"Total loaded lenses: {timing['loaded_lenses']}")
     print(f"Total time: {timing['total']:.2f}ms")
 
     print(f"\nTop 5 concepts:")
@@ -85,7 +85,7 @@ def main():
 
     print(f"\nDetection time: {timing['initial_detection']:.2f}ms")
     print(f"Children loaded: {timing['num_children_loaded']}")
-    print(f"Total loaded probes: {timing['loaded_probes']}")
+    print(f"Total loaded lenses: {timing['loaded_lenses']}")
     print(f"Total time: {timing['total']:.2f}ms")
 
     print(f"\nTop 10 concepts:")
@@ -105,7 +105,7 @@ def main():
 
     print(f"\nDetection time: {timing['initial_detection']:.2f}ms")
     print(f"Children loaded: {timing['num_children_loaded']}")
-    print(f"Total loaded probes: {timing['loaded_probes']}")
+    print(f"Total loaded lenses: {timing['loaded_lenses']}")
     print(f"Total time: {timing['total']:.2f}ms")
 
     print(f"\nTop 10 concepts:")
@@ -122,22 +122,22 @@ def main():
     print("FINAL STATISTICS")
     print("=" * 80)
     print(f"Total concepts in metadata: {len(manager.concept_metadata):,}")
-    print(f"Loaded in memory: {len(manager.loaded_probes)}")
-    print(f"Memory footprint: {len(manager.loaded_probes) / len(manager.concept_metadata) * 100:.2f}%")
-    print(f"Estimated memory: ~{len(manager.loaded_probes) * 1.3:.0f}MB (activation probes)")
+    print(f"Loaded in memory: {len(manager.loaded_lenses)}")
+    print(f"Memory footprint: {len(manager.loaded_lenses) / len(manager.concept_metadata) * 100:.2f}%")
+    print(f"Estimated memory: ~{len(manager.loaded_lenses) * 1.3:.0f}MB (activation lenses)")
 
     # Show loaded concepts by layer
     loaded_by_layer = {}
-    for concept_name in manager.loaded_probes.keys():
+    for concept_name in manager.loaded_lenses.keys():
         metadata = manager.concept_metadata.get(concept_name)
         if metadata:
             layer = metadata.layer
             loaded_by_layer[layer] = loaded_by_layer.get(layer, 0) + 1
 
-    print(f"\nLoaded probes by layer:")
+    print(f"\nLoaded lenses by layer:")
     for layer in sorted(loaded_by_layer.keys()):
         count = loaded_by_layer[layer]
-        print(f"  Layer {layer}: {count:4d} probes")
+        print(f"  Layer {layer}: {count:4d} lenses")
 
     print("\n" + "=" * 80)
 

@@ -1,25 +1,25 @@
-# Probe Accuracy Benchmark - Quick Start Guide
+# Lens Accuracy Benchmark - Quick Start Guide
 
 ## Overview
 
-The probe accuracy benchmark system validates probe performance across multiple contexts:
+The lens accuracy benchmark system validates lens performance across multiple contexts:
 
-1. **Prompt activations**: How the probe responds to input text containing the concept
-2. **Response activations**: How the probe responds during model generation
-3. **Steered activations**: How the probe responds when steering vectors are applied
+1. **Prompt activations**: How the lens responds to input text containing the concept
+2. **Response activations**: How the lens responds during model generation
+3. **Steered activations**: How the lens responds when steering vectors are applied
 
 ## Example Usage
 
-### 1. Benchmark Concept Probes
+### 1. Benchmark Concept Lenses
 
 Test binary concept classifiers (e.g., "Hat", "Cat", "Geology"):
 
 ```bash
-python scripts/benchmark_concept_probes.py \
+python scripts/benchmark_concept_lenses.py \
   --concepts Hat Cat Geology \
-  --probe-dir results/trained_probes \
+  --lens-dir results/trained_lenses \
   --n-samples 100 \
-  --output results/probe_benchmarks/concepts.csv
+  --output results/lens_benchmarks/concepts.csv
 ```
 
 **Expected CSV Output:**
@@ -33,16 +33,16 @@ Hat,Hat,steered_down,100,0.05,0.03,0.12,0.00
 ...
 ```
 
-### 2. Benchmark Simplex Probes
+### 2. Benchmark Simplex Lenses
 
-Test three-pole simplex probes (μ−, μ0, μ+):
+Test three-pole simplex lenses (μ−, μ0, μ+):
 
 ```bash
-python scripts/benchmark_simplex_probes.py \
+python scripts/benchmark_simplex_lenses.py \
   --simplexes Hunger Temperature Arousal \
-  --probe-dir results/s_tier_simplexes/run_20251117_082151 \
+  --lens-dir results/s_tier_simplexes/run_20251117_082151 \
   --n-samples 100 \
-  --output results/probe_benchmarks/simplexes.csv
+  --output results/lens_benchmarks/simplexes.csv
 ```
 
 **Expected CSV Output:**
@@ -61,10 +61,10 @@ Hunger,mixed,neutral,steered_to_neutral,100,0.85,0.06,0.95,0.70
 Generate confusion matrices, steering plots, and quality reports:
 
 ```bash
-python scripts/analyze_probe_benchmarks.py \
-  --concept-csv results/probe_benchmarks/concepts.csv \
-  --simplex-csv results/probe_benchmarks/simplexes.csv \
-  --output-dir results/probe_benchmarks/analysis
+python scripts/analyze_lens_benchmarks.py \
+  --concept-csv results/lens_benchmarks/concepts.csv \
+  --simplex-csv results/lens_benchmarks/simplexes.csv \
+  --output-dir results/lens_benchmarks/analysis
 ```
 
 **Generated Outputs:**
@@ -77,7 +77,7 @@ python scripts/analyze_probe_benchmarks.py \
 
 ## What to Look For
 
-### Good Concept Probe Patterns
+### Good Concept Lens Patterns
 
 **Diagonal dominance** (prompted == detected):
 - High mean activation (0.90+)
@@ -100,7 +100,7 @@ python scripts/analyze_probe_benchmarks.py \
 }
 ```
 
-### Good Simplex Probe Patterns
+### Good Simplex Lens Patterns
 
 **3x3 diagonal blocks**:
 - High diagonal (0.90+): Each pole strongly detects itself
@@ -113,7 +113,7 @@ python scripts/analyze_probe_benchmarks.py \
 
 ## Quality Metrics
 
-### Concept Probes
+### Concept Lenses
 
 1. **Precision**: Ratio of correct-concept activation to mean incorrect-concept activation
    - Good: 20+
@@ -131,7 +131,7 @@ python scripts/analyze_probe_benchmarks.py \
    - Good: 0.80+
    - Excellent: 0.95+
 
-### Simplex Probes
+### Simplex Lenses
 
 1. **Pole Separation**: Mean activation difference between correct pole and other poles
    - Good: 0.70+
@@ -158,7 +158,7 @@ python scripts/analyze_probe_benchmarks.py \
 - Consider hierarchical relationships
 
 ### Poor steering effectiveness
-- Probe may not be well-calibrated
+- Lens may not be well-calibrated
 - Try different steering strengths
 - Check if concept is steerable (abstract concepts harder)
 
@@ -171,7 +171,7 @@ python scripts/analyze_probe_benchmarks.py \
 
 For better domain-specific benchmarking, you can modify prompt generation:
 
-**In `benchmark_concept_probes.py`:**
+**In `benchmark_concept_lenses.py`:**
 ```python
 def generate_concept_prompts(concept: str, n_samples: int, seed: int = 42) -> List[str]:
     # Add domain-specific templates
@@ -183,7 +183,7 @@ def generate_concept_prompts(concept: str, n_samples: int, seed: int = 42) -> Li
     ...
 ```
 
-**In `benchmark_simplex_probes.py`:**
+**In `benchmark_simplex_lenses.py`:**
 ```python
 def generate_pole_prompts(...):
     # Customize based on simplex dimension and pole type
@@ -198,13 +198,13 @@ Add benchmark runs to your validation pipeline:
 
 ```bash
 #!/bin/bash
-# Run after training new probes
+# Run after training new lenses
 
 # Benchmark
-python scripts/benchmark_concept_probes.py --concepts Hat Cat --n-samples 50 --output latest_bench.csv
+python scripts/benchmark_concept_lenses.py --concepts Hat Cat --n-samples 50 --output latest_bench.csv
 
 # Analyze
-python scripts/analyze_probe_benchmarks.py --concept-csv latest_bench.csv --output-dir latest_analysis
+python scripts/analyze_lens_benchmarks.py --concept-csv latest_bench.csv --output-dir latest_analysis
 
 # Check quality thresholds
 python scripts/validate_quality_thresholds.py --report latest_analysis/concept_quality_report.json
@@ -212,6 +212,6 @@ python scripts/validate_quality_thresholds.py --report latest_analysis/concept_q
 
 ## See Also
 
-- [Full Benchmark Design](PROBE_ACCURACY_BENCHMARK.md)
-- [Probe Training Guide](TRAINING_CODE_CONSOLIDATION.md)
+- [Full Benchmark Design](LENS_ACCURACY_BENCHMARK.md)
+- [Lens Training Guide](TRAINING_CODE_CONSOLIDATION.md)
 - [Concept Pack Format](CONCEPT_PACK_FORMAT.md)

@@ -186,13 +186,13 @@ Based on learnings, focus on:
 
 ### 1. Empirical Validation (4-6 hours) - HIGH PRIORITY
 - Test cascade activation
-- Validate probe quality
+- Validate lens quality
 - Measure activation flow
 - **Don't add features until validated**
 
 ### 2. Behavioral Elicitation Study (8-12 hours) - RESEARCH
 - Test instruction-tuned vs pre-trained models
-- Apply probes to **responses** not prompts
+- Apply lenses to **responses** not prompts
 - Only update pipeline if validated
 
 ### 3. WordNet Patch Validation (2-4 hours) - VALIDATION

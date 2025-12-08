@@ -251,7 +251,7 @@ def score_discriminative_value(synset_name: str, definition: str, domain: str) -
 
     High scores for:
     - Clear semantic boundaries (easy to distinguish from siblings)
-    - Not too abstract (abstract concepts are hard to probe)
+    - Not too abstract (abstract concepts are hard to lens)
     - Not too specific (rare concepts don't add much value)
     """
     synset = wn.synset(synset_name)
@@ -453,7 +453,7 @@ def main():
     print("  1. Review top 50 concepts")
     print("  2. Create Layer 5 entries for selected concepts")
     print("  3. Generate WordNet synset mappings")
-    print("  4. Train and validate new probes")
+    print("  4. Train and validate new lenses")
 
 
 if __name__ == '__main__':

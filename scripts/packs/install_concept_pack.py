@@ -296,7 +296,7 @@ def install_pack(pack_path: str, skip_backup: bool = False, skip_recalc: bool = 
         print("  2. Validate integrity")
     else:
         print("  1. Validate integrity")
-    print("  3. Train probes for new concepts")
+    print("  3. Train lenses for new concepts")
     print()
 
 

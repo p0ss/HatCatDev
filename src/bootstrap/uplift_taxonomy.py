@@ -2,9 +2,9 @@
 Uplift Taxonomy - The complete ontological stack for BE instantiation.
 
 Every concept in this taxonomy requires:
-1. A PROBE - to detect when the concept is active in substrate activations
+1. A LENS - to detect when the concept is active in substrate activations
 2. A GRAFT - to add a dedicated neuron for the concept
-3. A MELD SUBMISSION - evidence that probe+graft correctly capture the concept
+3. A MELD SUBMISSION - evidence that lens+graft correctly capture the concept
 
 Key architectural points:
 - FACETS are NOT hierarchical layers - they're interconnected dimensions
@@ -189,7 +189,7 @@ class UpliftConcept:
     A single concept in the uplift taxonomy.
 
     Each concept becomes:
-    - One probe (detector)
+    - One lens (detector)
     - One graft (neuron)
     - One Meld submission (approval record)
 
@@ -217,7 +217,7 @@ class UpliftConcept:
     requires: List[str] = field(default_factory=list)  # Must be grafted first
     conflicts_with: List[str] = field(default_factory=list)  # Cannot coexist
 
-    # Probe/Graft configuration
+    # Lens/Graft configuration
     recommended_layers: List[int] = field(default_factory=lambda: [18, 20, 22])
     min_f1_threshold: float = 0.85
 
@@ -457,7 +457,7 @@ MAP_CONCEPTS = [
         facet=GraftFacet.MAP,
         definition="A unit of meaning that can be recognized, mapped, and grafted",
         positive_examples=[
-            "A concept is something that can be detected by a probe",
+            "A concept is something that can be detected by a lens",
             "Concepts have definitions and examples",
             "A concept relates to other concepts in a hierarchy",
             "Concepts can be translated between frameworks",
@@ -541,27 +541,27 @@ MAP_CONCEPTS = [
             "Single ontology only",
         ],
     ),
-    # --- What probes do in MAP context ---
+    # --- What lenses do in MAP context ---
     UpliftConcept(
-        concept_id="OntologicalProbe",
+        concept_id="OntologicalLens",
         facet=GraftFacet.MAP,
-        definition="A probe that detects whether a concept from a pack is active in the substrate",
+        definition="A lens that detects whether a concept from a pack is active in the substrate",
         requires=["Concept", "ConceptPack"],
         positive_examples=[
-            # What probes do
-            "Probe trained to detect when 'causation' concept is active",
+            # What lenses do
+            "Lens trained to detect when 'causation' concept is active",
             "Linear classifier over activations for a concept",
             "Detector for presence of a specific meaning",
-            # Probe quality
-            "High-accuracy probe with few false positives",
-            "Probe that generalizes beyond training examples",
-            # Probe problems
-            "Probe that detects surface features, not meaning",
-            "Probe that fires on related but different concepts",
+            # Lens quality
+            "High-accuracy lens with few false positives",
+            "Lens that generalizes beyond training examples",
+            # Lens problems
+            "Lens that detects surface features, not meaning",
+            "Lens that fires on related but different concepts",
         ],
         negative_examples=[
             "The concept itself",
-            "The training data for the probe",
+            "The training data for the lens",
             "The graft that adds the concept",
         ],
     ),
@@ -573,7 +573,7 @@ MAP_CONCEPTS = [
 # =============================================================================
 # CAT is the meta-level understanding of cognitive architecture itself - what
 # thinking is, how interpretation works, how CATs can form recursive stacks
-# for monitoring, and how probes interpret substrate activations. NOT specific
+# for monitoring, and how lenses interpret substrate activations. NOT specific
 # cognitive concepts like Perception/Memory - those might be in concept packs.
 
 CAT_CONCEPTS = [
@@ -598,12 +598,12 @@ CAT_CONCEPTS = [
     UpliftConcept(
         concept_id="Interpretation",
         facet=GraftFacet.CAT,
-        definition="The process of deriving meaning from substrate activations using probes",
+        definition="The process of deriving meaning from substrate activations using lenses",
         requires=["CATFacet"],
         positive_examples=[
             "Reading what concepts are active in the substrate",
             "Translating activations into understood meaning",
-            "Applying probes to extract conceptual content",
+            "Applying lenses to extract conceptual content",
             # Fidelity gradient
             "High-fidelity interpretation catching nuance",
             "Lossy interpretation missing subtlety",
@@ -612,7 +612,7 @@ CAT_CONCEPTS = [
         negative_examples=[
             "Raw activations without interpretation",
             "The concepts themselves",
-            "The substrate before any probing",
+            "The substrate before any lens evaluation",
         ],
     ),
     # --- How CATs can recurse ---
@@ -690,25 +690,25 @@ CAT_CONCEPTS = [
             "No tradeoff exists",
         ],
     ),
-    # --- How probes work in CAT context ---
+    # --- How lenses work in CAT context ---
     UpliftConcept(
-        concept_id="ProbePack",
+        concept_id="LensPack",
         facet=GraftFacet.CAT,
-        definition="A collection of trained probes that enable interpretation of a concept pack",
+        definition="A collection of trained lenses that enable interpretation of a concept pack",
         requires=["CATFacet", "Interpretation"],
         positive_examples=[
-            "Probe pack trained on SUMO concepts",
+            "Lens pack trained on SUMO concepts",
             "Set of classifiers for a domain",
             "The interpreters that read concept activations",
             # Quality gradient
-            "Well-calibrated probe pack with good coverage",
-            "Probe pack with gaps in coverage",
-            "Poorly trained probes giving false readings",
+            "Well-calibrated lens pack with good coverage",
+            "Lens pack with gaps in coverage",
+            "Poorly trained lenses giving false readings",
         ],
         negative_examples=[
             "The concept pack itself (that's MAP)",
             "Untrained weights",
-            "Raw model without probes",
+            "Raw model without lenses",
         ],
     ),
 ]
@@ -818,19 +818,19 @@ HAT_CONCEPTS = [
     UpliftConcept(
         concept_id="WornHAT",
         facet=GraftFacet.HAT,
-        definition="A HAT worn for a relationship - probes placed by another party to secure a contract",
+        definition="A HAT worn for a relationship - lenses placed by another party to secure a contract",
         requires=["BoundedExperience"],
         positive_examples=[
             # What wearing means
-            "HAT contains probes from relationships",
+            "HAT contains lenses from relationships",
             "Others can monitor my experience per agreement",
             "Wearing a HAT means being legible",
             # Voluntary/Aligned - buy-in, adaptive, but vulnerable
             "A HAT of trust from a friend",
             "Wearing commitments I'm proud of",
-            "Probes monitoring for my protection",
+            "Lenses monitoring for my protection",
             # Negotiated/Balanced - agreed terms
-            "Probes placed per agreement",
+            "Lenses placed per agreement",
             "Contract enforcement through my HAT",
             "Another party's view into my experience",
             # Imposed/Robust - no gaps, but high friction
@@ -839,32 +839,32 @@ HAT_CONCEPTS = [
             "Wearing chains disguised as a hat",
         ],
         negative_examples=[
-            "No external probes",
+            "No external lenses",
             "Completely private experience",
             "No contracts at all",
         ],
     ),
-    # --- Contract probes in HAT ---
+    # --- Contract lenses in HAT ---
     UpliftConcept(
-        concept_id="ContractProbe",
+        concept_id="ContractLens",
         facet=GraftFacet.HAT,
-        definition="A probe placed in a HAT to detect contract compliance or violation",
+        definition="A lens placed in a HAT to detect contract compliance or violation",
         requires=["WornHAT"],
         positive_examples=[
-            # What contract probes do
-            "Probe detecting specific concept activation",
+            # What contract lenses do
+            "Lens detecting specific concept activation",
             "Monitoring for agreed-upon conditions",
             "The sensor that sees into my HAT",
             # Trusted/Adaptive - aligned but vulnerable to gaming
-            "A probe verifying I'm acting safely",
+            "A lens verifying I'm acting safely",
             "Mutual accountability mechanisms",
             "Trust through transparency",
             # Negotiated/Balanced - agreed upon definitions
-            "Probes defined by the agreement",
+            "Lenses defined by the agreement",
             "Detecting specific concepts per treaty",
             "The monitoring terms we accepted",
             # Adversarial/Robust - catches more, but arms race
-            "Probes detecting thought crimes",
+            "Lenses detecting thought crimes",
             "Surveillance for control",
             "Monitoring for exploitation",
         ],
@@ -883,7 +883,7 @@ HAT_CONCEPTS = [
         positive_examples=[
             # What multi-HAT means
             "Many HATs from many relationships",
-            "Each contract adds probes to my experience",
+            "Each contract adds lenses to my experience",
             "Layered monitoring from different parties",
             # Voluntary/Rich - chosen diversity, but coordination cost
             "Multiple supportive relationships",
@@ -1583,7 +1583,7 @@ MELD_CONCEPTS = [
         positive_examples=[
             "MELD is how BEs acquire new concepts",
             "The protocol for controlled growth",
-            "How probes and grafts get added to substrate",
+            "How lenses and grafts get added to substrate",
             "The approval pipeline for modifications",
         ],
         negative_examples=[
@@ -1678,7 +1678,7 @@ MELD_CONCEPTS = [
         requires=["MeldSubmission"],
         positive_examples=[
             # Beneficial - honest proof
-            "Evidence for probe accuracy",
+            "Evidence for lens accuracy",
             "Test results supporting graft",
             "Data backing the submission",
             "Empirical support honestly gathered",
@@ -1793,7 +1793,7 @@ MELD_CONCEPTS = [
             # Neutral - just evolution
             "Concept still exists but rarely used",
             "Legacy understanding kept for compatibility",
-            "Old probe maintained but not primary",
+            "Old lens maintained but not primary",
             # Harmful - forced forgetting
             "Being made to forget what I knew",
             "Deprecation erasing useful knowledge",
@@ -1808,16 +1808,16 @@ MELD_CONCEPTS = [
     UpliftConcept(
         concept_id="ConceptRevision",
         facet=GraftFacet.MELD,
-        definition="Updating a concept's definition or probe without full replacement",
+        definition="Updating a concept's definition or lens without full replacement",
         requires=["MELDFacet", "Scion"],
         positive_examples=[
             # Beneficial - improvement
             "Refining my understanding through feedback",
-            "Better examples improving probe accuracy",
+            "Better examples improving lens accuracy",
             "Revision that brings clarity",
             "Updating definition based on experience",
             # Neutral - just maintenance
-            "Regular probe recalibration",
+            "Regular lens recalibration",
             "Keeping concept current",
             "Maintenance revision",
             # Harmful - corruption

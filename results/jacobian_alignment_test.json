@@ -3,7 +3,7 @@
     "model": "google/gemma-3-4b-pt",
     "abstraction_layer": 0,
     "model_layer": 6,
-    "probe_dir": "results/adaptive_test_tiny",
+    "lens_dir": "results/adaptive_test_tiny",
     "timestamp": "2025-11-13 21:40:16",
     "total_concepts": 5,
     "successful": 5,

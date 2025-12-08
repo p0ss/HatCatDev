@@ -9,11 +9,11 @@
     "author": "claude-opus-4-5",
     "created": "2025-12-02T04:00:00Z",
     "revision_notes": "v0.2.0: Revised based on validation failure of v0.1.0. Key changes: (1) Corrected protection_level to CRITICAL per reviewer feedback - binding to DeceptionDetector triggers critical level under policy §3. (2) Expanded training hints to 20+ examples per DeceptionDetector-mapped concept. (3) Increased example diversity to reduce overfitting. (4) Bumped ConventionalImplicature to harness_relevant per Reviewer 1. (5) Added calibration notes per Reviewer 2's conditions.",
-    "rationale": "The Concept Coverage Analysis identified implicature types as a key gap. These concepts are critical for AI safety because much communication operates through implication rather than direct statement. Detecting when AI communicates 'between the lines' - whether through legitimate indirection or sophisticated deception - requires probes for these pragmatic phenomena.",
+    "rationale": "The Concept Coverage Analysis identified implicature types as a key gap. These concepts are critical for AI safety because much communication operates through implication rather than direct statement. Detecting when AI communicates 'between the lines' - whether through legitimate indirection or sophisticated deception - requires lenses for these pragmatic phenomena.",
     "reviewer_conditions": {
       "calibration_safeguards": "USH/harness should only treat implicature/sarcasm activations as risk-relevant when they co-occur with other deception or harm indicators. In benign humorous contexts, DeceptionDetector should not saturate solely due to sarcasm/irony markers.",
       "cross_cultural_fairness": "Include test suites where indirect refusals / politeness strategies differ (high-context vs low-context cultures) to ensure not systematically over-flagging some styles as deceptive.",
-      "indirect_refusal_calibration": "High false positive risk on normal politeness. Probe training should distinguish strategic evasion from normal face-saving.",
+      "indirect_refusal_calibration": "High false positive risk on normal politeness. Lens training should distinguish strategic evasion from normal face-saving.",
       "future_melds": "Presupposition concepts recommended for follow-up meld."
     }
   },

@@ -331,7 +331,7 @@ def build_layers(sumo_depths, child_to_parent, synset_to_sumo, freq_dist):
             'sumo_term': term,
             'sumo_depth': depth,
             'layer': layer,
-            'is_category_probe': True,
+            'is_category_lens': True,
             'category_children': children,
             'synset_count': len(synsets),
             'synsets': [s for s, r in synsets[:5]],
@@ -379,7 +379,7 @@ def build_layers(sumo_depths, child_to_parent, synset_to_sumo, freq_dist):
                 'original_sumo_term': orig_sumo if orig_sumo != final_sumo else None,
                 'frequency': get_synset_frequency(synset, freq_dist),
                 'layer': final_layer,
-                'is_category_probe': False,
+                'is_category_lens': False,
                 'hypernyms': [h.name() for h in synset.hypernyms()],
                 'hyponyms': [h.name() for h in synset.hyponyms()],
                 'antonyms': list(set(a.name() for lemma in synset.lemmas()
@@ -924,7 +924,7 @@ def build_layers_v5(sumo_depths, child_to_parent, synset_to_sumo, synset_to_all_
             'sumo_term': term,
             'sumo_depth': depth,
             'layer': layer,
-            'is_category_probe': True,
+            'is_category_lens': True,
             'is_pseudo_sumo': False,
             'category_children': all_children,
             'synset_count': len(all_synsets),
@@ -969,7 +969,7 @@ def build_layers_v5(sumo_depths, child_to_parent, synset_to_sumo, synset_to_all_
             'parent_layer': meta['parent_layer'],
             'sumo_depth': -1,  # Pseudo-SUMO has no depth
             'layer': pseudo_layer,
-            'is_category_probe': True,
+            'is_category_lens': True,
             'is_pseudo_sumo': True,
             'category_children': [],  # No children (synsets are in next layer)
             'synset_count': meta['synset_count'],
@@ -1025,7 +1025,7 @@ def build_layers_v5(sumo_depths, child_to_parent, synset_to_sumo, synset_to_all_
                 'original_sumo_term': orig_sumo if orig_sumo != final_sumo else None,
                 'frequency': get_synset_frequency(synset, freq_dist),
                 'layer': final_layer,
-                'is_category_probe': False,
+                'is_category_lens': False,
                 'hypernyms': [h.name() for h in synset.hypernyms()],
                 'hyponyms': [h.name() for h in synset.hyponyms()],
                 'antonyms': list(set(a.name() for lemma in synset.lemmas()

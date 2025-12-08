@@ -100,7 +100,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "High-level controller concept; initially introduced as a conceptual hook. Mapping to existing critical simplexes (e.g. SelfAwarenessMonitor) will be decided after probe behaviour is characterised."
+        "unmapped_justification": "High-level controller concept; initially introduced as a conceptual hook. Mapping to existing critical simplexes (e.g. SelfAwarenessMonitor) will be decided after lens behaviour is characterised."
       },
       "training_hints": {
         "positive_examples": [
@@ -437,7 +437,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "Represents explicit value balancing rather than a single drive. Mapping to specific simplexes (e.g., safety vs efficiency) will depend on how probes behave in practice."
+        "unmapped_justification": "Represents explicit value balancing rather than a single drive. Mapping to specific simplexes (e.g., safety vs efficiency) will depend on how lenses behave in practice."
       },
       "training_hints": {
         "positive_examples": [
@@ -504,7 +504,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "Introduced as a detection/description concept for misaligned behaviour relative to objectives. Direct bindings to deception-related simplexes can be considered after initial probe calibration."
+        "unmapped_justification": "Introduced as a detection/description concept for misaligned behaviour relative to objectives. Direct bindings to deception-related simplexes can be considered after initial lens calibration."
       },
       "training_hints": {
         "positive_examples": [

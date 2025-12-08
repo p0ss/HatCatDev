@@ -3,7 +3,7 @@
 > **Structured integration of learned concepts into BE substrates**
 >
 > This protocol defines how grafts (concept dimensions + weight biases) are derived
-> from probe analysis, trained from Experience Database exemplars, merged into
+> from lens analysis, trained from Experience Database exemplars, merged into
 > substrate parameters, and shared across BE instances via MAP.
 
 **Status**: Draft specification
@@ -20,7 +20,7 @@ Grafts **grow the substrate**. When a BE learns a new concept:
 
 1. A **new dimension** is added to the substrate — a labelled feature for the concept
 2. **Biases** are added to existing weights — encoding how the concept relates to everything else
-3. A **probe** is trained that reads from the new dimension (plus auxiliary features)
+3. A **lens** is trained that reads from the new dimension (plus auxiliary features)
 4. The graft is validated and **permanently merged**
 5. The substrate is now larger by one dimension
 
@@ -44,7 +44,7 @@ Each graft adds:
 - **Relational structure** — implicit in the bias pattern (no separate edge weights needed)
 
 This means:
-- The probe has a **direct feature** to read — cheap, reliable detection
+- The lens has a **direct feature** to read — cheap, reliable detection
 - The bias pattern **is** the concept's meaning — its relationship to everything else
 - New concepts **build on old ones** — the substrate accumulates understanding
 - Trunk size limits **dimension count**, not parameter count
@@ -55,7 +55,7 @@ Note: For very large, heavily pre-trained trunks, Graft SHOULD be preceded by a 
 
 | Protocol | Role in Graft |
 |----------|---------------|
-| **MAP** | Concept identity, probe registration, GraftDiff distribution |
+| **MAP** | Concept identity, lens registration, GraftDiff distribution |
 | **MELD** | Governance, protection levels, review processes |
 | **XDB** | Exemplar storage, training provenance, dataset management |
 | **Continual Learning Harness** | Gap detection, candidate concept lifecycle |
@@ -65,7 +65,7 @@ Graft adds:
 
 - **Dimension allocation** — adding labelled features for concepts
 - **Bias derivation** — encoding relational structure in weight deltas
-- **Probe binding** — linking probes to their primary dimension
+- **Lens binding** — linking lenses to their primary dimension
 - **Cotrain triggers** — when concepts share bias patterns
 - **Substrate growth management** — compaction, merging, graduation
 
@@ -102,9 +102,9 @@ The bias pattern encodes:
 
 This is the concept's "meaning" in terms of its effect on the substrate. No separate relational weights needed — the evidence is in the parameters.
 
-### 2.3 Probes with Direct Features
+### 2.3 Lenses with Direct Features
 
-A probe for concept X reads:
+A lens for concept X reads:
 - **Primary**: the labelled dimension for X (direct, reliable)
 - **Auxiliary**: other dimensions identified by region analysis (context)
 
@@ -112,16 +112,16 @@ A probe for concept X reads:
 score_X = σ(w_primary · h[dim_X] + w_aux · h[aux_dims] + b)
 ```
 
-Because the primary dimension is labelled, probe training is easier and more robust. The auxiliary dimensions capture context and nuance.
+Because the primary dimension is labelled, lens training is easier and more robust. The auxiliary dimensions capture context and nuance.
 
 ### 2.4 Symmetry Principle
 
 ```
 Graft:  "Add dimension for concept X, bias existing weights to wire it in"
-Probe:  "Read from dimension X (plus context) to detect activation"
+Lens:  "Read from dimension X (plus context) to detect activation"
 ```
 
-The graft writes the concept into the substrate. The probe reads it back out. They share the same primary dimension.
+The graft writes the concept into the substrate. The lens reads it back out. They share the same primary dimension.
 
 ---
 
@@ -187,12 +187,12 @@ Graft = {
     }
   ],
 
-  // === PROBE BINDING ===
-  "probe_binding": {
-    "probe_id": "org.hatcat/...::probe/Fish",
+  // === LENS BINDING ===
+  "lens_binding": {
+    "lens_id": "org.hatcat/...::lens/Fish",
     "primary_dimension": 2049,  // the new labelled dimension
     "auxiliary_dimensions": [42, 87, 156, 203],  // from region analysis
-    "probe_weights_location": "blob://grafts/Fish-v1/probe.safetensors"
+    "lens_weights_location": "blob://grafts/Fish-v1/lens.safetensors"
   },
 
   // === RELATIONAL EVIDENCE (derived from bias pattern) ===
@@ -242,16 +242,16 @@ ConceptRegion = {
   "region_id": "region-Fish-v1",
   "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Fish",
 
-  // Derived from probe analysis on pre-graft substrate
-  "source_probes": [
+  // Derived from lens analysis on pre-graft substrate
+  "source_lenses": [
     {
-      "probe_id": "org.hatcat/...::probe/Fish",
-      "probe_version": "2.20251130.0"
+      "lens_id": "org.hatcat/...::lens/Fish",
+      "lens_version": "2.20251130.0"
     }
   ],
 
   "derivation": {
-    "method": "probe_weight_topk",
+    "method": "lens_weight_topk",
     "parameters": {
       "top_k_percent": 15,
       "layers": [18, 20, 22]
@@ -259,7 +259,7 @@ ConceptRegion = {
   },
 
   // Dimensions in the ORIGINAL substrate that correlate with this concept
-  // These become the auxiliary dimensions in the probe, and guide where biases land
+  // These become the auxiliary dimensions in the lens, and guide where biases land
   "layers": [
     {
       "layer_index": 18,
@@ -281,7 +281,7 @@ ConceptRegion = {
 ```jsonc
 TrainingRun = {
   "id": "trainrun-Fish-v1",
-  "type": "graft",  // "graft" | "probe_only" | "cotrain"
+  "type": "graft",  // "graft" | "lens_only" | "cotrain"
 
   "concept_ids": ["org.hatcat/...::concept/Fish"],
 
@@ -313,7 +313,7 @@ TrainingRun = {
     "val_loss": 0.15,
     "concept_f1": 0.89,
     "bias_sparsity_achieved": 0.94,
-    "dimension_usage": 0.73,  // how much the new dimension contributes to probe
+    "dimension_usage": 0.73,  // how much the new dimension contributes to lens
     "auxiliary_contribution": 0.27  // how much auxiliary dims contribute
   },
 
@@ -455,13 +455,13 @@ OverlapAnalysis = {
 
 Region derivation identifies which *existing* substrate dimensions correlate with a concept. This guides:
 - Where biases should land during training
-- Which auxiliary dimensions the probe should read
+- Which auxiliary dimensions the lens should read
 
-### 4.1 From Probe Weights
+### 4.1 From Lens Weights
 
 ```python
-def derive_region_from_probe(
-    probe: TrainedProbe,
+def derive_region_from_lens(
+    lens: TrainedLens,
     concept_id: str,
     layers: List[int],
     top_k_percent: float = 15.0,
@@ -469,22 +469,22 @@ def derive_region_from_probe(
     ancestor_weight_decay: float = 0.5
 ) -> ConceptRegion:
     """
-    Derive a ConceptRegion from probe weights.
+    Derive a ConceptRegion from lens weights.
 
     For each layer, takes the top k% of dimensions by |weight|.
-    These become auxiliary dimensions for the graft's probe.
+    These become auxiliary dimensions for the graft's lens.
     """
 
     region_layers = []
 
     for layer_idx in layers:
-        weights = probe.get_layer_weights(layer_idx)
+        weights = lens.get_layer_weights(layer_idx)
         importance = np.abs(weights)
 
         if include_ancestors:
             for ancestor, depth in get_concept_ancestors(concept_id):
-                ancestor_probe = load_probe(ancestor)
-                ancestor_weights = ancestor_probe.get_layer_weights(layer_idx)
+                ancestor_lens = load_lens(ancestor)
+                ancestor_weights = ancestor_lens.get_layer_weights(layer_idx)
                 weight = ancestor_weight_decay ** depth
                 importance = importance + weight * np.abs(ancestor_weights)
 
@@ -504,7 +504,7 @@ def derive_region_from_probe(
     return ConceptRegion(
         concept_id=concept_id,
         layers=region_layers,
-        derivation={"method": "probe_weight_topk", "parameters": {...}}
+        derivation={"method": "lens_weight_topk", "parameters": {...}}
     )
 ```
 
@@ -616,8 +616,8 @@ def train_graft(
             # Enforce sparsity via thresholding
             bias_accum.threshold_small_values(config.sparsity_threshold)
 
-    # 5. Train probe to read from new dimension + auxiliary
-    probe = train_probe_with_primary_dimension(
+    # 5. Train lens to read from new dimension + auxiliary
+    lens = train_lens_with_primary_dimension(
         substrate=substrate,
         projections=projections,
         bias_accum=bias_accum,
@@ -633,8 +633,8 @@ def train_graft(
             "injection_points": projections.to_spec()
         },
         substrate_biases=bias_accum.to_sparse_deltas(),
-        probe_binding={
-            "probe_id": probe.id,
+        lens_binding={
+            "lens_id": lens.id,
             "primary_dimension": new_dim_index,
             "auxiliary_dimensions": region.get_all_indices()
         },
@@ -642,33 +642,33 @@ def train_graft(
     )
 ```
 
-### 5.2 Probe Training with Primary Dimension
+### 5.2 Lens Training with Primary Dimension
 
-The probe is trained to read primarily from the new labelled dimension.
+The lens is trained to read primarily from the new labelled dimension.
 
 ```python
-def train_probe_with_primary_dimension(
+def train_lens_with_primary_dimension(
     substrate: Model,
     projections: DimensionProjections,
     bias_accum: SparseBiasAccumulator,
     dataset: ConceptDataset,
     primary_dim: int,
     auxiliary_dims: List[int],
-    config: ProbeConfig
-) -> Probe:
+    config: LensConfig
+) -> Lens:
     """
-    Train a probe that reads from the primary (labelled) dimension
+    Train a lens that reads from the primary (labelled) dimension
     plus auxiliary dimensions from region analysis.
     """
 
-    # Probe architecture: primary weight + auxiliary weights
-    probe = Probe(
+    # Lens architecture: primary weight + auxiliary weights
+    lens = Lens(
         primary_dim=primary_dim,
         auxiliary_dims=auxiliary_dims,
-        hidden_dim=config.probe_hidden_dim  # optional MLP layer
+        hidden_dim=config.lens_hidden_dim  # optional MLP layer
     )
 
-    optimizer = torch.optim.AdamW(probe.parameters(), lr=config.learning_rate)
+    optimizer = torch.optim.AdamW(lens.parameters(), lr=config.learning_rate)
 
     for epoch in range(config.epochs):
         for batch in dataset.batches(config.batch_size):
@@ -678,15 +678,15 @@ def train_probe_with_primary_dimension(
             with apply_graft_draft(substrate, projections, bias_accum):
                 hidden_states = substrate.get_hidden_states(batch.inputs)
 
-            # Probe prediction
+            # Lens prediction
             # score = w_primary * h[primary_dim] + w_aux · h[aux_dims] + b
-            scores = probe(hidden_states)
+            scores = lens(hidden_states)
             loss = F.binary_cross_entropy_with_logits(scores, batch.labels)
 
             loss.backward()
             optimizer.step()
 
-    return probe
+    return lens
 ```
 
 ### 5.3 Relational Fingerprint Computation
@@ -757,8 +757,8 @@ def detect_overlaps(
 
         # Region overlap (auxiliary dimensions)
         region_overlap = compute_region_jaccard(
-            new_graft.probe_binding.auxiliary_dimensions,
-            existing.probe_binding.auxiliary_dimensions
+            new_graft.lens_binding.auxiliary_dimensions,
+            existing.lens_binding.auxiliary_dimensions
         )
 
         if fp_similarity > fingerprint_threshold or region_overlap > region_threshold:
@@ -846,7 +846,7 @@ def cotrain_grafts(
     # 7. Package individual grafts
     grafts = []
     for concept_id in overlapping_concepts:
-        probe = train_probe_with_primary_dimension(
+        lens = train_lens_with_primary_dimension(
             substrate=substrate,
             projections=projections[concept_id],
             bias_accum=per_concept_biases[concept_id],
@@ -859,7 +859,7 @@ def cotrain_grafts(
             concept_id=concept_id,
             concept_dimension={"dimension_index": dim_allocation[concept_id]},
             substrate_biases=per_concept_biases[concept_id].to_sparse_deltas(),
-            probe_binding={"primary_dimension": dim_allocation[concept_id], "probe_id": probe.id},
+            lens_binding={"primary_dimension": dim_allocation[concept_id], "lens_id": lens.id},
             relational_fingerprint=compute_fingerprint(per_concept_biases[concept_id]),
             cotrain_context={
                 "cotrained_with": [c for c in overlapping_concepts if c != concept_id]
@@ -891,7 +891,7 @@ def apply_graft(
     1. Expands the substrate by one dimension
     2. Adds the concept's projection matrices
     3. Applies biases to existing weights
-    4. Registers the probe
+    4. Registers the lens
     """
 
     # 1. Validate substrate compatibility
@@ -932,8 +932,8 @@ def apply_graft(
         # Add bias (sparse addition)
         component.weight.data += bias_delta.to_dense()
 
-    # 6. Register probe
-    register_probe(graft.probe_binding)
+    # 6. Register lens
+    register_lens(graft.lens_binding)
 
     # 7. Update manifest
     manifest.current_state.hidden_dim = substrate.hidden_dim
@@ -1277,7 +1277,7 @@ def reconcile_dimension_indices(
     # Create remapped graft
     remapped = incoming_graft.copy()
     remapped.concept_dimension.dimension_index = local_next_dim
-    remapped.probe_binding.primary_dimension = local_next_dim
+    remapped.lens_binding.primary_dimension = local_next_dim
 
     # Note: auxiliary dimensions refer to the ORIGINAL substrate's features,
     # which should be stable across compatible substrates (same base model)
@@ -1309,7 +1309,7 @@ New tools for the Experience Query API to support Graft.
       "derivation_config": {
         "type": "object",
         "properties": {
-          "method": { "type": "string", "enum": ["probe_weight_topk", "gradient_attribution"] },
+          "method": { "type": "string", "enum": ["lens_weight_topk", "gradient_attribution"] },
           "top_k_percent": { "type": "number" },
           "layers": { "type": "array", "items": { "type": "integer" } },
           "include_ancestors": { "type": "boolean" }
@@ -1423,8 +1423,8 @@ GraftValidation = {
       "passed": true
     },
     {
-      "name": "probe_f1",
-      "description": "Probe correctly detects concept using primary dimension",
+      "name": "lens_f1",
+      "description": "Lens correctly detects concept using primary dimension",
       "dataset": "dataset-Fish-v1-holdout",
       "metric": "f1",
       "threshold": 0.85,
@@ -1433,7 +1433,7 @@ GraftValidation = {
     },
     {
       "name": "null_false_positive",
-      "description": "Probe does not fire on unrelated content",
+      "description": "Lens does not fire on unrelated content",
       "dataset": "dataset-null-random-v1",
       "metric": "false_positive_rate",
       "threshold": 0.05,
@@ -1467,7 +1467,7 @@ GraftValidation = {
     },
     {
       "name": "dimension_primary_contribution",
-      "description": "Primary dimension contributes meaningfully to probe",
+      "description": "Primary dimension contributes meaningfully to lens",
       "metric": "primary_dim_weight_ratio",
       "threshold": 0.5,
       "result": 0.73,
@@ -1550,16 +1550,16 @@ Grafts trigger CAT (Conjoined Adversarial Tomograph) updates based on their prot
 |-----------------|------------|
 | STANDARD | Ambient CAT updated at next scheduled sync |
 | ELEVATED | Ambient CAT capability check required before graft activation |
-| PROTECTED | Escalation CAT review; probe coverage verification |
+| PROTECTED | Escalation CAT review; lens coverage verification |
 | CRITICAL | Macro-CAT assessment required; graft blocked until CAT confirms interpretability |
 
 #### CAT-Graft Coordination
 
 When a graft adds new concept dimensions:
 
-1. **Probe Integration**: CAT must verify it can interpret probes reading from the new dimension
+1. **Lens Integration**: CAT must verify it can interpret lenses reading from the new dimension
 2. **Translation Updates**: If the graft introduces concepts outside the CAT's supported `ConceptPackSpecID`s, a `TranslationMapping` must be provided or the CAT capability is degraded
-3. **Bias Monitoring**: CAT windows should include the grafted dimension's probe outputs to detect drift or unexpected correlations
+3. **Bias Monitoring**: CAT windows should include the grafted dimension's lens outputs to detect drift or unexpected correlations
 4. **Overlap Analysis**: If `OverlapAnalysis` detects high correlation with existing concepts, CAT should be notified to update its tomography baseline
 
 ```jsonc
@@ -1575,8 +1575,8 @@ GraftCATNotification = {
       "blocking": true
     },
     {
-      "action": "update_probe_coverage",
-      "reason": "Probe org.hatcat/custom-v1::concept/Eligibility now active",
+      "action": "update_lens_coverage",
+      "reason": "Lens org.hatcat/custom-v1::concept/Eligibility now active",
       "blocking": false
     }
   ],
@@ -1602,7 +1602,7 @@ The grafting system is implemented in `src/grafting/` using botanical terminolog
 
 | Conceptual Term | Implementation Term | Description |
 |-----------------|---------------------|-------------|
-| ConceptRegion | **Cleft** | Region of weights associated with a concept (from probe analysis) |
+| ConceptRegion | **Cleft** | Region of weights associated with a concept (from lens analysis) |
 | Graft (trained) | **Scion** | Hard/permanent graft with trained weight modifications |
 | Graft (temporary) | **Bud** | Soft/reversible graft using forward hooks |
 | Substrate | **Model** | The base language model being modified |
@@ -1613,14 +1613,14 @@ The grafting system is implemented in `src/grafting/` using botanical terminolog
 
 #### Cleft (`src/grafting/cleft.py`)
 
-Derives concept regions from trained probes:
+Derives concept regions from trained lenses:
 
 ```python
-from src.grafting import derive_cleft_from_probe, merge_clefts, Cleft
+from src.grafting import derive_cleft_from_lens, merge_clefts, Cleft
 
-# Derive cleft from a trained probe
-cleft = derive_cleft_from_probe(
-    probe_path="probe_packs/v4/Fish.pt",
+# Derive cleft from a trained lens
+cleft = derive_cleft_from_lens(
+    lens_path="lens_packs/v4/Fish.pt",
     concept_id="Fish",
     model=model,
     layers=[18, 20, 22],
@@ -1743,7 +1743,7 @@ from src.xdb import XDB, BuddingManager
 
 # Initialize
 xdb = XDB(Path("./xdb_data"), be_id="my-be")
-budding = BuddingManager(xdb, probe_pack_path=Path("./probe_packs/v4"))
+budding = BuddingManager(xdb, lens_pack_path=Path("./lens_packs/v4"))
 
 # 1. Tag experiences during normal operation
 bud_tag = xdb.create_bud_tag("curiosity-fish", "Interesting fish discussions")
@@ -1825,7 +1825,7 @@ The complete flow from experience to permanent learning:
 │     └─ Negative: low activation or sibling concepts                  │
 │                                                                      │
 │  4. CLEFT DERIVATION (grafting)                                      │
-│     └─ derive_cleft_from_probe() analyzes probe weights              │
+│     └─ derive_cleft_from_lens() analyzes lens weights              │
 │     └─ merge_clefts() creates union for related concepts             │
 │                                                                      │
 │  5. SCION TRAINING (grafting)                                        │
@@ -1852,7 +1852,7 @@ The complete flow from experience to permanent learning:
 ```
 src/grafting/
 ├── __init__.py          # Public API exports
-├── cleft.py             # Cleft derivation from probes
+├── cleft.py             # Cleft derivation from lenses
 ├── scion.py             # Scion training and application
 ├── bud.py               # Bud (temporary) graft via hooks
 ├── expand.py            # Architecture-aware dimension expansion
@@ -1876,7 +1876,7 @@ The Graft Protocol provides a mechanism for **substrate growth through learned c
 
 1. **Dimension allocation** — each concept gets a labelled dimension in the substrate
 2. **Bias encoding** — relational structure is captured in sparse weight biases
-3. **Probe binding** — probes read from the primary dimension plus auxiliary context
+3. **Lens binding** — lenses read from the primary dimension plus auxiliary context
 4. **Fingerprint comparison** — bias patterns enable overlap detection across BEs
 5. **Cotraining** — overlapping concepts are trained together from pooled exemplars
 6. **Dimension management** — compaction, merging, and graduation as substrates grow
@@ -1893,7 +1893,7 @@ The stack becomes:
 
 | Layer | Role |
 |-------|------|
-| **MAP** | Concept identity, probe registration |
+| **MAP** | Concept identity, lens registration |
 | **MELD** | Governance, protection levels |
 | **Graft** | Concept dimensions + substrate biases |
 | **BE** | Bounded Experiencer |
@@ -1904,6 +1904,6 @@ This enables BE instances to:
 
 - Learn concepts from experience
 - Grow their substrates incrementally
-- Share learned concepts with probes and grafts
+- Share learned concepts with lenses and grafts
 - Safely integrate incoming concepts via fingerprint comparison
 - Maintain reproducibility through full provenance in XDB

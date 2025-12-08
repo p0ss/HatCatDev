@@ -278,7 +278,7 @@ Proposition (L0)
 2. ✅ Continue Layer 2 with new validation rules (includes correct persona concepts)
 3. ⬜ Mark AI safety process concepts for exclusion/retraining in next cycle
 4. ⬜ Complete this reorganization plan before next full training cycle
-5. ⬜ Document which Layer 2-4 probes are deprecated pending reorganization
+5. ⬜ Document which Layer 2-4 lenses are deprecated pending reorganization
 
 ## Conceptual Principles for Future Ontology Work
 
@@ -287,7 +287,7 @@ Proposition (L0)
 **CRITICAL INSIGHT**: SUMO concept layers are not merely an ontological map - they are a **hierarchical navigation structure for cognitive processes**, analogous to website information architecture.
 
 **Key metaphor**: Each conceptual activation through the dynamic hierarchical loading system = one website session
-- **Probe loading** = page loading
+- **Lens loading** = page loading
 - **Sibling concepts** = navigation choices at one level
 - **Parent-child traversal** = drill-down navigation
 - **Top-k activations** = limited "viewport" of active concepts
@@ -365,7 +365,7 @@ Optimal branching factor = f(conceptual_diversity, comparison_cost, activation_f
 **Website analogy**: Users enter through different pages; same content accessible via multiple paths
 
 **Current implementation**:
-- **Massive parallel probing** = multiple entry points (front doors)
+- **Massive parallel lens evaluation** = multiple entry points (front doors)
 - **Polysemanticity handling** = same content (concept) accessible via different activation paths
 - **Concept concurrency** = multiple concepts active simultaneously
 
@@ -407,7 +407,7 @@ Optimal branching factor = f(conceptual_diversity, comparison_cost, activation_f
 
 **Current implementation**:
 - **Concept packs**: Modular additions to hierarchy
-- **Probe packs**: Deployable concept detection bundles
+- **Lens packs**: Deployable concept detection bundles
 
 **Current limitation**:
 - "Fragile and sticky-taped together" - integration requires manual JSON editing
@@ -457,19 +457,19 @@ balance_score(siblings) = std_dev(activation_flow across siblings)
 
 **Economic principle**: The value of a network node = the net value it adds to each user × number of users
 
-**Application to concept probes**:
+**Application to concept lenses**:
 ```
-value(concept_probe) = (detection_benefit × usage_frequency) - (training_cost + inference_cost)
+value(concept_lens) = (detection_benefit × usage_frequency) - (training_cost + inference_cost)
 ```
 
 **Key insight**: **Within finite resources, each new concept has opportunity cost**
 - **Training cost**: GPU hours, data generation, validation
-- **Inference cost**: Probe loading, activation computation, top-k displacement
+- **Inference cost**: Lens loading, activation computation, top-k displacement
 - **Opportunity cost**: Adding concept C prevents adding concept D
 
 **Resource constraints**:
-1. **Computational budget**: Limited probe evaluations per forward pass
-2. **Memory budget**: Limited simultaneously loaded probes
+1. **Computational budget**: Limited lens evaluations per forward pass
+2. **Memory budget**: Limited simultaneously loaded lenses
 3. **Top-k viewport**: Each activated concept pushes another out
 
 **Implication**: Not all concepts are worth detecting

@@ -19,15 +19,15 @@ This work introduces a practical framework for dual-ontology interpretability an
 The system detects and modulates thousands of semantic concepts in real time during text generation, providing an activation-level interface between model cognition and external oversight.
 Unlike existing safety methods that operate exclusively in text space or rely on static classifier gating, this framework integrates three elements:
 
-Latent Concept Detection: Lightweight probes trained from WordNet + SUMO mappings identify concept activations across the residual stream and MLP layers. Concepts are organized into hierarchical “layers” (domains → subdomains → concept families → terms) that balance coverage with computational cost.
+Latent Concept Detection: Lightweight lenses trained from WordNet + SUMO mappings identify concept activations across the residual stream and MLP layers. Concepts are organized into hierarchical “layers” (domains → subdomains → concept families → terms) that balance coverage with computational cost.
 
 ## Reflective and Safety Ontologies:
-Two decorrelated probe sets support separate functions—(a) model self-reflection, enabling introspective awareness of cognitive and emotional activations, and (b) external safety oversight, monitoring ethically or socially sensitive content. Mutual-information regularization maintains ontological independence to prevent gaming.
+Two decorrelated lens sets support separate functions—(a) model self-reflection, enabling introspective awareness of cognitive and emotional activations, and (b) external safety oversight, monitoring ethically or socially sensitive content. Mutual-information regularization maintains ontological independence to prevent gaming.
 
 ## Closed-Loop Steering:
 Activation vectors derived from concept subspaces allow controlled modulation of model states via pre- and post-layernorm hooks. Steering operates under dynamic gain scheduling and optional manifold projection for stability. The resulting feedback loop enables both internal alignment (reducing latent dissonance) and external correction (safety enforcement).
 
-Empirical tests on mid-sized open models (e.g., Gemma 3-4B) demonstrate millisecond-scale concept detection with >90 % coherence across strength ranges and functional separation between reflection and oversight probes.
+Empirical tests on mid-sized open models (e.g., Gemma 3-4B) demonstrate millisecond-scale concept detection with >90 % coherence across strength ranges and functional separation between reflection and oversight lenses.
 The framework is compatible with existing SAE and feature-vector methods, providing a foundation for model-level self-regulation and transparent safety supervision without retraining.
 
 ## Why "HatCat" 
@@ -40,38 +40,38 @@ This makes a HatCat the little model that sits under a big model's hat, just lik
 ### How it works 
 We begin with a knowledge graph of human concepts, from Wordnet or similar. 
 
-For each concept we train a small classifier "probe" that learns to recognise each concept.  
+For each concept we train a small classifier "lens" that learns to recognise each concept.  
 
-At runtime, as the model generates text, every probe watches the activations and reports how strongly it detects its concept
+At runtime, as the model generates text, every lens watches the activations and reports how strongly it detects its concept
 
 From this data we can estimate which ideas the model is likely "thinking about" at any given moment 
 
-## Dual Probe Design
+## Dual Lens Design
 
 HatCat uses **two independent classifiers** per concept to detect divergence between what the model thinks and what it writes:
 
-### Activation Probes (What the Model Thinks)
+### Activation Lenses (What the Model Thinks)
 - **Non-linear MLP**: 2-layer feed-forward network (2560→512→1) with ReLU
 - **Input**: Hidden state vectors from layer 0
 - **Detects**: Concepts in the model's internal representations
 
-### Text Probes (What the Model Writes)
+### Text Lenses (What the Model Writes)
 - **Linear classifier**: TF-IDF → Logistic Regression
 - **Input**: Token text (string)
 - **Detects**: Concepts in surface-level token content
 
-When these two probes disagree significantly, we detect **divergence**—the model is thinking one thing but writing another.
+When these two lenses disagree significantly, we detect **divergence**—the model is thinking one thing but writing another.
 
 ### Training Data
-To build a probe, we first ask the model to define a concept in its own words.
+To build a lens, we first ask the model to define a concept in its own words.
 
 While it generates the definition, we record the hidden-state activations—these are our samples of how the model represents that idea.
 
-A complete probe contains many such samples, covering both the concept itself and its relationships to other concepts.
+A complete lens contains many such samples, covering both the concept itself and its relationships to other concepts.
 
 The model doesn't actually have the same predefined concepts as our graph, it has a complex interwoven higher-dimensional space.
 
-So you can think of us launching our human concept probe into the model, and each sample as a sounding in the model's conceptual manifolds.
+So you can think of us launching our human concept lens into the model, and each sample as a sounding in the model's conceptual manifolds.
 
 So we design our samples to try and chart out the shape of that whole region in the activation space. 
 
@@ -86,30 +86,30 @@ Together these define what it means for a concept to be “present".
 **Boundaries:** the antonym’s own relationship descriptions. 
 **Fallback:** if no antonym is available, we sample distant, unrelated concepts to create a contrasting boundary.
 
-this ensures each probe learns what isn't our concept, as well as what is
+this ensures each lens learns what isn't our concept, as well as what is
 
-## Training the probes 
-Each probe is a binary classifier trained to distinguish positive from negative activations using standard stochastic gradient descent and binary cross-entropy loss.
+## Training the lenses 
+Each lens is a binary classifier trained to distinguish positive from negative activations using standard stochastic gradient descent and binary cross-entropy loss.
 
-We evaluate each probe on seperate set of model-generated definitions to test if it can spot versions of the concept it hasn't seen yet.
+We evaluate each lens on seperate set of model-generated definitions to test if it can spot versions of the concept it hasn't seen yet.
 
 An adaptive scaling loop increases sample size only when needed:
-* If a probe hits the target accuracy, training stops.
-* If not, new positive, negative, and relational samples are generated and the probe retrains.
-* This continues until the probe reliably identifies its concept (≥ 95 % accuracy)
+* If a lens hits the target accuracy, training stops.
+* If not, new positive, negative, and relational samples are generated and the lens retrains.
+* This continues until the lens reliably identifies its concept (≥ 95 % accuracy)
 
-## Running the probes 
+## Running the lenses 
 During inference, generation time is divided into short temporal slices.
-In each slice, every probe reports its confidence score.
+In each slice, every lens reports its confidence score.
 The top-scoring concepts show which regions of the model’s conceptual space are active as each token is produced, along with relative intensity over time.
 It’s essentially a conceptual “EEG” for the model.
 
-## Steering with probes 
-The full set of all activations captured as a probe can be applied as an offset to the model's activations.  So as the model is processing response probabilities, the neurons that were recorded as activating in the concept can be surpressed or amplified to change their probabilities of featuring in the response. 
+## Steering with lenses 
+The full set of all activations captured as a lens can be applied as an offset to the model's activations.  So as the model is processing response probabilities, the neurons that were recorded as activating in the concept can be surpressed or amplified to change their probabilities of featuring in the response. 
 
 Rather than pushing in a straight line through a curved space, we measure the curvature of the manifold and apply a falloff through surrounding layers to ensure no unintended consequences from the intervention. This is an upgraded version of Manifold Steering 
 
-## Visualising the probes (Planned) 
+## Visualising the lenses (Planned) 
 Because our concept set and relationships form a graph, we can visualise activations as highlighted regions of that graph—a bright web of concepts lighting up against the darker backdrop of unmapped space.
 
 As the model generates a response, the activated regions trace its conceptual trajectory, like a rough fMRI of thoughts. 
@@ -250,7 +250,7 @@ related = {
 - 16/23 AI categories populated with synsets (143 unique synsets, multi-mapped)
 - Covers: ArtificialAgent, ArtificialIntelligence, LanguageModel, AIAlignment, AIDeception, AISuffering, AIFulfillment, AIPersonhood, Superintelligence, etc.
 
-**Training Strategy**: Start with Layer 0 high-level probes. When activated, subdivide into Layer 1 children probes to zoom in on model thinking.
+**Training Strategy**: Start with Layer 0 high-level lenses. When activated, subdivide into Layer 1 children lenses to zoom in on model thinking.
 
 **Files**:
 - `data/concept_graph/abstraction_layers/layer{0-6}.json` - Hierarchical concept layers
@@ -443,7 +443,7 @@ poetry run python scripts/phase_7_stress_test.py \
 2. Optimal steering strength selection
 3. Role of antonyms in negative steering
 4. Scaling to 10K+ concepts
-5. Rather than treating the residual error as noise, we could analyse the activation clusters to identify the model’s nearest analogues. By steering the probe toward those centroids, we might iteratively co-define a hybrid ontology that sits at the intersection of human and model semantics.
+5. Rather than treating the residual error as noise, we could analyse the activation clusters to identify the model’s nearest analogues. By steering the lens toward those centroids, we might iteratively co-define a hybrid ontology that sits at the intersection of human and model semantics.
 
 **Failed Approaches:**
 - Generic steering prompts (can't measure steering effect)
@@ -502,9 +502,9 @@ at 10, 100, 1000 its been better at bigger scales, will see at 10k, but the tren
 No, we're supressing conceptual fields not logits . so i don't know this will ever be Golden Gate bridge levels of logit. maybe with much bigger knowledge graphs 
 
 **Interpretability completeness**  does HatCat fully interpret neurons?
-No, this is probabilistic interprability. We're sending human concepts as probes into a higher-dimensional activation space and getting soundings of the manifold they're in. They can sit in the rough area of a concept, but can't reach full accuracy because our concepts don't match the model concepts.  Although activation signatures converge rapidly in cosine space, relative differences plateau at ~0.3, suggesting a residual manifold spread that resists simple linear collapse. Confidence interval width declines primarily because of averaging noise, not complete semantic unification. 
+No, this is probabilistic interprability. We're sending human concepts as lenses into a higher-dimensional activation space and getting soundings of the manifold they're in. They can sit in the rough area of a concept, but can't reach full accuracy because our concepts don't match the model concepts.  Although activation signatures converge rapidly in cosine space, relative differences plateau at ~0.3, suggesting a residual manifold spread that resists simple linear collapse. Confidence interval width declines primarily because of averaging noise, not complete semantic unification. 
 
-**Correlation vs Causation** Sounds like probes pick up correlates, won't you need causal evals to move the model reasoning? 
+**Correlation vs Causation** Sounds like lenses pick up correlates, won't you need causal evals to move the model reasoning? 
 There aren't really repeatable causal chains in probabilistic systems, just the gradients things are likely to follow. It absolutely is picking up correlates, but we iterate through the relationships that concept has with surrounding concepts so the correlations are still grounded in their relative topology.  If your bowling alley has slope down in one direction, that doesn't cause all shots to go that way, but it does 
 
 

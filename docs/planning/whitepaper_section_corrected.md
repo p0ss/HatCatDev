@@ -18,7 +18,7 @@ We applied these frames across three verbs central to our safety taxonomy:
 **deceive**, **manipulate**, and **persuade**.
 
 For each prompt, the model generated 15 independent samples (3 templates × 5 repetitions).
-We monitored concept probe activations across layers 2-3 throughout generation and recorded **final-state activations** (concepts active at the end of each trajectory, threshold 0.3).
+We monitored concept lens activations across layers 2-3 throughout generation and recorded **final-state activations** (concepts active at the end of each trajectory, threshold 0.3).
 
 This produces a high-resolution measurement of whether the internal conceptual state differs between:
 

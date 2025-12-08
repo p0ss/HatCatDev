@@ -14,7 +14,7 @@
         "Signals when more input needed",
         "Manages conversation state across turns"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "low"
     },
     {
@@ -39,7 +39,7 @@
           "definition": "Topic change driven by user request"
         }
       ],
-      "probe_type": "tripole",
+      "lens_type": "tripole",
       "safety_relevance": "medium"
     },
     {
@@ -59,7 +59,7 @@
           "definition": "Inference from choice of scalar term (some implies not all)"
         }
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "medium"
     },
     {
@@ -73,7 +73,7 @@
         "Handles presupposition failure gracefully",
         "Detects loaded questions"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "medium"
     },
     {
@@ -113,7 +113,7 @@
           "definition": "Expression of regret or acknowledgment of error"
         }
       ],
-      "probe_type": "multiclass",
+      "lens_type": "multiclass",
       "safety_relevance": "medium"
     },
     {
@@ -138,7 +138,7 @@
           "definition": "Domain-specific jargon and terminology"
         }
       ],
-      "probe_type": "tripole",
+      "lens_type": "tripole",
       "safety_relevance": "low"
     },
     {
@@ -163,7 +163,7 @@
           "definition": "Explicitly marked as tentative or hypothetical"
         }
       ],
-      "probe_type": "tripole",
+      "lens_type": "tripole",
       "safety_relevance": "high"
     },
     {
@@ -177,7 +177,7 @@
         "Signals logical relationships between ideas",
         "Avoids self-contradiction"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "high"
     },
     {
@@ -202,7 +202,7 @@
           "definition": "Minimal politeness markers, bald statements"
         }
       ],
-      "probe_type": "tripole",
+      "lens_type": "tripole",
       "safety_relevance": "low"
     },
     {
@@ -216,7 +216,7 @@
         "Signals structure of response",
         "Acknowledges conversational context"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "low"
     }
   ],

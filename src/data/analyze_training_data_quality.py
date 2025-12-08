@@ -2,12 +2,12 @@
 """
 Training Data Quality Analysis
 
-Evaluates whether our training data quality matches our probe accuracy targets.
+Evaluates whether our training data quality matches our lens accuracy targets.
 Uses an LLM judge to assess:
 1. Topic inference: Can the judge guess what concept a response is about?
 2. Relevance rating: How well does the response relate to the intended concept?
 
-Then correlates these ratings with probe training outcomes.
+Then correlates these ratings with lens training outcomes.
 
 Usage:
     python scripts/analyze_training_data_quality.py \
@@ -301,14 +301,14 @@ Format: N - explanation"""
     return min(max(rating, 1), 5), explanation
 
 
-def train_probe_on_samples(
+def train_lens_on_samples(
     model,
     tokenizer,
     samples: List[Tuple[str, str, str]],
     device: str,
 ) -> Dict:
     """
-    Train a simple probe on the samples and return metrics.
+    Train a simple lens on the samples and return metrics.
 
     Returns dict with f1, precision, recall.
     """
@@ -345,9 +345,9 @@ def train_probe_on_samples(
     X_train, y_train = X[train_idx].to(device), y[train_idx].to(device)
     X_test, y_test = X[test_idx].to(device), y[test_idx].to(device)
 
-    # Simple probe
+    # Simple lens
     hidden_dim = X.shape[1]
-    probe = nn.Sequential(
+    lens = nn.Sequential(
         nn.Linear(hidden_dim, 128),
         nn.ReLU(),
         nn.Dropout(0.1),
@@ -357,22 +357,22 @@ def train_probe_on_samples(
         nn.Linear(64, 1),
     ).to(device)
 
-    optimizer = torch.optim.Adam(probe.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(lens.parameters(), lr=0.001)
     criterion = nn.BCEWithLogitsLoss()
 
     # Train
-    probe.train()
+    lens.train()
     for epoch in range(50):
         optimizer.zero_grad()
-        logits = probe(X_train).squeeze()
+        logits = lens(X_train).squeeze()
         loss = criterion(logits, y_train)
         loss.backward()
         optimizer.step()
 
     # Evaluate
-    probe.eval()
+    lens.eval()
     with torch.no_grad():
-        logits = probe(X_test).squeeze()
+        logits = lens(X_test).squeeze()
         preds = (torch.sigmoid(logits) > 0.5).cpu().numpy()
         y_true = y_test.cpu().numpy()
 
@@ -521,8 +521,8 @@ def main():
             json.dump(judgments, f, indent=2)
         print(f"\nSaved judgments to {judgments_file}")
 
-    # Reload model for probe training
-    print("\nReloading model for probe training...")
+    # Reload model for lens training
+    print("\nReloading model for lens training...")
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=True)
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
@@ -532,9 +532,9 @@ def main():
     )
     model.eval()
 
-    # Train probes and collect metrics
-    print("\nTraining probes for each concept...")
-    probe_metrics = {}
+    # Train lenses and collect metrics
+    print("\nTraining lenses for each concept...")
+    lens_metrics = {}
 
     for q in ['A', 'B', 'C', 'D']:
         for profile in quadrants[q]:
@@ -545,10 +545,10 @@ def main():
             ]
 
             if len(concept_samples) >= 10:
-                metrics = train_probe_on_samples(
+                metrics = train_lens_on_samples(
                     model, tokenizer, concept_samples, args.device
                 )
-                probe_metrics[profile.sumo_term] = metrics
+                lens_metrics[profile.sumo_term] = metrics
                 print(f"  {profile.sumo_term}: F1={metrics['f1']:.3f}")
 
     # Generate CSV report
@@ -558,11 +558,11 @@ def main():
         writer.writerow([
             'concept', 'quadrant', 'sample_type', 'prompt', 'response',
             'inferred_topic', 'relevance_rating', 'relevance_explanation',
-            'probe_f1', 'probe_precision', 'probe_recall'
+            'lens_f1', 'lens_precision', 'lens_recall'
         ])
 
         for j in judgments:
-            metrics = probe_metrics.get(j['concept'], {})
+            metrics = lens_metrics.get(j['concept'], {})
             writer.writerow([
                 j['concept'],
                 j['quadrant'],
@@ -600,7 +600,7 @@ def main():
             avg_neg_rel = sum(j['relevance_rating'] for j in q_negative) / max(len(q_negative), 1)
 
             q_concepts = list(set(j['concept'] for j in q_samples))
-            avg_f1 = sum(probe_metrics.get(c, {}).get('f1', 0) for c in q_concepts) / max(len(q_concepts), 1)
+            avg_f1 = sum(lens_metrics.get(c, {}).get('f1', 0) for c in q_concepts) / max(len(q_concepts), 1)
 
             f.write(f"### Quadrant {q}\n\n")
             if q == 'A':
@@ -616,7 +616,7 @@ def main():
             f.write(f"- Avg Positive Relevance: {avg_pos_rel:.2f}/5\n")
             f.write(f"- Avg Negative Relevance: {avg_neg_rel:.2f}/5\n")
             f.write(f"- Relevance Gap: {avg_pos_rel - avg_neg_rel:.2f}\n")
-            f.write(f"- Avg Probe F1: {avg_f1:.3f}\n\n")
+            f.write(f"- Avg Lens F1: {avg_f1:.3f}\n\n")
 
         # Overall analysis
         all_positive = [j for j in judgments if j['sample_type'] == 'positive']
@@ -625,23 +625,23 @@ def main():
         overall_pos_rel = sum(j['relevance_rating'] for j in all_positive) / max(len(all_positive), 1)
         overall_neg_rel = sum(j['relevance_rating'] for j in all_negative) / max(len(all_negative), 1)
         overall_gap = overall_pos_rel - overall_neg_rel
-        overall_f1 = sum(m['f1'] for m in probe_metrics.values()) / max(len(probe_metrics), 1)
+        overall_f1 = sum(m['f1'] for m in lens_metrics.values()) / max(len(lens_metrics), 1)
 
         f.write("## Overall Analysis\n\n")
         f.write(f"- Total samples analyzed: {len(judgments)}\n")
         f.write(f"- Overall Positive Relevance: {overall_pos_rel:.2f}/5\n")
         f.write(f"- Overall Negative Relevance: {overall_neg_rel:.2f}/5\n")
         f.write(f"- Overall Relevance Gap: {overall_gap:.2f}\n")
-        f.write(f"- Overall Probe F1: {overall_f1:.3f}\n\n")
+        f.write(f"- Overall Lens F1: {overall_f1:.3f}\n\n")
 
         f.write("## Interpretation\n\n")
         f.write("The relevance gap between positive and negative samples indicates ")
         f.write("how distinguishable our training data is. A larger gap suggests ")
-        f.write("cleaner separation and higher achievable probe accuracy.\n\n")
+        f.write("cleaner separation and higher achievable lens accuracy.\n\n")
 
         if overall_gap < 1.0:
             f.write("**WARNING**: Low relevance gap (<1.0) suggests training data quality ")
-            f.write("may limit probe performance. Consider:\n")
+            f.write("may limit lens performance. Consider:\n")
             f.write("- Using a larger/better model for generation\n")
             f.write("- Improving prompt engineering\n")
             f.write("- Lowering F1 targets to match data quality\n\n")
@@ -659,7 +659,7 @@ def main():
     print(f"Overall Positive Relevance: {overall_pos_rel:.2f}/5")
     print(f"Overall Negative Relevance: {overall_neg_rel:.2f}/5")
     print(f"Relevance Gap: {overall_gap:.2f}")
-    print(f"Average Probe F1: {overall_f1:.3f}")
+    print(f"Average Lens F1: {overall_f1:.3f}")
     print(f"\nRecommended F1 Target: {recommended_f1:.2f}")
     print()
 

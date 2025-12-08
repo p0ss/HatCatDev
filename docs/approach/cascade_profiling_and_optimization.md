@@ -11,25 +11,25 @@ Initial per-token cascade performance was **too slow** for real-time generation:
 
 ### Bottleneck Identification
 
-Detailed profiling showed **probe loading is the bottleneck**:
+Detailed profiling showed **lens loading is the bottleneck**:
 
 **Level 1 (19 children loaded)**:
 ```
 Timing Breakdown:
-  1. Inference (existing probes):  26.2%  (17.4ms)
+  1. Inference (existing lenses):  26.2%  (17.4ms)
   2. Parent-child lookup:           0.0%  ( 0.0ms)
   3. Loading children:             71.8%  (47.6ms) ← BOTTLENECK!
-  4. Inference (new probes):        2.0%  ( 1.3ms)
+  4. Inference (new lenses):        2.0%  ( 1.3ms)
   5. Sorting/filtering:             0.0%  ( 0.0ms)
 ```
 
-**Per-Probe Loading Breakdown**:
+**Per-Lens Loading Breakdown**:
 ```
   File I/O (torch.load):           26%  (0.6ms)
   Model creation + state_dict:     59%  (1.5ms)  ← SLOWEST!
   GPU transfer (.to(device)):      16%  (0.4ms)
   ────────────────────────────────────────────
-  Average per probe:              2.5ms
+  Average per lens:              2.5ms
 ```
 
 ### Per-Token Behavior (No Pruning)
@@ -48,11 +48,11 @@ Token 10:  56ms  (children= 18, loaded=437)
 
 Average: 121ms
 Max: 323ms
-Final loaded: 437 probes
+Final loaded: 437 lenses
 ```
 
-**Problem**: Cache grows unbounded (25 → 437 probes), causing:
-1. More probes to run each token (slower inference)
+**Problem**: Cache grows unbounded (25 → 437 lenses), causing:
+1. More lenses to run each token (slower inference)
 2. More children to load (explosive loading time)
 3. No memory freed
 
@@ -61,16 +61,16 @@ Final loaded: 437 probes
 ### Implementation
 
 Added `_aggressive_prune_to_top_k()` method that:
-1. Keeps base layer probes (always)
-2. Keeps ONLY top-K scoring non-base probes
+1. Keeps base layer lenses (always)
+2. Keeps ONLY top-K scoring non-base lenses
 3. Unloads everything else
 
-**Key insight**: We only report top-10 concepts anyway, so keeping 437 probes is wasteful!
+**Key insight**: We only report top-10 concepts anyway, so keeping 437 lenses is wasteful!
 
 ### Configuration
 
 ```python
-manager = DynamicProbeManager(
+manager = DynamicLensManager(
     device="cuda",
     base_layers=[0],
     load_threshold=0.3,
@@ -115,97 +115,97 @@ Token 10:  16ms  (children=  6, loaded= 30, unloaded=231)
 
 Average: 59ms  (vs 108ms baseline)
 Max: 140ms  (vs 323ms baseline)
-Final loaded: 30 probes  (vs 437 baseline)
-Total unloaded: 231 probes
+Final loaded: 30 lenses  (vs 437 baseline)
+Total unloaded: 231 lenses
 ```
 
 **Key improvements**:
-1. Cache stays at 30 probes (controlled growth)
+1. Cache stays at 30 lenses (controlled growth)
 2. Fewer children loaded per token (smaller explosions)
-3. Faster inference (only 30 probes to run)
-4. Memory efficient (constant 30 probes vs 437)
+3. Faster inference (only 30 lenses to run)
+4. Memory efficient (constant 30 lenses vs 437)
 
 ## Recommended Configuration
 
 For **per-token real-time usage**:
 
 ```python
-manager = DynamicProbeManager(
+manager = DynamicLensManager(
     device="cuda",
-    base_layers=[0],           # Only Layer 0 (14 probes)
+    base_layers=[0],           # Only Layer 0 (14 lenses)
     load_threshold=0.3,         # Load children when parent > 0.3
-    keep_top_k=30,              # Keep top 30 scoring probes
+    keep_top_k=30,              # Keep top 30 scoring lenses
     aggressive_pruning=True,    # Enable pruning
-    max_loaded_probes=500,      # Safety limit (shouldn't reach)
+    max_loaded_lenses=500,      # Safety limit (shouldn't reach)
 )
 ```
 
 **Expected performance**:
 - Average: **~59ms per token**
 - 100 tokens: **~5.9s overhead**
-- Memory: **~39MB** (30 probes × 1.3MB)
+- Memory: **~39MB** (30 lenses × 1.3MB)
 
 For **batch/offline analysis** (less time-sensitive):
 
 ```python
-manager = DynamicProbeManager(
+manager = DynamicLensManager(
     device="cuda",
     base_layers=[0, 1],         # Layers 0-1 for better coverage
     load_threshold=0.3,
-    keep_top_k=100,             # More probes for accuracy
+    keep_top_k=100,             # More lenses for accuracy
     aggressive_pruning=True,
-    max_loaded_probes=1000,
+    max_loaded_lenses=1000,
 )
 ```
 
 ## Further Optimization Opportunities
 
-### 1. Probe Caching (Not Implemented)
+### 1. Lens Caching (Not Implemented)
 
-**Problem**: We reload the same probes repeatedly.
+**Problem**: We reload the same lenses repeatedly.
 
 **Example**: "Physical" might get loaded/unloaded 10 times during generation.
 
-**Solution**: Keep LRU cache of probe state_dicts in RAM:
+**Solution**: Keep LRU cache of lens state_dicts in RAM:
 ```python
-# Don't delete probe from memory, just mark as "inactive"
-# Keep probe state_dict in LRU cache
+# Don't delete lens from memory, just mark as "inactive"
+# Keep lens state_dict in LRU cache
 # Reload from cache (no file I/O) when needed again
 ```
 
-**Expected savings**: 26% (eliminate file I/O), reducing per-probe load from 2.5ms → 1.8ms
+**Expected savings**: 26% (eliminate file I/O), reducing per-lens load from 2.5ms → 1.8ms
 
-### 2. Batch Probe Loading (Not Implemented)
+### 2. Batch Lens Loading (Not Implemented)
 
-**Problem**: Loading probes one-by-one in loop.
+**Problem**: Loading lenses one-by-one in loop.
 
 **Solution**: Load all children in parallel or batched:
 ```python
 # Instead of:
 for child in children:
-    load_probe(child)  # 2.5ms each
+    load_lens(child)  # 2.5ms each
 
 # Do:
-load_probes_batch(children)  # Parallel file I/O, single GPU transfer
+load_lenses_batch(children)  # Parallel file I/O, single GPU transfer
 ```
 
 **Expected savings**: 30-40% (parallel I/O + single GPU transfer)
 
 ### 3. Lazy Model Creation (Not Implemented)
 
-**Problem**: Creating new `SimpleMLP()` instance for each probe (59% of load time).
+**Problem**: Creating new `SimpleMLP()` instance for each lens (59% of load time).
 
 **Solution**: Pre-create model instances and just swap state_dicts:
 ```python
 # Pre-create model pool
 self.model_pool = [SimpleMLP(hidden_dim).to(device) for _ in range(100)]
 
-# When loading probe:
+# When loading lens:
 model = self.model_pool[idx]  # Reuse existing model
 model.load_state_dict(state_dict)  # Only load weights
 ```
 
-**Expected savings**: 59% of load time, reducing 2.5ms → 1.0ms per probe
+**Expected savings**: 59% of load time, reducing 2.5ms → 1.0ms per lens
 
 ### 4. Lower Load Threshold (Implemented, Tunable)
 
@@ -219,24 +219,24 @@ model.load_state_dict(state_dict)  # Only load weights
 
 ### 5. Smaller Base Layers (Already Optimal)
 
-**Current**: `base_layers=[0]` (14 probes)
+**Current**: `base_layers=[0]` (14 lenses)
 
 Already optimal! Layer 0 provides broad coverage with minimal overhead.
 
 ## Summary
 
 **Profiling revealed**:
-- Probe loading is 68-94% of cascade time
+- Lens loading is 68-94% of cascade time
 - Model creation (59%) + File I/O (26%) are the main culprits
-- Per-probe average: 2.5ms
+- Per-lens average: 2.5ms
 
 **Aggressive pruning (implemented)**:
 - **1.83x speedup** (108ms → 59ms per token)
-- Keeps cache at constant size (30 probes)
+- Keeps cache at constant size (30 lenses)
 - 45% reduction in 100-token overhead (10.8s → 5.9s)
 
 **Further optimizations (not implemented, ROI estimated)**:
-1. **Probe caching**: Save ~26% (eliminate file I/O)
+1. **Lens caching**: Save ~26% (eliminate file I/O)
 2. **Batch loading**: Save ~30-40% (parallel I/O)
 3. **Lazy model creation**: Save ~59% of remaining load time
 4. **Combined**: Could achieve **~2-3x additional speedup**
@@ -253,11 +253,11 @@ Already optimal! Layer 0 provides broad coverage with minimal overhead.
 - `scripts/test_aggressive_pruning.py` - Compare pruning strategies
 
 **Implementation**:
-- `src/monitoring/dynamic_probe_manager.py`:
+- `src/monitoring/dynamic_lens_manager.py`:
   - `_aggressive_prune_to_top_k()` - Aggressive top-K pruning (NEW)
   - `keep_top_k` parameter (NEW)
   - `aggressive_pruning` parameter (NEW)
 
 **Documentation**:
 - `docs/cascade_profiling_and_optimization.md` - This file
-- `docs/dynamic_probe_loading.md` - Architecture overview
+- `docs/dynamic_lens_loading.md` - Architecture overview

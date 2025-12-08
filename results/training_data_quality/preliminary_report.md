@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-Analysis of training data reveals significant output quality issues, but **output quality ≠ activation quality**. We train probes on activations, not decoded outputs. Prior experiments show ~75% correlation between prompt and output activations, meaning the model's internal representations are more stable than its outputs suggest.
+Analysis of training data reveals significant output quality issues, but **output quality ≠ activation quality**. We train lenses on activations, not decoded outputs. Prior experiments show ~75% correlation between prompt and output activations, meaning the model's internal representations are more stable than its outputs suggest.
 
 **Key insight**: A model can activate "Vodka" concepts internally while producing garbled output about "Whip". The residual stream captures intent, not just decoded tokens.
 
@@ -124,13 +124,13 @@ Improve prompt clarity to ensure the model activates the right concepts:
 ## Next Steps
 
 1. Run LLM judge evaluation (requires ANTHROPIC_API_KEY) focusing on **prompt relevance**
-2. Correlate activation patterns with probe F1 (not just output quality)
+2. Correlate activation patterns with lens F1 (not just output quality)
 3. Test F1=0.85 target with falloff to 0.75
 4. Validate that sibling refinement improves discrimination within this ceiling
 
 ## Conclusion
 
-Output quality analysis reveals ~20-40% degenerate outputs, but this overstates the impact on probe training. Since we train on activations (not outputs), and activations show ~75% stability vs outputs, the effective training signal quality is higher than output quality suggests.
+Output quality analysis reveals ~20-40% degenerate outputs, but this overstates the impact on lens training. Since we train on activations (not outputs), and activations show ~75% stability vs outputs, the effective training signal quality is higher than output quality suggests.
 
 **Revised recommendation**: F1 target of **0.85** (not 0.95) with falloff to **0.75** for difficult concepts. This balances realistic expectations with the understanding that activation quality exceeds output quality.
 

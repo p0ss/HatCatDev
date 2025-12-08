@@ -1,8 +1,8 @@
 """
-Meld Submission Format - Unified training data for probe+graft pairs.
+Meld Submission Format - Unified training data for lens+graft pairs.
 
 Every concept that gets added to a BE needs:
-1. A probe to detect when the concept is active
+1. A lens to detect when the concept is active
 2. A graft to add a dedicated neuron for the concept
 3. Evidence that both work correctly
 
@@ -10,7 +10,7 @@ The Meld submission format captures all of this in a single structure
 that can go through the approval pipeline.
 
 The format is designed to:
-- Support both probe training and graft training
+- Support both lens training and graft training
 - Capture contrastive pairs (positive/negative examples)
 - Include validation data separate from training data
 - Track provenance and approval status
@@ -38,7 +38,7 @@ class SubmissionStatus(Enum):
 
 class EvidenceType(Enum):
     """Types of evidence that can support a submission."""
-    PROBE_METRICS = "probe_metrics"       # F1, accuracy, etc.
+    LENS_METRICS = "lens_metrics"       # F1, accuracy, etc.
     GRAFT_METRICS = "graft_metrics"       # Training loss, delta magnitude
     ACTIVATION_SAMPLES = "activation_samples"  # Example activations
     CONTRASTIVE_PAIRS = "contrastive_pairs"    # A/B comparisons
@@ -49,7 +49,7 @@ class EvidenceType(Enum):
 @dataclass
 class TrainingExample:
     """
-    A single training example for probe/graft training.
+    A single training example for lens/graft training.
 
     Examples are labeled and can include metadata about source.
     """
@@ -133,12 +133,12 @@ class EvidenceItem:
 @dataclass
 class MeldSubmission:
     """
-    A complete Meld submission for a concept probe+graft pair.
+    A complete Meld submission for a concept lens+graft pair.
 
     This is the unit of approval in the Meld protocol:
     - Submit this to request adding a concept to the BE
     - Goes through review by ASK authority
-    - If approved, both probe and graft are trained and applied
+    - If approved, both lens and graft are trained and applied
     """
     # Identity
     submission_id: str
@@ -178,8 +178,8 @@ class MeldSubmission:
     tribe_id: str = ""
 
     # Results (populated after training)
-    probe_path: Optional[str] = None
-    probe_metrics: Dict[str, float] = field(default_factory=dict)
+    lens_path: Optional[str] = None
+    lens_metrics: Dict[str, float] = field(default_factory=dict)
     graft_path: Optional[str] = None
     graft_metrics: Dict[str, float] = field(default_factory=dict)
 
@@ -269,8 +269,8 @@ class MeldSubmission:
             "created_at": self.created_at,
             "created_by": self.created_by,
             "tribe_id": self.tribe_id,
-            "probe_path": self.probe_path,
-            "probe_metrics": self.probe_metrics,
+            "lens_path": self.lens_path,
+            "lens_metrics": self.lens_metrics,
             "graft_path": self.graft_path,
             "graft_metrics": self.graft_metrics,
             "checksum": self.compute_checksum(),

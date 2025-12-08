@@ -86,8 +86,8 @@
         "06319029.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Adverb",
@@ -156,8 +156,8 @@
         "06319157.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Advertising",
@@ -264,8 +264,8 @@
         "07248320.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Agriculture",
@@ -358,8 +358,8 @@
         "01739814.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "AIAbuse",
@@ -432,8 +432,8 @@
         "00845299.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "AIControlProblem",
@@ -530,8 +530,8 @@
         "03096960.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Airway",
@@ -600,8 +600,8 @@
         "08493961.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Alga",
@@ -765,8 +765,8 @@
         "01404495.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Alveolus",
@@ -840,8 +840,8 @@
         "05528395.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Arriving",
@@ -900,8 +900,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Arthropod",
@@ -1002,8 +1002,8 @@
         "01767661.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "AtmosphericRegion",
@@ -1090,8 +1090,8 @@
         "11456760.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Atrophy",
@@ -1169,8 +1169,8 @@
         "07427060.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Attack",
@@ -1261,8 +1261,8 @@
         "01119169.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "AutoImmuneDisorder",
@@ -1301,8 +1301,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Automobile",
@@ -1427,8 +1427,8 @@
         "13248598.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "BacterialAgent",
@@ -1468,8 +1468,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Bacterium",
@@ -1628,8 +1628,8 @@
         "01342269.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Bear",
@@ -1718,8 +1718,8 @@
         "02131942.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Bed",
@@ -1818,8 +1818,8 @@
         "02818832.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Biology",
@@ -1898,8 +1898,8 @@
         "06037666.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "BodyOfWater",
@@ -1939,8 +1939,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "BodyVessel",
@@ -2029,8 +2029,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Book",
@@ -2193,8 +2193,8 @@
         "02695079.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Bowing",
@@ -2259,8 +2259,8 @@
         "07275713.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Brain",
@@ -2346,8 +2346,8 @@
         "05481095.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "BronchialDuct",
@@ -2423,8 +2423,8 @@
         "05531511.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Burying",
@@ -2490,8 +2490,8 @@
         "01234625.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Calculating",
@@ -2652,8 +2652,8 @@
         "00619889.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Canine",
@@ -2826,8 +2826,8 @@
         "08895623.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Character",
@@ -2998,8 +2998,8 @@
         "03281821.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "CheckInService",
@@ -3072,8 +3072,8 @@
         "00966152.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Chemistry",
@@ -3152,8 +3152,8 @@
         "06051925.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Church",
@@ -3192,8 +3192,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "CigarOrCigarette",
@@ -3268,8 +3268,8 @@
         "03030433.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "City",
@@ -3447,8 +3447,8 @@
         "08504151.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "CityDistrict",
@@ -3523,8 +3523,8 @@
         "08540532.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Classifying",
@@ -3687,8 +3687,8 @@
         "00152018.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "ClearWeather",
@@ -3767,8 +3767,8 @@
         "14523090.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Clothing",
@@ -3858,8 +3858,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Coffee",
@@ -3908,8 +3908,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "CognitiveAgent",
@@ -4080,8 +4080,8 @@
         "09493374.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Colloid",
@@ -4174,8 +4174,8 @@
         "14588646.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Committing",
@@ -4265,8 +4265,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "CommunicationDevice",
@@ -4309,8 +4309,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Comparing",
@@ -4402,8 +4402,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "ComposingMusic",
@@ -4484,8 +4484,8 @@
         "00939452.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "CompoundSubstance",
@@ -4658,8 +4658,8 @@
         "05440207.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Confining",
@@ -4766,8 +4766,8 @@
         "00417131.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Constructing",
@@ -4924,8 +4924,8 @@
         "01149868.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Container",
@@ -5013,8 +5013,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Cooking",
@@ -5183,8 +5183,8 @@
         "00243918.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Coral",
@@ -5267,8 +5267,8 @@
         "01916187.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Coronation",
@@ -5334,8 +5334,8 @@
         "07453638.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Crushing",
@@ -5402,8 +5402,8 @@
         "01594362.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "CultivatedLandArea",
@@ -5502,8 +5502,8 @@
         "03453443.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Cutting",
@@ -5666,8 +5666,8 @@
         "00317727.s"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Debating",
@@ -5761,8 +5761,8 @@
         "07134706.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Declaring",
@@ -5947,8 +5947,8 @@
         "00179676.s"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "DefensiveManeuver",
@@ -6023,8 +6023,8 @@
         "01127795.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "DetectionSignal",
@@ -6063,8 +6063,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "DevelopmentalAttribute",
@@ -6139,8 +6139,8 @@
         "15145586.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "DiagnosticProcess",
@@ -6301,8 +6301,8 @@
         "00642045.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "DigitalData",
@@ -6343,8 +6343,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Directing",
@@ -6436,8 +6436,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Disappearing",
@@ -6482,8 +6482,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Discovering",
@@ -6558,8 +6558,8 @@
         "00729109.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "DiseaseOrSyndrome",
@@ -6651,8 +6651,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Diving",
@@ -6725,8 +6725,8 @@
         "07466415.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "DomesticCat",
@@ -6826,8 +6826,8 @@
         "09591676.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "DramaticActing",
@@ -6906,8 +6906,8 @@
         "02697725.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Drawing",
@@ -6989,8 +6989,8 @@
         "01582645.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Driving",
@@ -7096,8 +7096,8 @@
         "01841591.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Ear",
@@ -7171,8 +7171,8 @@
         "05320899.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "EarthTremor",
@@ -7242,8 +7242,8 @@
         "07429276.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "EducationalProcess",
@@ -7334,8 +7334,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Election",
@@ -7389,8 +7389,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "ElementalSubstance",
@@ -7480,8 +7480,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Elephant",
@@ -7558,8 +7558,8 @@
         "02503517.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Engineering",
@@ -7634,8 +7634,8 @@
         "02809692.a"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Explosion",
@@ -7708,8 +7708,8 @@
         "11498679.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "FacialExpression",
@@ -7749,8 +7749,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Falling",
@@ -7834,8 +7834,8 @@
         "01258302.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Feline",
@@ -7982,8 +7982,8 @@
         "02755301.a"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Fern",
@@ -8150,8 +8150,8 @@
         "11545350.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "FinancialInstrument",
@@ -8242,8 +8242,8 @@
         "13271094.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Flying",
@@ -8338,8 +8338,8 @@
         "00505010.r"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Foot",
@@ -8415,8 +8415,8 @@
         "13650225.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Forest",
@@ -8505,8 +8505,8 @@
         "08438533.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "FormalMeeting",
@@ -8589,8 +8589,8 @@
         "07143624.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "FreshWaterArea",
@@ -8673,8 +8673,8 @@
         "09717233.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "FruitOrVegetable",
@@ -8856,8 +8856,8 @@
         "02729345.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "GameShot",
@@ -8953,8 +8953,8 @@
         "03618339.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "GasMixture",
@@ -9025,8 +9025,8 @@
         "15055633.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Greeting",
@@ -9095,8 +9095,8 @@
         "06630017.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "GroupOfPeople",
@@ -9184,8 +9184,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Hair",
@@ -9358,8 +9358,8 @@
         "02902535.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Hamster",
@@ -9425,8 +9425,8 @@
         "02343187.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Handle",
@@ -9519,8 +9519,8 @@
         "02788148.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "HerbaceousPlant",
@@ -9559,8 +9559,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Hiring",
@@ -9613,8 +9613,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Hormone",
@@ -9790,8 +9790,8 @@
         "05407119.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Horn",
@@ -9874,8 +9874,8 @@
         "03994614.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Hunting",
@@ -9974,8 +9974,8 @@
         "01142203.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Imagining",
@@ -10072,8 +10072,8 @@
         "05767733.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Injuring",
@@ -10247,8 +10247,8 @@
         "00403783.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Interpreting",
@@ -10357,8 +10357,8 @@
         "00588221.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Island",
@@ -10533,8 +10533,8 @@
         "08740729.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Jumping",
@@ -10636,8 +10636,8 @@
         "01869465.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Key",
@@ -10704,8 +10704,8 @@
         "06424869.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "LaborStriking",
@@ -10786,8 +10786,8 @@
         "02412647.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Landing",
@@ -10888,8 +10888,8 @@
         "01978850.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "LandTransitway",
@@ -11009,8 +11009,8 @@
         "04206948.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "LanguageModel",
@@ -11093,8 +11093,8 @@
         "06414372.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Leaving",
@@ -11159,8 +11159,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Library",
@@ -11221,8 +11221,8 @@
         "07977870.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Lichen",
@@ -11337,8 +11337,8 @@
         "12987652.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "LinearEquation",
@@ -11401,8 +11401,8 @@
         "06670137.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Livestock",
@@ -11441,8 +11441,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Lung",
@@ -11516,8 +11516,8 @@
         "05387544.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "MalarialPlasmodium",
@@ -11578,8 +11578,8 @@
         "01424420.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Managing",
@@ -11661,8 +11661,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Manufacture",
@@ -11827,8 +11827,8 @@
         "03134595.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "ManufacturedProduct",
@@ -11867,8 +11867,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "MedicalScience",
@@ -11961,8 +11961,8 @@
         "06043075.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Medicine",
@@ -12051,8 +12051,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Microscope",
@@ -12123,8 +12123,8 @@
         "02711780.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "MilitaryManeuver",
@@ -12197,8 +12197,8 @@
         "02853218.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "MilitaryOrganization",
@@ -12312,8 +12312,8 @@
         "08028999.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Missile",
@@ -12354,8 +12354,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Mollusk",
@@ -12512,8 +12512,8 @@
         "01940736.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Moss",
@@ -12658,8 +12658,8 @@
         "11537327.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "MoveableHoliday",
@@ -12699,8 +12699,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Murder",
@@ -12792,8 +12792,8 @@
         "10298343.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Mushroom",
@@ -12921,8 +12921,8 @@
         "12998349.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "MusicalConducting",
@@ -12996,8 +12996,8 @@
         "01733213.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Nation",
@@ -13171,8 +13171,8 @@
         "00605430.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Negotiating",
@@ -13256,8 +13256,8 @@
         "02050688.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "NerveCell",
@@ -13347,8 +13347,8 @@
         "05469240.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Noun",
@@ -13441,8 +13441,8 @@
         "06317862.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Nutrient",
@@ -13515,8 +13515,8 @@
         "15054862.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "ObjectiveNorm",
@@ -13587,8 +13587,8 @@
         "05830832.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "OrganismProcess",
@@ -13757,8 +13757,8 @@
         "00212377.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "OrganizationalMerging",
@@ -13831,8 +13831,8 @@
         "01238424.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "OvercastWeather",
@@ -13909,8 +13909,8 @@
         "14524198.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Pain",
@@ -14081,8 +14081,8 @@
         "05724694.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Panda",
@@ -14143,8 +14143,8 @@
         "02510455.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Perspiring",
@@ -14227,8 +14227,8 @@
         "14405774.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Physics",
@@ -14307,8 +14307,8 @@
         "06090869.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "PhysiologicalResponseToEmotionalState",
@@ -14347,8 +14347,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "PlaneAngleMeasure",
@@ -14493,8 +14493,8 @@
         "11467996.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Planning",
@@ -14659,8 +14659,8 @@
         "00928371.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "PlantSubstance",
@@ -14699,8 +14699,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "PoliticalProcess",
@@ -14883,8 +14883,8 @@
         "00122106.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Precipitation",
@@ -14971,8 +14971,8 @@
         "11457496.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Predicting",
@@ -15113,8 +15113,8 @@
         "00248249.r"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "PreparedFood",
@@ -15298,8 +15298,8 @@
         "07571547.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Publication",
@@ -15445,8 +15445,8 @@
         "00968038.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Racing",
@@ -15589,8 +15589,8 @@
         "01086103.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "RadiatingElectromagnetic",
@@ -15661,8 +15661,8 @@
         "11441077.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "RadiatingNuclear",
@@ -15727,8 +15727,8 @@
         "11421822.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "RadiatingSound",
@@ -15819,8 +15819,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "RailroadTrack",
@@ -15901,8 +15901,8 @@
         "03671272.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Raping",
@@ -15970,8 +15970,8 @@
         "02567519.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Reading",
@@ -16030,8 +16030,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Recording",
@@ -16110,8 +16110,8 @@
         "03727274.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "RegulatoryProcess",
@@ -16284,8 +16284,8 @@
         "00665771.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "ReligiousProcess",
@@ -16376,8 +16376,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Remembering",
@@ -16544,8 +16544,8 @@
         "00794533.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Residence",
@@ -16629,8 +16629,8 @@
         "08559155.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Restating",
@@ -16713,8 +16713,8 @@
         "00959178.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Returning",
@@ -16811,8 +16811,8 @@
         "00076193.r"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Room",
@@ -16901,8 +16901,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Running",
@@ -16985,8 +16985,8 @@
         "01901447.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "SaltWaterArea",
@@ -17067,8 +17067,8 @@
         "09345932.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "School",
@@ -17137,8 +17137,8 @@
         "08276720.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Seating",
@@ -17213,8 +17213,8 @@
         "01543998.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Seed",
@@ -17311,8 +17311,8 @@
         "11683989.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Sharing",
@@ -17379,8 +17379,8 @@
         "02295208.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Sheep",
@@ -17493,8 +17493,8 @@
         "02415971.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Shrugging",
@@ -17568,8 +17568,8 @@
         "07273924.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Sign",
@@ -17658,8 +17658,8 @@
         "06793231.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Smoking",
@@ -17734,8 +17734,8 @@
         "01198101.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Snorkeling",
@@ -17798,8 +17798,8 @@
         "01963795.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Soil",
@@ -17872,8 +17872,8 @@
         "14842992.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Speaking",
@@ -17960,8 +17960,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Spore",
@@ -18067,8 +18067,8 @@
         "11549138.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "SportsFacility",
@@ -18153,8 +18153,8 @@
         "04292313.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "SportsGround",
@@ -18235,8 +18235,8 @@
         "04038109.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Stating",
@@ -18427,8 +18427,8 @@
         "00750345.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Stealing",
@@ -18510,8 +18510,8 @@
         "09838295.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Stimulant",
@@ -18600,8 +18600,8 @@
         "07770869.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Stomach",
@@ -18675,8 +18675,8 @@
         "05395690.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "StreamWaterArea",
@@ -18814,8 +18814,8 @@
         "09118817.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "StringInstrument",
@@ -18946,8 +18946,8 @@
         "02682407.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "SubjectiveAssessmentAttribute",
@@ -19037,8 +19037,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Sunday",
@@ -19115,8 +19115,8 @@
         "15163797.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Surfing",
@@ -19190,8 +19190,8 @@
         "01948077.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "SwitchDevice",
@@ -19292,8 +19292,8 @@
         "02826589.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "TakingIll",
@@ -19366,8 +19366,8 @@
         "00088209.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "TakingOff",
@@ -19444,8 +19444,8 @@
         "02014553.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "TeamSport",
@@ -19484,8 +19484,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "TellingALie",
@@ -19558,8 +19558,8 @@
         "00834259.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "TextureAttribute",
@@ -19720,8 +19720,8 @@
         "01263924.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "TherapeuticProcess",
@@ -19890,8 +19890,8 @@
         "00097179.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Throwing",
@@ -19973,8 +19973,8 @@
         "01507792.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Tissue",
@@ -20151,8 +20151,8 @@
         "04972603.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Tooth",
@@ -20255,8 +20255,8 @@
         "05307521.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Toxin",
@@ -20313,8 +20313,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Transfer",
@@ -20414,8 +20414,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Translating",
@@ -20491,8 +20491,8 @@
         "00960562.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Transportation",
@@ -20583,8 +20583,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Trespassing",
@@ -20660,8 +20660,8 @@
         "02570684.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Vacationing",
@@ -20729,8 +20729,8 @@
         "15137890.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "VegetableOil",
@@ -20783,8 +20783,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "ViolentContest",
@@ -20875,8 +20875,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "ViralAgent",
@@ -20916,8 +20916,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Virus",
@@ -21074,8 +21074,8 @@
         "01331659.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "WakingUp",
@@ -21148,8 +21148,8 @@
         "01259773.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Walking",
@@ -21308,8 +21308,8 @@
         "00283568.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Wedding",
@@ -21377,8 +21377,8 @@
         "07452074.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Wind",
@@ -21492,8 +21492,8 @@
         "11431754.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "WindInstrument",
@@ -21644,8 +21644,8 @@
         "07998206.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Wine",
@@ -21737,8 +21737,8 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Wing",
@@ -21807,8 +21807,8 @@
         "02151625.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "WoodArtifact",
@@ -21873,8 +21873,8 @@
         "14942762.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Worm",
@@ -22031,8 +22031,8 @@
         "01922303.n"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Wrestling",
@@ -22115,8 +22115,8 @@
         "01504699.v"
       ]
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   },
   {
     "sumo_term": "Writing",
@@ -22206,7 +22206,7 @@
       },
       "divergent_synsets": []
     },
-    "probe_grade": null,
-    "probe_f1": null
+    "lens_grade": null,
+    "lens_f1": null
   }
 ]

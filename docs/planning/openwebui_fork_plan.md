@@ -289,7 +289,7 @@ services:
     ports:
       - "8765:8765"
     volumes:
-      - ./probe_packs:/app/probe_packs
+      - ./lens_packs:/app/lens_packs
       - ./concept_packs:/app/concept_packs
     environment:
       - CUDA_VISIBLE_DEVICES=0

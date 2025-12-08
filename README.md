@@ -1,12 +1,12 @@
 # HatCat (Current Capabilities)
 
-This document reflects what actually ships in `src/` today: how concepts are built, how probes are trained, and how to run real-time monitoring/steering.
+This document reflects what actually ships in `src/` today: how concepts are built, how lenses are trained, and how to run real-time monitoring/steering.
 
 HatCat implements the **HAT** (Headspace Ambient Transducer) - a neural implant that reads a model's internal activations and transduces them into stable concept scores. The companion **CAT** (Conjoined Adversarial Tomograph) provides oversight by detecting divergence between internal state and external behaviour. Together with MAP (below), these form the foundation for building legible, governable AI systems. Specifications for a complete architecture supporting recursive self-improving aligned agentic civilisation can be found in `docs/specification/`.
 
 ## MINDMELD Architectural Protocol (MAP)
 
-HatCat's concept and probe pack system implements the MINDMELD Architectural Protocol (MAP), a lightweight protocol for concept-aware endpoints that enables interoperability between different concept probe systems. MAP provides a standardized way for systems to declare which concept packs they speak, expose probes for those packs, and publish conceptual diffs over time. HatCat's concept packs (model-agnostic ontology specifications) and probe packs (model-specific trained classifiers) are MAP-compliant with globally unique `spec_id` and `probe_pack_id` identifiers, structured `probe_index` mappings, and standardized output schemas. This means HatCat probes can be discovered, loaded, and queried by any MAP-compatible client, and conceptual learning can be shared across different systems using the same concept space. See `docs/specification/MINDMELD_ARCHITECTURAL_PROTOCOL.md` for the full specification.
+HatCat's concept and lens pack system implements the MINDMELD Architectural Protocol (MAP), a lightweight protocol for concept-aware endpoints that enables interoperability between different concept lens systems. MAP provides a standardized way for systems to declare which concept packs they speak, expose lenses for those packs, and publish conceptual diffs over time. HatCat's concept packs (model-agnostic ontology specifications) and lens packs (model-specific trained classifiers) are MAP-compliant with globally unique `spec_id` and `lens_pack_id` identifiers, structured `lens_index` mappings, and standardized output schemas. This means HatCat lenses can be discovered, loaded, and queried by any MAP-compatible client, and conceptual learning can be shared across different systems using the same concept space. See `docs/specification/MINDMELD_ARCHITECTURAL_PROTOCOL.md` for the full specification.
 
 ## Core Modules
 
@@ -20,7 +20,7 @@ HatCat's concept and probe pack system implements the MINDMELD Architectural Pro
 
 ### Training (`src/training`)
 - **Prompt synthesis**: `data_generation.py` and `sumo_data_generation.py` generate definitional, relational, and neutral prompts (WordNet distance ≥5) for each concept.
-- **Binary classifiers**: `classifier.py` hosts the minimal MLP for concept probes.
+- **Binary classifiers**: `classifier.py` hosts the minimal MLP for concept lenses.
 - **Activation extraction**: `activations.py` averages residual/MLP layers during short generations.
 - **SUMO classifier API** (`sumo_classifiers.py`): wraps the entire pipeline—load per-layer concepts, synthesize data, extract activations, train classifiers, and save results. Exposed via `scripts/train_sumo_classifiers.py`.
 
@@ -49,7 +49,7 @@ poetry run python src/build_sumo_wordnet_layers_v5.py \
 This script parses Merge.kif, merges custom AI ontologies, constructs hyponym-based intermediate layers, and writes `layer0.json` through `layer6.json`.
 
 ### 2. Train SUMO Concept Classifiers
-Train/update binary probes for the SUMO layers:
+Train/update binary lenses for the SUMO layers:
 ```bash
 poetry run python scripts/train_sumo_classifiers.py \
   --layers 0 1 2 \
@@ -75,7 +75,7 @@ poetry run python scripts/sumo_temporal_detection.py \
 - `--quiet` suppresses the textual report for automated runs.
 - JSON output matches the structure expected by downstream analysis/visualization (one entry per token with the top-k concepts, probabilities, and layer tags).
 
-### 4. Self-Concept / Meta Awareness Probe
+### 4. Self-Concept / Meta Awareness Lens
 `scripts/test_self_concept_monitoring.py` automates a battery of introspective prompts, logging how the SUMO monitor responds:
 ```bash
 poetry run python scripts/test_self_concept_monitoring.py \
@@ -170,7 +170,7 @@ poetry run python scripts/install_concept_pack.py \
 
 Concept packs include:
 - Custom SUMO/WordNet definitions (.kif format)
-- Trained probe weights
+- Trained lens weights
 - Metadata (version, dependencies, coverage stats)
 - Installation scripts
 

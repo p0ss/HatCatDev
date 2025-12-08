@@ -56,7 +56,7 @@ for prompt in prompts:
 - Strong signal (no dilution)
 - Can detect concept appearing/disappearing during generation
 - Temporal resolution for dissonance measurement
-- Matches how we'll USE the probes (per-token during generation)
+- Matches how we'll USE the lenses (per-token during generation)
 
 ## Two Critical Questions
 
@@ -146,7 +146,7 @@ classifier.train(projected, labels)
 
 **Costs**:
 - Additional preprocessing (PCA fitting)
-- Need to store subspace per concept (~10KB extra per probe)
+- Need to store subspace per concept (~10KB extra per lens)
 - Slightly more complex inference (project → classify)
 
 **Is it worth it?**
@@ -280,7 +280,7 @@ Expected accuracy: 0.90-0.95 (good!)
 Model: SimpleMLP(2560 → 128 → 64 → 1)
 Parameters: ~330K parameters
 Training time: ~2-5s per concept
-Memory: ~1.3MB per probe
+Memory: ~1.3MB per lens
 ```
 
 **After (PCA 50-dim)**:
@@ -288,7 +288,7 @@ Memory: ~1.3MB per probe
 Model: SimpleMLP(50 → 128 → 64 → 1) + PCA projection
 Parameters: ~9K parameters (36x fewer!)
 Training time: ~0.5-1s per concept (3-5x faster)
-Memory: ~350KB per probe + ~10KB for PCA (4x smaller)
+Memory: ~350KB per lens + ~10KB for PCA (4x smaller)
 ```
 
 ## Implementation Plan
@@ -364,28 +364,28 @@ def is_exact_concept_match(token_text, concept):
     return 0
 ```
 
-For text probes, labeling is even simpler:
+For text lenses, labeling is even simpler:
 ```python
-# Text probe trains on prompt TEXT, not tokens
+# Text lens trains on prompt TEXT, not tokens
 # So no per-token labeling needed!
-text_probe.train(prompts, labels)  # One label per prompt (easier)
+text_lens.train(prompts, labels)  # One label per prompt (easier)
 ```
 
-## Critical Realization: Text vs Activation Probes Differ!
+## Critical Realization: Text vs Activation Lenses Differ!
 
-**Activation Probes**:
+**Activation Lenses**:
 - Train per-token (need temporal resolution)
 - Use hidden states (continuous vectors)
 - PCA might help (high-dim → low-dim)
 
-**Text Probes**:
+**Text Lenses**:
 - Train per-prompt (already discrete)
 - Use token text (sparse TF-IDF)
 - PCA not applicable (already low-dim after TF-IDF)
 
 **This means**:
-- Per-token training: **Activation probes only**
-- Text probes: Keep current approach (per-prompt is correct!)
+- Per-token training: **Activation lenses only**
+- Text lenses: Keep current approach (per-prompt is correct!)
 
 ## Summary
 

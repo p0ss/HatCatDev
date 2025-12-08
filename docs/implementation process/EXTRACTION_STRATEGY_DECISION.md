@@ -1,11 +1,11 @@
 # Extraction Strategy Decision: Combined-20 (Prompt+Generation)
 
 **Date**: 2025-11-20
-**Status**: ✓ APPROVED - Default for all probe training
+**Status**: ✓ APPROVED - Default for all lens training
 
 ## Executive Summary
 
-After comprehensive experimentation and analysis, we are adopting **combined-20 (prompt+generation extraction)** as the default training strategy for HatCat probe training.
+After comprehensive experimentation and analysis, we are adopting **combined-20 (prompt+generation extraction)** as the default training strategy for HatCat lens training.
 
 **Key Result**: Combined-20 achieves 2x training data at zero additional computational cost by extracting activations from both prompt processing and generation phases.
 
@@ -56,7 +56,7 @@ While combined-20 shows a 2.8% drop on generation-only tests (0.947 vs 0.975), t
 
 Variance across test conditions: **0.0004 vs 0.0018** (4.5x more stable)
 
-Combined-20 probes work consistently well regardless of extraction method, indicating they've learned fundamental concept representations rather than distribution-specific patterns.
+Combined-20 lenses work consistently well regardless of extraction method, indicating they've learned fundamental concept representations rather than distribution-specific patterns.
 
 ### 4. Bonus Feature
 
@@ -127,8 +127,8 @@ def extract_prompt_and_generation(model, tokenizer, prompts):
 ### Migration Path
 
 1. Update `src/training/sumo_classifiers.py::extract_activations()` to use combined extraction
-2. Retrain all existing probe packs with new strategy
-3. Document change in probe pack metadata
+2. Retrain all existing lens packs with new strategy
+3. Document change in lens pack metadata
 4. Benchmark: Verify no performance regression on existing test sets
 
 ## Experimental Validation
@@ -172,7 +172,7 @@ Even at 30 samples, prompts are diverse:
 - Category relationship prompts
 - WordNet relationship prompts
 
-This diversity contributes to the robustness of combined-20 probes.
+This diversity contributes to the robustness of combined-20 lenses.
 
 ## Future Considerations
 

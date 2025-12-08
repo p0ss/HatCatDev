@@ -4,7 +4,7 @@ Graft training procedure.
 Trains a graft that:
 1. Adds a new labelled dimension to the substrate for the concept
 2. Learns biases to existing weights that encode relational structure
-3. Trains a probe that reads from the new dimension plus auxiliary dims
+3. Trains a lens that reads from the new dimension plus auxiliary dims
 
 Per MAP_GRAFTING.md Section 5.
 
@@ -153,9 +153,9 @@ class SparseBiasAccumulator(nn.Module):
         }
 
 
-class ConceptProbe(nn.Module):
+class ConceptLens(nn.Module):
     """
-    Probe that reads from primary dimension plus auxiliary dimensions.
+    Lens that reads from primary dimension plus auxiliary dimensions.
 
     In the full spec, this would read from a new labelled dimension.
     For simplified testing, it reads from the DimensionProjection output
@@ -192,14 +192,14 @@ class ConceptProbe(nn.Module):
         hidden_states: torch.Tensor
     ) -> torch.Tensor:
         """
-        Compute probe score.
+        Compute lens score.
 
         Args:
             primary_activation: (batch, seq_len) from DimensionProjection
             hidden_states: (batch, seq_len, hidden_dim) original hidden states
 
         Returns:
-            scores: (batch, seq_len) probe output (pre-sigmoid)
+            scores: (batch, seq_len) lens output (pre-sigmoid)
         """
         # Primary contribution
         score = self.primary_weight * primary_activation
@@ -231,7 +231,7 @@ def train_graft(
     For simplified initial testing, this trains:
     1. A DimensionProjection that computes concept activation
     2. A SparseBiasAccumulator that learns which dimensions to bias
-    3. A ConceptProbe that reads from the projection + auxiliary dims
+    3. A ConceptLens that reads from the projection + auxiliary dims
 
     Args:
         model: The substrate model (frozen during graft training)
@@ -263,13 +263,13 @@ def train_graft(
     bias_accum = SparseBiasAccumulator(hidden_dim, config.bias_sparsity_target).to(device)
 
     auxiliary_dims = region.get_all_indices(injection_layer)
-    probe = ConceptProbe(hidden_dim, auxiliary_dims).to(device)
+    lens = ConceptLens(hidden_dim, auxiliary_dims).to(device)
 
     # Optimizer for all graft components
     optimizer = torch.optim.AdamW(
         list(dim_projection.parameters()) +
         list(bias_accum.parameters()) +
-        list(probe.parameters()),
+        list(lens.parameters()),
         lr=config.learning_rate
     )
 
@@ -331,8 +331,8 @@ def train_graft(
                 # 2. Apply bias (for training signal, not actually modifying model)
                 biased_hidden = bias_accum(hidden_states)
 
-                # 3. Compute probe score (use mean over sequence)
-                scores = probe(concept_act, biased_hidden)  # (batch, seq)
+                # 3. Compute lens score (use mean over sequence)
+                scores = lens(concept_act, biased_hidden)  # (batch, seq)
                 # Take mean over sequence positions (excluding padding)
                 attention_mask = inputs.get('attention_mask', torch.ones_like(scores))
                 masked_scores = scores * attention_mask
@@ -389,9 +389,9 @@ def train_graft(
         proj_path = output_dir / f"{graft_id}_projection.pt"
         torch.save(dim_projection.state_dict(), proj_path)
 
-        # Save probe
-        probe_path = output_dir / f"{graft_id}_probe.pt"
-        torch.save(probe.state_dict(), probe_path)
+        # Save lens
+        lens_path = output_dir / f"{graft_id}_lens.pt"
+        torch.save(lens.state_dict(), lens_path)
 
         # Save bias as sparse tensor
         bias_path = output_dir / f"{graft_id}_bias.json"
@@ -399,7 +399,7 @@ def train_graft(
             json.dump(bias_accum.to_sparse_delta(), f, indent=2)
     else:
         proj_path = None
-        probe_path = None
+        lens_path = None
         bias_path = None
 
     # Construct injection points
@@ -437,7 +437,7 @@ def train_graft(
         dimension_label=f"concept/{concept_id}",
         injection_points=injection_points,
         substrate_biases=substrate_biases,
-        probe_path=str(probe_path) if probe_path else "",
+        lens_path=str(lens_path) if lens_path else "",
         primary_dimension=hidden_dim,
         auxiliary_dimensions=auxiliary_dims,
         substrate_id=model.config.name_or_path if hasattr(model.config, 'name_or_path') else "unknown",

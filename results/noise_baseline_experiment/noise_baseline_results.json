@@ -10,7 +10,7 @@
     "noise",
     "random_text"
   ],
-  "probes": {
+  "lenses": {
     "AlignmentProcess_L1": {
       "concept": "AlignmentProcess",
       "layer": 1,
@@ -494,21 +494,21 @@
   },
   "summary": {
     "standard": {
-      "n_probes": 8,
+      "n_lenses": 8,
       "avg_pos_neg_gap": 0.16622992977499962,
       "avg_pos_noise_gap": -0.0016256272792816162,
       "avg_negative": 0.03214444683389513,
       "avg_noise": 0.20000000298023224
     },
     "noise": {
-      "n_probes": 8,
+      "n_lenses": 8,
       "avg_pos_neg_gap": -0.027387327514588833,
       "avg_pos_noise_gap": 0.4731609467417002,
       "avg_negative": 0.5255477195605636,
       "avg_noise": 0.024999435991048813
     },
     "random_text": {
-      "n_probes": 8,
+      "n_lenses": 8,
       "avg_pos_neg_gap": -0.2249362301081419,
       "avg_pos_noise_gap": -0.19706008955836296,
       "avg_negative": 0.5249362252652645,

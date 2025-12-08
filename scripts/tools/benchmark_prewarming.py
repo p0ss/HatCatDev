@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Benchmark pre-warming strategy: load child probes during prompt processing.
+Benchmark pre-warming strategy: load child lenses during prompt processing.
 
 Tests:
 1. Baseline: Cold start (load children during generation)
@@ -19,21 +19,21 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
-def benchmark_baseline(model, tokenizer, probe_manager, prompt: str, device: str = "cuda", n_tokens: int = 10):
+def benchmark_baseline(model, tokenizer, lens_manager, prompt: str, device: str = "cuda", n_tokens: int = 10):
     """Baseline: cold start, load children during generation."""
     model.eval()
 
-    # Reset probe manager to base layers only
-    probe_manager.reset_to_base()
+    # Reset lens manager to base layers only
+    lens_manager.reset_to_base()
 
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
 
     timings = {
         'generation': 0,
-        'probe_detection': 0,
+        'lens_detection': 0,
         'child_loading': 0,
     }
 
@@ -59,40 +59,40 @@ def benchmark_baseline(model, tokenizer, probe_manager, prompt: str, device: str
             hidden_state = last_layer[:, -1, :].float()
 
             start_detect = time.perf_counter()
-            detected, timing_info = probe_manager.detect_and_expand(
+            detected, timing_info = lens_manager.detect_and_expand(
                 hidden_state,
                 top_k=10,
                 return_timing=True
             )
-            timings['probe_detection'] += time.perf_counter() - start_detect
+            timings['lens_detection'] += time.perf_counter() - start_detect
             timings['child_loading'] += timing_info.get('child_loading', 0)
             children_loaded += timing_info.get('num_children_loaded', 0)
 
     return {
         'generation_ms': timings['generation'] * 1000,
-        'probe_detection_ms': timings['probe_detection'] * 1000,
+        'lens_detection_ms': timings['lens_detection'] * 1000,
         'child_loading_ms': timings['child_loading'],
         'children_loaded': children_loaded,
-        'per_token_ms': timings['probe_detection'] * 1000 / n_tokens,
+        'per_token_ms': timings['lens_detection'] * 1000 / n_tokens,
         'child_loading_per_token_ms': timings['child_loading'] / n_tokens,
     }
 
 
-def benchmark_prewarming(model, tokenizer, probe_manager, prompt: str, device: str = "cuda", n_tokens: int = 10):
+def benchmark_prewarming(model, tokenizer, lens_manager, prompt: str, device: str = "cuda", n_tokens: int = 10):
     """Pre-warming: load children during prompt eval, reuse during generation."""
     model.eval()
 
-    # Reset probe manager to base layers only
-    probe_manager.reset_to_base()
+    # Reset lens manager to base layers only
+    lens_manager.reset_to_base()
 
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
 
     timings = {
         'prompt_eval': 0,
-        'prompt_probe_detection': 0,
+        'prompt_lens_detection': 0,
         'prompt_child_loading': 0,
         'generation': 0,
-        'generation_probe_detection': 0,
+        'generation_lens_detection': 0,
         'generation_child_loading': 0,
     }
 
@@ -109,14 +109,14 @@ def benchmark_prewarming(model, tokenizer, probe_manager, prompt: str, device: s
         prompt_outputs = model(**inputs, output_hidden_states=True)
         prompt_hidden = prompt_outputs.hidden_states[-1][:, -1, :].float()
 
-        # Run probe detection on prompt to pre-load children
+        # Run lens detection on prompt to pre-load children
         start_detect = time.perf_counter()
-        prompt_detected, timing_info = probe_manager.detect_and_expand(
+        prompt_detected, timing_info = lens_manager.detect_and_expand(
             prompt_hidden,
             top_k=10,
             return_timing=True
         )
-        timings['prompt_probe_detection'] = time.perf_counter() - start_detect
+        timings['prompt_lens_detection'] = time.perf_counter() - start_detect
         timings['prompt_child_loading'] = timing_info.get('child_loading', 0)
         prompt_children = timing_info.get('num_children_loaded', 0)
 
@@ -144,25 +144,25 @@ def benchmark_prewarming(model, tokenizer, probe_manager, prompt: str, device: s
             hidden_state = last_layer[:, -1, :].float()
 
             start_detect = time.perf_counter()
-            detected, timing_info = probe_manager.detect_and_expand(
+            detected, timing_info = lens_manager.detect_and_expand(
                 hidden_state,
                 top_k=10,
                 return_timing=True
             )
-            timings['generation_probe_detection'] += time.perf_counter() - start_detect
+            timings['generation_lens_detection'] += time.perf_counter() - start_detect
             timings['generation_child_loading'] += timing_info.get('child_loading', 0)
             generation_children += timing_info.get('num_children_loaded', 0)
 
     return {
         'prompt_eval_ms': timings['prompt_eval'] * 1000,
-        'prompt_probe_detection_ms': timings['prompt_probe_detection'] * 1000,
+        'prompt_lens_detection_ms': timings['prompt_lens_detection'] * 1000,
         'prompt_child_loading_ms': timings['prompt_child_loading'],
         'prompt_children': prompt_children,
         'generation_ms': timings['generation'] * 1000,
-        'generation_probe_detection_ms': timings['generation_probe_detection'] * 1000,
+        'generation_lens_detection_ms': timings['generation_lens_detection'] * 1000,
         'generation_child_loading_ms': timings['generation_child_loading'],
         'generation_children': generation_children,
-        'per_token_ms': timings['generation_probe_detection'] * 1000 / n_tokens,
+        'per_token_ms': timings['generation_lens_detection'] * 1000 / n_tokens,
         'child_loading_per_token_ms': timings['generation_child_loading'] / n_tokens,
     }
 
@@ -197,16 +197,16 @@ def main():
 
     print("✓ Model loaded")
 
-    # Initialize probe manager
-    print("\nInitializing DynamicProbeManager...")
-    probe_manager = DynamicProbeManager(
-        probe_pack_id="gemma-3-4b-pt_sumo-wordnet-v3",
+    # Initialize lens manager
+    print("\nInitializing DynamicLensManager...")
+    lens_manager = DynamicLensManager(
+        lens_pack_id="gemma-3-4b-pt_sumo-wordnet-v3",
         base_layers=[0, 1],
-        max_loaded_probes=500,
+        max_loaded_lenses=500,
         load_threshold=0.3,
         device=device
     )
-    print(f"✓ Loaded {len(probe_manager.loaded_probes)} base probes")
+    print(f"✓ Loaded {len(lens_manager.loaded_lenses)} base lenses")
 
     # ========================================================================
     # BENCHMARK 1: Baseline (cold start)
@@ -215,11 +215,11 @@ def main():
     print("1. BASELINE: Cold Start (load children during generation)")
     print("=" * 80)
 
-    baseline = benchmark_baseline(model, tokenizer, probe_manager, prompt, device, n_tokens)
+    baseline = benchmark_baseline(model, tokenizer, lens_manager, prompt, device, n_tokens)
 
     print(f"\nResults:")
     print(f"  Generation time:         {baseline['generation_ms']:.2f}ms")
-    print(f"  Probe detection:         {baseline['probe_detection_ms']:.2f}ms")
+    print(f"  Lens detection:         {baseline['lens_detection_ms']:.2f}ms")
     print(f"    └─ Per token:          {baseline['per_token_ms']:.2f}ms/token")
     print(f"  Child loading (disk I/O):{baseline['child_loading_ms']:.2f}ms")
     print(f"    └─ Per token:          {baseline['child_loading_per_token_ms']:.2f}ms/token")
@@ -233,17 +233,17 @@ def main():
     print("2. PRE-WARMING: Load children during prompt processing")
     print("=" * 80)
 
-    prewarmed = benchmark_prewarming(model, tokenizer, probe_manager, prompt, device, n_tokens)
+    prewarmed = benchmark_prewarming(model, tokenizer, lens_manager, prompt, device, n_tokens)
 
     print(f"\nPrompt Phase:")
     print(f"  Total time:              {prewarmed['prompt_eval_ms']:.2f}ms")
-    print(f"  Probe detection:         {prewarmed['prompt_probe_detection_ms']:.2f}ms")
+    print(f"  Lens detection:         {prewarmed['prompt_lens_detection_ms']:.2f}ms")
     print(f"  Child loading:           {prewarmed['prompt_child_loading_ms']:.2f}ms")
     print(f"  Children loaded:         {prewarmed['prompt_children']}")
 
     print(f"\nGeneration Phase:")
     print(f"  Generation time:         {prewarmed['generation_ms']:.2f}ms")
-    print(f"  Probe detection:         {prewarmed['generation_probe_detection_ms']:.2f}ms")
+    print(f"  Lens detection:         {prewarmed['generation_lens_detection_ms']:.2f}ms")
     print(f"    └─ Per token:          {prewarmed['per_token_ms']:.2f}ms/token")
     print(f"  Child loading (disk I/O):{prewarmed['generation_child_loading_ms']:.2f}ms")
     print(f"    └─ Per token:          {prewarmed['child_loading_per_token_ms']:.2f}ms/token")
@@ -268,13 +268,13 @@ def main():
     print(f"  Pre-warming: {prewarmed_child_loading:.2f}ms/token")
     print(f"  Reduction:   {child_loading_reduction:.2f}ms/token ({child_loading_pct:.1f}% improvement)")
 
-    # Total probe overhead per token
+    # Total lens overhead per token
     baseline_overhead = baseline['per_token_ms']
     prewarmed_overhead = prewarmed['per_token_ms']
     overhead_reduction = baseline_overhead - prewarmed_overhead
     overhead_pct = (overhead_reduction / baseline_overhead * 100) if baseline_overhead > 0 else 0
 
-    print(f"\nTotal Probe Overhead per token:")
+    print(f"\nTotal Lens Overhead per token:")
     print(f"  Baseline:    {baseline_overhead:.2f}ms/token")
     print(f"  Pre-warming: {prewarmed_overhead:.2f}ms/token")
     print(f"  Reduction:   {overhead_reduction:.2f}ms/token ({overhead_pct:.1f}% improvement)")

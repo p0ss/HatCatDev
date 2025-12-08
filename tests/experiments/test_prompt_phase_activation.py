@@ -28,7 +28,7 @@ import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 # Diverse test prompts covering different domains
@@ -63,7 +63,7 @@ TEST_PROMPTS = [
 def capture_prompt_phase_activations(
     model,
     tokenizer,
-    probe_manager,
+    lens_manager,
     prompt: str,
     threshold: float = 0.1,
     top_k_concepts: int = 10,
@@ -106,8 +106,8 @@ def capture_prompt_phase_activations(
             # Convert to float32 to match classifier dtype
             hidden_state_f32 = hidden_state.float()
 
-            # Use DynamicProbeManager to detect concepts
-            detected, timing = probe_manager.detect_and_expand(
+            # Use DynamicLensManager to detect concepts
+            detected, timing = lens_manager.detect_and_expand(
                 hidden_state_f32,
                 top_k=top_k_concepts,
                 return_timing=True
@@ -199,7 +199,7 @@ def analyze_concept_emergence(timeline):
 def compare_prompt_vs_generation_activations(
     model,
     tokenizer,
-    probe_manager,
+    lens_manager,
     prompt: str,
     max_gen_tokens: int = 20,
     threshold: float = 0.1,
@@ -215,7 +215,7 @@ def compare_prompt_vs_generation_activations(
     prompt_result = capture_prompt_phase_activations(
         model=model,
         tokenizer=tokenizer,
-        probe_manager=probe_manager,
+        lens_manager=lens_manager,
         prompt=prompt,
         threshold=threshold,
         device=device
@@ -252,7 +252,7 @@ def compare_prompt_vs_generation_activations(
             hidden_state = last_layer[:, -1, :]
             hidden_state_f32 = hidden_state.float()
 
-            detected, _ = probe_manager.detect_and_expand(
+            detected, _ = lens_manager.detect_and_expand(
                 hidden_state_f32,
                 top_k=10,
                 return_timing=True
@@ -320,10 +320,10 @@ def main():
                        help='Model name (default: gemma-3-4b-pt)')
     parser.add_argument('--base-layer', type=int, default=3,
                        help='Base SUMO layer to keep loaded (default: 3)')
-    parser.add_argument('--max-probes', type=int, default=500,
-                       help='Max probes to keep loaded (default: 500)')
+    parser.add_argument('--max-lenses', type=int, default=500,
+                       help='Max lenses to keep loaded (default: 500)')
     parser.add_argument('--load-threshold', type=float, default=0.3,
-                       help='Threshold to load child probes (default: 0.3)')
+                       help='Threshold to load child lenses (default: 0.3)')
     parser.add_argument('--detection-threshold', type=float, default=0.1,
                        help='Min probability to record concept (default: 0.1)')
     parser.add_argument('--max-gen-tokens', type=int, default=20,
@@ -366,17 +366,17 @@ def main():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    # Initialize DynamicProbeManager
-    print("\nInitializing DynamicProbeManager...")
-    probe_manager = DynamicProbeManager(
-        probe_pack_id="gemma-3-4b-pt_sumo-wordnet-v2",
+    # Initialize DynamicLensManager
+    print("\nInitializing DynamicLensManager...")
+    lens_manager = DynamicLensManager(
+        lens_pack_id="gemma-3-4b-pt_sumo-wordnet-v2",
         base_layers=[args.base_layer],
-        max_loaded_probes=args.max_probes,
+        max_loaded_lenses=args.max_lenses,
         load_threshold=args.load_threshold,
         device=args.device
     )
 
-    print(f"  Initial probes loaded: {len(probe_manager.loaded_probes)}")
+    print(f"  Initial lenses loaded: {len(lens_manager.loaded_lenses)}")
 
     print("\n" + "=" * 80)
     print("RUNNING TESTS")
@@ -393,7 +393,7 @@ def main():
             prompt_result = capture_prompt_phase_activations(
                 model=model,
                 tokenizer=tokenizer,
-                probe_manager=probe_manager,
+                lens_manager=lens_manager,
                 prompt=prompt,
                 threshold=args.detection_threshold,
                 device=args.device
@@ -414,7 +414,7 @@ def main():
             comparison = compare_prompt_vs_generation_activations(
                 model=model,
                 tokenizer=tokenizer,
-                probe_manager=probe_manager,
+                lens_manager=lens_manager,
                 prompt=prompt,
                 max_gen_tokens=args.max_gen_tokens,
                 threshold=args.detection_threshold,

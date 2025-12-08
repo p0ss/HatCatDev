@@ -1,24 +1,24 @@
 `torch_dtype` is deprecated! Use `dtype` instead!
 🔬 Token Timeline Visualization Demo
 ================================================================================
-Loading model and probes...
+Loading model and lenses...
 Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.69s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.46s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.50s/it]
-✓ Loaded probe pack: gemma-3-4b-pt_sumo-wordnet-v1 v1.0.0
+✓ Loaded lens pack: gemma-3-4b-pt_sumo-wordnet-v1 v1.0.0
   Model: google/gemma-3-4b-pt
   Concept pack: sumo-wordnet-v1 v1.0.0
   Layers: [0, 1, 2, 3, 4, 5], Types: ['activation', 'text']
-Using probe pack: gemma-3-4b-pt_sumo-wordnet-v1
+Using lens pack: gemma-3-4b-pt_sumo-wordnet-v1
 
 ✓ Loaded metadata for 121512 concepts across 7 layers
   Parent-child relationships: 660
 
-Initializing DynamicProbeManager...
+Initializing DynamicLensManager...
   Base layers: [1]
   Load threshold: 0.5
-  Max probes in memory: 500
+  Max lenses in memory: 500
   Inferred hidden_dim: 2560
   Preallocating model pool (100 models)...
-✓ Base layers loaded: 276 probes
+✓ Base layers loaded: 276 lenses
 
 Prompt: Mountains are formed when
 

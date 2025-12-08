@@ -235,7 +235,7 @@ def main():
     print("   - Better initial learning from diverse samples")
 
     print("\n✓ RECOMMENDED: Start with min=20 or min=30")
-    print("  Expected outcome: Similar or faster total time, better probe quality")
+    print("  Expected outcome: Similar or faster total time, better lens quality")
 
     print("\n⚠️  Need empirical validation:")
     print("  Run Layer 0 or Layer 1 with min=20 to measure actual iteration reduction")

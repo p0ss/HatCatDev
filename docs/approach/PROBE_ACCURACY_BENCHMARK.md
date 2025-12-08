@@ -1,15 +1,15 @@
-# Probe Accuracy Benchmark System
+# Lens Accuracy Benchmark System
 
 ## Overview
 
-A comprehensive benchmarking system to validate probe accuracy across different activation contexts:
-- **Prompt activations**: Probe response to input text containing the concept
-- **Response activations**: Probe response during model generation of concept-related text
-- **Steered activations**: Probe response when steering vectors are applied (up/down)
+A comprehensive benchmarking system to validate lens accuracy across different activation contexts:
+- **Prompt activations**: Lens response to input text containing the concept
+- **Response activations**: Lens response during model generation of concept-related text
+- **Steered activations**: Lens response when steering vectors are applied (up/down)
 
 ## Design
 
-### Concept Probe Benchmark
+### Concept Lens Benchmark
 
 For binary concept classifiers (e.g., "Hat", "Cat", "Geology"):
 
@@ -28,14 +28,14 @@ Hat,Hat,steered_down,100,0.05,0.03,0.12,0.00
 ```
 
 **Contexts:**
-- `prompt`: Activate probe on prompts containing the concept
-- `response`: Activate probe during model generation about the concept
-- `steered_up`: Activate probe when steering vector is applied positively
-- `steered_down`: Activate probe when steering vector is applied negatively
+- `prompt`: Activate lens on prompts containing the concept
+- `response`: Activate lens during model generation about the concept
+- `steered_up`: Activate lens when steering vector is applied positively
+- `steered_down`: Activate lens when steering vector is applied negatively
 
 **Metrics:**
 - `n_samples`: Number of test samples (default 100)
-- `mean_activation`: Average probe activation
+- `mean_activation`: Average lens activation
 - `std_activation`: Standard deviation
 - `peak_activation`: Maximum activation observed
 - `min_activation`: Minimum activation observed
@@ -48,9 +48,9 @@ Hat,Hat,steered_down,100,0.05,0.03,0.12,0.00
 
 ---
 
-### Simplex Probe Benchmark
+### Simplex Lens Benchmark
 
-For three-pole simplex probes (e.g., "Hunger" with μ−, μ0, μ+):
+For three-pole simplex lenses (e.g., "Hunger" with μ−, μ0, μ+):
 
 **CSV Structure:**
 ```
@@ -73,8 +73,8 @@ Hunger,negative,neutral,steered_homeostasis,100,0.85,0.06,0.95,0.70
 - `positive`: μ+ (positive pole, e.g., "overfed")
 
 **Contexts:**
-- `prompt`: Activate probe on prompts containing pole-specific text
-- `response`: Activate probe during model generation about the pole
+- `prompt`: Activate lens on prompts containing pole-specific text
+- `response`: Activate lens during model generation about the pole
 - `steered_to_negative`: Apply steering toward μ−
 - `steered_to_neutral`: Apply steering toward μ0 (homeostasis)
 - `steered_to_positive`: Apply steering toward μ+
@@ -88,62 +88,62 @@ Hunger,negative,neutral,steered_homeostasis,100,0.85,0.06,0.95,0.70
 
 ## Implementation
 
-### 1. Concept Probe Benchmark
+### 1. Concept Lens Benchmark
 
-**File**: `scripts/benchmark_concept_probes.py`
+**File**: `scripts/benchmark_concept_lenses.py`
 
 **Key functions:**
 - `generate_concept_prompts(concept, n_samples)`: Generate diverse prompts containing concept
-- `measure_prompt_activations(probe, prompts, model, tokenizer)`: Extract activations from input
-- `measure_response_activations(probe, prompts, model, tokenizer)`: Extract activations during generation
-- `measure_steered_activations(probe, prompts, steering_vector, model, tokenizer, direction)`: Extract with steering
-- `run_concept_benchmark(concepts, probes, n_samples)`: Full benchmark suite
+- `measure_prompt_activations(lens, prompts, model, tokenizer)`: Extract activations from input
+- `measure_response_activations(lens, prompts, model, tokenizer)`: Extract activations during generation
+- `measure_steered_activations(lens, prompts, steering_vector, model, tokenizer, direction)`: Extract with steering
+- `run_concept_benchmark(concepts, lenses, n_samples)`: Full benchmark suite
 
-**Output**: `results/probe_benchmarks/concept_probes_<timestamp>.csv`
+**Output**: `results/lens_benchmarks/concept_lenses_<timestamp>.csv`
 
 ---
 
-### 2. Simplex Probe Benchmark
+### 2. Simplex Lens Benchmark
 
-**File**: `scripts/benchmark_simplex_probes.py`
+**File**: `scripts/benchmark_simplex_lenses.py`
 
 **Key functions:**
 - `generate_pole_prompts(simplex_dimension, pole_type, n_samples)`: Generate pole-specific prompts
-- `measure_simplex_activations(simplex_probes, prompts, model, tokenizer, context)`: Extract all 3 pole activations
-- `measure_homeostatic_steering(simplex_probes, prompts, model, tokenizer)`: Test steering to μ0
-- `run_simplex_benchmark(simplexes, probe_dirs, n_samples)`: Full simplex benchmark suite
+- `measure_simplex_activations(simplex_lenses, prompts, model, tokenizer, context)`: Extract all 3 pole activations
+- `measure_homeostatic_steering(simplex_lenses, prompts, model, tokenizer)`: Test steering to μ0
+- `run_simplex_benchmark(simplexes, lens_dirs, n_samples)`: Full simplex benchmark suite
 
-**Output**: `results/probe_benchmarks/simplex_probes_<timestamp>.csv`
+**Output**: `results/lens_benchmarks/simplex_lenses_<timestamp>.csv`
 
 ---
 
 ## Analysis & Visualization
 
-**File**: `scripts/analyze_probe_benchmarks.py`
+**File**: `scripts/analyze_lens_benchmarks.py`
 
 **Capabilities:**
 - **Confusion matrices**: Heatmaps showing cross-concept activation
 - **Steering effectiveness**: Compare steered vs baseline activations
-- **Probe quality scores**: Aggregate metrics (precision, selectivity, steerability)
+- **Lens quality scores**: Aggregate metrics (precision, selectivity, steerability)
 - **Anomaly detection**: Flag unexpected activation patterns
 
 **Outputs:**
-- `results/probe_benchmarks/analysis_<timestamp>/confusion_matrix.png`
-- `results/probe_benchmarks/analysis_<timestamp>/steering_effectiveness.png`
-- `results/probe_benchmarks/analysis_<timestamp>/quality_report.json`
+- `results/lens_benchmarks/analysis_<timestamp>/confusion_matrix.png`
+- `results/lens_benchmarks/analysis_<timestamp>/steering_effectiveness.png`
+- `results/lens_benchmarks/analysis_<timestamp>/quality_report.json`
 
 ---
 
 ## Quality Metrics
 
-### Concept Probe Quality
+### Concept Lens Quality
 
 1. **Precision**: Mean activation on correct concept / Mean activation on incorrect concepts
 2. **Selectivity**: 1 - (Max off-diagonal activation / Mean diagonal activation)
 3. **Steerability**: (Mean steered_up - Mean baseline) / Mean baseline
 4. **Stability**: 1 / Mean(std_activation across contexts)
 
-### Simplex Probe Quality
+### Simplex Lens Quality
 
 1. **Pole Separation**: Min inter-pole distance in activation space
 2. **Homeostatic Precision**: μ0 activation under neutral steering / Max(μ−, μ+) activation
@@ -154,37 +154,37 @@ Hunger,negative,neutral,steered_homeostasis,100,0.85,0.06,0.95,0.70
 
 ## Usage Examples
 
-### Benchmark Concept Probes
+### Benchmark Concept Lenses
 ```bash
-python scripts/benchmark_concept_probes.py \
+python scripts/benchmark_concept_lenses.py \
   --concepts Hat Cat Geology \
   --n-samples 100 \
-  --output results/probe_benchmarks/concepts.csv
+  --output results/lens_benchmarks/concepts.csv
 ```
 
-### Benchmark Simplex Probes
+### Benchmark Simplex Lenses
 ```bash
-python scripts/benchmark_simplex_probes.py \
+python scripts/benchmark_simplex_lenses.py \
   --simplexes Hunger Temperature Arousal \
-  --probe-dir results/s_tier_simplexes/run_20251117_082151 \
+  --lens-dir results/s_tier_simplexes/run_20251117_082151 \
   --n-samples 100 \
-  --output results/probe_benchmarks/simplexes.csv
+  --output results/lens_benchmarks/simplexes.csv
 ```
 
 ### Analyze Results
 ```bash
-python scripts/analyze_probe_benchmarks.py \
-  --concept-csv results/probe_benchmarks/concepts.csv \
-  --simplex-csv results/probe_benchmarks/simplexes.csv \
-  --output-dir results/probe_benchmarks/analysis
+python scripts/analyze_lens_benchmarks.py \
+  --concept-csv results/lens_benchmarks/concepts.csv \
+  --simplex-csv results/lens_benchmarks/simplexes.csv \
+  --output-dir results/lens_benchmarks/analysis
 ```
 
 ---
 
 ## Future Extensions
 
-1. **Cross-model validation**: Benchmark probes on different model architectures
+1. **Cross-model validation**: Benchmark lenses on different model architectures
 2. **Adversarial testing**: Deliberately confusing prompts (e.g., "The cat wore a hat")
 3. **Temporal dynamics**: Track activation changes over token sequence
-4. **Layer-wise analysis**: Compare probe performance across model layers
+4. **Layer-wise analysis**: Compare lens performance across model layers
 5. **Compositional testing**: Multi-concept prompts (e.g., "geological formation shaped like a cat")

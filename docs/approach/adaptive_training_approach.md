@@ -2,19 +2,19 @@
 
 ## Overview
 
-HatCat uses an adaptive training system that dynamically adjusts sample sizes based on concept difficulty. Instead of using a fixed number of training samples for all concepts, the system starts with minimal data and incrementally adds more samples only when needed, balancing training efficiency with probe quality.
+HatCat uses an adaptive training system that dynamically adjusts sample sizes based on concept difficulty. Instead of using a fixed number of training samples for all concepts, the system starts with minimal data and incrementally adds more samples only when needed, balancing training efficiency with lens quality.
 
 ## Core Principles
 
 ### 1. **Start Small, Scale As Needed**
 - Begin with minimal samples (10: 5 positive + 5 negative)
-- Only generate additional data when probes fail to graduate
+- Only generate additional data when lenses fail to graduate
 - Easy concepts graduate quickly with minimal computational cost
 - Difficult concepts receive more training data automatically
 
 ### 2. **Independent Graduation**
-Each probe type (activation and text) graduates independently when it achieves:
-- Target F1 score (≥0.95 for activation probes)
+Each lens type (activation and text) graduates independently when it achieves:
+- Target F1 score (≥0.95 for activation lenses)
 - Low overfitting (train-test gap ≤10%)
 - Minimum iteration stability (≥3 iterations)
 
@@ -29,7 +29,7 @@ Validation requirements relax progressively across cycles:
 | 3 | 90 (45+45) | RELAXED | C+ | 0.40 |
 | 4 | 120 (60+60) | RELAXED | C+ | 0.40 |
 
-**Validation grades** are based on probe calibration:
+**Validation grades** are based on lens calibration:
 - **A-grade**: target_rank ≤ 10, others ≥ 5.0, score ≥ 0.40
 - **B-grade**: target_rank ≤ 15, others ≥ 3.0, score ≥ 0.25
 - **C-grade**: target_rank ≤ 20, others ≥ 1.5, score ≥ 0.15
@@ -41,7 +41,7 @@ Validation requirements relax progressively across cycles:
 ┌─────────────────────────────────────────────┐
 │ Cycle 0: Generate 10 samples (5+5)          │
 │ ↓                                            │
-│ Train probe on 10 samples                    │
+│ Train lens on 10 samples                    │
 │ ↓                                            │
 │ Test F1 ≥ 0.95 & gap ≤ 0.10 & iter ≥ 3?    │
 │ ├─ Yes → Validate calibration               │
@@ -62,7 +62,7 @@ not fully graduated.
 
 ## Stuck Detection & Auto-Escalation
 
-The system detects when a probe is "stuck" (unable to graduate after 3 iterations within a cycle) and automatically requests more training data:
+The system detects when a lens is "stuck" (unable to graduate after 3 iterations within a cycle) and automatically requests more training data:
 
 ```python
 stuck_without_data = cycle_iterations >= 3 and not graduated
@@ -150,7 +150,7 @@ For concepts with sparse or missing WordNet synsets, the system supports manual 
 - **Trainer**: `src/training/dual_adaptive_trainer.py`
 - **Main training script**: `src/training/sumo_classifiers.py`
 - **Data generation**: `src/training/sumo_data_generation.py`
-- **Validation**: `src/training/probe_validation.py`
+- **Validation**: `src/training/lens_validation.py`
 
 ## Configuration Parameters
 
@@ -159,15 +159,15 @@ For concepts with sparse or missing WordNet synsets, the system supports manual 
 DualAdaptiveTrainer(
     max_iterations=50,                    # Max iterations per cycle
 
-    # Activation probe config
+    # Activation lens config
     activation_initial_samples=10,        # Cycle 0 samples (5+5)
     activation_first_increment=20,        # Cycle 1 increment (10+10)
     activation_subsequent_increment=30,   # Cycle 2+ increment (15+15)
     activation_max_samples=200,           # Hard limit
     activation_target_accuracy=0.95,      # Graduation threshold
 
-    # Text probe config (similar structure)
-    train_text_probes=False,              # Usually disabled
+    # Text lens config (similar structure)
+    train_text_lenses=False,              # Usually disabled
 
     # Validation
     validation_mode='falloff',            # or 'loose', 'strict'

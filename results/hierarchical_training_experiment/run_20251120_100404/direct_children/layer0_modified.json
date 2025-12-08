@@ -8,7 +8,7 @@
         "sumo_term": "Physical",
         "sumo_depth": 1,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "Object",
@@ -39,7 +39,7 @@
         "sumo_term": "SetOrClass",
         "sumo_depth": 2,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "Class",
@@ -67,7 +67,7 @@
         "sumo_term": "Quantity",
         "sumo_depth": 2,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "Number",
@@ -98,7 +98,7 @@
         "sumo_term": "PhysicalSystem",
         "sumo_depth": 2,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [],
         "synset_count": 0,
@@ -123,7 +123,7 @@
         "sumo_term": "Proposition",
         "sumo_depth": 2,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "Graph",
@@ -160,7 +160,7 @@
         "sumo_term": "Entity",
         "sumo_depth": 0,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "Physical",
@@ -188,7 +188,7 @@
         "sumo_term": "ContentBearingPhysical",
         "sumo_depth": 2,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "ContentBearingObject",
@@ -218,7 +218,7 @@
         "sumo_term": "Process",
         "sumo_depth": 2,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "ContentBearingProcess",
@@ -253,7 +253,7 @@
         "sumo_term": "Object",
         "sumo_depth": 2,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "SelfConnectedObject",
@@ -285,7 +285,7 @@
         "sumo_term": "Attribute",
         "sumo_depth": 2,
         "layer": 0,
-        "is_category_probe": true,
+        "is_category_lens": true,
         "is_pseudo_sumo": false,
         "category_children": [
           "InternalAttribute",
@@ -321,7 +321,7 @@
       "sumo_term": "Physical",
       "sumo_depth": 1,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "Object",
@@ -368,7 +368,7 @@
       "sumo_term": "Quantity",
       "sumo_depth": 2,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "Number",
@@ -410,7 +410,7 @@
       "sumo_term": "Proposition",
       "sumo_depth": 2,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "Graph",
@@ -479,7 +479,7 @@
       "sumo_term": "Entity",
       "sumo_depth": 0,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "Physical",
@@ -528,7 +528,7 @@
       "sumo_term": "Process",
       "sumo_depth": 2,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "ContentBearingProcess",
@@ -599,7 +599,7 @@
       "sumo_term": "Object",
       "sumo_depth": 2,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "SelfConnectedObject",
@@ -672,7 +672,7 @@
       "sumo_term": "Attribute",
       "sumo_depth": 2,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "InternalAttribute",
@@ -847,7 +847,7 @@
       "sumo_term": "Relation",
       "sumo_depth": 2,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "IntentionalRelation",
@@ -885,7 +885,7 @@
       "sumo_term": "Collection",
       "sumo_depth": 2,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "Script",
@@ -954,7 +954,7 @@
       "sumo_term": "Abstract",
       "sumo_depth": 1,
       "layer": 0,
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "category_children": [
         "Quantity",

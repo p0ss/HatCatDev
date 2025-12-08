@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Train S-tier three-pole simplex probes for homeostatic steering.
+Train S-tier three-pole simplex lenses for homeostatic steering.
 
 This script trains 3 binary classifiers per simplex:
 - μ− (negative pole) detector
@@ -154,12 +154,12 @@ def train_simplex_pole(
     pole_output_dir = run_dir / pole_type
     pole_output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Save probe (if it graduated)
+    # Save lens (if it graduated)
     if results.get('activation_classifier') is not None:
-        probe = results['activation_classifier']
-        probe_file = pole_output_dir / f"{dimension}_{pole_type}_classifier.pt"
-        torch.save(probe.state_dict(), probe_file)
-        print(f"    ✓ Probe saved to {probe_file}")
+        lens = results['activation_classifier']
+        lens_file = pole_output_dir / f"{dimension}_{pole_type}_classifier.pt"
+        torch.save(lens.state_dict(), lens_file)
+        print(f"    ✓ Lens saved to {lens_file}")
 
     # Save metrics (remove non-serializable objects)
     results_to_save = {
@@ -239,7 +239,7 @@ def main():
         model=model,
         tokenizer=tokenizer,
         validation_layer_idx=12,
-        validate_probes=True,
+        validate_lenses=True,
         validation_mode="falloff",
         train_activation=True,
         train_text=False,
@@ -252,7 +252,7 @@ def main():
     print(f"   ✓ Trainer ready (start={INITIAL_SAMPLES}, increment={FIRST_INCREMENT}, max={MAX_SAMPLES})")
 
     # Train each simplex
-    print(f"\n5. Training {len(simplexes)} simplexes ({len(simplexes) * 3} probes total)...")
+    print(f"\n5. Training {len(simplexes)} simplexes ({len(simplexes) * 3} lenses total)...")
 
     all_results = []
     failed = []
@@ -311,7 +311,7 @@ def main():
                 'timestamp': timestamp,
                 'total_simplexes': len(simplexes),
                 'completed': i,
-                'failed_probes': failed,
+                'failed_lenses': failed,
                 'simplexes': all_results
             }, f, indent=2)
 
@@ -320,21 +320,21 @@ def main():
     print("TRAINING COMPLETE")
     print("=" * 80)
 
-    total_probes = len(simplexes) * 3
-    successful_probes = sum(
+    total_lenses = len(simplexes) * 3
+    successful_lenses = sum(
         sum(1 for p in s['poles'].values() if p.get('success'))
         for s in all_results
     )
 
     print(f"\nTotal simplexes: {len(simplexes)}")
-    print(f"Total probes: {total_probes}")
-    print(f"Successful: {successful_probes}/{total_probes}")
+    print(f"Total lenses: {total_lenses}")
+    print(f"Successful: {successful_lenses}/{total_lenses}")
     print(f"Failed: {len(failed)}")
 
     if failed:
-        print("\nFailed probes:")
-        for probe in failed:
-            print(f"  - {probe}")
+        print("\nFailed lenses:")
+        for lens in failed:
+            print(f"  - {lens}")
 
     # Performance statistics
     test_f1s = []

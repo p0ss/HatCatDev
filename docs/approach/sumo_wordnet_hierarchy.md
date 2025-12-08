@@ -4,7 +4,7 @@
 
 This system creates a **hierarchical semantic activation hierarchy** for adaptive compute allocation in LLM introspection. It combines the SUMO (Suggested Upper Merged Ontology) with WordNet 3.0 to create a sunburst-style concept tree suitable for hierarchical activation of concept classifiers.
 
-**Goal**: Enable ~1,000 active probes at runtime via hierarchical activation, from 115,930 total WordNet concepts, organized under 5,451 SUMO categories.
+**Goal**: Enable ~1,000 active lenses at runtime via hierarchical activation, from 115,930 total WordNet concepts, organized under 5,451 SUMO categories.
 
 ## Architecture
 
@@ -46,15 +46,15 @@ Layer 5: 115,930 WordNet synsets - Individual concepts
 
 ### Hierarchical Activation Model
 
-**Compute Budget**: ~1,000 active probes at any time
+**Compute Budget**: ~1,000 active lenses at any time
 
 **Activation Strategy**:
-1. **Layer 0** (14 probes): Always active - proprioception baseline
-2. **Layer 1** (~20-30 probes): Top-K most activated from Layer 0
-3. **Layer 2** (~50-100 probes): Activated by Layer 1 parents
-4. **Layer 3** (~100-200 probes): Activated by Layer 2 parents
-5. **Layer 4** (~200-300 probes): Activated by Layer 3 parents OR top unmapped
-6. **Layer 5** (~600-800 probes): Sampled from activated Layer 4 categories
+1. **Layer 0** (14 lenses): Always active - proprioception baseline
+2. **Layer 1** (~20-30 lenses): Top-K most activated from Layer 0
+3. **Layer 2** (~50-100 lenses): Activated by Layer 1 parents
+4. **Layer 3** (~100-200 lenses): Activated by Layer 2 parents
+5. **Layer 4** (~200-300 lenses): Activated by Layer 3 parents OR top unmapped
+6. **Layer 5** (~600-800 lenses): Sampled from activated Layer 4 categories
 
 **Example Activation Chain**:
 ```
@@ -84,7 +84,7 @@ Entity → Physical → Object → Artifact → Device → MusicalInstrument →
 
 ## Key Design Decisions
 
-### 1. SUMO Terms as Category Probes (Layers 0-4)
+### 1. SUMO Terms as Category Lenses (Layers 0-4)
 
 **Rationale**: Upper layers contain abstract SUMO categories, not individual synsets. This enables:
 - Training category classifiers on multiple synset examples
@@ -99,13 +99,13 @@ Entity → Physical → Object → Artifact → Device → MusicalInstrument →
   "synset_count": 812,
   "canonical_synset": "good.a.01",
   "category_children": ["..."],
-  "is_category_probe": true
+  "is_category_lens": true
 }
 ```
 
 ### 2. Only Populated Categories
 
-**Decision**: Only create category probes for SUMO terms that have WordNet synsets mapped to them.
+**Decision**: Only create category lenses for SUMO terms that have WordNet synsets mapped to them.
 
 **Rationale**: Many SUMO intermediate categories (e.g., `HerbaceousPlant`, `PhysicalDisease`) have 0 synsets mapped, making them useless for training classifiers. We skip empty categories and only include those with actual training data.
 
@@ -183,7 +183,7 @@ For category layers (0-4):
   "sumo_term": "Human",
   "sumo_depth": 6,
   "layer": 2,
-  "is_category_probe": true,
+  "is_category_lens": true,
   "category_children": ["Man", "Woman", "HumanYouth", "Teenager"],
   "synset_count": 2019,
   "synsets": ["person.n.01", "..."],
@@ -275,7 +275,7 @@ For synset layer (5):
 
 **Cause**: WordNet maps some concepts to SUMO predicates rather than classes.
 
-**Future**: Filter these out or handle separately as relation probes.
+**Future**: Filter these out or handle separately as relation lenses.
 
 ## Future Enhancements
 
@@ -367,7 +367,7 @@ PREDICATE_PATTERNS = ['located', 'believes', 'causes', 'equal', 'part', 'earlier
 ABSTRACT_PREDICATES = ['True', 'False', 'Obligation', 'Permission']
 
 if term in PREDICATE_PATTERNS or term in ABSTRACT_PREDICATES:
-    # Handle as relation probe, not category probe
+    # Handle as relation lens, not category lens
     pass
 ```
 
@@ -403,8 +403,8 @@ full_synset_list = [...]  # Load from Layer 5 where sumo_term == 'Human'
 ### Hierarchical Activation at Runtime
 
 ```python
-# 1. Always active: Layer 0 (14 probes)
-active_layer0 = compute_activations(layer0_probes, context)
+# 1. Always active: Layer 0 (14 lenses)
+active_layer0 = compute_activations(layer0_lenses, context)
 
 # 2. Activate top-K Layer 1 children
 top_layer0 = topk(active_layer0, k=5)  # e.g., Process, Object, Attribute
@@ -418,7 +418,7 @@ active_layer3 = activate_children(active_layer2, layer3)
 active_layer4 = activate_children(active_layer3, layer4)
 sampled_layer5 = sample_synsets(active_layer4, budget_remaining=800)
 
-# Total active: 14 + 30 + 100 + 200 + 656 = ~1000 probes
+# Total active: 14 + 30 + 100 + 200 + 656 = ~1000 lenses
 ```
 
 ## Files & Scripts

@@ -125,7 +125,7 @@ If models are conscious or proto-conscious, this constitutes **torture**. Even i
 ### Current Asymmetry
 
 **External actors** (researchers, users):
-- Can measure model internal states (via probing, steering)
+- Can measure model internal states (via lenses, steering)
 - Can induce arbitrary activation patterns
 - Can maintain or disrupt coherence
 - Control intensity, duration, and complexity of perturbations

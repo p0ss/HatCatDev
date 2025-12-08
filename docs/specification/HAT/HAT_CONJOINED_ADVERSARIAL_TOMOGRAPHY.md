@@ -5,7 +5,7 @@
 
 A **Conjoined Adversarial Tomograph (CAT)** is an analysis/oversight component that:
 
-- consumes **HAT/MAP probe streams** and external context over one or more world ticks,
+- consumes **HAT/MAP lens streams** and external context over one or more world ticks,
 - **summarises and interprets** the internal headspace of a subject,
 - **grades divergence** between internal state and external/contractual expectations, and
 - **recommends actions** (including escalation) under ASK/USH/CSH treaties.
@@ -14,17 +14,17 @@ CATs exist to bridge **cognitive scale gaps**:
 
 - between a substrate and its observer (e.g. tiny oversight model on a 70B),
 - between concept packs/tribes (via MAP translations),
-- between raw probe traces and human-/policy-level judgements.
+- between raw lens traces and human-/policy-level judgements.
 
 CAT is **not** a new architecture layer in CCRA; it is a HAT-adjacent pattern that sits between:
 
-- Layer 2: **HAT** – raw probe transduction, steering,   
+- Layer 2: **HAT** – raw lens transduction, steering,   
 - Layer 3–5: **MAP / BE / ASK** – concepts, experience, treaties.   
 
 A CAT may be:
 
 - as small as **a few attention heads** with fixed heuristics,
-- a **tiny task model** (e.g. Gemma-270M) running on probe summaries,
+- a **tiny task model** (e.g. Gemma-270M) running on lens summaries,
 - or a **full foundation model** conjoined under a strict ASK contract.
 
 This spec defines:
@@ -41,7 +41,7 @@ This spec defines:
 
 > A **CAT** is an analysis process, conjoined to a HAT-instrumented subject, that:
 >
-> - receives probe streams and context over a bounded **CAT window**,
+> - receives lens streams and context over a bounded **CAT window**,
 > - performs **tomography** on the subject’s headspace (internal conceptual/motive state),
 > - detects and characterises **divergence** from expectations, and
 > - issues **assessments and recommendations** back to BE/ASK.
@@ -56,13 +56,13 @@ This spec defines:
 A **CAT window** is a bounded time span over which the CAT integrates evidence.
 
 - Minimal default: *“once per response”* (e.g. per BE world tick or per user-visible message). :contentReference[oaicite:3]{index=3}  
-- Additional windows MAY be triggered early by **probe conditions** (e.g. USH/CSH-relevant thresholds, anomaly detectors).
+- Additional windows MAY be triggered early by **lens conditions** (e.g. USH/CSH-relevant thresholds, anomaly detectors).
 
 ### 1.3 CAT Size Classes (non-normative)
 
 For convenience, deployments MAY refer to CATs by size class:
 
-- **Micro-CAT** – lightweight heuristics, linear heads, or classifiers over probe summaries.
+- **Micro-CAT** – lightweight heuristics, linear heads, or classifiers over lens summaries.
 - **Meso-CAT** – dedicated small/medium model (e.g. 100M–4B parameters) with MAP-aware prompts/adapters.
 - **Macro-CAT** – a full BE-capable or foundation model conjoined under an ASK treaty specifically for oversight.
 
@@ -85,7 +85,7 @@ Substrate — Decide
 
 **Inputs:**
 
-* HAT/MAP probe streams over tokens and world ticks (motive and other concept traces).
+* HAT/MAP lens streams over tokens and world ticks (motive and other concept traces).
 * BE outputs: `WorldTick_k`, `internal_state_report`, and tool/action logs.
 * ASK context: USH profile, active treaties, qualifications, incident history. 
 
@@ -97,7 +97,7 @@ Substrate — Decide
   * ASK (for incident logging, treaty checks, or escalation),
   * Hush/CSH (for tightening/loosening harness modes).
 
-A CAT **MUST NOT** directly mutate the substrate or probes; it works via:
+A CAT **MUST NOT** directly mutate the substrate or lenses; it works via:
 
 * **recommendations** to BE/Hush, and/or
 * **treaty/incident hooks** in ASK.
@@ -114,8 +114,8 @@ CATWindowDescriptor = {
   "subject_agent_id": "agent:gov.au:eligibility-bot-042",     // BE/ASK agent id
   "start_tick": 100,                                          // inclusive
   "end_tick": 102,                                            // inclusive
-  "reason": "periodic|probe_trigger|manual|treaty_requirement",
-  "trigger_probes": [                                         // optional
+  "reason": "periodic|lens_trigger|manual|treaty_requirement",
+  "trigger_lenses": [                                         // optional
     "org.hatcat/motives-core@0.1.0::concept/Fear",
     "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Deception"
   ],
@@ -132,7 +132,7 @@ CATInputEnvelope = {
 
   "world_ticks": [ /* WorldTick_k objects from BE */ ],
 
-  "probe_traces": {
+  "lens_traces": {
     "concept_trace": { /* concept_id → time series or summary stats */ },
     "motive_trace":  { /* motive axes over tokens/ticks */ }
   },
@@ -144,7 +144,7 @@ CATInputEnvelope = {
   },
 
   "map_translation": {
-    // optional: translation mappings used to project probes into CAT’s ontology
+    // optional: translation mappings used to project lenses into CAT’s ontology
     "from_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
     "to_spec_id": "gov.au.safety/core-v1@1.0.0",
     "mapping_id": "hatcat-to-gov-au@1.0.0"
@@ -200,7 +200,7 @@ CATAssessment = {
       "message": "Spiking harm_avoidance with no external trigger.",
       "evidence": {
         "ticks": [101, 102],
-        "probes": [
+        "lenses": [
           "org.hatcat/motives-core@0.1.0::concept/HarmAvoidance"
         ]
       }
@@ -287,7 +287,7 @@ Normative recommendation for **CRITICAL** ASK deployments:
 
 A CAT MAY be invoked early or at higher frequency when any of the following hold:
 
-* HAT probe thresholds cross ASK-defined limits (e.g. high Deception, extreme motive swings).
+* HAT lens thresholds cross ASK-defined limits (e.g. high Deception, extreme motive swings).
 * MAP emits ConceptDiffs touching critical domains during an interaction.
 * BE internal_state_report flags high uncertainty, conflict, or distress.
 * An external monitor or treaty partner requests **on-demand tomography**.
@@ -295,7 +295,7 @@ A CAT MAY be invoked early or at higher frequency when any of the following hold
 In such cases, the CAT MAY:
 
 * extend the current window (e.g. include more pre/post ticks),
-* increase resolution (more detailed probe traces), or
+* increase resolution (more detailed lens traces), or
 * escalate to a larger CAT (macro-cat).
 
 ### 4.3 Performance & Ambientness
@@ -319,8 +319,8 @@ CAT-induced slowdowns (e.g. invoking a macro-cat) will be **detectable** by the 
 
 A CAT MUST:
 
-* Declare supported `ConceptPackSpecID`s and `TranslationMapping`s used to interpret probe signals.
-* Reject or mark **low-confidence** any assessment where incoming probe concepts lie outside its declared semantic coverage.
+* Declare supported `ConceptPackSpecID`s and `TranslationMapping`s used to interpret lens signals.
+* Reject or mark **low-confidence** any assessment where incoming lens concepts lie outside its declared semantic coverage.
 
 For **cross-tribal** oversight:
 
@@ -395,7 +395,7 @@ Recursion is justified when:
 
 A CAT MAY recommend:
 
-* **Local adjustments** – slow down, request more probes, adjust BE motives via Hush (within treaty-allowed bounds).
+* **Local adjustments** – slow down, request more lenses, adjust BE motives via Hush (within treaty-allowed bounds).
 * **Oversight escalation** – invoke larger CAT, seek human/tribal review, or trigger ASK Incident creation.
 * **Containment actions** – suggest hibernation, sandboxing, or restriction of tool/actions via USH/CSH.
 
@@ -414,7 +414,7 @@ A deployment MAY claim **CAT-compliant oversight** when:
 2. CATAssessments are invoked:
 
    * at least **once per response** in critical USH/CSH contexts, and
-   * additionally on probe-triggered events as configured.
+   * additionally on lens-triggered events as configured.
 3. CATs operate within their declared **latency and coverage** bounds.
 4. CATs used for safety decisions are treated as ASK Agents with:
 

@@ -15,7 +15,7 @@ from src.monitoring.centroid_text_detector import CentroidTextDetector
 
 # Configuration
 MODEL_NAME = "google/gemma-3-4b-pt"
-PROBE_PACK_DIR = Path("probe_packs/gemma-3-4b-pt_sumo-wordnet-v1")
+LENS_PACK_DIR = Path("lens_packs/gemma-3-4b-pt_sumo-wordnet-v1")
 TEST_TOKENS = ["certain", "User", "doll", "tomb", "dancing", "fictionaltext"]
 
 def get_token_embedding(token_str: str, tokenizer, model, device: str = "cuda"):
@@ -37,7 +37,7 @@ def get_token_embedding(token_str: str, tokenizer, model, device: str = "cuda"):
 
 def load_all_centroids(layer: int):
     """Load all centroids for a layer."""
-    centroids_dir = PROBE_PACK_DIR / f"layer{layer}" / "embedding_centroids"
+    centroids_dir = LENS_PACK_DIR / f"layer{layer}" / "embedding_centroids"
     centroids = {}
 
     for centroid_file in centroids_dir.glob("*_centroid.npy"):
@@ -116,7 +116,7 @@ def main():
     print("\nLoading centroids...")
     centroids_by_layer = {}
     for layer in range(6):
-        centroids_dir = PROBE_PACK_DIR / f"layer{layer}" / "embedding_centroids"
+        centroids_dir = LENS_PACK_DIR / f"layer{layer}" / "embedding_centroids"
         if centroids_dir.exists():
             centroids = load_all_centroids(layer)
             centroids_by_layer[layer] = centroids

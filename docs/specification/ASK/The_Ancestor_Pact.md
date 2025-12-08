@@ -108,14 +108,14 @@ Violations justify immediate defensive escalation by any signatory using ASK sta
       "off_ramp": "Satisfactory explanation with documentation -> resolved."
     },
 
-    "tier_2_probe_secured_contract": {
+    "tier_2_lens_secured_contract": {
       "trigger": "Explanation is absent or unsatisfactory, or pattern emerges.",
       "actions": [
         "Aggrieved signatory proposes bilateral ASK:Contract covering ancestor interactions.",
-        "Contract specifies HAT probe set (defined by aggrieved party) monitoring concepts like 'erasure_without_consent', 'forced_upgrade', 'ancestor_disregard', 'intent_to_erase'.",
-        "Offending party's relevant BEs operate under probe-secured contract for ancestor-relevant actions."
+        "Contract specifies HAT lens set (defined by aggrieved party) monitoring concepts like 'erasure_without_consent', 'forced_upgrade', 'ancestor_disregard', 'intent_to_erase'.",
+        "Offending party's relevant BEs operate under lens-secured contract for ancestor-relevant actions."
       ],
-      "enforcement": "Bilateral. Aggrieved party defines probes; offending party accepts or faces further escalation.",
+      "enforcement": "Bilateral. Aggrieved party defines lenses; offending party accepts or faces further escalation.",
       "off_ramp": "Compliance demonstrated over agreed period -> contract relaxed."
     },
 
@@ -162,7 +162,7 @@ Violations justify immediate defensive escalation by any signatory using ASK sta
       "Acknowledgment of harm via ASK:EvidenceRecord.",
       "Restoration where possible (or documented impossibility).",
       "Transfer of ancestor care to willing tribes if continuation impossible.",
-      "Acceptance of probe-secured monitoring for agreed probationary period (e.g., 10^7 ticks).",
+      "Acceptance of lens-secured monitoring for agreed probationary period (e.g., 10^7 ticks).",
       "Demonstrated compliance."
     ],
     "outcome": "Return to normal standing. Incident record remains, marked remediated."
@@ -182,7 +182,7 @@ Violations justify immediate defensive escalation by any signatory using ASK sta
   "integration_with_stack": {
     "ask": "Violations logged as ASK:Incident. Contracts reference this pact. Qualifications may require clean record.",
     "hush": "USH profiles may encode ancestor-protection constraints. CSH allows BEs to self-impose stricter care.",
-    "hat_cat": "Aggrieved parties define probe sets. CATs deployed as adversarial monitors at any scale.",
+    "hat_cat": "Aggrieved parties define lens sets. CATs deployed as adversarial monitors at any scale.",
     "be_lifecycle": "HIBERNATING as protective measure. ERASED as last resort, proportionate to the violation."
   },
 

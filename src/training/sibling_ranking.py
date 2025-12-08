@@ -1,8 +1,8 @@
 """
-Sibling ranking refinement for probe training.
+Sibling ranking refinement for lens training.
 
-After initial binary training, this module refines probes within sibling groups
-using margin ranking loss to ensure each probe ranks highest on its own prompts.
+After initial binary training, this module refines lenses within sibling groups
+using margin ranking loss to ensure each lens ranks highest on its own prompts.
 """
 
 from __future__ import annotations
@@ -21,14 +21,14 @@ from .sumo_classifiers import extract_activations
 from .sumo_data_generation import create_sumo_training_dataset
 
 
-def load_probe(
-    probe_path: Path,
+def load_lens(
+    lens_path: Path,
     hidden_dim: int = 4096,
     device: str = "cuda",
 ) -> nn.Sequential:
-    """Load a trained probe from disk."""
-    state = torch.load(probe_path, map_location=device)
-    probe = nn.Sequential(
+    """Load a trained lens from disk."""
+    state = torch.load(lens_path, map_location=device)
+    lens = nn.Sequential(
         nn.Linear(hidden_dim, 128),
         nn.ReLU(),
         nn.Dropout(0.1),
@@ -37,18 +37,18 @@ def load_probe(
         nn.Dropout(0.1),
         nn.Linear(64, 1)
     ).to(device)
-    probe.load_state_dict(state)
-    return probe
+    lens.load_state_dict(state)
+    return lens
 
 
-def save_probe(probe: nn.Module, probe_path: Path):
-    """Save a probe to disk."""
-    torch.save(probe.state_dict(), probe_path)
+def save_lens(lens: nn.Module, lens_path: Path):
+    """Save a lens to disk."""
+    torch.save(lens.state_dict(), lens_path)
 
 
-def load_refinement_manifest(probe_dir: Path) -> Dict:
+def load_refinement_manifest(lens_dir: Path) -> Dict:
     """Load the sibling refinement manifest for a layer."""
-    manifest_path = probe_dir / "sibling_refinement.json"
+    manifest_path = lens_dir / "sibling_refinement.json"
     if manifest_path.exists():
         with open(manifest_path) as f:
             return json.load(f)
@@ -56,7 +56,7 @@ def load_refinement_manifest(probe_dir: Path) -> Dict:
 
 
 def needs_sibling_refinement(
-    probe_dir: Path,
+    lens_dir: Path,
     hierarchy_dir: Path,
     layer: int,
     min_siblings: int = 2,
@@ -65,11 +65,11 @@ def needs_sibling_refinement(
     Check if a layer needs sibling refinement.
 
     Returns True if:
-    1. The layer directory exists with trained probes
+    1. The layer directory exists with trained lenses
     2. No sibling_refinement.json exists OR it has incomplete groups
 
     Args:
-        probe_dir: Directory containing trained probes (e.g., probe_packs/xxx/layer2)
+        lens_dir: Directory containing trained lenses (e.g., lens_packs/xxx/layer2)
         hierarchy_dir: Directory containing hierarchy JSON files
         layer: Layer number
         min_siblings: Minimum siblings to form a group
@@ -77,13 +77,13 @@ def needs_sibling_refinement(
     Returns:
         True if refinement is needed, False otherwise
     """
-    if not probe_dir.exists():
+    if not lens_dir.exists():
         return False
 
-    # Check if there are any trained probes
-    probe_files = list(probe_dir.glob("*_classifier.pt"))
-    if len(probe_files) < min_siblings:
-        return False  # Not enough probes to form sibling groups
+    # Check if there are any trained lenses
+    lens_files = list(lens_dir.glob("*_classifier.pt"))
+    if len(lens_files) < min_siblings:
+        return False  # Not enough lenses to form sibling groups
 
     # Load layer concepts
     layer_path = hierarchy_dir / f"layer{layer}.json"
@@ -95,13 +95,13 @@ def needs_sibling_refinement(
     concepts = layer_data['concepts']
 
     # Get potential sibling groups (don't skip already refined)
-    sibling_groups = get_sibling_groups(concepts, probe_dir, min_siblings, skip_already_refined=False)
+    sibling_groups = get_sibling_groups(concepts, lens_dir, min_siblings, skip_already_refined=False)
 
     if not sibling_groups:
         return False  # No sibling groups possible
 
     # Check manifest for completion
-    manifest = load_refinement_manifest(probe_dir)
+    manifest = load_refinement_manifest(lens_dir)
     refined_parents = set(manifest.get("refined_groups", []))
 
     # If no manifest or empty, definitely needs refinement
@@ -136,33 +136,33 @@ def get_layers_needing_refinement(
     """
     needs_refinement = []
     for layer in layers:
-        probe_dir = output_dir / f"layer{layer}"
-        if needs_sibling_refinement(probe_dir, hierarchy_dir, layer, min_siblings):
+        lens_dir = output_dir / f"layer{layer}"
+        if needs_sibling_refinement(lens_dir, hierarchy_dir, layer, min_siblings):
             needs_refinement.append(layer)
     return needs_refinement
 
 
-def save_refinement_manifest(probe_dir: Path, manifest: Dict):
+def save_refinement_manifest(lens_dir: Path, manifest: Dict):
     """Save the sibling refinement manifest."""
-    manifest_path = probe_dir / "sibling_refinement.json"
+    manifest_path = lens_dir / "sibling_refinement.json"
     with open(manifest_path, 'w') as f:
         json.dump(manifest, f, indent=2)
 
 
 def get_sibling_groups(
     concepts: List[Dict],
-    probe_dir: Path,
+    lens_dir: Path,
     min_siblings: int = 2,
     skip_already_refined: bool = True,
 ) -> Dict[str, List[str]]:
     """
     Group concepts by their parent (siblings).
 
-    Only returns groups where all siblings have trained probes.
+    Only returns groups where all siblings have trained lenses.
 
     Args:
         concepts: List of concept dicts with 'sumo_term' and 'parent_concepts'
-        probe_dir: Directory containing trained probes
+        lens_dir: Directory containing trained lenses
         min_siblings: Minimum siblings required to form a group
         skip_already_refined: If True, skip groups listed in sibling_refinement.json
 
@@ -170,7 +170,7 @@ def get_sibling_groups(
         Dict mapping parent name to list of sibling concept names
     """
     # Load refinement manifest for resume capability
-    manifest = load_refinement_manifest(probe_dir) if skip_already_refined else {"refined_groups": []}
+    manifest = load_refinement_manifest(lens_dir) if skip_already_refined else {"refined_groups": []}
     refined_parents = set(manifest.get("refined_groups", []))
 
     # Group by parent - concepts can have multiple parents (multi-inheritance)
@@ -192,7 +192,7 @@ def get_sibling_groups(
                 parent_to_children[parent] = []
             parent_to_children[parent].append(c['sumo_term'])
 
-    # Filter to groups where all siblings have trained probes
+    # Filter to groups where all siblings have trained lenses
     valid_groups = {}
     skipped_refined = 0
     for parent, children in parent_to_children.items():
@@ -204,11 +204,11 @@ def get_sibling_groups(
             skipped_refined += 1
             continue
 
-        # Check all have probes
+        # Check all have lenses
         trained_siblings = []
         for child in children:
-            probe_path = probe_dir / f"{child}_classifier.pt"
-            if probe_path.exists():
+            lens_path = lens_dir / f"{child}_classifier.pt"
+            if lens_path.exists():
                 trained_siblings.append(child)
 
         if len(trained_siblings) >= min_siblings:
@@ -222,7 +222,7 @@ def get_sibling_groups(
 
 def refine_sibling_group(
     siblings: List[str],
-    probe_dir: Path,
+    lens_dir: Path,
     concept_map: Dict[str, Dict],
     model,
     tokenizer,
@@ -235,13 +235,13 @@ def refine_sibling_group(
     save_refined: bool = True,
 ) -> Dict:
     """
-    Refine probes for a sibling group using margin ranking loss.
+    Refine lenses for a sibling group using margin ranking loss.
 
-    Each probe should rank highest on prompts specifically about its concept.
+    Each lens should rank highest on prompts specifically about its concept.
 
     Args:
         siblings: List of sibling concept names
-        probe_dir: Directory containing trained probes
+        lens_dir: Directory containing trained lenses
         concept_map: Mapping of concept names to concept dicts
         model: Language model for activation extraction
         tokenizer: Tokenizer
@@ -251,19 +251,19 @@ def refine_sibling_group(
         lr: Learning rate
         margin: Margin for ranking loss
         hidden_dim: Model hidden dimension
-        save_refined: Whether to save refined probes (saves to _refined.pt suffix)
+        save_refined: Whether to save refined lenses (saves to _refined.pt suffix)
 
     Returns:
         Dict with refinement results
     """
     start_time = time.time()
 
-    # Load probes
-    probes = {}
+    # Load lenses
+    lenses = {}
     for sibling in siblings:
-        probe_path = probe_dir / f"{sibling}_classifier.pt"
-        probes[sibling] = load_probe(probe_path, hidden_dim, device)
-        probes[sibling].train()
+        lens_path = lens_dir / f"{sibling}_classifier.pt"
+        lenses[sibling] = load_lens(lens_path, hidden_dim, device)
+        lenses[sibling].train()
 
     # Generate prompts for each sibling
     prompts_by_sibling = {}
@@ -289,12 +289,12 @@ def refine_sibling_group(
         activations_by_sibling[sibling] = torch.tensor(acts, dtype=torch.float32).to(device)
 
     # Evaluate pre-refinement accuracy
-    pre_accuracy = evaluate_sibling_ranking_accuracy(probes, activations_by_sibling, device)
+    pre_accuracy = evaluate_sibling_ranking_accuracy(lenses, activations_by_sibling, device)
 
     # Set up optimizer and loss
     all_params = []
-    for probe in probes.values():
-        all_params.extend(probe.parameters())
+    for lens in lenses.values():
+        all_params.extend(lens.parameters())
     optimizer = Adam(all_params, lr=lr)
     margin_loss = nn.MarginRankingLoss(margin=margin)
 
@@ -306,19 +306,19 @@ def refine_sibling_group(
         optimizer.zero_grad()
 
         for target_sibling, acts in activations_by_sibling.items():
-            target_probe = probes[target_sibling]
+            target_lens = lenses[target_sibling]
 
             for other_sibling in siblings:
                 if other_sibling == target_sibling:
                     continue
-                if other_sibling not in probes:
+                if other_sibling not in lenses:
                     continue
 
-                other_probe = probes[other_sibling]
+                other_lens = lenses[other_sibling]
 
                 # Compute scores
-                target_scores = target_probe(acts)
-                other_scores = other_probe(acts)
+                target_scores = target_lens(acts)
+                other_scores = other_lens(acts)
 
                 # Target should rank higher
                 target_indicator = torch.ones(acts.shape[0], device=device)
@@ -335,17 +335,17 @@ def refine_sibling_group(
         optimizer.step()
 
     # Set back to eval mode
-    for probe in probes.values():
-        probe.eval()
+    for lens in lenses.values():
+        lens.eval()
 
     # Evaluate post-refinement accuracy
-    post_accuracy = evaluate_sibling_ranking_accuracy(probes, activations_by_sibling, device)
+    post_accuracy = evaluate_sibling_ranking_accuracy(lenses, activations_by_sibling, device)
 
-    # Save refined probes (overwrites originals)
+    # Save refined lenses (overwrites originals)
     if save_refined:
-        for sibling, probe in probes.items():
-            probe_path = probe_dir / f"{sibling}_classifier.pt"
-            save_probe(probe, probe_path)
+        for sibling, lens in lenses.items():
+            lens_path = lens_dir / f"{sibling}_classifier.pt"
+            save_lens(lens, lens_path)
 
     elapsed = time.time() - start_time
 
@@ -360,30 +360,30 @@ def refine_sibling_group(
 
 
 def evaluate_sibling_ranking_accuracy(
-    probes: Dict[str, nn.Module],
+    lenses: Dict[str, nn.Module],
     activations_by_sibling: Dict[str, torch.Tensor],
     device: str = "cuda"
 ) -> float:
     """
-    Evaluate what fraction of prompts have the correct probe ranking first.
+    Evaluate what fraction of prompts have the correct lens ranking first.
     """
     total_correct = 0
     total_prompts = 0
 
-    siblings = list(probes.keys())
+    siblings = list(lenses.keys())
 
     for target_sibling, acts in activations_by_sibling.items():
-        if target_sibling not in probes:
+        if target_sibling not in lenses:
             continue
 
         for i in range(acts.shape[0]):
             act = acts[i:i+1]
 
-            # Get scores from all probes
+            # Get scores from all lenses
             scores = {}
             with torch.no_grad():
-                for sib_name, probe in probes.items():
-                    scores[sib_name] = probe(act).item()
+                for sib_name, lens in lenses.items():
+                    scores[sib_name] = lens(act).item()
 
             # Check if target wins
             winner = max(scores, key=scores.get)
@@ -396,7 +396,7 @@ def evaluate_sibling_ranking_accuracy(
 
 def refine_all_sibling_groups(
     layer: int,
-    probe_dir: Path,
+    lens_dir: Path,
     hierarchy_dir: Path,
     model,
     tokenizer,
@@ -411,7 +411,7 @@ def refine_all_sibling_groups(
 
     Args:
         layer: Layer number
-        probe_dir: Directory containing trained probes (e.g., probe_packs/xxx/layer3)
+        lens_dir: Directory containing trained lenses (e.g., lens_packs/xxx/layer3)
         hierarchy_dir: Directory containing hierarchy JSON files
         model: Language model
         tokenizer: Tokenizer
@@ -432,10 +432,10 @@ def refine_all_sibling_groups(
     concept_map = {c['sumo_term']: c for c in concepts}
 
     # Get sibling groups (skips already-refined from manifest)
-    sibling_groups = get_sibling_groups(concepts, probe_dir, min_siblings)
+    sibling_groups = get_sibling_groups(concepts, lens_dir, min_siblings)
 
     # Load manifest for updating after each group
-    manifest = load_refinement_manifest(probe_dir)
+    manifest = load_refinement_manifest(lens_dir)
 
     print(f"\n{'='*70}")
     print(f"SIBLING RANKING REFINEMENT - Layer {layer}")
@@ -449,7 +449,7 @@ def refine_all_sibling_groups(
 
         result = refine_sibling_group(
             siblings=siblings,
-            probe_dir=probe_dir,
+            lens_dir=lens_dir,
             concept_map=concept_map,
             model=model,
             tokenizer=tokenizer,
@@ -476,7 +476,7 @@ def refine_all_sibling_groups(
             "epochs": result['epochs'],
             "time": result['time'],
         }
-        save_refinement_manifest(probe_dir, manifest)
+        save_refinement_manifest(lens_dir, manifest)
 
     # Summary
     if results:
@@ -494,8 +494,8 @@ def refine_all_sibling_groups(
 
 
 __all__ = [
-    'load_probe',
-    'save_probe',
+    'load_lens',
+    'save_lens',
     'get_sibling_groups',
     'refine_sibling_group',
     'refine_all_sibling_groups',

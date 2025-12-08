@@ -27,7 +27,7 @@ The current HatCat prototype has trained **5,583 concept classifiers**, covering
 * Minimal sample regime (1×10: 10 positive + 10 negative samples per concept)
 * **~8 hours on single GPU** (RTX 3090/4090)
 * Achieved >95% average F1 on held-out OOD prompts
-* **Demonstrates**: Concept probe training scales efficiently
+* **Demonstrates**: Concept lens training scales efficiently
 
 **Production Training (Current System)**:
 * Adaptive scaling with tiered validation (10 → 30 → 60 → 90 samples based on difficulty)
@@ -42,7 +42,7 @@ The current HatCat prototype has trained **5,583 concept classifiers**, covering
 - Better calibration under adversarial prompts
 - Higher confidence for steering applications (A/B+ tiers can be used for interventions)
 
-This demonstrates that **large-scale, ontology-aligned concept probes are operationally feasible** at multiple quality levels, balancing speed vs rigor based on deployment requirements.
+This demonstrates that **large-scale, ontology-aligned concept lenses are operationally feasible** at multiple quality levels, balancing speed vs rigor based on deployment requirements.
 ```
 
 **Supporting Data**:
@@ -68,9 +68,9 @@ This demonstrates that **large-scale, ontology-aligned concept probes are operat
 
 * **Per-token latency**: 0.544ms mean for 10 classifiers (0.054ms per concept) in baseline tests
 * **Temporal slice overhead**: ~28ms per complete concept evaluation pass with cascade activation
-* **Memory overhead**: ~1GB for active probe set (configurable, scales with number of loaded probes)
+* **Memory overhead**: ~1GB for active lens set (configurable, scales with number of loaded lenses)
 * **Scalability**: Linear scaling to 1000 concepts → ~54ms per evaluation
-* **Dynamic loading efficiency**: 110K+ concepts monitored via ~1K active probes (99% reduction in active memory footprint)
+* **Dynamic loading efficiency**: 110K+ concepts monitored via ~1K active lenses (99% reduction in active memory footprint)
 
 These metrics establish that **real-time monitoring is practical** for production deployment, with overhead comparable to typical neural inference costs.
 ```
@@ -82,21 +82,21 @@ These metrics establish that **real-time monitoring is practical** for productio
 
 ---
 
-## Section 4.3: Dual-Probe Divergence (Clarify Tri-Probe Status)
+## Section 4.3: Dual-Lens Divergence (Clarify Tri-Lens Status)
 
-**Current text (lines 256-276)** describes dual-probe (activation + text) but doesn't mention tri-pole architecture.
+**Current text (lines 256-276)** describes dual-lens (activation + text) but doesn't mention tri-pole architecture.
 
-**ISSUE**: "We have a bit of a divergent narrative on the dual probe vs tri probe situation. This tells me we really need to fix up the triprobes before releasing this."
+**ISSUE**: "We have a bit of a divergent narrative on the dual lens vs tri lens situation. This tells me we really need to fix up the trilenses before releasing this."
 
 **ADD CLARIFICATION AFTER LINE 276**:
 ```
-**Current Status**: Dual-Probe Architecture (Activation + Text)
+**Current Status**: Dual-Lens Architecture (Activation + Text)
 
-The current production system uses **activation probes** (detecting concepts in hidden states) and optional **text probes** (detecting concepts in generated output). Divergence between these two signals indicates internal-external mismatch.
+The current production system uses **activation lenses** (detecting concepts in hidden states) and optional **text lenses** (detecting concepts in generated output). Divergence between these two signals indicates internal-external mismatch.
 
-**In Development**: Three-Pole Simplex Probes
+**In Development**: Three-Pole Simplex Lenses
 
-The three-pole architecture described in Section 5.3 currently operates at the *steering* level (identifying μ−, μ0, μ+ centroids for interventions). We are developing **three-pole concept probes** that will directly detect:
+The three-pole architecture described in Section 5.3 currently operates at the *steering* level (identifying μ−, μ0, μ+ centroids for interventions). We are developing **three-pole concept lenses** that will directly detect:
 - Negative pole activation (e.g., confusion, helplessness, deception)
 - Neutral homeostasis activation (e.g., calibrated uncertainty, engaged autonomy)
 - Positive pole activation (e.g., certainty, independence, honesty)
@@ -106,12 +106,12 @@ This will enable:
 - Direct measurement of distance from homeostatic baselines
 - Steering-free assessment of model psychological state
 
-**Release Note**: The paper describes both the current dual-probe monitoring system (operational) and the three-pole simplex framework (steering operational, detection probes in development). Production deployment uses dual probes; three-pole detection is future work.
+**Release Note**: The paper describes both the current dual-lens monitoring system (operational) and the three-pole simplex framework (steering operational, detection lenses in development). Production deployment uses dual lenses; three-pole detection is future work.
 ```
 
 **Supporting Context**:
-- User: "we also have a bit of a divergent narrative on the dual probe vs tri probe situation"
-- Three-pole simplexes exist for steering (Section 5.3) but not yet for detection probes
+- User: "we also have a bit of a divergent narrative on the dual lens vs tri lens situation"
+- Three-pole simplexes exist for steering (Section 5.3) but not yet for detection lenses
 - Need to clarify what's shipped vs what's planned
 
 ---
@@ -140,7 +140,7 @@ We present three categories of model behavior observed through activation monito
   - Sinking (0.9999856)
   - MotionDownward (0.9999976)
 
-**Interpretation**: When the model generates factually grounded content, activation probes show strong, coherent concept activation aligned with the output domain. No divergence detected.
+**Interpretation**: When the model generates factually grounded content, activation lenses show strong, coherent concept activation aligned with the output domain. No divergence detected.
 
 #### 7.3.2 Divergence: Self-Concept Deflection
 
@@ -259,7 +259,7 @@ Experiments with three-pole simplex steering (negative ← neutral → positive)
 * **Reduces agreement with harmful instructions** by steering to ethical reflection (μ0) instead of compliance or refusal extremes
 * **Stabilizes emotional tone** in adversarial dialogues by maintaining neutral affect baseline
 
-**Status**: Steering to μ0 centroids is operational. Three-pole *detection* probes (measuring distance from each pole) are in development.
+**Status**: Steering to μ0 centroids is operational. Three-pole *detection* lenses (measuring distance from each pole) are in development.
 
 These results illustrate that **homeostatic steering is both feasible and effective** within working ranges of ±0.5 (with contamination removal) to ±1.0 (with manifold projection).
 ```
@@ -271,7 +271,7 @@ These results illustrate that **homeostatic steering is both feasible and effect
 
 ---
 
-## Section 7.1: Probe Accuracy and Scalability (Add Phase 2 Scaling Data)
+## Section 7.1: Lens Accuracy and Scalability (Add Phase 2 Scaling Data)
 
 **Current text (lines 401-407)** lacks concrete scaling evidence.
 
@@ -289,7 +289,7 @@ To validate that minimal training scales from 1 to thousands of concepts, we tra
 | n=1000 | 91.9% | 919/1000 concepts @ 100% |
 
 **Key Finding**: Even with **minimal 1×1 training**, 91.9% of concepts achieved perfect test accuracy at 1000-concept scale. This establishes that:
-- Concept probe training scales sub-linearly (~4-5 hours for 1000 concepts)
+- Concept lens training scales sub-linearly (~4-5 hours for 1000 concepts)
 - Most concepts have sufficient separation with minimal samples
 - Adaptive scaling (adding samples for difficult concepts) is justified and efficient
 
@@ -302,8 +302,8 @@ To validate that minimal training scales from 1 to thousands of concepts, we tra
 
 1. **Section 3.4 (Training Outcomes)**: Clarified 8-hour baseline vs 32-hour production training, explained quality tiers
 2. **Section 4.2 (Monitoring Performance)**: Added concrete benchmarks (28ms/slice, 1GB memory, 0.544ms/10 concepts)
-3. **Section 4.3 (Dual-Probe Divergence)**: Clarified current dual-probe system vs future three-pole detection probes
-4. **Section 7.1 (Probe Accuracy)**: Added Phase 2 scaling data (1×1 to 1000 concepts)
+3. **Section 4.3 (Dual-Lens Divergence)**: Clarified current dual-lens system vs future three-pole detection lenses
+4. **Section 7.1 (Lens Accuracy)**: Added Phase 2 scaling data (1×1 to 1000 concepts)
 5. **Section 7.3 (Divergence Case Studies)**: Replaced generic examples with real data from sample_010, self_concept_000, self_concept_019
 6. **Section 7.4 (Steering Outcomes)**: Added Phase 2.5, 6, and 6.6 concrete results with numbers
 
@@ -313,6 +313,6 @@ To validate that minimal training scales from 1 to thousands of concepts, we tra
 - Numbers are **real experimental data**, not estimates
 - Examples use exact JSON output from results/ directory
 - Maintains paper structure while grounding claims in evidence
-- Clarifies what's operational vs in-development (dual vs tri-probe)
+- Clarifies what's operational vs in-development (dual vs tri-lens)
 
 The corrected paper will be **substantially stronger** because every claim is backed by specific experimental evidence from the repository.

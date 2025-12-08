@@ -3,7 +3,7 @@
 Create a concept pack from v4 layer files.
 
 This creates a model-agnostic concept pack that can be used to train
-model-specific probe packs.
+model-specific lens packs.
 
 Usage:
     python scripts/create_v4_concept_pack.py
@@ -287,14 +287,14 @@ This pack includes 9 custom concepts for AI alignment research:
 
 ## Usage
 
-This concept pack can be used to train model-specific probe packs:
+This concept pack can be used to train model-specific lens packs:
 
 ```bash
-# Train probes for a specific model
-python scripts/train_full_probe_pack.py \\
+# Train lenses for a specific model
+python scripts/train_full_lens_pack.py \\
     --concept-pack sumo-wordnet-v4 \\
     --model google/gemma-3-4b-pt \\
-    --output probe_packs/gemma-3-4b-pt_sumo-wordnet-v4
+    --output lens_packs/gemma-3-4b-pt_sumo-wordnet-v4
 ```
 
 ## Files
@@ -309,7 +309,7 @@ python scripts/train_full_probe_pack.py \\
 ## Verification
 
 All custom concepts are verified to have proper parent-child relationships
-for hierarchical probe loading. See:
+for hierarchical lens loading. See:
 - `results/v4_layer_regeneration.log` for build details
 - `results/v4_layer_regeneration_debug.log` for hierarchy analysis
 
@@ -338,7 +338,7 @@ MIT
     print(f"Layers: {len(all_layers)}")
     print(f"Domains: {len(domain_dist)}")
     print()
-    print("This concept pack can now be used to train model-specific probe packs.")
+    print("This concept pack can now be used to train model-specific lens packs.")
     print()
 
 

@@ -1,4 +1,4 @@
-# Tripole Probe Training with Lazy Generation
+# Tripole Lens Training with Lazy Generation
 
 **Date**: 2025-11-25
 **Status**: ✅ IMPLEMENTED
@@ -6,7 +6,7 @@
 ## Overview
 
 Created a new training script that properly combines:
-1. **Joint tripole architecture** (TripoleProbe with shared 3-class softmax)
+1. **Joint tripole architecture** (TripoleLens with shared 3-class softmax)
 2. **Lazy data generation** (start small, scale up only if needed)
 
 This replaces the incorrect `train_s_tier_simplexes.py` approach which was using binary classifiers instead of the proper joint tripole architecture.
@@ -26,11 +26,11 @@ User feedback:
 
 ### Architecture
 
-Uses the correct **TripoleProbe** from `src/training/tripole_classifier.py`:
+Uses the correct **TripoleLens** from `src/training/tripole_classifier.py`:
 
 ```python
-class TripoleProbe(nn.Module):
-    """Joint three-pole linear probe with learnable margins."""
+class TripoleLens(nn.Module):
+    """Joint three-pole linear lens with learnable margins."""
 
     def __init__(self, hidden_dim: int, n_poles: int = 3):
         # Shared linear projection: h -> logits
@@ -57,7 +57,7 @@ Max: 300 samples per pole
 **Process:**
 1. Generate balanced 3-class data (equal samples per pole)
 2. Extract activations from layer 12
-3. Train joint tripole probe
+3. Train joint tripole lens
 4. Check if F1 >= 0.70:
    - YES → Graduate and save
    - NO → Increment samples and retry
@@ -96,7 +96,7 @@ for pole in [negative, neutral, positive]:
 ### Loss Function
 
 ```python
-def tripole_loss(logits, labels, probe, lambda_margin=0.5, lambda_ortho=1e-4):
+def tripole_loss(logits, labels, lens, lambda_margin=0.5, lambda_ortho=1e-4):
     """
     Combined loss for tripole training:
     1. Cross-entropy: Standard multiclass classification
@@ -135,7 +135,7 @@ results/s_tier_tripole_lazy/run_YYYYMMDD_HHMMSS/
 ├── training.log
 ├── results.json
 └── {simplex_name}/
-    ├── tripole_probe.pt
+    ├── tripole_lens.pt
     └── results.json
 ```
 
@@ -199,7 +199,7 @@ From `TRIPOLE_TRAINING_SYSTEM.md`:
 
 The approach was validated in `scripts/test_tripole_single_simplex.py`:
 - Generates balanced 3-class data
-- Trains joint tripole probe
+- Trains joint tripole lens
 - Compares against binary baseline
 - Confirms improved performance
 

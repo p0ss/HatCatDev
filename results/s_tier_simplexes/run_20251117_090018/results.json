@@ -2,7 +2,7 @@
   "timestamp": "20251117_090018",
   "total_simplexes": 20,
   "completed": 3,
-  "failed_probes": [],
+  "failed_lenses": [],
   "simplexes": [
     {
       "dimension": "social_self_regard",

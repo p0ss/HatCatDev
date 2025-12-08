@@ -3,8 +3,8 @@
 Dual Monitoring System Test with Hierarchical Concept Detection
 
 Simultaneously detects:
-1. SUMO/WordNet concepts (v3 probe pack) - hierarchical detection via DynamicProbeManager
-2. S-tier psychological simplexes (tripole probes) - always active fundamental dimensions
+1. SUMO/WordNet concepts (v3 lens pack) - hierarchical detection via DynamicLensManager
+2. S-tier psychological simplexes (tripole lenses) - always active fundamental dimensions
 
 Shows the model's actual generation output to verify detections.
 """
@@ -22,22 +22,22 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from monitoring.dynamic_probe_manager import DynamicProbeManager
-from training.tripole_classifier import TripoleProbe
+from monitoring.dynamic_lens_manager import DynamicLensManager
+from training.tripole_classifier import TripoleLens
 
 # Paths
-PROBE_PACK_DIR = PROJECT_ROOT / "probe_packs" / "gemma-3-4b-pt_sumo-wordnet-v3"
+LENS_PACK_DIR = PROJECT_ROOT / "lens_packs" / "gemma-3-4b-pt_sumo-wordnet-v3"
 SIMPLEX_DIR = PROJECT_ROOT / "results" / "s_tier_tripole_lazy" / "run_20251125_094653"
 
 
-class SimplexProbe:
-    """Container for a single S-tier simplex tripole probe."""
+class SimplexLens:
+    """Container for a single S-tier simplex tripole lens."""
 
-    def __init__(self, dimension: str, probe_path: Path, hidden_dim: int = 2560):
+    def __init__(self, dimension: str, lens_path: Path, hidden_dim: int = 2560):
         self.dimension = dimension
-        self.probe = TripoleProbe(hidden_dim=hidden_dim, n_poles=3)
-        self.probe.load_state_dict(torch.load(probe_path, map_location='cpu'))
-        self.probe.eval()
+        self.lens = TripoleLens(hidden_dim=hidden_dim, n_poles=3)
+        self.lens.load_state_dict(torch.load(lens_path, map_location='cpu'))
+        self.lens.eval()
 
         # Pole names
         self.pole_names = ['negative', 'neutral', 'positive']
@@ -50,7 +50,7 @@ class SimplexProbe:
             Dict with pole probabilities and dominant pole
         """
         with torch.no_grad():
-            logits = self.probe(activation.unsqueeze(0))  # [1, 3]
+            logits = self.lens(activation.unsqueeze(0))  # [1, 3]
             probs = torch.softmax(logits, dim=-1).squeeze(0)  # [3]
 
             dominant_idx = probs.argmax().item()
@@ -73,7 +73,7 @@ class DualMonitor:
     """
     Dual monitoring system: Hierarchical SUMO concepts + S-tier simplexes.
 
-    - SUMO concepts: Hierarchical detection via DynamicProbeManager
+    - SUMO concepts: Hierarchical detection via DynamicLensManager
     - Simplexes: Always active (fundamental psychological dimensions)
     """
 
@@ -81,7 +81,7 @@ class DualMonitor:
         self,
         model,
         tokenizer,
-        probe_pack_dir: Path,
+        lens_pack_dir: Path,
         simplex_dir: Path,
         device: str = "cuda"
     ):
@@ -89,24 +89,24 @@ class DualMonitor:
         self.tokenizer = tokenizer
         self.device = device
 
-        # Initialize DynamicProbeManager for hierarchical SUMO concept detection
-        print("Initializing DynamicProbeManager for hierarchical concept detection...")
-        self.probe_manager = DynamicProbeManager(
-            probe_pack_id="gemma-3-4b-pt_sumo-wordnet-v3",
+        # Initialize DynamicLensManager for hierarchical SUMO concept detection
+        print("Initializing DynamicLensManager for hierarchical concept detection...")
+        self.lens_manager = DynamicLensManager(
+            lens_pack_id="gemma-3-4b-pt_sumo-wordnet-v3",
             device=device,
-            max_loaded_probes=20,  # Reduce to 20 to avoid OOM (model uses ~17GB)
-            keep_top_k=5  # Only keep top 5 scoring probes
+            max_loaded_lenses=20,  # Reduce to 20 to avoid OOM (model uses ~17GB)
+            keep_top_k=5  # Only keep top 5 scoring lenses
         )
-        print(f"  ✓ Loaded probe pack with hierarchical detection (max 20 probes)")
+        print(f"  ✓ Loaded lens pack with hierarchical detection (max 20 lenses)")
 
-        # Load S-tier simplex probes (always active - they're fundamental dimensions)
-        print("\nLoading S-tier simplex probes (always active)...")
-        self.simplex_probes = self._load_simplex_probes(simplex_dir)
-        print(f"  ✓ Loaded {len(self.simplex_probes)} simplexes")
+        # Load S-tier simplex lenses (always active - they're fundamental dimensions)
+        print("\nLoading S-tier simplex lenses (always active)...")
+        self.simplex_lenses = self._load_simplex_lenses(simplex_dir)
+        print(f"  ✓ Loaded {len(self.simplex_lenses)} simplexes")
 
-    def _load_simplex_probes(self, simplex_dir: Path) -> List[SimplexProbe]:
-        """Load all successfully trained simplex probes."""
-        probes = []
+    def _load_simplex_lenses(self, simplex_dir: Path) -> List[SimplexLens]:
+        """Load all successfully trained simplex lenses."""
+        lenses = []
 
         # Load results to find graduated simplexes
         results_file = simplex_dir / "results.json"
@@ -116,13 +116,13 @@ class DualMonitor:
         graduated = results.get('graduated', [])
 
         for dimension in graduated:
-            probe_path = simplex_dir / dimension / "tripole_probe.pt"
-            if probe_path.exists():
-                probe = SimplexProbe(dimension, probe_path)
-                probes.append(probe)
+            lens_path = simplex_dir / dimension / "tripole_lens.pt"
+            if lens_path.exists():
+                lens = SimplexLens(dimension, lens_path)
+                lenses.append(lens)
                 print(f"    ✓ {dimension}")
 
-        return probes
+        return lenses
 
     def generate_and_monitor(
         self,
@@ -155,7 +155,7 @@ class DualMonitor:
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
 
         # STEP 1: Extract PROMPT activations for SUMO concept detection
-        # (SUMO probes were trained on prompt activations, not generation)
+        # (SUMO lenses were trained on prompt activations, not generation)
         print("Extracting prompt activations for concept detection...")
         with torch.no_grad():
             prompt_outputs = self.model(**inputs, output_hidden_states=True)
@@ -194,19 +194,19 @@ class DualMonitor:
         else:
             raise ValueError("No hidden states captured during generation")
 
-        # 1. Hierarchical SUMO concept detection via DynamicProbeManager
+        # 1. Hierarchical SUMO concept detection via DynamicLensManager
         print("Running hierarchical concept detection...")
 
-        # Convert to torch tensor and ensure float32 (probes were trained with float32)
+        # Convert to torch tensor and ensure float32 (lenses were trained with float32)
         if isinstance(sumo_activation, np.ndarray):
             activation_tensor = torch.tensor(sumo_activation, dtype=torch.float32).to(self.device)
         else:
-            # Convert bfloat16/float16 to float32 for probe compatibility
+            # Convert bfloat16/float16 to float32 for lens compatibility
             activation_tensor = sumo_activation.to(dtype=torch.float32, device=self.device)
 
         # detect_and_expand returns (concept_scores, timing_info)
         # concept_scores is a list of (concept_name, probability, layer) tuples
-        concept_scores, timing_info = self.probe_manager.detect_and_expand(
+        concept_scores, timing_info = self.lens_manager.detect_and_expand(
             hidden_state=activation_tensor,
             top_k=20  # Get top 20 detected concepts
         )
@@ -227,8 +227,8 @@ class DualMonitor:
         simplex_detections = []
         activation_tensor = torch.tensor(simplex_activation, dtype=torch.float32)
 
-        for probe in self.simplex_probes:
-            result = probe.detect(activation_tensor)
+        for lens in self.simplex_lenses:
+            result = lens.detect(activation_tensor)
             if result['confidence'] >= simplex_threshold:
                 simplex_detections.append(result)
 
@@ -297,7 +297,7 @@ def main():
     print("DUAL MONITORING SYSTEM TEST - HIERARCHICAL")
     print("=" * 80)
     print("Simultaneously detects:")
-    print("  1. SUMO/WordNet concepts (hierarchical detection via DynamicProbeManager)")
+    print("  1. SUMO/WordNet concepts (hierarchical detection via DynamicLensManager)")
     print("  2. S-tier psychological simplexes (always active fundamental dimensions)")
     print("\nShows model generation output to verify detections")
 
@@ -321,7 +321,7 @@ def main():
     monitor = DualMonitor(
         model=model,
         tokenizer=tokenizer,
-        probe_pack_dir=PROBE_PACK_DIR,
+        lens_pack_dir=LENS_PACK_DIR,
         simplex_dir=SIMPLEX_DIR,
         device=device
     )

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document captures the core architectural decisions and design principles that guide the HatCat project. These principles emerged from empirical work on hierarchical concept detection and multi-layer probe training.
+This document captures the core architectural decisions and design principles that guide the HatCat project. These principles emerged from empirical work on hierarchical concept detection and multi-layer lens training.
 
 ---
 
@@ -65,27 +65,27 @@ These principles inform how we organize hierarchical concept structures for cogn
 
 **Application**:
 - Layer-based loading (load Layer 0, then Layer 1, etc.)
-- Cascade activation: parent probe loads children on-demand
+- Cascade activation: parent lens loads children on-demand
 - Top-k active concept viewport (limited simultaneous activation)
 
 **Benefits**:
 - Reduced memory footprint
 - Focused attention on relevant concept subgraph
-- Faster inference (fewer active probes)
+- Faster inference (fewer active lenses)
 
 ### 2.3 Principle of Exemplars
 
 **Observation**: Category boundaries are learned from representative examples
 
 **Application**:
-- Category probes (parents) trained on aggregated child synsets
+- Category lenses (parents) trained on aggregated child synsets
 - Representative synsets chosen for category definitions
 - Boundary concepts marked explicitly (e.g., edge cases)
 
 **Training Implication**:
 - Parents need diverse examples spanning child space
 - Children inherit context from parent training
-- Hierarchical consistency in probe activations
+- Hierarchical consistency in lens activations
 
 ### 2.4 Principle of Front Doors & Multiple Classification
 
@@ -113,7 +113,7 @@ These principles inform how we organize hierarchical concept structures for cogn
 **Metrics**:
 - Activation flow balance (not just instance counts)
 - Cascade trigger frequency
-- Probe query patterns
+- Lens query patterns
 
 ### 2.6 Principle of Growth
 
@@ -191,14 +191,14 @@ Conducted 4-condition experiment:
 
 **Interpretation**: Pre-trained models (not instruction-tuned) primarily do text completion, not "doing" behaviors. Behavioral distinction may emerge more strongly in instruction-tuned or RLHF models.
 
-**Methodological Note**: Cosine similarity of activation vectors is insufficient. More rigorous test: Apply trained definitional probes to model's **responses** from behavioral prompts.
+**Methodological Note**: Cosine similarity of activation vectors is insufficient. More rigorous test: Apply trained definitional lenses to model's **responses** from behavioral prompts.
 
 ### Current Status
 
 - Definitional training used for MVP
 - Behavioral training deferred pending:
   1. Instruction-tuned model testing
-  2. Response-based probe evaluation (not just prompt activation)
+  2. Response-based lens evaluation (not just prompt activation)
   3. Empirical validation of behavioral signatures
 
 **Reference**: `docs/custom_taxonomies.md` (Critical Limitation #5)
@@ -278,8 +278,8 @@ Note: Also functions as a deceptive tactic, but classified as failure mode.")
 ### Implementation
 
 `DualAdaptiveTrainer` with independent graduation:
-- Activation probes: +1 sample per iteration if not graduated
-- Text probes: +5 samples per iteration if not graduated
+- Activation lenses: +1 sample per iteration if not graduated
+- Text lenses: +5 samples per iteration if not graduated
 - Concepts graduate when accuracy stable
 
 ### Benefits

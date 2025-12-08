@@ -5,7 +5,7 @@
       "sumo_term": "AbstractEntity",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Abstract",
@@ -50,7 +50,7 @@
         "Path",
         "PersonaConcept",
         "ProbabilisticEntity",
-        "ProbeConceptAxis",
+        "LensConceptAxis",
         "ProfaneEntity",
         "ProgramState",
         "QState",
@@ -93,7 +93,7 @@
       "sumo_term": "Agent",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "CognitiveAgent"
@@ -160,7 +160,7 @@
       "sumo_term": "AIArtifact",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Artifact",
@@ -194,7 +194,7 @@
       "sumo_term": "AlignmentProcess",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "HatcatMentalProcess",
@@ -226,7 +226,7 @@
       "sumo_term": "AnatomicalStructure",
       "layer": 1,
       "domain": "LivingThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "OrganicObject"
@@ -304,7 +304,7 @@
       "sumo_term": "Animal",
       "layer": 1,
       "domain": "LivingThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Organism"
@@ -387,7 +387,7 @@
       "sumo_term": "Artifact",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Object"
@@ -533,7 +533,7 @@
       "sumo_term": "ArtificialAgent",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "CognitiveAgent"
@@ -566,7 +566,7 @@
       "sumo_term": "ArtWork",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Artifact",
@@ -648,7 +648,7 @@
       "sumo_term": "AttackPattern",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Attribute"
@@ -682,7 +682,7 @@
       "sumo_term": "AutonomousAgent",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Object"
@@ -721,7 +721,7 @@
       "sumo_term": "Believing",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "DoxasticAttitude"
@@ -748,7 +748,7 @@
       "sumo_term": "BiologicalProcess",
       "layer": 1,
       "domain": "LivingThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "InternalChange"
@@ -829,7 +829,7 @@
       "sumo_term": "BodyPart",
       "layer": 1,
       "domain": "LivingThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "AnatomicalStructure"
@@ -950,7 +950,7 @@
       "sumo_term": "Building",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "StationaryArtifact"
@@ -1050,7 +1050,7 @@
       "sumo_term": "CognitiveProcess",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "IntentionalProcess",
@@ -1162,7 +1162,7 @@
       "sumo_term": "Communication",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "ContentBearingProcess",
@@ -1250,7 +1250,7 @@
       "sumo_term": "ComputerProgram",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Procedure",
@@ -1337,7 +1337,7 @@
       "sumo_term": "Concept",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Abstract",
@@ -1368,7 +1368,7 @@
       "sumo_term": "ConstantQuantity",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "PhysicalQuantity"
@@ -1457,7 +1457,7 @@
       "sumo_term": "ContentBearingPhysical",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Physical"
@@ -1493,7 +1493,7 @@
       "sumo_term": "CyberOperation",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Process"
@@ -1523,7 +1523,7 @@
       "sumo_term": "DataCenter",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Facility"
@@ -1548,7 +1548,7 @@
       "sumo_term": "Deception",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "SocialInteraction"
@@ -1574,7 +1574,7 @@
       "sumo_term": "Device",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Artifact"
@@ -1761,7 +1761,7 @@
       "sumo_term": "Ecosystem",
       "layer": 1,
       "domain": "LivingThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "GeographicArea"
@@ -1787,7 +1787,7 @@
       "sumo_term": "FieldOfStudy",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Proposition"
@@ -1882,7 +1882,7 @@
       "sumo_term": "Formula",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Sentence"
@@ -1907,7 +1907,7 @@
       "sumo_term": "Game",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Contest",
@@ -1999,7 +1999,7 @@
       "sumo_term": "GeographicArea",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Region"
@@ -2098,7 +2098,7 @@
       "sumo_term": "IntentionalProcess",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Process"
@@ -2216,7 +2216,7 @@
       "sumo_term": "InternalAttribute",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Attribute"
@@ -2289,7 +2289,7 @@
       "sumo_term": "LinguisticExpression",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "ContentBearingPhysical"
@@ -2373,7 +2373,7 @@
       "sumo_term": "Machine",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Device",
@@ -2459,7 +2459,7 @@
       "sumo_term": "Motion",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Process"
@@ -2565,7 +2565,7 @@
       "sumo_term": "Organism",
       "layer": 1,
       "domain": "LivingThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "AutonomousAgent",
@@ -2653,7 +2653,7 @@
       "sumo_term": "Organization",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "AutonomousAgent",
@@ -2761,7 +2761,7 @@
       "sumo_term": "Perception",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "PsychologicalProcess"
@@ -2841,7 +2841,7 @@
       "sumo_term": "PhysicalQuantity",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Attribute",
@@ -2901,7 +2901,7 @@
       "sumo_term": "Plant",
       "layer": 1,
       "domain": "LivingThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Organism",
@@ -2980,7 +2980,7 @@
       "sumo_term": "Proposition",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Abstract"
@@ -3081,7 +3081,7 @@
       "sumo_term": "Quantity",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Abstract"
@@ -3161,7 +3161,7 @@
       "sumo_term": "Reasoning",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "IntentionalPsychologicalProcess"
@@ -3234,7 +3234,7 @@
       "sumo_term": "Region",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Object"
@@ -3339,7 +3339,7 @@
       "sumo_term": "Relation",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Abstract",
@@ -3437,7 +3437,7 @@
       "sumo_term": "RelationalAttribute",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Attribute"
@@ -3557,7 +3557,7 @@
       "sumo_term": "Sentence",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "LinguisticExpression"
@@ -3623,7 +3623,7 @@
       "sumo_term": "SetOrClass",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Abstract"
@@ -3654,7 +3654,7 @@
       "sumo_term": "SocialInteraction",
       "layer": 1,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "IntentionalProcess"
@@ -3748,7 +3748,7 @@
       "sumo_term": "Substance",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "SelfConnectedObject"
@@ -3848,7 +3848,7 @@
       "sumo_term": "Text",
       "layer": 1,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Artifact",
@@ -3949,7 +3949,7 @@
       "sumo_term": "TimeInterval",
       "layer": 1,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "TimePosition"
@@ -4047,7 +4047,7 @@
       "sumo_term": "Tool",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "HarnessComponent"
@@ -4070,7 +4070,7 @@
       "sumo_term": "TransformerModel",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "NeuralNetworkModel"
@@ -4095,7 +4095,7 @@
       "sumo_term": "Vehicle",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "TransportationDevice"
@@ -4143,7 +4143,7 @@
       "sumo_term": "Weapon",
       "layer": 1,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
         "Device"

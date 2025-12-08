@@ -48,10 +48,10 @@ Then open http://localhost:8501 in your browser.
 
 ## Architecture
 
-The Streamlit UI uses HatCat's `DynamicProbeManager` for concept detection:
+The Streamlit UI uses HatCat's `DynamicLensManager` for concept detection:
 
 ```
-User Input → Streamlit UI → Model + DynamicProbeManager → Response
+User Input → Streamlit UI → Model + DynamicLensManager → Response
                                   ↓
                      Concept Activations & Timeline Data
                                   ↓

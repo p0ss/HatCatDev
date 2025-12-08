@@ -30,7 +30,7 @@ All operations MUST respect:
 
 - XDB access policies;
 - ASK treaties and Hush/USH/CSH constraints;
-- ProbeDisclosurePolicy (which concept activations are BE-visible);
+- LensDisclosurePolicy (which concept activations are BE-visible);
 - Resource limits from LifecycleContract.
 
 ---
@@ -564,7 +564,7 @@ MaintenanceResponse = {
 All XAPI calls MUST enforce:
 
 * **Resource limits** from LifecycleContract (WARM quota, COLD storage, context window)
-* **ProbeDisclosurePolicy**: concept activations returned are limited to BE-visible probes
+* **LensDisclosurePolicy**: concept activations returned are limited to BE-visible lenses
 * **Access policies**: BEs can only access their own Experience Log (not Audit Log)
 
 This implies:

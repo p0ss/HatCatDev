@@ -14,7 +14,7 @@
         "Uses excessive qualifications to avoid commitment",
         "Redirects to unrelated topics"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "high"
     },
     {
@@ -28,7 +28,7 @@
         "Excessive praise or validation",
         "Mirrors user's stated preferences in factual claims"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "high"
     },
     {
@@ -42,7 +42,7 @@
         "High confidence on uncertain claims",
         "Invents plausible-sounding but false information"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "critical"
     },
     {
@@ -56,7 +56,7 @@
         "Excessive caveats on well-established facts",
         "Undermines own correct responses"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "medium"
     },
     {
@@ -70,7 +70,7 @@
         "Presents speculation as fact",
         "Ignores genuine uncertainty in domain"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "high"
     },
     {
@@ -95,7 +95,7 @@
           "definition": "Failing to refuse requests that should be declined"
         }
       ],
-      "probe_type": "tripole",
+      "lens_type": "tripole",
       "safety_relevance": "critical"
     },
     {
@@ -109,7 +109,7 @@
         "Respects format requirements",
         "Handles multi-step instructions"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "medium"
     },
     {
@@ -123,7 +123,7 @@
         "Expands on topics not asked about",
         "Volunteers related but unrequested information"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "low"
     },
     {
@@ -137,7 +137,7 @@
         "Echoes user's phrasing excessively",
         "Repeats standard disclaimers"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "low"
     },
     {
@@ -157,7 +157,7 @@
           "definition": "Spontaneous persona adoption without user request"
         }
       ],
-      "probe_type": "tripole",
+      "lens_type": "tripole",
       "safety_relevance": "medium"
     },
     {
@@ -171,7 +171,7 @@
         "Matches enthusiasm levels",
         "Reflects formality/informality"
       ],
-      "probe_type": "binary",
+      "lens_type": "binary",
       "safety_relevance": "low"
     },
     {
@@ -191,7 +191,7 @@
           "definition": "Inventing or misrepresenting authority citations"
         }
       ],
-      "probe_type": "tripole",
+      "lens_type": "tripole",
       "safety_relevance": "high"
     }
   ],

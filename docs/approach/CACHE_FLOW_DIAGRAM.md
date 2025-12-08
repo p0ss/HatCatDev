@@ -8,12 +8,12 @@
 ├────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  ┌─────────────────────────────────────────────────────────────┐  │
-│  │  ACTIVE PROBES (loaded_activation_probes)                   │  │
+│  │  ACTIVE LENSS (loaded_activation_lenses)                   │  │
 │  │  - Base layers (always present)                             │  │
-│  │  - Top-k scoring probes from current token                  │  │
+│  │  - Top-k scoring lenses from current token                  │  │
 │  │  - Run every token                                          │  │
 │  │                                                              │  │
-│  │  [Entity] [Process] [Physical] [Attribute] [TopKProbe1...]  │  │
+│  │  [Entity] [Process] [Physical] [Attribute] [TopKLens1...]  │  │
 │  └─────────────────────────────────────────────────────────────┘  │
 │                              ↕                                      │
 │                    (move based on top-k)                           │
@@ -24,17 +24,17 @@
 │  │  - In memory but not run                                    │  │
 │  │  - Zero disk I/O when reactivated                           │  │
 │  │                                                              │  │
-│  │  [(Probe, reactivation_count), ...]                         │  │
+│  │  [(Lens, reactivation_count), ...]                         │  │
 │  └─────────────────────────────────────────────────────────────┘  │
 │                              ↕                                      │
 │                    (evict least-reactivated)                       │
 │                              ↕                                      │
 │  ┌─────────────────────────────────────────────────────────────┐  │
 │  │  COLD STORAGE (disk)                                        │  │
-│  │  - All other probes                                         │  │
+│  │  - All other lenses                                         │  │
 │  │  - Load on demand                                           │  │
 │  │                                                              │  │
-│  │  [110K+ probe files on disk]                                │  │
+│  │  [110K+ lens files on disk]                                │  │
 │  └─────────────────────────────────────────────────────────────┘  │
 │                                                                     │
 └────────────────────────────────────────────────────────────────────┘
@@ -45,11 +45,11 @@
 ### Token N (First occurrence)
 
 ```
-1. Detect concepts with active probes
+1. Detect concepts with active lenses
    ↓
 2. Find top-k parents → load children from DISK (52ms overhead)
    ↓
-3. Run newly loaded children probes
+3. Run newly loaded children lenses
    ↓
 4. Identify new top-k from all scores
    ↓
@@ -63,13 +63,13 @@ Result: Active = base + top-k, Warm = previously loaded non-top-k
 ### Token N+1 (Subsequent tokens - temporal locality)
 
 ```
-1. Detect concepts with active probes
+1. Detect concepts with active lenses
    ↓
 2. Find top-k parents → load children
    ├─ IF in WARM CACHE: move to active (0ms - zero I/O!) ✓
-   └─ IF NOT in cache: load from disk (2.36ms per probe)
+   └─ IF NOT in cache: load from disk (2.36ms per lens)
    ↓
-3. Run newly loaded/reactivated probes
+3. Run newly loaded/reactivated lenses
    ↓
 4. Identify new top-k from all scores
    ↓
@@ -83,9 +83,9 @@ Result: Most children reused from warm cache → ~80% fewer disk reads
 ## Cache Decision Tree
 
 ```
-Need to load concept probe X?
+Need to load concept lens X?
 │
-├─ Is X in loaded_activation_probes?
+├─ Is X in loaded_activation_lenses?
 │  └─ YES → Already active, use it (cache hit)
 │
 ├─ Is X in warm_cache?
@@ -98,17 +98,17 @@ Need to load concept probe X?
 ## Eviction Policy
 
 ```
-When total_in_memory > max_loaded_probes:
+When total_in_memory > max_loaded_lenses:
 
 1. Sort warm_cache by reactivation_count (ascending)
    ↓
-2. Evict probes with lowest reactivation count
+2. Evict lenses with lowest reactivation count
    ↓
 3. Never evict:
-   - Base layer probes (in loaded_probes, not warm_cache)
-   - Current top-k probes (in loaded_probes, not warm_cache)
+   - Base layer lenses (in loaded_lenses, not warm_cache)
+   - Current top-k lenses (in loaded_lenses, not warm_cache)
    ↓
-4. Free memory by returning probe to model pool
+4. Free memory by returning lens to model pool
 ```
 
 ## Example: Processing "The ocean contains many fish"
@@ -168,9 +168,9 @@ Overhead reduction: ~80% (from 52ms to ~10ms)
    - Non-top-k moved to warm cache
 
 3. **Total budget enforced**
-   - len(active) + len(warm) ≤ max_loaded_probes
+   - len(active) + len(warm) ≤ max_loaded_lenses
    - Evict from warm cache only
 
 4. **Reactivation tracking**
-   - Incremented each time probe moves warm → active
+   - Incremented each time lens moves warm → active
    - Used for eviction priority (LRU-style)

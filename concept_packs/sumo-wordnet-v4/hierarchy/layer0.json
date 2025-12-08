@@ -5,7 +5,7 @@
       "sumo_term": "MindsAndAgents",
       "layer": 0,
       "domain": "MindsAndAgents",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": true,
       "category_children": [
         "Agent",
@@ -29,7 +29,7 @@
       "sumo_term": "CreatedThings",
       "layer": 0,
       "domain": "CreatedThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": true,
       "category_children": [
         "AIArtifact",
@@ -55,7 +55,7 @@
       "sumo_term": "PhysicalWorld",
       "layer": 0,
       "domain": "PhysicalWorld",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": true,
       "category_children": [
         "ConstantQuantity",
@@ -75,7 +75,7 @@
       "sumo_term": "LivingThings",
       "layer": 0,
       "domain": "LivingThings",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": true,
       "category_children": [
         "AnatomicalStructure",
@@ -93,7 +93,7 @@
       "sumo_term": "Information",
       "layer": 0,
       "domain": "Information",
-      "is_category_probe": true,
+      "is_category_lens": true,
       "is_pseudo_sumo": true,
       "category_children": [
         "AbstractEntity",

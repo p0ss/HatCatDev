@@ -1,7 +1,7 @@
 # Layer 6 Characterization: WordNet Synset Analysis
 
 **Date**: 2025-01-15
-**Purpose**: Determine if Layer 6's 115,930 WordNet synsets represent distinct concepts worth training probes for, or if they're redundant synonyms.
+**Purpose**: Determine if Layer 6's 115,930 WordNet synsets represent distinct concepts worth training lenses for, or if they're redundant synonyms.
 
 ---
 
@@ -9,7 +9,7 @@
 
 **Finding**: Layer 6 synsets are **genuinely distinct semantic concepts**, not redundant synonyms. They represent fine-grained taxonomic and conceptual distinctions valuable for divergence detection.
 
-**Recommendation**: Include Layer 6 as probe targets. Dynamic loading makes memory manageable, and granular probes improve word-to-concept matching and contextual variance detection.
+**Recommendation**: Include Layer 6 as lens targets. Dynamic loading makes memory manageable, and granular lenses improve word-to-concept matching and contextual variance detection.
 
 ---
 
@@ -226,7 +226,7 @@ These fine-grained distinctions are **valuable for concept detection**.
 
 ### 4. Granularity Adds Value
 
-**User's original intent**: "The more granular our probes can get, the more likely they are to match to the output words, and the more likely their related probes are to catch their contextual variance in their outer bounds."
+**User's original intent**: "The more granular our lenses can get, the more likely they are to match to the output words, and the more likely their related lenses are to catch their contextual variance in their outer bounds."
 
 **Layer 6 supports this**:
 - Word "gamecock" directly matches specific synset, not generic "bird"
@@ -237,20 +237,20 @@ These fine-grained distinctions are **valuable for concept detection**.
 
 ## Recommendation
 
-### Include Layer 6 as Probe Targets
+### Include Layer 6 as Lens Targets
 
 **Rationale**:
 1. **Distinct concepts**: Not redundant synonyms, each synset is semantically unique
 2. **Taxonomic value**: Preserves fine-grained hierarchical distinctions
-3. **Better word matching**: Granular probes improve direct concept-word alignment
+3. **Better word matching**: Granular lenses improve direct concept-word alignment
 4. **Contextual coverage**: Related concepts capture variance at outer activation bounds
-5. **Memory manageable**: Dynamic probe loading handles 115k concepts within budget
+5. **Memory manageable**: Dynamic lens loading handles 115k concepts within budget
 6. **Full connectivity**: 100% of top categories hierarchically resolve to trained concepts
 
 **Implementation Strategy**:
 - Load Layer 6 synsets dynamically based on activation strength
 - Prioritize high-frequency synsets for initial loading
-- Use hierarchical structure to expand/contract probe sets
+- Use hierarchical structure to expand/contract lens sets
 - Maintain parent-child relationships for contextual resolution
 
 ---
@@ -288,8 +288,8 @@ These fine-grained distinctions are **valuable for concept detection**.
 
 ## Conclusion
 
-Layer 6's 115,930 synsets are **not redundant**. They represent a rich taxonomy of distinct semantic concepts at varying levels of abstraction. Including them as probe targets will enhance HatCat's ability to detect fine-grained conceptual distinctions and capture contextual variance in model activations.
+Layer 6's 115,930 synsets are **not redundant**. They represent a rich taxonomy of distinct semantic concepts at varying levels of abstraction. Including them as lens targets will enhance HatCat's ability to detect fine-grained conceptual distinctions and capture contextual variance in model activations.
 
-The hierarchical structure is fully functional, with 100% of high-frequency categories resolving to trained concepts in Layers 0-4. Dynamic probe loading makes this feasible without exceeding memory constraints.
+The hierarchical structure is fully functional, with 100% of high-frequency categories resolving to trained concepts in Layers 0-4. Dynamic lens loading makes this feasible without exceeding memory constraints.
 
-**Recommendation**: Proceed with Layer 6 integration as probe targets.
+**Recommendation**: Proceed with Layer 6 integration as lens targets.

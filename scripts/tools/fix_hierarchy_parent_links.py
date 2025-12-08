@@ -9,7 +9,7 @@ For each concept, adds:
 - Validates that every non-layer-0 concept has at least one parent
 - Validates that parent->child relationships are bidirectional
 
-This is critical for dynamic probe loading to work correctly.
+This is critical for dynamic lens loading to work correctly.
 """
 
 import argparse

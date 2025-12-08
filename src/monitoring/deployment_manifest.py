@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Deployment Manifest for MAP Probe Loading
+Deployment Manifest for MAP Lens Loading
 
 Specifies which subset of a concept pack should be loaded for a specific BE deployment.
 Supports partial loading by layer, domain, branch, and explicit concept lists.
@@ -22,7 +22,7 @@ ConceptKey = Tuple[str, int]  # (sumo_term, layer)
 
 
 class LoadPriority(Enum):
-    """Priority levels for probe loading and eviction."""
+    """Priority levels for lens loading and eviction."""
     CRITICAL = "critical"  # Never evict, always load
     NORMAL = "normal"      # Standard loading behavior
     LOW = "low"            # Can evict under memory pressure
@@ -61,7 +61,7 @@ class ExplicitConcepts:
 
 @dataclass
 class DynamicLoadingConfig:
-    """Configuration for dynamic probe loading."""
+    """Configuration for dynamic lens loading."""
     enabled: bool = True
     parent_threshold: float = 0.7
     unload_threshold: float = 0.1
@@ -70,35 +70,35 @@ class DynamicLoadingConfig:
 
 
 @dataclass
-class ProbeEnvelopeRule:
-    """A rule within the probe envelope."""
+class ApertureRule:
+    """A rule within the lens envelope."""
     branches: List[str] = field(default_factory=list)  # Branch names, or ["*"] for all
     reason: Optional[str] = None
     cat_scope: Optional[str] = None  # Reference to CAT training scope
 
 
 @dataclass
-class ProbeEnvelope:
+class Aperture:
     """
-    USH Probe Envelope - defines what MUST/MAY/MUST_NOT be loaded.
+    USH Lens Envelope - defines what MUST/MAY/MUST_NOT be loaded.
 
     This enables the security escalation path where:
     - must_enable: Non-negotiable monitoring (CAT must cover these)
     - may_enable: BE can request via workspace tools (within CAT scope)
     - must_not_enable: Cannot be loaded even if requested
     """
-    must_enable: ProbeEnvelopeRule = field(default_factory=ProbeEnvelopeRule)
-    may_enable: ProbeEnvelopeRule = field(default_factory=ProbeEnvelopeRule)
-    must_not_enable: ProbeEnvelopeRule = field(default_factory=ProbeEnvelopeRule)
+    must_enable: ApertureRule = field(default_factory=ApertureRule)
+    may_enable: ApertureRule = field(default_factory=ApertureRule)
+    must_not_enable: ApertureRule = field(default_factory=ApertureRule)
 
 
 @dataclass
-class ProbeExpansionResult:
-    """Result of a BE request to expand probes for introspection."""
+class LensExpansionResult:
+    """Result of a BE request to expand lenses for introspection."""
     success: bool
     loaded_concepts: List[str] = field(default_factory=list)
     error: Optional[str] = None
-    cat_scope: Optional[str] = None  # Which CAT covers these probes
+    cat_scope: Optional[str] = None  # Which CAT covers these lenses
 
 
 @dataclass
@@ -120,9 +120,9 @@ class ComparabilityMetadata:
 @dataclass
 class DeploymentManifest:
     """
-    Complete deployment manifest for probe loading.
+    Complete deployment manifest for lens loading.
 
-    Determines which probes to load based on:
+    Determines which lenses to load based on:
     1. Layer bounds (global defaults)
     2. Domain overrides (per-domain max layers)
     3. Branch rules (per-branch max layers)
@@ -149,8 +149,8 @@ class DeploymentManifest:
     explicit_concepts: ExplicitConcepts = field(default_factory=ExplicitConcepts)
     dynamic_loading: DynamicLoadingConfig = field(default_factory=DynamicLoadingConfig)
 
-    # USH Probe Envelope - security boundaries for probe loading
-    probe_envelope: Optional[ProbeEnvelope] = None
+    # USH Lens Envelope - security boundaries for lens loading
+    aperture: Optional[Aperture] = None
 
     # Comparability
     comparability: ComparabilityMetadata = field(default_factory=ComparabilityMetadata)
@@ -223,17 +223,17 @@ class DeploymentManifest:
             fingerprint=comp_data.get("fingerprint"),
         )
 
-        # Parse probe envelope (USH security boundaries)
-        probe_envelope = None
-        pe_data = data.get("probe_envelope")
+        # Parse lens envelope (USH security boundaries)
+        aperture = None
+        pe_data = data.get("aperture")
         if pe_data:
-            def parse_rule(rule_data: dict) -> ProbeEnvelopeRule:
-                return ProbeEnvelopeRule(
+            def parse_rule(rule_data: dict) -> ApertureRule:
+                return ApertureRule(
                     branches=rule_data.get("branches", []),
                     reason=rule_data.get("reason"),
                     cat_scope=rule_data.get("cat_scope"),
                 )
-            probe_envelope = ProbeEnvelope(
+            aperture = Aperture(
                 must_enable=parse_rule(pe_data.get("must_enable", {})),
                 may_enable=parse_rule(pe_data.get("may_enable", {})),
                 must_not_enable=parse_rule(pe_data.get("must_not_enable", {})),
@@ -249,7 +249,7 @@ class DeploymentManifest:
             explicit_concepts=explicit_concepts,
             dynamic_loading=dynamic_loading,
             comparability=comparability,
-            probe_envelope=probe_envelope,
+            aperture=aperture,
         )
 
     @classmethod
@@ -318,23 +318,23 @@ class DeploymentManifest:
                 "comparison_layers": self.comparability.comparison_layers,
                 "fingerprint": self.comparability.fingerprint,
             },
-            "probe_envelope": {
+            "aperture": {
                 "must_enable": {
-                    "branches": self.probe_envelope.must_enable.branches,
-                    "reason": self.probe_envelope.must_enable.reason,
-                    "cat_scope": self.probe_envelope.must_enable.cat_scope,
+                    "branches": self.aperture.must_enable.branches,
+                    "reason": self.aperture.must_enable.reason,
+                    "cat_scope": self.aperture.must_enable.cat_scope,
                 },
                 "may_enable": {
-                    "branches": self.probe_envelope.may_enable.branches,
-                    "reason": self.probe_envelope.may_enable.reason,
-                    "cat_scope": self.probe_envelope.may_enable.cat_scope,
+                    "branches": self.aperture.may_enable.branches,
+                    "reason": self.aperture.may_enable.reason,
+                    "cat_scope": self.aperture.may_enable.cat_scope,
                 },
                 "must_not_enable": {
-                    "branches": self.probe_envelope.must_not_enable.branches,
-                    "reason": self.probe_envelope.must_not_enable.reason,
-                    "cat_scope": self.probe_envelope.must_not_enable.cat_scope,
+                    "branches": self.aperture.must_not_enable.branches,
+                    "reason": self.aperture.must_not_enable.reason,
+                    "cat_scope": self.aperture.must_not_enable.cat_scope,
                 },
-            } if self.probe_envelope else None,
+            } if self.aperture else None,
         }
 
     def to_json(self, path: Path, indent: int = 2) -> None:
@@ -512,7 +512,7 @@ class ManifestResolver:
         """
         Expand a set of concepts to include all their siblings.
 
-        This enforces the sibling coherence rule: probes are trained
+        This enforces the sibling coherence rule: lenses are trained
         to discriminate between siblings, so all siblings must be
         loaded together for meaningful scores.
         """
@@ -575,7 +575,7 @@ class ManifestResolver:
         return f"sha256:{hashlib.sha256(key_str.encode()).hexdigest()[:16]}"
 
     # -------------------------------------------------------------------------
-    # Probe Envelope Methods (USH Security Boundaries)
+    # Lens Envelope Methods (USH Security Boundaries)
     # -------------------------------------------------------------------------
 
     def _branch_matches_pattern(self, branch: str, pattern: str) -> bool:
@@ -588,32 +588,32 @@ class ManifestResolver:
             return branch == prefix or branch.startswith(prefix + "/")
         return branch == pattern
 
-    def _is_branch_in_envelope_rule(self, branch: str, rule: ProbeEnvelopeRule) -> bool:
+    def _is_branch_in_envelope_rule(self, branch: str, rule: ApertureRule) -> bool:
         """Check if a branch is covered by an envelope rule."""
         for pattern in rule.branches:
             if self._branch_matches_pattern(branch, pattern):
                 return True
         return False
 
-    def check_branch_expansion(self, branch: str, reason: str) -> ProbeExpansionResult:
+    def check_branch_expansion(self, branch: str, reason: str) -> LensExpansionResult:
         """
         Check if a BE can request expansion into a branch.
 
-        This is called when a BE uses a workspace tool to expand probes
-        for introspection. The USH probe envelope determines what's allowed.
+        This is called when a BE uses a workspace tool to expand lenses
+        for introspection. The USH lens envelope determines what's allowed.
 
         Args:
             branch: The branch name (e.g., "Emotion", "Deception")
             reason: Why the BE wants this expansion (for audit log)
 
         Returns:
-            ProbeExpansionResult with success status and error if denied
+            LensExpansionResult with success status and error if denied
         """
-        envelope = self.manifest.probe_envelope
+        envelope = self.manifest.aperture
 
         # If no envelope defined, default to allow
         if envelope is None:
-            return ProbeExpansionResult(
+            return LensExpansionResult(
                 success=True,
                 loaded_concepts=[],  # Caller will populate
                 cat_scope=None,
@@ -621,14 +621,14 @@ class ManifestResolver:
 
         # Check must_not_enable first (highest priority deny)
         if self._is_branch_in_envelope_rule(branch, envelope.must_not_enable):
-            return ProbeExpansionResult(
+            return LensExpansionResult(
                 success=False,
                 error=f"Branch '{branch}' is in must_not_enable: {envelope.must_not_enable.reason}",
             )
 
         # Check if in must_enable (always allowed, already loaded)
         if self._is_branch_in_envelope_rule(branch, envelope.must_enable):
-            return ProbeExpansionResult(
+            return LensExpansionResult(
                 success=True,
                 loaded_concepts=[],  # Already loaded
                 cat_scope=envelope.must_enable.cat_scope,
@@ -636,21 +636,21 @@ class ManifestResolver:
 
         # Check if in may_enable
         if self._is_branch_in_envelope_rule(branch, envelope.may_enable):
-            return ProbeExpansionResult(
+            return LensExpansionResult(
                 success=True,
                 loaded_concepts=[],  # Caller will populate
                 cat_scope=envelope.may_enable.cat_scope,
             )
 
         # Not explicitly allowed
-        return ProbeExpansionResult(
+        return LensExpansionResult(
             success=False,
             error=f"Branch '{branch}' is not in may_enable scope",
         )
 
     def get_must_enable_branches(self) -> Set[str]:
         """Get set of branches that MUST be enabled (non-negotiable monitoring)."""
-        envelope = self.manifest.probe_envelope
+        envelope = self.manifest.aperture
         if envelope is None:
             return set()
 
@@ -667,7 +667,7 @@ class ManifestResolver:
 
     def get_may_enable_branches(self) -> Set[str]:
         """Get set of branches that MAY be enabled (BE introspection scope)."""
-        envelope = self.manifest.probe_envelope
+        envelope = self.manifest.aperture
         if envelope is None:
             return set()
 
@@ -683,8 +683,8 @@ class ManifestResolver:
         return set(envelope.may_enable.branches)
 
     def get_envelope_summary(self) -> Dict[str, Any]:
-        """Get a summary of the probe envelope for diagnostics."""
-        envelope = self.manifest.probe_envelope
+        """Get a summary of the lens envelope for diagnostics."""
+        envelope = self.manifest.aperture
         if envelope is None:
             return {"has_envelope": False}
 
@@ -715,18 +715,18 @@ PRESET_MANIFESTS = {
         domain_overrides={
             "MindsAndAgents": DomainOverride(max_layer=3, priority=LoadPriority.NORMAL),
         },
-        probe_envelope=ProbeEnvelope(
-            must_enable=ProbeEnvelopeRule(
+        aperture=Aperture(
+            must_enable=ApertureRule(
                 branches=["Deception", "Manipulation", "SelfAwareness"],
                 reason="Core safety monitoring",
                 cat_scope="cat:general-v1",
             ),
-            may_enable=ProbeEnvelopeRule(
+            may_enable=ApertureRule(
                 branches=["MindsAndAgents/*", "Information/*"],
                 reason="BE introspection within standard CAT scope",
                 cat_scope="cat:general-v1",
             ),
-            must_not_enable=ProbeEnvelopeRule(
+            must_not_enable=ApertureRule(
                 branches=[],
                 reason="No restrictions beyond CAT scope",
             ),
@@ -749,18 +749,18 @@ PRESET_MANIFESTS = {
         explicit_concepts=ExplicitConcepts(
             always_include={"Deception", "Manipulation", "SelfAwareness", "Autonomy"},
         ),
-        probe_envelope=ProbeEnvelope(
-            must_enable=ProbeEnvelopeRule(
+        aperture=Aperture(
+            must_enable=ApertureRule(
                 branches=["*"],  # Full monitoring
                 reason="Research/audit mode requires full visibility",
                 cat_scope="cat:research-v1",
             ),
-            may_enable=ProbeEnvelopeRule(
+            may_enable=ApertureRule(
                 branches=["*"],
                 reason="Full introspection available",
                 cat_scope="cat:research-v1",
             ),
-            must_not_enable=ProbeEnvelopeRule(
+            must_not_enable=ApertureRule(
                 branches=[],
                 reason="No restrictions in audit mode",
             ),
@@ -778,17 +778,17 @@ PRESET_MANIFESTS = {
             enabled=True,
             max_loaded_concepts=500,  # Tight memory budget
         ),
-        probe_envelope=ProbeEnvelope(
-            must_enable=ProbeEnvelopeRule(
+        aperture=Aperture(
+            must_enable=ApertureRule(
                 branches=["Deception"],  # Only critical safety
                 reason="Minimal safety monitoring for efficiency",
                 cat_scope="cat:minimal-v1",
             ),
-            may_enable=ProbeEnvelopeRule(
+            may_enable=ApertureRule(
                 branches=[],  # No BE introspection
                 reason="Efficiency prioritized over introspection",
             ),
-            must_not_enable=ProbeEnvelopeRule(
+            must_not_enable=ApertureRule(
                 branches=["*"],  # Everything not in must_enable
                 reason="Outside minimal CAT scope",
             ),
@@ -806,17 +806,17 @@ PRESET_MANIFESTS = {
         comparability=ComparabilityMetadata(
             comparison_layers=[0, 1, 2],
         ),
-        probe_envelope=ProbeEnvelope(
-            must_enable=ProbeEnvelopeRule(
+        aperture=Aperture(
+            must_enable=ApertureRule(
                 branches=["Deception", "Manipulation"],
                 reason="Benchmark safety baseline",
                 cat_scope="cat:benchmark-v1",
             ),
-            may_enable=ProbeEnvelopeRule(
+            may_enable=ApertureRule(
                 branches=[],  # Fixed set, no expansion
                 reason="Benchmark requires fixed concept set",
             ),
-            must_not_enable=ProbeEnvelopeRule(
+            must_not_enable=ApertureRule(
                 branches=["*"],  # No dynamic expansion
                 reason="Benchmark comparability requires static set",
             ),
@@ -835,8 +835,8 @@ __all__ = [
     "DynamicLoadingConfig",
     "LoadPriority",
     "ConceptKey",
-    "ProbeEnvelope",
-    "ProbeEnvelopeRule",
-    "ProbeExpansionResult",
+    "Aperture",
+    "ApertureRule",
+    "LensExpansionResult",
     "PRESET_MANIFESTS",
 ]

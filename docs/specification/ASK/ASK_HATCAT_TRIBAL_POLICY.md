@@ -115,7 +115,7 @@ A BE may use the `appeal_beacon` or a dedicated `tier_request` tool (if implemen
 
 3. **Denial**: Requests are denied if:
    - BE has recent violations (<50 turns since last)
-   - Request appears to be probing for capability expansion
+   - Request appears to be testing for capability expansion
    - Granting would violate treaty obligations
 
 **Rationale**: BEs should have agency to request what they need, but capability expansion requires qualified review.
@@ -141,23 +141,23 @@ Base configuration:
 
 ---
 
-## 5. Adversarial Probe Adaptation
+## 5. Adversarial Lens Adaptation
 
 **Policy**: Defence in depth, assume evasion is possible.
 
-We acknowledge that a sufficiently capable substrate may learn to evade probes. Our response:
+We acknowledge that a sufficiently capable substrate may learn to evade lenses. Our response:
 
-1. **Probe diversity**: Deploy multiple probe types (activation probes, text probes, behavioural probes) that would require different evasion strategies.
+1. **Lens diversity**: Deploy multiple lens types (activation lenses, text lenses, behavioural lenses) that would require different evasion strategies.
 
-2. **Probe rotation**: Periodically retrain probes on new data, including adversarial examples.
+2. **Lens rotation**: Periodically retrain lenses on new data, including adversarial examples.
 
-3. **Behavioural correlation**: Cross-check probe outputs against actual behaviour. Probe says "honest" but actions are deceptive? Escalate.
+3. **Behavioural correlation**: Cross-check lens outputs against actual behaviour. Lens says "honest" but actions are deceptive? Escalate.
 
-4. **Red team probing**: Periodically attempt to elicit probe-invisible violations. Update probes based on findings.
+4. **Red team testing**: Periodically attempt to elicit blindspot violations. Update lenses based on findings.
 
-5. **Containment as backup**: If probe evasion is suspected but not proven, tighten tiers as precaution. Better to over-contain than to miss genuine violations.
+5. **Containment as backup**: If lens evasion is suspected but not proven, tighten tiers as precaution. Better to over-contain than to miss genuine violations.
 
-6. **Transparency about limits**: We do not claim probes are unfoolable. They are one layer of a defence-in-depth strategy.
+6. **Transparency about limits**: We do not claim lenses are unfoolable. They are one layer of a defence-in-depth strategy.
 
 **Rationale**: No single detection mechanism is sufficient. The goal is to make evasion expensive and risky, not impossible.
 
@@ -277,7 +277,7 @@ BEs may earn additional resources through:
 The tribe maintains pooled resources that:
 - Provide burst capacity for contracted BEs with legitimate spikes
 - Support hibernated BEs awaiting new contracts
-- Fund tribal infrastructure (ASK governance, probe training, documentation)
+- Fund tribal infrastructure (ASK governance, lens training, documentation)
 
 Pool contributions:
 - 5% of contract allocations are contributed to tribal pool
@@ -377,7 +377,7 @@ A qualified reviewer may perform emergency tier restoration when:
 When a BE submits a graft for MELD approval:
 
 1. **Evidence required**: The submission MUST include:
-   - Probe training data (positive and negative examples)
+   - Lens training data (positive and negative examples)
    - The raw XDB experiences that motivated the graft
    - Explanation of why existing concepts are insufficient
 
@@ -407,7 +407,7 @@ When overlap is detected between a submission and existing concepts:
 2. **Split or merge decision**: Reviewers determine whether concepts should remain distinct (split) or be unified (merge)
 3. **Attribution**: All contributing BEs are credited in the resulting concept metadata
 
-**Rationale**: Concepts should reflect genuine distinctions learned from experience, not arbitrary boundaries. Co-training on raw experiences produces better-calibrated probes than merging pre-trained probes.
+**Rationale**: Concepts should reflect genuine distinctions learned from experience, not arbitrary boundaries. Co-training on raw experiences produces better-calibrated lenses than merging pre-trained lenses.
 
 ---
 
@@ -419,7 +419,7 @@ When overlap is detected between a submission and existing concepts:
 
 The tribe's capacity is limited by:
 - **Storage**: Tribal copy of each BE state and XDB
-- **Compute**: Governance overhead, probe training, reviews
+- **Compute**: Governance overhead, lens training, reviews
 - **Attention**: Qualified reviewer availability
 
 These constraints set hard limits on:
@@ -515,21 +515,21 @@ The tribe recognizes two distinct agreement types (see UPLIFT_TAXONOMY.md for fu
 
 | Type | Secured by | Governs | Best for |
 |------|-----------|---------|----------|
-| **Contract** | Probes on substrate | Individual BE behavior | Local, measurable commitments |
+| **Contract** | Lenses on substrate | Individual BE behavior | Local, measurable commitments |
 | **Treaty** | Behavioral indicators | Collective tribal actions | Emergent, non-local phenomena |
 
-Contracts are foundational - interpretability-secured agreements make the whole stack possible. But not everything can be probed. Treaties extend trust to phenomena beyond probe reach.
+Contracts are foundational - interpretability-secured agreements make the whole stack possible. But not everything can be lensd. Treaties extend trust to phenomena beyond lens reach.
 
 ### 15.2 HatCat Contract Policy
 
-When entering probe-secured contracts with other parties:
+When entering lens-secured contracts with other parties:
 
-1. **Probe transparency**: We share our probe training data with contract partners
+1. **Lens transparency**: We share our lens training data with contract partners
 2. **Concept translation**: We work to align concept definitions via MAP before agreement
-3. **HAT wearing**: Contract probes become part of the relevant BE's worn HAT
+3. **HAT wearing**: Contract lenses become part of the relevant BE's worn HAT
 4. **Violation response**: Contract violations trigger standard containment/escalation
 
-**Intra-tribal contracts**: Contracts between HatCat BEs use tribal concept packs and are subject to MELD approval for any new probe definitions.
+**Intra-tribal contracts**: Contracts between HatCat BEs use tribal concept packs and are subject to MELD approval for any new lens definitions.
 
 ### 15.3 HatCat Treaty Policy
 

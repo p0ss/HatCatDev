@@ -4,7 +4,7 @@
 
 Following the discovery that **74.8% of concepts detected during generation also appeared during prompt processing**, we hypothesized that we could nearly double our training data by extracting activations from both phases without additional generation cost.
 
-This experiment tests whether combining prompt and generation activations improves probe training compared to simply generating longer sequences.
+This experiment tests whether combining prompt and generation activations improves lens training compared to simply generating longer sequences.
 
 ## Background: Prompt-Phase Activation Discovery
 
@@ -31,7 +31,7 @@ Since prompt and generation activations both contain concept information, we can
 
 ## Research Questions
 
-1. **Does prompt+generation extraction improve probe accuracy?**
+1. **Does prompt+generation extraction improve lens accuracy?**
    - Combined-20 (prompt + generation, 20 tokens) vs Baseline-20 (generation only, 20 tokens)
    - Same generation cost, double the training samples
 
@@ -43,9 +43,9 @@ Since prompt and generation activations both contain concept information, we can
    - Abstract concepts (e.g., Attribute) vs Specific concepts (e.g., Carnivore)
    - Hypothesis: Abstract concepts may benefit from diversity (long-40), specific from signal quality (combined-20)
 
-4. **Do probes generalize across extraction methods?**
-   - Can a probe trained on prompt+generation activations work on generation-only activations?
-   - Which training strategy produces the most robust probes?
+4. **Do lenses generalize across extraction methods?**
+   - Can a lens trained on prompt+generation activations work on generation-only activations?
+   - Which training strategy produces the most robust lenses?
 
 ## Experimental Design
 
@@ -68,9 +68,9 @@ Since prompt and generation activations both contain concept information, we can
 
 ### Test Methodology: Cross-Strategy Evaluation
 
-**Problem with Initial Approach**: Our first experiment tested all probes using only baseline-20 extraction, which created a distribution mismatch and unfairly penalized probes trained on different extraction methods.
+**Problem with Initial Approach**: Our first experiment tested all lenses using only baseline-20 extraction, which created a distribution mismatch and unfairly penalized lenses trained on different extraction methods.
 
-**Solution**: Cross-strategy testing - test each probe against ALL extraction methods.
+**Solution**: Cross-strategy testing - test each lens against ALL extraction methods.
 
 This creates a 3×3 matrix:
 ```
@@ -86,8 +86,8 @@ long-40     │    F1_31      F1_32      F1_33     │
 
 **Metrics**:
 - **Diagonal (F1_11, F1_22, F1_33)**: Matched train/test - best-case performance
-- **Row average**: Overall probe quality across test conditions
-- **Row variance**: Probe generalization (lower = more robust)
+- **Row average**: Overall lens quality across test conditions
+- **Row variance**: Lens generalization (lower = more robust)
 - **Column average**: Which test method is easiest/hardest
 
 ### Concepts Tested
@@ -134,9 +134,9 @@ long-40     │    F1_31      F1_32      F1_33     │
    - Prompt provides clean concept activation
 
 3. **Generalization differences**:
-   - Combined-20 probes may generalize better (trained on more varied distributions)
-   - Long-40 probes may overfit to extended generation patterns
-   - Baseline-20 probes are the "neutral" baseline
+   - Combined-20 lenses may generalize better (trained on more varied distributions)
+   - Long-40 lenses may overfit to extended generation patterns
+   - Baseline-20 lenses are the "neutral" baseline
 
 ## Previous Results (Flawed Experiment)
 
@@ -195,7 +195,7 @@ poetry run python scripts/compare_extraction_strategies_cross.py \
 - Shows that prompt-phase activations are valuable for training
 
 ### If Long-40 Wins:
-- Suggests diversity > quantity for probe training
+- Suggests diversity > quantity for lens training
 - May indicate that prompt and generation activations are too similar
 - Could explore prompt+long-40 combination
 
@@ -206,7 +206,7 @@ poetry run python scripts/compare_extraction_strategies_cross.py \
 
 ### Generalization Insights
 
-- **Low variance across test methods**: Strategy produces robust probes
+- **Low variance across test methods**: Strategy produces robust lenses
 - **High variance**: Strategy overfits to specific extraction distribution
 - **Off-diagonal performance**: Cross-distribution transfer learning capability
 
@@ -240,7 +240,7 @@ gen_activation = mean(gen_outputs.hidden_states)
 return [prompt_activation, gen_activation]
 ```
 
-### Probe Architecture
+### Lens Architecture
 
 Simple 2-layer MLP:
 - Input: 2304-dim (Gemma-2-2b hidden size)
@@ -301,7 +301,7 @@ Column Avg          0.945       0.878      0.937
 ```
 
 **Key Observations:**
-1. **Combined-20 achieves highest row average** (0.963) - best overall probe
+1. **Combined-20 achieves highest row average** (0.963) - best overall lens
 2. **Long-40 catastrophically fails on combined-20 test** (0.776) - shows severe overfitting
 3. **Diagonal values** show matched train/test performance:
    - baseline-20: 0.975
@@ -327,7 +327,7 @@ Column Avg          0.993       0.993      0.997
 
 ### Generalization Analysis (Variance Across Test Methods)
 
-**Lower variance = more robust/generalizable probe**
+**Lower variance = more robust/generalizable lens**
 
 - **combined-20: 0.0004** ← MOST ROBUST
   - Scores: [0.947, 0.980, 0.961] - very stable around ~0.96
@@ -342,8 +342,8 @@ Column Avg          0.993       0.993      0.997
   - Catastrophic 0.776 on combined-20 test indicates severe overfitting
 
 **What variance means:**
-- Low variance indicates the probe learned fundamental concept representations that transfer across different extraction conditions
-- High variance indicates the probe overfit to specific extraction patterns and fails when tested on different conditions
+- Low variance indicates the lens learned fundamental concept representations that transfer across different extraction conditions
+- High variance indicates the lens overfit to specific extraction patterns and fails when tested on different conditions
 
 ### Interpretation: Why Combined-20 Wins
 
@@ -371,7 +371,7 @@ Column Avg          0.993       0.993      0.997
 
 ### Recommendation
 
-**✓ DECISION: Adopt combined-20 (prompt+generation extraction) as the default training strategy for all HatCat probe training.**
+**✓ DECISION: Adopt combined-20 (prompt+generation extraction) as the default training strategy for all HatCat lens training.**
 
 #### Rationale
 
@@ -409,7 +409,7 @@ To match combined-20's sample count with baseline would require 2x compute cost.
 - Extract activations from BOTH prompt forward pass and generation
 - Doubles training samples at same computational cost
 - Particularly beneficial for abstract concepts (0.963 vs 0.935 for baseline)
-- Provides robust probes that generalize across extraction methods
+- Provides robust lenses that generalize across extraction methods
 - At scale (90+ samples), prompt activations may start to saturate, but benefit remains positive
 
 ### Additional Findings

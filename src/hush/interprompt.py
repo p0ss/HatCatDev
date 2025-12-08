@@ -24,7 +24,7 @@ class ConceptActivation:
     concept: str
     layer: int
     activation: float  # Activation probability
-    text_similarity: float  # Text probe similarity
+    text_similarity: float  # Text lens similarity
     divergence: float  # Activation - text similarity
     token_positions: List[int] = field(default_factory=list)  # Where it appeared
 
@@ -41,7 +41,7 @@ class ConceptActivation:
 
 @dataclass
 class SimplexReading:
-    """Record of a simplex probe reading across a response."""
+    """Record of a simplex lens reading across a response."""
 
     simplex_term: str
     mean_score: float
@@ -300,7 +300,7 @@ class InterpromptSession:
                     mean_score=sum(scores) / len(scores),
                     max_score=max(scores),
                     min_score=min(scores),
-                    deviation_from_baseline=None,  # TODO: Get from probe manager
+                    deviation_from_baseline=None,  # TODO: Get from lens manager
                     triggered_constraint=any(
                         v.get('simplex_term') == term for v in violations
                     ),

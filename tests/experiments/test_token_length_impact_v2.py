@@ -140,7 +140,7 @@ def train_concept_at_token_length(
         print(f"  Extraction: {extract_time:.1f}s")
 
         # Train
-        print(f"  Training probe...")
+        print(f"  Training lens...")
         train_start = time.time()
         train_result = trainer.train_cycle(
             activations_pos=pos_acts,
@@ -159,8 +159,8 @@ def train_concept_at_token_length(
 
         # Validate
         print(f"  Validating...")
-        val_result = validator.validate_probe(
-            probe=trainer.get_probe(),
+        val_result = validator.validate_lens(
+            lens=trainer.get_lens(),
             concept=target_concept,
             all_concepts=all_concepts,
             cycle=cycle,

@@ -3,7 +3,7 @@
 Analyze correlation between rapid graduation, low synset count, and validation failure.
 
 Hypothesis: Concepts with few synsets overfit quickly to small samples, achieving high
-test F1 (A-grade) in few iterations but failing to generalize to probe calibration.
+test F1 (A-grade) in few iterations but failing to generalize to lens calibration.
 """
 
 import json

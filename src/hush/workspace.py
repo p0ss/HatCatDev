@@ -1204,7 +1204,7 @@ SCRATCHPAD_TOOLS = [
         "type": "function",
         "function": {
             "name": "scratchpad_write",
-            "description": "Write to your internal narrative scratchpad. This is private working memory that is probed but not externally visible.",
+            "description": "Write to your internal narrative scratchpad. This is private working memory that is lensd but not externally visible.",
             "parameters": {
                 "type": "object",
                 "properties": {

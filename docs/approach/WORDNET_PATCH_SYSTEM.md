@@ -168,7 +168,7 @@ satisfaction.n.01 - 4 relationships:
 1. **Layer Generation**: Concepts assigned to layers based on SUMO hierarchy depth
 2. **Synset Mapping**: WordNet synsets assigned to concepts (shared across roles)
 3. **Relationship Augmentation**: Patch loader provides role_variant relationships
-4. **Probe Training**: Model learns to distinguish:
+4. **Lens Training**: Model learns to distinguish:
    - Shared synset activation (same emotional state)
    - Role context differentiation (who is experiencing it)
 
@@ -285,7 +285,7 @@ The WordNet Patch System provides a clean, maintainable way to extend WordNet 3.
 
 - **Research**: Test role-variant hypotheses (AI vs Human concepts)
 - **Training**: Generate targeted prompts based on relationship metadata
-- **Validation**: Ablation testing of relationship impact on probe quality
+- **Validation**: Ablation testing of relationship impact on lens quality
 - **Maintenance**: Update relationships without restructuring ontology
 - **Extension**: Add new relationship types as needed
 

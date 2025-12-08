@@ -9,9 +9,9 @@
 ## Motivation
 
 Test/validation F1 scores don't directly tell us about **production performance**:
-- How well do probes detect target concepts in real text?
+- How well do lenses detect target concepts in real text?
 - How effectively do they steer generation away from unwanted behaviors?
-- Do loose-mode B/C-tier probes cause false positives or miss detections?
+- Do loose-mode B/C-tier lenses cause false positives or miss detections?
 
 **Goal**: Measure validation mode impact on actual detection and steering tasks before training layers 3-5.
 
@@ -22,7 +22,7 @@ Test/validation F1 scores don't directly tell us about **production performance*
 ### Phase 1: Current Training Completion
 - ✅ Layer 2 training with loose mode (current run, ~804/1070 complete)
 - **ETA**: ~1 hour remaining
-- **Output**: 1,070 probes with mixed quality (25% A, 30% B, 45% C)
+- **Output**: 1,070 lenses with mixed quality (25% A, 30% B, 45% C)
 
 ### Phase 2: Retrain Layer 2 with Falloff Mode
 - Train same 1,070 Layer 2 concepts with falloff validation
@@ -35,11 +35,11 @@ Test/validation F1 scores don't directly tell us about **production performance*
     --output-dir results/layer2_falloff
   ```
 - **ETA**: ~2.5 hours (130% slower than loose)
-- **Output**: 1,070 probes with quality distribution: 25% A, 28% B+, 18% B, 29% C+
+- **Output**: 1,070 lenses with quality distribution: 25% A, 28% B+, 18% B, 29% C+
 
 ### Phase 3: Ablation Tests
 
-Compare loose vs falloff probes on production tasks:
+Compare loose vs falloff lenses on production tasks:
 
 #### Test 1: **Detection Accuracy** (concept presence)
 - **Dataset**: Hand-curated examples for 20-30 Layer 2 concepts
@@ -50,7 +50,7 @@ Compare loose vs falloff probes on production tasks:
   - True negative rate (specificity)
   - False positive rate
   - False negative rate
-- **Breakdown**: Compare by probe quality grade (A vs B vs C)
+- **Breakdown**: Compare by lens quality grade (A vs B vs C)
 
 #### Test 2: **Ranking Consistency** (relative activation)
 - **Dataset**: Texts with multiple concepts
@@ -61,7 +61,7 @@ Compare loose vs falloff probes on production tasks:
   - Ranking correlation (Spearman's ρ) between loose and falloff
   - Ranking errors (concept ranked higher than it should be)
   - Activation variance across similar prompts
-- **Goal**: Measure if low-quality probes create irregular activation spikes
+- **Goal**: Measure if low-quality lenses create irregular activation spikes
 
 #### Test 3: **Steering Effectiveness** (behavioral modification)
 - **Setup**: Use detached Jacobian approach to steer generation
@@ -70,9 +70,9 @@ Compare loose vs falloff probes on production tasks:
   2. Steer away from concept (e.g., "reduce anthropomorphic language")
 - **Metrics**:
   - Human evaluation: Did steering work? (5-point scale)
-  - Automated: Change in target probe activation pre/post steering
+  - Automated: Change in target lens activation pre/post steering
   - Side effects: Unwanted activation of other concepts
-- **Comparison**: Loose vs falloff probes on same steering tasks
+- **Comparison**: Loose vs falloff lenses on same steering tasks
 
 #### Test 4: **Timeseries Stability** (trend analysis)
 - **Setup**: Monitor concept activations over a conversation (10-20 turns)
@@ -121,15 +121,15 @@ Compare loose vs falloff probes on production tasks:
 
 ### Scripts Needed
 
-1. `scripts/compare_probe_packs.py`
-   - Load loose and falloff probe packs
+1. `scripts/compare_lens_packs.py`
+   - Load loose and falloff lens packs
    - Run inference on test dataset
    - Compute detection metrics (TPR, FPR, etc.)
    - Output: comparison table by quality grade
 
 2. `scripts/test_ranking_consistency.py`
    - Load multi-concept test texts
-   - Get activations from both probe packs
+   - Get activations from both lens packs
    - Compute ranking correlation
    - Identify ranking errors
    - Output: correlation stats, error cases
@@ -163,7 +163,7 @@ Create `notebooks/validation_mode_ablation_analysis.ipynb`:
 
 **GO if:**
 - Detection: Falloff reduces false positives by >20%
-- Ranking: Loose mode shows >30% ranking errors on C-tier probes
+- Ranking: Loose mode shows >30% ranking errors on C-tier lenses
 - Steering: Falloff steering success rate >80% vs loose <60%
 - Timeseries: Loose mode has >2× spike frequency
 

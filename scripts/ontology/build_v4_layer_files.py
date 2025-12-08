@@ -88,7 +88,7 @@ def build_v4_layer_files(parent_map, children_map, definitions, synset_map):
             "sumo_term": "MindsAndAgents",
             "layer": 0,
             "domain": "MindsAndAgents",
-            "is_category_probe": True,
+            "is_category_lens": True,
             "is_pseudo_sumo": True,
             "category_children": sorted([c for c, l in layer_assignment.items()
                                         if l == 1 and concept_domain.get(c) == "MindsAndAgents"])[:15],
@@ -99,7 +99,7 @@ def build_v4_layer_files(parent_map, children_map, definitions, synset_map):
             "sumo_term": "CreatedThings",
             "layer": 0,
             "domain": "CreatedThings",
-            "is_category_probe": True,
+            "is_category_lens": True,
             "is_pseudo_sumo": True,
             "category_children": sorted([c for c, l in layer_assignment.items()
                                         if l == 1 and concept_domain.get(c) == "CreatedThings"])[:15],
@@ -110,7 +110,7 @@ def build_v4_layer_files(parent_map, children_map, definitions, synset_map):
             "sumo_term": "PhysicalWorld",
             "layer": 0,
             "domain": "PhysicalWorld",
-            "is_category_probe": True,
+            "is_category_lens": True,
             "is_pseudo_sumo": True,
             "category_children": sorted([c for c, l in layer_assignment.items()
                                         if l == 1 and concept_domain.get(c) == "PhysicalWorld"])[:15],
@@ -121,7 +121,7 @@ def build_v4_layer_files(parent_map, children_map, definitions, synset_map):
             "sumo_term": "LivingThings",
             "layer": 0,
             "domain": "LivingThings",
-            "is_category_probe": True,
+            "is_category_lens": True,
             "is_pseudo_sumo": True,
             "category_children": sorted([c for c, l in layer_assignment.items()
                                         if l == 1 and concept_domain.get(c) == "LivingThings"])[:15],
@@ -132,7 +132,7 @@ def build_v4_layer_files(parent_map, children_map, definitions, synset_map):
             "sumo_term": "Information",
             "layer": 0,
             "domain": "Information",
-            "is_category_probe": True,
+            "is_category_lens": True,
             "is_pseudo_sumo": True,
             "category_children": sorted([c for c, l in layer_assignment.items()
                                         if l == 1 and concept_domain.get(c) == "Information"])[:15],
@@ -183,7 +183,7 @@ def build_v4_layer_files(parent_map, children_map, definitions, synset_map):
             "sumo_term": concept,
             "layer": layer_num,
             "domain": domain,
-            "is_category_probe": True,
+            "is_category_lens": True,
             "is_pseudo_sumo": False,
             "parent_concepts": parents,
             "category_children": category_children,

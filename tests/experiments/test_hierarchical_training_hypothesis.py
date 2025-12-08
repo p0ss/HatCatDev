@@ -7,7 +7,7 @@ This script tests three conditions:
 2. Direct Children: Include direct children's synsets
 3. Recursive Descendants: Include all descendant synsets
 
-For each condition, we train Layer 0 probes and measure:
+For each condition, we train Layer 0 lenses and measure:
 - Training success rate
 - Calibration accuracy
 - Child detection ability
@@ -178,7 +178,7 @@ def run_experimental_condition(
             n_test_pos=5,
             n_test_neg=5,
             device=device,
-            output_dir=output_dir / "probes",
+            output_dir=output_dir / "lenses",
             use_adaptive_training=True,
             validation_mode='falloff',
         )
@@ -259,7 +259,7 @@ def main():
     print(f"{'='*80}")
     print(f"\nResults saved to: {output_dir}")
     print(f"\nNext steps:")
-    print(f"1. Run calibration on each probe set")
+    print(f"1. Run calibration on each lens set")
     print(f"2. Compare child detection rates")
     print(f"3. Analyze statistical significance")
     print(f"4. Document findings in HIERARCHICAL_TRAINING_DECISION.md")

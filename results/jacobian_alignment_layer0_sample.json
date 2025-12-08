@@ -3,7 +3,7 @@
     "model": "google/gemma-3-4b-pt",
     "abstraction_layer": 0,
     "model_layer": 6,
-    "probe_dir": "probe_packs/gemma-3-4b-pt_sumo-wordnet-v1",
+    "lens_dir": "lens_packs/gemma-3-4b-pt_sumo-wordnet-v1",
     "timestamp": "2025-11-13 21:35:09",
     "total_concepts": 4,
     "successful": 0,

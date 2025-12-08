@@ -159,7 +159,7 @@ Use the same WordNet patch approach as Layer 2/3 sparse concepts:
 Once patched:
 1. Test deception detection scenarios requiring intention understanding
 2. Test alignment monitoring with ethical reasoning prompts
-3. Compare probe activations for rational vs irrational motivations
+3. Compare lens activations for rational vs irrational motivations
 4. Validate incentive/disincentive detection
 
 ## References

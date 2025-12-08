@@ -309,8 +309,8 @@ def test_hooking(
     print(f"✓ Timeline contains {len(timeline)} token steps")
     print()
     print("Next steps:")
-    print("1. Train activation probes for selected concepts")
-    print("2. Apply probes to captured activations")
+    print("1. Train activation lenses for selected concepts")
+    print("2. Apply lenses to captured activations")
     print("3. Analyze temporal patterns (lead-lag structure)")
 
     return {

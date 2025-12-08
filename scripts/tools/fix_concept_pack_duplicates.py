@@ -4,7 +4,7 @@ Fix Concept Pack Duplicates
 
 Removes duplicate concepts across layers in the concept pack:
 1. For each concept name, keeps only the BEST layer:
-   - Priority: category probe > most synsets > lowest layer number
+   - Priority: category lens > most synsets > lowest layer number
 2. Removes layer 6 entries that duplicate concepts in layers 0-5
 3. Creates backup before modifying files
 
@@ -42,16 +42,16 @@ def find_best_layer_for_concepts(layer_files: List[Path]) -> Dict[str, Tuple[int
                     continue
 
                 # Evaluate quality of this entry
-                is_category = concept.get('is_category_probe', False)
+                is_category = concept.get('is_category_lens', False)
                 synset_count = len(concept.get('synsets', []))
 
                 # Check if we should keep this over existing
                 if sumo_term in concept_to_best:
                     best_layer, best_concept = concept_to_best[sumo_term]
-                    best_is_category = best_concept.get('is_category_probe', False)
+                    best_is_category = best_concept.get('is_category_lens', False)
                     best_synset_count = len(best_concept.get('synsets', []))
 
-                    # Priority: category probe > more synsets > lower layer
+                    # Priority: category lens > more synsets > lower layer
                     should_replace = False
                     if is_category and not best_is_category:
                         should_replace = True

@@ -3,14 +3,14 @@
 Generalist Baseline Experiment
 
 The hypothesis: There's a "concept-like" direction in embedding space that
-all trained probes learn. By first training on a diverse set of unrelated
+all trained lenses learn. By first training on a diverse set of unrelated
 concepts, we can identify this common direction and subtract it from
-future probe training.
+future lens training.
 
 Approach:
-1. Train probes on N diverse, unrelated concepts (the "generalist set")
+1. Train lenses on N diverse, unrelated concepts (the "generalist set")
 2. Extract the common direction from their first-layer weights
-3. Train new probes on target concepts WITH the common direction subtracted
+3. Train new lenses on target concepts WITH the common direction subtracted
 4. Compare calibration before/after
 
 This is the PROACTIVE version - we compute the bias BEFORE training.
@@ -61,7 +61,7 @@ TEST_CONCEPTS = [
 ]
 
 
-class ProbeClassifier(nn.Module):
+class LensClassifier(nn.Module):
     """MLP classifier for concept detection."""
     def __init__(self, input_dim: int = 4096):
         super().__init__()
@@ -193,9 +193,9 @@ def get_embeddings(model, tokenizer, texts: List[str], target_layer: int = 15) -
     return torch.empty(0, 4096)
 
 
-def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
-                max_epochs: int = 100, patience: int = 10) -> Tuple[ProbeClassifier, Dict]:
-    """Train a probe."""
+def train_lens(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
+                max_epochs: int = 100, patience: int = 10) -> Tuple[LensClassifier, Dict]:
+    """Train a lens."""
     pos_labels = torch.ones(len(positive_emb), 1)
     neg_labels = torch.zeros(len(negative_emb), 1)
 
@@ -212,8 +212,8 @@ def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
     if len(X_val) == 0:
         X_val, y_val = X_train[-2:], y_train[-2:]
 
-    probe = ProbeClassifier(input_dim=X.shape[1])
-    optimizer = torch.optim.Adam(probe.parameters(), lr=0.001)
+    lens = LensClassifier(input_dim=X.shape[1])
+    optimizer = torch.optim.Adam(lens.parameters(), lr=0.001)
     criterion = nn.BCELoss()
 
     best_val_loss = float('inf')
@@ -221,50 +221,50 @@ def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
     best_state = None
 
     for epoch in range(max_epochs):
-        probe.train()
+        lens.train()
         optimizer.zero_grad()
-        pred = probe(X_train)
+        pred = lens(X_train)
         loss = criterion(pred, y_train)
         loss.backward()
         optimizer.step()
 
-        probe.eval()
+        lens.eval()
         with torch.no_grad():
-            val_pred = probe(X_val)
+            val_pred = lens(X_val)
             val_loss = criterion(val_pred, y_val).item()
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             patience_counter = 0
-            best_state = probe.model.state_dict().copy()
+            best_state = lens.model.state_dict().copy()
         else:
             patience_counter += 1
             if patience_counter >= patience:
                 break
 
     if best_state:
-        probe.model.load_state_dict(best_state)
+        lens.model.load_state_dict(best_state)
 
-    probe.eval()
+    lens.eval()
     with torch.no_grad():
-        train_pred = probe(X_train)
+        train_pred = lens(X_train)
         train_acc = ((train_pred > 0.5) == y_train).float().mean().item()
-        val_pred = probe(X_val)
+        val_pred = lens(X_val)
         val_acc = ((val_pred > 0.5) == y_val).float().mean().item()
 
-    return probe, {'train_acc': train_acc, 'val_acc': val_acc, 'epochs': epoch + 1}
+    return lens, {'train_acc': train_acc, 'val_acc': val_acc, 'epochs': epoch + 1}
 
 
-def get_first_layer_weights(probe: ProbeClassifier) -> torch.Tensor:
+def get_first_layer_weights(lens: LensClassifier) -> torch.Tensor:
     """Extract the first layer weights (shape: 128 x 4096)."""
-    return probe.model[0].weight.data.clone()
+    return lens.model[0].weight.data.clone()
 
 
-def compute_common_direction(probes: List[ProbeClassifier]) -> torch.Tensor:
-    """Compute the mean first-layer weight direction across all probes."""
+def compute_common_direction(lenses: List[LensClassifier]) -> torch.Tensor:
+    """Compute the mean first-layer weight direction across all lenses."""
     all_weights = []
-    for probe in probes:
-        weights = get_first_layer_weights(probe)  # 128 x 4096
+    for lens in lenses:
+        weights = get_first_layer_weights(lens)  # 128 x 4096
         # Normalize each row
         normalized = weights / (weights.norm(dim=1, keepdim=True) + 1e-8)
         all_weights.append(normalized)
@@ -274,11 +274,11 @@ def compute_common_direction(probes: List[ProbeClassifier]) -> torch.Tensor:
     return mean_direction
 
 
-def train_probe_with_offset(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
+def train_lens_with_offset(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
                             common_direction: torch.Tensor, offset_strength: float = 1.0,
-                            max_epochs: int = 100, patience: int = 10) -> Tuple[ProbeClassifier, Dict]:
+                            max_epochs: int = 100, patience: int = 10) -> Tuple[LensClassifier, Dict]:
     """
-    Train a probe and subtract the common direction from its first layer weights.
+    Train a lens and subtract the common direction from its first layer weights.
 
     We do this DURING training by modifying the weights after each epoch.
     """
@@ -298,8 +298,8 @@ def train_probe_with_offset(positive_emb: torch.Tensor, negative_emb: torch.Tens
     if len(X_val) == 0:
         X_val, y_val = X_train[-2:], y_train[-2:]
 
-    probe = ProbeClassifier(input_dim=X.shape[1])
-    optimizer = torch.optim.Adam(probe.parameters(), lr=0.001)
+    lens = LensClassifier(input_dim=X.shape[1])
+    optimizer = torch.optim.Adam(lens.parameters(), lr=0.001)
     criterion = nn.BCELoss()
 
     best_val_loss = float('inf')
@@ -307,16 +307,16 @@ def train_probe_with_offset(positive_emb: torch.Tensor, negative_emb: torch.Tens
     best_state = None
 
     for epoch in range(max_epochs):
-        probe.train()
+        lens.train()
         optimizer.zero_grad()
-        pred = probe(X_train)
+        pred = lens(X_train)
         loss = criterion(pred, y_train)
         loss.backward()
         optimizer.step()
 
         # Apply offset: subtract common direction from first layer weights
         with torch.no_grad():
-            weights = probe.model[0].weight.data
+            weights = lens.model[0].weight.data
             for i in range(weights.shape[0]):
                 w = weights[i]
                 c = common_direction[i]
@@ -324,43 +324,43 @@ def train_probe_with_offset(positive_emb: torch.Tensor, negative_emb: torch.Tens
                 projection = (w @ c_norm) * c_norm
                 weights[i] = w - offset_strength * projection
 
-        probe.eval()
+        lens.eval()
         with torch.no_grad():
-            val_pred = probe(X_val)
+            val_pred = lens(X_val)
             val_loss = criterion(val_pred, y_val).item()
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             patience_counter = 0
-            best_state = probe.model.state_dict().copy()
+            best_state = lens.model.state_dict().copy()
         else:
             patience_counter += 1
             if patience_counter >= patience:
                 break
 
     if best_state:
-        probe.model.load_state_dict(best_state)
+        lens.model.load_state_dict(best_state)
 
-    probe.eval()
+    lens.eval()
     with torch.no_grad():
-        train_pred = probe(X_train)
+        train_pred = lens(X_train)
         train_acc = ((train_pred > 0.5) == y_train).float().mean().item()
-        val_pred = probe(X_val)
+        val_pred = lens(X_val)
         val_acc = ((val_pred > 0.5) == y_val).float().mean().item()
 
-    return probe, {'train_acc': train_acc, 'val_acc': val_acc, 'epochs': epoch + 1}
+    return lens, {'train_acc': train_acc, 'val_acc': val_acc, 'epochs': epoch + 1}
 
 
-def evaluate_sibling_discrimination(probe: ProbeClassifier,
+def evaluate_sibling_discrimination(lens: LensClassifier,
                                      positive_emb: torch.Tensor,
                                      sibling_emb: torch.Tensor,
                                      distant_emb: torch.Tensor) -> Dict:
-    """Evaluate probe on positives, siblings, and distant concepts."""
-    probe.eval()
+    """Evaluate lens on positives, siblings, and distant concepts."""
+    lens.eval()
     with torch.no_grad():
-        pos_scores = probe(positive_emb).squeeze().numpy() if len(positive_emb) > 0 else np.array([])
-        sib_scores = probe(sibling_emb).squeeze().numpy() if len(sibling_emb) > 0 else np.array([])
-        dist_scores = probe(distant_emb).squeeze().numpy() if len(distant_emb) > 0 else np.array([])
+        pos_scores = lens(positive_emb).squeeze().numpy() if len(positive_emb) > 0 else np.array([])
+        sib_scores = lens(sibling_emb).squeeze().numpy() if len(sibling_emb) > 0 else np.array([])
+        dist_scores = lens(distant_emb).squeeze().numpy() if len(distant_emb) > 0 else np.array([])
 
     if pos_scores.ndim == 0:
         pos_scores = np.array([pos_scores.item()])
@@ -407,12 +407,12 @@ def main():
     print("Loading hierarchy...")
     hierarchy = load_hierarchy(Path(args.layers_dir))
 
-    # Phase 1: Train generalist probes to find common direction
+    # Phase 1: Train generalist lenses to find common direction
     print("\n" + "="*60)
-    print("PHASE 1: Training generalist probes")
+    print("PHASE 1: Training generalist lenses")
     print("="*60)
 
-    generalist_probes = []
+    generalist_lenses = []
     for concept, layer in GENERALIST_CONCEPTS:
         concept_data = hierarchy.get(layer, {}).get(concept)
         if not concept_data:
@@ -438,33 +438,33 @@ def main():
             print(f"  Skipping {concept} (insufficient negatives)")
             continue
 
-        print(f"  Training generalist probe: {concept}...")
-        probe, metrics = train_probe(pos_emb, neg_emb)
-        generalist_probes.append(probe)
+        print(f"  Training generalist lens: {concept}...")
+        lens, metrics = train_lens(pos_emb, neg_emb)
+        generalist_lenses.append(lens)
         print(f"    Val acc: {metrics['val_acc']:.3f}")
 
-    print(f"\nTrained {len(generalist_probes)} generalist probes")
+    print(f"\nTrained {len(generalist_lenses)} generalist lenses")
 
     # Compute common direction
-    print("\nComputing common direction from generalist probes...")
-    common_direction = compute_common_direction(generalist_probes)
+    print("\nComputing common direction from generalist lenses...")
+    common_direction = compute_common_direction(generalist_lenses)
     print(f"  Common direction shape: {common_direction.shape}")
     print(f"  Common direction norm: {common_direction.norm():.4f}")
 
     # Save common direction
     torch.save(common_direction, output_dir / 'generalist_common_direction.pt')
 
-    # Phase 2: Train test probes with and without offset
+    # Phase 2: Train test lenses with and without offset
     print("\n" + "="*60)
-    print("PHASE 2: Training test probes with offset")
+    print("PHASE 2: Training test lenses with offset")
     print("="*60)
 
     results = {
         'timestamp': datetime.now().isoformat(),
         'model': args.model,
-        'n_generalist_probes': len(generalist_probes),
+        'n_generalist_lenses': len(generalist_lenses),
         'offset_strengths': args.offset_strengths,
-        'probes': {},
+        'lenses': {},
     }
 
     for concept, layer in TEST_CONCEPTS:
@@ -475,7 +475,7 @@ def main():
         concept_data = hierarchy.get(layer, {}).get(concept)
         if not concept_data:
             print(f"  ERROR: Concept not found")
-            results['probes'][f'{concept}_L{layer}'] = {'error': 'Concept not found'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': 'Concept not found'}
             continue
 
         pos_defs = get_concept_definitions(concept_data, concept)
@@ -483,7 +483,7 @@ def main():
 
         if len(pos_emb) < 5:
             print(f"  ERROR: Insufficient positive samples")
-            results['probes'][f'{concept}_L{layer}'] = {'error': 'Insufficient samples'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': 'Insufficient samples'}
             continue
 
         # Get siblings
@@ -504,7 +504,7 @@ def main():
 
         if len(distant_emb) < 5:
             print(f"  ERROR: Insufficient distant samples")
-            results['probes'][f'{concept}_L{layer}'] = {'error': 'Insufficient distant'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': 'Insufficient distant'}
             continue
 
         # Split for training/eval
@@ -516,13 +516,13 @@ def main():
 
         if len(train_pos) < 3 or len(train_neg) < 3:
             print(f"  ERROR: Insufficient training samples after split")
-            results['probes'][f'{concept}_L{layer}'] = {'error': 'Insufficient after split'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': 'Insufficient after split'}
             continue
 
         print(f"  Train pos: {len(train_pos)}, Train neg: {len(train_neg)}")
         print(f"  Eval pos: {len(eval_pos)}, Eval sib: {len(eval_sib)}, Eval dist: {len(eval_dist)}")
 
-        probe_results = {
+        lens_results = {
             'concept': concept,
             'layer': layer,
             'modes': {},
@@ -530,9 +530,9 @@ def main():
 
         # Baseline (no offset)
         print(f"\n  Training BASELINE (no offset)...")
-        probe_base, train_metrics_base = train_probe(train_pos, train_neg)
-        eval_base = evaluate_sibling_discrimination(probe_base, eval_pos, eval_sib, eval_dist)
-        probe_results['modes']['baseline'] = {
+        lens_base, train_metrics_base = train_lens(train_pos, train_neg)
+        eval_base = evaluate_sibling_discrimination(lens_base, eval_pos, eval_sib, eval_dist)
+        lens_results['modes']['baseline'] = {
             'training': train_metrics_base,
             'evaluation': eval_base,
         }
@@ -545,11 +545,11 @@ def main():
         # With offset at different strengths
         for strength in args.offset_strengths:
             print(f"\n  Training with OFFSET (strength={strength})...")
-            probe_offset, train_metrics_offset = train_probe_with_offset(
+            lens_offset, train_metrics_offset = train_lens_with_offset(
                 train_pos, train_neg, common_direction, offset_strength=strength
             )
-            eval_offset = evaluate_sibling_discrimination(probe_offset, eval_pos, eval_sib, eval_dist)
-            probe_results['modes'][f'offset_{strength}'] = {
+            eval_offset = evaluate_sibling_discrimination(lens_offset, eval_pos, eval_sib, eval_dist)
+            lens_results['modes'][f'offset_{strength}'] = {
                 'training': train_metrics_offset,
                 'evaluation': eval_offset,
             }
@@ -559,7 +559,7 @@ def main():
             print(f"    Pos-Sib gap: {off_sib_gap:.3f}" if off_sib_gap is not None else "    Pos-Sib gap: N/A")
             print(f"    Pos-Dist gap: {off_dist_gap:.3f}" if off_dist_gap is not None else "    Pos-Dist gap: N/A")
 
-        results['probes'][f'{concept}_L{layer}'] = probe_results
+        results['lenses'][f'{concept}_L{layer}'] = lens_results
 
     # Summary
     print("\n" + "="*60)
@@ -569,18 +569,18 @@ def main():
     for mode in ['baseline'] + [f'offset_{s}' for s in args.offset_strengths]:
         sib_gaps = []
         dist_gaps = []
-        for probe_key, probe_data in results['probes'].items():
-            if 'error' in probe_data:
+        for lens_key, lens_data in results['lenses'].items():
+            if 'error' in lens_data:
                 continue
-            if mode in probe_data.get('modes', {}):
-                eval_data = probe_data['modes'][mode].get('evaluation', {})
+            if mode in lens_data.get('modes', {}):
+                eval_data = lens_data['modes'][mode].get('evaluation', {})
                 if eval_data.get('positive_sibling_gap') is not None:
                     sib_gaps.append(eval_data['positive_sibling_gap'])
                 if eval_data.get('positive_distant_gap') is not None:
                     dist_gaps.append(eval_data['positive_distant_gap'])
 
         if sib_gaps:
-            print(f"\n{mode}: ({len(sib_gaps)} probes)")
+            print(f"\n{mode}: ({len(sib_gaps)} lenses)")
             print(f"  Avg pos-sib gap:  {np.mean(sib_gaps):.3f} ± {np.std(sib_gaps):.3f}")
             print(f"  Avg pos-dist gap: {np.mean(dist_gaps):.3f} ± {np.std(dist_gaps):.3f}")
 

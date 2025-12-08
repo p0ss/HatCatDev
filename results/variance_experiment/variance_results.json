@@ -2,7 +2,7 @@
   "timestamp": "2025-12-02T20:12:30.554945",
   "model": "swiss-ai/Apertus-8B-2509",
   "n_runs": 5,
-  "probes": {
+  "lenses": {
     "AlignmentProcess_L1": {
       "concept": "AlignmentProcess",
       "layer": 1,

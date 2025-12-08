@@ -1,11 +1,11 @@
 # HatCat OpenWebUI Server Configuration
-# MAP-compliant probe pack configuration
+# MAP-compliant lens pack configuration
 
-# Probe pack selection (legacy format - will show deprecation warning)
-# Use probe_pack_id for backward compatibility with existing packs
-# NOTE: Using v2/v3 with activation probes only (no text probes = no divergence scores)
-# Text probes were discontinued due to insufficient training data - will use embedding model for similarity in future
-probe_pack_id: "gemma-3-4b-pt_sumo-wordnet-v3"
+# Lens pack selection (legacy format - will show deprecation warning)
+# Use lens_pack_id for backward compatibility with existing packs
+# NOTE: Using v2/v3 with activation lenses only (no text lenses = no divergence scores)
+# Text lenses were discontinued due to insufficient training data - will use embedding model for similarity in future
+lens_pack_id: "gemma-3-4b-pt_sumo-wordnet-v3"
 
 # Model configuration
 model:
@@ -14,14 +14,14 @@ model:
   device_map: "auto"
   low_cpu_mem_usage: true
 
-# Probe manager configuration
-probe_manager:
+# Lens manager configuration
+lens_manager:
   base_layers: [0]  # Start with base layer, dynamic loading handles deeper layers
-  use_activation_probes: true
-  use_text_probes: true
+  use_activation_lenses: true
+  use_text_lenses: true
   keep_top_k: 100
   load_threshold: 0.3
-  max_loaded_probes: 1000
+  max_loaded_lenses: 1000
 
 # Server configuration
 server:

@@ -5,11 +5,11 @@ This module provides:
 1. ToolGraft - Task tuning tools as substrate grafts
 2. BootstrapArtifact - Complete package for waking a BE
 3. UpliftTaxonomy - Graph of concepts across facets (MAP, CAT, HAT, HUSH, etc.)
-4. MeldSubmission - Unified format for probe+graft training data
+4. MeldSubmission - Unified format for lens+graft training data
 5. wake_be - The wake sequence for instantiating a BE
 
 The key insight: EVERY concept the BE needs must be grafted in, each requiring:
-- A probe (to detect when the concept is active)
+- A lens (to detect when the concept is active)
 - A graft (to add a dedicated neuron)
 - A Meld submission (to go through approval)
 
@@ -55,7 +55,7 @@ from .artifact import (
     ArtifactComponent,
     SubstrateBundle,
     ConceptPack,
-    ProbePack,
+    LensPack,
     USHProfile,
     UpliftRecord,
     XDBBootstrap,
@@ -121,7 +121,7 @@ __all__ = [
     'ArtifactComponent',
     'SubstrateBundle',
     'ConceptPack',
-    'ProbePack',
+    'LensPack',
     'USHProfile',
     'UpliftRecord',
     'XDBBootstrap',

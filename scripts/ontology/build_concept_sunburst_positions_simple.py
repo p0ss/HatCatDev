@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Build sunburst layout for SUMO concepts using DynamicProbeManager hierarchy.
+Build sunburst layout for SUMO concepts using DynamicLensManager hierarchy.
 
-Simpler approach: Use the concept_metadata that's already loaded by DynamicProbeManager.
+Simpler approach: Use the concept_metadata that's already loaded by DynamicLensManager.
 """
 
 import json
@@ -10,7 +10,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 from collections import defaultdict
 import numpy as np
 
@@ -27,7 +27,7 @@ def calculate_concept_strength(metadata) -> float:
 
     return strength
 
-def assign_sunburst_positions(manager: DynamicProbeManager) -> dict:
+def assign_sunburst_positions(manager: DynamicLensManager) -> dict:
     """Assign angular positions using sunburst layout."""
 
     positions = {}
@@ -132,12 +132,12 @@ def main():
     print("=" * 80)
     print()
 
-    print("Loading DynamicProbeManager...")
-    manager = DynamicProbeManager(
-        probes_dir=Path('results/sumo_classifiers_adaptive_l0_5'),
+    print("Loading DynamicLensManager...")
+    manager = DynamicLensManager(
+        lenses_dir=Path('results/sumo_classifiers_adaptive_l0_5'),
         base_layers=[0],
-        use_activation_probes=False,  # Don't load actual probes
-        use_text_probes=False,
+        use_activation_lenses=False,  # Don't load actual lenses
+        use_text_lenses=False,
         keep_top_k=0,
     )
 

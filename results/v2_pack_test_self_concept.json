@@ -1515,8 +1515,8 @@
       "cache_hits": 0,
       "cache_misses": 1439,
       "cache_hit_rate": 0.0,
-      "loaded_probes": 50,
-      "max_probes_loaded": 50,
+      "loaded_lenses": 50,
+      "max_lenses_loaded": 50,
       "total_loads": 1439,
       "total_unloads": 1389
     }
@@ -1531,9 +1531,9 @@
         "child_detection": 1.8107891082763672,
         "cache_management": 0.001430511474609375,
         "total": 32.709598541259766,
-        "loaded_probes": 40
+        "loaded_lenses": 40
       },
-      "loaded_probes": 40
+      "loaded_lenses": 40
     },
     {
       "step": 1,
@@ -1544,9 +1544,9 @@
         "child_detection": 4.237890243530273,
         "cache_management": 0.08153915405273438,
         "total": 63.216209411621094,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 2,
@@ -1557,9 +1557,9 @@
         "child_detection": 5.077600479125977,
         "cache_management": 0.1537799835205078,
         "total": 74.95570182800293,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 3,
@@ -1570,9 +1570,9 @@
         "child_detection": 4.18853759765625,
         "cache_management": 0.11873245239257812,
         "total": 63.32898139953613,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 4,
@@ -1583,9 +1583,9 @@
         "child_detection": 6.161689758300781,
         "cache_management": 0.24628639221191406,
         "total": 111.78278923034668,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 5,
@@ -1596,9 +1596,9 @@
         "child_detection": 3.4973621368408203,
         "cache_management": 0.13685226440429688,
         "total": 36.64731979370117,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 6,
@@ -1609,9 +1609,9 @@
         "child_detection": 3.9148330688476562,
         "cache_management": 0.10728836059570312,
         "total": 46.097755432128906,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 7,
@@ -1622,9 +1622,9 @@
         "child_detection": 2.591848373413086,
         "cache_management": 0.055789947509765625,
         "total": 33.57505798339844,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 8,
@@ -1635,9 +1635,9 @@
         "child_detection": 3.411531448364258,
         "cache_management": 0.07271766662597656,
         "total": 42.38128662109375,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 9,
@@ -1648,9 +1648,9 @@
         "child_detection": 2.0668506622314453,
         "cache_management": 0.0457763671875,
         "total": 27.097702026367188,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 10,
@@ -1661,9 +1661,9 @@
         "child_detection": 0.6282329559326172,
         "cache_management": 0.018835067749023438,
         "total": 10.941028594970703,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 11,
@@ -1674,9 +1674,9 @@
         "child_detection": 4.2057037353515625,
         "cache_management": 0.13113021850585938,
         "total": 44.58165168762207,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 12,
@@ -1687,9 +1687,9 @@
         "child_detection": 2.9065608978271484,
         "cache_management": 0.06389617919921875,
         "total": 35.2628231048584,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 13,
@@ -1700,9 +1700,9 @@
         "child_detection": 5.59544563293457,
         "cache_management": 0.2601146697998047,
         "total": 86.9436264038086,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 14,
@@ -1713,9 +1713,9 @@
         "child_detection": 4.549980163574219,
         "cache_management": 0.12326240539550781,
         "total": 49.91459846496582,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 15,
@@ -1726,9 +1726,9 @@
         "child_detection": 4.795074462890625,
         "cache_management": 0.13208389282226562,
         "total": 63.64107131958008,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 16,
@@ -1739,9 +1739,9 @@
         "child_detection": 5.43975830078125,
         "cache_management": 0.23674964904785156,
         "total": 77.25381851196289,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 17,
@@ -1752,9 +1752,9 @@
         "child_detection": 3.0765533447265625,
         "cache_management": 0.06866455078125,
         "total": 31.43930435180664,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 18,
@@ -1765,9 +1765,9 @@
         "child_detection": 3.4415721893310547,
         "cache_management": 0.07867813110351562,
         "total": 35.262346267700195,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 19,
@@ -1778,9 +1778,9 @@
         "child_detection": 4.053592681884766,
         "cache_management": 0.09846687316894531,
         "total": 44.55852508544922,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 20,
@@ -1791,9 +1791,9 @@
         "child_detection": 2.1600723266601562,
         "cache_management": 0.0553131103515625,
         "total": 28.538227081298828,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 21,
@@ -1804,9 +1804,9 @@
         "child_detection": 4.022359848022461,
         "cache_management": 0.07605552673339844,
         "total": 141.92533493041992,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 22,
@@ -1817,9 +1817,9 @@
         "child_detection": 1.874685287475586,
         "cache_management": 0.04291534423828125,
         "total": 24.714946746826172,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 23,
@@ -1830,9 +1830,9 @@
         "child_detection": 3.1347274780273438,
         "cache_management": 0.053882598876953125,
         "total": 32.1807861328125,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 24,
@@ -1843,9 +1843,9 @@
         "child_detection": 5.30552864074707,
         "cache_management": 0.20122528076171875,
         "total": 79.13875579833984,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 25,
@@ -1856,9 +1856,9 @@
         "child_detection": 1.9543170928955078,
         "cache_management": 0.05745887756347656,
         "total": 26.292800903320312,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 26,
@@ -1869,9 +1869,9 @@
         "child_detection": 3.0150413513183594,
         "cache_management": 0.08034706115722656,
         "total": 37.91952133178711,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 27,
@@ -1882,9 +1882,9 @@
         "child_detection": 1.6973018646240234,
         "cache_management": 0.03647804260253906,
         "total": 15.581846237182617,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 28,
@@ -1895,9 +1895,9 @@
         "child_detection": 3.1380653381347656,
         "cache_management": 0.05650520324707031,
         "total": 33.98275375366211,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     },
     {
       "step": 29,
@@ -1908,9 +1908,9 @@
         "child_detection": 3.639698028564453,
         "cache_management": 0.08392333984375,
         "total": 47.43480682373047,
-        "loaded_probes": 50
+        "loaded_lenses": 50
       },
-      "loaded_probes": 50
+      "loaded_lenses": 50
     }
   ]
 }

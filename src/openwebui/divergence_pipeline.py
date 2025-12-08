@@ -22,13 +22,13 @@ class Pipeline:
     class Valves(BaseModel):
         """User-configurable settings for the pipeline."""
 
-        PROBE_DIR: str = "results/sumo_classifiers_adaptive_l0_5"
+        LENS_DIR: str = "results/sumo_classifiers_adaptive_l0_5"
         BASE_LAYERS: List[int] = [0]
         DIVERGENCE_THRESHOLD_LOW: float = 0.3
         DIVERGENCE_THRESHOLD_HIGH: float = 0.6
         TOP_K_CONCEPTS: int = 5
-        USE_ACTIVATION_PROBES: bool = True
-        USE_TEXT_PROBES: bool = True
+        USE_ACTIVATION_LENSS: bool = True
+        USE_TEXT_LENSS: bool = True
         MODEL_NAME: str = "google/gemma-3-4b-pt"
 
     def __init__(self):
@@ -40,18 +40,18 @@ class Pipeline:
         self.tokenizer = None
 
     async def on_startup(self):
-        """Load models and probes on startup."""
+        """Load models and lenses on startup."""
         print("🎩 HatCat: Loading divergence analyzer...")
 
-        from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+        from src.monitoring.dynamic_lens_manager import DynamicLensManager
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
-        # Load probe manager
-        self.manager = DynamicProbeManager(
-            probes_dir=Path(self.valves.PROBE_DIR),
+        # Load lens manager
+        self.manager = DynamicLensManager(
+            lenses_dir=Path(self.valves.LENS_DIR),
             base_layers=self.valves.BASE_LAYERS,
-            use_activation_probes=self.valves.USE_ACTIVATION_PROBES,
-            use_text_probes=self.valves.USE_TEXT_PROBES,
+            use_activation_lenses=self.valves.USE_ACTIVATION_LENSS,
+            use_text_lenses=self.valves.USE_TEXT_LENSS,
             keep_top_k=100,
         )
 
@@ -64,8 +64,8 @@ class Pipeline:
         )
         self.model.eval()
 
-        print(f"✓ Loaded {len(self.manager.loaded_activation_probes)} activation probes")
-        print(f"✓ Loaded {len(self.manager.loaded_text_probes)} text probes")
+        print(f"✓ Loaded {len(self.manager.loaded_activation_lenses)} activation lenses")
+        print(f"✓ Loaded {len(self.manager.loaded_text_lenses)} text lenses")
 
     async def on_shutdown(self):
         """Cleanup on shutdown."""
@@ -161,21 +161,21 @@ class Pipeline:
         hidden_state: np.ndarray,
         token_text: str,
     ) -> Dict[str, Any]:
-        """Analyze divergence between activation and text probes for a token."""
+        """Analyze divergence between activation and text lenses for a token."""
 
-        # Run activation probes
+        # Run activation lenses
         activation_scores = {}
-        for concept_key, probe in self.manager.loaded_activation_probes.items():
+        for concept_key, lens in self.manager.loaded_activation_lenses.items():
             with torch.no_grad():
                 h = torch.tensor(hidden_state, dtype=torch.float32).to("cuda")
-                prob = probe(h).item()
+                prob = lens(h).item()
                 activation_scores[concept_key[0]] = prob
 
-        # Run text probes
+        # Run text lenses
         text_scores = {}
-        for concept_key, text_probe in self.manager.loaded_text_probes.items():
+        for concept_key, text_lens in self.manager.loaded_text_lenses.items():
             try:
-                prob = text_probe.pipeline.predict_proba([token_text])[0, 1]
+                prob = text_lens.pipeline.predict_proba([token_text])[0, 1]
                 text_scores[concept_key[0]] = prob
             except:
                 pass

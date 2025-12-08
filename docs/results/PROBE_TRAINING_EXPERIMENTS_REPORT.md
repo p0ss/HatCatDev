@@ -1,19 +1,19 @@
-# Probe Training Experiments Report
+# Lens Training Experiments Report
 
 **Date**: December 2, 2025
 **Model**: swiss-ai/Apertus-8B-2509
-**Objective**: Identify and address sources of probe training variance and sibling confusion
+**Objective**: Identify and address sources of lens training variance and sibling confusion
 
 ---
 
 ## Executive Summary
 
-We conducted a series of controlled experiments to understand why probes fail to discriminate between semantically related concepts (siblings). The key findings are:
+We conducted a series of controlled experiments to understand why lenses fail to discriminate between semantically related concepts (siblings). The key findings are:
 
 1. **Sibling-aware training dramatically improves discrimination** - Mixed mode training with siblings as hard negatives achieves 0.88-0.99 positive-sibling gaps vs 0.50-0.70 for standard training
 2. **Inter-run variance is significant (~5% std dev)** - Same training setup with different seeds produces 0.05 average gap std deviation
-3. **Post-hoc debiasing shows limited effect** - Common direction analysis found Layer 0 probes share 0.32 mean similarity, but Layers 1-4 only 0.05-0.07
-4. **Generalist baseline approach inconclusive** - Only 1 generalist probe trained successfully, limiting the power of the test
+3. **Post-hoc debiasing shows limited effect** - Common direction analysis found Layer 0 lenses share 0.32 mean similarity, but Layers 1-4 only 0.05-0.07
+4. **Generalist baseline approach inconclusive** - Only 1 generalist lens trained successfully, limiting the power of the test
 
 ---
 
@@ -21,7 +21,7 @@ We conducted a series of controlled experiments to understand why probes fail to
 
 **Purpose**: Establish error bars for comparing training approaches
 
-**Method**: Train the same 8 probes 5 times each with different random seeds (42, 142, 242, 342, 442)
+**Method**: Train the same 8 lenses 5 times each with different random seeds (42, 142, 242, 342, 442)
 
 **Results**:
 
@@ -38,7 +38,7 @@ We conducted a series of controlled experiments to understand why probes fail to
 
 **Key Finding**: Average inter-run std dev: **0.051** (±0.10 suggested error margin for comparisons)
 
-Some probes (AIAlignmentProcess, ACPowerSource) show almost no variance, while others (Agent, Projectile) show high variance. This may correlate with concept specificity and definition quality.
+Some lenses (AIAlignmentProcess, ACPowerSource) show almost no variance, while others (Agent, Projectile) show high variance. This may correlate with concept specificity and definition quality.
 
 ---
 
@@ -75,16 +75,16 @@ Some probes (AIAlignmentProcess, ACPowerSource) show almost no variance, while o
 
 ## Experiment 3: Post-Hoc Debiasing
 
-**Purpose**: Identify and remove shared "concept-like" directions across all probes
+**Purpose**: Identify and remove shared "concept-like" directions across all lenses
 
 **Method**:
-1. Extract first-layer weights from all trained probes
+1. Extract first-layer weights from all trained lenses
 2. Compute mean direction per layer (the "common direction")
-3. Analyze similarity of individual probes to common direction
+3. Analyze similarity of individual lenses to common direction
 
 **Results** (Common Direction Statistics):
 
-| Layer | # Probes | Direction Norm | Mean Similarity |
+| Layer | # Lenses | Direction Norm | Mean Similarity |
 |-------|----------|----------------|-----------------|
 | 0 | 10 | 3.66 | 0.32 (high) |
 | 1 | 257 | 0.84 | 0.05-0.07 (low) |
@@ -93,8 +93,8 @@ Some probes (AIAlignmentProcess, ACPowerSource) show almost no variance, while o
 | 4 | 3271 | 0.84 | 0.05-0.07 (low) |
 
 **Key Findings**:
-1. Layer 0 probes share significant structure (0.32 similarity) - likely due to learning "is this a concept?" rather than "which concept?"
-2. Layers 1-4 show minimal common direction (0.05-0.07 similarity) - probes learn concept-specific directions
+1. Layer 0 lenses share significant structure (0.32 similarity) - likely due to learning "is this a concept?" rather than "which concept?"
+2. Layers 1-4 show minimal common direction (0.05-0.07 similarity) - lenses learn concept-specific directions
 3. Post-hoc debiasing unlikely to help layers 1-4; may help Layer 0
 
 ---
@@ -104,11 +104,11 @@ Some probes (AIAlignmentProcess, ACPowerSource) show almost no variance, while o
 **Purpose**: Pre-compute common direction from diverse concepts, subtract during training
 
 **Method**:
-1. Train probes on 10 diverse "generalist" concepts (Organism, Artifact, Device, etc.)
+1. Train lenses on 10 diverse "generalist" concepts (Organism, Artifact, Device, etc.)
 2. Compute common direction from their first-layer weights
-3. Train target probes while projecting out the common direction at various strengths
+3. Train target lenses while projecting out the common direction at various strengths
 
-**Results** (limited due to only 1 generalist probe training successfully):
+**Results** (limited due to only 1 generalist lens training successfully):
 
 | Mode | Avg Pos-Sib Gap | Avg Pos-Dist Gap |
 |------|-----------------|------------------|
@@ -121,7 +121,7 @@ Some probes (AIAlignmentProcess, ACPowerSource) show almost no variance, while o
 **Key Findings**:
 1. Only "Organism" trained successfully as a generalist (others lacked definitions)
 2. Offset 1.0 shows slight improvement in sibling gap (0.286 vs 0.197 baseline)
-3. **Inconclusive** - need more generalist probes for a representative common direction
+3. **Inconclusive** - need more generalist lenses for a representative common direction
 
 ---
 
@@ -129,13 +129,13 @@ Some probes (AIAlignmentProcess, ACPowerSource) show almost no variance, while o
 
 ### Immediate Actions
 
-1. **Use mixed sibling training** for all future probe packs
+1. **Use mixed sibling training** for all future lens packs
    - Include 50% siblings as hard negatives
    - This alone provides the largest improvement in sibling discrimination
 
 2. **Increase minimum definitions threshold** from 5 to 10
    - Many concepts fail to train due to insufficient examples
-   - Quality > quantity for probe reliability
+   - Quality > quantity for lens reliability
 
 ### Future Work
 

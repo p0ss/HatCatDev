@@ -2,7 +2,7 @@
 """
 Test token length impact on validation failures.
 
-Hypothesis: The 20-token generation length is too short, causing probes to learn
+Hypothesis: The 20-token generation length is too short, causing lenses to learn
 superficial patterns that work on test data but fail on validation prompts.
 
 Experiment design:
@@ -13,7 +13,7 @@ Experiment design:
 Expected outcome:
 - Longer token generation → better validation scores (smaller gap)
 - Longer token generation → proportionally longer training time
-- Trade-off between training speed and probe quality
+- Trade-off between training speed and lens quality
 """
 
 import sys
@@ -37,7 +37,7 @@ from training.sumo_data_generation import (
 )
 from training.dual_adaptive_trainer import DualAdaptiveTrainer
 from training.falloff_validation import FalloffValidator
-from monitoring.dynamic_probe_manager import DynamicProbeManager
+from monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 def train_single_concept_with_token_length(
@@ -162,14 +162,14 @@ def train_single_concept_with_token_length(
         )
 
         # Train
-        print(f"Training probe...")
+        print(f"Training lens...")
         train_result = trainer.train_cycle(
             activations_pos=cycle_train["activations_pos"],
             activations_neg=cycle_train["activations_neg"],
         )
 
         # Test
-        print(f"Testing probe...")
+        print(f"Testing lens...")
         test_metrics = trainer.test(
             activations_pos=test_data["activations_pos"],
             activations_neg=test_data["activations_neg"],
@@ -181,8 +181,8 @@ def train_single_concept_with_token_length(
 
         # Validate
         print(f"Running falloff validation...")
-        val_result = validator.validate_probe(
-            probe=trainer.get_probe(),
+        val_result = validator.validate_lens(
+            lens=trainer.get_lens(),
             concept=target_concept,
             all_concepts=all_concepts,
             cycle=cycle,

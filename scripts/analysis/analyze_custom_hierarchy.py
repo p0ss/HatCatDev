@@ -294,7 +294,7 @@ def main():
     print("2. Fix bridge.kif parent assignments as needed")
     print("3. Update V4 builder to integrate custom_concept_layers.json")
     print("4. Generate synsets for custom concepts")
-    print("5. Build V4.5 and train probes")
+    print("5. Build V4.5 and train lenses")
 
 
 if __name__ == "__main__":

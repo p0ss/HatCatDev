@@ -202,7 +202,7 @@ def create_sumo_training_dataset(
         use_wordnet_relationships: Include WordNet relationships
         yin_yang_ratio: Fraction of negatives that are "yin-yang" prompts
                         (e.g., "list things least similar to X"). These teach
-                        the probe to distinguish "thinking about X" from
+                        the lens to distinguish "thinking about X" from
                         "contrasting with X". Default 0.2 (20%).
 
     Returns:
@@ -400,7 +400,7 @@ def create_sumo_training_dataset(
 
     # ------------------------------------------------------------------------
     # YIN-YANG NEGATIVES (~20%): These mention the TARGET concept but ask for
-    # its opposites. Teaches probe to distinguish "thinking about X" from
+    # its opposites. Teaches lens to distinguish "thinking about X" from
     # "contrasting with X" - the yin in the yang.
     # ------------------------------------------------------------------------
     if n_yin_yang > 0:

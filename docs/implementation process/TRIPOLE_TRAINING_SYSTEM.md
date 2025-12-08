@@ -231,9 +231,9 @@ def train_tripole_simplex(
     lambda_ortho: float = 1e-4
 ) -> tuple:
     """
-    Train tripole probe with early stopping.
+    Train tripole lens with early stopping.
 
-    Returns: (probe, history) with per-pole metrics
+    Returns: (lens, history) with per-pole metrics
     """
 ```
 
@@ -282,7 +282,7 @@ API prompts explicitly request diverse cultural concepts to prevent Western bias
 **Why this matters:**
 1. Prevents models from escaping detection via culturally-specific encoding
 2. Captures unique cultural perspectives missing from Western psychology
-3. Ensures probes work across multilingual contexts
+3. Ensures lenses work across multilingual contexts
 4. Addresses potential blind spot in Western-centric training data
 
 **Enrichment output:**
@@ -423,7 +423,7 @@ Weak orthogonality constraint (λ=1e-4) promotes:
 
 ## Conclusion
 
-The tripole training system represents a significant advance in simplex probe training:
+The tripole training system represents a significant advance in simplex lens training:
 
 1. **Joint optimization** ensures consistent representations across poles
 2. **Margin maximization** creates well-separated decision boundaries

@@ -3,7 +3,7 @@ Training module: SUMO-aware concept classifier training.
 
 This module provides tools for:
 - Training binary classifiers to detect SUMO concepts in activations
-- Training text probes for fast token→concept mapping
+- Training text lenses for fast token→concept mapping
 - Generating SUMO-aware training prompts (with WordNet and category relationships)
 - Extracting activations from language models
 - Computing concept centroids from name embeddings
@@ -20,9 +20,9 @@ from .sumo_data_generation import (
     build_sumo_negative_pool,
     split_camel_case,
 )
-from .probe_validation import (
-    validate_probe_calibration,
-    validate_probe_set,
+from .lens_validation import (
+    validate_lens_calibration,
+    validate_lens_set,
     infer_concept_domain,
 )
 
@@ -34,7 +34,7 @@ __all__ = [
     "create_sumo_training_dataset",
     "build_sumo_negative_pool",
     "split_camel_case",
-    "validate_probe_calibration",
-    "validate_probe_set",
+    "validate_lens_calibration",
+    "validate_lens_set",
     "infer_concept_domain",
 ]

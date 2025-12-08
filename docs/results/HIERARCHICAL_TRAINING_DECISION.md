@@ -110,7 +110,7 @@ if not all_synsets:
 - ✗ No improvement over direct children (both 5/10)
 - ✗ Sample explosion (10,243 synsets for Physical!)
 - ✗ Much longer training times
-- ✗ Harder to reason about what the probe represents
+- ✗ Harder to reason about what the lens represents
 - ✗ Parent concept becomes "union of all descendants" rather than its own concept
 
 ## Remaining Issues
@@ -129,7 +129,7 @@ The current approach of excluding all descendants creates a negative sample shor
 4. **Reduced requirements**: Accept fewer negative samples for concepts with limited pools
 
 ### Issue 2: Test Metrics Show Zero Precision/Recall
-All successful probes report `test_precision: 0.0` and `test_recall: 0.0` despite `test_f1: 1.0`.
+All successful lenses report `test_precision: 0.0` and `test_recall: 0.0` despite `test_f1: 1.0`.
 
 **This suggests a reporting bug in the training code** - F1 cannot be 1.0 if precision and recall are 0.0.
 
@@ -201,7 +201,7 @@ With n=10 concepts:
 
 ## Conclusion
 
-**The data supports adopting H1 (Direct Children Inclusion)** as the standard training strategy for HatCat probes:
+**The data supports adopting H1 (Direct Children Inclusion)** as the standard training strategy for HatCat lenses:
 
 1. Parents should include their direct children's synsets as positive examples
 2. This improves training success while maintaining manageable complexity

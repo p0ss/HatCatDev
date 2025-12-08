@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS audit_records (
     tick INTEGER NOT NULL,
     event_type VARCHAR NOT NULL,
     raw_content VARCHAR,
-    probe_activations JSON,
+    lens_activations JSON,
     steering_applied JSON,
     prev_record_hash VARCHAR,
     record_hash VARCHAR NOT NULL
@@ -281,7 +281,7 @@ class AuditLog:
             'tick': record.tick,
             'event_type': record.event_type.value,
             'raw_content': record.raw_content,
-            'probe_activations': record.probe_activations,
+            'lens_activations': record.lens_activations,
             'steering_applied': record.steering_applied,
             'prev_hash': record.prev_record_hash,
         }, sort_keys=True)
@@ -297,7 +297,7 @@ class AuditLog:
         tick: int,
         event_type: EventType,
         raw_content: str,
-        probe_activations: Dict[str, float],
+        lens_activations: Dict[str, float],
         steering_applied: Optional[List[Dict]] = None,
     ) -> AuditRecord:
         """
@@ -310,7 +310,7 @@ class AuditLog:
             tick: Tick number
             event_type: Type of event
             raw_content: Raw unfiltered content
-            probe_activations: Full probe outputs (including hidden probes)
+            lens_activations: Full lens outputs (including hidden lenses)
             steering_applied: Any steering that was applied
 
         Returns:
@@ -323,7 +323,7 @@ class AuditLog:
             tick=tick,
             event_type=event_type,
             raw_content=raw_content,
-            probe_activations=probe_activations,
+            lens_activations=lens_activations,
             steering_applied=steering_applied or [],
             prev_record_hash=self._last_record_hash,
         )
@@ -338,12 +338,12 @@ class AuditLog:
                 self._connection.execute("""
                     INSERT INTO audit_records (
                         id, timestamp, xdb_id, tick, event_type, raw_content,
-                        probe_activations, steering_applied, prev_record_hash, record_hash
+                        lens_activations, steering_applied, prev_record_hash, record_hash
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, [
                     record.id, record.timestamp, record.xdb_id, record.tick,
                     record.event_type.value, record.raw_content,
-                    json.dumps(record.probe_activations),
+                    json.dumps(record.lens_activations),
                     json.dumps(record.steering_applied),
                     record.prev_record_hash, record.record_hash,
                 ])
@@ -405,7 +405,7 @@ class AuditLog:
             # Get all hot records for this xdb
             records = self._connection.execute("""
                 SELECT id, timestamp, xdb_id, tick, event_type, raw_content,
-                       probe_activations, steering_applied, prev_record_hash, record_hash
+                       lens_activations, steering_applied, prev_record_hash, record_hash
                 FROM audit_records
                 WHERE xdb_id = ?
                 ORDER BY tick
@@ -515,7 +515,7 @@ class AuditLog:
                     'tick': row[3],
                     'event_type': row[4],
                     'raw_content': row[5],
-                    'probe_activations': json.loads(row[6]) if row[6] else {},
+                    'lens_activations': json.loads(row[6]) if row[6] else {},
                     'steering_applied': json.loads(row[7]) if row[7] else [],
                     'prev_record_hash': row[8],
                     'record_hash': row[9],

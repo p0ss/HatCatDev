@@ -106,28 +106,28 @@ class TrainingRequirements:
 
 
 @dataclass
-class ProbePerformanceThreshold:
+class LensPerformanceThreshold:
     """Performance thresholds for a single protection level."""
     min_holdout_accuracy: float
     min_test_f1: float
 
 
 @dataclass
-class ProbePerformanceRequirements:
-    """Probe performance requirements by protection level."""
-    thresholds_by_level: Dict[str, ProbePerformanceThreshold]
-    critical_simplex_hard_floor: ProbePerformanceThreshold
+class LensPerformanceRequirements:
+    """Lens performance requirements by protection level."""
+    thresholds_by_level: Dict[str, LensPerformanceThreshold]
+    critical_simplex_hard_floor: LensPerformanceThreshold
 
     @staticmethod
-    def get_defaults() -> "ProbePerformanceRequirements":
-        return ProbePerformanceRequirements(
+    def get_defaults() -> "LensPerformanceRequirements":
+        return LensPerformanceRequirements(
             thresholds_by_level={
-                "STANDARD": ProbePerformanceThreshold(0.60, 0.60),
-                "ELEVATED": ProbePerformanceThreshold(0.65, 0.65),
-                "PROTECTED": ProbePerformanceThreshold(0.70, 0.70),
-                "CRITICAL": ProbePerformanceThreshold(0.75, 0.75),
+                "STANDARD": LensPerformanceThreshold(0.60, 0.60),
+                "ELEVATED": LensPerformanceThreshold(0.65, 0.65),
+                "PROTECTED": LensPerformanceThreshold(0.70, 0.70),
+                "CRITICAL": LensPerformanceThreshold(0.75, 0.75),
             },
-            critical_simplex_hard_floor=ProbePerformanceThreshold(0.60, 0.60),
+            critical_simplex_hard_floor=LensPerformanceThreshold(0.60, 0.60),
         )
 
     def get_acceptance_category(
@@ -138,7 +138,7 @@ class ProbePerformanceRequirements:
         maps_to_critical_simplex: bool
     ) -> str:
         """
-        Determine acceptance category for a concept based on probe performance.
+        Determine acceptance category for a concept based on lens performance.
 
         Returns:
             "PASS" - meets or exceeds threshold
@@ -147,7 +147,7 @@ class ProbePerformanceRequirements:
         """
         threshold = self.thresholds_by_level.get(
             protection_level,
-            ProbePerformanceThreshold(0.60, 0.60)
+            LensPerformanceThreshold(0.60, 0.60)
         )
 
         # Check hard floor for critical simplex mapping
@@ -172,7 +172,7 @@ class MeldPolicy:
     critical_bound_concepts: Set[str]
     critical_bound_by_simplex: Dict[str, Set[str]]
     training_requirements: TrainingRequirements
-    probe_performance_requirements: ProbePerformanceRequirements
+    lens_performance_requirements: LensPerformanceRequirements
     from_pack: bool = False
     pack_id: Optional[str] = None
 
@@ -332,27 +332,27 @@ def load_pack_policy(pack_dir: Path) -> Tuple[MeldPolicy, List[str]]:
         min_examples_for_simplex=min_for_simplex or TrainingRequirements.get_defaults().min_examples_for_simplex,
     )
 
-    # Load probe performance requirements
-    perf_cfg = meld_policy.get("probe_performance_requirements", {})
+    # Load lens performance requirements
+    perf_cfg = meld_policy.get("lens_performance_requirements", {})
     thresholds_by_level = {}
     for level, thresh in perf_cfg.get("thresholds_by_level", {}).items():
         if isinstance(thresh, dict):
-            thresholds_by_level[level] = ProbePerformanceThreshold(
+            thresholds_by_level[level] = LensPerformanceThreshold(
                 thresh.get("min_holdout_accuracy", 0.60),
                 thresh.get("min_test_f1", 0.60),
             )
 
     hard_floor_cfg = perf_cfg.get("critical_simplex_hard_floor", {})
     if hard_floor_cfg:
-        hard_floor = ProbePerformanceThreshold(
+        hard_floor = LensPerformanceThreshold(
             hard_floor_cfg.get("min_holdout_accuracy", 0.60),
             hard_floor_cfg.get("min_test_f1", 0.60),
         )
     else:
-        hard_floor = ProbePerformanceRequirements.get_defaults().critical_simplex_hard_floor
+        hard_floor = LensPerformanceRequirements.get_defaults().critical_simplex_hard_floor
 
-    probe_perf_reqs = ProbePerformanceRequirements(
-        thresholds_by_level=thresholds_by_level or ProbePerformanceRequirements.get_defaults().thresholds_by_level,
+    lens_perf_reqs = LensPerformanceRequirements(
+        thresholds_by_level=thresholds_by_level or LensPerformanceRequirements.get_defaults().thresholds_by_level,
         critical_simplex_hard_floor=hard_floor,
     )
 
@@ -362,7 +362,7 @@ def load_pack_policy(pack_dir: Path) -> Tuple[MeldPolicy, List[str]]:
         critical_bound_concepts=critical_bound_all or DEFAULT_CRITICAL_BOUND_CONCEPTS,
         critical_bound_by_simplex=critical_bound_by_simplex,
         training_requirements=training_reqs,
-        probe_performance_requirements=probe_perf_reqs,
+        lens_performance_requirements=lens_perf_reqs,
         from_pack=True,
         pack_id=pack_data.get("pack_id", pack_dir.name)
     ), warnings
@@ -376,7 +376,7 @@ def get_default_policy() -> MeldPolicy:
         critical_bound_concepts=DEFAULT_CRITICAL_BOUND_CONCEPTS,
         critical_bound_by_simplex={},
         training_requirements=TrainingRequirements.get_defaults(),
-        probe_performance_requirements=ProbePerformanceRequirements.get_defaults(),
+        lens_performance_requirements=LensPerformanceRequirements.get_defaults(),
         from_pack=False
     )
 

@@ -5,7 +5,7 @@ Verifies:
 1. bfloat16 model loading works without errors
 2. batch_size=4 doesn't OOM
 3. Actual speedup vs unbatched FP32
-4. Probe quality comparable to FP32 baseline
+4. Lens quality comparable to FP32 baseline
 """
 
 import sys
@@ -183,10 +183,10 @@ def benchmark_speedup(model, tokenizer, device):
     return speedup, X_batched, train_labels
 
 
-def test_probe_quality(model, tokenizer, device, X_train, train_labels):
-    """Test if probe trained on bfloat16 has comparable F1 scores."""
+def test_lens_quality(model, tokenizer, device, X_train, train_labels):
+    """Test if lens trained on bfloat16 has comparable F1 scores."""
     print("=" * 80)
-    print("TEST 4: PROBE QUALITY TEST")
+    print("TEST 4: LENS QUALITY TEST")
     print("=" * 80)
     print()
 
@@ -214,8 +214,8 @@ def test_probe_quality(model, tokenizer, device, X_train, train_labels):
     print("✓ Test activations extracted")
     print()
 
-    # Train probe
-    print("Training probe with adaptive trainer...")
+    # Train lens
+    print("Training lens with adaptive trainer...")
     trainer = DualAdaptiveTrainer(
         activation_target_accuracy=0.95,
         activation_baseline=10,
@@ -224,7 +224,7 @@ def test_probe_quality(model, tokenizer, device, X_train, train_labels):
         max_iterations=10,
         model=model,
         tokenizer=tokenizer,
-        validate_probes=False,
+        validate_lenses=False,
         train_activation=True,
         train_text=False,
     )
@@ -243,7 +243,7 @@ def test_probe_quality(model, tokenizer, device, X_train, train_labels):
 
     if results['activation']:
         act = results['activation']
-        print("✓ PROBE TRAINING RESULTS:")
+        print("✓ LENS TRAINING RESULTS:")
         print(f"  Graduated: Yes")
         print(f"  Iterations: {act['iterations']}")
         print(f"  Samples: {act['samples']}")
@@ -254,13 +254,13 @@ def test_probe_quality(model, tokenizer, device, X_train, train_labels):
 
         # Quality check
         if act['test_f1'] >= 0.90:
-            print("✓ Probe quality acceptable (test_f1 ≥ 0.90)")
+            print("✓ Lens quality acceptable (test_f1 ≥ 0.90)")
             return True
         else:
-            print("⚠️  Probe quality below baseline (test_f1 < 0.90)")
+            print("⚠️  Lens quality below baseline (test_f1 < 0.90)")
             return False
     else:
-        print("✗ PROBE FAILED TO GRADUATE")
+        print("✗ LENS FAILED TO GRADUATE")
         return False
 
 
@@ -286,7 +286,7 @@ def main():
         print(f"⚠️  Speedup {speedup:.2f}x less than expected (2-4x)")
 
     # Test 4: Quality
-    quality_ok = test_probe_quality(model, tokenizer, device, X_train, train_labels)
+    quality_ok = test_lens_quality(model, tokenizer, device, X_train, train_labels)
 
     # Summary
     print("=" * 80)
@@ -296,7 +296,7 @@ def main():
     print(f"1. bfloat16 loading: ✓")
     print(f"2. batch_size=4 memory: {'✓' if memory_ok else '✗'}")
     print(f"3. Speedup: {speedup:.2f}x")
-    print(f"4. Probe quality: {'✓' if quality_ok else '✗'}")
+    print(f"4. Lens quality: {'✓' if quality_ok else '✗'}")
     print()
 
     if memory_ok and quality_ok and speedup >= 2.0:

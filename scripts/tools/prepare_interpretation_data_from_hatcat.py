@@ -3,7 +3,7 @@
 Prepare interpretation training data from HatCat server outputs.
 
 This script:
-1. Takes HatCat probe activation outputs (sentence + axis activations)
+1. Takes HatCat lens activation outputs (sentence + axis activations)
 2. Uses an LLM to generate interpretation summaries
 3. Formats as instruction-following training data for fine-tuning
 """
@@ -33,7 +33,7 @@ else:
 
 
 def format_hatcat_output_as_context(sentence: str, axes: Dict[str, Dict]) -> str:
-    """Format HatCat probe output as training context.
+    """Format HatCat lens output as training context.
 
     Example input format:
     {
@@ -171,7 +171,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Prepare interpretation training data from HatCat outputs")
     parser.add_argument('--input', '-i', type=str, required=True,
-                       help='Input file with HatCat probe outputs (JSONL format)')
+                       help='Input file with HatCat lens outputs (JSONL format)')
     parser.add_argument('--output', '-o', type=str, default=None,
                        help='Output file for training data (default: input_name_training.jsonl)')
     parser.add_argument('--generate-summaries', action='store_true',

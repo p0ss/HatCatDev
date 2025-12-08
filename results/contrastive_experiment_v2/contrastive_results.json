@@ -6,7 +6,7 @@
     "sibling",
     "mixed"
   ],
-  "probes": {
+  "lenses": {
     "ACPowerSource_L3": {
       "concept": "ACPowerSource",
       "layer": 3,

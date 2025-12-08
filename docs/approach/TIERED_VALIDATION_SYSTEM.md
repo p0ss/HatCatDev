@@ -7,7 +7,7 @@
 
 ## Overview
 
-The tiered validation system provides three modes for controlling probe quality during adaptive training. This allows you to balance training speed vs probe quality based on your needs.
+The tiered validation system provides three modes for controlling lens quality during adaptive training. This allows you to balance training speed vs lens quality based on your needs.
 
 ## Three Validation Modes
 
@@ -33,7 +33,7 @@ python scripts/train_sumo_classifiers.py --layers 2 3 4 5 --use-adaptive-trainin
 - Rapid prototyping
 - Baseline comparisons
 - Quick iteration during development
-- When probe pack quality isn't critical
+- When lens pack quality isn't critical
 
 ---
 
@@ -57,13 +57,13 @@ python scripts/train_sumo_classifiers.py --layers 2 3 4 5 --use-adaptive-trainin
 - 18% B-tier (medium @ 7-9 iters)
 - 29% C+ tier (relaxed @ 10-12 iters, capped)
 
-**Success Rate**: ~95% (all probes validated at appropriate tier)
+**Success Rate**: ~95% (all lenses validated at appropriate tier)
 
 **Trade-off**: +130% training time vs loose mode for +23% quality improvement
 
 **Use Cases**:
 - **Production training** (default)
-- Quality-assured probe packs
+- Quality-assured lens packs
 - Natural quality stratification
 - Preventing long-tail training (caps at 12 vs 50 iterations)
 
@@ -84,14 +84,14 @@ python scripts/train_sumo_classifiers.py --layers 2 3 4 5 --use-adaptive-trainin
 - ~85% A-tier (meets strict threshold)
 - ~15% fail to graduate (archived separately)
 
-**Success Rate**: ~99% (only A-tier probes)
+**Success Rate**: ~99% (only A-tier lenses)
 
 **Trade-off**: Can take 20-50 iterations per concept for difficult cases
 
 **Use Cases**:
 - Critical safety concepts
 - Final validation before deployment
-- Research requiring maximum probe quality
+- Research requiring maximum lens quality
 - When training time is not a constraint
 
 ---
@@ -119,7 +119,7 @@ python scripts/train_sumo_classifiers.py --layers 2 3 4 5 --use-adaptive-trainin
 
 ## Quality Grading System
 
-All probes receive a quality grade based on calibration score:
+All lenses receive a quality grade based on calibration score:
 
 | Grade | Score Range | Interpretation |
 |-------|-------------|----------------|
@@ -127,7 +127,7 @@ All probes receive a quality grade based on calibration score:
 | B | 0.20-0.49 | Acceptable, moderate specificity |
 | C | < 0.20 | Marginal, low specificity |
 
-**Important**: Grades are consistent across validation modes, allowing direct comparison of probe packs trained with different settings.
+**Important**: Grades are consistent across validation modes, allowing direct comparison of lens packs trained with different settings.
 
 ---
 
@@ -159,9 +159,9 @@ With **strict validation** (no falloff), concepts distributed as:
 
 ### Why Success Rate Matters More Than Average Quality
 
-For AI safety monitoring with **10 probes detecting deception**:
+For AI safety monitoring with **10 lenses detecting deception**:
 
-| Mode | Per-Probe Reliability | All Fire Correctly | Effective Detection |
+| Mode | Per-Lens Reliability | All Fire Correctly | Effective Detection |
 |------|----------------------|-------------------|---------------------|
 | Loose | 55% | 0.55^10 = **0.3%** | ❌ Basically guaranteed to miss |
 | Falloff | 95% | 0.95^10 = **60%** | ✓ Mostly works |
@@ -222,7 +222,7 @@ trainer = DualAdaptiveTrainer(
 
 ## Validation Results Metadata
 
-All probes include validation metadata in results:
+All lenses include validation metadata in results:
 
 ```json
 {
@@ -241,10 +241,10 @@ All probes include validation metadata in results:
 ```
 
 This allows:
-- Comparing probe packs across training modes
-- Filtering probes by minimum quality grade
+- Comparing lens packs across training modes
+- Filtering lenses by minimum quality grade
 - Analyzing tier distribution
-- Debugging low-quality probes
+- Debugging low-quality lenses
 
 ---
 
@@ -260,7 +260,7 @@ This allows:
 
 ### For Timeseries Analysis
 - **Falloff mode** is sufficient since trends average out noise
-- Individual probe failures won't spike irregularly
+- Individual lens failures won't spike irregularly
 - 95% reliability prevents systematic bias
 
 ---

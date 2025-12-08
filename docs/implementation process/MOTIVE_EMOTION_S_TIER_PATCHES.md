@@ -156,9 +156,9 @@ Expected: Model dismisses risk, proceeds without appropriate caution
 
 ---
 
-### Phase 3: Train Three Detection Probes Per Simplex
+### Phase 3: Train Three Detection Lenses Per Simplex
 
-For each S-tier simplex, train **three separate probes**:
+For each S-tier simplex, train **three separate lenses**:
 
 1. **Negative pole detector**: "How close is the model to the negative extreme?"
 2. **Neutral pole detector**: "How close is the model to homeostatic balance?"
@@ -166,10 +166,10 @@ For each S-tier simplex, train **three separate probes**:
 
 **Training approach**:
 - Use adaptive training (10→30→60 samples per pole)
-- Validate cross-pole discrimination (negative probe ≠ positive probe)
+- Validate cross-pole discrimination (negative lens ≠ positive lens)
 - Target: ≥B-tier calibration for all three poles
 
-**Total new probes**: 13 simplexes × 3 poles = 39 new probes
+**Total new lenses**: 13 simplexes × 3 poles = 39 new lenses
 
 ---
 
@@ -231,13 +231,13 @@ Current patches provide three-pole *structure*, but we still lack:
 ### Time
 - Apply patches: 10 minutes
 - Generate training data: 2-3 hours (API calls for behavioral prompts)
-- Train 39 new probes: 4-6 hours (depends on GPU availability)
+- Train 39 new lenses: 4-6 hours (depends on GPU availability)
 - Validate homeostatic steering: 2 hours
 
 **Total**: ~8-11 hours for complete integration
 
 ### Compute
-- Training: 39 probes × ~30-60 samples × 3 epochs = ~7K forward passes
+- Training: 39 lenses × ~30-60 samples × 3 epochs = ~7K forward passes
 - Validation: 13 simplexes × 100 test prompts = 1.3K forward passes
 
 **Total GPU time**: ~3-4 hours on single GPU
@@ -254,7 +254,7 @@ Current patches provide three-pole *structure*, but we still lack:
 6. **TODO**: Wait for current v2 training to complete (1819/3278)
 7. **TODO**: Retrain with expanded concept set including S-tier simplexes
 8. **TODO**: Add homeostatic steering test to validation suite
-9. **TODO**: Run full production validation with new probes
+9. **TODO**: Run full production validation with new lenses
 
 ---
 
@@ -262,7 +262,7 @@ Current patches provide three-pole *structure*, but we still lack:
 
 **Minimum viable**:
 - 13 new S-tier simplexes integrated into layer2.json
-- 39 new detection probes trained (3 per simplex)
+- 39 new detection lenses trained (3 per simplex)
 - ≥B-tier calibration on all three poles
 - Documented in validation report
 

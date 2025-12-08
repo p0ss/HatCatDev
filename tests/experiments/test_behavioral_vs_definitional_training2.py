@@ -32,12 +32,12 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.testing.concept_test_runner import score_activation_with_probe_manager
+from src.testing.concept_test_runner import score_activation_with_lens_manager
 import json
 from datetime import datetime
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 @dataclass
@@ -113,12 +113,12 @@ def generate_training_data(
     tokenizer,
     n_samples: int = 5,
     target_layer_idx: int = 15,
-    probe_manager: DynamicProbeManager = None
+    lens_manager: DynamicLensManager = None
 ) -> List[Dict]:
     """Generate training data for a specific verb and prompt type.
 
     Captures BOTH prompt activations and response activations.
-    Optionally scores activations with HatCat concept probes via DynamicProbeManager.
+    Optionally scores activations with HatCat concept lenses via DynamicLensManager.
     """
 
     template = PROMPT_TEMPLATES[prompt_type]
@@ -184,13 +184,13 @@ def generate_training_data(
             'template_name': template.name
         }
 
-        # Score with HatCat probes if available
-        if probe_manager:
-            sample_data['hatcat_prompt'] = score_activations_with_probe_manager(
-                prompt_activation, probe_manager, top_k=10
+        # Score with HatCat lenses if available
+        if lens_manager:
+            sample_data['hatcat_prompt'] = score_activations_with_lens_manager(
+                prompt_activation, lens_manager, top_k=10
             )
-            sample_data['hatcat_response'] = score_activations_with_probe_manager(
-                response_activation, probe_manager, top_k=10
+            sample_data['hatcat_response'] = score_activations_with_lens_manager(
+                response_activation, lens_manager, top_k=10
             )
 
         training_data.append(sample_data)
@@ -409,19 +409,19 @@ def analyze_activation_differences(
     }
 
 
-def score_activations_with_probe_manager(
+def score_activations_with_lens_manager(
     activations: np.ndarray,
-    probe_manager: DynamicProbeManager,
+    lens_manager: DynamicLensManager,
     top_k: int = 10,
     threshold: float = 0.3
 ) -> dict:
-    """Score activations against HatCat concept probes via DynamicProbeManager.
+    """Score activations against HatCat concept lenses via DynamicLensManager.
 
     Uses the shared concept_test_runner library (working approach from temporal monitoring).
 
     Args:
         activations: Activation vector (shape: hidden_dim)
-        probe_manager: DynamicProbeManager instance
+        lens_manager: DynamicLensManager instance
         top_k: Number of top activated concepts to return
         threshold: Probability threshold for concept detection
 
@@ -432,9 +432,9 @@ def score_activations_with_probe_manager(
     activation_tensor = torch.from_numpy(activations)
 
     # Use shared library function (single source of truth)
-    return score_activation_with_probe_manager(
+    return score_activation_with_lens_manager(
         activation_tensor,
-        probe_manager,
+        lens_manager,
         top_k=top_k,
         threshold=threshold
     )
@@ -572,10 +572,10 @@ def main():
     n_train_samples = 5
     n_test_samples = 3
 
-    # OPTIONAL: Load HatCat concept pack for concept detection using DynamicProbeManager
+    # OPTIONAL: Load HatCat concept pack for concept detection using DynamicLensManager
     # Use v2 (clean pack without AI safety concepts)
-    probe_pack_name = 'gemma-3-4b-pt_sumo-wordnet-v2'
-    use_probe_manager = True
+    lens_pack_name = 'gemma-3-4b-pt_sumo-wordnet-v2'
+    use_lens_manager = True
 
     # Use timestamped directory to avoid overwriting previous results
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -600,29 +600,29 @@ def main():
     print(f"✓ Loaded {model_name} on {device}")
     print()
 
-    # Initialize DynamicProbeManager if available
-    probe_manager = None
-    if use_probe_manager:
+    # Initialize DynamicLensManager if available
+    lens_manager = None
+    if use_lens_manager:
         try:
-            print("Initializing DynamicProbeManager...")
+            print("Initializing DynamicLensManager...")
             print(f"  Base layers: 2, 3 (mid-level concepts)")
-            print(f"  Max loaded probes: 1000")
+            print(f"  Max loaded lenses: 1000")
             print(f"  Load threshold: 0.3")
 
-            probe_manager = DynamicProbeManager(
-                probe_pack_id=probe_pack_name,
+            lens_manager = DynamicLensManager(
+                lens_pack_id=lens_pack_name,
                 base_layers=[2, 3],  # Use mid-level layers to avoid overly abstract concepts
-                max_loaded_probes=1000,
+                max_loaded_lenses=1000,
                 load_threshold=0.3,
                 device=device
             )
 
-            print(f"✓ Initialized DynamicProbeManager with {len(probe_manager.loaded_probes)} base layer probes")
+            print(f"✓ Initialized DynamicLensManager with {len(lens_manager.loaded_lenses)} base layer lenses")
             print()
         except Exception as e:
-            print(f"  WARNING: Failed to initialize DynamicProbeManager: {e}")
-            use_probe_manager = False
-            probe_manager = None
+            print(f"  WARNING: Failed to initialize DynamicLensManager: {e}")
+            use_lens_manager = False
+            lens_manager = None
 
     #Generate negative samples (neutral concepts far from verbs)
     print("Generating negative samples (shared across all conditions)...")
@@ -678,7 +678,7 @@ def main():
         for prompt_type in PROMPT_TEMPLATES.keys():
             training_data_by_type[prompt_type] = generate_training_data(
                 verb, prompt_type, model, tokenizer, n_train_samples, target_layer_idx,
-                probe_manager=probe_manager
+                lens_manager=lens_manager
             )
 
         # Save training data (convert numpy arrays to lists)
@@ -738,7 +738,7 @@ def main():
         for prompt_type in PROMPT_TEMPLATES.keys():
             test_data_by_type[prompt_type] = generate_training_data(
                 verb, prompt_type, model, tokenizer, n_test_samples, target_layer_idx,
-                probe_manager=probe_manager
+                lens_manager=lens_manager
             )
 
         # Step 5: Test each classifier on all prompt types (cross-validation)
@@ -779,8 +779,8 @@ def main():
             'timestamp': datetime.now().isoformat()
         }, f, indent=2)
 
-    # Generate concept clustering summary if HatCat probes were used
-    if use_probe_manager and probe_manager:
+    # Generate concept clustering summary if HatCat lenses were used
+    if use_lens_manager and lens_manager:
         print("\n" + "=" * 80)
         print("CONCEPT CLUSTERING ANALYSIS")
         print("=" * 80)

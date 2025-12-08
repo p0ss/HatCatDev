@@ -18,7 +18,7 @@
 		<h1>BED Auditor</h1>
 		<nav>
 			<a href="/">Stream</a>
-			<a href="/probes">Probes</a>
+			<a href="/lenses">Lenses</a>
 			<a href="/xdb">XDB</a>
 			<a href="/audit">Audit</a>
 			<a href="/tools">Tools</a>

@@ -21,7 +21,7 @@ import logging
 import json
 
 from .data_structures import Graft, SubstrateManifest
-from .graft_training import DimensionProjection, ConceptProbe
+from .graft_training import DimensionProjection, ConceptLens
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ class GraftedModel(nn.Module):
         # Registry of loaded grafts
         self.grafts: Dict[str, Graft] = {}
         self.projections: Dict[str, DimensionProjection] = {}
-        self.probes: Dict[str, ConceptProbe] = {}
+        self.lenses: Dict[str, ConceptLens] = {}
         self.biases: Dict[str, torch.Tensor] = {}
 
         # Which grafts are currently active
@@ -95,21 +95,21 @@ class GraftedModel(nn.Module):
             projection.eval()
             self.projections[graft.graft_id] = projection
 
-        # Load probe weights
-        if graft.probe_path:
-            probe_path = Path(graft.probe_path)
-            if not probe_path.is_absolute():
-                probe_path = graft_dir / probe_path.name
+        # Load lens weights
+        if graft.lens_path:
+            lens_path = Path(graft.lens_path)
+            if not lens_path.is_absolute():
+                lens_path = graft_dir / lens_path.name
 
-            if probe_path.exists():
+            if lens_path.exists():
                 hidden_dim = self.base_model.config.hidden_size
-                probe = ConceptProbe(
+                lens = ConceptLens(
                     hidden_dim,
                     graft.auxiliary_dimensions
                 ).to(self.device)
-                probe.load_state_dict(torch.load(probe_path, map_location=self.device, weights_only=True))
-                probe.eval()
-                self.probes[graft.graft_id] = probe
+                lens.load_state_dict(torch.load(lens_path, map_location=self.device, weights_only=True))
+                lens.eval()
+                self.lenses[graft.graft_id] = lens
 
         # Load bias
         if graft.substrate_biases:
@@ -273,14 +273,14 @@ class GraftedModel(nn.Module):
             # Compute activation
             activation = projection(hidden_states)  # (1, seq_len, 1)
 
-            # Apply probe if available
-            probe_score = None
-            if graft_id in self.probes:
-                probe = self.probes[graft_id]
-                scores = probe(activation.squeeze(-1), hidden_states)
+            # Apply lens if available
+            lens_score = None
+            if graft_id in self.lenses:
+                lens = self.lenses[graft_id]
+                scores = lens(activation.squeeze(-1), hidden_states)
                 mask = inputs.get('attention_mask', torch.ones_like(scores))
                 mean_score = (scores * mask).sum() / mask.sum()
-                probe_score = torch.sigmoid(mean_score).item()
+                lens_score = torch.sigmoid(mean_score).item()
 
         return {
             "graft_id": graft_id,
@@ -289,7 +289,7 @@ class GraftedModel(nn.Module):
             "max_activation": activation.max().item(),
             "min_activation": activation.min().item(),
             "std_activation": activation.std().item(),
-            "probe_score": probe_score,
+            "lens_score": lens_score,
             "tokens": len(inputs.input_ids[0])
         }
 
@@ -461,7 +461,7 @@ def validate_graft(
     Checks:
     1. Substrate compatibility
     2. Dimension activation (if validation_data provided)
-    3. Probe F1 (if validation_data provided)
+    3. Lens F1 (if validation_data provided)
     4. Bias sparsity
 
     Args:

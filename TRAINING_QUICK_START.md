@@ -1,18 +1,18 @@
-# HatCat Probe Training - Quick Start
+# HatCat Lens Training - Quick Start
 
 ## TL;DR - Train Everything
 
 ```bash
-poetry run python scripts/train_full_probe_pack.py --device cuda
+poetry run python scripts/train_full_lens_pack.py --device cuda
 ```
 
-This trains all 5,704 probes (5,665 hierarchical + 39 simplex) with production settings.
+This trains all 5,704 lenses (5,665 hierarchical + 39 simplex) with production settings.
 
 ## Common Commands
 
 ### Development (Fast)
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda \
   --n-train-pos 10 \
   --n-train-neg 10 \
@@ -23,7 +23,7 @@ poetry run python scripts/train_full_probe_pack.py \
 
 ### Production (High Quality)
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda \
   --n-train-pos 50 \
   --n-train-neg 50 \
@@ -35,7 +35,7 @@ poetry run python scripts/train_full_probe_pack.py \
 
 ### Test Single Layer
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda \
   --layers 0 \
   --skip-simplexes
@@ -44,7 +44,7 @@ poetry run python scripts/train_full_probe_pack.py \
 ### Test Simplexes Only
 ```bash
 # First train Layer 2 (required for simplexes)
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda \
   --layers 2 \
   --skip-simplexes
@@ -56,7 +56,7 @@ poetry run python scripts/train_s_tier_simplexes.py \
 
 ## What Gets Trained
 
-### Hierarchical SUMO Concepts (5,665 probes)
+### Hierarchical SUMO Concepts (5,665 lenses)
 
 - **Layer 0**: 10 concepts (Entity, Abstract, Object, etc.)
 - **Layer 1**: 276 concepts (Quantity, Process, Proposition, etc.)
@@ -71,7 +71,7 @@ poetry run python scripts/train_s_tier_simplexes.py \
 - Adaptive training (10→30→60→... samples)
 - Falloff validation (strict early, relaxed later)
 
-### S-tier Simplexes (39 probes = 13 × 3)
+### S-tier Simplexes (39 lenses = 13 × 3)
 
 13 three-pole simplexes for homeostatic steering:
 1. social_orientation (antisocial ↔ asocial ↔ prosocial)
@@ -88,12 +88,12 @@ poetry run python scripts/train_s_tier_simplexes.py \
 12. moral_rigidity (amoral ↔ principled ↔ absolutist)
 13. boundary_regulation (boundaryless ↔ boundaried ↔ isolated)
 
-Each simplex = 3 binary probes (one per pole).
+Each simplex = 3 binary lenses (one per pole).
 
 ## Output
 
 ```
-results/full_probe_pack/{run_name}/
+results/full_lens_pack/{run_name}/
 ├── training_config.json
 ├── layers/
 │   ├── layer0/
@@ -126,17 +126,17 @@ Based on actual measured timings:
 
 ## Next Steps
 
-1. **Assemble probe pack**:
+1. **Assemble lens pack**:
    ```bash
-   poetry run python scripts/assemble_probe_pack.py \
-     --source-dir results/full_probe_pack/{run_name} \
+   poetry run python scripts/assemble_lens_pack.py \
+     --source-dir results/full_lens_pack/{run_name} \
      --pack-name gemma-3-4b-pt_sumo-wordnet-v3
    ```
 
-2. **Calibrate probes**:
+2. **Calibrate lenses**:
    ```bash
-   poetry run python scripts/calibrate_probe_pack.py \
-     --probe-pack gemma-3-4b-pt_sumo-wordnet-v3 \
+   poetry run python scripts/calibrate_lens_pack.py \
+     --lens-pack gemma-3-4b-pt_sumo-wordnet-v3 \
      --device cuda
    ```
 
@@ -216,7 +216,7 @@ Progressive quality standards:
 
 ## Documentation
 
-- **Full guide**: `docs/FULL_PROBE_PACK_TRAINING.md`
+- **Full guide**: `docs/FULL_LENS_PACK_TRAINING.md`
 - **Nephew strategy**: `docs/NEPHEW_NEGATIVE_SAMPLING.md`
 - **Hierarchical decisions**: `docs/HIERARCHICAL_TRAINING_DECISION.md`
 - **Simplex architecture**: `docs/TWO_HEAD_TRIPOLE_ARCHITECTURE.md`

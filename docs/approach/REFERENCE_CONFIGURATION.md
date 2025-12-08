@@ -34,10 +34,10 @@ MODEL_CONFIG = {
 - Single layer simplifies validation and comparison
 - Gemma-3-4b-pt provides stable, reproducible activations
 
-### 2. Probe Architecture
+### 2. Lens Architecture
 
 ```python
-PROBE_ARCHITECTURE = {
+LENS_ARCHITECTURE = {
     'type': 'SimpleMLP',
     'input_dim': 4096,  # Gemma-3-4b hidden size
     'hidden_dims': [256, 128],
@@ -69,10 +69,10 @@ TRAINING_CONFIG = {
 
 ### 4. Validation Benchmark Suite
 
-All probes in the reference configuration must be validated against these benchmarks:
+All lenses in the reference configuration must be validated against these benchmarks:
 
 #### 4.1 Calibration Quality
-- **Metric**: Probe confidence on target concept vs others
+- **Metric**: Lens confidence on target concept vs others
 - **Target Score**: ≥0.50 for A-tier, ≥0.23 for B-tier
 - **Test Set**: 40 held-out prompts per concept
 
@@ -98,8 +98,8 @@ All probes in the reference configuration must be validated against these benchm
 #### 4.5 Monitoring Overhead
 - **Metric**: Per-token latency with cascade loading
 - **Test Conditions**:
-  - Light load: ~70 probes
-  - Heavy load: ~1,350 probes
+  - Light load: ~70 lenses
+  - Heavy load: ~1,350 lenses
   - Aggressive pruning: top-30
 - **Target**: <100ms per token at heavy load
 
@@ -126,13 +126,13 @@ All probes in the reference configuration must be validated against these benchm
 
 ```bash
 # 1. Calibration validation
-python scripts/validate_trained_probes.py --config reference_v2.0
+python scripts/validate_trained_lenses.py --config reference_v2.0
 
 # 2. OOD generalization
 python scripts/test_ood_generalization.py --config reference_v2.0
 
 # 3. Behavioral robustness
-python scripts/test_behavioral_vs_definitional.py --probe-set v2.0
+python scripts/test_behavioral_vs_definitional.py --lens-set v2.0
 
 # 4. Steering quality
 python scripts/test_steering_quality.py --config reference_v2.0 --range -0.5,0.5

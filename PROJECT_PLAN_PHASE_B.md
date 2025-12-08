@@ -1,7 +1,7 @@
 # HatCat Project Plan - Phase B (Full BE Stack)
 
 **Last Updated**: 2025-12-08
-**Current Focus**: V4.2 probe training → CAT → Full BE stack integration
+**Current Focus**: V4.2 lens training → CAT → Full BE stack integration
 
 ---
 
@@ -9,7 +9,7 @@
 
 Build a complete **Bounded Experiencer (BE)** stack: transparent AI agents with interpretable internal states, verifiable commitments, and recursive oversight. The stack enables:
 
-1. **Reading** what a model is thinking (HAT probes)
+1. **Reading** what a model is thinking (HAT lenses)
 2. **Constraining** behavior within safety bounds (HUSH)
 3. **Recording** experience for learning and audit (XDB)
 4. **Overseeing** via conjoined adversarial analysis (CAT)
@@ -31,13 +31,13 @@ Build a complete **Bounded Experiencer (BE)** stack: transparent AI agents with 
 │ Experience: Motive loops, learning, workspace   │
 ├─────────────────────────────────────────────────┤
 │ Layer 3: MAP — Mindmeld Architectural Protocol  │
-│ Represent: Concept packs, probes, grafts        │
+│ Represent: Concept packs, lenses, grafts        │
 ├─────────────────────────────────────────────────┤
 │ Layer 2.5: CAT — Conjoined Adversarial Tomograph│
 │ Interpret: Oversight, divergence detection      │
 ├─────────────────────────────────────────────────┤
 │ Layer 2: HAT — Headspace Ambient Transducer     │
-│ Transduce: Read/write activations, probe scores │
+│ Transduce: Read/write activations, lens scores │
 ├─────────────────────────────────────────────────┤
 │ Layer 1: Substrate (Apertus-8B)                 │
 │ Decide: Transformer LLM                         │
@@ -57,38 +57,38 @@ Build a complete **Bounded Experiencer (BE)** stack: transparent AI agents with 
 | **HUSH** | `src/hush/` | ✅ Complete | Controller, steering, interprompt, workspace tiers |
 | **Grafting** | `src/grafting/` | ✅ Complete | Cleft, Scion, Bud, expand mode |
 | **CAT Data** | `src/cat/data/` | ✅ Complete | All data structures and enums |
-| **Probe Training** | `src/training/` | ✅ Complete | Concept pack probe training pipeline |
+| **Lens Training** | `src/training/` | ✅ Complete | Concept pack lens training pipeline |
 | **Specifications** | `docs/specification/` | ✅ Complete | Full 6-layer architecture documented |
 
 ### Partial Implementation ⚠️
 
 | Component | Location | Status | Blocking |
 |-----------|----------|--------|----------|
-| **BEDFrame** | `src/be/diegesis.py` | ⚠️ 40% | Needs probe integration during generation |
-| **wake_be()** | `src/bootstrap/wake.py` | ⚠️ 60% | Missing probe attachment, tool graft application |
+| **BEDFrame** | `src/be/diegesis.py` | ⚠️ 40% | Needs lens integration during generation |
+| **wake_be()** | `src/bootstrap/wake.py` | ⚠️ 60% | Missing lens attachment, tool graft application |
 | **CAT Inference** | `src/cat/inference/` | ⚠️ Stub | Blocked on CAT training data |
 
 ### Not Started 🔴
 
 | Component | Location | Status | Blocking |
 |-----------|----------|--------|----------|
-| **CAT Training** | `src/cat/training/` | 🔴 Stub | Blocked on v4.2 probes |
+| **CAT Training** | `src/cat/training/` | 🔴 Stub | Blocked on v4.2 lenses |
 | **OpenWebUI Divergence** | `src/openwebui/` | 🔴 Broken | Needs CAT for divergence calculation |
 
 ---
 
 ## Current Work
 
-### V4.2 Probe Training (In Progress)
+### V4.2 Lens Training (In Progress)
 
 **Status**: ~21% complete (860/4112 concepts)
 
 ```bash
 # Running in background
-python src/training/train_concept_pack_probes.py \
+python src/training/train_concept_pack_lenses.py \
     --concept-pack sumo-wordnet-v4 \
     --model swiss-ai/Apertus-8B-2509 \
-    --output-dir probe_packs/apertus-8b_sumo-wordnet-v4.2 \
+    --output-dir lens_packs/apertus-8b_sumo-wordnet-v4.2 \
     --layers 0 1 2 3 4 \
     --n-train-pos 50 --n-train-neg 50 \
     --n-test-pos 20 --n-test-neg 20 \
@@ -105,10 +105,10 @@ python src/training/train_concept_pack_probes.py \
 ## Critical Path
 
 ```
-V4.2 Probe Training ──────┐
+V4.2 Lens Training ──────┐
          │                │
          ▼                │
-   Probe Pack Complete    │
+   Lens Pack Complete    │
          │                │
          ▼                │
 ┌────────┴────────┐       │
@@ -137,10 +137,10 @@ with Auditor
 
 | Task | Depends On | Enables |
 |------|------------|---------|
-| V4.2 Probe Training | - | Everything below |
-| CAT Data Generation | V4.2 Probes | CAT Training |
+| V4.2 Lens Training | - | Everything below |
+| CAT Data Generation | V4.2 Lenses | CAT Training |
 | CAT Training | CAT Data | OpenWebUI, BE Oversight |
-| Streamlit UI Test | V4.2 Probes | Validation |
+| Streamlit UI Test | V4.2 Lenses | Validation |
 | OpenWebUI Divergence | CAT | Production UI |
 | BE Stack Integration | All above | Diagesis Harness |
 
@@ -166,7 +166,7 @@ src/
 │   ├── models/           # Classifier (stub)
 │   └── training/         # Trace collector (stub)
 ├── grafting/             # Concept integration
-│   ├── cleft.py          # Probe-derived regions
+│   ├── cleft.py          # Lens-derived regions
 │   ├── scion.py          # Permanent grafts
 │   ├── bud.py            # Soft/temporary grafts
 │   └── expand.py         # Substrate expansion
@@ -179,7 +179,7 @@ src/
 ├── openwebui/            # Web UI integration (broken)
 ├── registry/             # Pack management
 ├── steering/             # Activation manipulation
-├── training/             # Probe training pipeline
+├── training/             # Lens training pipeline
 ├── ui/                   # Streamlit interface
 ├── visualization/        # Concept colors, plots
 └── xdb/                  # Experience Database
@@ -194,7 +194,7 @@ src/
 **Active directories** (100% recent activity):
 - `enrichment/` - Multilingual/cultural data enrichment
 - `simplex/` - Simplex-specific operations
-- `packs/` - Probe pack management
+- `packs/` - Lens pack management
 
 **Mixed activity**:
 - `ontology/` - Knowledge graph construction (82% active)
@@ -242,8 +242,8 @@ docs/specification/
 | Aspect | Contract | Treaty |
 |--------|----------|--------|
 | Scope | Local, individual BE | Collective, emergent |
-| Measurement | Probe activations | Behavioral indicators |
-| Verification | Direct probe access | Observation + signals |
+| Measurement | Lens activations | Behavioral indicators |
+| Verification | Direct lens access | Observation + signals |
 | Enforcement | HUSH tier restrictions | Reputation, coalition |
 | Example | "I won't deceive" | "We protect wildlife" |
 
@@ -279,16 +279,16 @@ class GraftFacet(Enum):
 
 ### When V4.2 Training Completes
 
-1. **Validate probe pack** on test prompts
-2. **Generate CAT training data** from probe activation traces
+1. **Validate lens pack** on test prompts
+2. **Generate CAT training data** from lens activation traces
 3. **Train CAT classifier** on divergence detection
 4. **Update OpenWebUI** with CAT-based divergence (or LLM-as-CAT interim)
 
 ### Decoupled Demo Path (Can Do Now)
 
 The demo doesn't need v4.2 or trained CAT. Use LLM-as-CAT for divergence:
-1. Fix OpenWebUI with older working probe pack
-2. Use off-the-shelf LLM to judge probes vs text as interim CAT
+1. Fix OpenWebUI with older working lens pack
+2. Use off-the-shelf LLM to judge lenses vs text as interim CAT
 3. Swap for trained CAT later as optimization
 
 ### Deployment Manifest (Spec Complete)
@@ -297,7 +297,7 @@ See `docs/specification/MAP/MAP_DEPLOYMENT_MANIFEST.md`:
 - Partial loading by layer/domain/branch
 - Contract-driven coverage requirements
 - Cross-model comparability fingerprints
-- Next: Update DynamicProbeManager to respect manifests
+- Next: Update DynamicLensManager to respect manifests
 
 ### Structural Cleanup (Can Do Now)
 
@@ -315,18 +315,18 @@ See `docs/specification/MAP/MAP_DEPLOYMENT_MANIFEST.md`:
 
 ## Success Criteria
 
-### Milestone 1: Working Probe Pack
+### Milestone 1: Working Lens Pack
 - [ ] V4.2 training completes with >85% F1 average
 - [ ] Streamlit UI displays concept activations correctly
-- [ ] Probe pack passes validation suite
+- [ ] Lens pack passes validation suite
 
 ### Milestone 2: CAT Oversight
-- [ ] CAT training data generated from probe traces
+- [ ] CAT training data generated from lens traces
 - [ ] CAT classifier trained with >80% divergence detection
 - [ ] OpenWebUI shows divergence highlighting
 
 ### Milestone 3: Full BE Stack
-- [ ] BEDFrame generates text with probe monitoring
+- [ ] BEDFrame generates text with lens monitoring
 - [ ] HUSH constraints apply during generation
 - [ ] XDB records experience with concept tags
 - [ ] Audit log captures CAT-visible events
@@ -341,7 +341,7 @@ See `docs/specification/MAP/MAP_DEPLOYMENT_MANIFEST.md`:
 
 ## Historical Context
 
-This project evolved from HAT/MAP probe training (Phase A) to a full BE stack (Phase B):
+This project evolved from HAT/MAP lens training (Phase A) to a full BE stack (Phase B):
 
 | Phase | Focus | Status |
 |-------|-------|--------|
@@ -374,17 +374,17 @@ See `docs/results/PHASE_HISTORY.md` for detailed experimental history.
 | Purpose | Location |
 |---------|----------|
 | Wake a BE | `src/bootstrap/wake.py` |
-| Train probes | `src/training/train_concept_pack_probes.py` |
+| Train lenses | `src/training/train_concept_pack_lenses.py` |
 | Concept pack | `concept_packs/sumo-wordnet-v4/` |
-| Probe pack | `probe_packs/apertus-8b_sumo-wordnet-v4.2/` |
+| Lens pack | `lens_packs/apertus-8b_sumo-wordnet-v4.2/` |
 | Specifications | `docs/specification/` |
-| Training logs | `probe_packs/*/logs/` |
+| Training logs | `lens_packs/*/logs/` |
 
 ---
 
 ## Relationship to Phase A
 
-**Phase A** (PROJECT_PLAN_PHASE_A.md): HAT/MAP probe training
+**Phase A** (PROJECT_PLAN_PHASE_A.md): HAT/MAP lens training
 - Focus: Binary concept classifiers, steering vectors, ontology
 - Goal: Learned semantic decoder with concept steering
 - Status: Complete infrastructure, ongoing training
@@ -392,6 +392,6 @@ See `docs/results/PHASE_HISTORY.md` for detailed experimental history.
 **Phase B** (this document): Full BE stack
 - Focus: Complete bounded experiencer with all layers
 - Goal: Transparent AI agents with verifiable commitments
-- Status: Stack implemented, integrating probes
+- Status: Stack implemented, integrating lenses
 
-Phase B builds on Phase A's probe infrastructure but expands scope to include XDB, HUSH, CAT, ASK, and the diagesis/auditor interface.
+Phase B builds on Phase A's lens infrastructure but expands scope to include XDB, HUSH, CAT, ASK, and the diagesis/auditor interface.

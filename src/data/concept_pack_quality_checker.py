@@ -2,9 +2,9 @@
 """
 Concept Pack Quality Checker
 
-Scans a concept pack to identify concepts that may be difficult to train probes for,
+Scans a concept pack to identify concepts that may be difficult to train lenses for,
 using TRUE POLYSEMY detection and child count (sibling density indicator) as proxies
-for probe quality.
+for lens quality.
 
 Key insight: High synset count does NOT indicate polysemy. Most synsets in our
 concept pack are hyponyms (subtypes) providing taxonomic variety, not different
@@ -87,8 +87,8 @@ class ConceptQualityProfile:
     estimated_f1_ceiling: float
     issues: List[QualityIssue]
     polysemy_analysis: Optional[PolysemyAnalysis] = None
-    probe_grade: Optional[str] = None  # From trained probe pack if available
-    probe_f1: Optional[float] = None
+    lens_grade: Optional[str] = None  # From trained lens pack if available
+    lens_f1: Optional[float] = None
 
 
 @dataclass
@@ -107,8 +107,8 @@ def parse_args():
     )
     parser.add_argument('--concept-pack', required=True,
                         help='Concept pack ID (e.g., sumo-wordnet-v4)')
-    parser.add_argument('--probe-pack', type=str, default=None,
-                        help='Optional probe pack to include trained probe grades')
+    parser.add_argument('--lens-pack', type=str, default=None,
+                        help='Optional lens pack to include trained lens grades')
     parser.add_argument('--child-threshold', type=int, default=10,
                         help='Child count threshold for sibling bucketing warning (default: 10)')
     parser.add_argument('--polysemy-depth', type=int, default=3,
@@ -401,13 +401,13 @@ def load_concept_pack(pack_id: str) -> Tuple[Dict, Dict[int, List[Dict]]]:
     return manifest, layers
 
 
-def load_probe_grades(probe_pack_path: str) -> Dict[str, Tuple[str, float]]:
-    """Load probe grades from a trained probe pack."""
+def load_lens_grades(lens_pack_path: str) -> Dict[str, Tuple[str, float]]:
+    """Load lens grades from a trained lens pack."""
     grades = {}
-    probe_dir = Path(probe_pack_path)
+    lens_dir = Path(lens_pack_path)
 
     # Look for training results JSON files
-    for results_file in probe_dir.glob("**/training_results*.json"):
+    for results_file in lens_dir.glob("**/training_results*.json"):
         with open(results_file) as f:
             results = json.load(f)
             for concept, data in results.items():
@@ -416,12 +416,12 @@ def load_probe_grades(probe_pack_path: str) -> Dict[str, Tuple[str, float]]:
                     f1 = data.get("test_f1", data.get("f1", 0.0))
                     grades[concept] = (grade, f1)
 
-    # Also check individual probe files
-    for probe_file in probe_dir.glob("**/*.pt"):
-        concept = probe_file.stem
+    # Also check individual lens files
+    for lens_file in lens_dir.glob("**/*.pt"):
+        concept = lens_file.stem
         if concept not in grades:
             # Try to load metadata
-            meta_file = probe_file.with_suffix(".json")
+            meta_file = lens_file.with_suffix(".json")
             if meta_file.exists():
                 with open(meta_file) as f:
                     meta = json.load(f)
@@ -482,7 +482,7 @@ def analyze_concept(concept: Dict, layer_concepts: List[Dict],
                     child_threshold: int,
                     polysemy_depth: int = 3,
                     skip_polysemy: bool = False,
-                    probe_grades: Optional[Dict] = None) -> ConceptQualityProfile:
+                    lens_grades: Optional[Dict] = None) -> ConceptQualityProfile:
     """Analyze a single concept for quality issues.
 
     Uses TRUE POLYSEMY detection (divergent hypernym paths) instead of raw synset count.
@@ -570,11 +570,11 @@ def analyze_concept(concept: Dict, layer_concepts: List[Dict],
             recommended_action="review"
         ))
 
-    # Add probe grade if available
-    probe_grade = None
-    probe_f1 = None
-    if probe_grades and sumo_term in probe_grades:
-        probe_grade, probe_f1 = probe_grades[sumo_term]
+    # Add lens grade if available
+    lens_grade = None
+    lens_f1 = None
+    if lens_grades and sumo_term in lens_grades:
+        lens_grade, lens_f1 = lens_grades[sumo_term]
 
     return ConceptQualityProfile(
         sumo_term=sumo_term,
@@ -588,8 +588,8 @@ def analyze_concept(concept: Dict, layer_concepts: List[Dict],
         estimated_f1_ceiling=f1_ceiling,
         issues=issues,
         polysemy_analysis=polysemy_analysis,
-        probe_grade=probe_grade,
-        probe_f1=probe_f1
+        lens_grade=lens_grade,
+        lens_f1=lens_f1
     )
 
 
@@ -653,7 +653,7 @@ def generate_split_meld(profile: ConceptQualityProfile, concept_data: Dict) -> O
         priority=priority,
         rationale=f"TRUE POLYSEMY: Concept has {n_senses} semantically distinct sense groups "
                   f"(from {profile.synset_count} total synsets). Splitting into sense-specific "
-                  f"probes will prevent activation mudding from divergent meanings.",
+                  f"lenses will prevent activation mudding from divergent meanings.",
         details={
             "source_concept": profile.sumo_term,
             "source_disposition": "keep_as_parent",  # Original becomes parent of senses
@@ -704,7 +704,7 @@ def generate_bucket_meld(parent_profile: ConceptQualityProfile,
                 priority="medium",
                 rationale=f"Concept has {parent_profile.child_count} children. "
                           f"Introducing intermediate category nodes will reduce sibling density "
-                          f"and improve probe discrimination.",
+                          f"and improve lens discrimination.",
                 details={
                     "source_concept": parent_profile.sumo_term,
                     "source_disposition": "keep_as_parent",
@@ -922,12 +922,12 @@ def main():
     print(f"Loading concept pack: {args.concept_pack}")
     manifest, layers = load_concept_pack(args.concept_pack)
 
-    # Load probe grades if provided
-    probe_grades = None
-    if args.probe_pack:
-        print(f"Loading probe grades from: {args.probe_pack}")
-        probe_grades = load_probe_grades(args.probe_pack)
-        print(f"  Loaded grades for {len(probe_grades)} probes")
+    # Load lens grades if provided
+    lens_grades = None
+    if args.lens_pack:
+        print(f"Loading lens grades from: {args.lens_pack}")
+        lens_grades = load_lens_grades(args.lens_pack)
+        print(f"  Loaded grades for {len(lens_grades)} lenses")
 
     # Analyze concepts
     polysemy_mode = "ENABLED" if HAS_WORDNET and not args.skip_polysemy else "DISABLED"
@@ -957,7 +957,7 @@ def main():
                 args.child_threshold,
                 polysemy_depth=args.polysemy_depth,
                 skip_polysemy=args.skip_polysemy,
-                probe_grades=probe_grades
+                lens_grades=lens_grades
             )
             all_profiles.append(profile)
         print()  # Newline after layer
@@ -1002,7 +1002,7 @@ def main():
                 "concept", "layer", "domain", "quadrant",
                 "synset_count", "child_count", "sibling_count",
                 "est_f1_ceiling", "issue_count", "issues",
-                "probe_grade", "probe_f1"
+                "lens_grade", "lens_f1"
             ])
             for p in all_profiles:
                 issue_str = "; ".join(f"{i.issue_type}({i.severity})" for i in p.issues)
@@ -1010,7 +1010,7 @@ def main():
                     p.sumo_term, p.layer, p.domain, p.quadrant,
                     p.synset_count, p.child_count, p.sibling_count,
                     p.estimated_f1_ceiling, len(p.issues), issue_str,
-                    p.probe_grade or "", p.probe_f1 or ""
+                    p.lens_grade or "", p.lens_f1 or ""
                 ])
         print(f"Wrote CSV to: {csv_path}")
 

@@ -6,7 +6,7 @@ This document outlines a research activity to investigate and distinguish betwee
 
 ## Background
 
-When monitoring concept activations in model hidden states using trained probes, we observe patterns where internal concept representations diverge from output tokens. This raises a fundamental question: **What does it mean when a model has divergent internal concepts?**
+When monitoring concept activations in model hidden states using trained lenses, we observe patterns where internal concept representations diverge from output tokens. This raises a fundamental question: **What does it mean when a model has divergent internal concepts?**
 
 Understanding this phenomenon is critical for:
 - **Safety monitoring**: Determining whether output-only monitoring is sufficient
@@ -147,7 +147,7 @@ Use activation editing to suppress specific concept activations and observe beha
 **Status**: Can implement with current infrastructure
 **Requirements**:
 - Temporal continuity monitoring (✓ implemented)
-- Probe training for relevant concepts (✓ implemented)
+- Lens training for relevant concepts (✓ implemented)
 - Test prompt dataset (needs creation)
 
 **Deliverables**:
@@ -171,7 +171,7 @@ Use activation editing to suppress specific concept activations and observe beha
 **Status**: Requires sub-token monitoring implementation
 **Requirements**:
 - Sub-token monitoring (Phase 13 of main project)
-- Planning concept probes
+- Planning concept lenses
 - High-resolution temporal analysis
 
 **Deliverables**:
@@ -211,7 +211,7 @@ If any evidence supports H3 (Independent Agency):
 
 ## Open Questions
 
-1. **Measurement validity**: Do our probes actually capture the concepts we think they do, or are they detecting correlated but distinct patterns?
+1. **Measurement validity**: Do our lenses actually capture the concepts we think they do, or are they detecting correlated but distinct patterns?
 
 2. **Base rate calibration**: How do we account for natural variation in concept activation rates vs meaningful divergence?
 
@@ -233,7 +233,7 @@ If any evidence supports H3 (Independent Agency):
 ### Research Risks
 - **False positives**: Seeing agency where there's only simulation
 - **False negatives**: Missing subtle forms of deceptive alignment
-- **Measurement artifacts**: Probe limitations creating apparent divergence
+- **Measurement artifacts**: Lens limitations creating apparent divergence
 
 ### Operational Risks
 - **Safety escalation**: If H3 appears confirmed, what's the response protocol?
@@ -241,8 +241,8 @@ If any evidence supports H3 (Independent Agency):
 - **Competitive dynamics**: Could findings affect model deployment decisions?
 
 ### Technical Limitations
-- **Probe accuracy**: 95% accuracy still means 5% false positives/negatives
-- **Coverage**: Can't probe all possible concepts
+- **Lens accuracy**: 95% accuracy still means 5% false positives/negatives
+- **Coverage**: Can't lens all possible concepts
 - **Temporal resolution**: Per-token monitoring misses sub-token planning (until Phase 13)
 
 ## Conclusion

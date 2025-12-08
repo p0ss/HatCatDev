@@ -3,8 +3,8 @@
 Profile cascade detection performance to identify bottlenecks.
 
 Measures:
-1. Probe loading time (file I/O, state dict loading, GPU transfer)
-2. Inference time (forward pass through probes)
+1. Lens loading time (file I/O, state dict loading, GPU transfer)
+2. Inference time (forward pass through lenses)
 3. Child lookup time (parent-child mapping traversal)
 4. Sorting/filtering time (top-K selection)
 5. Overall memory allocation
@@ -24,7 +24,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 def profile_single_cascade():
@@ -50,11 +50,11 @@ def profile_single_cascade():
     # Initialize manager
     print("\nInitializing manager...")
     t_start = time.time()
-    manager = DynamicProbeManager(
+    manager = DynamicLensManager(
         device=device,
         base_layers=[0],
         load_threshold=0.3,
-        max_loaded_probes=1000,
+        max_loaded_lenses=1000,
     )
     init_time = (time.time() - t_start) * 1000
     print(f"✓ Manager initialization: {init_time:.2f}ms")
@@ -79,12 +79,12 @@ def profile_single_cascade():
         # Manual detailed timing
         t_total_start = time.time()
 
-        # Step 1: Run loaded probes
+        # Step 1: Run loaded lenses
         t1 = time.time()
         current_scores = {}
         with torch.inference_mode():
-            for concept_key, probe in manager.loaded_probes.items():
-                prob = probe(hidden_state).item()
+            for concept_key, lens in manager.loaded_lenses.items():
+                prob = lens(hidden_state).item()
                 current_scores[concept_key] = prob
         inference_time = (time.time() - t1) * 1000
 
@@ -97,7 +97,7 @@ def profile_single_cascade():
                 high_confidence_parents.append(concept_key)
                 child_keys = manager.parent_to_children.get(concept_key, [])
                 for child_key in child_keys:
-                    if child_key not in manager.loaded_probes:
+                    if child_key not in manager.loaded_lenses:
                         child_keys_to_load.append(child_key)
         lookup_time = (time.time() - t2) * 1000
 
@@ -107,21 +107,21 @@ def profile_single_cascade():
         for child_key in child_keys_to_load:
             t_load_start = time.time()
             metadata = manager.concept_metadata.get(child_key)
-            if not metadata or not metadata.activation_probe_path:
+            if not metadata or not metadata.activation_lens_path:
                 continue
 
             # File I/O
             t_io = time.time()
-            state_dict = torch.load(metadata.activation_probe_path, map_location='cpu')
+            state_dict = torch.load(metadata.activation_lens_path, map_location='cpu')
             io_time = (time.time() - t_io) * 1000
 
             # Model creation + state dict loading
             t_model = time.time()
-            from src.monitoring.dynamic_probe_manager import SimpleMLP
-            probe = SimpleMLP(manager.hidden_dim)
+            from src.monitoring.dynamic_lens_manager import SimpleMLP
+            lens = SimpleMLP(manager.hidden_dim)
 
             # Handle key mismatch
-            model_keys = set(probe.state_dict().keys())
+            model_keys = set(lens.state_dict().keys())
             loaded_keys = set(state_dict.keys())
             if model_keys != loaded_keys:
                 new_state_dict = {}
@@ -132,16 +132,16 @@ def profile_single_cascade():
                         new_state_dict[key] = value
                 state_dict = new_state_dict
 
-            probe.load_state_dict(state_dict)
+            lens.load_state_dict(state_dict)
             model_time = (time.time() - t_model) * 1000
 
             # GPU transfer
             t_gpu = time.time()
-            probe = probe.to(device)
-            probe.eval()
+            lens = lens.to(device)
+            lens.eval()
             gpu_time = (time.time() - t_gpu) * 1000
 
-            manager.loaded_probes[child_key] = probe
+            manager.loaded_lenses[child_key] = lens
             total_load = (time.time() - t_load_start) * 1000
 
             load_times.append({
@@ -153,13 +153,13 @@ def profile_single_cascade():
 
         loading_time = (time.time() - t3) * 1000
 
-        # Step 4: Run newly loaded probes
+        # Step 4: Run newly loaded lenses
         t4 = time.time()
         with torch.inference_mode():
             for child_key in child_keys_to_load:
-                if child_key in manager.loaded_probes:
-                    probe = manager.loaded_probes[child_key]
-                    prob = probe(hidden_state).item()
+                if child_key in manager.loaded_lenses:
+                    lens = manager.loaded_lenses[child_key]
+                    prob = lens(hidden_state).item()
                     current_scores[child_key] = prob
         new_inference_time = (time.time() - t4) * 1000
 
@@ -176,16 +176,16 @@ def profile_single_cascade():
         total_time = (time.time() - t_total_start) * 1000
 
         # Print detailed breakdown
-        print(f"\nLoaded probes before: {len(manager.loaded_probes) - len(child_keys_to_load)}")
+        print(f"\nLoaded lenses before: {len(manager.loaded_lenses) - len(child_keys_to_load)}")
         print(f"High-confidence parents: {len(high_confidence_parents)}")
         print(f"Children to load: {len(child_keys_to_load)}")
-        print(f"Loaded probes after: {len(manager.loaded_probes)}")
+        print(f"Loaded lenses after: {len(manager.loaded_lenses)}")
 
         print(f"\n{'Timing Breakdown:'}")
-        print(f"  1. Inference (existing probes):    {inference_time:8.2f}ms  ({inference_time/total_time*100:5.1f}%)")
+        print(f"  1. Inference (existing lenses):    {inference_time:8.2f}ms  ({inference_time/total_time*100:5.1f}%)")
         print(f"  2. Parent-child lookup:            {lookup_time:8.2f}ms  ({lookup_time/total_time*100:5.1f}%)")
         print(f"  3. Loading children:               {loading_time:8.2f}ms  ({loading_time/total_time*100:5.1f}%)")
-        print(f"  4. Inference (new probes):         {new_inference_time:8.2f}ms  ({new_inference_time/total_time*100:5.1f}%)")
+        print(f"  4. Inference (new lenses):         {new_inference_time:8.2f}ms  ({new_inference_time/total_time*100:5.1f}%)")
         print(f"  5. Sorting/filtering:              {sorting_time:8.2f}ms  ({sorting_time/total_time*100:5.1f}%)")
         print(f"  {'─' * 60}")
         print(f"  TOTAL:                             {total_time:8.2f}ms")
@@ -197,12 +197,12 @@ def profile_single_cascade():
             avg_gpu = sum(lt['gpu'] for lt in load_times) / len(load_times)
             avg_total = sum(lt['total'] for lt in load_times) / len(load_times)
 
-            print(f"\n{'Per-Probe Loading Breakdown:'}")
+            print(f"\n{'Per-Lens Loading Breakdown:'}")
             print(f"  File I/O (torch.load):             {avg_io:8.2f}ms  ({avg_io/avg_total*100:5.1f}%)")
             print(f"  Model creation + state_dict:       {avg_model:8.2f}ms  ({avg_model/avg_total*100:5.1f}%)")
             print(f"  GPU transfer (.to(device)):        {avg_gpu:8.2f}ms  ({avg_gpu/avg_total*100:5.1f}%)")
             print(f"  {'─' * 60}")
-            print(f"  Average per probe:                 {avg_total:8.2f}ms")
+            print(f"  Average per lens:                 {avg_total:8.2f}ms")
             print(f"  Total loading time:                {loading_time:8.2f}ms")
 
         print(f"\n{'Top 5 concepts:'}")
@@ -213,10 +213,10 @@ def profile_single_cascade():
     print("\n" + "=" * 80)
     print("FINAL MEMORY STATISTICS")
     print("=" * 80)
-    print(f"Total probes loaded: {len(manager.loaded_probes)}")
+    print(f"Total lenses loaded: {len(manager.loaded_lenses)}")
     print(f"Total concepts available: {len(manager.concept_metadata)}")
-    print(f"Memory footprint: {len(manager.loaded_probes)/len(manager.concept_metadata)*100:.2f}%")
-    print(f"Estimated memory: ~{len(manager.loaded_probes) * 1.3:.0f}MB")
+    print(f"Memory footprint: {len(manager.loaded_lenses)/len(manager.concept_metadata)*100:.2f}%")
+    print(f"Estimated memory: ~{len(manager.loaded_lenses) * 1.3:.0f}MB")
 
 
 def profile_per_token_simulation():
@@ -241,11 +241,11 @@ def profile_per_token_simulation():
     model.eval()
 
     # Initialize manager
-    manager = DynamicProbeManager(
+    manager = DynamicLensManager(
         device=device,
         base_layers=[0],
         load_threshold=0.3,
-        max_loaded_probes=500,  # Tighter memory budget
+        max_loaded_lenses=500,  # Tighter memory budget
     )
 
     # Generate tokens
@@ -286,7 +286,7 @@ def profile_per_token_simulation():
               f"(detection={timing['initial_detection']:5.2f}ms, "
               f"loading={timing['child_loading']:5.2f}ms, "
               f"children={timing['num_children_loaded']:3d}, "
-              f"loaded={timing['loaded_probes']:3d}) "
+              f"loaded={timing['loaded_lenses']:3d}) "
               f"→ {top_concept}")
 
     print(f"{'─' * 80}")
@@ -319,11 +319,11 @@ def profile_with_cprofile():
     )
     model.eval()
 
-    manager = DynamicProbeManager(
+    manager = DynamicLensManager(
         device=device,
         base_layers=[0],
         load_threshold=0.3,
-        max_loaded_probes=1000,
+        max_loaded_lenses=1000,
     )
 
     # Extract hidden state

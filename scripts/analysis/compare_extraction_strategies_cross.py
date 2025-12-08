@@ -2,9 +2,9 @@
 """
 Cross-Strategy Extraction Comparison
 
-Tests all probes against all extraction methods to find:
-1. Which training strategy produces the best probes?
-2. Which probes generalize best across extraction methods?
+Tests all lenses against all extraction methods to find:
+1. Which training strategy produces the best lenses?
+2. Which lenses generalize best across extraction methods?
 
 Creates a 3x3 matrix of results:
 - Rows: Training strategies (baseline-20, combined-20, long-40)
@@ -111,7 +111,7 @@ def extract_with_strategy(model, tokenizer, prompts, strategy, device="cuda"):
         raise ValueError(f"Unknown strategy: {strategy}")
 
 
-def train_probe(
+def train_lens(
     concept_name,
     layer,
     train_strategy,
@@ -121,7 +121,7 @@ def train_probe(
     n_samples=30,
     device="cuda",
 ):
-    """Train a probe using specified training strategy."""
+    """Train a lens using specified training strategy."""
     print(f"\nTraining {concept_name} with {train_strategy}...")
 
     # Load concept
@@ -157,16 +157,16 @@ def train_probe(
     X_val = np.vstack([pos_acts[split:], neg_acts[split:]])
     y_val = np.array([1] * (len(pos_acts) - split) + [0] * (len(neg_acts) - split))
 
-    probe, train_metrics = train_simple_classifier(
+    lens, train_metrics = train_simple_classifier(
         X_train, y_train, X_val, y_val,
         hidden_dim=128, epochs=50, lr=0.001
     )
 
-    return probe, concept, negative_pool
+    return lens, concept, negative_pool
 
 
-def test_probe(
-    probe,
+def test_lens(
+    lens,
     concept,
     negative_pool,
     test_strategy,
@@ -176,7 +176,7 @@ def test_probe(
     n_test=100,
     device="cuda",
 ):
-    """Test probe using specified test extraction strategy."""
+    """Test lens using specified test extraction strategy."""
     # Generate test prompts
     test_prompts, test_labels = create_sumo_training_dataset(
         concept=concept,
@@ -197,11 +197,11 @@ def test_probe(
     y_test = np.array([1] * len(test_pos_acts) + [0] * len(test_neg_acts))
 
     # Evaluate
-    probe.eval()
-    probe = probe.cpu()
+    lens.eval()
+    lens = lens.cpu()
     with torch.no_grad():
         X_tensor = torch.FloatTensor(X_test)
-        outputs = probe(X_tensor)
+        outputs = lens(X_tensor)
         preds = (outputs.squeeze() > 0.5).long()
 
         from sklearn.metrics import f1_score, accuracy_score
@@ -228,13 +228,13 @@ def run_cross_strategy_test(
 
     strategies = ['baseline-20', 'combined-20', 'long-40']
 
-    # Train all probes
-    probes = {}
+    # Train all lenses
+    lenses = {}
     concept_data = None
     negative_pool = None
 
     for train_strategy in strategies:
-        probe, concept, neg_pool = train_probe(
+        lens, concept, neg_pool = train_lens(
             concept_name=concept_name,
             layer=layer,
             train_strategy=train_strategy,
@@ -244,19 +244,19 @@ def run_cross_strategy_test(
             n_samples=n_train,
             device=device,
         )
-        probes[train_strategy] = probe
+        lenses[train_strategy] = lens
         concept_data = concept
         negative_pool = neg_pool
 
-    # Test all probes against all extraction methods
+    # Test all lenses against all extraction methods
     print(f"\nTesting all combinations (3x3 = 9 tests)...")
     results = []
 
     for train_strategy in strategies:
         for test_strategy in strategies:
-            print(f"  Testing {train_strategy} probe on {test_strategy} extraction...")
-            f1, acc = test_probe(
-                probe=probes[train_strategy],
+            print(f"  Testing {train_strategy} lens on {test_strategy} extraction...")
+            f1, acc = test_lens(
+                lens=lenses[train_strategy],
                 concept=concept_data,
                 negative_pool=negative_pool,
                 test_strategy=test_strategy,
@@ -347,7 +347,7 @@ def main():
     print("  combined-20: Prompt + generation, 20 tokens (2x samples)")
     print("  long-40: Generation only, 40 tokens")
     print("\nTest Strategies:")
-    print("  Each probe tested against all 3 extraction methods")
+    print("  Each lens tested against all 3 extraction methods")
     print(f"\nTest size: {args.n_test} positives + {args.n_test} negatives = {args.n_test * 2} samples")
     print("\nConcepts:")
     print(f"  Abstract: {args.abstract_concept} (L{args.abstract_layer})")
@@ -416,7 +416,7 @@ def main():
 
     strategies = ['baseline-20', 'combined-20', 'long-40']
 
-    # Which training strategy produces best probes? (average across all test methods)
+    # Which training strategy produces best lenses? (average across all test methods)
     print("\nBest Training Strategy (by average F1 across test methods):")
     for strat in strategies:
         abstract_scores = [r['f1'] for r in abstract_results if r['train_strategy'] == strat]
@@ -424,7 +424,7 @@ def main():
         avg = np.mean(abstract_scores + specific_scores)
         print(f"  {strat}: {avg:.3f}")
 
-    # Which probes generalize best? (smallest variance across test methods)
+    # Which lenses generalize best? (smallest variance across test methods)
     print("\nMost Generalizable (lowest variance across test methods):")
     for strat in strategies:
         abstract_scores = [r['f1'] for r in abstract_results if r['train_strategy'] == strat]

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick test of tripole probe on a single simplex.
+Quick test of tripole lens on a single simplex.
 
 Compares joint tripole training against the old binary approach.
 """
@@ -26,7 +26,7 @@ BEHAVIORAL_RATIO = 0.6
 LAYER_IDX = 12
 
 print("=" * 80)
-print("TRIPOLE PROBE TEST - Single Simplex")
+print("TRIPOLE LENS TEST - Single Simplex")
 print("=" * 80)
 
 # 1. Load simplex definition
@@ -157,9 +157,9 @@ test_labels = labels_tensor[test_indices]
 print(f"   Train: {train_activations.shape[0]} samples")
 print(f"   Test: {test_activations.shape[0]} samples")
 
-# 7. Train tripole probe
-print(f"\n7. Training tripole probe...")
-probe, history = train_tripole_simplex(
+# 7. Train tripole lens
+print(f"\n7. Training tripole lens...")
+lens, history = train_tripole_simplex(
     train_activations=train_activations,
     train_labels=train_labels,
     test_activations=test_activations,

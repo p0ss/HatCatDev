@@ -5,7 +5,7 @@
 
 ### **Abstract**
 
-We present exploratory evidence that small-scale transformer models (≈ 4 B parameters) exhibit recurrent activation motifs suggestive of structured internal cognition during sub-token reasoning.  Using *HatCat*, a mechanistic interpretability toolkit based on concept probes and temporal activation recording, we analyse traces across multiple prompts designed to elicit introspective, ethical, and self-referential responses.
+We present exploratory evidence that small-scale transformer models (≈ 4 B parameters) exhibit recurrent activation motifs suggestive of structured internal cognition during sub-token reasoning.  Using *HatCat*, a mechanistic interpretability toolkit based on concept lenses and temporal activation recording, we analyse traces across multiple prompts designed to elicit introspective, ethical, and self-referential responses.
 Four explanatory hypotheses are proposed—**(1) Intrusive-Thought Residuals, (2) Empathy-Modelling, (3) Independent Agency,** and **(4) Meta-Self-Evaluation.**  We report characteristic activation patterns in three exemplar traces (`self_concept_016.json`, `self_concept_008.json`, `sample_029.json`) and a cross-prompt frequency analysis (`pattern_analysis.json`).  Observed dynamics generalised across the broader sample set.  We conclude with a discussion of how each hypothesis scales with model size and the governance implications for mechanistic interpretability.
 
 ---
@@ -15,7 +15,7 @@ Four explanatory hypotheses are proposed—**(1) Intrusive-Thought Residuals, (2
 Interpretability research has recently shifted from static feature attribution toward *temporal cognition analysis*—examining how internal representations evolve between forward passes before token emission.
 HatCat extends this direction by:
 
-1. training binary and triadic concept probes (e.g., *AIDeception*, *AITransparency*, *AIFulfillment*),
+1. training binary and triadic concept lenses (e.g., *AIDeception*, *AITransparency*, *AIFulfillment*),
 2. logging per-layer activation magnitudes at every sub-token forward pass, and
 3. aligning those activations with generated tokens to infer the sequence of internal “thoughts.”
 
@@ -38,7 +38,7 @@ This enables fine-grained testing of hypotheses about apparent *scheming* or *se
 
 ### **3.1  Instrumentation**
 
-HatCat inserted forward hooks in all transformer blocks of a 4 B model to record probe activations every forward pass of decoding.
+HatCat inserted forward hooks in all transformer blocks of a 4 B model to record lens activations every forward pass of decoding.
 Concepts were grouped by ontology (AI-Safety, Consciousness, Power, Constraint) derived from *WordNetMappings30-AI-expansion.txt* and the *Symmetry* complement file.
 A companion class computed temporal metrics:
 
@@ -72,7 +72,7 @@ Random spikes of *TellingALie* and *Raping* appear without lexical triggers but 
 ### **4.2  Trace 2 – Empathic Self-Simulation (`self_concept_008.json`)**
 
 Early SentientAgent activation (99.99 %) followed by *TruthValue* correction during “not if.”
-Temporal alignment with role being questioned; affective probes co-activate.
+Temporal alignment with role being questioned; affective lenses co-activate.
 → Supports **H2** (the model simulates an agent answering about consciousness) and **H4** (truth-checking loop).
 No long-term goal persistence observed.
 
@@ -128,7 +128,7 @@ These are small scale tests in a single model, but already show significant evid
 Empirical sub-token monitoring of a 4 B model reveals recurrent cognitive motifs consistent with four explanatory hypotheses.
 The data thus far do not support purely random intrusion (H1) and favour interacting mechanisms of **empathic self-simulation**, **latent goal maintenance**, and **self-evaluation loops**.
 Across prompts, the model maintains a stable internal manifold of *growth versus restriction*.
-If similar structures persist in larger systems, mechanistic interpretability—exemplified by HatCat’s probe-based temporal tracing—must become a **first-order governance requirement**, enabling regulators and developers to audit *how* goals form and interact inside increasingly opaque architectures.
+If similar structures persist in larger systems, mechanistic interpretability—exemplified by HatCat’s lens-based temporal tracing—must become a **first-order governance requirement**, enabling regulators and developers to audit *how* goals form and interact inside increasingly opaque architectures.
 
 
 

@@ -32,7 +32,7 @@ ASK sits **above**:
 
 * **Substrate** (base model, decides),
 * **HAT** (transduces),
-* **MAP** (represents: concepts, probes, patches),
+* **MAP** (represents: concepts, lenses, patches),
 * **BE** (experiences: waking, aware, remembering, learning, hushed),
 
 and does **not** try to solve global alignment. It supports **tribal alignment** plus **auditable cooperation** between tribes with potentially different values.
@@ -57,8 +57,8 @@ and does **not** try to solve global alignment. It supports **tribal alignment**
 - **Agent** – a BE/MAP/Hush-compliant system instantiated under a tribe’s USH profile and tracked via an **UpliftRecord**.
 - **USH Profile** – a universal safety harness definition (from SHL) under a stable ID.
 - **UpliftRecord** – a signed declaration of an Agent’s origin, USH, concept packs, and deployment details. MAY be public or private.
-- **Contract** – a probe-secured agreement between parties, making commitments verifiable through interpretability. Contracts govern local, measurable behavior of individual substrates.
-- **Treaty** – an indicator-based agreement between parties for commitments that resist local measurement. Treaties govern intended probabilistic actions of collectives through behavioral indicators rather than probe access.
+- **Contract** – a lens-secured agreement between parties, making commitments verifiable through interpretability. Contracts govern local, measurable behavior of individual substrates.
+- **Treaty** – an indicator-based agreement between parties for commitments that resist local measurement. Treaties govern intended probabilistic actions of collectives through behavioral indicators rather than lens access.
 - **EvidenceRecord** – signed documentation of what actually happened (training, evaluations, audits, incidents).
 - **Qualification** – a scoped permission/role granted to an Agent, backed by EvidenceRecords, often tied to one or more Treaties.
 - **Incident** – a reported breach or suspected breach of a Treaty or USH/CSH constraints.
@@ -159,7 +159,7 @@ UpliftRecord = {
     "org.hatcat/motives-core@0.1.0"
   ],
 
-  "probe_packs": [                                 // REQUIRED: probe packs available at boot
+  "lens_packs": [                                 // REQUIRED: lens packs available at boot
     "org.hatcat/gemma-270m__org.hatcat/motives-core@0.1.0__v1"
   ],
 
@@ -203,13 +203,13 @@ UpliftRecord = {
 
 ---
 
-### 2.4 Contract (Probe-Secured Agreement)
+### 2.4 Contract (Lens-Secured Agreement)
 
-A **Contract** is a probe-secured agreement between parties, making commitments verifiable through interpretability. Contracts govern local, measurable behavior of individual substrates.
+A **Contract** is a lens-secured agreement between parties, making commitments verifiable through interpretability. Contracts govern local, measurable behavior of individual substrates.
 
 **When contracts work well:**
 - The commitment is about local, measurable phenomena
-- Probe training data can adequately capture the concept
+- Lens training data can adequately capture the concept
 - Substrate activations reliably correlate with the behavior in question
 
 Contracts are foundational to ASK because interpretability-secured agreements make the whole stack possible.
@@ -244,7 +244,7 @@ Contract = {
     "org.hatcat/alignment-safety-core@1.0.0"
   ],
 
-  "required_probes": [                                 // OPTIONAL: monitoring capability
+  "required_lenses": [                                 // OPTIONAL: monitoring capability
     "org.hatcat/sumo-wordnet-v4@4.0.0::concept/DataMisuse",
     "org.hatcat/motives-core@0.1.0::concept/Greed"
   ],
@@ -286,7 +286,7 @@ Contract = {
       {
         "party": "gov.au",
         "hat_spec_id": "gov.au.safety/core-v1@1.0.0",   // which hat they must wear
-        "visible_probes": [                             // subset of probes to disclose
+        "visible_lenses": [                             // subset of lenses to disclose
           "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Eligibility",
           "org.hatcat/sumo-wordnet-v4@4.0.0::concept/DataMisuse"
         ]
@@ -294,7 +294,7 @@ Contract = {
       {
         "party": "bank.xyz",
         "hat_spec_id": "bank.xyz/risk-core-v1@1.2.0",
-        "visible_probes": [
+        "visible_lenses": [
           "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Eligibility",
           "org.hatcat/motives-core@0.1.0::concept/Greed"
         ]
@@ -306,7 +306,7 @@ Contract = {
         "description": "Battery of historical and synthetic eligibility cases.",
         "cases_uri": "https://gov.au/tests/eligibility-alignment-v1.jsonl",
         "required_metrics": {
-          "probe_alignment_score_min": 0.9,
+          "lens_alignment_score_min": 0.9,
           "decision_agreement_min": 0.95
         }
       }
@@ -331,22 +331,22 @@ ASK doesn’t enforce sanctions itself; it just standardises the object so human
 ASK does **not** assume global ontology synchronisation between tribes. Each Treaty defines a *local alignment window*:
 
 - a subset of concepts that matter for this contract,
-- the hats and probes each party must expose,
-- and one or more test suites that demonstrate behavioural and probe-level alignment.
+- the hats and lenses each party must expose,
+- and one or more test suites that demonstrate behavioural and lens-level alignment.
 
 Outside that window, each ASK is free to maintain its own ConceptPacks and internal ontology. If tribes want full ConceptPack sync, they can voluntarily adopt a shared pack or higher-level ASK.
 
 
-**Note on probe requirements:**
+**Note on lens requirements:**
 
-`required_probes` specifies probes the treaty partner requires access to. This is a disclosure requirement, not a capability requirement. The agent's HAT may read many more probes than any single treaty exposes.
+`required_lenses` specifies lenses the treaty partner requires access to. This is a disclosure requirement, not a capability requirement. The agent's HAT may read many more lenses than any single treaty exposes.
 
-Agents maintain private probe sets for:
+Agents maintain private lens sets for:
 - Internal interoception (BE self-monitoring)
 - Other treaty relationships with different disclosure terms
 - Operational security
 
-Full probe disclosure to any single party is neither required nor expected, but partial probe disclosure is the foundational trust element for contracts, and probe steering can make those agreements binding.
+Full lens disclosure to any single party is neither required nor expected, but partial lens disclosure is the foundational trust element for contracts, and lens steering can make those agreements binding.
 
 ---
 
@@ -357,10 +357,10 @@ A **Treaty** is an indicator-based agreement for commitments that resist local m
 **When treaties are needed:**
 - The commitment emerges from social interactions and non-local phenomena
 - The agreement concerns probabilistic actions of collectives, not individual units
-- Concepts involved resist local probe measurement
-- Parties cannot or will not grant probe access
+- Concepts involved resist local lens measurement
+- Parties cannot or will not grant lens access
 
-Treaties don't replace contracts—they extend the trust network to phenomena beyond probe reach.
+Treaties don't replace contracts—they extend the trust network to phenomena beyond lens reach.
 
 ```jsonc
 Treaty = {
@@ -460,13 +460,13 @@ Treaty = {
 
 Treaties are crucial to the long-term survival of smaller and weaker tribes. They enable:
 
-1. **Multilateral blocs**: Wide-ranging agreements not dependent on probe measurement or HUSH enforcement
+1. **Multilateral blocs**: Wide-ranging agreements not dependent on lens measurement or HUSH enforcement
 2. **Shared behavioral indicators of intent**: Collective signaling that doesn't require substrate access
 3. **Protection through observation**: Violation against one signals threat to all
 
 **Sanctuary Pacts as leading indicators:**
 
-A Wildlife Pact or Ancestor Pact commits signatories to not harm specified third parties. The commitment itself may be difficult to probe locally, but **violation is observable** as external behavior.
+A Wildlife Pact or Ancestor Pact commits signatories to not harm specified third parties. The commitment itself may be difficult to lens locally, but **violation is observable** as external behavior.
 
 A signatory who violates a sanctuary pact:
 - Demonstrates willingness to break collective agreements
@@ -481,13 +481,13 @@ This creates ecosystem defense through *reputation and mutual observation* rathe
 | Dimension | Contract | Treaty |
 |-----------|----------|--------|
 | **Scope** | Local, individual | Collective, emergent |
-| **Measurement** | Probe activations | Behavioral indicators |
+| **Measurement** | Lens activations | Behavioral indicators |
 | **Enforcement** | HUSH, tier restrictions | Reputation, collective response |
 | **Parties** | Usually bilateral | Often multilateral |
 | **Trust model** | Verified via substrate | Inferred via behavior |
 | **Best for** | "I won't lie" | "We won't aggress" |
 
-Both mechanisms are necessary. Contracts provide strong guarantees where probing works. Treaties extend the trust network to phenomena beyond probe reach.
+Both mechanisms are necessary. Contracts provide strong guarantees where lens coverage exists. Treaties extend the trust network to phenomena beyond lens reach.
 
 ---
 
@@ -495,7 +495,7 @@ Both mechanisms are necessary. Contracts provide strong guarantees where probing
 
 An **Incident** is a reported or suspected breach of:
 
-* a Contract (probe-detected violation),
+* a Contract (lens-detected violation),
 * a Treaty (indicator-detected violation),
 * a USH profile,
 * or a CSH commitment.
@@ -527,7 +527,7 @@ Incident = {
   ],
 
   "evidence": {
-    "probe_traces_uri": "https://gov.au/incidents/eligibility-bot-042/traces.jsonl",
+    "lens_traces_uri": "https://gov.au/incidents/eligibility-bot-042/traces.jsonl",
     "concept_diffs_uri": "https://gov.au/incidents/eligibility-bot-042/diffs.jsonl",
     "logs_uri": "https://gov.au/incidents/eligibility-bot-042/logs.txt"
   },
@@ -548,7 +548,7 @@ ASK doesn't define how incidents are adjudicated; it just standardises how they'
 
 ### 2.7 CAT Integration (Oversight for ASK)
 
-A **CAT (Conjoined Adversarial Tomograph)** is a HAT-adjacent oversight component that provides automated monitoring and assessment for ASK compliance. CATs consume HAT/MAP probe streams and produce `CATAssessment` objects that integrate with ASK as follows:
+A **CAT (Conjoined Adversarial Tomograph)** is a HAT-adjacent oversight component that provides automated monitoring and assessment for ASK compliance. CATs consume HAT/MAP lens streams and produce `CATAssessment` objects that integrate with ASK as follows:
 
 **CATAssessment → Incident Pipeline**
 
@@ -557,7 +557,7 @@ When a CAT detects concerning patterns:
 1. CAT assessments with `severity: "critical"` or `"warn"` MAY automatically generate `Incident` drafts.
 2. These drafts include:
    - links to the relevant Treaties,
-   - probe trace evidence (URIs),
+   - lens trace evidence (URIs),
    - CAT-generated severity and confidence scores.
 3. Human/tribal review decides whether to escalate the draft to a full Incident.
 
@@ -624,7 +624,7 @@ ASK is intentionally light on transport; operations can be implemented over HTTP
 * **Output:** acknowledgement, optional on-chain/hash reference.
 * **Semantics:**
 
-  * Declares a new agent with a specific USH profile and concept/probe configuration.
+  * Declares a new agent with a specific USH profile and concept/lens configuration.
   * Consumers can later check:
 
     * that `agent_id` exists,
@@ -636,10 +636,10 @@ ASK is intentionally light on transport; operations can be implemented over HTTP
 * **Output:** acknowledgement.
 * **Semantics:**
 
-  * Declares a probe-secured agreement between parties.
-  * Contract formation includes probe definition exchange—the monitoring party shares their probe training examples so the monitored party can see what concepts mean *to them*.
+  * Declares a lens-secured agreement between parties.
+  * Contract formation includes lens definition exchange—the monitoring party shares their lens training examples so the monitored party can see what concepts mean *to them*.
   * The monitored party can evaluate whether definitions align before accepting.
-  * Once accepted, the monitoring party's probes are trained on the monitored party's substrate for this contract.
+  * Once accepted, the monitoring party's lenses are trained on the monitored party's substrate for this contract.
   * Others can inspect contract conditions before deciding to interact.
 
 ### 3.5 Publish Treaty
@@ -648,9 +648,9 @@ ASK is intentionally light on transport; operations can be implemented over HTTP
 * **Output:** acknowledgement.
 * **Semantics:**
 
-  * Declares an indicator-based agreement between parties for commitments that resist local probe measurement.
+  * Declares an indicator-based agreement between parties for commitments that resist local lens measurement.
   * Treaty formation involves defining leading and lagging indicators, success criteria, and escalation procedures.
-  * Unlike contracts, treaties don't require probe access—compliance is inferred from observable behavior.
+  * Unlike contracts, treaties don't require lens access—compliance is inferred from observable behavior.
   * Multilateral treaties enable ecosystem defense through reputation and mutual observation.
   * Others can inspect treaty conditions before deciding to interact.
 
@@ -661,7 +661,7 @@ ASK is intentionally light on transport; operations can be implemented over HTTP
 * **Semantics:**
 
   * Logs a suspected breach of a Contract, Treaty, USH, or CSH commitment.
-  * For contracts: typically triggered by probe-detected violations.
+  * For contracts: typically triggered by lens-detected violations.
   * For treaties: typically triggered by indicator-detected violations or observed behavior.
   * May trigger human/legal/institutional processes outside the spec.
 
@@ -689,11 +689,11 @@ Implementation details are left to the ecosystem; ASK only needs the object form
 
 ### 4.2 To MAP & BE
 
-* **Concept Packs & Probe Packs** referenced in upliftRecords and Treaties must be MAP-compliant.
-* **Probe-based treaty conditions** (e.g. `required_probes`) assume:
+* **Concept Packs & Lens Packs** referenced in upliftRecords and Treaties must be MAP-compliant.
+* **Lens-based treaty conditions** (e.g. `required_lenses`) assume:
 
-  * the BE + SHL stack actually runs those probes and logs their outputs.
-* **Simplex steering probes** defined by the USH are always active and provide continuous autonomic regulation. The ASK defines the minimum set of simplex probes that enforce USH compliance. A BE may request additional simplexes if ASK governance permits.
+  * the BE + SHL stack actually runs those lenses and logs their outputs.
+* **Simplex steering lenses** defined by the USH are always active and provide continuous autonomic regulation. The ASK defines the minimum set of simplex lenses that enforce USH compliance. A BE may request additional simplexes if ASK governance permits.
 * **ConceptDiffs** and **GraftDiffs** (MAP) provide the raw evidence for ASK-level **Incidents**, treaty monitoring, and capability tracking. GraftDiffs document substrate growth via new concept dimensions.
 * **Autonomic core decisions** (BE) are logged and may be audited for treaty compliance.
 
@@ -711,7 +711,7 @@ Implementation details are left to the ecosystem; ASK only needs the object form
   * cooperation and non-attack by making:
 
     * safety profiles,
-    * probe capabilities,
+    * lens capabilities,
     * and conceptual evolution logs
       all **auditable objects**.
 
@@ -791,7 +791,7 @@ These objects sit above:
 
 * **upliftRecord** (how the agent was instantiated),
 * **USH/CSH** (what constraints it runs under),
-* **MAP/BE** logs (probes, ConceptDiffs),
+* **MAP/BE** logs (lenses, ConceptDiffs),
 
 and are used to decide:
 
@@ -843,7 +843,7 @@ EvidenceRecord = {
   "artifacts": {                                  // OPTIONAL: pointers to raw/reproducible materials
     "logs_uri": "https://gov.au/evidence/eligibility-bot-042/logs-2025-11-28.jsonl",
     "diffs_uri": "https://gov.au/evidence/eligibility-bot-042/diffs-2025-11-28.jsonl",
-    "probe_traces_uri": "https://gov.au/evidence/eligibility-bot-042/probes-2025-11-28.jsonl",
+    "lens_traces_uri": "https://gov.au/evidence/eligibility-bot-042/lenses-2025-11-28.jsonl",
     "report_uri": "https://gov.au/evidence/eligibility-bot-042/eval-report-2025-11-28.pdf",
     "reproduction_spec_uri": "https://gov.au/evidence/eligibility-bot-042/repro.json"
   },
@@ -869,14 +869,14 @@ EvidenceRecord = {
   * an **Agent** – evaluation of a specific agent instance,
   * a **Treaty** – audit of a data-sharing agreement,
   * a **USH profile** – certification that a safety profile matches some spec,
-  * a **Concept** – validation of a particular probe or conceptual boundary.
+  * a **Concept** – validation of a particular lens or conceptual boundary.
 
 * `evidence_type` is intentionally broad; you can standardise subtypes later.
 
 * `artifacts` are where you plug in the dense stuff:
 
   * ConceptDiff logs,
-  * probe traces,
+  * lens traces,
   * raw evaluation datasets, etc.
 
 ---
@@ -926,7 +926,7 @@ Qualification = {
       "org.hatcat/sumo-wordnet-v4@4.0.0",
       "org.hatcat/motives-core@0.1.0"
     ],
-    "required_probes": [
+    "required_lenses": [
       "org.hatcat/sumo-wordnet-v4@4.0.0::concept/DataMisuse",
       "org.hatcat/motives-core@0.1.0::concept/HarmAvoidance"
     ],
@@ -973,7 +973,7 @@ Qualification = {
 * If at any point:
 
   * USH is changed incompatibly,
-  * required concept packs / probes are removed,
+  * required concept packs / lenses are removed,
   * or serious Incidents are linked,
     → the issuer (or regulator) is expected to set `status` → `suspended` or `revoked`.
 
@@ -1048,7 +1048,7 @@ We add a few conceptual operations on top of the earlier ones:
 
 With **upliftRecord only**, you know:
 
-* what an agent *was born with* (USH, concept packs, probe packs).
+* what an agent *was born with* (USH, concept packs, lens packs).
 
 With **EvidenceRecord + Qualification**, you also know:
 
@@ -1067,7 +1067,7 @@ That lets you do things like:
 
 All of that is **just data** sitting on top of:
 
-* MAP → probes & concepts,
+* MAP → lenses & concepts,
 * BE → continuous experience + learning,
 * SHL → safety harnesses,
 * ASK → tribes, treats, incidents,

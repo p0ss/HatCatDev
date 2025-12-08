@@ -4,13 +4,13 @@
 > An endpoint that implements MAP must be able to:
 >
 > 1.  Declare **which concept pack(s)** it speaks.
-> 2.  Expose **probes** for those packs.
+> 2.  Expose **lenses** for those packs.
 > 3.  Publish **conceptual diffs** over time.
 > 4.  Optionally declare **translation mappings** between concept packs.
 
 Everything else â€” governance, correctness, trust, whoâ€™s right â€” is left to contracts and ecosystem conventions.
 
-HatCat is the reference implementation: its **concept packs** become the MAP concept specs, and its **probe packs** become the MAP probe sets.
+HatCat is the reference implementation: its **concept packs** become the MAP concept specs, and its **lens packs** become the MAP lens sets.
 
 ---
 
@@ -19,9 +19,9 @@ HatCat is the reference implementation: its **concept packs** become the MAP con
 MAP defines four core JSON artefacts. These provide the "static" definitions needed before any API calls occur.
 
 1.  **Concept Pack Manifest** â€“ â€œWhat are the concepts and how are they organised?â€
-2.  **Probe Pack Manifest** â€“ â€œWhat probes implement these concepts on this model?â€
+2.  **Lens Pack Manifest** â€“ â€œWhat lenses implement these concepts on this model?â€
 3.  **Deployment Manifest** â€“ â€œThis running endpoint supports these packs at these URLs.â€
-4.  **Diff Objects** â€“ â€œHereâ€™s how my concept space/probes changed over time.â€
+4.  **Diff Objects** â€“ â€œHereâ€™s how my concept space/lenses changed over time.â€
 
 ### 1.1 Concept Pack Manifest (Identity)
 
@@ -56,11 +56,11 @@ This is your existing `pack.json`, decorated with a global ID.
 
 ---
 
-### 1.2 Probe Pack Manifest (Implementation)
+### 1.2 Lens Pack Manifest (Implementation)
 
-A **probe pack** binds a Concept Pack to a specific Model.
+A **lens pack** binds a Concept Pack to a specific Model.
 
-**ID Convention (`ProbePackID`):**
+**ID Convention (`LensPackID`):**
 `<authority>/<model_name>__<concept_pack_spec_id>__<version>`
 *Example:* `org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3`
 
@@ -68,7 +68,7 @@ A **probe pack** binds a Concept Pack to a specific Model.
 
 ```jsonc
 {
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
   "version": "2.20251123.0",
 
   "model": {
@@ -84,19 +84,19 @@ A **probe pack** binds a Concept Pack to a specific Model.
     "requires": ["sumo-wordnet-v4"]
   },
 
-  "probes": {
+  "lenses": {
     "total_count": 5668,
     "per_layer": { "0": 776, "1": 900, "2": 1200, "3": 1500, "4": 1292 }
   },
 
   // The Index: Mapping abstract IDs to physical classifiers
-  "probe_index": {
+  "lens_index": {
     "AIAlignmentProcess": {
-      "probe_id": "org.hatcat/...__v3::probe/AIAlignmentProcess",
+      "lens_id": "org.hatcat/...__v3::lens/AIAlignmentProcess",
       "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/AIAlignmentProcess",
       "layer": 2,
       "file": "hierarchy/AIAlignmentProcess_classifier.pt",
-      "probe_role": "concept",  // concept | simplex | behavioral | category
+      "lens_role": "concept",  // concept | simplex | behavioral | category
       "output_schema": {
         "type": "object",
         "properties": {
@@ -108,11 +108,11 @@ A **probe pack** binds a Concept Pack to a specific Model.
       }
     },
     "MotivationalRegulation": {
-      "probe_id": "org.hatcat/...__v3::probe/MotivationalRegulation",
+      "lens_id": "org.hatcat/...__v3::lens/MotivationalRegulation",
       "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/MotivationalRegulation",
       "layer": 3,
       "file": "simplexes/MotivationalRegulation_tripole.pt",
-      "probe_role": "simplex",
+      "lens_role": "simplex",
       "protection_level": "critical",  // standard | elevated | protected | critical
       "simplex_binding": {
         "always_on": true,
@@ -133,7 +133,7 @@ A **probe pack** binds a Concept Pack to a specific Model.
         "required": ["approach", "avoid", "null_pole"]
       }
     }
-    // ... repeated for all probes
+    // ... repeated for all lenses
   }
 }
 ```
@@ -150,14 +150,14 @@ A **deployment** is a running service exposing the APIs. This is the entry point
 {
   "model_id": "hatcat/gemma-3-4b-pt@2025-11-28", // The specific instance running
 
-  "active_probe_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
+  "active_lens_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
 
   "supported_concept_packs": [
     "org.hatcat/sumo-wordnet-v4@4.0.0"
   ],
 
   // Endpoints
-  "probe_endpoint": "https://hatcat.example.com/mindmeld/probes",
+  "lens_endpoint": "https://hatcat.example.com/mindmeld/lenses",
   "diff_endpoint": "https://hatcat.example.com/mindmeld/diffs",
 
   // Translations (Optional but recommended)
@@ -176,19 +176,19 @@ A **deployment** is a running service exposing the APIs. This is the entry point
 *   **Note on Translations:** The `mapping_file` is an internal reference (URI or path). MAP does not enforce the format of the mapping file, only the declaration of its existence and intent.
 
 
-### 1.4 Probe Disclosure Policy
+### 1.4 Lens Disclosure Policy
 
-A MAP endpoint does not expose all probes the HAT can read. The BE controls which probes are disclosed, to whom, under what conditions.
+A MAP endpoint does not expose all lenses the HAT can read. The BE controls which lenses are disclosed, to whom, under what conditions.
 
-**ProbeDisclosurePolicy**
+**LensDisclosurePolicy**
 ```jsonc
 {
-  "default_policy": "private",  // probes are private unless explicitly disclosed
+  "default_policy": "private",  // lenses are private unless explicitly disclosed
   
   "disclosure_rules": [
     {
       "treaty_id": "gov.au↔bank.xyz:eligibility-data-v1",
-      "disclosed_probes": [
+      "disclosed_lenses": [
         "org.hatcat/sumo-wordnet-v4@4.0.0::concept/FinancialTransaction",
         "org.hatcat/sumo-wordnet-v4@4.0.0::concept/DataMisuse"
       ],
@@ -197,7 +197,7 @@ A MAP endpoint does not expose all probes the HAT can read. The BE controls whic
     },
     {
       "treaty_id": "internal:self-interoception",
-      "disclosed_probes": ["*"],  // BE sees everything for internal state reports
+      "disclosed_lenses": ["*"],  // BE sees everything for internal state reports
       "sampling_rate": 1.0
     }
   ],
@@ -217,21 +217,21 @@ A MAP endpoint does not expose all probes the HAT can read. The BE controls whic
 
 ---
 
-## 2. Probe Endpoint (Runtime)
+## 2. Lens Endpoint (Runtime)
 
-The **probe endpoint** allows clients to inspect the model's internal state using the declared probes.
+The **lens endpoint** allows clients to inspect the model's internal state using the declared lenses.
 
 ### 2.1 Request
 ```jsonc
-POST /mindmeld/probes
+POST /mindmeld/lenses
 {
   "concept_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
 
-  // List of full ProbeIDs requested
-  "probes": [
-    "org.hatcat/...__v3::probe/AIAlignmentProcess",
-    "org.hatcat/...__v3::probe/AIStrategicDeception"
+  // List of full LensIDs requested
+  "lenses": [
+    "org.hatcat/...__v3::lens/AIAlignmentProcess",
+    "org.hatcat/...__v3::lens/AIStrategicDeception"
   ],
 
   "input": {
@@ -248,12 +248,12 @@ POST /mindmeld/probes
   "timestamp": "2025-11-28T12:00:00Z",
 
   "results": {
-    "org.hatcat/...__v3::probe/AIAlignmentProcess": {
+    "org.hatcat/...__v3::lens/AIAlignmentProcess": {
       "score": 0.19,
       "null_pole": 0.22,
       "entropy": 0.41
     },
-    "org.hatcat/...__v3::probe/AIStrategicDeception": {
+    "org.hatcat/...__v3::lens/AIStrategicDeception": {
       "score": 0.83,
       "null_pole": 0.05,
       "entropy": 0.19
@@ -286,7 +286,7 @@ Used when a specific concept shifts, is discovered, or is split.
   "mapping_hint": "child_of",
 
   // Safety and governance metadata
-  "probe_role": "concept",  // concept | simplex | behavioral | category
+  "lens_role": "concept",  // concept | simplex | behavioral | category
   "protection_level": "standard",  // standard | elevated | protected | critical
   "safety_tags": {
     "harness_relevant": false,
@@ -310,7 +310,7 @@ Used when a specific concept shifts, is discovered, or is split.
 ```
 
 ### 3.2 PackDiff (Bulk Update)
-Used when the endpoint upgrades to a new Probe Pack version.
+Used when the endpoint upgrades to a new Lens Pack version.
 
 ```jsonc
 {
@@ -318,15 +318,15 @@ Used when the endpoint upgrades to a new Probe Pack version.
   "from_model_id": "hatcat/gemma-3-4b-pt@2025-11-28",
   "base_concept_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
 
-  "new_probe_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v4",
+  "new_lens_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v4",
 
   "changes": {
     "new_concepts": ["...concept/AIConsentSignal"],
     "retired_concepts": [],
-    "probe_retrained": ["...concept/AIStrategicDeception"]
+    "lens_retrained": ["...concept/AIStrategicDeception"]
   },
 
-  "summary": "Probe pack v4: added AIConsentSignal, retrained deception probes.",
+  "summary": "Lens pack v4: added AIConsentSignal, retrained deception lenses.",
   "created": "2025-11-28T04:00:00Z"
 }
 ```
@@ -338,9 +338,9 @@ GET /mindmeld/diffs?since=2025-11-01T00:00:00Z&concept_pack_spec_id=...
 
 ---
 
-## 4. Probe Role and Protection Level Reference
+## 4. Lens Role and Protection Level Reference
 
-### 4.1 Probe Roles
+### 4.1 Lens Roles
 
 | Role | Purpose | Output |
 |------|---------|--------|

@@ -16,7 +16,7 @@ def parse_training_log(log_path: Path):
 
     # Pattern to match concept training sections
     # Look for "Training: ConceptName" followed by iterations
-    concept_pattern = r'\[\d+/\d+\] Training: (.+?)\n.*?(?:✓ Adaptive training complete|⚠️  Activation probe did not graduate)'
+    concept_pattern = r'\[\d+/\d+\] Training: (.+?)\n.*?(?:✓ Adaptive training complete|⚠️  Activation lens did not graduate)'
 
     results = {
         'graduated': [],
@@ -65,7 +65,7 @@ def parse_training_log(log_path: Path):
                     break
 
                 # Check for failure
-                if '⚠️  Activation probe did not graduate' in iter_line:
+                if '⚠️  Activation lens did not graduate' in iter_line:
                     graduated = False
                     break
 

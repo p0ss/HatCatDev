@@ -118,7 +118,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial probe characterization."
+        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial lens characterization."
       }
     },
     {
@@ -168,7 +168,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial probe characterization."
+        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial lens characterization."
       }
     },
     {
@@ -218,7 +218,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial probe characterization."
+        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial lens characterization."
       }
     },
     {
@@ -567,7 +567,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial probe characterization."
+        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial lens characterization."
       }
     },
     {
@@ -619,7 +619,7 @@
         "status": "unmapped",
         "mapped_simplex": null,
         "mapping_rationale": null,
-        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial probe characterization."
+        "unmapped_justification": "Harness-relevant conceptual process; mapping to existing safety simplexes will be evaluated after initial lens characterization."
       }
     }
   ],

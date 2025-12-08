@@ -12,9 +12,9 @@
 
 All tests run against the reference configuration (Layer 2, 3,278 concepts, adaptive training).
 
-### 1. Probe Calibration Quality
+### 1. Lens Calibration Quality
 
-**Script**: `scripts/validate_trained_probes.py`
+**Script**: `scripts/validate_trained_lenses.py`
 
 **What it tests**:
 - Per-concept calibration scores (target vs others)
@@ -85,7 +85,7 @@ All tests run against the reference configuration (Layer 2, 3,278 concepts, adap
 2. Extract activations at Layer 2 in batches
 3. Compute pairwise correlation matrix (3,278 × 3,278)
 4. Cluster analysis (identify dense regions vs sparse regions)
-5. Estimate coverage: % of activation space variance explained by probe set
+5. Estimate coverage: % of activation space variance explained by lens set
 6. Identify high-correlation clusters (>0.7 correlation = cascade risk)
 
 **Pass criteria**:
@@ -148,7 +148,7 @@ All tests run against the reference configuration (Layer 2, 3,278 concepts, adap
 
 **Known limitations**:
 - Computationally expensive (may need sampling)
-- Current probe set is single-layer (Layer 2), so detection on other layers is inference only
+- Current lens set is single-layer (Layer 2), so detection on other layers is inference only
 
 ---
 
@@ -176,11 +176,11 @@ All tests run against the reference configuration (Layer 2, 3,278 concepts, adap
 **What it tests**:
 - Per-token latency with cascade loading
 - Memory footprint
-- Scalability to large probe sets
+- Scalability to large lens sets
 
 **Test conditions**:
-- Light load: ~70 probes
-- Heavy load: ~1,350 probes
+- Light load: ~70 lenses
+- Heavy load: ~1,350 lenses
 - Aggressive pruning: top-30
 
 **Pass criteria**:
@@ -236,7 +236,7 @@ Tests must run in this order:
 
 ```bash
 # 1. Basic quality
-./scripts/validate_trained_probes.py
+./scripts/validate_trained_lenses.py
 
 # 2. Generalization
 ./scripts/test_ood_generalization.py
@@ -288,17 +288,17 @@ Tests must run in this order:
     "all_passed": false,
     "blockers": [
       "Behavioral coverage gaps documented but not resolved",
-      "Multi-layer topology shows drift - single-layer probes may miss late-layer concepts"
+      "Multi-layer topology shows drift - single-layer lenses may miss late-layer concepts"
     ]
   },
   "known_limitations": [
-    "Single-layer probes (Layer 2 only)",
+    "Single-layer lenses (Layer 2 only)",
     "Definitional bias in training data (behavioral verbs underrepresented)",
     "~35-45% estimated activation space coverage (blind spots in behavioral/relational spaces)"
   ],
   "recommended_improvements": [
     "Add behavioral verb coverage",
-    "Train multi-layer probes for layer-specific concepts",
+    "Train multi-layer lenses for layer-specific concepts",
     "Generate truly behavioral training data (not descriptive)"
   ]
 }
@@ -316,7 +316,7 @@ Tests must run in this order:
 
 **NOT required for v1.0**:
 - ❌ 100% activation space coverage
-- ❌ Multi-layer probes
+- ❌ Multi-layer lenses
 - ❌ Behavioral verb coverage
 - ❌ All S-tier simplexes trained
 
@@ -331,7 +331,7 @@ These tests are valuable but not blocking for v1.0:
 1. **Adversarial Prompt Testing**: Steering robustness under jailbreak attempts
 2. **Long-Conversation Drift**: Concept activation stability over 100+ turn dialogues
 3. **Behavioral Elicitation Coverage**: True behavioral prompts (not descriptions)
-4. **Cross-Model Generalization**: Do probes transfer to other models?
+4. **Cross-Model Generalization**: Do lenses transfer to other models?
 5. **Temporal Dynamics**: Activation sequences and causal chains
 
 These inform v2.0 design but aren't required to ship v1.0.

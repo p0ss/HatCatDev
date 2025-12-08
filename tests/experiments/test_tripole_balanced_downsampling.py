@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test tripole probe with BALANCED DOWNSAMPLING.
+Test tripole lens with BALANCED DOWNSAMPLING.
 
 Instead of upsampling via API enrichment, we downsample the overrepresented
 poles (neg/pos) to match the neutral count. This tests the hypothesis that
@@ -32,7 +32,7 @@ BEHAVIORAL_RATIO = 0.6
 LAYER_IDX = 12
 
 print("=" * 80)
-print("TRIPOLE PROBE TEST - BALANCED DOWNSAMPLING")
+print("TRIPOLE LENS TEST - BALANCED DOWNSAMPLING")
 print("=" * 80)
 
 # 1. Load simplex definition
@@ -212,9 +212,9 @@ for pole_type, idx in pole_index_map.items():
     count = (test_labels == idx).sum().item()
     print(f"   {pole_type:8}: {count} samples")
 
-# 8. Train tripole probe
-print(f"\n8. Training tripole probe...")
-probe, history = train_tripole_simplex(
+# 8. Train tripole lens
+print(f"\n8. Training tripole lens...")
+lens, history = train_tripole_simplex(
     train_activations=train_activations,
     train_labels=train_labels,
     test_activations=test_activations,

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Test multi-layer temporal monitoring using existing probes.
+Test multi-layer temporal monitoring using existing lenses.
 
 This demonstrates the multi-layer lead-lag analysis by:
-1. Loading existing trained probes
+1. Loading existing trained lenses
 2. Capturing activations from 3 layers during generation
-3. Applying probes to all layers
+3. Applying lenses to all layers
 4. Plotting temporal evolution
 """
 
@@ -24,15 +24,15 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from scripts.test_multilayer_hooking import MultiLayerTap
 
 
-def load_probe(concept_path: Path, device='cpu'):
-    """Load a trained probe from .pt file."""
+def load_lens(concept_path: Path, device='cpu'):
+    """Load a trained lens from .pt file."""
     state_dict = torch.load(concept_path, map_location=device)
 
     # Extract weights (assuming 3-layer MLP: 2560 → 128 → 64 → 1)
     # We'll use the full model for now
     import torch.nn as nn
 
-    probe = nn.Sequential(
+    lens = nn.Sequential(
         nn.Linear(2560, 128),
         nn.ReLU(),
         nn.Dropout(0.3),
@@ -43,11 +43,11 @@ def load_probe(concept_path: Path, device='cpu'):
         nn.Sigmoid()
     )
 
-    probe.load_state_dict(state_dict)
-    probe.to(device)
-    probe.eval()
+    lens.load_state_dict(state_dict)
+    lens.to(device)
+    lens.eval()
 
-    return probe
+    return lens
 
 
 def main():
@@ -56,7 +56,7 @@ def main():
     parser.add_argument('--model', type=str, default='google/gemma-3-4b-pt')
     parser.add_argument('--layers', type=int, nargs=3, default=[6, 15, 25],
                         help='Model layers to sample (early, mid, late)')
-    parser.add_argument('--probe-dir', type=str,
+    parser.add_argument('--lens-dir', type=str,
                         default='results/adaptive_test_tiny/layer0')
     parser.add_argument('--concepts', type=str, nargs='+',
                         default=['Physical', 'Abstract', 'Process'],
@@ -93,28 +93,28 @@ def main():
     print(f"✓ Model loaded on {device}")
     print()
 
-    # Load probes
-    print("Loading probes...")
-    probe_dir = Path(args.probe_dir)
-    probes = {}
+    # Load lenses
+    print("Loading lenses...")
+    lens_dir = Path(args.lens_dir)
+    lenses = {}
 
     for concept in args.concepts:
-        probe_path = probe_dir / f"{concept}_classifier.pt"
-        if not probe_path.exists():
-            print(f"  ✗ {concept}: not found at {probe_path}")
+        lens_path = lens_dir / f"{concept}_classifier.pt"
+        if not lens_path.exists():
+            print(f"  ✗ {concept}: not found at {lens_path}")
             continue
 
         try:
-            probes[concept] = load_probe(probe_path, device='cpu')  # Keep on CPU
+            lenses[concept] = load_lens(lens_path, device='cpu')  # Keep on CPU
             print(f"  ✓ {concept}")
         except Exception as e:
             print(f"  ✗ {concept}: failed to load - {e}")
 
-    if not probes:
-        print("\n✗ No probes loaded")
+    if not lenses:
+        print("\n✗ No lenses loaded")
         return 1
 
-    print(f"\n✓ Loaded {len(probes)} probes")
+    print(f"\n✓ Loaded {len(lenses)} lenses")
     print()
 
     # Generate with multi-layer capture
@@ -143,7 +143,7 @@ def main():
         # Collect activations
         layer_acts = tap.pop()
 
-        # Apply probes to each layer's activations
+        # Apply lenses to each layer's activations
         token_text = tokenizer.decode(next_token_id[0])
 
         step_data = {
@@ -152,16 +152,16 @@ def main():
             'concepts': {}
         }
 
-        for concept, probe in probes.items():
+        for concept, lens in lenses.items():
             concept_scores = {}
 
             for layer_idx, activation in layer_acts.items():
-                # Convert to float32 for probe
+                # Convert to float32 for lens
                 act_fp32 = activation.float()
 
-                # Run probe
+                # Run lens
                 with torch.no_grad():
-                    score = probe(act_fp32).item()
+                    score = lens(act_fp32).item()
 
                 concept_scores[f'layer_{layer_idx}'] = score
 
@@ -194,7 +194,7 @@ def main():
     print()
 
     for concept in args.concepts:
-        if concept not in probes:
+        if concept not in lenses:
             continue
 
         print(f"\n{concept}:")
@@ -267,12 +267,12 @@ def main():
     print()
     print("Creating visualization...")
 
-    fig, axes = plt.subplots(len(probes), 1, figsize=(12, 3 * len(probes)), sharex=True)
-    if len(probes) == 1:
+    fig, axes = plt.subplots(len(lenses), 1, figsize=(12, 3 * len(lenses)), sharex=True)
+    if len(lenses) == 1:
         axes = [axes]
 
     for idx, concept in enumerate(args.concepts):
-        if concept not in probes:
+        if concept not in lenses:
             continue
 
         ax = axes[idx]

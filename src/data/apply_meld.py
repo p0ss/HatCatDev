@@ -4,7 +4,7 @@ Apply approved meld requests to a concept pack.
 
 This script integrates approved meld candidates into the target concept pack's
 layer files, updating parent-child relationships, bumping version, and tracking
-concepts pending probe retraining.
+concepts pending lens retraining.
 
 Usage:
     python -m src.data.apply_meld melds/approved/cog-architecture-core-packA.json
@@ -238,7 +238,7 @@ def compute_protection_level(meld: Dict, index: Optional[LayerIndex] = None) -> 
 
 
 def compute_meld_impact(meld: Dict, index: LayerIndex) -> ImpactAnalysis:
-    """Compute which probes are impacted by a meld request.
+    """Compute which lenses are impacted by a meld request.
 
     Per MAP_MELD_PROTOCOL.md §3.2
     """
@@ -338,7 +338,7 @@ def transform_candidate_to_concept(
         "sumo_term": candidate.get("term", ""),
         "layer": layer,
         "domain": candidate.get("domain", "MindsAndAgents"),
-        "is_category_probe": True,
+        "is_category_lens": True,
         "is_pseudo_sumo": True,
         "parent_concepts": collect_parent_concepts(candidate, meld, index),
         "category_children": [],
@@ -474,7 +474,7 @@ def apply_split_operation(
             "sumo_term": new_term,
             "layer": target_layer,  # Same layer as parent
             "domain": target_concept.get("domain", ""),
-            "is_category_probe": True,
+            "is_category_lens": True,
             "is_pseudo_sumo": True,
             "is_sense_split": True,  # Mark as created by split
             "parent_concepts": [target],  # Parent is the original concept

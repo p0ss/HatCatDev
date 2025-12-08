@@ -2,16 +2,16 @@
 """
 Contrastive Training Experiment - Sibling Hard Negatives
 
-Hypothesis: Probes fail at sibling discrimination because training negatives
+Hypothesis: Lenses fail at sibling discrimination because training negatives
 are from distant concepts, not siblings. Siblings produce similar activations
-in the model, so probes never learn to distinguish them.
+in the model, so lenses never learn to distinguish them.
 
-This experiment trains probes with:
+This experiment trains lenses with:
 1. Standard negatives (distant concepts) - baseline
 2. Hard negatives (siblings only) - contrastive
 3. Mixed negatives (50% sibling, 50% distant) - balanced
 
-We test on a subset of benchmark probes to measure impact.
+We test on a subset of benchmark lenses to measure impact.
 """
 
 import argparse
@@ -30,9 +30,9 @@ from torch.utils.data import DataLoader, TensorDataset
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from tqdm import tqdm
 
-# Benchmark probes - concepts with known siblings in v4 hierarchy
+# Benchmark lenses - concepts with known siblings in v4 hierarchy
 # Layer 1, 2, 3, 4 have concepts with parents (and thus siblings)
-BENCHMARK_PROBES = {
+BENCHMARK_LENSS = {
     # Layer 1 - abstract categories
     ('Agent', 1, 'test'),
     ('AlignmentProcess', 1, 'test'),
@@ -51,8 +51,8 @@ BENCHMARK_PROBES = {
 }
 
 
-class ProbeClassifier(nn.Module):
-    """MLP probe classifier."""
+class LensClassifier(nn.Module):
+    """MLP lens classifier."""
     def __init__(self, input_dim: int = 4096):
         super().__init__()
         self.model = nn.Sequential(
@@ -273,17 +273,17 @@ def generate_training_data(
     return X, y
 
 
-def train_probe(
+def train_lens(
     X: torch.Tensor,
     y: torch.Tensor,
     input_dim: int = 4096,
     epochs: int = 100,
     lr: float = 0.001,
     device: str = 'cuda'
-) -> Tuple[ProbeClassifier, Dict]:
-    """Train a probe classifier."""
-    probe = ProbeClassifier(input_dim).to(device)
-    optimizer = torch.optim.Adam(probe.parameters(), lr=lr)
+) -> Tuple[LensClassifier, Dict]:
+    """Train a lens classifier."""
+    lens = LensClassifier(input_dim).to(device)
+    optimizer = torch.optim.Adam(lens.parameters(), lr=lr)
     criterion = nn.BCELoss()
 
     # Split into train/val
@@ -301,17 +301,17 @@ def train_probe(
     patience_counter = 0
 
     for epoch in range(epochs):
-        probe.train()
+        lens.train()
         optimizer.zero_grad()
-        pred = probe(X_train)
+        pred = lens(X_train)
         loss = criterion(pred, y_train)
         loss.backward()
         optimizer.step()
 
         # Validation
-        probe.eval()
+        lens.eval()
         with torch.no_grad():
-            val_pred = probe(X_val)
+            val_pred = lens(X_val)
             val_loss = criterion(val_pred, y_val).item()
 
             # Compute metrics
@@ -320,7 +320,7 @@ def train_probe(
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
-            best_state = probe.state_dict().copy()
+            best_state = lens.state_dict().copy()
             patience_counter = 0
         else:
             patience_counter += 1
@@ -328,15 +328,15 @@ def train_probe(
                 break
 
     if best_state:
-        probe.load_state_dict(best_state)
+        lens.load_state_dict(best_state)
 
     # Final evaluation
-    probe.eval()
+    lens.eval()
     with torch.no_grad():
-        train_pred = (probe(X_train) > 0.5).float()
+        train_pred = (lens(X_train) > 0.5).float()
         train_acc = (train_pred == y_train).float().mean().item()
 
-        val_pred = (probe(X_val) > 0.5).float()
+        val_pred = (lens(X_val) > 0.5).float()
         val_acc = (val_pred == y_val).float().mean().item()
 
         # F1 score
@@ -354,11 +354,11 @@ def train_probe(
         'epochs': epoch + 1,
     }
 
-    return probe, metrics
+    return lens, metrics
 
 
 def evaluate_sibling_discrimination(
-    probe: ProbeClassifier,
+    lens: LensClassifier,
     concept_name: str,
     layer: int,
     hierarchy: Dict,
@@ -366,13 +366,13 @@ def evaluate_sibling_discrimination(
     tokenizer,
     device: str = 'cuda'
 ) -> Dict:
-    """Evaluate how well the probe discriminates against siblings AND distant concepts."""
+    """Evaluate how well the lens discriminates against siblings AND distant concepts."""
     concept_data = hierarchy[layer].get(concept_name)
     if not concept_data:
         return {}
 
-    probe.eval()
-    probe.to(device)
+    lens.eval()
+    lens.to(device)
 
     # Score positive samples
     pos_defs = get_concept_definitions(concept_data, 10)
@@ -381,7 +381,7 @@ def evaluate_sibling_discrimination(
         try:
             act = capture_activation(defn, model, tokenizer).to(device)
             with torch.no_grad():
-                score = probe(act).item()
+                score = lens(act).item()
             pos_scores.append(score)
         except:
             continue
@@ -398,7 +398,7 @@ def evaluate_sibling_discrimination(
                     try:
                         act = capture_activation(defn, model, tokenizer).to(device)
                         with torch.no_grad():
-                            score = probe(act).item()
+                            score = lens(act).item()
                         sibling_scores.append(score)
                     except:
                         continue
@@ -415,7 +415,7 @@ def evaluate_sibling_discrimination(
                         try:
                             act = capture_activation(defn, model, tokenizer).to(device)
                             with torch.no_grad():
-                                score = probe(act).item()
+                                score = lens(act).item()
                             distant_scores.append(score)
                         except:
                             continue
@@ -479,21 +479,21 @@ def main():
         'timestamp': datetime.now().isoformat(),
         'model': args.model,
         'modes': ['standard', 'sibling', 'mixed'],
-        'probes': {}
+        'lenses': {}
     }
 
-    test_probes = list(BENCHMARK_PROBES)
+    test_lenses = list(BENCHMARK_LENSS)
     if args.max_concepts:
-        test_probes = test_probes[:args.max_concepts]
+        test_lenses = test_lenses[:args.max_concepts]
 
-    print(f"\nTesting {len(test_probes)} benchmark probes...")
+    print(f"\nTesting {len(test_lenses)} benchmark lenses...")
 
-    for concept_name, layer, category in tqdm(test_probes):
+    for concept_name, layer, category in tqdm(test_lenses):
         print(f"\n{'='*60}")
         print(f"Concept: {concept_name} (Layer {layer}, {category})")
         print(f"{'='*60}")
 
-        probe_results = {
+        lens_results = {
             'concept': concept_name,
             'layer': layer,
             'category': category,
@@ -510,11 +510,11 @@ def main():
                 )
                 print(f"    Generated {len(X)} samples ({(y==1).sum().item()} pos, {(y==0).sum().item()} neg)")
 
-                probe, train_metrics = train_probe(X, y, device=args.device)
+                lens, train_metrics = train_lens(X, y, device=args.device)
                 print(f"    Train acc: {train_metrics['train_acc']:.3f}, Val F1: {train_metrics['val_f1']:.3f}")
 
                 eval_metrics = evaluate_sibling_discrimination(
-                    probe, concept_name, layer, hierarchy, model, tokenizer, args.device
+                    lens, concept_name, layer, hierarchy, model, tokenizer, args.device
                 )
 
                 if eval_metrics.get('positive_sibling_gap') is not None:
@@ -522,16 +522,16 @@ def main():
                     print(f"    Pos-Distant gap: {eval_metrics.get('positive_distant_gap', 0):.4f}")
                     print(f"    (pos={eval_metrics['avg_positive']:.4f}, sib={eval_metrics['avg_sibling']:.4f}, dist={eval_metrics.get('avg_distant', 0):.4f})")
 
-                probe_results['modes'][mode] = {
+                lens_results['modes'][mode] = {
                     'training': train_metrics,
                     'evaluation': eval_metrics,
                 }
 
             except Exception as e:
                 print(f"    ERROR: {e}")
-                probe_results['modes'][mode] = {'error': str(e)}
+                lens_results['modes'][mode] = {'error': str(e)}
 
-        results['probes'][f"{concept_name}_L{layer}"] = probe_results
+        results['lenses'][f"{concept_name}_L{layer}"] = lens_results
 
         # Save intermediate results
         with open(output_dir / 'contrastive_results.json', 'w') as f:
@@ -545,8 +545,8 @@ def main():
     for mode in ['standard', 'sibling', 'mixed']:
         sib_gaps = []
         dist_gaps = []
-        for probe_key, probe_data in results['probes'].items():
-            mode_data = probe_data['modes'].get(mode, {})
+        for lens_key, lens_data in results['lenses'].items():
+            mode_data = lens_data['modes'].get(mode, {})
             eval_data = mode_data.get('evaluation', {})
             sib_gap = eval_data.get('positive_sibling_gap')
             dist_gap = eval_data.get('positive_distant_gap')

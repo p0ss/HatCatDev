@@ -162,7 +162,7 @@ def train_with_lazy_generation(
     n_samples = SAMPLES_PER_POLE_INITIAL
     iteration = 0
     best_f1 = 0.0
-    best_probe = None
+    best_lens = None
     best_history = None
 
     while n_samples <= SAMPLES_PER_POLE_MAX:
@@ -195,8 +195,8 @@ def train_with_lazy_generation(
 
         print(f"  Train: {train_activations.shape[0]}, Test: {test_activations.shape[0]}")
 
-        # Train tripole probe with increased patience
-        probe, history = train_tripole_simplex(
+        # Train tripole lens with increased patience
+        lens, history = train_tripole_simplex(
             train_activations=train_activations,
             train_labels=train_labels,
             test_activations=test_activations,
@@ -216,7 +216,7 @@ def train_with_lazy_generation(
         # Track best
         if test_f1 > best_f1:
             best_f1 = test_f1
-            best_probe = probe
+            best_lens = lens
             best_history = history
 
         # Check if graduated
@@ -236,11 +236,11 @@ def train_with_lazy_generation(
     # Save results
     print(f"\n  Saving results...")
 
-    # Save probe (best across all iterations)
-    if best_probe is not None:
-        probe_file = run_dir / "tripole_probe.pt"
-        torch.save(best_probe.state_dict(), probe_file)
-        print(f"    ✓ Probe saved: {probe_file}")
+    # Save lens (best across all iterations)
+    if best_lens is not None:
+        lens_file = run_dir / "tripole_lens.pt"
+        torch.save(best_lens.state_dict(), lens_file)
+        print(f"    ✓ Lens saved: {lens_file}")
 
     # Save metrics
     results = {

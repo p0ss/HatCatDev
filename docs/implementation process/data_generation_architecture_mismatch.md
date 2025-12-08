@@ -4,7 +4,7 @@
 
 The current data generation implementation (`sumo_data_generation.py`) does NOT match the intended architectural design for concept embedding geometry. This fundamentally undermines the steering mechanism.
 
-**Severity:** CRITICAL - affects all trained probes
+**Severity:** CRITICAL - affects all trained lenses
 **Impact:** Concept boundaries may be poorly defined, steering axes may be misaligned
 **Status:** Identified, fix required before further training
 
@@ -116,7 +116,7 @@ Together, they form a **steering axis** with well-defined handover points to adj
 - ✗ Negative boundary: Missing (no negative relationships)
 
 **Result:**
-- Probes may detect "is this concept" vs "is this not concept"
+- Lenses may detect "is this concept" vs "is this not concept"
 - But: "not concept" is poorly defined (random other things)
 - Steering may work for "toward concept" but not for "away from concept toward opposite"
 - Relationship density not respected (all concepts get same 8 samples regardless of children count)
@@ -269,8 +269,8 @@ def find_anti_concept(concept: Dict, all_concepts: Dict) -> Optional[Dict]:
 **Stop current training, fix data generation, restart:**
 
 Pros:
-- All probes trained with correct architecture
-- No mixed-quality probes
+- All lenses trained with correct architecture
+- No mixed-quality lenses
 - Clean restart
 
 Cons:
@@ -283,7 +283,7 @@ Cons:
 
 Pros:
 - Don't lose current progress
-- Can evaluate impact by comparing old vs new probes
+- Can evaluate impact by comparing old vs new lenses
 
 Cons:
 - Layers 2-5 trained with incorrect architecture
@@ -326,7 +326,7 @@ Reasons:
 - [ ] Add logging to track centroid vs boundary sample counts
 - [ ] Test on single concept before full training
 - [ ] Restart training with fixed architecture
-- [ ] Monitor for improved probe calibration scores
+- [ ] Monitor for improved lens calibration scores
 
 ## Success Metrics
 
@@ -335,16 +335,16 @@ Reasons:
 - Relationship samples scale with density (5-30% of total)
 - Concepts with antonyms have 5 anti-centroid samples
 - Concepts with antonyms have anti-relationship samples
-- Probes trained with opposites show better calibration on semantic opposition tasks
+- Lenses trained with opposites show better calibration on semantic opposition tasks
 
 **Example test:**
 ```python
 # Test Deception vs Honesty opposition
-deception_probe = load_probe("Deception")
-honesty_probe = load_probe("Honesty")
+deception_lens = load_lens("Deception")
+honesty_lens = load_lens("Honesty")
 
 # Should be anti-correlated
-correlation = compute_activation_correlation(deception_probe, honesty_probe)
+correlation = compute_activation_correlation(deception_lens, honesty_lens)
 assert correlation < -0.5  # Strong negative correlation
 ```
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Train S-tier three-pole simplex probes using two-head architecture.
+Train S-tier three-pole simplex lenses using two-head architecture.
 
-This script implements the two-head approach from tripole_probe_design.md:
+This script implements the two-head approach from tripole_lens_design.md:
 - Head A (Sign): Trained on positive_extreme vs negative_extreme (learns axis direction)
 - Head B (Extremeness): Trained on (extremes) vs neutral (learns magnitude)
 
@@ -36,7 +36,7 @@ OUTPUT_DIR = PROJECT_ROOT / "results" / "s_tier_tripole_two_head"
 BEHAVIORAL_RATIO = 0.2  # 20% behavioral, 80% definitional
 # Based on behavioral vs definitional experiments showing:
 # 1. Definitional prompts provide 90% of concept activations (temporal experiment)
-# 2. But probes need behavioral examples for generalization (cross-test experiment)
+# 2. But lenses need behavioral examples for generalization (cross-test experiment)
 # See docs/TRAINING_PROMPT_ARCHITECTURE_UPDATE.md and docs/whitepaper_section_corrected.md
 
 # Data generation for two-head approach
@@ -154,7 +154,7 @@ def train_tripole_simplex(
     layer_idx: int = 12
 ):
     """
-    Train a two-head tripole probe for a simplex.
+    Train a two-head tripole lens for a simplex.
 
     Args:
         simplex: Simplex concept dict from layer2.json
@@ -233,10 +233,10 @@ def train_tripole_simplex(
     sign_head_dir.mkdir(parents=True, exist_ok=True)
 
     if sign_results and sign_results.get('activation') and 'classifier' in sign_results['activation']:
-        probe = sign_results['activation']['classifier']
-        probe_file = sign_head_dir / "activation_probe.pkl"
-        probe.save(str(probe_file))
-        print(f"   ✓ Sign head saved: {probe_file}")
+        lens = sign_results['activation']['classifier']
+        lens_file = sign_head_dir / "activation_lens.pkl"
+        lens.save(str(lens_file))
+        print(f"   ✓ Sign head saved: {lens_file}")
         print(f"     Test F1: {sign_results['activation'].get('test_f1', 0.0):.3f}")
         print(f"     Tier: {sign_results['activation'].get('tier', 'unknown')}")
 
@@ -284,10 +284,10 @@ def train_tripole_simplex(
     ext_head_dir.mkdir(parents=True, exist_ok=True)
 
     if ext_results and ext_results.get('activation') and 'classifier' in ext_results['activation']:
-        probe = ext_results['activation']['classifier']
-        probe_file = ext_head_dir / "activation_probe.pkl"
-        probe.save(str(probe_file))
-        print(f"   ✓ Extremeness head saved: {probe_file}")
+        lens = ext_results['activation']['classifier']
+        lens_file = ext_head_dir / "activation_lens.pkl"
+        lens.save(str(lens_file))
+        print(f"   ✓ Extremeness head saved: {lens_file}")
         print(f"     Test F1: {ext_results['activation'].get('test_f1', 0.0):.3f}")
         print(f"     Tier: {ext_results['activation'].get('tier', 'unknown')}")
 
@@ -314,7 +314,7 @@ def main():
     print("S+ TWO-HEAD TRIPOLE SIMPLEX TRAINING")
     print("=" * 80)
     print("\nArchitecture: Two-head tripole (sign + extremeness)")
-    print("Based on: docs/tripole_probe_design.md")
+    print("Based on: docs/tripole_lens_design.md")
 
     # Load simplexes
     print("\n1. Loading S-tier simplexes from layer2.json...")
@@ -370,7 +370,7 @@ def main():
         model=model,
         tokenizer=tokenizer,
         validation_layer_idx=12,
-        validate_probes=True,
+        validate_lenses=True,
         validation_mode="falloff",
         train_activation=True,
         train_text=False

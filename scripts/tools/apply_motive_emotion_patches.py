@@ -59,7 +59,7 @@ def create_layer_entry_from_simplex(simplex: Dict, category: str) -> Dict:
         "sumo_term": sumo_term,
         "sumo_depth": 2,
         "layer": 2,
-        "is_category_probe": False,  # Individual concepts, not categories
+        "is_category_lens": False,  # Individual concepts, not categories
         "is_pseudo_sumo": False,
         "category_children": [],
         "synset_count": 1,

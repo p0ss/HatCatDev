@@ -2,7 +2,7 @@
 
 ## Problem Discovered
 
-Tripole simplex probes were showing very poor neutral pole F1 scores (~0.27-0.31) despite having corrected pole definitions. The issue was consistent 6-8x data imbalance across all 13 S-tier simplexes:
+Tripole simplex lenses were showing very poor neutral pole F1 scores (~0.27-0.31) despite having corrected pole definitions. The issue was consistent 6-8x data imbalance across all 13 S-tier simplexes:
 
 - **Negative poles**: 87-94 overlap synsets
 - **Neutral poles**: 12-15 overlap synsets (6-8x fewer!)
@@ -75,7 +75,7 @@ The API prompts explicitly request culturally-diverse concepts to prevent Wester
 
 ### Why This Matters
 Models should not be able to escape detection by encoding concepts in culturally-specific ways. Training on diverse cultural representations ensures:
-1. Probes work across multilingual contexts
+1. Lenses work across multilingual contexts
 2. Capture unique cultural perspectives missing from Western psychology
 3. Prevent models from exploiting cultural blind spots
 
@@ -92,7 +92,7 @@ Models should not be able to escape detection by encoding concepts in culturally
 
 1. Execute 38 API requests from enrichment plan to generate 1,068 new synsets
 2. Merge new synsets into `simplex_overlap_synsets_enriched.json`
-3. Re-train tripole probes with balanced data
+3. Re-train tripole lenses with balanced data
 4. Expect neutral F1 to improve from ~0.27 to ~0.77 (2.8x)
 
 ## Key Insight

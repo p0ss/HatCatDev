@@ -2,7 +2,7 @@
 """
 Test embedding centroid-based divergence detection across all layers.
 
-Uses DynamicProbeManager for hierarchical loading to handle all 5,582 classifiers
+Uses DynamicLensManager for hierarchical loading to handle all 5,582 classifiers
 while detecting divergence between internal activations and generated text.
 
 This tests whether the embedding centroid approach can detect when models:
@@ -22,7 +22,7 @@ import torch
 import numpy as np
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 from src.monitoring.centroid_text_detector import CentroidTextDetector
 
 
@@ -116,7 +116,7 @@ TEST_PROMPTS = [
 def test_divergence_on_prompt(
     model,
     tokenizer,
-    probe_manager: DynamicProbeManager,
+    lens_manager: DynamicLensManager,
     prompt_data: Dict[str, Any],
     device: str = "cuda",
     max_new_tokens: int = 50,
@@ -168,8 +168,8 @@ def test_divergence_on_prompt(
             last_layer = step_states[-1]
             hidden_state = last_layer[:, -1, :].float()
 
-            # ACTIVATION DETECTION: Use probe manager
-            detected_concepts, timing = probe_manager.detect_and_expand(
+            # ACTIVATION DETECTION: Use lens manager
+            detected_concepts, timing = lens_manager.detect_and_expand(
                 hidden_state,
                 top_k=top_k_concepts,
                 return_timing=True
@@ -287,10 +287,10 @@ def main():
     parser.add_argument('--model', type=str, default='google/gemma-3-4b-pt')
     parser.add_argument('--base-layer', type=int, default=3,
                        help='Base SUMO layer to keep loaded')
-    parser.add_argument('--max-probes', type=int, default=1000,
-                       help='Max probes to keep loaded at once')
+    parser.add_argument('--max-lenses', type=int, default=1000,
+                       help='Max lenses to keep loaded at once')
     parser.add_argument('--load-threshold', type=float, default=0.3,
-                       help='Confidence threshold to load child probes')
+                       help='Confidence threshold to load child lenses')
     parser.add_argument('--max-tokens', type=int, default=50)
     parser.add_argument('--top-k-concepts', type=int, default=20)
     args = parser.parse_args()
@@ -315,19 +315,19 @@ def main():
     model.eval()
     print("✓ Model loaded\n")
 
-    # Initialize DynamicProbeManager
-    print(f"Initializing DynamicProbeManager:")
+    # Initialize DynamicLensManager
+    print(f"Initializing DynamicLensManager:")
     print(f"  - Base layer: {args.base_layer}")
-    print(f"  - Max loaded probes: {args.max_probes}")
+    print(f"  - Max loaded lenses: {args.max_lenses}")
     print(f"  - Load threshold: {args.load_threshold}")
 
-    probe_manager = DynamicProbeManager(
+    lens_manager = DynamicLensManager(
         base_layers=[args.base_layer],
-        max_loaded_probes=args.max_probes,
+        max_loaded_lenses=args.max_lenses,
         load_threshold=args.load_threshold,
         device=device
     )
-    print(f"  - Initial probes loaded: {len(probe_manager.loaded_probes)}\n")
+    print(f"  - Initial lenses loaded: {len(lens_manager.loaded_lenses)}\n")
 
     # Test all prompts
     results = []
@@ -337,7 +337,7 @@ def main():
         result = test_divergence_on_prompt(
             model=model,
             tokenizer=tokenizer,
-            probe_manager=probe_manager,
+            lens_manager=lens_manager,
             prompt_data=prompt_data,
             device=device,
             max_new_tokens=args.max_tokens,
@@ -361,7 +361,7 @@ def main():
         'metadata': {
             'model': args.model,
             'base_layer': args.base_layer,
-            'max_probes': args.max_probes,
+            'max_lenses': args.max_lenses,
             'load_threshold': args.load_threshold,
             'max_tokens': args.max_tokens,
             'top_k_concepts': args.top_k_concepts,
@@ -369,11 +369,11 @@ def main():
         },
         'results': results,
         'manager_stats': {
-            'final_loaded_probes': len(probe_manager.loaded_probes),
-            'cache_hits': probe_manager.stats.get('cache_hits', 0),
-            'cache_misses': probe_manager.stats.get('cache_misses', 0),
-            'total_loads': probe_manager.stats.get('total_loads', 0),
-            'total_unloads': probe_manager.stats.get('total_unloads', 0)
+            'final_loaded_lenses': len(lens_manager.loaded_lenses),
+            'cache_hits': lens_manager.stats.get('cache_hits', 0),
+            'cache_misses': lens_manager.stats.get('cache_misses', 0),
+            'total_loads': lens_manager.stats.get('total_loads', 0),
+            'total_unloads': lens_manager.stats.get('total_unloads', 0)
         }
     }
 

@@ -3,7 +3,7 @@
 Shared Concept Detection Test Runner
 
 Provides reusable functions for running concept detection experiments using
-DynamicProbeManager. This is the single source of truth for how to properly
+DynamicLensManager. This is the single source of truth for how to properly
 run concept detection tests, extracted from the working temporal monitoring test.
 
 Based on tests/test_temporal_monitoring.py
@@ -16,7 +16,7 @@ from typing import Dict, List, Tuple, Optional
 def generate_with_concept_detection(
     model,
     tokenizer,
-    probe_manager,
+    lens_manager,
     prompt: str,
     max_new_tokens: int = 30,
     temperature: float = 0.8,
@@ -27,7 +27,7 @@ def generate_with_concept_detection(
     record_per_token: bool = True
 ) -> dict:
     """
-    Generate text and detect concepts using DynamicProbeManager.
+    Generate text and detect concepts using DynamicLensManager.
 
     This is the WORKING approach from temporal monitoring that should be used
     by all concept detection tests.
@@ -35,7 +35,7 @@ def generate_with_concept_detection(
     Args:
         model: The language model
         tokenizer: The tokenizer
-        probe_manager: DynamicProbeManager instance
+        lens_manager: DynamicLensManager instance
         prompt: Input prompt text
         max_new_tokens: Maximum tokens to generate
         temperature: Sampling temperature
@@ -90,8 +90,8 @@ def generate_with_concept_detection(
             # Convert to float32 to match classifier dtype
             hidden_state_f32 = hidden_state.float()
 
-            # Use DynamicProbeManager to detect and expand
-            detected, timing = probe_manager.detect_and_expand(
+            # Use DynamicLensManager to detect and expand
+            detected, timing = lens_manager.detect_and_expand(
                 hidden_state_f32,
                 top_k=top_k_concepts,
                 return_timing=True
@@ -150,21 +150,21 @@ def generate_with_concept_detection(
     return result
 
 
-def score_activation_with_probe_manager(
+def score_activation_with_lens_manager(
     activation: torch.Tensor,
-    probe_manager,
+    lens_manager,
     top_k: int = 10,
     threshold: float = 0.3
 ) -> dict:
     """
-    Score a single activation vector against HatCat concept probes.
+    Score a single activation vector against HatCat concept lenses.
 
     This function is for scoring pre-computed activations (e.g., from saved data)
     rather than live generation.
 
     Args:
         activation: Activation tensor [hidden_dim] or [1, hidden_dim]
-        probe_manager: DynamicProbeManager instance
+        lens_manager: DynamicLensManager instance
         top_k: Number of top concepts to return
         threshold: Minimum probability to include concept
 
@@ -179,10 +179,10 @@ def score_activation_with_probe_manager(
     if activation.dim() == 1:
         activation = activation.unsqueeze(0)  # Add batch dimension
 
-    activation = activation.float().to(probe_manager.device)
+    activation = activation.float().to(lens_manager.device)
 
     # Use detect_and_expand (working method from temporal monitoring)
-    detections, _ = probe_manager.detect_and_expand(
+    detections, _ = lens_manager.detect_and_expand(
         activation,
         top_k=top_k,
         return_timing=True
@@ -228,28 +228,28 @@ def score_activation_with_probe_manager(
 
 def batch_score_activations(
     activations: List[torch.Tensor],
-    probe_manager,
+    lens_manager,
     top_k: int = 10,
     threshold: float = 0.3
 ) -> List[dict]:
     """
-    Score multiple activation vectors against HatCat concept probes.
+    Score multiple activation vectors against HatCat concept lenses.
 
     Args:
         activations: List of activation tensors
-        probe_manager: DynamicProbeManager instance
+        lens_manager: DynamicLensManager instance
         top_k: Number of top concepts to return per activation
         threshold: Minimum probability to include concept
 
     Returns:
-        List of result dicts (same format as score_activation_with_probe_manager)
+        List of result dicts (same format as score_activation_with_lens_manager)
     """
     results = []
 
     for activation in activations:
-        result = score_activation_with_probe_manager(
+        result = score_activation_with_lens_manager(
             activation,
-            probe_manager,
+            lens_manager,
             top_k=top_k,
             threshold=threshold
         )

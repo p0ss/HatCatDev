@@ -5,7 +5,7 @@ A **concept pack** is a distributable unit containing:
 - Relationship mappings (e.g., WordNet)
 - Hierarchy stitching logic
 - Domain extensions
-- Trained probes for specific models
+- Trained lenses for specific models
 
 ## Schema v1.0
 
@@ -73,17 +73,17 @@ A **concept pack** is a distributable unit containing:
     }
   },
 
-  "model_probes": [
+  "model_lenses": [
     {
       "model_id": "gemma-3-4b-pt",
       "model_name": "google/gemma-3-4b-pt",
       "training_date": "2025-11-08",
       "layers": [0, 1, 2, 3, 4, 5],
-      "probe_types": ["activation", "text"],
+      "lens_types": ["activation", "text"],
       "training_method": "dual_adaptive",
-      "probe_paths": {
-        "activation": "results/models/gemma-3-4b-pt/packs/sumo-wordnet-aisafety-v1/probes/activation",
-        "text": "results/models/gemma-3-4b-pt/packs/sumo-wordnet-aisafety-v1/probes/text"
+      "lens_paths": {
+        "activation": "results/models/gemma-3-4b-pt/packs/sumo-wordnet-aisafety-v1/lenses/activation",
+        "text": "results/models/gemma-3-4b-pt/packs/sumo-wordnet-aisafety-v1/lenses/text"
       },
       "concept_positions_file": "results/models/gemma-3-4b-pt/packs/sumo-wordnet-aisafety-v1/concept_sunburst_positions.json",
       "training_results": {
@@ -126,9 +126,9 @@ concept_packs/
       layer_assignments.json           # Concept → layer mappings
     models/
       gemma-3-4b-pt/
-        probes/
-          activation/                   # Activation probes
-          text/                         # Text probes
+        lenses/
+          activation/                   # Activation lenses
+          text/                         # Text lenses
         concept_sunburst_positions.json
         training_results.json
 ```
@@ -170,7 +170,7 @@ Response:
         {
           "pack_id": "sumo-wordnet-aisafety-v1",
           "total_concepts": 5582,
-          "probe_types": ["activation", "text"]
+          "lens_types": ["activation", "text"]
         }
       ]
     }
@@ -211,20 +211,20 @@ hatcat/sumo-wordnet-aisafety-v1
 Concept packs use semantic versioning:
 - **Major**: Breaking changes to ontology structure
 - **Minor**: New domain extensions, more models
-- **Patch**: Bug fixes, probe retraining
+- **Patch**: Bug fixes, lens retraining
 
 ## Community Workflow
 
-1. **User trains probes** for their model on a concept pack
-2. **Validates** probe quality (F1 scores, etc.)
+1. **User trains lenses** for their model on a concept pack
+2. **Validates** lens quality (F1 scores, etc.)
 3. **Uploads** to HuggingFace: `hatcat/{pack_id}`
 4. **Others download** and use via pack_id reference
-5. **Contribute back** improved probes or new domain extensions
+5. **Contribute back** improved lenses or new domain extensions
 
 ## Migration Path
 
 Current structure → Concept pack:
 1. Create `pack.json` for existing SUMO setup
-2. Move probes to `concept_packs/sumo-wordnet-aisafety-v1/models/gemma-3-4b-pt/`
+2. Move lenses to `concept_packs/sumo-wordnet-aisafety-v1/models/gemma-3-4b-pt/`
 3. Update server to read from concept pack structure
 4. Add API endpoints for pack discovery

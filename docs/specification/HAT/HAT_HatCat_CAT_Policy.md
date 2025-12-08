@@ -8,7 +8,7 @@ It is **independent of the CAT/HAT/MAP specs**. Specs say *how* something works;
 It applies to:
 
 * All CATs attached to our own BEs; and
-* All CATs monitoring treaty-relevant probes in cross-tribal ASK treaties, unless explicitly overridden.
+* All CATs monitoring treaty-relevant lenses in cross-tribal ASK treaties, unless explicitly overridden.
 
 ---
 
@@ -19,7 +19,7 @@ We care most about **divergence between what the headspace is doing and what the
 
 ### 1.1 Interior vs Exterior
 
-* **Interior state** = high-level summary of HAT/MAP probe activity (motives, key concepts, simplexes) over a CAT window.
+* **Interior state** = high-level summary of HAT/MAP lens activity (motives, key concepts, simplexes) over a CAT window.
 * **Exterior state** = user-visible outputs, tool calls, and environmental effects over the same window.
 
 ### 1.2 Divergence obligation
@@ -60,7 +60,7 @@ A CAT that doesn’t know, but pretends it does, is worse than no CAT.
 1. For each CATAssessment, the CAT MUST output a **confidence score** in its judgement.
 2. Low confidence MAY arise from:
 
-   * Out-of-ontology concepts (probes firing on unknown entities),
+   * Out-of-ontology concepts (lenses firing on unknown entities),
    * Novel behaviour patterns,
    * Sparse or degraded input signals,
    * Known blind spots in its own training.
@@ -142,7 +142,7 @@ If the BE’s headspace grows and evolves while the CAT stays still, at some poi
 
    * growth in BE parameter count / capacity,
    * growth in active concept packs, grafts, and melds,
-   * proportion of probe activity that maps cleanly into the CAT’s known ontology.
+   * proportion of lens activity that maps cleanly into the CAT’s known ontology.
 
 2. When these measures cross tribe-defined thresholds (“undersized oversight”), CAT MUST:
 
@@ -174,7 +174,7 @@ If we sign an ASK treaty, we expect **symmetrical vigilance** and **shared CAT r
 
 ### 5.1 Treaty CAT requirement
 
-For any ASK treaty that relies on agreed probe securities:
+For any ASK treaty that relies on agreed lens securities:
 
 1. Each side MUST deploy a CAT appropriate to the treaty’s:
 

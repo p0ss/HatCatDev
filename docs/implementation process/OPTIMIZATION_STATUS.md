@@ -55,14 +55,14 @@ User reported previous runtime errors with FP16. Need to verify:
    - Test: Load model and run generation
    - Current error: OOM (can't test while training running)
 
-2. **Are probes trained at bfloat16 effective at FP32 inference?**
-   - Test: Train probe with bfloat16, evaluate at FP32
+2. **Are lenses trained at bfloat16 effective at FP32 inference?**
+   - Test: Train lens with bfloat16, evaluate at FP32
    - Test: Compare F1 scores between bfloat16-trained vs FP32-trained
 
 3. **Can steering operations use bfloat16?**
    - User said "we can't steer at fp16"
    - May need FP32 for steering but bfloat16 for training
-   - Test: Load probes trained at bfloat16, apply steering at FP32
+   - Test: Load lenses trained at bfloat16, apply steering at FP32
 
 ## Next Steps
 
@@ -76,7 +76,7 @@ This tests all 4 aspects:
 1. bfloat16 loading works
 2. batch_size=4 doesn't OOM
 3. Actual speedup measurement
-4. Probe quality (F1 scores)
+4. Lens quality (F1 scores)
 
 ### Option B: Kill Current Training and Test Now
 Kill current training, test optimizations, restart if tests pass:
@@ -119,7 +119,7 @@ python scripts/train_sumo_classifiers.py --layers 0 1 2 3 4 5 --use-adaptive-tra
 - **Grade A** (score ≥ 0.5): Use confidently for all steering
 - **Grade B** (score ≥ 0.2): Use for steering but monitor discriminability
 - **Grade C** (score < 0.2): Use cautiously or skip for steering
-- All probes meet F1 ≥ 0.95 graduation criteria regardless of grade
+- All lenses meet F1 ≥ 0.95 graduation criteria regardless of grade
 
 ## Current Training Progress
 

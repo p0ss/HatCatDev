@@ -274,13 +274,13 @@ Our investigation reveals why the approach works:
 - Load all 82k noun synsets
 - Massive training overhead
 - Many redundant/overlapping concepts
-- Difficult to interpret probe activations
+- Difficult to interpret lens activations
 
 **HatCat approach (strategic conceptual coverage):**
 - Load 12k noun synsets at key abstraction levels
 - Efficient training (70% reduction in data generation)
 - Clear semantic hierarchy
-- Interpretable probe activations
+- Interpretable lens activations
 - 100% conceptual coverage through inheritance
 
 ## Recommendations
@@ -352,7 +352,7 @@ The **abstraction-focused approach** proves superior to exhaustive lexical cover
 - ✅ Complete conceptual space coverage
 - ✅ 70% reduction in training data requirements
 - ✅ Clear semantic hierarchy for monitoring
-- ✅ Interpretable probe activations
+- ✅ Interpretable lens activations
 - ✅ Efficient training (18s/concept average)
 
 **Trade-offs accepted:**
@@ -419,7 +419,7 @@ Exceptions:
 ### E. Related Documents
 
 - `docs/adaptive_training_approach.md` - Training methodology
-- `docs/detached_jacobian_approach.md` - Probe training approach
+- `docs/detached_jacobian_approach.md` - Lens training approach
 - `PROJECT_PLAN.md` - Overall project documentation
 
 ---

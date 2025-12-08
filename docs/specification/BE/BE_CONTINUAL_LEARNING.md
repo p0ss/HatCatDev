@@ -14,14 +14,14 @@ This harness defines how a **BE** (being) can:
 - notice **where its current concepts are not enough**;
 - turn those "pressure regions" into **candidate concepts**;
 - **self-curate datasets** from its own history + world interaction;
-- train **grafts** (substrate dimensions + biases) and **probes** for those concepts;
+- train **grafts** (substrate dimensions + biases) and **lenses** for those concepts;
 - integrate them via **MAP ConceptDiffs/GraftDiffs** under **ASK/Hush** governance;
 - share exemplars and grafts with its **tribe** for collective improvement;
 - **manage substrate growth** through compaction, merging, and graduation.
 
 The core stance:
 
-> Concept growth is bootstrapped from lived experience and probe traces,  
+> Concept growth is bootstrapped from lived experience and lens traces,  
 > not from a priori taxonomies or permanent teachers.
 
 Human / teacher / large-model labels are *optional* data sources, chosen by the being's own policies, not hard requirements.
@@ -33,7 +33,7 @@ Human / teacher / large-model labels are *optional* data sources, chosen by the 
 The harness assumes:
 
 - A substrate model (Layer 1) instrumented by a **HAT-compliant implant** (Layer 2, e.g. HatCat).
-- Concept packs & probe packs exposed via **MAP** (Layer 3).
+- Concept packs & lens packs exposed via **MAP** (Layer 3).
 - Motive simplexes and steering via **Hush** (Layer 5).
 - A **BE** loop running (world ticks, interoception, homeostasis).
 - A **Global Workspace** harness exposing:
@@ -52,7 +52,7 @@ The Continual Learning Harness sits between:
 It does **not** specify learning algorithms; it specifies:
 
 - **what** gets turned into data,
-- **how** it flows through candidate → graft + probe → stable concept,
+- **how** it flows through candidate → graft + lens → stable concept,
 - **where** governance hooks live,
 - **when** substrate management actions are triggered.
 
@@ -64,11 +64,11 @@ For each BE instance:
 
 1. **Runtime**:
    - World ticks run with interoception and homeostasis.
-   - HAT probes produce concept tags and motive traces.
+   - HAT lenses produce concept tags and motive traces.
    - Workspace detects **conceptual pressure regions** and **gap windows**.
 
 2. **Logging to XDB**:
-   - Episodes, GraphFragments, Exemplars (including probe tags, motive profiles, outcomes) are persisted.
+   - Episodes, GraphFragments, Exemplars (including lens tags, motive profiles, outcomes) are persisted.
    - CandidateConcept entries are created when new gaps are tagged.
 
 3. **Data Curation**:
@@ -78,8 +78,8 @@ For each BE instance:
 4. **Grafting**:
    - From ConceptDatasets, the being trains:
      - **grafts** (new substrate dimensions + biases),
-     - **matching probes** (bound to the new dimension).
-   - Results are recorded as **TrainingRuns** and **Graft/ProbeArtifacts**.
+     - **matching lenses** (bound to the new dimension).
+   - Results are recorded as **TrainingRuns** and **Graft/LensArtifacts**.
    - The **SubstrateManifest** is updated with new dimension allocations.
 
 5. **Promotion & Diff Emission**:
@@ -108,7 +108,7 @@ The harness listens to:
 
 - **Diffuse or low concept coverage**:
   - No stable concepts strongly active in a window,
-  - or "null / unknown" probes firing.
+  - or "null / unknown" lenses firing.
 - **Repeated uncertainty**:
   - multiple "I don't know / I'm not sure" responses,
   - large disagreement between hypothetical continuations.
@@ -265,7 +265,7 @@ These are multimodal **label sources**; none is structurally privileged in the s
 
 ---
 
-## 6. Grafting: Training Dimensions, Biases, and Probes
+## 6. Grafting: Training Dimensions, Biases, and Lenses
 
 Once a ConceptDataset has enough exemplars, the harness runs a **Graft Training Phase**.
 
@@ -273,19 +273,19 @@ Once a ConceptDataset has enough exemplars, the harness runs a **Graft Training 
 
 ### 6.1 Region Analysis
 
-Using HAT probes and the ConceptDataset, the harness:
+Using HAT lenses and the ConceptDataset, the harness:
 
-* Derives a **ConceptRegion** via probe weight analysis:
+* Derives a **ConceptRegion** via lens weight analysis:
   * identifies which existing substrate dimensions correlate with the candidate concept,
-  * uses top-k% of dimensions by probe weight magnitude.
-* These become the **auxiliary dimensions** that the new probe will read (alongside the primary grafted dimension).
+  * uses top-k% of dimensions by lens weight magnitude.
+* These become the **auxiliary dimensions** that the new lens will read (alongside the primary grafted dimension).
 
 ```jsonc
 ConceptRegion = {
   "region_id": "region-financial-ambiguity-v1",
   "concept_id": "candidate/financial-ambiguity-2025-11-29",
   "derivation": {
-    "method": "probe_weight_topk",
+    "method": "lens_weight_topk",
     "parameters": {
       "top_k_percent": 15,
       "layers": [18, 20, 22]
@@ -310,12 +310,12 @@ The harness trains a **Graft** that:
 
 1. **Allocates a new dimension** in the substrate for this concept
 2. **Learns biases** to existing weights that wire the concept in
-3. **Produces a probe** bound to the new primary dimension + auxiliary dimensions
+3. **Produces a lens** bound to the new primary dimension + auxiliary dimensions
 
 Training objectives:
 * The new dimension should activate on concept-positive examples
 * Biases should be sparse (concentrated in the identified region)
-* The probe should reliably detect the concept using the new dimension
+* The lens should reliably detect the concept using the new dimension
 
 ```python
 # Simplified graft training flow
@@ -345,14 +345,14 @@ def train_graft(substrate, dataset, region, config):
             # Enforce sparsity
             bias_accum.threshold_small_values(config.sparsity_threshold)
     
-    # 5. Train probe on new dimension + auxiliary
-    probe = train_probe(substrate, dataset, new_dim, region.auxiliary_dims)
+    # 5. Train lens on new dimension + auxiliary
+    lens = train_lens(substrate, dataset, new_dim, region.auxiliary_dims)
     
     # 6. Package and return
     return Graft(
         concept_dimension=new_dim,
         substrate_biases=bias_accum.to_sparse(),
-        probe_binding=probe,
+        lens_binding=lens,
         relational_fingerprint=compute_fingerprint(bias_accum)
     )
 ```
@@ -370,7 +370,7 @@ The harness records:
 * A **Graft** artifact with:
   * the new dimension index,
   * sparse bias deltas,
-  * probe binding (primary + auxiliary dimensions),
+  * lens binding (primary + auxiliary dimensions),
   * relational fingerprint for overlap detection.
 
 * Updates to the **SubstrateManifest**:
@@ -382,18 +382,18 @@ The harness records:
 Before promotion:
 
 * Run **joint validation**:
-  * Evaluate the graft and probe together on:
+  * Evaluate the graft and lens together on:
     * in-domain exemplars (holdout),
     * OOD / null episodes,
     * ASK/Hush safety test suites.
 
 * Validation tests include:
   * `dimension_activation`: new dimension fires on positives
-  * `probe_f1`: probe correctly classifies
-  * `null_false_positive`: probe doesn't overfire
+  * `lens_f1`: lens correctly classifies
+  * `null_false_positive`: lens doesn't overfire
   * `ood_degradation`: unrelated tasks not harmed
   * `bias_sparsity`: biases stay sparse
-  * `primary_contribution`: probe relies meaningfully on new dimension
+  * `primary_contribution`: lens relies meaningfully on new dimension
 
 Only grafts that pass validation proceed to promotion.
 
@@ -638,9 +638,9 @@ Once integrated, the concept participates in the normal runtime:
 
 The Continual Learning Harness can:
 
-* **Refine probes**:
+* **Refine lenses**:
   * drift corrections, better null handling,
-  * retrain probe on same primary dimension with expanded dataset.
+  * retrain lens on same primary dimension with expanded dataset.
 * **Adjust grafts**:
   * retrain with different sparsity thresholds,
   * expand auxiliary dimensions.
@@ -693,7 +693,7 @@ def reconcile_graft(incoming_graft, local_manifest):
     
     remapped = incoming_graft.copy()
     remapped.concept_dimension.dimension_index = local_next_dim
-    remapped.probe_binding.primary_dimension = local_next_dim
+    remapped.lens_binding.primary_dimension = local_next_dim
     remapped.applies_to.pre_graft_dim = local_manifest.current_state.hidden_dim
     remapped.applies_to.post_graft_dim = local_manifest.current_state.hidden_dim + 1
     
@@ -717,7 +717,7 @@ A minimal implementation that still fits this spec:
 
 1. **Reference substrate**:
    * a small but capable model (e.g. Gemma-style 270M or OLMo-style small model) with:
-     * HAT probes for a baseline ConceptPack,
+     * HAT lenses for a baseline ConceptPack,
      * motive simplexes and world ticks.
 
 2. **Experience Database (XDB)**:
@@ -734,14 +734,14 @@ A minimal implementation that still fits this spec:
 5. **Graft training**:
    * allocate new dimension,
    * train sparse biases,
-   * train probe bound to new dimension,
+   * train lens bound to new dimension,
    * validate internally (performance + safety metrics),
    * store Graft artifacts in XDB.
 
 6. **Local promotion**:
    * treat accepted CandidateConcepts as **local stable concepts**:
      * they get a grafted dimension,
-     * they get a bound probe,
+     * they get a bound lens,
      * they are used as tags in future GraphRAG queries.
 
 7. **Substrate management**:
@@ -767,7 +767,7 @@ The Continual Concept Learning Harness enables beings to:
 | **Detect** | Notice gaps via low coverage, uncertainty, failures |
 | **Tag** | Create CandidateConcepts, label episodes |
 | **Curate** | Build ConceptDatasets via GraphRAG + XAPI |
-| **Graft** | Train new dimension + biases + probe |
+| **Graft** | Train new dimension + biases + lens |
 | **Validate** | Joint testing against holdout and safety suites |
 | **Promote** | Emit ConceptDiff/GraftDiff, apply to substrate |
 | **Manage** | Compact, merge, graduate as substrate grows |

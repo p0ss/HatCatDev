@@ -32,7 +32,7 @@
 		for (const item of data.slice(-100)) {
 			const activations = viewMode === 'stream'
 				? (item as ExperienceTick).concept_activations
-				: (item as AuditRecord).probe_activations;
+				: (item as AuditRecord).lens_activations;
 
 			for (const [concept, score] of Object.entries(activations)) {
 				if (!summaries[concept]) {
@@ -252,9 +252,9 @@
 									<span class="content-text">{record.raw_content}</span>
 								{/if}
 							</div>
-							{#if Object.keys(record.probe_activations).length > 0}
+							{#if Object.keys(record.lens_activations).length > 0}
 								<div class="tick-activations">
-									{#each Object.entries(record.probe_activations).slice(0, 5) as [concept, score]}
+									{#each Object.entries(record.lens_activations).slice(0, 5) as [concept, score]}
 										<span class="activation">
 											{concept}: {score.toFixed(2)}
 										</span>

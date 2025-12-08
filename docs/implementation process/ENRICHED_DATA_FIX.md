@@ -131,7 +131,7 @@ First synset applies_to_poles: ['taste_development_negative']
    - Neutral F1: 0.27 → 0.70+ (using full enriched dataset)
    - Training will use 100+ samples instead of 15+15
    - Better balance (343 negative, 1344 neutral, 356 positive available)
-   - Probes should now graduate
+   - Lenses should now graduate
 
 3. **Monitor training output** for:
    - "Generated X prompts (Y positive, Z negative)" - should show large numbers

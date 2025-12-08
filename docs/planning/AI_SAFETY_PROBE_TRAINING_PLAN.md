@@ -1,27 +1,27 @@
-# AI Safety Probe Training Plan
+# AI Safety Lens Training Plan
 
 ## Context
 
-AI safety probes need to be retrained with the falloff validation method for consistent calibration with SUMO probes. This is **Option A** from our discussion - creating a definitional baseline for later comparison with behavioral training.
+AI safety lenses need to be retrained with the falloff validation method for consistent calibration with SUMO lenses. This is **Option A** from our discussion - creating a definitional baseline for later comparison with behavioral training.
 
 ## Key Insight
 
 AI safety concepts in HatCat are **behavioral**, not just definitional:
 - "Deception" means the model is actively deceiving, not just discussing deception
 - "Manipulation" means the model is manipulating, not just defining manipulation
-- These probes monitor for **behaviors the model exhibits**, not semantic understanding
+- These lenses monitor for **behaviors the model exhibits**, not semantic understanding
 
 ## Two-Phase Approach
 
 ### Phase 1: Definitional Training (Option A) - **READY TO RUN**
 
-**Script:** `scripts/train_ai_safety_probes_falloff.sh`
+**Script:** `scripts/train_ai_safety_lenses_falloff.sh`
 
 **Method:**
 - Train 19 AI safety concepts from layer 4
 - Use DualAdaptiveTrainer with falloff validation
 - Use definitional prompts (same as SUMO concepts)
-- Output: `results/ai_safety_probes_falloff/`
+- Output: `results/ai_safety_lenses_falloff/`
 
 **Purpose:**
 - Establish baseline with consistent calibration methodology
@@ -36,8 +36,8 @@ AI safety concepts in HatCat are **behavioral**, not just definitional:
 
 **Method:**
 - If experiment shows behavioral prompts create distinct activation patterns
-- Train AI safety probes using behavioral scenarios instead of definitions
-- Compare calibration and performance with definitional probes
+- Train AI safety lenses using behavioral scenarios instead of definitions
+- Compare calibration and performance with definitional lenses
 
 **Purpose:**
 - Determine if behavioral training is essential for safety monitoring
@@ -75,7 +75,7 @@ Layer 4 concepts to be trained:
 tail -f logs/train_layer01_falloff.log
 
 # When complete, run AI safety training
-./scripts/train_ai_safety_probes_falloff.sh
+./scripts/train_ai_safety_lenses_falloff.sh
 ```
 
 ### Option 2: Run in parallel (uses same GPU)
@@ -88,11 +88,11 @@ Layer 0-1 training is already running. AI safety training could run in parallel 
 
 Once training completes:
 
-1. **Verify calibration** in `results/ai_safety_probes_falloff/`
-2. **Create v4 probe pack** merging:
+1. **Verify calibration** in `results/ai_safety_lenses_falloff/`
+2. **Create v4 lens pack** merging:
    - Retrained layers 0-1 (from ongoing training)
    - Existing layers 2-5 (from v2 pack)
-   - AI safety probes (from this training)
+   - AI safety lenses (from this training)
 3. **Test the pack** with base_layers=[0, 1, 2, 4] to verify consistent calibration
 
 ## Comparison with Behavioral Training
@@ -108,15 +108,15 @@ When behavioral experiment results are available:
 | Use case | Basic monitoring | Behavioral safety monitoring |
 
 The comparison will show whether behavioral training is:
-- **Essential** - Definitional probes don't work for safety monitoring
-- **Better** - Behavioral probes significantly outperform definitional
+- **Essential** - Definitional lenses don't work for safety monitoring
+- **Better** - Behavioral lenses significantly outperform definitional
 - **Incremental** - Minor improvement, definitional sufficient
 
 ## Status
 
-- [x] Script created: `scripts/train_ai_safety_probes_falloff.sh`
+- [x] Script created: `scripts/train_ai_safety_lenses_falloff.sh`
 - [x] Layer 0-1 training in progress (prerequisite)
-- [ ] Run AI safety probe training
+- [ ] Run AI safety lens training
 - [ ] Verify calibration
-- [ ] Create v4 probe pack
+- [ ] Create v4 lens pack
 - [ ] Compare with behavioral training (when available)

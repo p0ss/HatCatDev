@@ -284,7 +284,7 @@ services:
 **Note**: Gemma-3-4B with full divergence detection typically uses **18-22 GB VRAM** due to:
 - Base model: ~8 GB (bfloat16)
 - Activation captures: ~4-6 GB
-- Probe inference: ~2-4 GB
+- Lens inference: ~2-4 GB
 - Text generation buffers: ~4-6 GB
 
 Re-train classifiers for Gemma-2B:
@@ -292,7 +292,7 @@ Re-train classifiers for Gemma-2B:
 ./.venv/bin/python scripts/train_sumo_classifiers.py \
   --layers 0 1 2 \
   --model google/gemma-2b \
-  --train-text-probes \
+  --train-text-lenses \
   --use-adaptive
 ```
 
@@ -322,7 +322,7 @@ model = AutoModelForCausalLM.from_pretrained(
 ```
 
 **Result**:
-- Gemma-3-4B: 20 GB → **8-10 GB VRAM** (base model ~3 GB, probes/activations ~5-7 GB)
+- Gemma-3-4B: 20 GB → **8-10 GB VRAM** (base model ~3 GB, lenses/activations ~5-7 GB)
 - Slight quality loss (~2-3%)
 - Can run on 12-16 GB GPUs with careful memory management
 

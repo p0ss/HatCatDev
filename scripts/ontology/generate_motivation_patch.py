@@ -154,7 +154,7 @@ def generate_patch_strategy_2(categories):
                 'synsets': synset_list,
                 'synset_count': len(synset_list),
                 'direct_synset_count': len(synset_list),
-                'is_category_probe': True,
+                'is_category_lens': True,
                 'category_children': [],
                 'mapping_metadata': {
                     'source': 'noun_motive_patch',
@@ -240,7 +240,7 @@ def recommend_strategy(categories):
     print("  Pros:")
     print("    - Semantic organization (RationalMotive, EthicalMotive separate)")
     print("    - Easier to find opposites (RationalMotive ↔ IrrationalMotive)")
-    print("    - Critical concepts get dedicated probes")
+    print("    - Critical concepts get dedicated lenses")
     print(f"    - Captures {critical_count} critical motivation synsets in focused concepts")
     print("  Cons:")
     print("    - More layer file changes (add to Layer 3)")

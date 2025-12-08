@@ -213,7 +213,7 @@ Experimental validation tested whether definitional prompts ("What is X?") activ
    - Neutral prompts: 0% cross-detection (distinct linguistic pattern)
 3. **Pre-trained model limitation**: Model performs autoregressive completion rather than instruction-following, making behavioral elicitation ineffective without instruction tuning
 
-**Practical implication**: Definitional probes are **sufficient for current pipeline** because:
+**Practical implication**: Definitional lenses are **sufficient for current pipeline** because:
 - Trigger reliably and consistently
 - Capture meaningful concept semantics (not complete null result)
 - Perfect behavioral elicitation would require per-concept prompt engineering
@@ -221,7 +221,7 @@ Experimental validation tested whether definitional prompts ("What is X?") activ
 
 **Future work**: Per-concept behavioral prompt engineering with instruction-tuned models may improve detection of implicit concept presence, but current definitional approach provides pragmatic balance of scalability and accuracy.
 
-**Methodological note**: Cosine similarity of activation vectors is insufficient for evaluating whether behavioral prompts elicit the target concept. A more rigorous test would apply trained definitional probes to the model's responses from behavioral prompts to measure whether the concept is actually present in generated text. This would test whether behavioral prompts successfully elicit the cognitive process versus merely changing surface linguistic features.
+**Methodological note**: Cosine similarity of activation vectors is insufficient for evaluating whether behavioral prompts elicit the target concept. A more rigorous test would apply trained definitional lenses to the model's responses from behavioral prompts to measure whether the concept is actually present in generated text. This would test whether behavioral prompts successfully elicit the cognitive process versus merely changing surface linguistic features.
 
 **Experiment details**: `results/behavioral_vs_definitional_experiment/` (November 14, 2024)
 
@@ -335,7 +335,7 @@ Experimental testing (see Validation Results above) found minimal activation dif
 3. **Depth-sensitive extraction** (following Equivalent Linear Mappings insight):
    - Surface layers: Capture definitional knowledge ("What is X?")
    - Deep layers: Capture operational process ("Do X")
-   - Train separate probes at different layer depths for definitional vs behavioral
+   - Train separate lenses at different layer depths for definitional vs behavioral
    - Current single-layer approach conflates these
 
 4. **Validation strategy**:

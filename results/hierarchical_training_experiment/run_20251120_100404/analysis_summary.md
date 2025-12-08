@@ -79,7 +79,7 @@ Why it's not better:
   - 300-500x more samples (no benefit)
   - Sample explosion for top-level concepts
   - Parent becomes "union of all descendants"
-  - Harder to interpret what probe represents
+  - Harder to interpret what lens represents
 ```
 
 ## Concept-by-Concept Analysis
@@ -185,7 +185,7 @@ Recursive:         1.11 min / 5 concepts = 0.22 min/concept (same)
    - Investigate cross-layer negatives or synthetic negatives
 
 2. **Fix test metric reporting**
-   - All successful probes report `precision: 0.0, recall: 0.0`
+   - All successful lenses report `precision: 0.0, recall: 0.0`
    - Yet `test_f1: 1.0` (impossible!)
    - Likely a bug in metric calculation
 

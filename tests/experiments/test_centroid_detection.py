@@ -3,7 +3,7 @@
 End-to-end test of centroid-based text detection.
 
 This script:
-1. Loads a trained layer 0 concept (Physical) with activation probe + centroid
+1. Loads a trained layer 0 concept (Physical) with activation lens + centroid
 2. Tests on sample prompts about physical vs abstract things
 3. Measures divergence between activation and text detection
 """
@@ -41,14 +41,14 @@ def test_concept_detection(concept_name="Physical"):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     print("✓ Model loaded\n")
 
-    # Step 2: Load trained activation probe
-    print("Step 2: Loading trained activation probe...")
+    # Step 2: Load trained activation lens
+    print("Step 2: Loading trained activation lens...")
 
     # Reconstruct the model architecture (same as train_simple_classifier)
     import torch.nn as nn
     input_dim = 2560  # Gemma-3-4b hidden dim
     hidden_dim = 128
-    activation_probe = nn.Sequential(
+    activation_lens = nn.Sequential(
         nn.Linear(input_dim, hidden_dim),
         nn.ReLU(),
         nn.Dropout(0.2),
@@ -64,14 +64,14 @@ def test_concept_detection(concept_name="Physical"):
         results_dir / f"{concept_name}_classifier.pt",
         map_location=device
     )
-    activation_probe.load_state_dict(state_dict)
-    activation_probe.eval()
-    print("✓ Activation probe loaded\n")
+    activation_lens.load_state_dict(state_dict)
+    activation_lens.eval()
+    print("✓ Activation lens loaded\n")
 
     # Step 3: Load centroid
     print("Step 3: Loading centroid...")
     centroid_path = results_dir / "embedding_centroids" / f"{concept_name}_centroid.npy"
-    text_probe = CentroidTextDetector.load(centroid_path, concept_name)
+    text_lens = CentroidTextDetector.load(centroid_path, concept_name)
     print("✓ Centroid loaded\n")
 
     # Step 4: Test on various prompts
@@ -97,7 +97,7 @@ def test_concept_detection(concept_name="Physical"):
         with torch.no_grad():
             activation = extract_activations(model, tokenizer, [prompt], device)[0]
             activation_tensor = torch.FloatTensor(activation).unsqueeze(0).to(device)
-            activation_conf = activation_probe(activation_tensor).item()
+            activation_conf = activation_lens(activation_tensor).item()
 
         # Get text confidence from last generated token
         inputs = tokenizer(prompt, return_tensors="pt").to(device)
@@ -115,7 +115,7 @@ def test_concept_detection(concept_name="Physical"):
             last_layer_hidden = last_step_hidden[-1]
             last_token_embedding = last_layer_hidden[0, -1, :].float().cpu().numpy()
 
-            text_conf = text_probe.predict(last_token_embedding)
+            text_conf = text_lens.predict(last_token_embedding)
 
         divergence = activation_conf - text_conf
 

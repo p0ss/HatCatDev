@@ -18,7 +18,7 @@ def main():
     print("=" * 80)
     print("\nThis will train a small subset of Layer 0 concepts with:")
     print("  - Adaptive training (independent graduation)")
-    print("  - Both activation and text probes")
+    print("  - Both activation and text lenses")
     print("  - Baseline: 10 samples")
     print("  - Activation increment: +1 per iteration")
     print("  - Text increment: +5 per iteration")
@@ -35,7 +35,7 @@ def main():
         n_test_pos=20,
         n_test_neg=20,
         output_dir=Path("results/sumo_classifiers_adaptive_test"),
-        train_text_probes=True,
+        train_text_lenses=True,
         use_adaptive_training=True,  # ENABLE ADAPTIVE TRAINING
     )
 

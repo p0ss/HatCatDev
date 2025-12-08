@@ -16,7 +16,7 @@ The **Experience Database (XDB)** is a BE's persistent **episodic memory**:
 - It is the primary payload for **tribe sync** and **knowledge sharing**.
 - It is the canonical source of truth from which:
   - **grafts** (substrate dimensions + biases) and
-  - **probes** (HAT/MAP detectors)
+  - **lenses** (HAT/MAP detectors)
   are *re-derived*.
 
 Conceptually:
@@ -25,7 +25,7 @@ Conceptually:
 |-----------|------|-------------|
 | **Global Workspace** | Current attention | Runtime, per session |
 | **Experience Database** | Episodic memory | Persistent, syncable |
-| **Patches + Probes** | Learned skills | Derived artifacts via MAP/HAT |
+| **Patches + Lenses** | Learned skills | Derived artifacts via MAP/HAT |
 | **Substrate** | Raw capacity | Model weights / brain tissue |
 
 The Experience Database Schema defines:
@@ -41,7 +41,7 @@ The Experience Database Schema defines:
 It does **not** define:
 
 - how the Global Workspace *looks* internally (that's the workspace doc);
-- how continual learning *trains* patches and probes (that's the learning harness);
+- how continual learning *trains* patches and lenses (that's the learning harness);
 - how ASK and Hush *govern* what's allowed (that's ASK/Hush).
 
 ---
@@ -54,7 +54,7 @@ It does **not** define:
   - Rebuilt from scratch on each instantiation from:
     - current session state,
     - loaded XDB summary (if any),
-    - active patches/probes.
+    - active patches/lenses.
   - Dies with the session.
 
 - **Experience Database (persistent)**
@@ -66,10 +66,10 @@ It does **not** define:
       training metadata, validation results).
   - Survives hibernation and can be synced with tribe repositories.
 
-- **Patches + Probes (derived artifacts)**
+- **Patches + Lenses (derived artifacts)**
   - Generated *from* Experience Database exemplars and training runs.
   - Stored as separate deployable assets (e.g. adapter weights,
-    probe parameters).
+    lens parameters).
   - Reproducible from XDB + training config where possible.
 
 ### 1.2 Sync & Sharing
@@ -80,10 +80,10 @@ For **tribe sync**:
    fragments to a shared store.
 2. Tribe-level processes retrain **shared patches** from pooled
    exemplars.
-3. New patches/probes are then redistributed as derived artifacts.
+3. New patches/lenses are then redistributed as derived artifacts.
 
 The **exemplars** (episodes with tags and provenance) are the **source
-of truth**. Patches/probes are secondary and can be regenerated.
+of truth**. Patches/lenses are secondary and can be regenerated.
 
 ---
 
@@ -98,7 +98,7 @@ The **Audit Log** is an immutable, append-only record that the BE cannot see or 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  AUDIT LOG (BE-Invisible)                                        │
-│  - Every timestep with full probe activations                    │
+│  - Every timestep with full lens activations                    │
 │  - Steering decisions and their rationale                        │
 │  - Raw I/O without BE-applied filters                            │
 │  - Cryptographic hash chain for integrity                        │
@@ -150,11 +150,11 @@ The **Experience Log** is what the BE can see and interact with:
 Every interaction is recorded to both logs simultaneously:
 
 ```
-Input/Output → ┬→ Audit Log (full probes, steering, raw)
-               └→ Experience Log (visible probes, BE-accessible)
+Input/Output → ┬→ Audit Log (full lenses, steering, raw)
+               └→ Experience Log (visible lenses, BE-accessible)
 ```
 
-The **Audit Log** receives the superset: all probe activations (including those the BE shouldn't know about), all steering decisions, all raw content.
+The **Audit Log** receives the superset: all lens activations (including those the BE shouldn't know about), all steering decisions, all raw content.
 
 The **Experience Log** receives the subset: only the concept activations and content the BE is allowed to perceive, filtered by ASK policy.
 
@@ -169,7 +169,7 @@ At a high level, the Experience Database consists of:
 - **Episodes & Exemplars** – tagged slices of experience
 - **Session Graph Fragments** – compacted structure of past sessions
 - **Concept Datasets** – collections of exemplars for specific concepts
-- **Training Runs** – metadata about training patches and probes
+- **Training Runs** – metadata about training patches and lenses
 - **Candidate Concepts (Buds)** – concepts in-flight, learning, not yet stable
 - **Documents** – reference materials (system instructions, policies, tool docs)
 
@@ -363,7 +363,7 @@ Episode = {
     "environment_id": "gov.au.portal-v3",
     "substrate_id": "olmo3-7b-base@0.1.0",
     "hat_impl_id": "hatcat:v4.0.0",
-    "probe_pack_id": "org.hatcat/sumo-wordnet-v4@4.0.0"
+    "lens_pack_id": "org.hatcat/sumo-wordnet-v4@4.0.0"
   },
 
   "access_policy_id": "policy-tribeA-private",
@@ -462,7 +462,7 @@ CandidateConcept = {
 ```
 
 When promoted, the CandidateConcept is turned into a proper MAP
-`ConceptDiff` and associated Probe + Patch.
+`ConceptDiff` and associated Lens + Patch.
 
 ---
 
@@ -503,19 +503,19 @@ These fragments are the main **GraphRAG backend**:
 
 ### 7.1 TrainingRun
 
-A TrainingRun records how a patch or probe was trained, from what
+A TrainingRun records how a patch or lens was trained, from what
 ExperienceDatabase content.
 
 ```jsonc
 TrainingRun = {
   "id": "trainrun-eligibility-patch-v1",
-  "type": "patch|probe|joint",
+  "type": "patch|lens|joint",
   "concept_ids": [
     "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Eligibility"
   ],
   "substrate_id": "olmo3-7b-base@0.1.0",
   "hat_impl_id": "hatcat:v4.0.0",
-  "probe_pack_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
+  "lens_pack_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
 
   "dataset_ids": [
     "dataset-eligibility-v1",
@@ -547,7 +547,7 @@ TrainingRun = {
 }
 ```
 
-### 7.2 GraftArtifact & ProbeArtifact
+### 7.2 GraftArtifact & LensArtifact
 
 The actual deployable artifacts are referenced, not necessarily stored
 inline.
@@ -567,10 +567,10 @@ GraftArtifact = {
   "created_at": "..."
 }
 
-ProbeArtifact = {
-  "id": "probe-eligibility-v1",
-  "training_run_id": "trainrun-eligibility-probe-v1",
-  "location": "blob://.../probe-eligibility-v1",
+LensArtifact = {
+  "id": "lens-eligibility-v1",
+  "training_run_id": "trainrun-eligibility-lens-v1",
+  "location": "blob://.../lens-eligibility-v1",
   "checksum": "sha256:...",
   "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Eligibility",
   "created_at": "..."
@@ -780,7 +780,7 @@ SyncManifest = {
 XDB contents are mostly **append-only**:
 
 * new Episodes, Exemplars, GraphFragments add information;
-* TrainingRuns, Patches, Probes add new capabilities.
+* TrainingRuns, Patches, Lenses add new capabilities.
 
 Conflicts arise mainly around:
 
@@ -803,7 +803,7 @@ The Experience Database (XDB) is a BE's persistent episodic memory:
 |-------|------|-------------|
 | Global Workspace | Current attention | Runtime, per session |
 | Experience Database | Episodic memory | Persistent, syncable |
-| Patches + Probes | Learned skills | Derived from XDB |
+| Patches + Lenses | Learned skills | Derived from XDB |
 | Substrate | Raw capacity | Model weights |
 
 ### Key Architectural Elements
@@ -832,4 +832,4 @@ The Experience Database (XDB) is a BE's persistent episodic memory:
 * **Document repository** – reference materials accessible to BE
 * **Resource-governed storage** – quotas from contract, compression under pressure
 
-Tribes exchange **Experience Database fragments**, then retrain shared patches from pooled exemplars. The **exemplars** are the source of truth; the **patches and probes** are reproducible artifacts derived from them.
+Tribes exchange **Experience Database fragments**, then retrain shared patches from pooled exemplars. The **exemplars** are the source of truth; the **patches and lenses** are reproducible artifacts derived from them.

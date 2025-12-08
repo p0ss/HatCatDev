@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Test MAP compliance for HatCat probe pack discovery and loading.
+Test MAP compliance for HatCat lens pack discovery and loading.
 
 Tests:
 1. Discovery of concept packs
-2. Discovery of probe packs (both legacy and MAP)
+2. Discovery of lens packs (both legacy and MAP)
 3. Version resolution
 4. Legacy pack loading with deprecation warning
 5. Manager initialization with auto-detection
@@ -16,7 +16,7 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 def test_concept_pack_discovery():
@@ -25,7 +25,7 @@ def test_concept_pack_discovery():
     print("TEST 1: Concept Pack Discovery")
     print("=" * 80)
 
-    packs = DynamicProbeManager.discover_concept_packs()
+    packs = DynamicLensManager.discover_concept_packs()
 
     print(f"\n✓ Found {len(packs)} concept pack(s):")
     for pack_id, path in packs.items():
@@ -35,15 +35,15 @@ def test_concept_pack_discovery():
     return len(packs) > 0, packs
 
 
-def test_probe_pack_discovery():
-    """Test 2: Discover probe packs (legacy and MAP)."""
+def test_lens_pack_discovery():
+    """Test 2: Discover lens packs (legacy and MAP)."""
     print("\n" + "=" * 80)
-    print("TEST 2: Probe Pack Discovery")
+    print("TEST 2: Lens Pack Discovery")
     print("=" * 80)
 
-    packs = DynamicProbeManager.discover_probe_packs()
+    packs = DynamicLensManager.discover_lens_packs()
 
-    print(f"\n✓ Found {len(packs)} probe pack(s):")
+    print(f"\n✓ Found {len(packs)} lens pack(s):")
 
     legacy_count = 0
     map_count = 0
@@ -75,7 +75,7 @@ def test_version_resolution():
     test_names = ["sumo-wordnet", "ai-safety"]
 
     for name in test_names:
-        latest = DynamicProbeManager.get_latest_version(name)
+        latest = DynamicLensManager.get_latest_version(name)
         if latest:
             print(f"\n✓ Latest version of '{name}': {latest}")
         else:
@@ -91,7 +91,7 @@ def test_legacy_loading_with_deprecation():
     print("=" * 80)
 
     # Get first legacy pack
-    packs = DynamicProbeManager.discover_probe_packs()
+    packs = DynamicLensManager.discover_lens_packs()
     legacy_packs = {k: v for k, v in packs.items() if v['type'] == 'legacy'}
 
     if not legacy_packs:
@@ -103,15 +103,15 @@ def test_legacy_loading_with_deprecation():
     print("Expected: Deprecation warning should appear\n")
 
     try:
-        manager = DynamicProbeManager(
-            probe_pack_id=pack_id,
+        manager = DynamicLensManager(
+            lens_pack_id=pack_id,
             base_layers=[0],
             device='cpu'
         )
 
         print(f"\n✓ Manager initialized successfully")
-        print(f"  Loaded {len(manager.loaded_activation_probes)} activation probes")
-        print(f"  Loaded {len(manager.loaded_text_probes)} text probes")
+        print(f"  Loaded {len(manager.loaded_activation_lenses)} activation lenses")
+        print(f"  Loaded {len(manager.loaded_text_lenses)} text lenses")
 
         return True, manager
 
@@ -127,19 +127,19 @@ def test_auto_detection():
     print("=" * 80)
 
     print("\nAttempting to initialize manager with auto-detection")
-    print("(Using nonexistent probes_dir to trigger auto-detection)\n")
+    print("(Using nonexistent lenses_dir to trigger auto-detection)\n")
 
     try:
-        manager = DynamicProbeManager(
-            probes_dir=Path("nonexistent_dir"),
+        manager = DynamicLensManager(
+            lenses_dir=Path("nonexistent_dir"),
             base_layers=[0],
             device='cpu'
         )
 
         print(f"\n✓ Manager auto-detected and loaded pack")
-        print(f"  Using pack: {manager.probes_dir.name}")
-        print(f"  Loaded {len(manager.loaded_activation_probes)} activation probes")
-        print(f"  Loaded {len(manager.loaded_text_probes)} text probes")
+        print(f"  Using pack: {manager.lenses_dir.name}")
+        print(f"  Loaded {len(manager.loaded_activation_lenses)} activation lenses")
+        print(f"  Loaded {len(manager.loaded_text_lenses)} text lenses")
 
         return True, manager
 
@@ -158,7 +158,7 @@ def main():
 
     # Run tests
     results['concept_discovery'] = test_concept_pack_discovery()
-    results['probe_discovery'] = test_probe_pack_discovery()
+    results['lens_discovery'] = test_lens_pack_discovery()
     results['version_resolution'] = test_version_resolution()
     results['legacy_loading'] = test_legacy_loading_with_deprecation()
     results['auto_detection'] = test_auto_detection()

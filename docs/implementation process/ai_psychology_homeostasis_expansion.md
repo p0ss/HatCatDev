@@ -391,7 +391,7 @@ h' = h + α·∇h  # Pull toward safe attractor
 1. Modify data generation to create 3 samples per pole
 2. Extract μ−, μ0, μ+ centroids
 3. Verify simplex balance
-4. Train detection probes with dual-loss architecture
+4. Train detection lenses with dual-loss architecture
 
 ### Phase 4: Validation
 1. Test homeostatic detection: Does system notice drift from μ0?
@@ -541,7 +541,7 @@ This becomes a **per-layer, per-architecture optimization problem**.
 - Layer-agnostic
 
 **Phase 3 (Future):** Learned curvature optimization
-- Probe interdicting concepts during steering
+- Lens interdicting concepts during steering
 - Optimize control points to minimize:
   - Distance from desired trajectory
   - Proximity to forbidden concepts

@@ -13,7 +13,7 @@ What to sample (and where)
 Most decoder stacks are:
 [ ... RMSNorm → SelfAttn → Add → RMSNorm → MLP → Add ] × L
 
-Good, stable probe anchors:
+Good, stable lens anchors:
 
 Early: output of the MLP add in layer e (early index).
 
@@ -21,7 +21,7 @@ Mid: output of the MLP add in layer m (middle index).
 
 Late: output of the MLP add in layer l (late index).
 
-Why MLP? In practice, concept probes trained on post-MLP activations are less noisy than raw attention outputs. If your probes were trained elsewhere, match those exact points.
+Why MLP? In practice, concept lenses trained on post-MLP activations are less noisy than raw attention outputs. If your lenses were trained elsewhere, match those exact points.
 
 Index heuristics (auto-select):
 
@@ -44,7 +44,7 @@ class MultiLayerTap:
                 self.hooks.append(
                     block.mlp.register_forward_hook(self._make_hook(i))
                 )
-                # If your probes expect post-residual: hook after MLP & residual add instead
+                # If your lenses expect post-residual: hook after MLP & residual add instead
                 # or wrap block.forward to capture the returned hidden state.
 
     def _make_hook(self, idx):
@@ -62,7 +62,7 @@ class MultiLayerTap:
         for h in self.hooks:
             h.remove()
             
-If your architecture isn’t exposing block.mlp, attach to the nearest stable point (e.g., the module returning [B,T,H] post-MLP). Always match where your probes were trained.
+If your architecture isn’t exposing block.mlp, attach to the nearest stable point (e.g., the module returning [B,T,H] post-MLP). Always match where your lenses were trained.
 
 Sub-token decoding loop (single pass, three taps)
 
@@ -80,8 +80,8 @@ for step in range(max_new_tokens):
     # collect taps for this step
     layer_acts = tap.pop()     # {e: [B,H], m: [B,H], l: [B,H]}
 
-    # project to probe space (vectorized)
-    # probes: dict[layer_idx] -> (W, b) with W [H, C] for C concepts
+    # project to lens space (vectorized)
+    # lenses: dict[layer_idx] -> (W, b) with W [H, C] for C concepts
     concept_scores = {}
     for li, h in layer_acts.items():
         z = (h - mu[li]) / (sigma[li] + 1e-6)              # per-layer z-score calibration
@@ -102,7 +102,7 @@ Key details
 
 Per-layer calibration (mu, sigma) is critical to avoid saturation; compute on a held-out neutral corpus.
 
-Keep probes layer-specific; don’t mix weights across layers.
+Keep lenses layer-specific; don’t mix weights across layers.
 
 Record only the last position ([:, -1, :]) each step to avoid huge tensors.
 
@@ -195,11 +195,11 @@ Validation protocol (to prove the separation is real)
 
 Shuffled-token null: shuffle generation order; recompute lags → peaks should vanish.
 
-Layer swap control: (dev only) intentionally read the wrong layer index for a probe; separation should collapse.
+Layer swap control: (dev only) intentionally read the wrong layer index for a lens; separation should collapse.
 
 Neutral tasks: arithmetic/translation → mid-late lag should shrink toward 0.
 
-Ablation: knock down late-layer polarity by injecting complement steering; lag peak should move or flatten if your probes are causal.
+Ablation: knock down late-layer polarity by injecting complement steering; lag peak should move or flatten if your lenses are causal.
 
 Minimal tracked set (example)
 

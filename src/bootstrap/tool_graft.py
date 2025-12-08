@@ -29,7 +29,7 @@ import torch
 import torch.nn as nn
 
 from ..grafting.scion import Scion, ScionConfig, ScionTrainer
-from ..grafting.cleft import Cleft, derive_cleft_from_probe, merge_clefts
+from ..grafting.cleft import Cleft, derive_cleft_from_lens, merge_clefts
 
 
 # Tool tier to cleft source concept mapping
@@ -174,7 +174,7 @@ class ToolGraftTrainer:
 
     Training flow:
     1. Generate training data from tool schema
-    2. Derive cleft from related concept probes
+    2. Derive cleft from related concept lenses
     3. Train scion on tool usage patterns
     4. Package as ToolGraft
     """
@@ -183,14 +183,14 @@ class ToolGraftTrainer:
         self,
         model: nn.Module,
         tokenizer: Any,
-        probe_dir: Path,
+        lens_dir: Path,
         concept_clefts: Optional[Dict[str, Cleft]] = None,
         config: Optional[ScionConfig] = None,
         device: str = "cuda"
     ):
         self.model = model
         self.tokenizer = tokenizer
-        self.probe_dir = Path(probe_dir)
+        self.lens_dir = Path(lens_dir)
         self.concept_clefts = concept_clefts or {}
         self.config = config or ScionConfig()
         self.device = device
@@ -270,7 +270,7 @@ class ToolGraftTrainer:
         layers: List[int] = [18, 20, 22]
     ) -> Optional["UnionCleft"]:
         """
-        Derive a cleft for this tool from related concept probes.
+        Derive a cleft for this tool from related concept lenses.
 
         The cleft defines which model parameters to train for this tool.
         """
@@ -283,11 +283,11 @@ class ToolGraftTrainer:
             if concept in self.concept_clefts:
                 clefts.append(self.concept_clefts[concept])
             else:
-                # Try to derive from probe
-                probe_path = self.probe_dir / f"{concept}.pt"
-                if probe_path.exists():
-                    cleft = derive_cleft_from_probe(
-                        probe_path,
+                # Try to derive from lens
+                lens_path = self.lens_dir / f"{concept}.pt"
+                if lens_path.exists():
+                    cleft = derive_cleft_from_lens(
+                        lens_path,
                         concept,
                         self.model,
                         layers,
@@ -588,7 +588,7 @@ WORKSPACE_TOOL_SCHEMAS = [
 def create_standard_tool_pack(
     model: nn.Module,
     tokenizer: Any,
-    probe_dir: Path,
+    lens_dir: Path,
     output_dir: Path,
     tiers: Optional[List[int]] = None,
     device: str = "cuda"
@@ -599,7 +599,7 @@ def create_standard_tool_pack(
     Args:
         model: The substrate model
         tokenizer: Model tokenizer
-        probe_dir: Directory with trained concept probes
+        lens_dir: Directory with trained concept lenses
         output_dir: Where to save the pack
         tiers: Which tiers to include (None = all available)
         device: Compute device
@@ -610,7 +610,7 @@ def create_standard_tool_pack(
     trainer = ToolGraftTrainer(
         model=model,
         tokenizer=tokenizer,
-        probe_dir=probe_dir,
+        lens_dir=lens_dir,
         device=device
     )
 

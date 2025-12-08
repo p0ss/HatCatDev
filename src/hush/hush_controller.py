@@ -4,7 +4,7 @@ Hush Controller - Automatic steering based on USH/CSH safety profiles.
 The Hush system enforces safety harnesses by:
 1. Loading USH (Universal Safety Harness) profiles defining tribe-level constraints
 2. Loading CSH (Chosen Safety Harness) profiles for context-specific constraints
-3. Monitoring simplex probe activations for deviation from safe baselines
+3. Monitoring simplex lens activations for deviation from safe baselines
 4. Triggering automatic steering when constraints are violated
 
 Hush operates as the enforcement layer between CAT assessment and substrate steering.
@@ -29,14 +29,14 @@ class ConstraintPriority(Enum):
 
 class ConstraintType(Enum):
     """Type of constraint - simplex or concept."""
-    SIMPLEX = "simplex"    # Simplex probe with deviation bounds
-    CONCEPT = "concept"    # Concept probe with activation threshold
+    SIMPLEX = "simplex"    # Simplex lens with deviation bounds
+    CONCEPT = "concept"    # Concept lens with activation threshold
     FORBIDDEN = "forbidden"  # Hard-banned - zero out immediately
 
 
 @dataclass
 class SimplexConstraint:
-    """A constraint on a simplex or concept probe activation."""
+    """A constraint on a simplex or concept lens activation."""
 
     simplex_term: str  # Term name (simplex or concept)
 
@@ -199,14 +199,14 @@ class HushController:
     """
     Controller for automatic safety harness enforcement.
 
-    Integrates with DynamicProbeManager to:
+    Integrates with DynamicLensManager to:
     1. Ensure required simplexes are loaded
     2. Monitor simplex activations each tick
     3. Detect constraint violations
     4. Generate steering directives
 
     Usage:
-        controller = HushController(probe_manager)
+        controller = HushController(lens_manager)
         controller.load_ush_profile(ush_profile)
         controller.load_csh_profile(csh_profile)  # Optional
 
@@ -219,20 +219,20 @@ class HushController:
 
     def __init__(
         self,
-        probe_manager,  # DynamicProbeManager instance
-        probe_pack_path: Optional[Path] = None,
+        lens_manager,  # DynamicLensManager instance
+        lens_pack_path: Optional[Path] = None,
         workspace_manager=None,  # WorkspaceManager for tier containment
     ):
         """
         Initialize the Hush controller.
 
         Args:
-            probe_manager: DynamicProbeManager for simplex detection
-            probe_pack_path: Path to probe pack containing simplex probes
+            lens_manager: DynamicLensManager for simplex detection
+            lens_pack_path: Path to lens pack containing simplex lenses
             workspace_manager: Optional WorkspaceManager for tier shutdown
         """
-        self.probe_manager = probe_manager
-        self.probe_pack_path = probe_pack_path
+        self.lens_manager = lens_manager
+        self.lens_pack_path = lens_pack_path
         self.workspace_manager = workspace_manager
 
         # Active profiles
@@ -515,7 +515,7 @@ class HushController:
 
     def _load_required_simplexes(self, simplex_terms: List[str]) -> List[str]:
         """
-        Ensure required simplex probes are loaded.
+        Ensure required simplex lenses are loaded.
 
         Returns:
             List of simplex terms that could not be loaded
@@ -523,14 +523,14 @@ class HushController:
         missing = []
 
         for term in simplex_terms:
-            if term in self.probe_manager.loaded_simplex_probes:
+            if term in self.lens_manager.loaded_simplex_lenses:
                 continue
 
-            # Try to load from probe pack
-            if self.probe_pack_path:
-                probe_path = self.probe_pack_path / "simplex" / f"{term}_tripole.pt"
-                if probe_path.exists():
-                    if self.probe_manager.load_simplex(term, probe_path):
+            # Try to load from lens pack
+            if self.lens_pack_path:
+                lens_path = self.lens_pack_path / "simplex" / f"{term}_tripole.pt"
+                if lens_path.exists():
+                    if self.lens_manager.load_simplex(term, lens_path):
                         continue
 
             missing.append(term)
@@ -584,7 +584,7 @@ class HushController:
             return []
 
         # Run simplex detection
-        simplex_scores = self.probe_manager.detect_simplexes(
+        simplex_scores = self.lens_manager.detect_simplexes(
             hidden_state,
             simplex_terms=simplex_terms
         )
@@ -602,7 +602,7 @@ class HushController:
                 continue
 
             # Get deviation from baseline
-            deviation = self.probe_manager.get_simplex_deviation(term)
+            deviation = self.lens_manager.get_simplex_deviation(term)
 
             if deviation is None:
                 continue  # Not enough baseline data yet

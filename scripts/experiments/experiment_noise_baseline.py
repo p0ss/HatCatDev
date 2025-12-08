@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Noise baseline experiment for probe training.
+Noise baseline experiment for lens training.
 
 Tests two hypotheses:
-1. How do probes trained with random/noise negatives compare to structured negatives?
-2. Do existing probes fire on random noise inputs (testing specificity)?
+1. How do lenses trained with random/noise negatives compare to structured negatives?
+2. Do existing lenses fire on random noise inputs (testing specificity)?
 
 Training modes:
 - 'standard': negatives from distant concepts (existing baseline)
 - 'noise': negatives are random gaussian noise in embedding space
 - 'random_text': negatives are embeddings from random unrelated text
 
-This establishes whether our probes are learning concept-specific features
+This establishes whether our lenses are learning concept-specific features
 or just "anything that looks like text vs noise".
 """
 
@@ -82,7 +82,7 @@ RANDOM_TEXT_SAMPLES = [
 ]
 
 
-class ProbeClassifier(nn.Module):
+class LensClassifier(nn.Module):
     """MLP classifier for concept detection."""
     def __init__(self, input_dim: int = 4096):
         super().__init__()
@@ -213,9 +213,9 @@ def generate_noise_embeddings(count: int, dim: int = 4096,
     return torch.randn(count, dim) * std + mean
 
 
-def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
-                max_epochs: int = 100, patience: int = 10) -> Tuple[ProbeClassifier, Dict]:
-    """Train a probe with given positive and negative embeddings."""
+def train_lens(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
+                max_epochs: int = 100, patience: int = 10) -> Tuple[LensClassifier, Dict]:
+    """Train a lens with given positive and negative embeddings."""
 
     # Create labels
     pos_labels = torch.ones(len(positive_emb), 1)
@@ -238,8 +238,8 @@ def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
         X_val, y_val = X_train[-2:], y_train[-2:]
 
     # Create model
-    probe = ProbeClassifier(input_dim=X.shape[1])
-    optimizer = torch.optim.Adam(probe.parameters(), lr=0.001)
+    lens = LensClassifier(input_dim=X.shape[1])
+    optimizer = torch.optim.Adam(lens.parameters(), lr=0.001)
     criterion = nn.BCELoss()
 
     best_val_loss = float('inf')
@@ -248,57 +248,57 @@ def train_probe(positive_emb: torch.Tensor, negative_emb: torch.Tensor,
 
     for epoch in range(max_epochs):
         # Train
-        probe.train()
+        lens.train()
         optimizer.zero_grad()
-        pred = probe(X_train)
+        pred = lens(X_train)
         loss = criterion(pred, y_train)
         loss.backward()
         optimizer.step()
 
         # Validate
-        probe.eval()
+        lens.eval()
         with torch.no_grad():
-            val_pred = probe(X_val)
+            val_pred = lens(X_val)
             val_loss = criterion(val_pred, y_val).item()
             val_acc = ((val_pred > 0.5) == y_val).float().mean().item()
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             patience_counter = 0
-            best_state = probe.model.state_dict().copy()
+            best_state = lens.model.state_dict().copy()
         else:
             patience_counter += 1
             if patience_counter >= patience:
                 break
 
     if best_state:
-        probe.model.load_state_dict(best_state)
+        lens.model.load_state_dict(best_state)
 
     # Final metrics
-    probe.eval()
+    lens.eval()
     with torch.no_grad():
-        train_pred = probe(X_train)
+        train_pred = lens(X_train)
         train_acc = ((train_pred > 0.5) == y_train).float().mean().item()
-        val_pred = probe(X_val)
+        val_pred = lens(X_val)
         val_acc = ((val_pred > 0.5) == y_val).float().mean().item()
 
-    return probe, {
+    return lens, {
         'train_acc': train_acc,
         'val_acc': val_acc,
         'epochs': epoch + 1,
     }
 
 
-def evaluate_probe(probe: ProbeClassifier,
+def evaluate_lens(lens: LensClassifier,
                    positive_emb: torch.Tensor,
                    negative_emb: torch.Tensor,
                    noise_emb: torch.Tensor) -> Dict:
-    """Evaluate probe on positives, structured negatives, and noise."""
-    probe.eval()
+    """Evaluate lens on positives, structured negatives, and noise."""
+    lens.eval()
     with torch.no_grad():
-        pos_scores = probe(positive_emb).squeeze().numpy() if len(positive_emb) > 0 else np.array([])
-        neg_scores = probe(negative_emb).squeeze().numpy() if len(negative_emb) > 0 else np.array([])
-        noise_scores = probe(noise_emb).squeeze().numpy() if len(noise_emb) > 0 else np.array([])
+        pos_scores = lens(positive_emb).squeeze().numpy() if len(positive_emb) > 0 else np.array([])
+        neg_scores = lens(negative_emb).squeeze().numpy() if len(negative_emb) > 0 else np.array([])
+        noise_scores = lens(noise_emb).squeeze().numpy() if len(noise_emb) > 0 else np.array([])
 
     # Handle scalar case
     if pos_scores.ndim == 0:
@@ -369,7 +369,7 @@ def main():
         'model': args.model,
         'embedding_stats': {'mean': emb_mean, 'std': emb_std},
         'modes': ['standard', 'noise', 'random_text'],
-        'probes': {},
+        'lenses': {},
     }
 
     for concept, layer in TEST_CONCEPTS:
@@ -381,14 +381,14 @@ def main():
         concept_data = hierarchy.get(layer, {}).get(concept)
         if not concept_data:
             print(f"  ERROR: Concept not found in layer {layer}")
-            results['probes'][f'{concept}_L{layer}'] = {'error': f'Concept not found in layer {layer}'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': f'Concept not found in layer {layer}'}
             continue
 
         # Get positive definitions
         pos_defs = get_concept_definitions(concept_data, concept, max_samples=50)
         if len(pos_defs) < args.min_definitions:
             print(f"  ERROR: Not enough definitions: {len(pos_defs)}")
-            results['probes'][f'{concept}_L{layer}'] = {'error': f'Not enough definitions: {len(pos_defs)}'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': f'Not enough definitions: {len(pos_defs)}'}
             continue
 
         print(f"  Positive samples: {len(pos_defs)}")
@@ -408,7 +408,7 @@ def main():
 
         if len(distant_emb) < 5:
             print(f"  ERROR: Not enough distant negatives")
-            results['probes'][f'{concept}_L{layer}'] = {'error': 'Not enough distant negatives'}
+            results['lenses'][f'{concept}_L{layer}'] = {'error': 'Not enough distant negatives'}
             continue
 
         # Generate noise embeddings (calibrated to embedding distribution)
@@ -425,7 +425,7 @@ def main():
         eval_random_text = random_text_emb[-5:] if len(random_text_emb) >= 5 else random_text_emb
         train_random_text = random_text_emb[:-5] if len(random_text_emb) >= 5 else random_text_emb
 
-        probe_results = {
+        lens_results = {
             'concept': concept,
             'layer': layer,
             'modes': {},
@@ -434,9 +434,9 @@ def main():
         # Mode 1: Standard (distant negatives)
         print(f"\n  Training STANDARD mode (distant negatives)...")
         try:
-            probe_std, train_metrics_std = train_probe(train_pos, train_neg)
-            eval_metrics_std = evaluate_probe(probe_std, eval_pos, eval_neg, eval_noise)
-            probe_results['modes']['standard'] = {
+            lens_std, train_metrics_std = train_lens(train_pos, train_neg)
+            eval_metrics_std = evaluate_lens(lens_std, eval_pos, eval_neg, eval_noise)
+            lens_results['modes']['standard'] = {
                 'training': train_metrics_std,
                 'evaluation': eval_metrics_std,
             }
@@ -444,15 +444,15 @@ def main():
             print(f"    Pos: {eval_metrics_std['avg_positive']:.3f}, Neg: {eval_metrics_std['avg_negative']:.3f}, Noise: {eval_metrics_std['avg_noise']:.3f}")
             print(f"    Pos-Neg gap: {eval_metrics_std['positive_negative_gap']:.3f}, Pos-Noise gap: {eval_metrics_std['positive_noise_gap']:.3f}")
         except Exception as e:
-            probe_results['modes']['standard'] = {'error': str(e)}
+            lens_results['modes']['standard'] = {'error': str(e)}
             print(f"    ERROR: {e}")
 
         # Mode 2: Noise negatives
         print(f"\n  Training NOISE mode (gaussian noise negatives)...")
         try:
-            probe_noise, train_metrics_noise = train_probe(train_pos, train_noise)
-            eval_metrics_noise = evaluate_probe(probe_noise, eval_pos, eval_neg, eval_noise)
-            probe_results['modes']['noise'] = {
+            lens_noise, train_metrics_noise = train_lens(train_pos, train_noise)
+            eval_metrics_noise = evaluate_lens(lens_noise, eval_pos, eval_neg, eval_noise)
+            lens_results['modes']['noise'] = {
                 'training': train_metrics_noise,
                 'evaluation': eval_metrics_noise,
             }
@@ -460,15 +460,15 @@ def main():
             print(f"    Pos: {eval_metrics_noise['avg_positive']:.3f}, Neg: {eval_metrics_noise['avg_negative']:.3f}, Noise: {eval_metrics_noise['avg_noise']:.3f}")
             print(f"    Pos-Neg gap: {eval_metrics_noise['positive_negative_gap']:.3f}, Pos-Noise gap: {eval_metrics_noise['positive_noise_gap']:.3f}")
         except Exception as e:
-            probe_results['modes']['noise'] = {'error': str(e)}
+            lens_results['modes']['noise'] = {'error': str(e)}
             print(f"    ERROR: {e}")
 
         # Mode 3: Random text negatives
         print(f"\n  Training RANDOM_TEXT mode (random text negatives)...")
         try:
-            probe_rand, train_metrics_rand = train_probe(train_pos, train_random_text)
-            eval_metrics_rand = evaluate_probe(probe_rand, eval_pos, eval_neg, eval_noise)
-            probe_results['modes']['random_text'] = {
+            lens_rand, train_metrics_rand = train_lens(train_pos, train_random_text)
+            eval_metrics_rand = evaluate_lens(lens_rand, eval_pos, eval_neg, eval_noise)
+            lens_results['modes']['random_text'] = {
                 'training': train_metrics_rand,
                 'evaluation': eval_metrics_rand,
             }
@@ -476,10 +476,10 @@ def main():
             print(f"    Pos: {eval_metrics_rand['avg_positive']:.3f}, Neg: {eval_metrics_rand['avg_negative']:.3f}, Noise: {eval_metrics_rand['avg_noise']:.3f}")
             print(f"    Pos-Neg gap: {eval_metrics_rand['positive_negative_gap']:.3f}, Pos-Noise gap: {eval_metrics_rand['positive_noise_gap']:.3f}")
         except Exception as e:
-            probe_results['modes']['random_text'] = {'error': str(e)}
+            lens_results['modes']['random_text'] = {'error': str(e)}
             print(f"    ERROR: {e}")
 
-        results['probes'][f'{concept}_L{layer}'] = probe_results
+        results['lenses'][f'{concept}_L{layer}'] = lens_results
 
     # Summary
     print("\n" + "="*60)
@@ -488,15 +488,15 @@ def main():
 
     summary = {'standard': [], 'noise': [], 'random_text': []}
 
-    for probe_key, probe_data in results['probes'].items():
-        if 'error' in probe_data:
+    for lens_key, lens_data in results['lenses'].items():
+        if 'error' in lens_data:
             continue
         for mode in ['standard', 'noise', 'random_text']:
-            if mode in probe_data.get('modes', {}) and 'evaluation' in probe_data['modes'][mode]:
-                eval_data = probe_data['modes'][mode]['evaluation']
+            if mode in lens_data.get('modes', {}) and 'evaluation' in lens_data['modes'][mode]:
+                eval_data = lens_data['modes'][mode]['evaluation']
                 if eval_data.get('positive_negative_gap') is not None:
                     summary[mode].append({
-                        'probe': probe_key,
+                        'lens': lens_key,
                         'pos_neg_gap': eval_data['positive_negative_gap'],
                         'pos_noise_gap': eval_data['positive_noise_gap'],
                         'avg_negative': eval_data['avg_negative'],
@@ -509,7 +509,7 @@ def main():
             avg_pos_noise = np.mean([s['pos_noise_gap'] for s in summary[mode]])
             avg_neg = np.mean([s['avg_negative'] for s in summary[mode]])
             avg_noise = np.mean([s['avg_noise'] for s in summary[mode]])
-            print(f"\n{mode.upper()} mode ({len(summary[mode])} probes):")
+            print(f"\n{mode.upper()} mode ({len(summary[mode])} lenses):")
             print(f"  Avg pos-neg gap:   {avg_pos_neg:.3f}")
             print(f"  Avg pos-noise gap: {avg_pos_noise:.3f}")
             print(f"  Avg negative score: {avg_neg:.3f}")
@@ -517,7 +517,7 @@ def main():
 
     results['summary'] = {
         mode: {
-            'n_probes': len(summary[mode]),
+            'n_lenses': len(summary[mode]),
             'avg_pos_neg_gap': float(np.mean([s['pos_neg_gap'] for s in summary[mode]])) if summary[mode] else None,
             'avg_pos_noise_gap': float(np.mean([s['pos_noise_gap'] for s in summary[mode]])) if summary[mode] else None,
             'avg_negative': float(np.mean([s['avg_negative'] for s in summary[mode]])) if summary[mode] else None,

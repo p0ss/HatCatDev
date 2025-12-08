@@ -42,7 +42,7 @@ The deployment consists of three main components:
 ┌─────────────────────▼───────────────────────────────┐
 │              HatCat Backend                         │
 │   - Gemma-3-4B model (GPU)                         │
-│   - SUMO activation probes                         │
+│   - SUMO activation lenses                         │
 │   - Embedding centroids                            │
 │   - Dynamic divergence analysis                    │
 └─────────────────────────────────────────────────────┘
@@ -55,7 +55,7 @@ The deployment consists of three main components:
 - **GPU**: NVIDIA GPU with 24 GB VRAM (for Gemma-3-4B with full divergence detection)
   - Recommended: RTX 4090, RTX A5000, A6000, or better
   - Minimum: RTX 3090 (24GB) or RTX 4060 Ti 16GB with aggressive optimization
-  - **Reality check**: Full pipeline uses 18-22 GB VRAM (model + activations + probes + generation)
+  - **Reality check**: Full pipeline uses 18-22 GB VRAM (model + activations + lenses + generation)
 - **RAM**: 32+ GB system memory (16 GB minimum)
 - **Storage**: 40+ GB (15 GB for model, 3 GB for classifiers, 15+ GB for Docker images, 7+ GB for concept layers)
 - **CPU**: 8+ cores recommended (4 cores minimum)
@@ -629,7 +629,7 @@ docker-compose up -d hatcat-backend
 
 ```bash
 # Re-train classifiers for new layers
-./.venv/bin/python scripts/train_sumo_classifiers.py --layers 6 --train-text-probes
+./.venv/bin/python scripts/train_sumo_classifiers.py --layers 6 --train-text-lenses
 
 # Restart backend to load new models
 docker-compose restart hatcat-backend

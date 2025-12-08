@@ -2,7 +2,7 @@
   "timestamp": "20251125_111554",
   "total_simplexes": 13,
   "completed": 13,
-  "failed_probes": [
+  "failed_lenses": [
     "aspiration/social_mobility/negative",
     "aspiration/social_mobility/neutral",
     "aspiration/social_mobility/positive"

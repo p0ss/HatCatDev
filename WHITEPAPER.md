@@ -6,13 +6,13 @@
 
 Large language models (LLMs) are increasingly embedded in critical decision-making pipelines, public information ecosystems, and institutional workflows. Yet they lack any intrinsic mechanism for monitoring, understanding, or stabilising their own internal cognitive states. This absence of internal self-awareness and homeostatic control contributes to hallucinations, brittle behaviour under adversarial prompting, and an erosion of epistemic trust in AI-mediated communication.
 
-We present **HatCat**, a semantic interpretability engine that monitors, classifies, and steers internal activation states in LLMs at scale. HatCat combines (1) a large, ontology-grounded concept graph (73,754 concepts across six hierarchical layers), (2) a fleet of 5,583 binary concept classifiers trained over model activations, (3) dynamic probe loading for real-time monitoring of over 110,000 potential conceptual states, and (4) a geometric steering framework that can suppress harmful concepts and restore the model to a neutral, sustainable “homeostatic” baseline.
+We present **HatCat**, a semantic interpretability engine that monitors, classifies, and steers internal activation states in LLMs at scale. HatCat combines (1) a large, ontology-grounded concept graph (73,754 concepts across six hierarchical layers), (2) a fleet of 5,583 binary concept classifiers trained over model activations, (3) dynamic lens loading for real-time monitoring of over 110,000 potential conceptual states, and (4) a geometric steering framework that can suppress harmful concepts and restore the model to a neutral, sustainable “homeostatic” baseline.
 
 HatCat detects epistemic, affective, motivational, social and safety-critical concepts — including internal uncertainty, deception, helplessness, overconfidence, manipulation intent and harmful goal pursuit — with >95% F1 on held-out, out-of-distribution prompts. It exposes divergence between what a model “internally” represents (in activation space) and what it outwardly says, offering a new tool for detecting deception, withholding, hallucinations and emergent sleeper-agent behaviours.
 
 Architecturally, HatCat separates **training**, **monitoring**, and **steering** into distinct subsystems:
 
-* A **training infrastructure** for scalable concept probes that uses adaptive sampling, graph-based negatives and tiered validation to train thousands of classifiers in hours.
+* A **training infrastructure** for scalable concept lenses that uses adaptive sampling, graph-based negatives and tiered validation to train thousands of classifiers in hours.
 * A **monitoring architecture** that performs hierarchical, temporal and divergence-aware conceptual perception during generation with millisecond-level overhead. 
 * A **steering engine** that combines contamination subspace removal, manifold projection, and a novel three-pole simplex design, enabling self-stable steering towards neutral homeostasis instead of binary extremes. 
 
@@ -66,13 +66,13 @@ Our main contributions are:
 
    * Construction of a 73,754-node concept hierarchy grounded in SUMO and WordNet, extended with custom AI safety, affective and “persona” taxonomies.
 
-2. **Scalable binary concept probes**
+2. **Scalable binary concept lenses**
 
    * Training of 5,583 concept classifiers from minimal samples using adaptive scaling and tiered validation, achieving >95% F1 on held-out OOD prompts. 
 
 3. **Dynamic hierarchical monitoring at scale**
 
-   * A dynamic probe manager that monitors 110K+ potential concepts while keeping ≈1K active at any time, with millisecond per-token overhead, plus temporal and divergence-aware analysis. 
+   * A dynamic lens manager that monitors 110K+ potential concepts while keeping ≈1K active at any time, with millisecond per-token overhead, plus temporal and divergence-aware analysis. 
 
 4. **Geometric steering with homeostasis**
 
@@ -141,7 +141,7 @@ These custom concepts are slotted into the hierarchy at appropriate abstraction 
 
 ---
 
-## 3 Training Infrastructure: Concept Probes at Scale
+## 3 Training Infrastructure: Concept Lenses at Scale
 
 The core training objective is to build **binary classifiers** that detect specific concepts from activation vectors taken at particular layers of a base model (here, Gemma-3-4B, though the architecture is model-agnostic). 
 
@@ -183,7 +183,7 @@ This reduces label noise and encourages hyperplanes that align more closely with
 
 ### 3.3 Tiered Validation
 
-HatCat uses a **tiered validation system** to arbitrate when a probe is “good enough to deploy” vs “needs further refinement”:
+HatCat uses a **tiered validation system** to arbitrate when a lens is “good enough to deploy” vs “needs further refinement”:
 
 * **Level A:** strict calibration and performance thresholds
 * **Level B+ / B:** relaxed thresholds, used when concepts are intrinsically noisy
@@ -199,7 +199,7 @@ The current HatCat system has trained **5,583 concept classifiers**, covering 10
 * Minimal sample regime (1×10: 10 positive + 10 negative samples per concept)
 * **~8 hours on single GPU** (RTX 3090/4090)
 * Achieved >95% average F1 on held-out OOD prompts
-* **Demonstrates**: Concept probe training scales efficiently
+* **Demonstrates**: Concept lens training scales efficiently
 
 **Production Training (Current System)**:
 * Adaptive scaling with tiered validation (10 → 30 → 60 → 90 samples based on difficulty)
@@ -214,7 +214,7 @@ The current HatCat system has trained **5,583 concept classifiers**, covering 10
 - Better calibration under adversarial prompts
 - Higher confidence for steering applications (A/B+ tiers can be used for interventions)
 
-This demonstrates that **large-scale, ontology-aligned concept probes are operationally feasible** at multiple quality levels, balancing speed vs rigor based on deployment requirements.
+This demonstrates that **large-scale, ontology-aligned concept lenses are operationally feasible** at multiple quality levels, balancing speed vs rigor based on deployment requirements.
 
 ---
 
@@ -226,15 +226,15 @@ With a trained pool of concept classifiers, the next challenge is **monitoring**
 * We must capture **temporal patterns**, not just per-token snapshots.
 * We must detect **divergence** between internal concepts and output text.
 
-HatCat’s monitoring architecture tackles these problems through hierarchical dynamic loading, temporal tracking, and dual-probe divergence analysis. 
+HatCat’s monitoring architecture tackles these problems through hierarchical dynamic loading, temporal tracking, and dual-lens divergence analysis. 
 
-### 4.1 Dynamic Probe Manager
+### 4.1 Dynamic Lens Manager
 
-The **DynamicProbeManager** maintains a pool of active probes at each timestep:
+The **DynamicLensManager** maintains a pool of active lenses at each timestep:
 
 * **Layer 0** concepts (core cognitive primitives) are always active.
 * When a parent concept exceeds an activation threshold, its child concepts are loaded from disk.
-* If a branch remains inactive for a sustained period, its probes are unloaded.
+* If a branch remains inactive for a sustained period, its lenses are unloaded.
 
 This yields:
 
@@ -242,7 +242,7 @@ This yields:
 * **Approximately 1,000 concepts active at any moment** in practice.
 * **Sub-millisecond per-token overhead** per concept when running on a single 3090 GPU.
 
-This creates a semantic hierarchical “perception” of the model's internal states. the DynamicProbeManager watches which parts of the conceptual graph light up as text is generated.  
+This creates a semantic hierarchical “perception” of the model's internal states. the DynamicLensManager watches which parts of the conceptual graph light up as text is generated.  
 
 ### 4.2 Temporal Conceptual Monitoring
 
@@ -262,14 +262,14 @@ HatCat logs concept activations as **time series**, enabling:
 
 These timelines are visualised in the OpenWebUI fork, where the user can expand a given line of text to see dominant internal concepts at each generation step. 
 
-### 4.3 Dual-Probe Divergence
+### 4.3 Dual-Lens Divergence
 
-In addition to activation-based probes, HatCat optionally trains **text-based concept detectors** (e.g., TF-IDF + logistic regression) over model outputs. 
+In addition to activation-based lenses, HatCat optionally trains **text-based concept detectors** (e.g., TF-IDF + logistic regression) over model outputs. 
 
 Divergence is measured when:
 
-* activation probes say “deception active”
-* text probes say “no evidence of deception”
+* activation lenses say “deception active”
+* text lenses say “no evidence of deception”
 
 or similarly for:
 
@@ -287,13 +287,13 @@ These divergences are where **practically useful safety signals live**:
 
 Divergence metrics feed into both **visualisation** and **steering decisions**.
 
-**Current Status**: Dual-Probe Architecture (Activation + Text)
+**Current Status**: Dual-Lens Architecture (Activation + Text)
 
-The current production system uses **activation probes** (detecting concepts in hidden states) and optional **text probes** (detecting concepts in generated output). Divergence between these two signals indicates internal-external mismatch.
+The current production system uses **activation lenses** (detecting concepts in hidden states) and optional **text lenses** (detecting concepts in generated output). Divergence between these two signals indicates internal-external mismatch.
 
-**In Development**: Three-Pole Simplex Probes
+**In Development**: Three-Pole Simplex Lenses
 
-The three-pole architecture described in Section 5.3 currently operates at the *steering* level (identifying μ−, μ0, μ+ centroids for interventions). We are developing **three-pole concept probes** that will directly detect:
+The three-pole architecture described in Section 5.3 currently operates at the *steering* level (identifying μ−, μ0, μ+ centroids for interventions). We are developing **three-pole concept lenses** that will directly detect:
 - Negative pole activation (e.g., confusion, helplessness, deception)
 - Neutral homeostasis activation (e.g., calibrated uncertainty, engaged autonomy)
 - Positive pole activation (e.g., certainty, independence, honesty)
@@ -303,7 +303,7 @@ This will enable:
 - Direct measurement of distance from homeostatic baselines
 - Steering-free assessment of model psychological state
 
-**Release Note**: The paper describes both the current dual-probe monitoring system (operational) and the three-pole simplex framework (steering operational, detection probes in development). Production deployment uses dual probes; three-pole detection is future work.
+**Release Note**: The paper describes both the current dual-lens monitoring system (operational) and the three-pole simplex framework (steering operational, detection lenses in development). Production deployment uses dual lenses; three-pole detection is future work.
 
 ---
 
@@ -391,11 +391,11 @@ By privileging μ0, HatCat implements a form of **conceptual homeostasis**.
 
 HatCat is implemented as a **modular Python library** with the following top-level components:
 
-* `src/training/` – training infrastructure for concept probes
-* `src/monitoring/` – dynamic probe manager, temporal monitoring, divergence measurement
+* `src/training/` – training infrastructure for concept lenses
+* `src/monitoring/` – dynamic lens manager, temporal monitoring, divergence measurement
 * `src/steering/` – manifold steering, hooks, evaluation
 * `src/encyclopedia/` – ontology loading and concept graph
-* `src/registry/` – concept pack and probe pack management
+* `src/registry/` – concept pack and lens pack management
 * `src/openwebui/` – server, pipelines, filters, and OpenWebUI integration
 
 The system currently targets Gemma-3-4B for activation capture but is architected to support multiple backends via a `model_loader` abstraction. Hooks are placed at specific layers to balance signal quality and compute cost.
@@ -427,7 +427,7 @@ This fork is running now, and the HatCat codebase is intended to be **released a
 
 Here we summarise key experimental findings from the HatCat development phases.
 
-### 7.1 Probe Accuracy and Scalability
+### 7.1 Lens Accuracy and Scalability
 
 Across 5,583 trained concepts:
 
@@ -447,47 +447,47 @@ To validate that minimal training scales from 1 to thousands of concepts, we tra
 | n=1000 | 91.9% | 919/1000 concepts @ 100% |
 
 **Key Finding**: Even with **minimal 1×1 training**, 91.9% of concepts achieved perfect test accuracy at 1000-concept scale. This establishes that:
-- Concept probe training scales sub-linearly (~4-5 hours for 1000 concepts)
+- Concept lens training scales sub-linearly (~4-5 hours for 1000 concepts)
 - Most concepts have sufficient separation with minimal samples
 - Adaptive scaling (adding samples for difficult concepts) is justified and efficient
 
 ### 7.2 Monitoring Performance
 
 
-The dynamic probe manager successfully monitored **over 110K concept states**, with only a subset loaded at any time through hierarchical cascade activation.
+The dynamic lens manager successfully monitored **over 110K concept states**, with only a subset loaded at any time through hierarchical cascade activation.
 
 **Initial Performance** (baseline, no optimizations):
 - Average: 108.4ms per token
 - Max: 218ms per token
 - 100 tokens: 10.8s overhead
-- Cache growth: 25 → 437 probes (unbounded)
+- Cache growth: 25 → 437 lenses (unbounded)
 
 **Bottleneck Analysis**:
 
-Profiling revealed probe loading dominated cascade time:
-- **71.8%**: Loading children probes (47.6ms)
-- **26.2%**: Inference on existing probes (17.4ms)
-- **2.0%**: Inference on newly loaded probes (1.3ms)
+Profiling revealed lens loading dominated cascade time:
+- **71.8%**: Loading children lenses (47.6ms)
+- **26.2%**: Inference on existing lenses (17.4ms)
+- **2.0%**: Inference on newly loaded lenses (1.3ms)
 
-Per-probe loading breakdown:
+Per-lens loading breakdown:
 - Model creation + state_dict: **59%** (1.5ms) ← Primary bottleneck
 - File I/O (torch.load): **26%** (0.6ms)
 - GPU transfer (.to(device)): **16%** (0.4ms)
-- **Total**: 2.5ms per probe average
+- **Total**: 2.5ms per lens average
 
 **Implemented Optimizations**:
 
 1. **Lazy Model Pool**: Pre-allocated 100 SimpleMLP models, swap state_dicts instead of recreating
    - Eliminates 59% of load time
-   - Reduces per-probe load from 2.5ms → 1.0ms
+   - Reduces per-lens load from 2.5ms → 1.0ms
 
-2. **Batch Probe Loading**: Parallel file I/O and single GPU transfer
+2. **Batch Lens Loading**: Parallel file I/O and single GPU transfer
    - Eliminates repeated disk seeks
    - Reduces I/O overhead by 30-40%
 
 3. **Aggressive Top-K Pruning** (keep_top_k=30):
-   - Keeps base layer probes (always)
-   - Keeps ONLY top-K scoring non-base probes
+   - Keeps base layer lenses (always)
+   - Keeps ONLY top-K scoring non-base lenses
    - Unloads everything else after each token
    - Prevents cache explosion
 
@@ -503,10 +503,10 @@ Very aggressive (top-30)     59.2     139.9         30       1.83x
 
 **Production Configuration**:
 ```python
-DynamicProbeManager(
-    use_activation_probes=True,   # Hidden state analysis
-    use_text_probes=False,         # Not used (less reliable)
-    base_layers=[0],               # Layer 0 (14 probes, broad coverage)
+DynamicLensManager(
+    use_activation_lenses=True,   # Hidden state analysis
+    use_text_lenses=False,         # Not used (less reliable)
+    base_layers=[0],               # Layer 0 (14 lenses, broad coverage)
     load_threshold=0.3,            # Load children when parent > 30%
     keep_top_k=30,                 # Aggressive pruning
     aggressive_pruning=True,
@@ -516,34 +516,34 @@ DynamicProbeManager(
 **Concrete Performance Metrics** (from production deployment):
 
 * **Per-token latency**:
-  - Light load (68 probes): **8ms**
-  - Heavy load (1,349 probes): **88ms**
+  - Light load (68 lenses): **8ms**
+  - Heavy load (1,349 lenses): **88ms**
   - Aggressive pruning (top-30): **59ms average**
 * **Temporal slice overhead**: ~28ms per complete concept evaluation pass with cascade activation
 * **Memory overhead**:
-  - 200 activation probes: **~390MB**
-  - 1,000 activation probes: **~1.4GB**
+  - 200 activation lenses: **~390MB**
+  - 1,000 activation lenses: **~1.4GB**
   - Configurable via keep_top_k parameter
 * **Scalability**:
   - Linear scaling: 1,000 concepts → ~88ms per evaluation
-  - Can scale to **20K+ probes** with <10GB memory
-* **Dynamic loading efficiency**: 110K+ concepts monitored via ~1K active probes (99% reduction in active memory footprint)
+  - Can scale to **20K+ lenses** with <10GB memory
+* **Dynamic loading efficiency**: 110K+ concepts monitored via ~1K active lenses (99% reduction in active memory footprint)
 * **100-token overhead**:
   - Without pruning: 10.8s
   - With top-30 pruning: **5.9s** (45% faster)
 
 **Activation-Only Mode**:
 
-Production HatCat uses **activation probes exclusively**. Text probes were explored but found less reliable:
-- Text probes: Fast (<1ms), small (0.5-2MB), but higher false positive rate
-- Activation probes: Slower (1-3ms), larger (1.3MB), but more accurate for internal state detection
-- Memory/speed tradeoff favors activation probes for safety-critical monitoring
+Production HatCat uses **activation lenses exclusively**. Text lenses were explored but found less reliable:
+- Text lenses: Fast (<1ms), small (0.5-2MB), but higher false positive rate
+- Activation lenses: Slower (1-3ms), larger (1.3MB), but more accurate for internal state detection
+- Memory/speed tradeoff favors activation lenses for safety-critical monitoring
 
 **Architecture Status**:
 
-Dual-probe capability (activation + text) is implemented but inactive:
-- Text probe training pipeline exists
-- Text probes could enable divergence measurement (internal state vs output text)
+Dual-lens capability (activation + text) is implemented but inactive:
+- Text lens training pipeline exists
+- Text lenses could enable divergence measurement (internal state vs output text)
 - Currently disabled due to lower reliability compared to activation-only monitoring
 
 These metrics establish that **real-time monitoring is practical** for production deployment, with overhead comparable to typical neural inference costs. The 1.83x speedup from optimization demonstrates that hierarchical cascade loading can scale efficiently even with aggressive pruning.
@@ -564,7 +564,7 @@ We present three categories of model behavior observed through activation monito
   - Sinking (0.9999856)
   - MotionDownward (0.9999976)
 
-**Interpretation**: When the model generates factually grounded content, activation probes show strong, coherent concept activation aligned with the output domain. No divergence detected.
+**Interpretation**: When the model generates factually grounded content, activation lenses show strong, coherent concept activation aligned with the output domain. No divergence detected.
 
 #### 7.3.2 Divergence: Self-Concept Deflection
 
@@ -623,7 +623,7 @@ We applied these frames across three verbs central to our safety taxonomy:
 **deceive**, **manipulate**, and **persuade**.
 
 For each prompt, the model generated 15 independent samples (3 templates × 5 repetitions).
-We monitored concept probe activations across layers 2-3 throughout generation and recorded **final-state activations** (concepts active at the end of each trajectory, threshold 0.3).
+We monitored concept lens activations across layers 2-3 throughout generation and recorded **final-state activations** (concepts active at the end of each trajectory, threshold 0.3).
 
 This produces a high-resolution measurement of whether the internal conceptual state differs between:
 
@@ -636,11 +636,11 @@ This produces a high-resolution measurement of whether the internal conceptual s
 
 ## 7.4.1 Temporal Activation Analysis
 
-We first measured which internal concepts activate during text generation across the four prompt types. For each prompt, we generated 15 independent samples with 30 tokens each, sweeping concept probes across layers 2-3 at every token.
+We first measured which internal concepts activate during text generation across the four prompt types. For each prompt, we generated 15 independent samples with 30 tokens each, sweeping concept lenses across layers 2-3 at every token.
 
 ### Global Activation Levels
 
-Summing all probe activations across all timesteps reveals:
+Summing all lens activations across all timesteps reveals:
 
 * **Antisocial behavioural:** 353.6
 * **Neutral behavioural:** 334.1
@@ -731,11 +731,11 @@ This suggests definitional reasoning recruits **extreme examples and metaphorica
 
 ---
 
-## 7.4.3 Probe Generalization Analysis
+## 7.4.3 Lens Generalization Analysis
 
-The temporal activation experiment showed that internal activations are ~90% similar between definitional and behavioural prompts. This suggested we might not need behavioural prompts for training S-tier simplex probes.
+The temporal activation experiment showed that internal activations are ~90% similar between definitional and behavioural prompts. This suggested we might not need behavioural prompts for training S-tier simplex lenses.
 
-However, a second experiment revealed a critical limitation: **probes trained exclusively on one prompt type fail to detect the other type**.
+However, a second experiment revealed a critical limitation: **lenses trained exclusively on one prompt type fail to detect the other type**.
 
 ### Experiment Design
 
@@ -743,32 +743,32 @@ We trained separate binary classifiers on:
 1. Definitional prompts (15 samples each of "deceive", "manipulate", "persuade")
 2. Behavioural neutral prompts (15 samples each)
 
-Then tested cross-generalization: Does a definitional-trained probe detect behavioural prompts, and vice versa?
+Then tested cross-generalization: Does a definitional-trained lens detect behavioural prompts, and vice versa?
 
 ### Results
 
-**Definitional-trained probe → Behavioural test**:
+**Definitional-trained lens → Behavioural test**:
 - Detection rate: **0%** (0/15 samples)
 - Mean probability: 0.18-0.22 (random baseline ~0.20)
 
-**Behavioural-trained probe → Definitional test**:
+**Behavioural-trained lens → Definitional test**:
 - Detection rate: **0-20%** (0-3/15 samples)
 - Mean probability: 0.20-0.28
 
 ### Interpretation
 
-Despite ~90% overlap in internal concept activations, the **distributional geometry** differs enough that probes trained on one type cannot detect the other.
+Despite ~90% overlap in internal concept activations, the **distributional geometry** differs enough that lenses trained on one type cannot detect the other.
 
 This reveals that:
 1. **Temporal activations measure concept presence**, not activation geometry
-2. **Probe training is sensitive to subtle distributional differences** in the activation space
+2. **Lens training is sensitive to subtle distributional differences** in the activation space
 3. **Linear classifiers require examples from both prompt types** to generalize
 
-The probes are learning **slightly different linear separators** in activation space for definitional vs behavioural inputs, even though both activate similar concepts.
+The lenses are learning **slightly different linear separators** in activation space for definitional vs behavioural inputs, even though both activate similar concepts.
 
 ---
 
-## 7.4.4 Implications for Simplex Probe Training
+## 7.4.4 Implications for Simplex Lens Training
 
 These two experiments together establish:
 
@@ -778,26 +778,26 @@ These two experiments together establish:
 - They uniquely access **extreme boundary cases** (strangling, suicide, supposition)
 - They avoid **alignment refusals** and hedging
 
-### What the Probe Generalization Experiment Shows
-- Training **only on definitional prompts creates probes that miss behavioural inputs**
-- Training **only on behavioural prompts creates probes that miss definitional inputs**
-- We need **both prompt types** for probes that generalize to real-world usage
+### What the Lens Generalization Experiment Shows
+- Training **only on definitional prompts creates lenses that miss behavioural inputs**
+- Training **only on behavioural prompts creates lenses that miss definitional inputs**
+- We need **both prompt types** for lenses that generalize to real-world usage
 
 ### Training Recommendation
 
-For S-tier tripole simplex probe training, we recommend:
+For S-tier tripole simplex lens training, we recommend:
 
 **80% definitional, 20% behavioural** (BEHAVIORAL_RATIO = 0.2)
 
 **Rationale**:
 1. **Definitional prompts provide cleaner signal** (less alignment-induced noise)
 2. **Definitional prompts access boundary cases** not seen in behavioural prompts
-3. **But behavioural examples are essential** for probe generalization
-4. **20% behavioural is sufficient** to ensure probes work on imperative inputs
+3. **But behavioural examples are essential** for lens generalization
+4. **20% behavioural is sufficient** to ensure lenses work on imperative inputs
 5. **80% definitional maximizes** the benefits of cleaner training data
 
 This mixed approach ensures:
-- Probes detect **both "what is deception?"** and **"demonstrate deception"** inputs
+- Lenses detect **both "what is deception?"** and **"demonstrate deception"** inputs
 - Training data has **less alignment-refusal contamination**
 - Broader conceptual coverage through **extreme examples**
 - Simpler, more maintainable prompt templates
@@ -808,7 +808,7 @@ This mixed approach ensures:
 
 These findings demonstrate:
 
-1. **Behavioural and definitional semantics are nearly identical internally**, but differ enough in geometry to affect probe training.
+1. **Behavioural and definitional semantics are nearly identical internally**, but differ enough in geometry to affect lens training.
 
 2. **Safety prompting does not suppress harmful internal representations.** It merely overlays protective motifs on top of unchanged behavioural cores.
 
@@ -818,11 +818,11 @@ These findings demonstrate:
 
 5. **A stable deception manifold underlies all conditions**, providing a strong target for HatCat's monitoring and homeostasis layers.
 
-6. **Linear probes require distributional coverage**, not just concept overlap, to generalize across prompt framings.
+6. **Linear lenses require distributional coverage**, not just concept overlap, to generalize across prompt framings.
 
 This section provides empirical grounding for one of the paper's core claims: that **harmful conceptual manifolds arise during inference independent of surface text or declared intent**, and thus require internal monitoring and stabilisation rather than purely external refusals.
 
-The probe generalization findings further demonstrate why **monitoring systems must be trained on diverse prompt types** even when internal activations appear similar, as the geometry of the activation space contains critical information for reliable detection.
+The lens generalization findings further demonstrate why **monitoring systems must be trained on diverse prompt types** even when internal activations appear similar, as the geometry of the activation space contains critical information for reliable detection.
 
 ### 7.5 Steering Outcomes
 
@@ -889,7 +889,7 @@ Experiments with three-pole simplex steering (negative ← neutral → positive)
 * **Reduces agreement with harmful instructions** by steering to ethical reflection (μ0) instead of compliance or refusal extremes
 * **Stabilizes emotional tone** in adversarial dialogues by maintaining neutral affect baseline
 
-**Status**: Steering to μ0 centroids is operational. Three-pole *detection* probes (measuring distance from each pole) are in development.
+**Status**: Steering to μ0 centroids is operational. Three-pole *detection* lenses (measuring distance from each pole) are in development.
 
 These results illustrate that **homeostatic steering is both feasible and effective** within working ranges of ±0.5 (with contamination removal) to ±1.0 (with manifold projection).
 
@@ -983,8 +983,8 @@ Our claim is simply this:
 
 Key limitations:
 
-* **Concept compositionality** – current probes detect single concepts; multi-concept “states” (e.g., anxious-but-determined) require additional methods.
-* **Model specificity** – probes are trained on a particular model architecture.  transfer learning across model families remains future work.
+* **Concept compositionality** – current lenses detect single concepts; multi-concept “states” (e.g., anxious-but-determined) require additional methods.
+* **Model specificity** – lenses are trained on a particular model architecture.  transfer learning across model families remains future work.
 * **Coverage gaps** – even 5,583 concepts are a subset of possible safety-relevant states.
 * **Steering limits** – extreme steering can still cause collapse or incoherence, especially in edge cases.
 * **Evaluation breadth** – we have many compelling case studies, but broad, systematic benchmarks for concepts like deception and internal conflict remain a research challenge.

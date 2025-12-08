@@ -7,7 +7,7 @@
 HatCat with Gemma-3-4B uses **18-22 GB VRAM** during inference:
 - Base model (bfloat16): ~8 GB
 - Activation captures (hidden states): ~4-6 GB
-- Probe inference (2,000+ classifiers): ~2-4 GB
+- Lens inference (2,000+ classifiers): ~2-4 GB
 - Generation buffers (KV cache): ~4-6 GB
 
 **This means you need 24 GB GPU minimum.**
@@ -200,7 +200,7 @@ if idle_time > 1800:
 
 ### 5. Limit Concept Layers (Save 40% Memory)
 - Load only layers 0-2 (not 0-5)
-- Fewer probes = less memory
+- Fewer lenses = less memory
 - Faster inference
 
 ### 6. Share Costs (Save 75%)

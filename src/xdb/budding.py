@@ -3,7 +3,7 @@ Budding - Bridge between XDB experiences and grafting infrastructure.
 
 This module provides the training data pipeline for scion creation:
 1. Query XDB for experiences tagged with specific concepts
-2. Build union clefts from related concept probes
+2. Build union clefts from related concept lenses
 3. Prepare training datasets for ScionTrainer
 4. Track scion training runs in XDB
 5. Promote buds to scions
@@ -13,7 +13,7 @@ The flow:
               ↓
     BudTrainingData (positive/negative examples)
               ↓
-    Cleft derivation (from probe weights)
+    Cleft derivation (from lens weights)
               ↓
     ScionTrainer (trains on cleft regions)
               ↓
@@ -158,17 +158,17 @@ class BuddingManager:
     def __init__(
         self,
         xdb: 'XDB',
-        probe_pack_path: Optional[Path] = None,
+        lens_pack_path: Optional[Path] = None,
     ):
         """
         Initialize the budding manager.
 
         Args:
             xdb: The XDB instance for experience access
-            probe_pack_path: Path to probe pack for cleft derivation
+            lens_pack_path: Path to lens pack for cleft derivation
         """
         self.xdb = xdb
-        self.probe_pack_path = Path(probe_pack_path) if probe_pack_path else None
+        self.lens_pack_path = Path(lens_pack_path) if lens_pack_path else None
 
         # Track training runs
         self.training_runs: Dict[str, ScionTrainingRun] = {}
@@ -413,7 +413,7 @@ class BuddingManager:
         Execute scion training for a prepared run.
 
         This:
-        1. Derives clefts from related concept probes
+        1. Derives clefts from related concept lenses
         2. Creates union cleft
         3. Runs ScionTrainer
         4. Updates run record with results
@@ -430,7 +430,7 @@ class BuddingManager:
         """
         # Import grafting modules
         from ..grafting import (
-            derive_cleft_from_probe,
+            derive_cleft_from_lens,
             merge_clefts,
             ScionTrainer,
             ScionConfig,
@@ -451,36 +451,36 @@ class BuddingManager:
             # Get training data
             training_data = self.get_training_data(run.bud_tag_id)
 
-            # Derive clefts from probes
+            # Derive clefts from lenses
             clefts = []
 
-            if self.probe_pack_path:
-                # Try to load probes for related concepts
+            if self.lens_pack_path:
+                # Try to load lenses for related concepts
                 for concept_id in training_data.related_concept_ids:
-                    # Try various probe naming conventions
-                    for probe_name in [
+                    # Try various lens naming conventions
+                    for lens_name in [
                         f"{concept_id}.pt",
                         f"{concept_id.replace('::', '_')}.pt",
                         f"{concept_id.split('::')[-1]}.pt",
                     ]:
-                        probe_path = self.probe_pack_path / probe_name
-                        if probe_path.exists():
+                        lens_path = self.lens_pack_path / lens_name
+                        if lens_path.exists():
                             try:
-                                cleft = derive_cleft_from_probe(
-                                    probe_path,
+                                cleft = derive_cleft_from_lens(
+                                    lens_path,
                                     concept_id,
                                     model,
                                     layers=layers or [18, 20, 22],
                                 )
                                 clefts.append(cleft)
-                                logger.info(f"Derived cleft from probe: {probe_name}")
+                                logger.info(f"Derived cleft from lens: {lens_name}")
                             except Exception as e:
-                                logger.warning(f"Failed to derive cleft from {probe_name}: {e}")
+                                logger.warning(f"Failed to derive cleft from {lens_name}: {e}")
                             break
 
-            # If no probes found, use a default cleft (all middle layers)
+            # If no lenses found, use a default cleft (all middle layers)
             if not clefts:
-                logger.warning("No probes found, using default cleft configuration")
+                logger.warning("No lenses found, using default cleft configuration")
                 # Create a minimal cleft for the target concept
                 # This will train without specific region constraints
                 from ..grafting.cleft import Cleft
@@ -658,7 +658,7 @@ class BuddingManager:
                 run_id: run.to_dict()
                 for run_id, run in self.training_runs.items()
             },
-            "probe_pack_path": str(self.probe_pack_path) if self.probe_pack_path else None,
+            "lens_pack_path": str(self.lens_pack_path) if self.lens_pack_path else None,
         }
 
         path = Path(path)
@@ -695,6 +695,6 @@ class BuddingManager:
                 run.completed_at = datetime.fromisoformat(run_data["completed_at"])
             self.training_runs[run_id] = run
 
-        # Restore probe pack path
-        if state.get("probe_pack_path"):
-            self.probe_pack_path = Path(state["probe_pack_path"])
+        # Restore lens pack path
+        if state.get("lens_pack_path"):
+            self.lens_pack_path = Path(state["lens_pack_path"])

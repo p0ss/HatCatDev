@@ -49,7 +49,7 @@ The UI will open in your browser at http://localhost:8501
 - Interactive timeline visualization with 5 zoom levels (chat, reply, paragraph, sentence, token)
 - Hover tooltips showing top concepts with probabilities and hierarchy levels
 - AI safety concept highlighting (red backgrounds on concerning tokens)
-- Dynamic probe loading (base layers 2-3, expands to level 4-5)
+- Dynamic lens loading (base layers 2-3, expands to level 4-5)
 
 ### UI Controls
 

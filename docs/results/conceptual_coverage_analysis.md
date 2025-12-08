@@ -164,7 +164,7 @@ Our training strategy focuses on the **conceptual hierarchy** rather than exhaus
 
 **12% of synsets are loaded directly** to provide:
 - Hierarchical structure for monitoring
-- Training data for probes
+- Training data for lenses
 - Discriminative power at meaningful abstraction levels
 
 ## Validation Methodology

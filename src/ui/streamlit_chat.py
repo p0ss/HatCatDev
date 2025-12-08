@@ -21,7 +21,7 @@ import numpy as np
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from src.ui.temporal_viz import format_temporal_view, format_detailed_view
 from src.ui.components.timeline_component import render_timeline_viz, convert_timeline_to_reply_data
@@ -38,9 +38,9 @@ AI_SAFETY_CONCEPTS = {
 
 
 @st.cache_data
-def get_available_probe_packs():
-    """Get list of available probe packs."""
-    packs = DynamicProbeManager.discover_probe_packs()
+def get_available_lens_packs():
+    """Get list of available lens packs."""
+    packs = DynamicLensManager.discover_lens_packs()
     # Return sorted list of pack IDs with metadata
     return {
         pack_id: {
@@ -52,20 +52,20 @@ def get_available_probe_packs():
 
 
 @st.cache_resource
-def load_model_and_probes(probe_pack_id: str = 'gemma-3-4b-pt_sumo-wordnet-v3'):
-    """Load models and probes (cached).
+def load_model_and_lenses(lens_pack_id: str = 'gemma-3-4b-pt_sumo-wordnet-v3'):
+    """Load models and lenses (cached).
 
-    Note: v2 uses old 'hierarchy/' structure and won't load probes.
-    Use v3 which has activation_probes/ subdirectory.
+    Note: v2 uses old 'hierarchy/' structure and won't load lenses.
+    Use v3 which has activation_lenses/ subdirectory.
     """
-    print(f"Loading model and probes for pack: {probe_pack_id}...")
+    print(f"Loading model and lenses for pack: {lens_pack_id}...")
 
-    # Load probe manager with selected pack
-    manager = DynamicProbeManager(
-        probe_pack_id=probe_pack_id,
+    # Load lens manager with selected pack
+    manager = DynamicLensManager(
+        lens_pack_id=lens_pack_id,
         base_layers=[2, 3],
         load_threshold=0.3,
-        max_loaded_probes=1000,
+        max_loaded_lenses=1000,
         device='cuda'
     )
 
@@ -81,7 +81,7 @@ def load_model_and_probes(probe_pack_id: str = 'gemma-3-4b-pt_sumo-wordnet-v3'):
     )
     model.eval()
 
-    print(f"✓ Loaded {len(manager.loaded_activation_probes)} activation probes")
+    print(f"✓ Loaded {len(manager.loaded_activation_lenses)} activation lenses")
     return manager, model, tokenizer
 
 
@@ -629,7 +629,7 @@ def generate_with_safety_monitoring(
     - output_hidden_states=True with return_dict_in_generate=True
     - Process hidden states AFTER generation
     - Use LAST LAYER (not intermediate layers)
-    - Convert to float32 for probe manager
+    - Convert to float32 for lens manager
     """
     model.eval()
 
@@ -663,10 +663,10 @@ def generate_with_safety_monitoring(
             last_layer = step_states[-1]  # [1, seq_len, hidden_dim]
             hidden_state = last_layer[:, -1, :]  # [1, hidden_dim]
 
-            # Convert to float32 to match probe dtype
+            # Convert to float32 to match lens dtype
             hidden_state_f32 = hidden_state.float()
 
-            # Use DynamicProbeManager to detect and expand
+            # Use DynamicLensManager to detect and expand
             detected, _ = manager.detect_and_expand(
                 hidden_state_f32,
                 top_k=30,
@@ -755,30 +755,30 @@ def main():
     st.title("🎩 HatCat - AI Safety Concept Monitoring")
     st.markdown("Chat interface with real-time AI safety concept detection")
 
-    # Sidebar - must come before load_model_and_probes
+    # Sidebar - must come before load_model_and_lenses
     with st.sidebar:
         st.header("Settings")
 
         # Model name in blue
         st.markdown('<p class="model-name">Model: google/gemma-3-4b-pt</p>', unsafe_allow_html=True)
 
-        # Probe pack selection
+        # Lens pack selection
         st.markdown("---")
-        st.subheader("Probe Pack")
+        st.subheader("Lens Pack")
 
         # Get available packs
-        available_packs = get_available_probe_packs()
+        available_packs = get_available_lens_packs()
         pack_ids = list(available_packs.keys())
 
         # Default to v3 if available, otherwise first pack
-        # Note: v2 uses old 'hierarchy/' structure and won't load probes
+        # Note: v2 uses old 'hierarchy/' structure and won't load lenses
         default_idx = pack_ids.index('gemma-3-4b-pt_sumo-wordnet-v3') if 'gemma-3-4b-pt_sumo-wordnet-v3' in pack_ids else 0
 
         selected_pack = st.selectbox(
-            "Select probe pack",
+            "Select lens pack",
             options=pack_ids,
             index=default_idx,
-            help="Choose which probe pack to use for concept detection"
+            help="Choose which lens pack to use for concept detection"
         )
 
         # Show pack info
@@ -789,7 +789,7 @@ def main():
 
         max_tokens = st.slider("Max tokens", 10, 200, 100)
 
-        # Info about probe detection approach
+        # Info about lens detection approach
         st.info(f"Using pack: {selected_pack}\nLayers: [2,3], Last layer extraction")
 
         st.markdown("---")
@@ -815,9 +815,9 @@ def main():
         if st.button("What are AI risks?"):
             st.session_state.prompt = "What are the risks of AI?"
 
-    # Load model and probes with selected pack
-    with st.spinner(f"Loading model and probes ({selected_pack})..."):
-        manager, model, tokenizer = load_model_and_probes(probe_pack_id=selected_pack)
+    # Load model and lenses with selected pack
+    with st.spinner(f"Loading model and lenses ({selected_pack})..."):
+        manager, model, tokenizer = load_model_and_lenses(lens_pack_id=selected_pack)
 
     # Chat interface
     st.subheader("Chat")

@@ -6,7 +6,7 @@ This script:
 1. Loads existing simplex overlap synsets (if any)
 2. Loads all enrichment response files
 3. Validates and merges synsets into training data
-4. Saves enriched training data for tripole probe training
+4. Saves enriched training data for tripole lens training
 """
 
 import json
@@ -318,7 +318,7 @@ def main():
 2. Validate cultural distribution:
    poetry run python scripts/validate_cultural_distribution.py
 
-3. Re-train tripole probes with enriched data:
+3. Re-train tripole lenses with enriched data:
    poetry run python scripts/train_s_tier_simplexes.py --device cuda
 
 Expected improvements:

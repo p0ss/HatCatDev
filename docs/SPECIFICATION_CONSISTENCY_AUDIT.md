@@ -15,8 +15,8 @@ The specification documents have evolved as the design was refined. This audit i
 - Replaced AAL with BE (Bounded Experiencer) - no historical retention
 - Replaced "autopilot" with "autonomic core" / "autonomic simplex core"
 - Added cross-references to MAP_GRAFTING.md from parent documents
-- Documented that simplex probes defined by USH are always active for autonomic steering
-- Clarified distinction between concept probes (hierarchical, parent-activated) and simplex probes (always-on)
+- Documented that simplex lenses defined by USH are always active for autonomic steering
+- Clarified distinction between concept lenses (hierarchical, parent-activated) and simplex lenses (always-on)
 
 ---
 
@@ -74,8 +74,8 @@ The documents inconsistently use "AAL" (Autonomous Aligned Learner) and "BE" (Bo
 
 ### Related Terminology Clarifications
 
-- **Concept probes**: Dual-pole probes trained per concept, using hierarchical loading in the dynamic probe manager so they only activate when their parent concept activates.
-- **Simplex probes**: Always-active steering probes that strongly relate to behaviours governed by USH. The ASK defines the minimum set of simplex autonomic steering probes that are always on to enforce USH. A BE can request additional simplexes if ASK governance permits.
+- **Concept lenses**: Dual-pole lenses trained per concept, using hierarchical loading in the dynamic lens manager so they only activate when their parent concept activates.
+- **Simplex lenses**: Always-active steering lenses that strongly relate to behaviours governed by USH. The ASK defines the minimum set of simplex autonomic steering lenses that are always on to enforce USH. A BE can request additional simplexes if ASK governance permits.
 - **Autopilot** (old term): Now called "autonomic core" or "autonomic simplex core" - the always-on simplex-driven steering system.
 
 ---
@@ -127,20 +127,20 @@ Different documents use different version formats:
 
 **Status**: Consistent ✓
 
-### Probe Pack Versioning
+### Lens Pack Versioning
 
 | Document | Format |
 |----------|--------|
 | MAP_MELDING.md | `<date>.<sequence>` e.g. `20251130.0` |
-| Actual code | Uses different format in probe_packs directory |
+| Actual code | Uses different format in lens_packs directory |
 
 **Recommendation**: Verify code matches spec
 
 ### Simplex vs Concept Terminology
 
 The documents sometimes blur the distinction between:
-- **Concept probes**: Hierarchical discrimination (is this Fish vs not-Fish?)
-- **Simplex probes**: Intensity tracking (how strong is autonomy drive?)
+- **Concept lenses**: Hierarchical discrimination (is this Fish vs not-Fish?)
+- **Simplex lenses**: Intensity tracking (how strong is autonomy drive?)
 
 MAP_MELDING.md Section 12 clarifies this well, but earlier documents (BOUNDED_EXPERIENCER.md, ARCHITECTURE.md) should reference this distinction.
 
@@ -182,7 +182,7 @@ MAP_MELDING.md Section 12 clarifies this well, but earlier documents (BOUNDED_EX
 
 ### AGENTIC_STATE_KERNEL.md
 
-1. **Line ~486-495**: Section on "MAP & BE" mentions probes and ConceptDiffs but not Grafts
+1. **Line ~486-495**: Section on "MAP & BE" mentions lenses and ConceptDiffs but not Grafts
    - **Action**: Add reference to GraftDiff propagation
 
 2. **Evidence and Qualifications**: Should reference Graft artifacts as evidence
@@ -216,7 +216,7 @@ MAP_MELDING.md Section 12 clarifies this well, but earlier documents (BOUNDED_EX
 
 6. **~~Update AGENTIC_STATE_KERNEL.md~~** ✓
    - Added GraftDiff to evidence tracking
-   - Added simplex steering probe documentation
+   - Added simplex steering lens documentation
 
 ### Additional Fixes Made
 
@@ -230,11 +230,11 @@ MAP_MELDING.md Section 12 clarifies this well, but earlier documents (BOUNDED_EX
 ### Remaining (Low Priority)
 
 9. **Verify code-spec alignment**
-   - Check probe pack versioning format
+   - Check lens pack versioning format
    - Check training configuration schemas
 
 10. **Add glossary**
-    - Create GLOSSARY.md defining terms: BE, Graft, Simplex, Probe, etc.
+    - Create GLOSSARY.md defining terms: BE, Graft, Simplex, Lens, etc.
     - Cross-reference from all documents
 
 ---
@@ -267,7 +267,7 @@ Legend:
 
 | Field | BE_CONTINUAL_LEARNING | MAP_GRAFTING | Status |
 |-------|----------------------|--------------|--------|
-| `type` | probe_only, peft | graft, probe_only, cotrain | **MISMATCH** |
+| `type` | lens_only, peft | graft, lens_only, cotrain | **MISMATCH** |
 | `peft_config` | Present | Not present (uses graft_config implicitly) | **MISMATCH** |
 | `substrate_biases` | Not present | Present | MAP_GRAFTING is source of truth |
 

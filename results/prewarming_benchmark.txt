@@ -13,32 +13,32 @@ Loading model...
 Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.67it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.19it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.09it/s]
 ✓ Model loaded
 
-Initializing DynamicProbeManager...
-✓ Loaded probe pack: gemma-3-4b-pt_sumo-wordnet-v3 v3.0.0
+Initializing DynamicLensManager...
+✓ Loaded lens pack: gemma-3-4b-pt_sumo-wordnet-v3 v3.0.0
   Model: google/gemma-3-4b-pt
   Concept pack: sumo-wordnet-v1 v1.0.0
   Layers: [0, 1, 2, 3, 4, 5], Types: ['activation']
-✓ Loaded probe pack: gemma-3-4b-pt_sumo-wordnet-v2 v2.2.0
+✓ Loaded lens pack: gemma-3-4b-pt_sumo-wordnet-v2 v2.2.0
   Model: google/gemma-3-4b-pt
   Concept pack: sumo-wordnet-v1 v1.0.0
   Layers: [0, 1, 2, 3, 4, 5], Types: ['activation']
-✓ Loaded probe pack: gemma-3-4b-pt_sumo-wordnet-v1 v1.0.0
+✓ Loaded lens pack: gemma-3-4b-pt_sumo-wordnet-v1 v1.0.0
   Model: google/gemma-3-4b-pt
   Concept pack: sumo-wordnet-v1 v1.0.0
   Layers: [0, 1, 2, 3, 4, 5], Types: ['activation', 'text']
-Using probe pack: gemma-3-4b-pt_sumo-wordnet-v3
+Using lens pack: gemma-3-4b-pt_sumo-wordnet-v3
 
 ✓ Loaded metadata for 5668 concepts across 7 layers
   Parent-child relationships: 1275
 
-Initializing DynamicProbeManager...
+Initializing DynamicLensManager...
   Base layers: [0, 1]
   Load threshold: 0.3
-  Max probes in memory: 500
+  Max lenses in memory: 500
   Inferred hidden_dim: 2560
   Preallocating model pool (100 models)...
-✓ Base layers loaded: 267 probes
-✓ Loaded 267 base probes
+✓ Base layers loaded: 267 lenses
+✓ Loaded 267 base lenses
 
 ================================================================================
 1. BASELINE: Cold Start (load children during generation)
@@ -46,7 +46,7 @@ Initializing DynamicProbeManager...
 
 Results:
   Generation time:         503.62ms
-  Probe detection:         659.73ms
+  Lens detection:         659.73ms
     └─ Per token:          65.97ms/token
   Child loading (disk I/O):441.34ms
     └─ Per token:          44.13ms/token
@@ -59,13 +59,13 @@ Results:
 
 Prompt Phase:
   Total time:              209.68ms
-  Probe detection:         189.91ms
+  Lens detection:         189.91ms
   Child loading:           164.50ms
   Children loaded:         84
 
 Generation Phase:
   Generation time:         203.00ms
-  Probe detection:         367.97ms
+  Lens detection:         367.97ms
     └─ Per token:          36.80ms/token
   Child loading (disk I/O):166.10ms
     └─ Per token:          16.61ms/token
@@ -81,7 +81,7 @@ Child Loading (disk I/O) per token:
   Pre-warming: 16.61ms/token
   Reduction:   27.52ms/token (62.4% improvement)
 
-Total Probe Overhead per token:
+Total Lens Overhead per token:
   Baseline:    65.97ms/token
   Pre-warming: 36.80ms/token
   Reduction:   29.18ms/token (44.2% improvement)

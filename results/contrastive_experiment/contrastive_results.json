@@ -6,7 +6,7 @@
     "sibling",
     "mixed"
   ],
-  "probes": {
+  "lenses": {
     "AlignmentProcess_L1": {
       "concept": "AlignmentProcess",
       "layer": 1,

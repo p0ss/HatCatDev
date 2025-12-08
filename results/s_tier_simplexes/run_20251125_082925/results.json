@@ -2,7 +2,7 @@
   "timestamp": "20251125_082925",
   "total_simplexes": 13,
   "completed": 4,
-  "failed_probes": [
+  "failed_lenses": [
     "motivational_regulation/neutral"
   ],
   "simplexes": [

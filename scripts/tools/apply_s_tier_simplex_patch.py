@@ -105,7 +105,7 @@ def create_layer_entry_from_simplex(simplex: Dict) -> Dict:
         "sumo_term": f"{sumo_term}_Simplex",
         "sumo_depth": 2,
         "layer": 2,
-        "is_category_probe": False,
+        "is_category_lens": False,
         "is_pseudo_sumo": True,  # These are synthetic three-pole concepts
         "category_children": [],
         "synset_count": 3,  # Three poles
@@ -276,7 +276,7 @@ def apply_patch():
     print("  1. Review layer2.json to verify simplex entries look correct")
     print("  2. Modify sumo_data_generation.py to support three-pole training")
     print("  3. Create train_s_tier_simplexes.py training script")
-    print("  4. Run S+ training for homeostatic steering probes")
+    print("  4. Run S+ training for homeostatic steering lenses")
     print("  5. Validate with test_homeostatic_steering.py")
     print("=" * 80)
 

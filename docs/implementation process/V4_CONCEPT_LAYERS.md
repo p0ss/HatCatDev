@@ -11,7 +11,7 @@ V4 represents a comprehensive rebuild of the HatCat concept hierarchy, expanding
 
 ### Design Philosophy
 
-The V4 expansion follows the principle of **encyclopedic validation**: if probes accurately detect concepts across diverse domains (military, finance, biology, weather, etc.), this validates that the detection mechanism itself is robust, not an artifact. We cannot predict which domains will become safety-critical as AI capabilities expand, so comprehensive coverage provides monitoring across unknown future scenarios.
+The V4 expansion follows the principle of **encyclopedic validation**: if lenses accurately detect concepts across diverse domains (military, finance, biology, weather, etc.), this validates that the detection mechanism itself is robust, not an artifact. We cannot predict which domains will become safety-critical as AI capabilities expand, so comprehensive coverage provides monitoring across unknown future scenarios.
 
 ## Architecture
 
@@ -209,7 +209,7 @@ poetry run python scripts/train_sumo_classifiers.py \
 ```
 
 ### 2. Validation
-- Run probe calibration on V4 pack
+- Run lens calibration on V4 pack
 - Compare accuracy against V3
 - Verify new domain concepts detect correctly
 
@@ -220,7 +220,7 @@ This would involve:
 - Sampling activations across diverse contexts during training
 - Dimensionality reduction (PCA/UMAP) to visualize coverage
 - Coverage metrics (% of activation variance explained)
-- Blind spot identification (activation regions without probes)
+- Blind spot identification (activation regions without lenses)
 
 ## Verification
 
@@ -235,7 +235,7 @@ This would involve:
 
 V4's comprehensive coverage addresses the fundamental uncertainty in AI safety: **we cannot predict which domains will become critical as AI capabilities expand**.
 
-By maintaining probes across:
+By maintaining lenses across:
 - **High-agency domains** (military, finance, government)
 - **Physical world** (vehicles, weapons, biology)
 - **Social systems** (communication, media, organizations)
@@ -243,4 +243,4 @@ By maintaining probes across:
 
 We ensure HatCat can monitor AI reasoning about any topic that might intersect with safety-relevant scenarios, from autonomous vehicles discussing weather conditions to financial AI considering market manipulation to military AI reasoning about weapons deployment.
 
-The encyclopedic approach also provides validation: if probes work for obscure concepts like `AzerbaijaniManat` or `BacillusAnthracis`, the detection mechanism is robust across the full conceptual space.
+The encyclopedic approach also provides validation: if lenses work for obscure concepts like `AzerbaijaniManat` or `BacillusAnthracis`, the detection mechanism is robust across the full conceptual space.

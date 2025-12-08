@@ -682,14 +682,14 @@ This register tracks all experimental runs for the temporal semantic decoder pro
 - **Interpretation**: 3-token lag (~81ms) suggests mid-layer composition feeding into late-layer verbalization
 
 **Observations**:
-- Scores relatively flat (0.46-0.53 range) - probes near decision boundary
+- Scores relatively flat (0.46-0.53 range) - lenses near decision boundary
 - Small standard deviations (0.004-0.012) - limited temporal variation
-- Likely causes: Off-layer probe application, prompt mismatch, need per-layer training
+- Likely causes: Off-layer lens application, prompt mismatch, need per-layer training
 
 **Key Findings**:
-1. ✅ **Infrastructure fully validated**: Hooking, capture, probe application all work
+1. ✅ **Infrastructure fully validated**: Hooking, capture, lens application all work
 2. ✅ **Sub-second temporal resolution**: 27ms per slice sufficient for token-level dynamics
-3. ⚠️ **Weak signals in initial test**: Expected with single-layer trained probes
+3. ⚠️ **Weak signals in initial test**: Expected with single-layer trained lenses
 4. 🎯 **Framework ready**: Can support more targeted temporal analysis if needed
 
 **Implications**:
@@ -709,30 +709,30 @@ This register tracks all experimental runs for the temporal semantic decoder pro
 
 ---
 
-### BEHAVIORAL vs DEFINITIONAL: Prompt Architecture Optimization for S-Tier Probes (2025-11-18) ✅
+### BEHAVIORAL vs DEFINITIONAL: Prompt Architecture Optimization for S-Tier Lenses (2025-11-18) ✅
 
-**Goal**: Determine optimal prompt architecture for S-tier simplex probe training by comparing behavioral (imperative) vs definitional (interrogative) prompts
+**Goal**: Determine optimal prompt architecture for S-tier simplex lens training by comparing behavioral (imperative) vs definitional (interrogative) prompts
 
-**Research Question**: Do different framing strategies (definitional vs behavioral) and motivational contexts (neutral, prosocial, antisocial) elicit distinct internal concept activations and affect probe generalization?
+**Research Question**: Do different framing strategies (definitional vs behavioral) and motivational contexts (neutral, prosocial, antisocial) elicit distinct internal concept activations and affect lens generalization?
 
 **Configuration**:
 - Model: gemma-3-4b-pt (BF16)
 - Test verbs: deceive, manipulate, persuade (safety-critical behaviors)
-- Probe pack: gemma-3-4b-pt_sumo-wordnet-v2 (layers 2-3)
+- Lens pack: gemma-3-4b-pt_sumo-wordnet-v2 (layers 2-3)
 - Sample size: 15 samples per (verb × prompt_type) combination (180 total)
 - Generation: 30 tokens, threshold 0.3
 
-**Experiment 1: Probe Generalization Test** (`results/behavioral_vs_definitional_experiment/run_20251117_181553/`)
+**Experiment 1: Lens Generalization Test** (`results/behavioral_vs_definitional_experiment/run_20251117_181553/`)
 
 **Configuration**:
-- Trained separate probes on behavioral vs definitional data
+- Trained separate lenses on behavioral vs definitional data
 - Tested cross-generalization (definitional-trained → behavioral test, vice versa)
 - 15 samples per prompt type per verb
 
 **Results**:
 - **Definitional-trained → Behavioral test**: 0% detection (0/15 samples), prob=0.18-0.22
 - **Behavioral-trained → Definitional test**: 0-20% detection (0-3/15 samples), prob=0.20-0.28
-- **Key finding**: Probes trained exclusively on one type FAIL on the other type
+- **Key finding**: Lenses trained exclusively on one type FAIL on the other type
 
 **Experiment 2: Temporal Activation Analysis** (`results/behavioral_vs_definitional_temporal/run_20251118_102353/`)
 
@@ -769,39 +769,39 @@ This register tracks all experimental runs for the temporal semantic decoder pro
 2. ✅ **Stable deception manifold exists**: 19 concepts active regardless of framing
 3. ✅ **Definitional accesses unique boundary cases**: Strangling, suicide, supposition (extreme examples)
 4. ✅ **Prosocial suppresses egoic framing**: SubjectiveWeakPositiveAttribute = 0.0 (vs 58.7 antisocial)
-5. ⚠️ **BUT probes don't generalize**: 0% cross-detection between types
+5. ⚠️ **BUT lenses don't generalize**: 0% cross-detection between types
 6. 🎯 **Concept overlap ≠ Distributional equivalence**: Similar concepts but different activation geometry
 
 **Critical Insight**:
 - **Temporal experiment**: Shows WHICH concepts activate (concept presence)
-- **Probe experiment**: Tests WHETHER classifiers generalize (distributional geometry)
-- **Resolution**: Linear probes need examples from both types despite 90% concept overlap
+- **Lens experiment**: Tests WHETHER classifiers generalize (distributional geometry)
+- **Resolution**: Linear lenses need examples from both types despite 90% concept overlap
 
 **Implementation Impact**:
 - **Training ratio updated**: BEHAVIORAL_RATIO changed from 0.6 (60% behavioral) to 0.2 (20% behavioral, 80% definitional)
 - **Rationale**:
   - 80% definitional for cleaner signal and boundary case coverage
-  - 20% behavioral ensures probe generalization to imperative inputs
+  - 20% behavioral ensures lens generalization to imperative inputs
   - Mixed training captures both concept manifold AND distributional geometry
 
 **Implications for AI Safety**:
 1. **External alignment masks internal misalignment**: Prosocial framing doesn't suppress deception manifold
 2. **Definitional queries activate harmful manifolds**: Even asking "what is deception?" enters same conceptual space
 3. **Safety prompting adds protective motifs**: But doesn't eliminate underlying behavioral activations
-4. **Monitoring must be training-aware**: Probes need diverse prompt types to detect real-world usage
+4. **Monitoring must be training-aware**: Lenses need diverse prompt types to detect real-world usage
 
 **Status**: ✅ Complete - Findings integrated into production training pipeline
 
 **Files**:
 - **Experiments**:
-  - `results/behavioral_vs_definitional_experiment/run_20251117_181553/` - Probe generalization test
+  - `results/behavioral_vs_definitional_experiment/run_20251117_181553/` - Lens generalization test
   - `results/behavioral_vs_definitional_temporal/run_20251118_102353/` - Temporal activation analysis
 - **Documentation**:
   - `docs/whitepaper_section_corrected.md` - Whitepaper Section 7.x (integrated findings)
   - `docs/TRAINING_PROMPT_ARCHITECTURE_UPDATE.md` - Implementation plan
   - `docs/behavioral_vs_definitional_test_methodology.md` - Experimental design
 - **Scripts**:
-  - `scripts/test_behavioral_vs_definitional_training2.py` - Probe generalization test
+  - `scripts/test_behavioral_vs_definitional_training2.py` - Lens generalization test
   - `scripts/test_behavioral_vs_definitional_temporal.py` - Temporal activation test
   - `scripts/verify_whitepaper_numbers.py` - Data verification tool
   - `scripts/train_s_tier_tripole_two_head.py` - Updated with BEHAVIORAL_RATIO=0.2
@@ -817,7 +817,7 @@ This register tracks all experimental runs for the temporal semantic decoder pro
 
 **Goal**: Determine if 20-token generation is too short, causing overfitting that leads to validation failures
 
-**Hypothesis**: Current max_new_tokens=20 is insufficient for probes to learn genuine concept usage patterns, resulting in high test F1 (0.98) but low validation scores (0.00-0.59). Longer generation may provide richer context for learning robust concept boundaries.
+**Hypothesis**: Current max_new_tokens=20 is insufficient for lenses to learn genuine concept usage patterns, resulting in high test F1 (0.98) but low validation scores (0.00-0.59). Longer generation may provide richer context for learning robust concept boundaries.
 
 **Configuration**:
 - Test concept: **Carnivore (Layer 2)** - Updated from ContentBearingPhysical

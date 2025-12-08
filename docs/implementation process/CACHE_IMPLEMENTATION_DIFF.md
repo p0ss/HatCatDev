@@ -2,7 +2,7 @@
 
 ## Overview
 
-Successfully implemented temporal locality caching in DynamicProbeManager to eliminate disk I/O overhead. The implementation adds a warm cache layer between active probes and disk storage, exploiting temporal locality to achieve ~80% reduction in disk I/O.
+Successfully implemented temporal locality caching in DynamicLensManager to eliminate disk I/O overhead. The implementation adds a warm cache layer between active lenses and disk storage, exploiting temporal locality to achieve ~80% reduction in disk I/O.
 
 ## Key Changes
 
@@ -12,13 +12,13 @@ Successfully implemented temporal locality caching in DynamicProbeManager to eli
 
 ```python
 # Line ~196-200
-# Warm cache: probes that were recently relevant but not in top-k
-# Key: (sumo_term, layer), Value: (probe, reactivation_count)
+# Warm cache: lenses that were recently relevant but not in top-k
+# Key: (sumo_term, layer), Value: (lens, reactivation_count)
 self.warm_cache: Dict[Tuple[str, int], Tuple[nn.Module, int]] = {}
 self.cache_reactivation_count: Dict[Tuple[str, int], int] = defaultdict(int)
 
-# Track which probes are in base layers (never evict these)
-self.base_layer_probes: Set[Tuple[str, int]] = set()
+# Track which lenses are in base layers (never evict these)
+self.base_layer_lenses: Set[Tuple[str, int]] = set()
 ```
 
 ### 2. Base Layer Tracking (_load_base_layers)
@@ -27,12 +27,12 @@ self.base_layer_probes: Set[Tuple[str, int]] = set()
 
 **Added after base layer loading:**
 ```python
-# Mark all loaded probes as base layer probes (never evict these)
-for concept_key in self.loaded_activation_probes.keys():
-    self.base_layer_probes.add(concept_key)
+# Mark all loaded lenses as base layer lenses (never evict these)
+for concept_key in self.loaded_activation_lenses.keys():
+    self.base_layer_lenses.add(concept_key)
 ```
 
-**Purpose:** Protect base layer probes from eviction to ensure broad hierarchical coverage.
+**Purpose:** Protect base layer lenses from eviction to ensure broad hierarchical coverage.
 
 ### 3. Warm Cache Check (_load_concepts)
 
@@ -42,16 +42,16 @@ for concept_key in self.loaded_activation_probes.keys():
 
 ```python
 for concept_key in concept_keys:
-    if self.use_activation_probes:
-        if concept_key in self.loaded_activation_probes:
+    if self.use_activation_lenses:
+        if concept_key in self.loaded_activation_lenses:
             # Already in active set
             self.stats['cache_hits'] += 1
         elif concept_key in self.warm_cache:
-            # Move from warm cache to active loaded probes (zero disk I/O!)
-            probe, reactivation_count = self.warm_cache[concept_key]
-            self.loaded_activation_probes[concept_key] = probe
-            self.loaded_probes[concept_key] = probe
-            self.probe_scores[concept_key] = 0.0
+            # Move from warm cache to active loaded lenses (zero disk I/O!)
+            lens, reactivation_count = self.warm_cache[concept_key]
+            self.loaded_activation_lenses[concept_key] = lens
+            self.loaded_lenses[concept_key] = lens
+            self.lens_scores[concept_key] = 0.0
 
             # Increment reactivation count
             self.cache_reactivation_count[concept_key] = reactivation_count + 1
@@ -65,23 +65,23 @@ for concept_key in concept_keys:
 
 **Added tracking:** `self._last_warm_cache_hits = warm_cache_hits` (line ~521)
 
-**Impact:** Zero disk I/O when reactivating probes from warm cache.
+**Impact:** Zero disk I/O when reactivating lenses from warm cache.
 
 ### 4. Cache Memory Management (_manage_cache_memory)
 
 **Location:** Lines ~430-476 (new method)
 
-**Purpose:** Evict least-reactivated probes when memory budget exceeded.
+**Purpose:** Evict least-reactivated lenses when memory budget exceeded.
 
 ```python
 def _manage_cache_memory(self):
-    """Manage warm cache size by evicting least-reactivated probes."""
-    total_in_memory = len(self.loaded_activation_probes) + len(self.warm_cache)
+    """Manage warm cache size by evicting least-reactivated lenses."""
+    total_in_memory = len(self.loaded_activation_lenses) + len(self.warm_cache)
 
-    if total_in_memory <= self.max_loaded_probes:
+    if total_in_memory <= self.max_loaded_lenses:
         return
 
-    num_to_evict = total_in_memory - self.max_loaded_probes
+    num_to_evict = total_in_memory - self.max_loaded_lenses
 
     # Sort warm cache by reactivation count (ascending)
     warm_cache_sorted = sorted(
@@ -89,15 +89,15 @@ def _manage_cache_memory(self):
         key=lambda x: x[1][1]  # reactivation_count
     )
 
-    # Evict least-reactivated probes
+    # Evict least-reactivated lenses
     evicted = 0
-    for concept_key, (probe, reactivation_count) in warm_cache_sorted:
+    for concept_key, (lens, reactivation_count) in warm_cache_sorted:
         if evicted >= num_to_evict:
             break
-        if concept_key in self.base_layer_probes:
+        if concept_key in self.base_layer_lenses:
             continue
 
-        self._return_model_to_pool(probe)
+        self._return_model_to_pool(lens)
         del self.warm_cache[concept_key]
         if concept_key in self.cache_reactivation_count:
             del self.cache_reactivation_count[concept_key]
@@ -125,26 +125,26 @@ if not skip_pruning:
     sorted_all_concepts = sorted(current_scores.items(), key=lambda x: x[1], reverse=True)
     top_k_concept_keys = set([key for key, _ in sorted_all_concepts[:top_k]])
 
-    # Move non-top-k probes to warm cache (but keep base layer probes active)
+    # Move non-top-k lenses to warm cache (but keep base layer lenses active)
     to_warm_cache = []
-    for concept_key in list(self.loaded_activation_probes.keys()):
-        if concept_key in self.base_layer_probes:
+    for concept_key in list(self.loaded_activation_lenses.keys()):
+        if concept_key in self.base_layer_lenses:
             continue
         if concept_key not in top_k_concept_keys:
             to_warm_cache.append(concept_key)
 
-    # Move probes to warm cache
+    # Move lenses to warm cache
     for concept_key in to_warm_cache:
-        probe = self.loaded_activation_probes[concept_key]
+        lens = self.loaded_activation_lenses[concept_key]
         reactivation_count = self.cache_reactivation_count.get(concept_key, 0)
-        self.warm_cache[concept_key] = (probe, reactivation_count)
+        self.warm_cache[concept_key] = (lens, reactivation_count)
 
-        # Remove from active loaded probes
-        del self.loaded_activation_probes[concept_key]
-        if concept_key in self.loaded_probes:
-            del self.loaded_probes[concept_key]
-        if concept_key in self.probe_scores:
-            del self.probe_scores[concept_key]
+        # Remove from active loaded lenses
+        del self.loaded_activation_lenses[concept_key]
+        if concept_key in self.loaded_lenses:
+            del self.loaded_lenses[concept_key]
+        if concept_key in self.lens_scores:
+            del self.lens_scores[concept_key]
 
     # Manage total cache memory (evict from warm cache if needed)
     self._manage_cache_memory()
@@ -159,7 +159,7 @@ if not skip_pruning:
 ```python
 if timing is not None:
     timing['total'] = (time.time() - start) * 1000
-    timing['loaded_probes'] = len(self.loaded_probes)
+    timing['loaded_lenses'] = len(self.loaded_lenses)
     timing['cache_hits'] = cache_hits_this_token
     timing['cache_misses'] = cache_misses_this_token
     timing['warm_cache_size'] = len(self.warm_cache)
@@ -172,9 +172,9 @@ if timing is not None:
 **Added warm cache information:**
 
 ```python
-print(f"Base layer probes (protected): {len(self.base_layer_probes)}")
+print(f"Base layer lenses (protected): {len(self.base_layer_lenses)}")
 print(f"Warm cache size: {len(self.warm_cache)}")
-print(f"Total in memory: {len(self.loaded_probes) + len(self.warm_cache)}")
+print(f"Total in memory: {len(self.loaded_lenses) + len(self.warm_cache)}")
 
 # Show top reactivated concepts from warm cache
 if self.cache_reactivation_count:
@@ -194,7 +194,7 @@ if self.cache_reactivation_count:
 All changes are **100% backward compatible**:
 
 - Existing API unchanged
-- `loaded_probes` alias maintained
+- `loaded_lenses` alias maintained
 - Methods have same signatures
 - Falls back gracefully if warm cache empty
 - All existing tests pass without modification
@@ -203,14 +203,14 @@ All changes are **100% backward compatible**:
 
 1. ✓ Syntax validation (`python3 -m py_compile`)
 2. ✓ Manager initialization with new attributes
-3. ✓ Base layer probe marking
+3. ✓ Base layer lens marking
 4. ✓ Cache statistics tracking
 5. ✓ Cache management methods callable
 6. ✓ Enhanced stats display
 
 ## Files Modified
 
-- `/home/poss/Documents/Code/HatCat/src/monitoring/dynamic_probe_manager.py`
+- `/home/poss/Documents/Code/HatCat/src/monitoring/dynamic_lens_manager.py`
   - Total lines modified: ~100
   - New method: `_manage_cache_memory()` (~47 lines)
   - Modified methods: 5
@@ -226,14 +226,14 @@ Documentation:
 ## Performance Expectations
 
 ### Before
-- Token 1: 200ms total, 52ms disk I/O (25.8 probes × 2.36ms)
-- Token 2: 200ms total, 52ms disk I/O (25.8 probes × 2.36ms)
-- Token 3: 200ms total, 52ms disk I/O (25.8 probes × 2.36ms)
+- Token 1: 200ms total, 52ms disk I/O (25.8 lenses × 2.36ms)
+- Token 2: 200ms total, 52ms disk I/O (25.8 lenses × 2.36ms)
+- Token 3: 200ms total, 52ms disk I/O (25.8 lenses × 2.36ms)
 
 ### After (with ~80% cache hit rate)
-- Token 1: 200ms total, 52ms disk I/O (25.8 probes × 2.36ms) [cold start]
-- Token 2: ~100ms total, ~10ms disk I/O (5 probes × 2.36ms, 20 from cache)
-- Token 3: ~100ms total, ~10ms disk I/O (5 probes × 2.36ms, 20 from cache)
+- Token 1: 200ms total, 52ms disk I/O (25.8 lenses × 2.36ms) [cold start]
+- Token 2: ~100ms total, ~10ms disk I/O (5 lenses × 2.36ms, 20 from cache)
+- Token 3: ~100ms total, ~10ms disk I/O (5 lenses × 2.36ms, 20 from cache)
 
 **Speedup: ~2x for token processing (after warm-up)**
 
@@ -245,11 +245,11 @@ To verify performance improvement:
 2. Compare cache hit rates across different prompts
 3. Measure disk I/O reduction in production
 4. Monitor warm cache size and eviction patterns
-5. Tune `max_loaded_probes` based on memory constraints
+5. Tune `max_loaded_lenses` based on memory constraints
 
 Example profiling:
 ```bash
-poetry run python scripts/profile_probe_overhead_detailed.py
+poetry run python scripts/profile_lens_overhead_detailed.py
 ```
 
 ## Migration Guide
@@ -258,7 +258,7 @@ No migration required! The implementation is transparent:
 
 ```python
 # Existing code works unchanged
-manager = DynamicProbeManager(...)
+manager = DynamicLensManager(...)
 concepts, timing = manager.detect_and_expand(hidden_state, return_timing=True)
 
 # New metrics available in timing_info

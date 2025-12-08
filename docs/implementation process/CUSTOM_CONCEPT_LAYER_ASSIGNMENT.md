@@ -158,9 +158,9 @@ Highly specific detection signals and model architectures:
    - Integrate synthetic synsets into V4.5 builder
    - Estimated cost: $1.50-$2.50, time: 35-45 minutes
 
-6. **Train V4.5 probes** (priority: medium, after above steps)
-   - Train probes for all custom concepts (est. 13 hours)
-   - Validate probe accuracy on safety-critical concepts
+6. **Train V4.5 lenses** (priority: medium, after above steps)
+   - Train lenses for all custom concepts (est. 13 hours)
+   - Validate lens accuracy on safety-critical concepts
 
 ## Quality Checks
 
@@ -192,4 +192,4 @@ Layer assignment validation (all passed ✓):
 3. Generate comprehensive layer assignment mapping
 4. Integrate into V4 builder
 5. Generate synsets
-6. Build V4.5 and train probes
+6. Build V4.5 and train lenses

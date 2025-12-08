@@ -44,7 +44,7 @@ class TagType(Enum):
 
 class TagSource(Enum):
     """How a tag was applied."""
-    AUTO = "auto"                    # System-applied (from probes)
+    AUTO = "auto"                    # System-applied (from lenses)
     MANUAL = "manual"                # BE-applied
     INHERITED = "inherited"          # Inherited from parent tag
 
@@ -205,7 +205,7 @@ class Tag:
     A tag in the folksonomy.
 
     Tags can be:
-    - CONCEPT: From concept pack graph (linked to probes)
+    - CONCEPT: From concept pack graph (linked to lenses)
     - ENTITY: Named entities the BE tracks
     - BUD: Candidate for graft training
     - CUSTOM: Arbitrary labels
@@ -693,7 +693,7 @@ class AuditRecord:
     A record in the audit log.
 
     This is immutable and not BE-accessible.
-    Contains full probe outputs including hidden probes.
+    Contains full lens outputs including hidden lenses.
     """
 
     id: str
@@ -701,8 +701,8 @@ class AuditRecord:
     xdb_id: str
     tick: int
 
-    # Full probe state (including hidden probes)
-    probe_activations: Dict[str, float] = field(default_factory=dict)
+    # Full lens state (including hidden lenses)
+    lens_activations: Dict[str, float] = field(default_factory=dict)
 
     # Steering that was applied
     steering_applied: List[Dict] = field(default_factory=list)
@@ -722,7 +722,7 @@ class AuditRecord:
             'timestamp': self.timestamp.isoformat(),
             'xdb_id': self.xdb_id,
             'tick': self.tick,
-            'probe_activations': self.probe_activations,
+            'lens_activations': self.lens_activations,
             'steering_applied': self.steering_applied,
             'event_type': self.event_type.value,
             'raw_content': self.raw_content,

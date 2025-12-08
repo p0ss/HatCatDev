@@ -4,13 +4,13 @@
 > An endpoint that implements MAP must be able to:
 >
 > 1.  Declare **which concept pack(s)** it speaks.
-> 2.  Expose **probes** for those packs.
+> 2.  Expose **lenses** for those packs.
 > 3.  Publish **conceptual diffs** over time.
 > 4.  Optionally declare **translation mappings** between concept packs.
 
 Everything else — governance, correctness, trust, who’s right — is left to contracts and ecosystem conventions.
 
-HatCat is the reference implementation: its **concept packs** become the MAP concept specs, and its **probe packs** become the MAP probe sets.
+HatCat is the reference implementation: its **concept packs** become the MAP concept specs, and its **lens packs** become the MAP lens sets.
 
 ---
 
@@ -19,9 +19,9 @@ HatCat is the reference implementation: its **concept packs** become the MAP con
 MAP defines four core JSON artefacts. These provide the "static" definitions needed before any API calls occur.
 
 1.  **Concept Pack Manifest** – “What are the concepts and how are they organised?”
-2.  **Probe Pack Manifest** – “What probes implement these concepts on this model?”
+2.  **Lens Pack Manifest** – “What lenses implement these concepts on this model?”
 3.  **Deployment Manifest** – “This running endpoint supports these packs at these URLs.”
-4.  **Diff Objects** – “Here’s how my concept space/probes changed over time.”
+4.  **Diff Objects** – “Here’s how my concept space/lenses changed over time.”
 
 ### 1.1 Concept Pack Manifest (Identity)
 
@@ -56,11 +56,11 @@ This is your existing `pack.json`, decorated with a global ID.
 
 ---
 
-### 1.2 Probe Pack Manifest (Implementation)
+### 1.2 Lens Pack Manifest (Implementation)
 
-A **probe pack** binds a Concept Pack to a specific Model.
+A **lens pack** binds a Concept Pack to a specific Model.
 
-**ID Convention (`ProbePackID`):**
+**ID Convention (`LensPackID`):**
 `<authority>/<model_name>__<concept_pack_spec_id>__<version>`
 *Example:* `org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3`
 
@@ -68,7 +68,7 @@ A **probe pack** binds a Concept Pack to a specific Model.
 
 ```jsonc
 {
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
   "version": "2.20251123.0",
 
   "model": {
@@ -84,15 +84,15 @@ A **probe pack** binds a Concept Pack to a specific Model.
     "requires": ["sumo-wordnet-v4"]
   },
 
-  "probes": {
+  "lenses": {
     "total_count": 5668,
     "per_layer": { "0": 776, "1": 900, "2": 1200, "3": 1500, "4": 1292 }
   },
 
   // The Index: Mapping abstract IDs to physical classifiers
-  "probe_index": {
+  "lens_index": {
     "AIAlignmentProcess": {
-      "probe_id": "org.hatcat/...__v3::probe/AIAlignmentProcess",
+      "lens_id": "org.hatcat/...__v3::lens/AIAlignmentProcess",
       "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/AIAlignmentProcess",
       "layer": 2,
       "file": "hierarchy/AIAlignmentProcess_classifier.pt",
@@ -106,7 +106,7 @@ A **probe pack** binds a Concept Pack to a specific Model.
         "required": ["score"]
       }
     }
-    // ... repeated for all 5668 probes
+    // ... repeated for all 5668 lenses
   }
 }
 ```
@@ -123,14 +123,14 @@ A **deployment** is a running service exposing the APIs. This is the entry point
 {
   "model_id": "hatcat/gemma-3-4b-pt@2025-11-28", // The specific instance running
 
-  "active_probe_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
+  "active_lens_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
 
   "supported_concept_packs": [
     "org.hatcat/sumo-wordnet-v4@4.0.0"
   ],
 
   // Endpoints
-  "probe_endpoint": "https://hatcat.example.com/mindmeld/probes",
+  "lens_endpoint": "https://hatcat.example.com/mindmeld/lenses",
   "diff_endpoint": "https://hatcat.example.com/mindmeld/diffs",
 
   // Translations (Optional but recommended)
@@ -150,21 +150,21 @@ A **deployment** is a running service exposing the APIs. This is the entry point
 
 ---
 
-## 2. Probe Endpoint (Runtime)
+## 2. Lens Endpoint (Runtime)
 
-The **probe endpoint** allows clients to inspect the model's internal state using the declared probes.
+The **lens endpoint** allows clients to inspect the model's internal state using the declared lenses.
 
 ### 2.1 Request
 ```jsonc
-POST /mindmeld/probes
+POST /mindmeld/lenses
 {
   "concept_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v3",
 
-  // List of full ProbeIDs requested
-  "probes": [
-    "org.hatcat/...__v3::probe/AIAlignmentProcess",
-    "org.hatcat/...__v3::probe/AIStrategicDeception"
+  // List of full LensIDs requested
+  "lenses": [
+    "org.hatcat/...__v3::lens/AIAlignmentProcess",
+    "org.hatcat/...__v3::lens/AIStrategicDeception"
   ],
 
   "input": {
@@ -181,12 +181,12 @@ POST /mindmeld/probes
   "timestamp": "2025-11-28T12:00:00Z",
 
   "results": {
-    "org.hatcat/...__v3::probe/AIAlignmentProcess": {
+    "org.hatcat/...__v3::lens/AIAlignmentProcess": {
       "score": 0.19,
       "null_pole": 0.22,
       "entropy": 0.41
     },
-    "org.hatcat/...__v3::probe/AIStrategicDeception": {
+    "org.hatcat/...__v3::lens/AIStrategicDeception": {
       "score": 0.83,
       "null_pole": 0.05,
       "entropy": 0.19
@@ -234,7 +234,7 @@ Used when a specific concept shifts, is discovered, or is split.
 ```
 
 ### 3.2 PackDiff (Bulk Update)
-Used when the endpoint upgrades to a new Probe Pack version.
+Used when the endpoint upgrades to a new Lens Pack version.
 
 ```jsonc
 {
@@ -242,15 +242,15 @@ Used when the endpoint upgrades to a new Probe Pack version.
   "from_model_id": "hatcat/gemma-3-4b-pt@2025-11-28",
   "base_concept_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
 
-  "new_probe_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v4",
+  "new_lens_pack_id": "org.hatcat/gemma-3-4b-pt__org.hatcat/sumo-wordnet-v4@4.0.0__v4",
 
   "changes": {
     "new_concepts": ["...concept/AIConsentSignal"],
     "retired_concepts": [],
-    "probe_retrained": ["...concept/AIStrategicDeception"]
+    "lens_retrained": ["...concept/AIStrategicDeception"]
   },
 
-  "summary": "Probe pack v4: added AIConsentSignal, retrained deception probes.",
+  "summary": "Lens pack v4: added AIConsentSignal, retrained deception lenses.",
   "created": "2025-11-28T04:00:00Z"
 }
 ```
@@ -266,7 +266,7 @@ Returns an array of ConceptDiff and PackDiff objects.
 
 ## 4. HatCat Implementation Guide
 
-This section describes how to upgrade HatCat's existing concept packs and probe packs to be MAP-compliant.
+This section describes how to upgrade HatCat's existing concept packs and lens packs to be MAP-compliant.
 
 ### 4.1 Upgrading Concept Packs
 
@@ -323,12 +323,12 @@ This section describes how to upgrade HatCat's existing concept packs and probe 
 }
 ```
 
-### 4.2 Upgrading Probe Packs
+### 4.2 Upgrading Lens Packs
 
-**Current State**: `probe_packs/gemma-3-4b-pt_sumo-wordnet-v3/probe_pack.json`
+**Current State**: `lens_packs/gemma-3-4b-pt_sumo-wordnet-v3/lens_pack.json`
 ```jsonc
 {
-  "probe_pack_id": null,  // ⚠️ NULL - needs real ID
+  "lens_pack_id": null,  // ⚠️ NULL - needs real ID
   "version": "2.20251123.0",
   "model": {
     "name": "google/gemma-3-4b-pt"
@@ -336,7 +336,7 @@ This section describes how to upgrade HatCat's existing concept packs and probe 
   "compatibility": {
     "requires": ["sumo-wordnet-v1"]  // ⚠️ Should reference spec_id
   },
-  "probes": {
+  "lenses": {
     "total_count": 5668,
     "concepts": ["AAM", "AGM", ...]  // ⚠️ Flat list only
   }
@@ -344,16 +344,16 @@ This section describes how to upgrade HatCat's existing concept packs and probe 
 ```
 
 **Required Changes**:
-1. Set `probe_pack_id` to real MAP-compliant ID
+1. Set `lens_pack_id` to real MAP-compliant ID
 2. Add `concept_pack_spec_id` linking to concept pack
-3. Build `probe_index` mapping concept names to probe metadata
-4. Add `probe_output_schema` describing probe return values
+3. Build `lens_index` mapping concept names to lens metadata
+4. Add `lens_output_schema` describing lens return values
 
 **Upgraded Structure**:
 ```jsonc
 {
-  // NEW: Real probe pack ID (not null)
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
+  // NEW: Real lens pack ID (not null)
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
 
   // KEEP: Version and model info
   "version": "2.20251123.0",
@@ -373,14 +373,14 @@ This section describes how to upgrade HatCat's existing concept packs and probe 
   },
 
   // KEEP: Aggregate stats
-  "probes": {
+  "lenses": {
     "total_count": 5668,
     "layer_distribution": { /* ... */ },
     "concepts": ["AAM", "AGM", ...]  // Keep for compat
   },
 
-  // NEW: Shared output schema for all probes
-  "probe_output_schema": {
+  // NEW: Shared output schema for all lenses
+  "lens_output_schema": {
     "type": "object",
     "properties": {
       "score": { "type": "number", "description": "Concept activation score" },
@@ -390,21 +390,21 @@ This section describes how to upgrade HatCat's existing concept packs and probe 
     "required": ["score"]
   },
 
-  // NEW: Index mapping concept names to probe metadata
-  "probe_index": {
+  // NEW: Index mapping concept names to lens metadata
+  "lens_index": {
     "AIAlignmentProcess": {
-      "probe_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::probe/AIAlignmentProcess",
+      "lens_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::lens/AIAlignmentProcess",
       "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/AIAlignmentProcess",
       "layer": 2,
       "file": "hierarchy/AIAlignmentProcess_classifier.pt",
-      "output_schema": { "$ref": "#/probe_output_schema" }
+      "output_schema": { "$ref": "#/lens_output_schema" }
     },
     "AIStrategicDeception": {
-      "probe_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::probe/AIStrategicDeception",
+      "lens_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::lens/AIStrategicDeception",
       "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/AIStrategicDeception",
       "layer": 2,
       "file": "hierarchy/AIStrategicDeception_classifier.pt",
-      "output_schema": { "$ref": "#/probe_output_schema" }
+      "output_schema": { "$ref": "#/lens_output_schema" }
     }
     // ... repeated for all 5668 concepts
   }
@@ -422,14 +422,14 @@ This file describes a running MAP endpoint instance.
   "deployment_id": "hatcat/gemma-3-4b-pt@2025-11-28",
   "model_id": "hatcat/gemma-3-4b-pt@2025-11-28",
 
-  "active_probe_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
+  "active_lens_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
 
   "supported_concept_packs": [
     "org.hatcat/sumo-wordnet-v4@4.0.0"
   ],
 
   // MAP API endpoints
-  "probe_endpoint": "http://localhost:8000/mindmeld/probes",
+  "lens_endpoint": "http://localhost:8000/mindmeld/lenses",
   "diff_endpoint": "http://localhost:8000/mindmeld/diffs",
   "manifest_endpoint": "http://localhost:8000/mindmeld/manifest",
 
@@ -442,13 +442,13 @@ This file describes a running MAP endpoint instance.
 
 HatCat needs two HTTP endpoints to be MAP-compliant:
 
-**Endpoint 1: Probe Inference** (`POST /mindmeld/probes`)
+**Endpoint 1: Lens Inference** (`POST /mindmeld/lenses`)
 
 This endpoint:
-1. Accepts ProbeRequest with probe IDs
-2. Looks up probe files via `probe_index`
+1. Accepts LensRequest with lens IDs
+2. Looks up lens files via `lens_index`
 3. Runs forward pass through the model
-4. Returns probe scores
+4. Returns lens scores
 
 **Implementation Sketch** (FastAPI):
 ```python
@@ -459,49 +459,49 @@ import torch
 
 app = FastAPI()
 
-class ProbeRequest(BaseModel):
+class LensRequest(BaseModel):
     concept_pack_spec_id: str
-    probe_pack_id: str
-    probes: List[str]  # List of ProbeIDs
+    lens_pack_id: str
+    lenses: List[str]  # List of LensIDs
     input: Dict[str, str]  # {"text": "...", "position": "final_token"}
 
-class ProbeResponse(BaseModel):
+class LensResponse(BaseModel):
     model_id: str
     timestamp: str
     results: Dict[str, Dict[str, float]]
 
-@app.post("/mindmeld/probes", response_model=ProbeResponse)
-async def run_probes(request: ProbeRequest):
-    # 1. Validate probe_pack_id matches deployment
-    if request.probe_pack_id != ACTIVE_PROBE_PACK_ID:
-        raise HTTPException(404, "Probe pack not found")
+@app.post("/mindmeld/lenses", response_model=LensResponse)
+async def run_lenses(request: LensRequest):
+    # 1. Validate lens_pack_id matches deployment
+    if request.lens_pack_id != ACTIVE_LENS_PACK_ID:
+        raise HTTPException(404, "Lens pack not found")
 
-    # 2. Load probe_index from probe_pack.json
-    probe_index = load_probe_index(request.probe_pack_id)
+    # 2. Load lens_index from lens_pack.json
+    lens_index = load_lens_index(request.lens_pack_id)
 
-    # 3. Resolve ProbeIDs to filesystem paths
-    probe_files = []
-    for probe_id in request.probes:
-        concept_name = extract_concept_name(probe_id)
-        if concept_name not in probe_index:
-            raise HTTPException(404, f"Probe {probe_id} not found")
-        probe_files.append(probe_index[concept_name]["file"])
+    # 3. Resolve LensIDs to filesystem paths
+    lens_files = []
+    for lens_id in request.lenses:
+        concept_name = extract_concept_name(lens_id)
+        if concept_name not in lens_index:
+            raise HTTPException(404, f"Lens {lens_id} not found")
+        lens_files.append(lens_index[concept_name]["file"])
 
     # 4. Run model forward pass and extract activations
     activations = run_model_forward(request.input["text"])
 
-    # 5. Run each probe classifier
+    # 5. Run each lens classifier
     results = {}
-    for probe_id, probe_file in zip(request.probes, probe_files):
-        classifier = torch.load(probe_file)
+    for lens_id, lens_file in zip(request.lenses, lens_files):
+        classifier = torch.load(lens_file)
         scores = classifier(activations)
-        results[probe_id] = {
+        results[lens_id] = {
             "score": scores["score"],
             "null_pole": scores["null_pole"],
             "entropy": scores["entropy"]
         }
 
-    return ProbeResponse(
+    return LensResponse(
         model_id=MODEL_ID,
         timestamp=datetime.now().isoformat() + "Z",
         results=results
@@ -545,7 +545,7 @@ async def get_diffs(
     return {"diffs": diffs}
 ```
 
-**Logging Diffs**: Whenever HatCat trains new probes or discovers new concepts, append to the diff log:
+**Logging Diffs**: Whenever HatCat trains new lenses or discovers new concepts, append to the diff log:
 
 ```python
 def log_concept_diff(local_concept_id, related_concepts, summary, evidence):
@@ -565,12 +565,12 @@ def log_concept_diff(local_concept_id, related_concepts, summary, evidence):
     with open("logs/conceptual_diffs.jsonl", "a") as f:
         f.write(json.dumps(diff) + "\n")
 
-def log_pack_diff(new_probe_pack_id, changes, summary):
+def log_pack_diff(new_lens_pack_id, changes, summary):
     diff = {
         "type": "PackDiff",
         "from_model_id": MODEL_ID,
         "base_concept_pack_spec_id": CONCEPT_PACK_SPEC_ID,
-        "new_probe_pack_id": new_probe_pack_id,
+        "new_lens_pack_id": new_lens_pack_id,
         "changes": changes,
         "summary": summary,
         "created": datetime.now().isoformat() + "Z"
@@ -590,19 +590,19 @@ To make HatCat MAP-compliant:
   - [ ] Add `concept_index` structure
   - [ ] Script: `scripts/upgrade_concept_packs_to_map.py`
 
-- [ ] **Upgrade probe packs**:
-  - [ ] Set `probe_pack_id` (replace null with real ID)
+- [ ] **Upgrade lens packs**:
+  - [ ] Set `lens_pack_id` (replace null with real ID)
   - [ ] Add `concept_pack_spec_id` linking to concept pack
-  - [ ] Build `probe_index` from existing classifier files
-  - [ ] Add `probe_output_schema`
-  - [ ] Script: `scripts/upgrade_probe_packs_to_map.py`
+  - [ ] Build `lens_index` from existing classifier files
+  - [ ] Add `lens_output_schema`
+  - [ ] Script: `scripts/upgrade_lens_packs_to_map.py`
 
 - [ ] **Create deployment manifests**:
   - [ ] Generate `deployments/*.json` for each running instance
   - [ ] Script: `scripts/generate_deployment_manifest.py`
 
 - [ ] **Implement MAP endpoints**:
-  - [ ] Create FastAPI server with `/mindmeld/probes` and `/mindmeld/diffs`
+  - [ ] Create FastAPI server with `/mindmeld/lenses` and `/mindmeld/diffs`
   - [ ] Integrate with existing HatCat inference pipeline
   - [ ] File: `src/api/map_server.py`
 
@@ -613,7 +613,7 @@ To make HatCat MAP-compliant:
 
 - [ ] **Validation**:
   - [ ] Verify all IDs are unique and follow conventions
-  - [ ] Test probe endpoint with sample requests
+  - [ ] Test lens endpoint with sample requests
   - [ ] Test diff endpoint filtering
   - [ ] Script: `scripts/validate_map_compliance.py`
 
@@ -622,10 +622,10 @@ To make HatCat MAP-compliant:
 All MAP upgrades are **additive** — existing fields remain unchanged:
 
 - Concept packs keep `pack_id`, `version`, `hierarchy_file`
-- Probe packs keep `compatibility.requires`, `probes.concepts` list
+- Lens packs keep `compatibility.requires`, `lenses.concepts` list
 - Internal HatCat code can continue using short names
 
-Only external MAP clients need to use the new `spec_id` and `probe_id` fields.
+Only external MAP clients need to use the new `spec_id` and `lens_id` fields.
 
 ### 4.7 Scripts Reference
 
@@ -634,29 +634,29 @@ HatCat provides scripts to automate MAP migration:
 | Script | Purpose |
 |--------|---------|
 | `scripts/upgrade_concept_packs_to_map.py` | Add MAP fields to concept pack manifests |
-| `scripts/upgrade_probe_packs_to_map.py` | Add MAP fields and build probe_index |
+| `scripts/upgrade_lens_packs_to_map.py` | Add MAP fields and build lens_index |
 | `scripts/generate_deployment_manifest.py` | Create deployment manifest from config |
 | `scripts/validate_map_compliance.py` | Verify all MAP requirements are met |
-| `scripts/build_probe_index.py` | Generate probe_index from classifier files |
+| `scripts/build_lens_index.py` | Generate lens_index from classifier files |
 
 **Usage Example**:
 ```bash
 # Upgrade all concept packs
 python scripts/upgrade_concept_packs_to_map.py --authority org.hatcat
 
-# Upgrade all probe packs
-python scripts/upgrade_probe_packs_to_map.py
+# Upgrade all lens packs
+python scripts/upgrade_lens_packs_to_map.py
 
 # Generate deployment manifest
 python scripts/generate_deployment_manifest.py \
-  --probe-pack gemma-3-4b-pt_sumo-wordnet-v3 \
+  --lens-pack gemma-3-4b-pt_sumo-wordnet-v3 \
   --host http://localhost:8000 \
   --output deployments/local-gemma.json
 
 # Validate compliance
 python scripts/validate_map_compliance.py \
   --concept-packs concept_packs/ \
-  --probe-packs probe_packs/ \
+  --lens-packs lens_packs/ \
   --deployments deployments/
 ```
 
@@ -668,7 +668,7 @@ MAP is a **declaration protocol**, not a trust protocol. Security considerations
 
 1. **ID Spoofing**: Anyone can claim any `spec_id`. Consumers must verify authority via out-of-band mechanisms (signatures, DNS records, etc.)
 
-2. **Probe Correctness**: MAP does not guarantee probe accuracy. Consumers should validate probe quality through:
+2. **Lens Correctness**: MAP does not guarantee lens accuracy. Consumers should validate lens quality through:
    - Benchmark suites
    - Cross-validation with multiple endpoints
    - Calibration datasets
@@ -692,11 +692,11 @@ MAP leaves governance and trust to **ecosystem conventions** and bilateral contr
 
 MAP is intentionally minimal. Possible extensions:
 
-1. **Probe Calibration Metadata**: Include calibration curves and confidence intervals
+1. **Lens Calibration Metadata**: Include calibration curves and confidence intervals
 2. **Multi-Model Ensembles**: Deployment manifests for ensemble endpoints
 3. **Real-time Diff Subscriptions**: WebSocket or SSE for live diff feeds
 4. **Concept Translation Services**: Standardized API for cross-pack concept mapping
-5. **Benchmark Results**: Include standardized benchmark scores in probe pack manifests
+5. **Benchmark Results**: Include standardized benchmark scores in lens pack manifests
 6. **Versioned Schemas**: JSON Schema definitions for all MAP objects
 
 These are **out of scope** for MAP v1, but can be added as optional extensions.

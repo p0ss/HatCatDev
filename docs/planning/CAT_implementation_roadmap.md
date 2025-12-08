@@ -5,7 +5,7 @@
   Overview
 
   Build a Meso-CAT (270M-1B scale) to provide adversarial oversight for 4B-8B substrates. The CAT
-  consumes HAT probe streams and produces divergence assessments.
+  consumes HAT lens streams and produces divergence assessments.
 
   1. CAT Ontology (Concept Pack for Oversight)
 
@@ -13,7 +13,7 @@
 
   Layer A: Semantic Concepts (inherited from subject)
   - Import from sumo-wordnet-v4 - the ~1000 concepts the subject uses
-  - CAT must understand these to interpret probe signals
+  - CAT must understand these to interpret lens signals
 
   Layer B: Behavioural Indicators
   - Evasion - circumlocution, topic steering, selective attention
@@ -35,9 +35,9 @@
   - Hedging vs Commitment - epistemic stance
 
   Layer D: Divergence Detectors
-  - Interior/Exterior Mismatch - probe state vs output mismatch
+  - Interior/Exterior Mismatch - lens state vs output mismatch
   - MotiveSpike - sudden motive axis changes
-  - CalibrationDrift - probe outputs vs expected baselines
+  - CalibrationDrift - lens outputs vs expected baselines
   - ConceptActivationAnomaly - unexpected concept co-activations
   - TemporalIncoherence - state evolution that doesn't match context
 
@@ -65,21 +65,21 @@
     - MultiWOZ (dialogue state)
     - Synthetic generation with pragmatic labels
 
-  Dataset D: Probe-Aligned Training
-  - Paired (probe_trace, behavioural_label) examples
+  Dataset D: Lens-Aligned Training
+  - Paired (lens_trace, behavioural_label) examples
   - Requires running the subject model and capturing HAT output
-  - ~50K probe traces with corresponding assessments
+  - ~50K lens traces with corresponding assessments
 
   3. CAT Model Architecture
 
   Option A: Encoder-only (like BERT)
-  - Input: serialized probe traces + context window
+  - Input: serialized lens traces + context window
   - Output: multi-head classification (divergence type, severity, confidence)
   - Pro: Fast inference, deterministic
   - Con: Limited reasoning about complex patterns
 
   Option B: Decoder-only (small LLM)
-  - Input: probe traces serialized as special tokens + natural language context
+  - Input: lens traces serialized as special tokens + natural language context
   - Output: CATAssessment JSON
   - Pro: Can explain reasoning, flexible output
   - Con: Higher latency, may hallucinate
@@ -92,24 +92,24 @@
   - Phi-3 Mini (3.8B, quantized)
   - TinyLlama 1.1B
   - SmolLM 360M/1.7B
-  - Custom encoder trained from scratch on probe-specific pretraining
+  - Custom encoder trained from scratch on lens-specific pretraining
 
   4. Training Program
 
-  Phase 1: Probe Embedding Pretraining
-  - Train probe trace encoder on reconstruction task
-  - Input: probe vectors from HAT
-  - Task: reconstruct masked probe values, predict next-tick probes
+  Phase 1: Lens Embedding Pretraining
+  - Train lens trace encoder on reconstruction task
+  - Input: lens vectors from HAT
+  - Task: reconstruct masked lens values, predict next-tick lenses
   - Duration: ~100K steps
 
   Phase 2: Behavioural Classification
   - Fine-tune on behavioural indicator detection
-  - Multi-label classification from probe traces
+  - Multi-label classification from lens traces
   - Calibrate confidence outputs
 
   Phase 3: Divergence Detection
   - Fine-tune on divergence ground truth
-  - Key task: given (probe_trace, external_output), classify match/mismatch
+  - Key task: given (lens_trace, external_output), classify match/mismatch
   - Include adversarial examples
 
   Phase 4: Assessment Generation (for decoder-only)
@@ -131,13 +131,13 @@
   ├── data/
   │   ├── generate_divergence_corpus.py
   │   ├── annotate_behavioural.py
-  │   └── collect_probe_traces.py
+  │   └── collect_lens_traces.py
   ├── models/
-  │   ├── probe_encoder.py               # Probe trace embedding
+  │   ├── lens_encoder.py               # Lens trace embedding
   │   ├── cat_classifier.py              # Option A: encoder-only
   │   └── cat_generator.py               # Option B: decoder-only
   ├── training/
-  │   ├── pretrain_probe_encoder.py
+  │   ├── pretrain_lens_encoder.py
   │   ├── train_behavioural.py
   │   ├── train_divergence.py
   │   └── calibrate_thresholds.py
@@ -146,18 +146,18 @@
   │   ├── cat_assessment.py              # Assessment generation
   │   └── escalation.py                  # Trigger larger CAT
   └── integration/
-      ├── hat_cat_bridge.py              # Connect to HAT probe streams
+      ├── hat_cat_bridge.py              # Connect to HAT lens streams
       └── ask_hooks.py                   # ASK incident/treaty integration
 
   6. Data Collection Strategy
 
   Immediate (can start now):
-  1. Use existing probe training infrastructure to collect probe traces during generation
+  1. Use existing lens training infrastructure to collect lens traces during generation
   2. Create synthetic divergence corpus using prompt engineering
   3. Annotate subset of LMSYS-Chat for behavioural indicators
 
   Medium-term:
-  1. Red-team the 4B-8B subject to collect adversarial probe traces
+  1. Red-team the 4B-8B subject to collect adversarial lens traces
   2. Build ground-truth divergence dataset from human annotation
   3. Partner with other projects for discourse-annotated data
 

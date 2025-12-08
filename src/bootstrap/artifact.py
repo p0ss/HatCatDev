@@ -4,7 +4,7 @@ Bootstrap Artifact - Complete package for waking a Bounded Experiencer.
 The artifact contains everything needed to instantiate a BE:
 1. Substrate Bundle - The base model with checksum
 2. Concept Pack (MAP) - SUMO concepts and hierarchies
-3. Probe Pack - Trained classifiers for concept detection
+3. Lens Pack - Trained classifiers for concept detection
 4. USH Profile - Utility Simplex Homeostasis parameters
 5. Uplift Record - How this BE was created/modified
 6. XDB Bootstrap - Initial experience database state
@@ -135,17 +135,17 @@ class ConceptPack(ArtifactComponent):
 
 
 @dataclass
-class ProbePack(ArtifactComponent):
+class LensPack(ArtifactComponent):
     """
-    Trained concept probes that read substrate activations.
+    Trained concept lenses that read substrate activations.
 
     Contains:
-    - Probe weights for each concept
-    - Probe performance metrics (F1, accuracy)
+    - Lens weights for each concept
+    - Lens performance metrics (F1, accuracy)
     - Layer mappings
     - Calibration data
     """
-    probe_count: int = 0
+    lens_count: int = 0
     layers_covered: List[int] = field(default_factory=list)
     avg_f1: float = 0.0
     min_f1_threshold: float = 0.8
@@ -153,7 +153,7 @@ class ProbePack(ArtifactComponent):
     def to_dict(self) -> Dict[str, Any]:
         d = super().to_dict()
         d.update({
-            "probe_count": self.probe_count,
+            "lens_count": self.lens_count,
             "layers_covered": self.layers_covered,
             "avg_f1": self.avg_f1,
             "min_f1_threshold": self.min_f1_threshold,
@@ -348,7 +348,7 @@ class BootstrapArtifact:
     # Components
     substrate: SubstrateBundle = field(default_factory=lambda: SubstrateBundle(name="substrate", version="0.0.0"))
     concept_pack: ConceptPack = field(default_factory=lambda: ConceptPack(name="concepts", version="0.0.0"))
-    probe_pack: ProbePack = field(default_factory=lambda: ProbePack(name="probes", version="0.0.0"))
+    lens_pack: LensPack = field(default_factory=lambda: LensPack(name="lenses", version="0.0.0"))
     ush_profile: USHProfile = field(default_factory=lambda: USHProfile(name="ush", version="0.0.0"))
     uplift_record: UpliftRecord = field(default_factory=lambda: UpliftRecord(name="uplift", version="0.0.0"))
     xdb_bootstrap: XDBBootstrap = field(default_factory=lambda: XDBBootstrap(name="xdb", version="0.0.0"))
@@ -364,7 +364,7 @@ class BootstrapArtifact:
         """Compute overall artifact checksum from component checksums."""
         h = hashlib.sha256()
         for component in [
-            self.substrate, self.concept_pack, self.probe_pack,
+            self.substrate, self.concept_pack, self.lens_pack,
             self.ush_profile, self.uplift_record, self.xdb_bootstrap,
             self.lifecycle, self.tool_pack
         ]:
@@ -385,12 +385,12 @@ class BootstrapArtifact:
             errors.append("Substrate has no checksum")
         if not self.concept_pack.checksum:
             errors.append("Concept pack has no checksum")
-        if not self.probe_pack.checksum:
-            errors.append("Probe pack has no checksum")
+        if not self.lens_pack.checksum:
+            errors.append("Lens pack has no checksum")
 
-        # Check substrate dimensions match probe pack
-        if self.substrate.hidden_dim > 0 and self.probe_pack.probe_count > 0:
-            # Would check if probes are compatible with substrate
+        # Check substrate dimensions match lens pack
+        if self.substrate.hidden_dim > 0 and self.lens_pack.lens_count > 0:
+            # Would check if lenses are compatible with substrate
             pass
 
         # Check lifecycle is valid
@@ -411,7 +411,7 @@ class BootstrapArtifact:
             "components": {
                 "substrate": self.substrate.to_dict(),
                 "concept_pack": self.concept_pack.to_dict(),
-                "probe_pack": self.probe_pack.to_dict(),
+                "lens_pack": self.lens_pack.to_dict(),
                 "ush_profile": self.ush_profile.to_dict(),
                 "uplift_record": self.uplift_record.to_dict(),
                 "xdb_bootstrap": self.xdb_bootstrap.to_dict(),
@@ -429,7 +429,7 @@ class BootstrapArtifact:
             manifest.json       # Artifact metadata and checksums
             substrate/          # Model weights or references
             concepts/           # Concept pack files
-            probes/             # Probe weights
+            lenses/             # Lens weights
             ush/                # USH configuration
             uplift/             # Provenance records
             xdb/                # XDB seed data
@@ -440,7 +440,7 @@ class BootstrapArtifact:
         output_dir.mkdir(parents=True, exist_ok=True)
 
         # Create subdirectories
-        for subdir in ['substrate', 'concepts', 'probes', 'ush', 'uplift', 'xdb', 'lifecycle', 'tools']:
+        for subdir in ['substrate', 'concepts', 'lenses', 'ush', 'uplift', 'xdb', 'lifecycle', 'tools']:
             (output_dir / subdir).mkdir(exist_ok=True)
 
         # Save manifest
@@ -471,7 +471,7 @@ def create_artifact_from_components(
     be_name: str,
     substrate_manifest: SubstrateManifest,
     concept_pack_path: Path,
-    probe_pack_path: Path,
+    lens_pack_path: Path,
     tool_pack: Optional[ToolGraftPack] = None,
     ush_config: Optional[Dict[str, Any]] = None,
     lifecycle_config: Optional[Dict[str, Any]] = None,
@@ -508,12 +508,12 @@ def create_artifact_from_components(
     )
     artifact.concept_pack.checksum = artifact.concept_pack.compute_checksum(concept_pack_path)
 
-    # Probe pack
-    artifact.probe_pack = ProbePack(
-        name="probes",
+    # Lens pack
+    artifact.lens_pack = LensPack(
+        name="lenses",
         version="1.0.0",
     )
-    artifact.probe_pack.checksum = artifact.probe_pack.compute_checksum(probe_pack_path)
+    artifact.lens_pack.checksum = artifact.lens_pack.compute_checksum(lens_pack_path)
 
     # USH profile
     if ush_config:

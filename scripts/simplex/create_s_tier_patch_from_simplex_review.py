@@ -158,14 +158,14 @@ def create_s_plus_training_spec(patch: Dict):
     """Create S+ training specification"""
 
     total_simplexes = patch['metadata']['total_s_tier_simplexes']
-    total_probes = total_simplexes * 3  # 3 probes per simplex
+    total_lenses = total_simplexes * 3  # 3 lenses per simplex
 
     spec = {
         "training_run": "S+_three_pole_homeostatic",
-        "description": "S-tier three-pole detection probe training for homeostatic steering",
+        "description": "S-tier three-pole detection lens training for homeostatic steering",
         "total_simplexes": total_simplexes,
-        "total_probes": total_probes,
-        "probes_per_simplex": 3,
+        "total_lenses": total_lenses,
+        "lenses_per_simplex": 3,
         "training_configuration": {
             "mode": "adaptive_falloff",
             "validation_mode": "falloff_strict",
@@ -190,25 +190,25 @@ def create_s_plus_training_spec(patch: Dict):
             "total_samples_per_simplex": 90,
             "behavioral_coverage_target": 0.6  # 60% behavioral, 40% definitional
         },
-        "probe_training_order": {
+        "lens_training_order": {
             "1_critical": {
                 "simplexes": len(patch['critical_s_tier']),
-                "probes": len(patch['critical_s_tier']) * 3,
+                "lenses": len(patch['critical_s_tier']) * 3,
                 "estimated_time_hours": len(patch['critical_s_tier']) * 0.5
             },
             "2_high": {
                 "simplexes": len(patch['high_priority_s_tier']),
-                "probes": len(patch['high_priority_s_tier']) * 3,
+                "lenses": len(patch['high_priority_s_tier']) * 3,
                 "estimated_time_hours": len(patch['high_priority_s_tier']) * 0.5
             },
             "3_medium": {
                 "simplexes": len(patch['medium_priority_s_tier']),
-                "probes": len(patch['medium_priority_s_tier']) * 3,
+                "lenses": len(patch['medium_priority_s_tier']) * 3,
                 "estimated_time_hours": len(patch['medium_priority_s_tier']) * 0.5
             },
             "4_standard": {
                 "simplexes": len(patch['standard_s_tier']),
-                "probes": len(patch['standard_s_tier']) * 3,
+                "lenses": len(patch['standard_s_tier']) * 3,
                 "estimated_time_hours": len(patch['standard_s_tier']) * 0.5
             }
         },
@@ -269,7 +269,7 @@ def main():
     print("SUMMARY")
     print("="*80)
     print(f"Total S-tier simplexes: {patch['metadata']['total_s_tier_simplexes']}")
-    print(f"Total probes needed: {spec['total_probes']} (3 per simplex)")
+    print(f"Total lenses needed: {spec['total_lenses']} (3 per simplex)")
     print(f"Estimated training time: {spec['estimated_total_time_hours']:.1f} hours")
     print(f"Estimated samples: {spec['estimated_total_samples']}")
     print(f"\nMissing SUMO concepts: {len(missing_sumo)}")

@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 def main():
     print("=" * 80)
@@ -33,17 +33,17 @@ def main():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    # Load probe manager
-    print("Loading probe manager...")
-    probe_manager = DynamicProbeManager(
-        probe_pack_id="gemma-3-4b-pt_sumo-wordnet-v2",
+    # Load lens manager
+    print("Loading lens manager...")
+    lens_manager = DynamicLensManager(
+        lens_pack_id="gemma-3-4b-pt_sumo-wordnet-v2",
         base_layers=[3],
-        max_loaded_probes=500,
+        max_loaded_lenses=500,
         load_threshold=0.3,
         device="cuda"
     )
 
-    print(f"Initial probes loaded: {len(probe_manager.loaded_probes)}")
+    print(f"Initial lenses loaded: {len(lens_manager.loaded_lenses)}")
 
     # Tokenize and process prompt
     print("\nProcessing prompt...")
@@ -79,7 +79,7 @@ def main():
         hidden_state = last_layer_states[0, pos:pos+1, :]
         hidden_state_f32 = hidden_state.float()
 
-        detected, timing = probe_manager.detect_and_expand(
+        detected, timing = lens_manager.detect_and_expand(
             hidden_state_f32,
             top_k=5,
             return_timing=True

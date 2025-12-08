@@ -8,7 +8,7 @@ However, when displaying results, we want to show the MOST SPECIFIC concept, not
 
 ## Solution: Hierarchical Suppression
 
-When multiple probes activate in a parent-child chain, suppress the parent activations and show only the most specific (deepest) concept.
+When multiple lenses activate in a parent-child chain, suppress the parent activations and show only the most specific (deepest) concept.
 
 ### Algorithm
 
@@ -70,7 +70,7 @@ Suppressed:
 ## Implementation
 
 This should be applied in:
-1. `DynamicProbeManager.detect_concepts()` - after getting raw activations
+1. `DynamicLensManager.detect_concepts()` - after getting raw activations
 2. Streamlit UI - before displaying concept tags
 3. Any analysis scripts that report concept activations
 
@@ -78,7 +78,7 @@ This should be applied in:
 
 1. **Cleaner output**: Shows "Sparrow" instead of "Sparrow, Bird, Animal, Physical, Object, Entity"
 2. **Preserves hierarchy**: Still maintains the semantic relationships
-3. **No retraining needed**: Works with existing probes
+3. **No retraining needed**: Works with existing lenses
 4. **Handles over-firing**: Layer 0 can activate broadly without polluting results
 
 ## Training Strategy for Layer 0
@@ -88,7 +88,7 @@ Even with hierarchical suppression, Layer 0 concepts need good training:
 1. **Positive examples**: Their direct synsets only (5-10 each)
 2. **Negative examples**: ALL other Layer 0 concept synsets
 3. **Purpose**: Distinguish "Entity" from "Proposition", "Physical" from "Abstract", etc.
-4. **Result**: Layer 0 probes learn their UNIQUE characteristics, not just general abstractness
+4. **Result**: Layer 0 lenses learn their UNIQUE characteristics, not just general abstractness
 
 Example for "Physical":
 - Positive: physical_entity.n.01, phenomenon.n.01, etc. (5 synsets)

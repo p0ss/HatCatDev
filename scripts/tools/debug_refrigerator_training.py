@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Debug Refrigerator probe training by dumping all generated prompts and data.
+Debug Refrigerator lens training by dumping all generated prompts and data.
 """
 
 import sys
@@ -13,12 +13,12 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from src.registry.concept_pack_registry import ConceptPackRegistry
 from src.training.activation_extraction import PromptBasedExtractor
-from src.training.adaptive_probe_trainer import SimpleProbeTrainer
+from src.training.adaptive_lens_trainer import SimpleLensTrainer
 
 
 def main():
     print("=" * 80)
-    print("REFRIGERATOR PROBE TRAINING DEBUG")
+    print("REFRIGERATOR LENS TRAINING DEBUG")
     print("=" * 80)
 
     # Setup

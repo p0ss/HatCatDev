@@ -102,7 +102,7 @@ def main():
         activation_max_samples=40,  # Smaller for quick test
         model=model,
         tokenizer=tokenizer,
-        validate_probes=True,
+        validate_lenses=True,
         validation_threshold=0.5,
         validation_layer_idx=15,
         train_activation=True,
@@ -129,7 +129,7 @@ def main():
 
     if results['activation']:
         act = results['activation']
-        print(f"\nActivation probe:")
+        print(f"\nActivation lens:")
         print(f"  Samples: {act['samples']}")
         print(f"  Iterations: {act['iterations']}")
         print(f"  Test F1: {act['test_f1']:.3f}")
@@ -146,13 +146,13 @@ def main():
             print(f"    Expected domain: {val['expected_domain']}")
 
             if val['passed']:
-                print(f"    ✓ Probe is well-calibrated")
+                print(f"    ✓ Lens is well-calibrated")
             else:
-                print(f"    ✗ Probe failed calibration (may fire universally)")
+                print(f"    ✗ Lens failed calibration (may fire universally)")
         else:
             print("\n  ⚠️  No validation results (validation may have been skipped)")
     else:
-        print("\n⚠️  Activation probe did not graduate")
+        print("\n⚠️  Activation lens did not graduate")
 
     print(f"\nTotal iterations: {results['total_iterations']}")
     print(f"Total time: {results['total_time']:.2f}s")

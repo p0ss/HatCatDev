@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test inter-run variability of tripole probes
+# Test inter-run variability of tripole lenses
 
 for i in {1..5}; do
   echo "=========================================="

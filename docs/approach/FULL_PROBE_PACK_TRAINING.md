@@ -1,10 +1,10 @@
-# Full Probe Pack Training Guide
+# Full Lens Pack Training Guide
 
 ## Overview
 
-This guide covers training the complete HatCat probe pack, including:
-- **5,665 hierarchical SUMO concept probes** (Layers 0-5)
-- **39 S-tier simplex probes** (13 three-pole simplexes × 3 poles each)
+This guide covers training the complete HatCat lens pack, including:
+- **5,665 hierarchical SUMO concept lenses** (Layers 0-5)
+- **39 S-tier simplex lenses** (13 three-pole simplexes × 3 poles each)
 - All with nephew negative sampling and adaptive training
 
 ## Quick Start
@@ -14,7 +14,7 @@ This guide covers training the complete HatCat probe pack, including:
 Train everything with default settings:
 
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda
 ```
 
@@ -28,7 +28,7 @@ This trains:
 
 **Fast development run** (lower quality, faster training):
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda \
   --n-train-pos 10 \
   --n-train-neg 10 \
@@ -39,7 +39,7 @@ poetry run python scripts/train_full_probe_pack.py \
 
 **Production quality** (high quality, slower training):
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda \
   --n-train-pos 50 \
   --n-train-neg 50 \
@@ -51,14 +51,14 @@ poetry run python scripts/train_full_probe_pack.py \
 
 **Skip simplexes** (train only hierarchical concepts):
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda \
   --skip-simplexes
 ```
 
 **Train specific layers only**:
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --device cuda \
   --layers 0 1 2
 ```
@@ -88,11 +88,11 @@ poetry run python scripts/train_full_probe_pack.py \
 - `--validation-mode`: Validation strictness (default: `falloff`)
   - `loose`: No validation blocking (fastest, lower quality)
   - `falloff`: Tiered validation with progressive relaxation (recommended)
-  - `strict`: Always validate and block poor probes (slowest, highest quality)
+  - `strict`: Always validate and block poor lenses (slowest, highest quality)
 
 ### Output
 
-- `--output-dir`: Base output directory (default: `results/full_probe_pack`)
+- `--output-dir`: Base output directory (default: `results/full_lens_pack`)
 - `--run-name`: Run name for this training session (default: timestamp)
 
 ## Architecture
@@ -137,7 +137,7 @@ poetry run python scripts/train_full_probe_pack.py \
 | 13 | boundary_regulation | boundaryless ↔ boundaried ↔ isolated |
 
 **Training strategy per simplex**:
-- 3 binary probes (negative, neutral, positive pole)
+- 3 binary lenses (negative, neutral, positive pole)
 - Each pole trained against other poles + general negatives
 - 60% behavioral prompts, 40% definitional prompts
 - Enables homeostatic steering: detect current pole, steer toward μ0
@@ -153,7 +153,7 @@ The script trains layers sequentially (0 → 1 → 2 → ... → 5):
    - Build negative pool (nephews + siblings)
    - Generate training prompts (behavioral + definitional)
    - Train with adaptive trainer
-   - Validate probe quality
+   - Validate lens quality
    - Save classifier weights
 
 **Adaptive training**:
@@ -180,13 +180,13 @@ For each of 13 simplexes:
    - Split 80/20 for train/test
    - Extract activations at layer 15
    - Train with adaptive trainer
-   - Validate probe quality
+   - Validate lens quality
    - Save classifier weights
 
 ## Output Structure
 
 ```
-results/full_probe_pack/
+results/full_lens_pack/
 ├── {run_name}/
 │   ├── training_config.json          # Training configuration
 │   ├── layers/                        # Hierarchical layers
@@ -260,7 +260,7 @@ results/full_probe_pack/
 ### 4. Falloff Validation
 
 **Benefits**:
-- High standards early (ensure core probes work)
+- High standards early (ensure core lenses work)
 - Progressive relaxation (prevent long tail)
 - Accepts best effort after 12 iterations
 - Balances quality vs training time
@@ -296,22 +296,22 @@ Based on actual timings from Gemma-3-4b-pt on RTX 3090:
 
 ## Next Steps After Training
 
-1. **Assemble probe pack**:
+1. **Assemble lens pack**:
    ```bash
-   poetry run python scripts/assemble_probe_pack.py \
-     --source-dir results/full_probe_pack/{run_name} \
+   poetry run python scripts/assemble_lens_pack.py \
+     --source-dir results/full_lens_pack/{run_name} \
      --pack-name gemma-3-4b-pt_sumo-wordnet-v3
    ```
 
-2. **Calibrate probes**:
+2. **Calibrate lenses**:
    ```bash
-   poetry run python scripts/calibrate_probe_pack.py \
-     --probe-pack gemma-3-4b-pt_sumo-wordnet-v3 \
+   poetry run python scripts/calibrate_lens_pack.py \
+     --lens-pack gemma-3-4b-pt_sumo-wordnet-v3 \
      --device cuda
    ```
 
 3. **Deploy for inference**:
-   - Load probe pack in monitoring pipeline
+   - Load lens pack in monitoring pipeline
    - Use for real-time concept detection
    - Enable homeostatic steering with simplexes
 
@@ -331,7 +331,7 @@ Use loose validation or skip simplexes:
 --validation-mode loose --skip-simplexes
 ```
 
-### Poor Probe Quality
+### Poor Lens Quality
 
 Increase samples and use strict validation:
 ```bash
@@ -342,7 +342,7 @@ Increase samples and use strict validation:
 
 The script automatically skips already-trained concepts. To resume:
 ```bash
-poetry run python scripts/train_full_probe_pack.py \
+poetry run python scripts/train_full_lens_pack.py \
   --run-name {previous_run_name}
 ```
 

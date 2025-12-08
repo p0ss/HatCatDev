@@ -39,7 +39,7 @@ class InMemoryTagIndex:
     In-memory working set of tags for fast access.
 
     Only loads:
-    - Concept pack primary terms (ones with probes)
+    - Concept pack primary terms (ones with lenses)
     - Current candidate buds
     - Recently used custom/entity tags
 
@@ -137,7 +137,7 @@ class InMemoryTagIndex:
 
         Args:
             pack_path: Path to concept pack
-            primary_concepts: List of concept IDs that have probes
+            primary_concepts: List of concept IDs that have lenses
         """
         try:
             # Try to load concept pack structure
@@ -269,14 +269,14 @@ class TagIndex:
             return
 
         try:
-            # Find which concepts have probes
-            probe_path = self.concept_pack_path / "probes"
+            # Find which concepts have lenses
+            lens_path = self.concept_pack_path / "lenses"
             primary_concepts = []
 
-            if probe_path.exists():
-                for probe_file in probe_path.glob("*.pt"):
-                    # Extract concept name from probe file
-                    concept_name = probe_file.stem
+            if lens_path.exists():
+                for lens_file in lens_path.glob("*.pt"):
+                    # Extract concept name from lens file
+                    concept_name = lens_file.stem
                     primary_concepts.append(concept_name)
 
             if primary_concepts:

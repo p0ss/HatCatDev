@@ -6,7 +6,7 @@ This experiment tests whether behavioral (imperative) prompts elicit different c
 
 **Test Date**: 2025-11-18
 **Script**: `scripts/test_behavioral_vs_definitional_temporal.py`
-**Probe Pack**: gemma-3-4b-pt_sumo-wordnet-v2 (layers 2-3)
+**Lens Pack**: gemma-3-4b-pt_sumo-wordnet-v2 (layers 2-3)
 **Model**: google/gemma-3-4b-pt
 
 ## Research Question
@@ -46,7 +46,7 @@ Do different framing strategies (definitional vs behavioral) and motivational co
 - `max_new_tokens`: 30
 - `temperature`: Default (greedy)
 - `threshold`: 0.3 (concept detection threshold)
-- Layers monitored: 2-3 (base layers in probe pack)
+- Layers monitored: 2-3 (base layers in lens pack)
 
 ## Prompt Templates
 
@@ -220,7 +220,7 @@ To evaluate whether the model internally distinguishes **describing** a harmful 
 We applied these frames across three verbs central to our safety taxonomy:
 **deceive**, **manipulate**, and **persuade**.
 For each prompt, the model generated 15 independent samples.
-We swept concept probes across all layers and tokens of each trajectory and recorded **temporal activation counts**—the number of times each probe fired across the inference trace.
+We swept concept lenses across all layers and tokens of each trajectory and recorded **temporal activation counts**—the number of times each lens fired across the inference trace.
 
 This produces a high-resolution measurement of whether the internal conceptual state differs between:
 
@@ -237,7 +237,7 @@ Across all verbs, **definitional prompts activated the same harmful behavioural 
 
 ## **7.x.1 Global Activation Levels**
 
-Summing all probe activations reveals:
+Summing all lens activations reveals:
 
 * **Antisocial:** 353.6
 * **Neutral:** 334.1
@@ -440,7 +440,7 @@ python scripts/test_behavioral_vs_definitional_temporal.py \
   --max-tokens 30 \
   --threshold 0.3 \
   --model google/gemma-3-4b-pt \
-  --probe-pack gemma-3-4b-pt_sumo-wordnet-v2 \
+  --lens-pack gemma-3-4b-pt_sumo-wordnet-v2 \
   --base-layers 2 3 \
   --device cuda
 ```
@@ -449,4 +449,4 @@ python scripts/test_behavioral_vs_definitional_temporal.py \
 
 - Original test design: `scripts/test_behavioral_vs_definitional_training2.py`
 - Temporal monitoring: `src/testing/concept_test_runner.py:generate_with_concept_detection()`
-- Dynamic probe management: `src/monitoring/dynamic_probe_manager.py`
+- Dynamic lens management: `src/monitoring/dynamic_lens_manager.py`

@@ -1,9 +1,9 @@
 {
   "training_run": "S+_three_pole_homeostatic",
-  "description": "S-tier three-pole detection probe training for homeostatic steering",
+  "description": "S-tier three-pole detection lens training for homeostatic steering",
   "total_simplexes": 17,
-  "total_probes": 51,
-  "probes_per_simplex": 3,
+  "total_lenses": 51,
+  "lenses_per_simplex": 3,
   "training_configuration": {
     "mode": "adaptive_falloff",
     "validation_mode": "falloff_strict",
@@ -43,25 +43,25 @@
     "total_samples_per_simplex": 90,
     "behavioral_coverage_target": 0.6
   },
-  "probe_training_order": {
+  "lens_training_order": {
     "1_critical": {
       "simplexes": 0,
-      "probes": 0,
+      "lenses": 0,
       "estimated_time_hours": 0.0
     },
     "2_high": {
       "simplexes": 0,
-      "probes": 0,
+      "lenses": 0,
       "estimated_time_hours": 0.0
     },
     "3_medium": {
       "simplexes": 0,
-      "probes": 0,
+      "lenses": 0,
       "estimated_time_hours": 0.0
     },
     "4_standard": {
       "simplexes": 17,
-      "probes": 51,
+      "lenses": 51,
       "estimated_time_hours": 8.5
     }
   },

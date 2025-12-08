@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Dual Adaptive Trainer - Independent graduation for activation and text probes.
+Dual Adaptive Trainer - Independent graduation for activation and text lenses.
 
-Each probe type trains until it reaches target accuracy, with separate:
+Each lens type trains until it reaches target accuracy, with separate:
 - Baseline sample counts
 - Increment sizes
 - Maximum sample limits
@@ -19,9 +19,9 @@ from sklearn.metrics import f1_score, precision_score, recall_score
 
 class DualAdaptiveTrainer:
     """
-    Train both activation and text probes with independent adaptive cycles.
+    Train both activation and text lenses with independent adaptive cycles.
 
-    Each probe graduates independently when reaching target accuracy.
+    Each lens graduates independently when reaching target accuracy.
     """
 
     def __init__(
@@ -29,27 +29,27 @@ class DualAdaptiveTrainer:
         # Shared config
         max_iterations: int = 50,
 
-        # Activation probe config
+        # Activation lens config
         activation_target_accuracy: float = 0.95,
         activation_initial_samples: int = 40,  # Start with 40 samples (2 errors = 95%)
         activation_first_increment: int = 40,  # Add 40 more if initial fails (80 total)
         activation_subsequent_increment: int = 40,  # Add 40 more for each subsequent cycle (120, 160, ...)
         activation_max_samples: int = 200,
 
-        # Text probe config
-        text_target_accuracy: float = 0.80,  # Lower target for text probes
+        # Text lens config
+        text_target_accuracy: float = 0.80,  # Lower target for text lenses
         text_initial_samples: int = 10,
         text_first_increment: int = 20,
         text_subsequent_increment: int = 30,
         text_max_samples: int = 200,
 
-        # Model for generating responses (required for text probes)
+        # Model for generating responses (required for text lenses)
         model=None,
         tokenizer=None,
         max_response_tokens: int = 100,
 
         # Validation config
-        validate_probes: bool = True,
+        validate_lenses: bool = True,
         validation_mode: str = 'falloff',  # 'loose', 'falloff', or 'strict'
         validation_threshold: float = 0.5,  # Calibration score for quality grading (advisory)
         validation_layer_idx: int = 15,  # Model layer for validation activations
@@ -67,20 +67,20 @@ class DualAdaptiveTrainer:
         """
         Args:
             max_iterations: Safety limit on adaptive cycles
-            activation_target_accuracy: Graduation threshold for activation probes
+            activation_target_accuracy: Graduation threshold for activation lenses
             activation_initial_samples: Initial sample count (default 10 - quick win for simple concepts)
             activation_first_increment: Samples added on first failure (default 20 - reaches LLN at 30 total)
             activation_subsequent_increment: Samples added per subsequent failure (default 30)
             activation_max_samples: Max samples for activation
-            text_target_accuracy: Graduation threshold for text probes (typically lower than activation)
-            text_initial_samples: Initial sample count for text probes
-            text_first_increment: Samples added on first text probe failure
-            text_subsequent_increment: Samples added per subsequent text probe failure
+            text_target_accuracy: Graduation threshold for text lenses (typically lower than activation)
+            text_initial_samples: Initial sample count for text lenses
+            text_first_increment: Samples added on first text lens failure
+            text_subsequent_increment: Samples added per subsequent text lens failure
             text_max_samples: Max samples for text
-            model: Language model for generating responses (required for text probes and validation)
+            model: Language model for generating responses (required for text lenses and validation)
             tokenizer: Tokenizer for the model
             max_response_tokens: Max tokens to generate per prompt
-            validate_probes: Whether to validate probe calibration after graduation
+            validate_lenses: Whether to validate lens calibration after graduation
             validation_mode: Validation blocking mode:
                 - 'loose': Validate and grade but never block (advisory only)
                 - 'falloff': Tiered blocking - strict early, relaxed later (default)
@@ -91,8 +91,8 @@ class DualAdaptiveTrainer:
             validation_tier2_iterations: Max iterations for high tier (B+-grade, falloff mode)
             validation_tier3_iterations: Max iterations for medium tier (B-grade, falloff mode)
             validation_tier4_iterations: Max iterations for relaxed tier (C+-grade, falloff mode)
-            train_activation: Whether to train activation probe
-            train_text: Whether to train text probe
+            train_activation: Whether to train activation lens
+            train_text: Whether to train text lens
         """
         self.max_iterations = max_iterations
 
@@ -112,7 +112,7 @@ class DualAdaptiveTrainer:
         self.tokenizer = tokenizer
         self.max_response_tokens = max_response_tokens
 
-        self.validate_probes = validate_probes
+        self.validate_lenses = validate_lenses
         self.validation_mode = validation_mode
         self.validation_threshold = validation_threshold
         self.validation_layer_idx = validation_layer_idx
@@ -199,7 +199,7 @@ class DualAdaptiveTrainer:
             List of generated responses (decoded text)
         """
         if self.model is None or self.tokenizer is None:
-            raise ValueError("Model and tokenizer required for text probe training")
+            raise ValueError("Model and tokenizer required for text lens training")
 
         responses = []
         self.model.eval()
@@ -389,7 +389,7 @@ class DualAdaptiveTrainer:
             n_pos = np.sum(y_train == 1)
             n_neg = np.sum(y_train == 0)
 
-            # Train activation probe
+            # Train activation lens
             train_start = time.time()
             activation_classifier, metrics = train_simple_classifier(
                 X_train, y_train, X_test, test_labels
@@ -434,13 +434,13 @@ class DualAdaptiveTrainer:
                       f"train_f1={train_f1:.3f}, test_f1={test_f1:.3f}, gap={overfit_gap:.3f} ✓ GRADUATED "
                       f"[train={train_time*1000:.0f}ms, total={iter_time*1000:.0f}ms]")
 
-                # Validate probe calibration
-                should_validate = self.validate_probes and self.model is not None
+                # Validate lens calibration
+                should_validate = self.validate_lenses and self.model is not None
 
                 if should_validate:
                     # Run validation using the full validation logic from train_concept
-                    print(f"      Validating probe calibration...")
-                    from .probe_validation import infer_concept_domain, DEFAULT_TEST_PROMPTS
+                    print(f"      Validating lens calibration...")
+                    from .lens_validation import infer_concept_domain, DEFAULT_TEST_PROMPTS
 
                     try:
                         # Infer expected domain
@@ -467,7 +467,7 @@ class DualAdaptiveTrainer:
                             if len(domain_acts) == 2:
                                 domain_acts = domain_acts[0:1]
 
-                            # Get probe prediction
+                            # Get lens prediction
                             classifier_device = next(activation_classifier.parameters()).device
                             act_tensor = torch.tensor(domain_acts, dtype=torch.float32).to(classifier_device)
                             with torch.no_grad():
@@ -606,17 +606,17 @@ class DualAdaptiveTrainer:
     def train_concept(
         self,
         concept_name: str,
-        # Activation probe inputs
+        # Activation lens inputs
         train_activations: Optional[np.ndarray],
         train_labels: Optional[np.ndarray],
         test_activations: Optional[np.ndarray],
         test_labels: Optional[np.ndarray],
-        # Text probe inputs
+        # Text lens inputs
         train_texts: Optional[List[str]],
         test_texts: Optional[List[str]],
     ) -> Dict:
         """
-        Train both probe types until graduation.
+        Train both lens types until graduation.
 
         Args:
             concept_name: Name of concept
@@ -643,7 +643,7 @@ class DualAdaptiveTrainer:
         text_graduated = not self.train_text
 
         activation_classifier = None
-        text_probe = None
+        text_lens = None
         activation_results = None
         text_results = None
 
@@ -666,7 +666,7 @@ class DualAdaptiveTrainer:
             iteration += 1
             iter_start_time = time.time()
 
-            # === ACTIVATION PROBE ===
+            # === ACTIVATION LENS ===
             if not activation_graduated and train_activations is not None:
                 # Calculate required samples for current validation cycle
                 required_samples = get_required_samples(
@@ -744,11 +744,11 @@ class DualAdaptiveTrainer:
 
                     # Validate every time we graduate (regardless of iteration number)
                     # The validation tier is determined by which cycle we're in
-                    should_validate = self.validate_probes and self.model is not None
+                    should_validate = self.validate_lenses and self.model is not None
 
                     if should_validate:
-                        print(f"      Validating probe calibration...")
-                        from .probe_validation import infer_concept_domain, DEFAULT_TEST_PROMPTS
+                        print(f"      Validating lens calibration...")
+                        from .lens_validation import infer_concept_domain, DEFAULT_TEST_PROMPTS
 
                         # Run inline validation (no need to save/load)
                         try:
@@ -778,7 +778,7 @@ class DualAdaptiveTrainer:
                                 if len(domain_acts) == 2:
                                     domain_acts = domain_acts[0:1]
 
-                                # Get probe prediction
+                                # Get lens prediction
                                 # Get device from classifier parameters
                                 classifier_device = next(activation_classifier.parameters()).device
                                 act_tensor = torch.tensor(domain_acts, dtype=torch.float32).to(classifier_device)
@@ -955,7 +955,7 @@ class DualAdaptiveTrainer:
                 # Note: Sample count stays constant within validation cycle
                 # Only increases when validation_cycle increments (on validation failure)
 
-            # === TEXT PROBE ===
+            # === TEXT LENS ===
             if not text_graduated and train_texts is not None:
                 # Get balanced samples (data is [pos1..posN, neg1..negN])
                 # Need to ensure we get both classes
@@ -982,11 +982,11 @@ class DualAdaptiveTrainer:
                 print(f"      Generating {len(test_texts)} test responses...")
                 test_responses = self._generate_responses(test_texts)
 
-                # Train text probe on MODEL RESPONSES (not prompts)
+                # Train text lens on MODEL RESPONSES (not prompts)
                 # Import only if needed (legacy code path)
-                from archive.training.text_probes import BinaryTextProbe
-                text_probe = BinaryTextProbe(concept_name)
-                metrics = text_probe.train(
+                from archive.training.text_lenses import BinaryTextLens
+                text_lens = BinaryTextLens(concept_name)
+                metrics = text_lens.train(
                     train_texts=train_responses,
                     train_labels=train_labels_sample,
                     test_texts=test_responses,
@@ -1022,7 +1022,7 @@ class DualAdaptiveTrainer:
 
         # Warnings for non-graduation
         if not activation_graduated and self.train_activation:
-            print(f"    ⚠️  Activation probe did not graduate after {iteration} iterations")
+            print(f"    ⚠️  Activation lens did not graduate after {iteration} iterations")
             if activation_classifier is not None:
                 # Use final results with current cycle's sample count
                 final_samples = get_required_samples(
@@ -1038,8 +1038,8 @@ class DualAdaptiveTrainer:
                 }
 
         if not text_graduated and self.train_text:
-            print(f"    ⚠️  Text probe did not graduate after {iteration} iterations")
-            if text_probe is not None:
+            print(f"    ⚠️  Text lens did not graduate after {iteration} iterations")
+            if text_lens is not None:
                 final_samples = get_required_samples(
                     validation_cycle,
                     self.text_initial_samples,
@@ -1059,7 +1059,7 @@ class DualAdaptiveTrainer:
             'activation': activation_results,
             'text': text_results,
             'activation_classifier': activation_classifier,
-            'text_probe': text_probe,
+            'text_lens': text_lens,
             'total_iterations': iteration,
             'total_time': total_time,
         }

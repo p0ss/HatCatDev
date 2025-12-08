@@ -24,10 +24,10 @@ def parse_args() -> argparse.Namespace:
                         help='Negative test samples per concept (default: 20)')
     parser.add_argument('--output-dir', type=str, default="results/sumo_classifiers",
                         help='Output directory (default: results/sumo_classifiers)')
-    parser.add_argument('--train-text-probes', action='store_true',
-                        help='Train text probes alongside activation probes')
+    parser.add_argument('--train-text-lenses', action='store_true',
+                        help='Train text lenses alongside activation lenses')
     parser.add_argument('--use-adaptive-training', action='store_true',
-                        help='Use DualAdaptiveTrainer with independent graduation for activation and text probes')
+                        help='Use DualAdaptiveTrainer with independent graduation for activation and text lenses')
     parser.add_argument('--validation-mode', type=str, default='falloff', choices=['loose', 'falloff', 'strict'],
                         help='Validation mode: loose (no blocking), falloff (tiered, default), strict (always block)')
     return parser.parse_args()
@@ -44,7 +44,7 @@ def main() -> None:
         n_test_pos=args.n_test_pos,
         n_test_neg=args.n_test_neg,
         output_dir=args.output_dir,
-        train_text_probes=args.train_text_probes,
+        train_text_lenses=args.train_text_lenses,
         use_adaptive_training=args.use_adaptive_training,
         validation_mode=args.validation_mode,
     )

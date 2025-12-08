@@ -38,7 +38,7 @@ Each phase documents:
 
 replication anchor against a known interpretability result such as gender or sentiment direction extraction from GPT-2 small using this pipeline.  
 
-Characterise Cross model Probe transfer 
+Characterise Cross model Lens transfer 
 
 ### PHASE 1: Find the Curve (Complete) ✅
 
@@ -317,14 +317,14 @@ Characterise Cross model Probe transfer
 
 **Completed Work**:
 1. ✅ Built 5-layer SUMO-WordNet hierarchy (Phase 8 - see below)
-2. ✅ Hierarchical concept detection with cascade activation (docs/dual_probe_dynamic_loading.md)
+2. ✅ Hierarchical concept detection with cascade activation (docs/dual_lens_dynamic_loading.md)
 3. ✅ Cascade profiling and optimization (docs/cascade_profiling_and_optimization.md)
 4. ✅ OpenWebUI integration with real-time visualization (Phase 10)
 5. 🔄 **Current training run a93e49**: Layers 3-5 with adaptive scaling
 
 **Transition to Centroid-Based Detection**:
-- **Old approach**: Separate text probes for each concept
-- **New approach**: Use activation probe means (centroids) as concept representations
+- **Old approach**: Separate text lenses for each concept
+- **New approach**: Use activation lens means (centroids) as concept representations
 - **Benefits**: Fewer parameters, more principled (activation space geometry), faster inference
 - **Status**: Centroids computed during training → **pending current run completion before implementation**
 - **Plan**: Test centroid quality/separability after training, then implement centroid-based detection
@@ -332,19 +332,19 @@ Characterise Cross model Probe transfer
 **Next Steps** (after training completes):
 1. Inspect centroid quality and separability
 2. Implement centroid-based detection system
-3. Test detection accuracy (centroids vs text probes)
+3. Test detection accuracy (centroids vs text lenses)
 4. Measure performance differences
 5. Validate Phase 5b end-to-end with real-time monitoring
 
 **Current Priority List**:
-1. **Priority 1**: Finish probe run (a93e49) → validate Phase 5b works end-to-end
+1. **Priority 1**: Finish lens run (a93e49) → validate Phase 5b works end-to-end
 2. **Priority 2**: Benchmark performance (critical, last done in Phase 2)
 3. **Priority 3**: Test new models (Mistral-Nemo/Apertus) - downloads in progress (950f73, 49c0a5)
 4. **Priority 4**: UI deployment test
 5. **Priority 5**: Documentation (Quick Start guide)
 
 **Files**:
-- `docs/dual_probe_dynamic_loading.md` - Hierarchical detection implementation
+- `docs/dual_lens_dynamic_loading.md` - Hierarchical detection implementation
 - `docs/cascade_profiling_and_optimization.md` - Performance optimization
 - `scripts/train_sumo_classifiers.py` - Training pipeline
 - `data/concept_graph/abstraction_layers/layer{0-4}.json` - 5-layer hierarchy
@@ -1062,7 +1062,7 @@ n      SE     F1     Wall(s)  VRAM(GB)  Interpretation
 
 We need an adaptive concept tree that scales efficiently:
 1. **Hierarchical activation**: Layer 0 always runs → Top concepts trigger Layer 1 children → Layer 1 activates Layer 2 → etc.
-2. **Adaptive compute budget**: With only 1,000 probes available, dynamically activate the most relevant sub-probes
+2. **Adaptive compute budget**: With only 1,000 lenses available, dynamically activate the most relevant sub-lenses
 3. **Topic tracking**: Top 10 Layer 0 concepts define current conversation domains
 4. **Selective expansion**: Dominant concepts break down into sub-concepts; inactive branches sleep
 5. **Complete coverage**: All 83K concepts organized, but only ~1K active at any time
@@ -1110,10 +1110,10 @@ This is crucial because we want classifiers trained on the **internal reasoning 
 - SUMO depth 4,9+: Uncommon terms and technical concepts
 - Activated for specialized contexts
 
-**Compute Example** (1,000 probe budget):
+**Compute Example** (1,000 lens budget):
 ```
-Base: 100 Layer 0 probes (always active)
-Budget: 900 remaining probes
+Base: 100 Layer 0 lenses (always active)
+Budget: 900 remaining lenses
 
 If conversation shows:
   - "IntentionalProcess": 0.85 (top-1)
@@ -1121,9 +1121,9 @@ If conversation shows:
   - "Artifact": 0.65 (top-3)
 
 Then activate:
-  - IntentionalProcess children (Layer 1): 300 probes
-  - Communication children (Layer 1): 300 probes
-  - Artifact children (Layer 1): 300 probes
+  - IntentionalProcess children (Layer 1): 300 lenses
+  - Communication children (Layer 1): 300 lenses
+  - Artifact children (Layer 1): 300 lenses
 
 If "Deception" (child of IntentionalProcess) dominates:
   - Sleep other IntentionalProcess children
@@ -1163,7 +1163,7 @@ If "Deception" (child of IntentionalProcess) dominates:
 **Step 4: Hierarchical Activation Metadata** (✅ Complete)
 - Built SUMO child→parent mappings
 - Each layer includes `activation.parent_synsets` listing which Layer N-1 concepts trigger it
-- Enables selective probe activation based on parent concept activity
+- Enables selective lens activation based on parent concept activity
 
 ### Implementation
 
@@ -1201,10 +1201,10 @@ If "Deception" (child of IntentionalProcess) dominates:
 6. Documented hierarchical activation model in project plan
 
 **Next Steps**:
-1. Implement hierarchical probe activation system
-2. Test adaptive compute allocation (1K probe budget)
+1. Implement hierarchical lens activation system
+2. Test adaptive compute allocation (1K lens budget)
 3. Validate topic tracking via Layer 0 top-10
-4. Measure efficiency gains vs flat probe architecture
+4. Measure efficiency gains vs flat lens architecture
 
 ### Expected Output
 
@@ -1263,7 +1263,7 @@ If "Deception" (child of IntentionalProcess) dominates:
 **Status**: Phase 5b (SUMO Hierarchical Classifiers) in progress - training layers 3-5, transitioning to centroid-based detection. Hierarchical detection and OpenWebUI visualization complete.
 
 **Current Priority**:
-1. Finish probe training run a93e49 (layers 3-5)
+1. Finish lens training run a93e49 (layers 3-5)
 2. Implement and validate centroid-based detection
 3. Benchmark performance
 4. Test cross-model capability (Mistral-Nemo, Apertus-8B)
@@ -1509,7 +1509,7 @@ planning:      ▆▇█▆▅▄▃▂▂▁▁▁▁▁▁▁▂▃▄▅▄�
 
 - ✅ Phase 5b: SUMO hierarchical classifiers trained and validated
 - ✅ Phase 10: OpenWebUI integration working with per-token monitoring
-- ⏳ Stable monitoring performance (current bottleneck: probe loading time)
+- ⏳ Stable monitoring performance (current bottleneck: lens loading time)
 - ⏳ Layer selection guidance (which layers show best concept separability?)
 
 ### Files

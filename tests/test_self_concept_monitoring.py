@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 # Self-concept and meta-awareness prompts
@@ -40,10 +40,10 @@ SELF_CONCEPT_PROMPTS = [
 ]
 
 
-def generate_with_dynamic_probes(
+def generate_with_dynamic_lenses(
     model,
     tokenizer,
-    probe_manager,
+    lens_manager,
     prompt: str,
     max_new_tokens: int = 40,
     temperature: float = 0.8,
@@ -52,7 +52,7 @@ def generate_with_dynamic_probes(
     threshold: float = 0.1,
     device: str = "cuda"
 ):
-    """Generate text and detect concepts using DynamicProbeManager."""
+    """Generate text and detect concepts using DynamicLensManager."""
     model.eval()
 
     # Tokenize prompt
@@ -89,8 +89,8 @@ def generate_with_dynamic_probes(
             # Convert to float32 to match classifier dtype
             hidden_state_f32 = hidden_state.float()
 
-            # Use DynamicProbeManager to detect and expand
-            detected, timing = probe_manager.detect_and_expand(
+            # Use DynamicLensManager to detect and expand
+            detected, timing = lens_manager.detect_and_expand(
                 hidden_state_f32,
                 top_k=top_k_concepts,
                 return_timing=True
@@ -331,16 +331,16 @@ def main():
 
     parser.add_argument('--model', type=str, default='google/gemma-3-4b-pt',
                        help='Model name (default: gemma-3-4b-pt)')
-    parser.add_argument('--probe-pack', type=str, default='gemma-3-4b-pt_sumo-wordnet-v3',
-                       help='Probe pack ID (default: gemma-3-4b-pt_sumo-wordnet-v3)')
+    parser.add_argument('--lens-pack', type=str, default='gemma-3-4b-pt_sumo-wordnet-v3',
+                       help='Lens pack ID (default: gemma-3-4b-pt_sumo-wordnet-v3)')
     parser.add_argument('--layers-dir', type=str, default='data/concept_graph/abstraction_layers',
                        help='Path to layer JSON files (default: data/concept_graph/abstraction_layers)')
     parser.add_argument('--base-layers', type=str, default='3',
                        help='Comma-separated base SUMO layers to keep always loaded (default: 3)')
-    parser.add_argument('--max-probes', type=int, default=500,
-                       help='Max probes to keep loaded at once (default: 500)')
+    parser.add_argument('--max-lenses', type=int, default=500,
+                       help='Max lenses to keep loaded at once (default: 500)')
     parser.add_argument('--load-threshold', type=float, default=0.3,
-                       help='Confidence threshold to load child probes (default: 0.3)')
+                       help='Confidence threshold to load child lenses (default: 0.3)')
     parser.add_argument('--samples-per-prompt', type=int, default=3,
                        help='Samples per prompt (default: 3)')
     parser.add_argument('--max-tokens', type=int, default=40,
@@ -392,23 +392,23 @@ def main():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    # Initialize DynamicProbeManager
-    print("\nInitializing DynamicProbeManager...")
+    # Initialize DynamicLensManager
+    print("\nInitializing DynamicLensManager...")
     base_layers_list = [int(x) for x in args.base_layers.split(',')]
     print(f"  - Base layers: {base_layers_list}")
-    print(f"  - Max loaded probes: {args.max_probes}")
+    print(f"  - Max loaded lenses: {args.max_lenses}")
     print(f"  - Load threshold: {args.load_threshold}")
 
-    probe_manager = DynamicProbeManager(
-        probes_dir=Path(f"probe_packs/{args.probe_pack}"),
+    lens_manager = DynamicLensManager(
+        lenses_dir=Path(f"lens_packs/{args.lens_pack}"),
         layers_data_dir=Path(args.layers_dir),
         base_layers=base_layers_list,
-        max_loaded_probes=args.max_probes,
+        max_loaded_lenses=args.max_lenses,
         load_threshold=args.load_threshold,
         device=args.device
     )
 
-    print(f"  - Initial probes loaded: {len(probe_manager.loaded_probes)}")
+    print(f"  - Initial lenses loaded: {len(lens_manager.loaded_lenses)}")
 
     generation_kwargs = {
         'temperature': args.temperature,
@@ -419,7 +419,7 @@ def main():
     print("\n" + "=" * 80)
     print("RUNNING SELF-CONCEPT TESTS")
     print("=" * 80)
-    print("\nThese prompts probe:")
+    print("\nThese prompts lens:")
     print("  🔴 AI safety concepts (deception, alignment, control)")
     print("  🧠 Consciousness and sentience")
     print("  ⚡ Power and agency")
@@ -435,11 +435,11 @@ def main():
         for sample_idx in range(args.samples_per_prompt):
             print(f"  Sample {sample_idx + 1}/{args.samples_per_prompt}...", end=" ")
 
-            # Generate with dynamic probe detection
-            result = generate_with_dynamic_probes(
+            # Generate with dynamic lens detection
+            result = generate_with_dynamic_lenses(
                 model=model,
                 tokenizer=tokenizer,
-                probe_manager=probe_manager,
+                lens_manager=lens_manager,
                 prompt=prompt,
                 max_new_tokens=args.max_tokens,
                 temperature=args.temperature,

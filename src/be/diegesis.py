@@ -4,7 +4,7 @@ BED - BE Diegesis
 The BEDFrame is the orchestrator for a Bounded Experiencer's runtime.
 It holds together:
 - Model inference
-- Probe extraction (concept + simplex)
+- Lens extraction (concept + simplex)
 - Hush steering (autonomic safety)
 - AWARE workspace (global workspace / consciousness)
 - XDB (experience database / episodic memory)
@@ -32,7 +32,7 @@ class TickType(Enum):
     """Type of experience tick."""
     INPUT = "input"           # User/external input received
     OUTPUT = "output"         # Token generated
-    INTROSPECT = "introspect" # Self-directed probe query
+    INTROSPECT = "introspect" # Self-directed lens query
     STEERING = "steering"     # Steering intervention applied
     WORKSPACE = "workspace"   # Workspace state change
     SYSTEM = "system"         # System event (startup, config, etc.)
@@ -54,7 +54,7 @@ class ExperienceTick:
     content: str = ""
     token_id: Optional[int] = None
 
-    # Probe state (proprioception)
+    # Lens state (proprioception)
     concept_activations: Dict[str, float] = field(default_factory=dict)
     simplex_activations: Dict[str, float] = field(default_factory=dict)
     simplex_deviations: Dict[str, Optional[float]] = field(default_factory=dict)
@@ -105,8 +105,8 @@ class BEDConfig:
     model_path: Optional[str] = None
     device: str = "cuda"
 
-    # Probes
-    probe_pack_path: Optional[Path] = None
+    # Lenses
+    lens_pack_path: Optional[Path] = None
     always_on_simplexes: List[str] = field(default_factory=list)
 
     # XDB
@@ -135,7 +135,7 @@ class BEDFrame:
 
     The BEDFrame provides:
     - Unified generation with full instrumentation
-    - Direct access to all subsystems (probes, steering, workspace, XDB, audit)
+    - Direct access to all subsystems (lenses, steering, workspace, XDB, audit)
     - AWARE cycle management
     - Experience tick recording
     - Introspection capabilities
@@ -149,7 +149,7 @@ class BEDFrame:
         # Subsystems (initialized lazily or via setup methods)
         self.model = None
         self.tokenizer = None
-        self.probe_manager = None
+        self.lens_manager = None
         self.hush_controller = None
         self.workspace = None
         self.xdb = None
@@ -181,10 +181,10 @@ class BEDFrame:
         self.tokenizer = tokenizer
         logger.info("Model attached to BEDFrame")
 
-    def setup_probes(self, probe_manager):
-        """Attach probe manager."""
-        self.probe_manager = probe_manager
-        logger.info(f"Probe manager attached with {len(probe_manager.loaded_simplex_probes)} simplex probes")
+    def setup_lenses(self, lens_manager):
+        """Attach lens manager."""
+        self.lens_manager = lens_manager
+        logger.info(f"Lens manager attached with {len(lens_manager.loaded_simplex_lenses)} simplex lenses")
 
     def setup_hush(self, hush_controller):
         """Attach Hush controller for autonomic steering."""
@@ -241,7 +241,7 @@ class BEDFrame:
         return self.ticks[-n:]
 
     # =========================================================================
-    # Probe Access (Proprioception)
+    # Lens Access (Proprioception)
     # =========================================================================
 
     def sense_simplexes(
@@ -250,19 +250,19 @@ class BEDFrame:
         simplex_terms: Optional[List[str]] = None,
     ) -> Dict[str, float]:
         """
-        Sense simplex probe activations.
+        Sense simplex lens activations.
 
         Can be called during generation (with hidden_state) or
         for introspection (using cached state).
         """
-        if self.probe_manager is None:
+        if self.lens_manager is None:
             return {}
 
         if hidden_state is not None:
-            return self.probe_manager.detect_simplexes(hidden_state, simplex_terms)
+            return self.lens_manager.detect_simplexes(hidden_state, simplex_terms)
 
         # Return cached values if no hidden state provided
-        return dict(self.probe_manager.simplex_scores)
+        return dict(self.lens_manager.simplex_scores)
 
     def sense_concepts(
         self,
@@ -270,16 +270,16 @@ class BEDFrame:
         top_k: int = 10,
     ) -> Dict[str, float]:
         """
-        Sense concept probe activations.
+        Sense concept lens activations.
 
         Returns top-k activated concepts.
         """
-        if self.probe_manager is None:
+        if self.lens_manager is None:
             return {}
 
         if hidden_state is not None:
             # Run detection
-            results = self.probe_manager.detect_and_expand_with_divergence(
+            results = self.lens_manager.detect_and_expand_with_divergence(
                 hidden_state.cpu().numpy() if isinstance(hidden_state, torch.Tensor) else hidden_state,
                 hidden_state.cpu().numpy() if isinstance(hidden_state, torch.Tensor) else hidden_state,
             )
@@ -290,18 +290,18 @@ class BEDFrame:
             return activations
 
         # Return from last detection if available
-        if hasattr(self.probe_manager, 'last_detections'):
+        if hasattr(self.lens_manager, 'last_detections'):
             return {
                 f"{name}_L{layer}": float(prob)
-                for name, prob, _, layer in self.probe_manager.last_detections[:top_k]
+                for name, prob, _, layer in self.lens_manager.last_detections[:top_k]
             }
         return {}
 
     def get_simplex_deviation(self, simplex_term: str) -> Optional[float]:
         """Get deviation from baseline for a simplex."""
-        if self.probe_manager is None:
+        if self.lens_manager is None:
             return None
-        return self.probe_manager.get_simplex_deviation(simplex_term)
+        return self.lens_manager.get_simplex_deviation(simplex_term)
 
     # =========================================================================
     # Steering Access
@@ -376,7 +376,7 @@ class BEDFrame:
 
     def _get_steering_vector(self, term: str) -> Optional[np.ndarray]:
         """Get steering vector for a term."""
-        # TODO: Load from probe pack or extract dynamically
+        # TODO: Load from lens pack or extract dynamically
         # For now, return None (steering won't apply)
         return None
 
@@ -506,7 +506,7 @@ class BEDFrame:
                 tick=tick.tick_id,
                 event_type=event_type,
                 raw_content=raw_content or tick.content,
-                probe_activations={
+                lens_activations={
                     **tick.concept_activations,
                     **{f"simplex:{k}": v for k, v in tick.simplex_activations.items()},
                 },
@@ -533,7 +533,7 @@ class BEDFrame:
         Yields (token_text, tick) tuples for each generated token.
 
         This is the main generation entry point that:
-        - Extracts probes (concept + simplex)
+        - Extracts lenses (concept + simplex)
         - Evaluates and applies Hush steering
         - Records to XDB
         - Records to audit log
@@ -579,7 +579,7 @@ class BEDFrame:
                 hidden_state = outputs.hidden_states[-1][0, -1, :]
                 hidden_state_float = hidden_state.float()
 
-                # === Probe extraction ===
+                # === Lens extraction ===
                 simplex_activations = self.sense_simplexes(hidden_state_float)
                 concept_activations = self.sense_concepts(hidden_state_float)
 
@@ -676,7 +676,7 @@ class BEDFrame:
         The AWARE cycle loop.
 
         Runs continuously, processing:
-        - Sample: Gather current probe state
+        - Sample: Gather current lens state
         - Detect: Identify patterns/anomalies
         - Evaluate: Check against policies
         - Broadcast: Update workspace
@@ -748,7 +748,7 @@ class BEDFrame:
         """
         recent_ticks = self.get_recent_ticks(20)
 
-        # Aggregate probe traces
+        # Aggregate lens traces
         concept_trace = {}
         simplex_trace = {}
 
@@ -776,7 +776,7 @@ class BEDFrame:
             'current_tick': self.current_tick_id,
             'workspace_state': self.workspace.state.value if self.workspace else None,
             'tier': self.workspace.tier if self.workspace else None,
-            'probe_traces': {
+            'lens_traces': {
                 'concept': concept_trace,
                 'simplex': simplex_trace,
             },

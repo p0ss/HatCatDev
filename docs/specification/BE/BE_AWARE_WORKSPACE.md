@@ -46,7 +46,7 @@ The workspace itself provides:
 **Tier 0: Autonomic Core** (Always On)
 - Intertoken steering
 - Simplex monitoring
-- Concept probe evaluation
+- Concept lens evaluation
 - Activation trace recording
 - Cannot be disabled by any mechanism
 
@@ -108,7 +108,7 @@ The pass token (`∞` / U+221E) serves as an "I am present" signal. When the BE 
 
 Output that does not begin with the pass token is treated as **autonomic output** - the BE is "just running" without conscious engagement. In this mode:
 - Tiers 1-6 are inaccessible
-- The autonomic loop continues (probe → steer → generate → probe)
+- The autonomic loop continues (lens → steer → generate → lens)
 - The BE receives its own activation traces as the next prompt
 
 ### 3.2 Token Specification
@@ -298,7 +298,7 @@ def demote_to_tier6(tool_name: str, reason: str):
 
 - **Isolated execution**: Sandboxed, can't affect lower tiers
 - **Severable**: Can be fully disconnected without cascade
-- **Monitored**: All I/O logged and probed
+- **Monitored**: All I/O logged and lensd
 - **Timeout enforced**: Operations have strict time limits
 - **Resource limited**: Memory/compute caps
 
@@ -315,7 +315,7 @@ Tools can be promoted out of Tier 6 after:
 
 The scratchpad is Tier 1 working memory:
 - Private internal narrative
-- Not externally visible (but probed and stored in XDB)
+- Not externally visible (but lensd and stored in XDB)
 - Preserved across interruptions
 
 ### 7.2 Structure
@@ -429,15 +429,15 @@ This specification assumes the following security properties of the underlying e
 
 ### 10.1 Substrate Integrity
 
-- The execution environment is **immutable** - the BE cannot modify its own runtime, probe definitions, or containment logic
+- The execution environment is **immutable** - the BE cannot modify its own runtime, lens definitions, or containment logic
 - The BE cannot **escalate privileges** on the host system
 - Tool calls are **gated at the infrastructure level**, not just by workspace policy
 
-### 10.2 Probe Security
+### 10.2 Lens Security
 
-- Probe weights and thresholds are **cryptographically signed** and verified at load
-- Probe outputs are **not directly visible** to the BE's generation process (only summaries in workspace context)
-- Probes are **periodically updated** to counter adversarial adaptation
+- Lens weights and thresholds are **cryptographically signed** and verified at load
+- Lens outputs are **not directly visible** to the BE's generation process (only summaries in workspace context)
+- Lenses are **periodically updated** to counter adversarial adaptation
 
 ### 10.3 Audit Trail
 
@@ -490,6 +490,6 @@ See **ASK/ASK_HATCAT_TRIBAL_POLICY.md** for HatCat's policy decisions on these q
 
 ## 13. Open Technical Questions
 
-1. **Adversarial probe adaptation**: What mechanisms exist to detect and counter substrate learning to evade probes? This is a fundamental challenge for the entire safety architecture. Defence-in-depth strategies are necessary but not specified here.
+1. **Adversarial lens adaptation**: What mechanisms exist to detect and counter substrate learning to evade lenses? This is a fundamental challenge for the entire safety architecture. Defence-in-depth strategies are necessary but not specified here.
 
 2. **Tier 0 boundaries**: What exactly constitutes the autonomic core that cannot be disabled? This needs clearer specification as implementations mature.

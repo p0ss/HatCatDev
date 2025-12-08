@@ -32,7 +32,7 @@
 
 ### Core Capabilities
 
-1. **Training Infrastructure**: Adaptive dual-probe training with tiered validation
+1. **Training Infrastructure**: Adaptive dual-lens training with tiered validation
 2. **Monitoring Systems**: Hierarchical temporal monitoring, divergence detection, dissonance measurement
 3. **Steering Infrastructure**: Manifold-aware concept steering with contamination removal
 4. **Ontology Management**: SUMO/WordNet integration with patches and custom taxonomies
@@ -46,20 +46,20 @@
 
 | Module | Purpose | Documentation | Notes |
 |--------|---------|---------------|-------|
-| **dual_adaptive_trainer.py** | Independent adaptive training for activation and text probes with tiered validation | `docs/TIERED_VALIDATION_SYSTEM.md` | Core training loop, 70% efficiency gain |
+| **dual_adaptive_trainer.py** | Independent adaptive training for activation and text lenses with tiered validation | `docs/TIERED_VALIDATION_SYSTEM.md` | Core training loop, 70% efficiency gain |
 | **sumo_classifiers.py** | SUMO concept classifier training with hierarchical relationships | `docs/SUMO_AWARE_TRAINING.md` | 5,583 concepts trained |
 | **sumo_data_generation.py** | Generate training data from SUMO concepts and WordNet relationships | `docs/adaptive_training_approach.md` | Definitional + relational samples |
-| **probe_validation.py** | Calibration-based probe validation (out-of-distribution testing) | `docs/TIERED_VALIDATION_SYSTEM.md` | Advisory validation framework |
+| **lens_validation.py** | Calibration-based lens validation (out-of-distribution testing) | `docs/TIERED_VALIDATION_SYSTEM.md` | Advisory validation framework |
 | **ai_symmetry_parser.py** | Parse AI-symmetry WordNet mappings for custom ontologies | `docs/AI_SAFETY_HIERARCHY_REORGANIZATION.md` | 184 synset mappings |
 | **classifier.py** | Binary concept classifier architecture (legacy) | `PROJECT_OVERVIEW.md` | BiLSTM + MLP design |
 | **activations.py** | Activation capture during generation (legacy) | Phase history | Early approach |
-| **embedding_centroids.py** | Centroid-based concept detection | Phase 5b plans | Transition from text probes |
+| **embedding_centroids.py** | Centroid-based concept detection | Phase 5b plans | Transition from text lenses |
 | **__init__.py** | Training module exports | - | - |
 
 **Key Features**:
 - Tiered validation (A → B+ → B → C+) with progressive strictness falloff
 - Adaptive sample scaling (10 → 30 → 60 → 90 samples)
-- Dual probe training (activation + text) with independent graduation
+- Dual lens training (activation + text) with independent graduation
 - SUMO-aware hierarchical relationship sampling
 
 **Documentation Coverage**: Strong. Well-documented in TIERED_VALIDATION_SYSTEM, SUMO_AWARE_TRAINING, adaptive_training_approach
@@ -72,11 +72,11 @@
 
 | Module | Purpose | Documentation | Notes |
 |--------|---------|---------------|-------|
-| **dynamic_probe_manager.py** | Hierarchical probe loading with cascade activation | `docs/dual_probe_dynamic_loading.md` | Loads 1K of 110K+ concepts on-demand |
+| **dynamic_lens_manager.py** | Hierarchical lens loading with cascade activation | `docs/dual_lens_dynamic_loading.md` | Loads 1K of 110K+ concepts on-demand |
 | **sumo_temporal.py** | SUMO hierarchical temporal detection | `docs/TEMPORAL_MONITORING.md` | Layer-aware concept tracking |
 | **temporal_monitor.py** | Legacy temporal sequence monitoring | `docs/TEMPORAL_APPROACH.md` | Sliding window approach |
-| **concept_dissonance.py** | Divergence measurement between activation and text probes | `docs/dissonance_measurement_improvements.md` | Detects model internal vs output mismatch |
-| **text_concept_probe.py** | Text-based concept detection (TF-IDF + LogReg) | `docs/dual_probe_training.md` | Complements activation probes |
+| **concept_dissonance.py** | Divergence measurement between activation and text lenses | `docs/dissonance_measurement_improvements.md` | Detects model internal vs output mismatch |
+| **text_concept_lens.py** | Text-based concept detection (TF-IDF + LogReg) | `docs/dual_lens_training.md` | Complements activation lenses |
 | **centroid_text_detector.py** | Centroid-based text detection | Phase 5b plans | Alternative to TF-IDF |
 | **__init__.py** | Monitoring module exports | - | - |
 
@@ -84,9 +84,9 @@
 - Hierarchical activation: Layer 0 always active → triggers Layer 1-5 children
 - Temporal continuity tracking across generation sequence
 - Divergence/dissonance detection (what model thinks vs. what it says)
-- Memory-efficient dynamic loading (1K active probes from 110K+ total)
+- Memory-efficient dynamic loading (1K active lenses from 110K+ total)
 
-**Documentation Coverage**: Strong. Comprehensive coverage of temporal monitoring, dual-probe architecture, cascade optimization
+**Documentation Coverage**: Strong. Comprehensive coverage of temporal monitoring, dual-lens architecture, cascade optimization
 
 **Gaps**: Centroid text detector implementation details missing
 
@@ -100,8 +100,8 @@
 | **detached_jacobian.py** | Jacobian-based steering vector extraction (research) | `docs/detached_jacobian_approach.md` | Alternative to classifier-based steering |
 | **steering_manager.py** | High-level steering API and hook management | - | **UNDOCUMENTED** |
 | **subspace.py** | PCA-based contamination subspace removal | Phase 6 results | Doubles working range to ±0.5 |
-| **hooks.py** | Forward hook infrastructure for activation manipulation | `docs/dual_probe_dynamic_loading.md` | Layer-specific hook placement |
-| **extraction.py** | Steering vector extraction from classifiers | Phase 2.5 results | Extracts from trained probes |
+| **hooks.py** | Forward hook infrastructure for activation manipulation | `docs/dual_lens_dynamic_loading.md` | Layer-specific hook placement |
+| **extraction.py** | Steering vector extraction from classifiers | Phase 2.5 results | Extracts from trained lenses |
 | **evaluation.py** | Steering effectiveness evaluation | Phase 5 results | Semantic shift (Δ) metrics |
 | **__init__.py** | Steering module exports | - | - |
 
@@ -160,15 +160,15 @@
 
 | Module | Purpose | Documentation | Notes |
 |--------|---------|---------------|-------|
-| **probe_pack_registry.py** | Manage trained probe packs (model-specific) | `docs/CONCEPT_PACK_WORKFLOW.md` | Package probes for distribution |
+| **lens_pack_registry.py** | Manage trained lens packs (model-specific) | `docs/CONCEPT_PACK_WORKFLOW.md` | Package lenses for distribution |
 | **concept_pack_registry.py** | Manage concept pack ontologies | `docs/CONCEPT_PACK_FORMAT.md` | Modular taxonomy system |
 | **__init__.py** | Registry module exports | - | - |
 
 **Key Features**:
-- Probe packs: Bundle trained probes with metadata
+- Lens packs: Bundle trained lenses with metadata
 - Concept packs: Distributable ontology extensions
 - Dependency management and versioning
-- Model-specific probe storage
+- Model-specific lens storage
 
 **Documentation Coverage**: Excellent. CONCEPT_PACK_FORMAT and WORKFLOW are comprehensive.
 
@@ -272,20 +272,20 @@
 | Script | Purpose | Documentation | Notes |
 |--------|---------|---------------|-------|
 | **train_sumo_classifiers.py** | Main SUMO classifier training pipeline | `docs/SUMO_AWARE_TRAINING.md` | Production-ready |
-| **train_multilayer_probes.py** | Multi-layer probe training | `docs/multilayer_monitoring_proposal.md` | Experimental |
+| **train_multilayer_lenses.py** | Multi-layer lens training | `docs/multilayer_monitoring_proposal.md` | Experimental |
 | **train_binary_classifiers.py** | Legacy binary classifier training | Phase 2 results | Early approach |
 | **train_interpreter.py** | Train interpreter model | - | **UNDOCUMENTED** |
-| **train_text_probes.py** | Text probe training | Phase 5b | Dual-probe system |
+| **train_text_lenses.py** | Text lens training | Phase 5b | Dual-lens system |
 
 #### Validation & Testing
 
 | Script | Purpose | Documentation | Notes |
 |--------|---------|---------------|-------|
-| **validate_trained_probes.py** | Validate probe quality on held-out data | `docs/TIERED_VALIDATION_SYSTEM.md` | Out-of-distribution testing |
+| **validate_trained_lenses.py** | Validate lens quality on held-out data | `docs/TIERED_VALIDATION_SYSTEM.md` | Out-of-distribution testing |
 | **test_adaptive_with_validation.py** | Test adaptive training with validation | Phase 5b | Integration test |
 | **test_layer0_training.py** | Test Layer 0 training specifically | Phase 8 | Base layer validation |
 | **validate_setup.py** | Validate HatCat installation | - | Setup verification |
-| **test_legacy_probes.py** | Test backward compatibility | - | Legacy support |
+| **test_legacy_lenses.py** | Test backward compatibility | - | Legacy support |
 
 #### Experimental/Phase Scripts
 
@@ -312,7 +312,7 @@
 | **analyze_sumo_concept_coverage.py** | SUMO concept coverage analysis | Phase 14 | 100% synset coverage |
 | **analyze_stability.py** | Classifier stability analysis | - | **UNDOCUMENTED** |
 | **analyze_divergence_distribution.py** | Divergence metric distribution | - | **UNDOCUMENTED** |
-| **diagnose_probe_calibration.py** | Probe calibration diagnostics | - | **UNDOCUMENTED** |
+| **diagnose_lens_calibration.py** | Lens calibration diagnostics | - | **UNDOCUMENTED** |
 | **diagnose_object_negatives.py** | Negative sampling diagnostics | - | **UNDOCUMENTED** |
 | **diagnose_centroid_accuracy.py** | Centroid detection accuracy | - | **UNDOCUMENTED** |
 
@@ -369,7 +369,7 @@
 
 | Script | Purpose | Documentation | Notes |
 |--------|---------|---------------|-------|
-| **test_centroid_detection.py** | Test centroid-based detection | Phase 5b | Alternative to text probes |
+| **test_centroid_detection.py** | Test centroid-based detection | Phase 5b | Alternative to text lenses |
 | **test_centroid_divergence_dynamic.py** | Dynamic centroid divergence | - | **UNDOCUMENTED** |
 | **diagnose_centroid_accuracy.py** | Centroid accuracy diagnostics | - | **UNDOCUMENTED** |
 | **generate_concept_name_embeddings.py** | Generate concept name embeddings | - | Sentence transformers |
@@ -381,8 +381,8 @@
 |--------|---------|---------------|-------|
 | **test_cascade_simple.py** | Simple cascade activation test | `docs/cascade_profiling_and_optimization.md` | Layer 0 → Layer 1 |
 | **profile_cascade_performance.py** | Profile cascade performance | `docs/cascade_profiling_and_optimization.md` | Optimization data |
-| **test_optimized_loading.py** | Test optimized probe loading | - | **UNDOCUMENTED** |
-| **test_probe_pack_loading.py** | Test probe pack registry | `docs/CONCEPT_PACK_WORKFLOW.md` | Registry validation |
+| **test_optimized_loading.py** | Test optimized lens loading | - | **UNDOCUMENTED** |
+| **test_lens_pack_loading.py** | Test lens pack registry | `docs/CONCEPT_PACK_WORKFLOW.md` | Registry validation |
 
 #### Behavioral Testing
 
@@ -416,8 +416,8 @@
 | **rerank_concepts_safety.py** | Rerank concepts by safety relevance | - | **UNDOCUMENTED** |
 | **filter_by_frequency.py** | Filter concepts by frequency | - | **UNDOCUMENTED** |
 | **debug_relationship_prompts.py** | Debug relationship sampling | - | **UNDOCUMENTED** |
-| **debug_probe_paths.py** | Debug probe file paths | - | **UNDOCUMENTED** |
-| **migrate_to_packs.py** | Migrate to probe pack system | - | **UNDOCUMENTED** |
+| **debug_lens_paths.py** | Debug lens file paths | - | **UNDOCUMENTED** |
+| **migrate_to_packs.py** | Migrate to lens pack system | - | **UNDOCUMENTED** |
 
 #### Shell Scripts
 
@@ -468,8 +468,8 @@
 | **TRAINING_CODE_CONSOLIDATION.md** | Training code organization | ✅ Planning |
 | **TIERED_VALIDATION_SYSTEM.md** | Tiered validation framework | ✅ Complete |
 | **VALIDATION_MODE_ABLATION_STUDY.md** | Validation mode comparison | ✅ Results |
-| **dual_probe_training.md** | Dual-probe architecture | ✅ Complete |
-| **dual_probe_adaptive_training.md** | Adaptive dual training | ✅ Complete |
+| **dual_lens_training.md** | Dual-lens architecture | ✅ Complete |
+| **dual_lens_adaptive_training.md** | Adaptive dual training | ✅ Complete |
 
 #### Monitoring & Detection
 
@@ -478,7 +478,7 @@
 | **TEMPORAL_MONITORING.md** | Temporal detection system | ✅ Complete |
 | **TEMPORAL_APPROACH.md** | Temporal approach overview | ✅ Complete |
 | **SUBTOKEN_MONITORING.md** | Sub-token granularity | 📋 Planned |
-| **dual_probe_divergence_detection.md** | Divergence detection | ✅ Complete |
+| **dual_lens_divergence_detection.md** | Divergence detection | ✅ Complete |
 | **dissonance_measurement_improvements.md** | Dissonance metrics | ✅ Complete |
 | **discriminating_divergent_concepts.md** | Research framework | ✅ Proposal |
 | **multilayer_monitoring_proposal.md** | Multi-layer monitoring | ✅ Proposal |
@@ -538,7 +538,7 @@
 | File | Purpose | Status |
 |------|---------|--------|
 | **cascade_profiling_and_optimization.md** | Cascade optimization | ✅ Complete |
-| **dual_probe_dynamic_loading.md** | Dynamic loading design | ✅ Complete |
+| **dual_lens_dynamic_loading.md** | Dynamic loading design | ✅ Complete |
 | **dynamic_fp_size.md** | Mixed precision design | ✅ Proposal |
 | **OPTIMIZATION_STATUS.md** | Optimization tracking | ⚠️ Needs update |
 | **per_token_training_and_pca.md** | Per-token PCA | ✅ Research |
@@ -721,7 +721,7 @@ Many analysis and diagnostic scripts lack documentation:
 - analyze_training_log.py
 - analyze_calibration_cost.py
 - analyze_stability.py
-- diagnose_* scripts (probe, centroid, object negatives)
+- diagnose_* scripts (lens, centroid, object negatives)
 - Various test_* scripts
 
 **Impact**: Low - These are development tools, not production systems
@@ -743,7 +743,7 @@ These systems are more sophisticated and important than they appear:
 - Automated installation with validation
 - Backup and rollback support
 - Distribution packaging
-- Probe pack integration
+- Lens pack integration
 
 **Documentation**: Excellent (CONCEPT_PACK_FORMAT.md, CONCEPT_PACK_WORKFLOW.md)
 
@@ -751,7 +751,7 @@ These systems are more sophisticated and important than they appear:
 
 ---
 
-### 2. Tiered Validation System (src/training/probe_validation.py)
+### 2. Tiered Validation System (src/training/lens_validation.py)
 
 **What it looks like**: Simple test accuracy check
 
@@ -768,9 +768,9 @@ These systems are more sophisticated and important than they appear:
 
 ---
 
-### 3. Dynamic Probe Manager (src/monitoring/dynamic_probe_manager.py)
+### 3. Dynamic Lens Manager (src/monitoring/dynamic_lens_manager.py)
 
-**What it looks like**: Simple probe loading
+**What it looks like**: Simple lens loading
 
 **What it actually is**: Hierarchical adaptive compute allocation system
 - Cascade activation (Layer 0 → Layer 1 → ... → Layer 5)
@@ -779,9 +779,9 @@ These systems are more sophisticated and important than they appear:
 - Cold branch unloading
 - Access pattern tracking
 
-**Documentation**: Good (dual_probe_dynamic_loading.md, cascade_profiling_and_optimization.md)
+**Documentation**: Good (dual_lens_dynamic_loading.md, cascade_profiling_and_optimization.md)
 
-**Impact**: Enables 110K+ concept monitoring with 1K probe budget
+**Impact**: Enables 110K+ concept monitoring with 1K lens budget
 
 ---
 
@@ -824,7 +824,7 @@ These systems are more sophisticated and important than they appear:
 **What it looks like**: Simple loop with sample increments
 
 **What it actually is**: Multi-axis adaptive training framework
-- Independent probe graduation (activation vs. text)
+- Independent lens graduation (activation vs. text)
 - Relationship importance ranking
 - Progressive sample scaling (10 → 30 → 60 → 90)
 - Tiered validation integration
@@ -876,7 +876,7 @@ These systems are more sophisticated and important than they appear:
 ### Excellent Documentation (Well-Covered)
 
 - Core training systems (SUMO, adaptive, tiered validation)
-- Concept pack and probe pack infrastructure
+- Concept pack and lens pack infrastructure
 - Manifold steering and geometric approaches
 - WordNet patch system
 - OpenWebUI integration (setup and roadmap)
@@ -886,7 +886,7 @@ These systems are more sophisticated and important than they appear:
 ### Good Documentation (Adequate Coverage)
 
 - Temporal monitoring
-- Dual-probe architecture
+- Dual-lens architecture
 - Cascade optimization
 - Phase experimental results
 - Ontology coverage analysis
@@ -970,7 +970,7 @@ These systems are more sophisticated and important than they appear:
 ### Most Underappreciated Systems
 1. **Concept Pack System** - Sophisticated modular ontology framework
 2. **Tiered Validation** - 70% efficiency gain through adaptive quality control
-3. **Dynamic Probe Manager** - 110K concepts with 1K probe budget
+3. **Dynamic Lens Manager** - 110K concepts with 1K lens budget
 4. **Dual-Subspace Steering** - Research-grade geometric steering
 5. **WordNet Patch System** - Achieved 100% synset coverage
 6. **Three-Pole Simplex** - Novel architecture for AI homeostasis

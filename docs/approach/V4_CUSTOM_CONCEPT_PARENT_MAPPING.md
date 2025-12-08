@@ -171,7 +171,7 @@ poetry run python scripts/build_v4_layer_files.py
 ### Phase 3: Validate
 - Check that all concepts have valid parent chains
 - Verify domain assignments propagate correctly
-- Test probe training on updated hierarchy
+- Test lens training on updated hierarchy
 
 ---
 

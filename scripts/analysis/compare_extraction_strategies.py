@@ -172,7 +172,7 @@ def train_with_strategy(
     y_val = np.array([1] * (len(pos_acts) - split) + [0] * (len(neg_acts) - split))
 
     train_start = time.time()
-    probe, train_metrics = train_simple_classifier(
+    lens, train_metrics = train_simple_classifier(
         X_train, y_train, X_val, y_val,
         hidden_dim=128, epochs=50, lr=0.001
     )
@@ -199,12 +199,12 @@ def train_with_strategy(
     y_test = np.array([1] * len(test_pos_acts) + [0] * len(test_neg_acts))
 
     # Evaluate
-    probe.eval()
-    probe = probe.cpu()  # Move to CPU for simplicity
+    lens.eval()
+    lens = lens.cpu()  # Move to CPU for simplicity
     with torch.no_grad():
         X_tensor = torch.FloatTensor(X_test)
         y_tensor = torch.LongTensor(y_test)
-        outputs = probe(X_tensor)
+        outputs = lens(X_tensor)
         preds = (outputs.squeeze() > 0.5).long()
 
         from sklearn.metrics import f1_score, accuracy_score

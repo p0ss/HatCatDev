@@ -2,7 +2,7 @@
 
 ## Summary
 
-Implemented temporal locality caching in DynamicProbeManager to eliminate disk I/O overhead during generation. This optimization leverages the observation that probes relevant in one token are likely to be relevant in subsequent tokens.
+Implemented temporal locality caching in DynamicLensManager to eliminate disk I/O overhead during generation. This optimization leverages the observation that lenses relevant in one token are likely to be relevant in subsequent tokens.
 
 ## Performance Impact
 
@@ -17,13 +17,13 @@ Implemented temporal locality caching in DynamicProbeManager to eliminate disk I
 
 ### Three-Tier Memory System
 
-1. **Active probes** (loaded_activation_probes)
+1. **Active lenses** (loaded_activation_lenses)
    - Base layers (always loaded for broad coverage)
-   - Top-k scoring probes from current token
+   - Top-k scoring lenses from current token
    - Run every token
 
 2. **Warm cache** (warm_cache)
-   - Previously-loaded probes not in current top-k
+   - Previously-loaded lenses not in current top-k
    - Kept in memory but not run
    - Zero disk I/O when reactivated
    - Evicted based on reactivation count (LRU-style)
@@ -35,16 +35,16 @@ Implemented temporal locality caching in DynamicProbeManager to eliminate disk I
 ## Implementation Details
 
 ### 1. Base Layer Tracking
-**File**: `/home/poss/Documents/Code/HatCat/src/monitoring/dynamic_probe_manager.py`
+**File**: `/home/poss/Documents/Code/HatCat/src/monitoring/dynamic_lens_manager.py`
 **Method**: `_load_base_layers()`
 
 ```python
-# Mark all loaded probes as base layer probes (never evict these)
-for concept_key in self.loaded_activation_probes.keys():
-    self.base_layer_probes.add(concept_key)
+# Mark all loaded lenses as base layer lenses (never evict these)
+for concept_key in self.loaded_activation_lenses.keys():
+    self.base_layer_lenses.add(concept_key)
 ```
 
-Base layer probes are protected from:
+Base layer lenses are protected from:
 - Moving to warm cache
 - Eviction from memory
 
@@ -52,15 +52,15 @@ Base layer probes are protected from:
 **Method**: `_load_concepts()`
 
 Loading priority:
-1. Check if already in active loaded_probes → cache hit
+1. Check if already in active loaded_lenses → cache hit
 2. Check if in warm_cache → move to active (zero disk I/O!)
 3. Not in memory → load from disk
 
 ```python
 elif concept_key in self.warm_cache:
-    # Move from warm cache to active loaded probes (zero disk I/O!)
-    probe, reactivation_count = self.warm_cache[concept_key]
-    self.loaded_activation_probes[concept_key] = probe
+    # Move from warm cache to active loaded lenses (zero disk I/O!)
+    lens, reactivation_count = self.warm_cache[concept_key]
+    self.loaded_activation_lenses[concept_key] = lens
     self.cache_reactivation_count[concept_key] = reactivation_count + 1
     del self.warm_cache[concept_key]
     self.stats['cache_hits'] += 1
@@ -71,8 +71,8 @@ elif concept_key in self.warm_cache:
 
 After each token:
 1. Identify top-k concept keys
-2. Move non-top-k probes to warm cache
-3. Keep base layer probes in active set
+2. Move non-top-k lenses to warm cache
+3. Keep base layer lenses in active set
 4. Call `_manage_cache_memory()` to enforce total budget
 
 ```python
@@ -80,9 +80,9 @@ After each token:
 sorted_all_concepts = sorted(current_scores.items(), key=lambda x: x[1], reverse=True)
 top_k_concept_keys = set([key for key, _ in sorted_all_concepts[:top_k]])
 
-# Move non-top-k probes to warm cache (but keep base layer probes active)
-for concept_key in list(self.loaded_activation_probes.keys()):
-    if concept_key in self.base_layer_probes:
+# Move non-top-k lenses to warm cache (but keep base layer lenses active)
+for concept_key in list(self.loaded_activation_lenses.keys()):
+    if concept_key in self.base_layer_lenses:
         continue
     if concept_key not in top_k_concept_keys:
         # Move to warm cache...
@@ -92,15 +92,15 @@ for concept_key in list(self.loaded_activation_probes.keys()):
 **Method**: `_manage_cache_memory()`
 
 Strategy:
-- Total budget: `max_loaded_probes` (for loaded + warm cache combined)
+- Total budget: `max_loaded_lenses` (for loaded + warm cache combined)
 - When exceeded: evict from warm cache only
 - Sort by reactivation count (ascending) → evict least-reactivated first
-- Never evict base layer probes
+- Never evict base layer lenses
 
 ```python
-total_in_memory = len(self.loaded_activation_probes) + len(self.warm_cache)
-if total_in_memory > self.max_loaded_probes:
-    # Evict least-reactivated probes from warm cache
+total_in_memory = len(self.loaded_activation_lenses) + len(self.warm_cache)
+if total_in_memory > self.max_loaded_lenses:
+    # Evict least-reactivated lenses from warm cache
 ```
 
 ### 5. Timing Metrics
@@ -123,14 +123,14 @@ if timing is not None:
 ### New Attributes
 
 ```python
-# Warm cache: (probe, reactivation_count)
+# Warm cache: (lens, reactivation_count)
 self.warm_cache: Dict[Tuple[str, int], Tuple[nn.Module, int]] = {}
 
 # Track reactivation counts for eviction policy
 self.cache_reactivation_count: Dict[Tuple[str, int], int] = defaultdict(int)
 
-# Track which probes are base layers (never evict)
-self.base_layer_probes: Set[Tuple[str, int]] = set()
+# Track which lenses are base layers (never evict)
+self.base_layer_lenses: Set[Tuple[str, int]] = set()
 
 # Temporary tracking for per-token cache hits
 self._last_warm_cache_hits: int = 0
@@ -158,11 +158,11 @@ self.stats = {
 Example output:
 ```
 ================================================================================
-DYNAMIC PROBE MANAGER STATISTICS
+DYNAMIC LENS MANAGER STATISTICS
 ================================================================================
 Total concepts in metadata: 5432
-Currently loaded probes: 50
-Base layer probes (protected): 25
+Currently loaded lenses: 50
+Base layer lenses (protected): 25
 Warm cache size: 150
 Total in memory: 200
 Total loads: 500
@@ -180,7 +180,7 @@ Top 10 most reactivated concepts (from warm cache):
 ## Backward Compatibility
 
 ✅ All existing code continues to work without modification
-- `loaded_probes` alias maintained
+- `loaded_lenses` alias maintained
 - Existing methods unchanged (only internal optimizations)
 - Same API surface
 - Falls back gracefully if warm cache empty
@@ -189,7 +189,7 @@ Top 10 most reactivated concepts (from warm cache):
 
 Verified:
 - ✅ Manager initialization with warm cache
-- ✅ Base layer probe marking
+- ✅ Base layer lens marking
 - ✅ Cache statistics tracking
 - ✅ Cache management methods exist and callable
 - ✅ Backward compatibility maintained
@@ -198,12 +198,12 @@ Verified:
 ## Usage Example
 
 ```python
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
-manager = DynamicProbeManager(
+manager = DynamicLensManager(
     device='cuda',
     base_layers=[0, 1],
-    max_loaded_probes=500,  # Combined budget for active + warm
+    max_loaded_lenses=500,  # Combined budget for active + warm
     keep_top_k=50,          # Keep top 50 in active set
     aggressive_pruning=True
 )
@@ -221,8 +221,8 @@ print(f"Cache hits: {timing['cache_hits']}, misses: {timing['cache_misses']}")
 
 ## Key Benefits
 
-1. **Zero disk I/O for reactivated probes**: Warm cache eliminates disk reads
-2. **Temporal locality exploitation**: Probes relevant now likely relevant soon
+1. **Zero disk I/O for reactivated lenses**: Warm cache eliminates disk reads
+2. **Temporal locality exploitation**: Lenses relevant now likely relevant soon
 3. **Memory efficient**: Total budget enforced across active + warm cache
 4. **Intelligent eviction**: LRU-style based on reactivation count
 5. **Protected base layers**: Ensures broad hierarchical coverage
@@ -230,8 +230,8 @@ print(f"Cache hits: {timing['cache_hits']}, misses: {timing['cache_misses']}")
 
 ## Files Modified
 
-- `/home/poss/Documents/Code/HatCat/src/monitoring/dynamic_probe_manager.py`
-  - `_load_base_layers()`: Mark base layer probes
+- `/home/poss/Documents/Code/HatCat/src/monitoring/dynamic_lens_manager.py`
+  - `_load_base_layers()`: Mark base layer lenses
   - `_load_concepts()`: Check warm cache before disk
   - `_manage_cache_memory()`: Evict from warm cache
   - `detect_and_expand()`: Manage warm cache after detection

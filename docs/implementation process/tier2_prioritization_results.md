@@ -244,7 +244,7 @@ All remaining concepts in top 50 fall in this range, including:
 3. Apply motivation patch (Strategy 2) to layers 2-3
 4. Create Layer 5 entries for validated Tier 2 concepts
 5. Generate training data with 4-component architecture
-6. Train and validate new probes
+6. Train and validate new lenses
 
 ### Medium-term (This Month)
 7. Tier 3 expansion (score 3.0-2.5 range)

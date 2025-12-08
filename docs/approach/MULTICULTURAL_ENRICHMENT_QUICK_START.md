@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide walks you through generating 2,043 culturally-diverse synsets to balance and enrich the tripole probe training data.
+This guide walks you through generating 2,043 culturally-diverse synsets to balance and enrich the tripole lens training data.
 
 ## Prerequisites
 
@@ -109,7 +109,7 @@ poetry run python scripts/merge_enrichment_responses.py
 
 This merges responses into: `data/simplex_overlap_synsets_enriched.json`
 
-## Step 6: Re-train Tripole Probes
+## Step 6: Re-train Tripole Lenses
 
 Train with balanced, culturally-diverse data:
 

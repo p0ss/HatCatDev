@@ -30,7 +30,7 @@ Full phase plan for implementing interactive divergence visualization with conce
 ---
 
 ## Phase 2: Repository Restructure for Multi-Model Support
-**Goal**: Support multiple models with different probe sets
+**Goal**: Support multiple models with different lens sets
 **Status**: PENDING
 
 ### Tasks:
@@ -42,9 +42,9 @@ Full phase plan for implementing interactive divergence visualization with conce
          ontologies/
            sumo/
              layers_0-5/
-               probes/
-                 activation/  # activation probes
-                 text/        # text probes
+               lenses/
+                 activation/  # activation lenses
+                 text/        # text lenses
                metadata.json
                concept_positions.json
                training_results.json
@@ -52,14 +52,14 @@ Full phase plan for implementing interactive divergence visualization with conce
          ontologies/
            sumo/
              layers_0-3/
-               probes/
+               lenses/
                metadata.json
    ```
 
 2. Create model registry system:
    - `src/registry/model_registry.py`
-   - Tracks available models, ontologies, probe coverage
-   - Auto-detection of trained probes
+   - Tracks available models, ontologies, lens coverage
+   - Auto-detection of trained lenses
    - Metadata schema:
      ```json
      {
@@ -69,14 +69,14 @@ Full phase plan for implementing interactive divergence visualization with conce
        "concept_count": 5582,
        "training_date": "2025-11-08",
        "base_model_path": "google/gemma-3-4b-pt",
-       "probe_paths": {
-         "activation": "results/models/gemma-3-4b-pt/ontologies/sumo/layers_0-5/probes/activation",
-         "text": "results/models/gemma-3-4b-pt/ontologies/sumo/layers_0-5/probes/text"
+       "lens_paths": {
+         "activation": "results/models/gemma-3-4b-pt/ontologies/sumo/layers_0-5/lenses/activation",
+         "text": "results/models/gemma-3-4b-pt/ontologies/sumo/layers_0-5/lenses/text"
        }
      }
      ```
 
-3. Update DynamicProbeManager:
+3. Update DynamicLensManager:
    - Accept `model_id` parameter
    - Load from registry
    - Support multiple models in memory (model pool)
@@ -217,11 +217,11 @@ Full phase plan for implementing interactive divergence visualization with conce
    - Link to full documentation
 
 3. Model selector enhancement:
-   - Show probe availability indicator (✓/✗)
+   - Show lens availability indicator (✓/✗)
    - Display ontology/domain info
    - Concept coverage stats
    - Tooltip with model details
-   - Disable if no probes available
+   - Disable if no lenses available
 
 4. Keyboard shortcuts:
    - `Ctrl+H`: Toggle help panel
@@ -311,7 +311,7 @@ Full phase plan for implementing interactive divergence visualization with conce
 ## Success Metrics
 
 - ✅ Stable streaming with no OOM errors (even with long conversations)
-- ⏳ Support for 3+ models with different probe sets
+- ⏳ Support for 3+ models with different lens sets
 - ⏳ User can steer concepts and see effect in real-time
 - ⏳ Model can request steering via tool calls
 - ⏳ Full token-level color visualization in OpenWebUI

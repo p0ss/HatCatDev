@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Generate training data for fine-tuning a small model to interpret HatCat probe outputs.
+Generate training data for fine-tuning a small model to interpret HatCat lens outputs.
 
 This script:
-1. Takes probe activation data (simplex axes with pole activations)
+1. Takes lens activation data (simplex axes with pole activations)
 2. Generates synthetic sentences exhibiting those characteristics
 3. Formats as instruction-following training data for fine-tuning
 """
@@ -339,7 +339,7 @@ def main():
     print("For production, you should:")
     print("  1. Use an LLM to generate realistic sentences from activation profiles")
     print("  2. Use an LLM to generate high-quality summaries")
-    print("  3. Include real probe output data from actual model runs")
+    print("  3. Include real lens output data from actual model runs")
     print("  4. Add data validation and quality checks")
 
     # Generate synthetic examples
@@ -383,7 +383,7 @@ def main():
    - Use an LLM to generate nuanced, accurate summaries
    - Ensure summaries don't over-speculate beyond features
 
-3. Add real probe data:
+3. Add real lens data:
    - Run HatCat on real sentences
    - Use actual activation patterns as training data
 
@@ -393,7 +393,7 @@ def main():
    - Validate on held-out test set
 
 5. Evaluate:
-   - Test on real probe outputs
+   - Test on real lens outputs
    - Measure accuracy of interpretations
    - Check for hallucination/over-speculation
 """)

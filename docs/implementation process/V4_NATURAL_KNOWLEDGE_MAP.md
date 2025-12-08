@@ -169,7 +169,7 @@ Each concept entry includes:
 - `child_count`: Total number of children
 - `sumo_definition`: SUMO documentation (if available)
 - `is_pseudo_sumo`: Whether this is a meta-concept (Layer 0 only)
-- `is_category_probe`: Whether this is trainable as a category
+- `is_category_lens`: Whether this is trainable as a category
 
 ## Building the V4 Hierarchy
 
@@ -189,7 +189,7 @@ To regenerate V4 layer files:
 poetry run python scripts/build_v4_layer_files.py
 ```
 
-## Benefits for Probe Training
+## Benefits for Lens Training
 
 1. **Semantic Coherence**: Concepts in same layer share semantic similarity
 2. **Domain Identification**: Layer 0 provides coarse domain filter
@@ -199,9 +199,9 @@ poetry run python scripts/build_v4_layer_files.py
 
 ## Next Steps
 
-1. Train probes on V4 hierarchy (estimated 13 hours for all 7,097 concepts)
+1. Train lenses on V4 hierarchy (estimated 13 hours for all 7,097 concepts)
 2. Generate WordNet synset mappings for concepts without coverage
-3. Validate probe accuracy on safety-critical concepts
+3. Validate lens accuracy on safety-critical concepts
 4. Create visualization of domain structure for UI
 
 ## References

@@ -2,7 +2,7 @@
 Hush - Safety Harness Enforcement Layer
 
 Hush enforces USH (Universal Safety Harness) and CSH (Chosen Safety Harness)
-constraints through automatic steering based on simplex probe monitoring.
+constraints through automatic steering based on simplex lens monitoring.
 
 Key components:
 - HushController: Main controller for loading profiles and evaluating constraints

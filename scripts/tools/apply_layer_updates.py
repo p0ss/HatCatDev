@@ -113,7 +113,7 @@ def create_layer_entry(concept_info: Dict, wordnet_mappings: Dict) -> Dict:
         "sumo_term": sumo_term,
         "sumo_depth": depth,
         "layer": layer,
-        "is_category_probe": is_category,
+        "is_category_lens": is_category,
         "is_pseudo_sumo": False,
         "category_children": children,
         "synset_count": len(synsets),
@@ -141,7 +141,7 @@ def update_parent_children(layer_data: List[Dict], new_concepts_by_layer: Dict) 
 
     # For each concept, update its category_children
     for concept in all_concepts.values():
-        if concept['is_category_probe']:
+        if concept['is_category_lens']:
             # Ensure category_children is accurate
             # (The recalculated data should already have this, but verify)
             pass

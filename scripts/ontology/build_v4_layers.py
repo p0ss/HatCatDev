@@ -374,7 +374,7 @@ def generate_layer_files(layers, depths, parent_map, children_map, concept_to_sy
                 "sumo_term": concept,
                 "sumo_depth": depths.get(concept, 999),
                 "layer": layer_num,
-                "is_category_probe": True,
+                "is_category_lens": True,
                 "is_pseudo_sumo": False,
                 "category_children": sorted(list(children_map.get(concept, []))),
                 "synset_count": len(synsets),

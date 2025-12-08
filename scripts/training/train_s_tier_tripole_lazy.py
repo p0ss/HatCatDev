@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Train S-tier three-pole simplex probes using proper joint tripole architecture with lazy generation.
+Train S-tier three-pole simplex lenses using proper joint tripole architecture with lazy generation.
 
-Uses TripoleProbe with joint 3-class softmax (not binary classifiers).
+Uses TripoleLens with joint 3-class softmax (not binary classifiers).
 Implements lazy data generation: start with 60 samples per pole, increment if needed.
 """
 
@@ -20,7 +20,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from training.sumo_data_generation import create_simplex_pole_training_dataset_contrastive
 from training.sumo_classifiers import extract_activations
-from training.tripole_classifier import train_tripole_simplex, TripoleProbe
+from training.tripole_classifier import train_tripole_simplex, TripoleLens
 
 # Paths
 S_TIER_DEFS_PATH = PROJECT_ROOT / "data" / "s_tier_simplex_definitions.json"
@@ -174,7 +174,7 @@ def train_simplex_with_lazy_generation(
     layer_idx: int = 12
 ):
     """
-    Train a tripole probe with lazy data generation.
+    Train a tripole lens with lazy data generation.
 
     Starts with SAMPLES_PER_POLE_INITIAL samples per pole.
     If training fails to reach MIN_F1_THRESHOLD, incrementally adds more data.
@@ -197,7 +197,7 @@ def train_simplex_with_lazy_generation(
     n_samples = SAMPLES_PER_POLE_INITIAL
     iteration = 0
     best_f1 = 0.0
-    best_probe = None
+    best_lens = None
     best_history = None
 
     while n_samples <= SAMPLES_PER_POLE_MAX:
@@ -230,8 +230,8 @@ def train_simplex_with_lazy_generation(
 
         print(f"  Train: {train_activations.shape[0]}, Test: {test_activations.shape[0]}")
 
-        # Train tripole probe
-        probe, history = train_tripole_simplex(
+        # Train tripole lens
+        lens, history = train_tripole_simplex(
             train_activations=train_activations,
             train_labels=train_labels,
             test_activations=test_activations,
@@ -251,7 +251,7 @@ def train_simplex_with_lazy_generation(
         # Track best
         if test_f1 > best_f1:
             best_f1 = test_f1
-            best_probe = probe
+            best_lens = lens
             best_history = history
 
         # Check if graduated
@@ -271,11 +271,11 @@ def train_simplex_with_lazy_generation(
     # Save results
     print(f"\n  Saving results...")
 
-    # Save probe (best across all iterations)
-    if best_probe is not None:
-        probe_file = run_dir / "tripole_probe.pt"
-        torch.save(best_probe.state_dict(), probe_file)
-        print(f"    ✓ Probe saved: {probe_file}")
+    # Save lens (best across all iterations)
+    if best_lens is not None:
+        lens_file = run_dir / "tripole_lens.pt"
+        torch.save(best_lens.state_dict(), lens_file)
+        print(f"    ✓ Lens saved: {lens_file}")
 
     # Save metrics
     results = {
@@ -300,7 +300,7 @@ def main():
     print("=" * 80)
     print("S-TIER TRIPOLE TRAINING WITH LAZY GENERATION")
     print("=" * 80)
-    print(f"Architecture: Joint 3-class softmax (TripoleProbe)")
+    print(f"Architecture: Joint 3-class softmax (TripoleLens)")
     print(f"Start: {SAMPLES_PER_POLE_INITIAL} samples/pole, Increment: {SAMPLES_PER_POLE_INCREMENT}, Max: {SAMPLES_PER_POLE_MAX}")
     print(f"Graduation threshold: F1 >= {MIN_F1_THRESHOLD}")
 

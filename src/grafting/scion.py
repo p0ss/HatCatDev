@@ -18,7 +18,7 @@ The training flow:
 Terminology:
 - Bud: soft/temporary graft using hooks (for testing)
 - Scion: hard/permanent graft that modifies weights and adds neuron
-- Cleft: the region of weights being modified (from probe analysis)
+- Cleft: the region of weights being modified (from lens analysis)
 """
 
 import torch

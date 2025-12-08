@@ -2,7 +2,7 @@
   "timestamp": "20251123_140224",
   "total_simplexes": 13,
   "completed": 13,
-  "failed_probes": [
+  "failed_lenses": [
     "taste_development/negative",
     "taste_development/neutral",
     "taste_development/positive",

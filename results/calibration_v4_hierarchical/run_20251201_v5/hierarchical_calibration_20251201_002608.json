@@ -1,8 +1,8 @@
 {
-  "probe_pack": "apertus-8b_sumo-wordnet-v4",
+  "lens_pack": "apertus-8b_sumo-wordnet-v4",
   "model": "swiss-ai/Apertus-8B-2509",
   "timestamp": "20251201_002608",
-  "total_probes": 50,
+  "total_lenses": 50,
   "categories": {
     "broken": 48,
     "well_calibrated": 1,

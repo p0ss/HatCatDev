@@ -3,7 +3,7 @@
 Test training layer 0 concepts with validation.
 
 Since layer 0 concepts ARE the validation domains, this tests
-self-consistency (a Process probe should fire on Process prompts).
+self-consistency (a Process lens should fire on Process prompts).
 """
 
 import sys
@@ -53,7 +53,7 @@ def main():
         output_dir=output_dir,
         save_text_samples=False,
         use_adaptive_training=True,
-        train_text_probes=False,  # Skip text probes for quick test
+        train_text_lenses=False,  # Skip text lenses for quick test
     )
 
     print("\n" + "=" * 80)

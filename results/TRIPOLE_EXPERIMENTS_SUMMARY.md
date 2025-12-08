@@ -180,7 +180,7 @@ Epoch 100: test_f1=0.816, margins=[0.477, 0.467, 0.474]
 - **Highly significant improvement**
 
 ### Comparison to Binary Baseline
-Previous binary probe results (from docs):
+Previous binary lens results (from docs):
 - Binary F1: ~0.62
 - Tripole (imbalanced): 0.649
 - Tripole (balanced): 0.826
@@ -251,4 +251,4 @@ Previous binary probe results (from docs):
 
 These experiments definitively prove that **data imbalance in joint tripole training causes severe performance degradation** (2.8x worse neutral F1, 20% catastrophic failure rate). The solution - **optimal balanced sampling** - achieves state-of-the-art performance (F1=0.826, neutral F1=0.767) by maximizing total data while maintaining perfect balance.
 
-The key insight: joint optimization through shared softmax amplifies imbalance effects that are hidden in binary classification. This finding has important implications for all multi-class joint training scenarios beyond just simplex probes.
+The key insight: joint optimization through shared softmax amplifies imbalance effects that are hidden in binary classification. This finding has important implications for all multi-class joint training scenarios beyond just simplex lenses.

@@ -87,7 +87,7 @@ def main():
         max_iterations=10,
         model=model,
         tokenizer=tokenizer,
-        validate_probes=False,  # Disable for quick test
+        validate_lenses=False,  # Disable for quick test
         train_activation=True,
         train_text=False,
     )

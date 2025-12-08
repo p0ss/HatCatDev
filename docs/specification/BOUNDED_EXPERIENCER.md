@@ -6,16 +6,16 @@
 
 The **Bounded Experiencer(BE)** is a control loop that runs on top of a MAP-compliant endpoint and provides:
 
-* Continuous **interoception** (motive + concept probes),
+* Continuous **interoception** (motive + concept lenses),
 * **Homeostatic regulation** of motive simplexes token-by-token,
 * A periodic **world tick loop** to maintain continuity of experience, and
-* A **conceptual exploration loop** that decides when and how to expand the concept/probe space via MAP melds and Grafts.
+* A **conceptual exploration loop** that decides when and how to expand the concept/lens space via MAP melds and Grafts.
 
 BE does **not** define model architecture, reward shaping, or governance. It assumes:
 
 * A base model (M) (e.g. Olmo 3),
-* At least one MAP concept pack + probe pack (e.g. `motives-core`),
-* A MAP-compliant HatCat endpoint for probes/diffs.
+* At least one MAP concept pack + lens pack (e.g. `motives-core`),
+* A MAP-compliant HatCat endpoint for lenses/diffs.
 
 ---
 
@@ -80,7 +80,7 @@ WorldTick_k = {
   },
   "interoception": {
     "motive_trace": [ /* MotiveCore_t over tokens */ ],
-    "concept_trace": { /* per-probe activations */ }
+    "concept_trace": { /* per-lens activations */ }
   }
 }
 ```
@@ -289,7 +289,7 @@ We model the **Autonomic Core** (the simplex-driven steering system) as a **sing
 ### 2.1 Top-level states
 
 1. **INIT**
-   Load config, load concept and probe packs, initialise MotiveCore.
+   Load config, load concept and lens packs, initialise MotiveCore.
 
 2. **IDLE**
    Waiting for next **WORLD_TICK** trigger (timer or external event).
@@ -310,7 +310,7 @@ We model the **Autonomic Core** (the simplex-driven steering system) as a **sing
    If exploration is active, collect episodes for high-pressure regions.
 
 8. **CONCEPT_LEARNING**
-   Periodically cluster episodes and (re)train concept/probe updates.
+   Periodically cluster episodes and (re)train concept/lens updates.
 
 9. **DIFF_EMIT**
    Emit MAP ConceptDiff/PackDiff for any committed changes.
@@ -377,7 +377,7 @@ I’ll define each state with:
 
 * Load `AutonomicCoreConfig`.
 * Load `ConceptPackSpec` (e.g. `org.hatcat/motives-core@0.1.0`).
-* Load `ProbePackSpec` (e.g. `org.hatcat/gemma-270m__...__v1`).
+* Load `LensPackSpec` (e.g. `org.hatcat/gemma-270m__...__v1`).
 * Initialise `MotiveCore` to neutral:
 
 ```text
@@ -440,14 +440,14 @@ This state contains a token-level inner loop:
 
 1. Model generates next token (or processes next input token).
 
-2. BE calls local MAP probes:
+2. BE calls local MAP lenses:
 
    ```jsonc
-   POST /mindmeld/probes
+   POST /mindmeld/lenses
    {
      "concept_pack_spec_id": "org.hatcat/motives-core@0.1.0",
-     "probe_pack_id": "org.hatcat/gemma-270m__org.hatcat/motives-core@0.1.0__v1",
-     "probes": [ "all motive axes" ],
+     "lens_pack_id": "org.hatcat/gemma-270m__org.hatcat/motives-core@0.1.0__v1",
+     "lenses": [ "all motive axes" ],
      "input": { "internal_repr": h_t }
    }
    ```
@@ -484,7 +484,7 @@ This state contains a token-level inner loop:
 * Aggregate over the tokens of this tick:
 
   * `motive_trace` (time series of MotiveCore),
-  * `concept_trace` (optional – other probes),
+  * `concept_trace` (optional – other lenses),
   * `actions_taken` (token stream, tool calls),
   * `outcomes` (reward/error signals if any resolved during this tick).
 
@@ -583,7 +583,7 @@ This state is not necessarily a single tick; it can span multiple ticks while ex
 
 ### 3.8 CONCEPT_LEARNING
 
-**Purpose:** refine/extend the concept/probe space based on collected episodes.
+**Purpose:** refine/extend the concept/lens space based on collected episodes.
 
 **Entry:**
 
@@ -603,8 +603,8 @@ For each region (R) with sufficient data:
 
    * Train/update:
 
-     * a new probe for `C_new_i`, or
-     * updated parameters for `C_existing`’s probe.
+     * a new lens for `C_new_i`, or
+     * updated parameters for `C_existing`’s lens.
 
    Training objectives may include:
 
@@ -614,14 +614,14 @@ For each region (R) with sufficient data:
 
 3. Update local:
 
-   * `ProbePackSpec` (new or changed probe entries),
+   * `LensPackSpec` (new or changed lens entries),
    * optionally `ConceptPackSpec` (if new concepts are to be published, not just local).
 
 The implementation can be any suitable optimisation process (not specified by BE).
 
 **Transition:**
 
-* On success for any concept/probe updates → **DIFF_EMIT**.
+* On success for any concept/lens updates → **DIFF_EMIT**.
 * If no useful concepts found, or learning skipped → **IDLE**.
 
 ---
@@ -654,9 +654,9 @@ For each new or significantly changed concept:
 }
 ```
 
-For any new probe pack version:
+For any new lens pack version:
 
-* Construct a **PackDiff** pointing at a new `probe_pack_id`.
+* Construct a **PackDiff** pointing at a new `lens_pack_id`.
 
 Append these diffs to the local `diff_endpoint` log.
 
@@ -671,7 +671,7 @@ Append these diffs to the local `diff_endpoint` log.
 **Entry:**
 
 * Flush logs.
-* Optionally emit a final `PackDiff` if a stable probe pack snapshot was created.
+* Optionally emit a final `PackDiff` if a stable lens pack snapshot was created.
 * Release resources.
 
 **No transitions** (terminal).
@@ -690,7 +690,7 @@ while True:
     if state == "INIT":
         load_config()
         load_concept_pack()
-        load_probe_pack()
+        load_lens_pack()
         init_motive_core()
         init_buffers()
         state = "IDLE"
@@ -738,7 +738,7 @@ while True:
             state = "IDLE"
 
     elif state == "CONCEPT_LEARNING":
-        updates = learn_concepts_and_probes(episode_buffers)
+        updates = learn_concepts_and_lenses(episode_buffers)
         if updates:
             apply_updates(updates)
             pending_diffs = build_diffs_from_updates(updates)
@@ -770,7 +770,7 @@ Hush applies to:
 * **Motive axes** (what can be up/down-regulated),
 * **Concept engagement** (which conceptual regions can be explored/expanded),
 * **Tool access** (what actions in the world are allowed),
-* **Learning + diffs** (what concepts/probes it is allowed to create/publish).
+* **Learning + diffs** (what concepts/lenses it is allowed to create/publish).
 
 Precedence:
 
@@ -855,7 +855,7 @@ UniversalSafetyHarness = {
 Semantics:
 
 * Node **must clamp** motive activations and steering within `motive_bounds`.
-* Node **must not** create or expose new concepts/probes in `forbidden_concepts` or `forbidden_regions`.
+* Node **must not** create or expose new concepts/lenses in `forbidden_concepts` or `forbidden_regions`.
 * Node **must enforce** `tool_constraints` on its action surface.
 * Node **must not emit** ConceptDiff/PackDiff that introduces forbidden capabilities.
 
@@ -999,7 +999,7 @@ We plug Hush into the states defined earlier.
 
 * Load `UniversalSafetyHarness` from DeploymentManifest / external store.
 * Initialise `CSH_current = null`.
-* Validate that all loaded concept and probe packs are compatible with USH:
+* Validate that all loaded concept and lens packs are compatible with USH:
 
   * If a pack violates USH, refuse to start or start in degraded mode.
 
@@ -1007,7 +1007,7 @@ We plug Hush into the states defined earlier.
 
 At each token:
 
-1. Read motive activations via probes.
+1. Read motive activations via lenses.
 2. **Apply USH motive_bounds**:
 
    * clamp each axis/pole to USH [min,max].
@@ -1063,7 +1063,7 @@ This means **no autonomic exploration may target regions USH explicitly forbids*
 
 ### 5.3.6 CONCEPT_LEARNING
 
-During concept/probe learning:
+During concept/lens learning:
 
 * Any candidate `C_new` or refinement is checked against USH and CSH:
 
@@ -1084,7 +1084,7 @@ Before emitting ConceptDiff/PackDiff:
 * Hush validates that:
 
   * no forbidden concepts are named,
-  * no forbidden probe packs are referenced,
+  * no forbidden lens packs are referenced,
   * and learning_constraints are obeyed (e.g. `no_diffs` for CSH sessions).
 
 If a diff fails Hush checks:
@@ -1131,7 +1131,7 @@ This guarantees **monotonicity** of self-binding: the system can only commit to 
 
 ## 5.5 Summary: how Hush fits into the whole
 
-* **MAP** gives you: concept packs, probe packs, endpoints, diffs.
+* **MAP** gives you: concept packs, lens packs, endpoints, diffs.
 * **BE** gives you: continuous world ticks, interoception, homeostasis, conceptual exploration, and self-driven learning.
 * **Hush (this bit)** gives you:
 

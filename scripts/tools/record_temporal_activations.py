@@ -70,7 +70,7 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--model', type=str, default='google/gemma-3-4b-pt')
     parser.add_argument('--max-tokens', type=int, default=100)
-    parser.add_argument('--probe-dir', type=Path,
+    parser.add_argument('--lens-dir', type=Path,
                        default=Path('results/sumo_classifiers'))
     args = parser.parse_args()
 
@@ -88,9 +88,9 @@ def main():
     model.eval()
 
     # Load SUMO hierarchical monitor
-    logger.info(f"Loading probes from: {args.probe_dir}")
+    logger.info(f"Loading lenses from: {args.lens_dir}")
     monitor = SUMOHierarchicalMonitor(
-        probe_dir=args.probe_dir,
+        lens_dir=args.lens_dir,
         device='cuda'
     )
 

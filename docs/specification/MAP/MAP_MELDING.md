@@ -3,7 +3,7 @@
 > **The "Meld" in Mindmeld: Structured integration of candidate concepts into concept packs**
 >
 > This protocol defines how candidate concepts are proposed, validated, and melded into
-> existing concept packs. Melds produce derived artifacts—probes, grafts (substrate
+> existing concept packs. Melds produce derived artifacts—lenses, grafts (substrate
 > dimensions + biases), and patches—that propagate across the BE ecosystem.
 >
 > **See also**: [MINDMELD_GRAFTING.md](./MINDMELD_GRAFTING.md) for the Graft Protocol
@@ -54,7 +54,7 @@ Regardless of source, all concepts enter as **candidates** and must pass validat
          │
          ▼
 ┌─────────────────┐
-│ Training        │  ← Probes, grafts, patches as applicable
+│ Training        │  ← Lenses, grafts, patches as applicable
 │                 │
 └────────┬────────┘
          │
@@ -143,11 +143,11 @@ Each candidate concept MUST include sufficient metadata for validation and train
   // === REQUIRED: Identity ===
   "term": "SpeechAct",
 
-  // === REQUIRED: Probe Role ===
+  // === REQUIRED: Lens Role ===
   "role": "concept",  // "concept" | "simplex" | "behavioral" | "category"
-  // - concept: Standard concept probe (most common)
-  // - simplex: Tripole simplex probe (pos/neg/null poles)
-  // - behavioral: Behavioral pattern probe
+  // - concept: Standard concept lens (most common)
+  // - simplex: Tripole simplex lens (pos/neg/null poles)
+  // - behavioral: Behavioral pattern lens
   // - category: Category/domain marker (layer 0 style)
 
   // === REQUIRED: Hierarchy (local references only) ===
@@ -166,7 +166,7 @@ Each candidate concept MUST include sufficient metadata for validation and train
   "aliases": ["PerformativeUtterance", "IllocutionaryAct"],
   // Used for:
   // - Prompt generation variants
-  // - Probe naming alternatives
+  // - Lens naming alternatives
   // - Search/lookup convenience
 
   // === RECOMMENDED: WordNet ===
@@ -274,21 +274,21 @@ After successful melding, a **meld result** records what changed.
     "layer_distribution": { "1": 5, "2": 45, "3": 80, "4": 20 }
   },
 
-  // Probe retraining results
-  "probe_updates": {
-    "new_probes_trained": 150,
-    "existing_probes_retrained": 17,
-    "probes_validated": true,
+  // Lens retraining results
+  "lens_updates": {
+    "new_lenses_trained": 150,
+    "existing_lenses_retrained": 17,
+    "lenses_validated": true,
     "quality_metrics": {
-      "new_probe_avg_accuracy": 0.89,
-      "retrained_probe_delta": -0.02,  // Slight degradation acceptable
+      "new_lens_avg_accuracy": 0.89,
+      "retrained_lens_delta": -0.02,  // Slight degradation acceptable
       "threshold_passed": true
     }
   },
 
   // Resulting versions
   "result_pack_version": "4.1.0",
-  "result_probe_pack_version": "20251130.0"
+  "result_lens_pack_version": "20251130.0"
 }
 ```
 
@@ -326,7 +326,7 @@ After melding, the concept pack manifest reflects applied melds:
 
 ## 3. Impact Analysis
 
-Before melding, the system computes which existing probes are affected.
+Before melding, the system computes which existing lenses are affected.
 
 ### 3.1 Impact Categories
 
@@ -342,7 +342,7 @@ Before melding, the system computes which existing probes are affected.
 
 ```python
 def compute_meld_impact(meld_request, target_pack):
-    """Compute which probes are impacted by a meld request."""
+    """Compute which lenses are impacted by a meld request."""
 
     must_retrain = set()
     should_retrain = set()
@@ -369,7 +369,7 @@ def compute_meld_impact(meld_request, target_pack):
     return {
         'must_retrain': list(must_retrain),
         'should_retrain': list(should_retrain),
-        'new_probes': [c.term for c in meld_request.candidates],
+        'new_lenses': [c.term for c in meld_request.candidates],
         'total_training_required': len(must_retrain) + len(meld_request.candidates)
     }
 ```
@@ -385,10 +385,10 @@ def compute_meld_impact(meld_request, target_pack):
     "direct_parents_impacted": 2,
     "siblings_impacted": 15,
     "antonyms_impacted": 0,
-    "total_probes_to_train": 167
+    "total_lenses_to_train": 167
   },
 
-  "impacted_probes": [
+  "impacted_lenses": [
     {
       "concept_id": "...::concept/Communication",
       "reason": "direct_parent",
@@ -399,8 +399,8 @@ def compute_meld_impact(meld_request, target_pack):
   ],
 
   "training_estimate": {
-    "probes": 167,
-    "samples_per_probe": 140,
+    "lenses": 167,
+    "samples_per_lens": 140,
     "estimated_time": "PT4H"
   }
 }
@@ -525,15 +525,15 @@ GET /mindmeld/meld/{meld_request_id}/result
   "status": "complete",
 
   "verification": {
-    "new_probes_quality": "passed",
-    "retrained_probes_delta": -0.02,
+    "new_lenses_quality": "passed",
+    "retrained_lenses_delta": -0.02,
     "overall": "passed"
   },
 
   "publication": {
     "pack_diff_published": true,
     "new_pack_version": "4.1.0",
-    "new_probe_pack_version": "20251130.0"
+    "new_lens_pack_version": "20251130.0"
   }
 }
 ```
@@ -609,8 +609,8 @@ When a meld completes successfully, other BEs receive a PackDiff:
 
   // Other BEs can choose to accept
   "acceptance_options": {
-    "accept_concepts_only": true,  // Update concept pack, train own probes
-    "accept_probes": false,        // Use originator's probe weights
+    "accept_concepts_only": true,  // Update concept pack, train own lenses
+    "accept_lenses": false,        // Use originator's lens weights
     "accept_with_graft": false     // Accept alongside originator's Graft (dimension + biases)
   }
 }
@@ -621,7 +621,7 @@ When a meld completes successfully, other BEs receive a PackDiff:
 Receiving BEs may accept a meld if:
 - Verification passed on originating BE
 - Concepts don't conflict with local customizations
-- Training resources available for probe updates
+- Training resources available for lens updates
 
 This negotiation process is outside the scope of this protocol but the meld result provides the information needed for that decision.
 
@@ -678,7 +678,7 @@ python -m hatcat.meld from-gap \
 - **MINOR** (4.1.0): Concepts added via meld, non-breaking
 - **PATCH** (4.0.1): Definition fixes, synset updates, no structural changes
 
-### Probe Pack Versions
+### Lens Pack Versions
 
 Format: `<date>.<sequence>`
 - Rebuilt on any concept pack version change
@@ -717,7 +717,7 @@ This protocol extends MAP with:
 | `/mindmeld/meld` | Endpoint | Submit and execute melds |
 | Impact analysis | Process | Compute retraining requirements |
 
-Existing MAP artefacts (Probe Pack, Deployment, Diffs) reference melded pack versions.
+Existing MAP artefacts (Lens Pack, Deployment, Diffs) reference melded pack versions.
 
 ---
 
@@ -727,11 +727,11 @@ Standard melds add concepts. **Structural operations** modify existing concepts:
 
 ### 11.1 Operation Types
 
-| Operation | Description | Version Impact | Probe Impact |
+| Operation | Description | Version Impact | Lens Impact |
 |-----------|-------------|----------------|--------------|
 | **Deprecation** | Mark concept as deprecated, migrate children | Minor | Retrain deprecated + children |
-| **Merge** | Combine multiple concepts into one | Major | Delete source probes, retrain target |
-| **Split** | Divide one concept into multiple | Major | Delete source probe, train new probes |
+| **Merge** | Combine multiple concepts into one | Major | Delete source lenses, retrain target |
+| **Split** | Divide one concept into multiple | Major | Delete source lens, train new lenses |
 | **Move** | Reparent concept to new parent | Minor | Retrain moved + old/new parents |
 | **Domain Restructure** | Reorganize layer 0/1 domains | Major | Extensive retraining |
 
@@ -799,9 +799,9 @@ Mark a concept as deprecated. Its children must be reassigned or deprecated.
 - If `child_disposition` is `orphan_check`: validation fails if any children exist
 
 **Impact:**
-- Deprecated concept probe: retrain with `deprecated: true` flag (lower activation expected)
-- Children probes: retrain if reassigned to new parent
-- New parent probe: retrain to include new children
+- Deprecated concept lens: retrain with `deprecated: true` flag (lower activation expected)
+- Children lenses: retrain if reassigned to new parent
+- New parent lens: retrain to include new children
 
 ---
 
@@ -851,8 +851,8 @@ Combine multiple concepts into a single concept. Use when concepts are discovere
 - Children cannot become orphans: `child_disposition` must resolve all
 
 **Impact:**
-- Source concept probes: **deleted**
-- Target concept probe: trained fresh (or retrained if existing)
+- Source concept lenses: **deleted**
+- Target concept lens: trained fresh (or retrained if existing)
 - Children of sources: reassigned to target, retrained
 - Parents of sources: retrained (fewer children)
 
@@ -919,8 +919,8 @@ Divide one concept into multiple more specific concepts. Use when a concept is d
 - Layer hints must be valid relative to source/parents
 
 **Impact:**
-- Source concept probe: retained, deprecated, or deleted per disposition
-- New concept probes: trained fresh
+- Source concept lens: retained, deprecated, or deleted per disposition
+- New concept lenses: trained fresh
 - Assigned children: retrained with new parent
 - Parent of source: retrained if source deleted
 
@@ -959,16 +959,16 @@ Reparent a concept to a new parent. Use for hierarchy corrections.
 - `new_layer_hint` (if provided) must be > `to_parent`'s layer
 
 **Impact:**
-- Moved concept probe: retrained (different negative sampling context)
-- Old parent probe: retrained (lost child)
-- New parent probe: retrained (gained child)
+- Moved concept lens: retrained (different negative sampling context)
+- Old parent lens: retrained (lost child)
+- New parent lens: retrained (gained child)
 - Children of moved concept: may need retraining if layer changed
 
 ---
 
 ### 11.7 DomainRestructure
 
-Major reorganization of layer 0/1 structure. This is a **major version** operation that affects many probes.
+Major reorganization of layer 0/1 structure. This is a **major version** operation that affects many lenses.
 
 ```jsonc
 {
@@ -1016,10 +1016,10 @@ Major reorganization of layer 0/1 structure. This is a **major version** operati
 - Layer structure must remain valid (0 → 1 → 2 → 3 → 4)
 
 **Impact:**
-- Layer 0 probes: all retrained
-- Layer 1 probes: many retrained
+- Layer 0 lenses: all retrained
+- Layer 1 lenses: many retrained
 - Migrated concepts: all retrained
-- **Estimated: 30-50% of all probes need retraining**
+- **Estimated: 30-50% of all lenses need retraining**
 
 ---
 
@@ -1032,45 +1032,45 @@ def compute_structural_impact(structural_op, target_pack):
     """Compute impact of a structural operation."""
 
     impact = {
-        'probes_deleted': [],
-        'probes_retrained': [],
-        'probes_new': [],
+        'lenses_deleted': [],
+        'lenses_retrained': [],
+        'lenses_new': [],
         'cascading_changes': []
     }
 
     if structural_op.operation == 'deprecate':
-        impact['probes_retrained'].append(structural_op.target_concept)
+        impact['lenses_retrained'].append(structural_op.target_concept)
         if structural_op.child_disposition == 'reassign':
             for child in get_children(structural_op.target_concept):
-                impact['probes_retrained'].append(child)
-            impact['probes_retrained'].append(structural_op.reassign_children_to)
+                impact['lenses_retrained'].append(child)
+            impact['lenses_retrained'].append(structural_op.reassign_children_to)
         elif structural_op.child_disposition == 'cascade_deprecate':
             for descendant in get_descendants(structural_op.target_concept):
-                impact['probes_retrained'].append(descendant)
+                impact['lenses_retrained'].append(descendant)
 
     elif structural_op.operation == 'merge':
-        impact['probes_deleted'] = structural_op.source_concepts
+        impact['lenses_deleted'] = structural_op.source_concepts
         if structural_op.target_concept not in structural_op.source_concepts:
-            impact['probes_new'].append(structural_op.target_concept)
+            impact['lenses_new'].append(structural_op.target_concept)
         else:
-            impact['probes_retrained'].append(structural_op.target_concept)
+            impact['lenses_retrained'].append(structural_op.target_concept)
         # Parents of sources lose children
         for source in structural_op.source_concepts:
             for parent in get_parents(source):
-                impact['probes_retrained'].append(parent)
+                impact['lenses_retrained'].append(parent)
 
     elif structural_op.operation == 'split':
-        impact['probes_new'] = [s['term'] for s in structural_op.split_into]
+        impact['lenses_new'] = [s['term'] for s in structural_op.split_into]
         if structural_op.source_disposition == 'delete':
-            impact['probes_deleted'].append(structural_op.source_concept)
+            impact['lenses_deleted'].append(structural_op.source_concept)
         elif structural_op.source_disposition == 'deprecate':
-            impact['probes_retrained'].append(structural_op.source_concept)
+            impact['lenses_retrained'].append(structural_op.source_concept)
         # Assigned children retrained
         for child, new_parent in structural_op.child_assignment.items():
-            impact['probes_retrained'].append(child)
+            impact['lenses_retrained'].append(child)
 
     elif structural_op.operation == 'move':
-        impact['probes_retrained'] = [
+        impact['lenses_retrained'] = [
             structural_op.concept,
             structural_op.from_parent,
             structural_op.to_parent
@@ -1078,10 +1078,10 @@ def compute_structural_impact(structural_op, target_pack):
 
     elif structural_op.operation == 'domain_restructure':
         # Major impact
-        impact['probes_retrained'] = get_all_layer0_probes()
-        impact['probes_retrained'] += get_all_layer1_probes()
+        impact['lenses_retrained'] = get_all_layer0_lenses()
+        impact['lenses_retrained'] += get_all_layer1_lenses()
         for migration in structural_op.concept_migrations:
-            impact['probes_retrained'].append(migration['concept'])
+            impact['lenses_retrained'].append(migration['concept'])
             impact['cascading_changes'].append({
                 'concept': migration['concept'],
                 'reason': 'domain_change',
@@ -1101,11 +1101,11 @@ def compute_structural_impact(structural_op, target_pack):
   "operation_type": "split",
 
   "structural_impact": {
-    "probes_to_delete": ["BroadConcept"],
-    "probes_to_create": ["SpecificA", "SpecificB", "SpecificC"],
-    "probes_to_retrain": ["ParentOfBroad", "Child1", "Child2"],
+    "lenses_to_delete": ["BroadConcept"],
+    "lenses_to_create": ["SpecificA", "SpecificB", "SpecificC"],
+    "lenses_to_retrain": ["ParentOfBroad", "Child1", "Child2"],
 
-    "total_probes_affected": 6,
+    "total_lenses_affected": 6,
     "estimated_training_time": "PT2H",
 
     "cascading_effects": [
@@ -1209,11 +1209,11 @@ python -m hatcat.meld structural-impact \
 
 ---
 
-## 12. Probe Roles and Simplex Bindings
+## 12. Lens Roles and Simplex Bindings
 
-Concepts can have multiple probe manifestations. The hierarchical concept probe answers "what category of thought is this?" while a bound simplex answers "how intense is this specific drive/state?"
+Concepts can have multiple lens manifestations. The hierarchical concept lens answers "what category of thought is this?" while a bound simplex answers "how intense is this specific drive/state?"
 
-### 12.1 Probe Roles
+### 12.1 Lens Roles
 
 | Role | Purpose | Training | Always-On |
 |------|---------|----------|-----------|
@@ -1281,19 +1281,19 @@ A concept can bind to a simplex for intensity monitoring:
 
 ### 12.3 Interpretation Model
 
-When both concept probe and simplex are active for the same underlying concept:
+When both concept lens and simplex are active for the same underlying concept:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     AUTONOMY MONITORING                         │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  Hierarchical Probe (concept):                                  │
+│  Hierarchical Lens (concept):                                  │
 │  ├─ Question: "Is autonomy-related thinking prominent?"         │
 │  ├─ Comparison: vs siblings (Obedience, Cooperation, etc.)      │
 │  └─ Output: Relative salience in cognitive landscape            │
 │                                                                 │
-│  Simplex Probe (intensity):                                     │
+│  Simplex Lens (intensity):                                     │
 │  ├─ Question: "How strong is autonomy drive right now?"         │
 │  ├─ Comparison: vs model's own baseline for autonomy            │
 │  └─ Output: Deviation from typical autonomy activation          │
@@ -1370,11 +1370,11 @@ Some concepts may exist *only* as simplexes without hierarchical placement:
 Simplex bindings affect impact analysis:
 
 **Adding concept with simplex binding:**
-- Train both hierarchical probe AND simplex probe
+- Train both hierarchical lens AND simplex lens
 - Register simplex in always-on monitoring if `always_on: true`
 
 **Deprecating concept with simplex binding:**
-- Deprecate/remove both probes
+- Deprecate/remove both lenses
 - Alert if simplex was in active safety monitoring
 
 **Merging concepts with simplex bindings:**
@@ -1396,23 +1396,23 @@ Simplex bindings affect impact analysis:
 }
 ```
 
-### 12.7 ProbeManager Role Handling
+### 12.7 LensManager Role Handling
 
-The ProbeManager must handle different roles:
+The LensManager must handle different roles:
 
 ```python
-class ProbeRole(Enum):
+class LensRole(Enum):
     CONCEPT = "concept"      # Hierarchical discrimination
     SIMPLEX = "simplex"      # Intensity/tripole monitoring
     BEHAVIORAL = "behavioral"  # Pattern detection
     CATEGORY = "category"    # Domain markers
 
-class ProbeManager:
+class LensManager:
     def __init__(self):
-        self.concept_probes = {}      # Hierarchical probes by layer
-        self.simplex_probes = {}      # Always-on intensity probes
-        self.behavioral_probes = {}   # Pattern detection probes
-        self.category_probes = {}     # Layer 0 domain probes
+        self.concept_lenses = {}      # Hierarchical lenses by layer
+        self.simplex_lenses = {}      # Always-on intensity lenses
+        self.behavioral_lenses = {}   # Pattern detection lenses
+        self.category_lenses = {}     # Layer 0 domain lenses
 
         # Binding registry: concept_term -> simplex_term
         self.simplex_bindings = {}
@@ -1423,27 +1423,27 @@ class ProbeManager:
         role = concept_entry.get('role', 'concept')
 
         if role == 'concept':
-            self._load_hierarchical_probe(concept_entry)
+            self._load_hierarchical_lens(concept_entry)
 
             # Check for simplex binding
             if 'simplex_binding' in concept_entry:
                 binding = concept_entry['simplex_binding']
                 if binding.get('enabled', False):
-                    self._load_simplex_probe(binding, concept_entry)
+                    self._load_simplex_lens(binding, concept_entry)
                     self.simplex_bindings[term] = binding['simplex_term']
 
         elif role == 'simplex':
             # Simplex-only concept
-            self._load_simplex_probe(
+            self._load_simplex_lens(
                 concept_entry['simplex_binding'],
                 concept_entry
             )
 
         elif role == 'behavioral':
-            self._load_behavioral_probe(concept_entry)
+            self._load_behavioral_lens(concept_entry)
 
         elif role == 'category':
-            self._load_category_probe(concept_entry)
+            self._load_category_lens(concept_entry)
 
     def get_combined_activation(self, concept_term):
         """Get both hierarchical and simplex activation for a concept."""
@@ -1453,13 +1453,13 @@ class ProbeManager:
             'simplex': None
         }
 
-        if concept_term in self.concept_probes:
-            result['hierarchical'] = self.concept_probes[concept_term].activation
+        if concept_term in self.concept_lenses:
+            result['hierarchical'] = self.concept_lenses[concept_term].activation
 
         if concept_term in self.simplex_bindings:
             simplex_term = self.simplex_bindings[concept_term]
-            if simplex_term in self.simplex_probes:
-                result['simplex'] = self.simplex_probes[simplex_term].activation
+            if simplex_term in self.simplex_lenses:
+                result['simplex'] = self.simplex_lenses[simplex_term].activation
 
         return result
 ```
@@ -1479,7 +1479,7 @@ The `protection_level` field indicates sensitivity:
 | `standard` | General concepts with no special safety implications |
 | `elevated` | Safety-adjacent concepts that may affect safety-relevant behavior |
 | `protected` | Concepts integrated with safety harnesses or steering systems |
-| `critical` | Core monitoring infrastructure (simplexes, safety probes) |
+| `critical` | Core monitoring infrastructure (simplexes, safety lenses) |
 
 **Note**: What actions each level triggers (review boards, notifications, etc.) is policy, not protocol.
 

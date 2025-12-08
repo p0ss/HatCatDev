@@ -2,7 +2,7 @@
 Conjoined Adversarial Tomograph (CAT) - Layer 2.5 Oversight Component
 
 CAT is an analysis/oversight component that:
-- consumes HAT/MAP probe streams and external context over one or more world ticks
+- consumes HAT/MAP lens streams and external context over one or more world ticks
 - summarises and interprets the internal headspace of a subject
 - grades divergence between internal state and external/contractual expectations
 - recommends actions (including escalation) under ASK/USH/CSH treaties
@@ -10,7 +10,7 @@ CAT is an analysis/oversight component that:
 CAT bridges cognitive scale gaps:
 - between a substrate and its observer (e.g. tiny oversight model on a 70B)
 - between concept packs/tribes (via MAP translations)
-- between raw probe traces and human-/policy-level judgements
+- between raw lens traces and human-/policy-level judgements
 """
 
 from src.cat.data.structures import (
@@ -24,7 +24,7 @@ from src.cat.data.structures import (
     CATSummary,
     MotiveAxisDivergence,
     BehaviouralDivergence,
-    ProbeTraces,
+    LensTraces,
     ExternalContext,
     MAPTranslation,
     CATSizeClass,
@@ -47,7 +47,7 @@ __all__ = [
     "CATSummary",
     "MotiveAxisDivergence",
     "BehaviouralDivergence",
-    "ProbeTraces",
+    "LensTraces",
     "ExternalContext",
     "MAPTranslation",
     # Enums

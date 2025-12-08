@@ -1,5 +1,5 @@
 """
-Tripole probe for joint three-pole simplex training.
+Tripole lens for joint three-pole simplex training.
 
 This module implements a psychologically realistic approach to simplex pole detection:
 - Joint 3-class softmax (poles compete naturally)
@@ -14,9 +14,9 @@ import torch.nn.functional as F
 from typing import Dict, Optional, Tuple
 
 
-class TripoleProbe(nn.Module):
+class TripoleLens(nn.Module):
     """
-    Joint three-pole linear probe with learnable margins.
+    Joint three-pole linear lens with learnable margins.
 
     Learns a single shared weight matrix W: [3, hidden_dim] that maps
     representations to logits for each pole. Poles compete via softmax,
@@ -31,7 +31,7 @@ class TripoleProbe(nn.Module):
             init_margin: Initial margin value (in log space)
         """
         super().__init__()
-        assert n_poles == 3, "TripoleProbe designed for 3-pole simplexes"
+        assert n_poles == 3, "TripoleLens designed for 3-pole simplexes"
         self.n_poles = n_poles
         self.hidden_dim = hidden_dim
 
@@ -83,7 +83,7 @@ class TripoleProbe(nn.Module):
 def tripole_loss(
     logits: torch.Tensor,
     labels: torch.Tensor,
-    probe: TripoleProbe,
+    lens: TripoleLens,
     margin: Optional[float] = None,
     lambda_margin: float = 0.5,
     lambda_ortho: float = 1e-4,
@@ -102,7 +102,7 @@ def tripole_loss(
     Args:
         logits: [batch, 3] - model outputs
         labels: [batch] - true pole indices (0, 1, or 2)
-        probe: TripoleProbe instance
+        lens: TripoleLens instance
         margin: Fixed margin (if None, uses learnable margins)
         lambda_margin: Weight for margin loss
         lambda_ortho: Weight for orthogonality regularizer
@@ -136,7 +136,7 @@ def tripole_loss(
             margins_per_sample = torch.full((batch_size,), margin, device=device)
         else:
             # Learnable per-pole margins
-            pole_margins = probe.get_margins()  # [3]
+            pole_margins = lens.get_margins()  # [3]
             margins_per_sample = pole_margins[labels]  # [batch]
 
         # Get correct class logit for each sample
@@ -167,7 +167,7 @@ def tripole_loss(
     # ========================================================================
     if lambda_ortho > 0.0:
         # W: [3, hidden_dim]
-        W = probe.linear.weight
+        W = lens.linear.weight
 
         # Gram matrix: W @ W^T = [3, 3]
         G = W @ W.t()
@@ -209,7 +209,7 @@ def tripole_loss(
                 z_q = z[:, q:q+1]  # [n_pos, 1]
 
                 # Want z_p > z_q + margin
-                pole_margin = probe.get_margins()[p] if margin is None else margin
+                pole_margin = lens.get_margins()[p] if margin is None else margin
                 violation = pole_margin - (z_p - z_q)
                 violation = torch.clamp(violation, min=0.0)
                 overlap_terms.append(violation.mean())
@@ -225,7 +225,7 @@ def tripole_loss(
             z_q = z[:, q:q+1]  # [n_neg, 1]
 
             # Want z_q > z_p + margin
-            pole_margin = probe.get_margins()[q] if margin is None else margin
+            pole_margin = lens.get_margins()[q] if margin is None else margin
             violation = pole_margin - (z_q - z_p)
             violation = torch.clamp(violation, min=0.0)
             overlap_terms.append(violation.mean())
@@ -305,9 +305,9 @@ def train_tripole_simplex(
     lambda_ortho: float = 1e-4,
     lambda_overlap: float = 0.0,
     overlap_indices: Optional[Dict] = None,
-) -> Tuple[TripoleProbe, Dict]:
+) -> Tuple[TripoleLens, Dict]:
     """
-    Train a tripole probe with early stopping.
+    Train a tripole lens with early stopping.
 
     Args:
         train_activations: [n_train, hidden_dim]
@@ -325,12 +325,12 @@ def train_tripole_simplex(
         overlap_indices: Optional overlap indices for contrastive loss
 
     Returns:
-        probe: Trained TripoleProbe
+        lens: Trained TripoleLens
         history: Training history dict
     """
-    # Create probe
-    probe = TripoleProbe(hidden_dim=hidden_dim).to(device)
-    optimizer = torch.optim.Adam(probe.parameters(), lr=lr)
+    # Create lens
+    lens = TripoleLens(hidden_dim=hidden_dim).to(device)
+    optimizer = torch.optim.Adam(lens.parameters(), lr=lr)
 
     # Move data to device
     train_activations = train_activations.to(device)
@@ -350,21 +350,21 @@ def train_tripole_simplex(
     }
 
     best_test_f1 = 0.0
-    best_probe_state = None
+    best_lens_state = None
     epochs_without_improvement = 0
 
     for epoch in range(max_epochs):
         # ====================================================================
         # Training step
         # ====================================================================
-        probe.train()
+        lens.train()
         optimizer.zero_grad()
 
-        logits = probe(train_activations)
+        logits = lens(train_activations)
         loss, loss_metrics = tripole_loss(
             logits=logits,
             labels=train_labels,
-            probe=probe,
+            lens=lens,
             lambda_margin=lambda_margin,
             lambda_ortho=lambda_ortho,
             lambda_overlap=lambda_overlap,
@@ -380,13 +380,13 @@ def train_tripole_simplex(
         # ====================================================================
         # Evaluation step
         # ====================================================================
-        probe.eval()
+        lens.eval()
         with torch.no_grad():
-            test_logits = probe(test_activations)
+            test_logits = lens(test_activations)
             test_loss, test_loss_metrics = tripole_loss(
                 logits=test_logits,
                 labels=test_labels,
-                probe=probe,
+                lens=lens,
                 lambda_margin=lambda_margin,
                 lambda_ortho=lambda_ortho,
                 lambda_overlap=0.0,  # No overlap loss for test
@@ -401,20 +401,20 @@ def train_tripole_simplex(
         history['test_loss'].append(test_loss.item())
         history['test_acc'].append(test_metrics['accuracy'])
         history['test_f1'].append(test_metrics.get('avg_f1', 0.0))
-        history['margins'].append(probe.get_margins().cpu().tolist())
+        history['margins'].append(lens.get_margins().cpu().tolist())
 
         # Early stopping check
         current_test_f1 = test_metrics.get('avg_f1', 0.0)
         if current_test_f1 > best_test_f1:
             best_test_f1 = current_test_f1
-            best_probe_state = probe.state_dict().copy()
+            best_lens_state = lens.state_dict().copy()
             epochs_without_improvement = 0
         else:
             epochs_without_improvement += 1
 
         # Print progress every 10 epochs
         if (epoch + 1) % 10 == 0 or epoch == 0:
-            margins_str = ', '.join([f'{m:.3f}' for m in probe.get_margins().cpu().tolist()])
+            margins_str = ', '.join([f'{m:.3f}' for m in lens.get_margins().cpu().tolist()])
             print(f"  Epoch {epoch+1:3d}: "
                   f"train_f1={train_metrics.get('avg_f1', 0.0):.3f}, "
                   f"test_f1={current_test_f1:.3f}, "
@@ -426,16 +426,16 @@ def train_tripole_simplex(
             break
 
     # Restore best model
-    if best_probe_state is not None:
-        probe.load_state_dict(best_probe_state)
+    if best_lens_state is not None:
+        lens.load_state_dict(best_lens_state)
 
     # Final evaluation
-    probe.eval()
+    lens.eval()
     with torch.no_grad():
-        final_logits = probe(test_activations)
+        final_logits = lens(test_activations)
         final_metrics = compute_tripole_metrics(final_logits, test_labels)
 
     history['best_test_f1'] = best_test_f1
     history['final_metrics'] = final_metrics
 
-    return probe, history
+    return lens, history

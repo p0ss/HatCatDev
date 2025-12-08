@@ -240,7 +240,7 @@ def train_layer(
     output_dir: Path | None = None,
     save_text_samples: bool = False,
     use_adaptive_training: bool = False,
-    train_text_probes: bool = False,
+    train_text_lenses: bool = False,
     validation_mode: str = 'falloff',
     validation_threshold: float = 0.5,
     include_sibling_negatives: bool = True,
@@ -252,9 +252,9 @@ def train_layer(
         layer: The layer number (0-6)
         hierarchy_dir: Path to the hierarchy directory containing layerN.json files.
                       This is a required parameter to prevent accidentally using the wrong hierarchy.
-        save_text_samples: If True, save generated text for text probe training (legacy)
+        save_text_samples: If True, save generated text for text lens training (legacy)
         use_adaptive_training: If True, use DualAdaptiveTrainer for independent graduation
-        train_text_probes: If True, compute embedding centroids (legacy, not currently used)
+        train_text_lenses: If True, compute embedding centroids (legacy, not currently used)
         include_sibling_negatives: If True (default), include siblings as hard negatives.
                                    Set to False for two-pass training (sibling refinement done separately).
     """
@@ -276,31 +276,31 @@ def train_layer(
     failed_concepts: List[Dict] = []
     start_time = time.time()
 
-    # Track all text samples for text probe training
+    # Track all text samples for text lens training
     if save_text_samples:
         text_samples_dir = output_dir / "text_samples"
         text_samples_dir.mkdir(exist_ok=True)
 
     # Create centroid output directory if needed
-    if train_text_probes:
+    if train_text_lenses:
         centroid_output_dir = output_dir / "embedding_centroids"
         centroid_output_dir.mkdir(exist_ok=True)
 
-    # Initialize adaptive trainer if requested (activation probes only now)
+    # Initialize adaptive trainer if requested (activation lenses only now)
     # Uses defaults from DualAdaptiveTrainer: 20 samples, 0.95 F1 target
     if use_adaptive_training:
         from .dual_adaptive_trainer import DualAdaptiveTrainer
         adaptive_trainer = DualAdaptiveTrainer(
-            # Use class defaults for activation probe config (20 samples, 0.95 F1)
+            # Use class defaults for activation lens config (20 samples, 0.95 F1)
             model=model,  # Needed for validation
             tokenizer=tokenizer,  # Needed for validation
             max_response_tokens=100,
-            validate_probes=True,  # Enable calibration validation
+            validate_lenses=True,  # Enable calibration validation
             validation_mode=validation_mode,  # Validation mode (loose/falloff/strict)
             validation_threshold=validation_threshold,  # Min score to pass (for strict mode)
             validation_layer_idx=15,  # Layer 15 for activations
             train_activation=True,
-            train_text=False,  # Disable TF-IDF text probe training
+            train_text=False,  # Disable TF-IDF text lens training
         )
 
     for i, concept in enumerate(concepts):
@@ -308,9 +308,9 @@ def train_layer(
 
         # Check if already trained (resume capability)
         classifier_path = output_dir / f"{concept_name}_classifier.pt"
-        centroid_path = centroid_output_dir / f"{concept_name}_centroid.npy" if train_text_probes else None
+        centroid_path = centroid_output_dir / f"{concept_name}_centroid.npy" if train_text_lenses else None
 
-        if classifier_path.exists() and (not train_text_probes or centroid_path.exists()):
+        if classifier_path.exists() and (not train_text_lenses or centroid_path.exists()):
             print(f"\n[{i + 1}/{len(concepts)}] Skipping {concept_name} (already trained)")
             continue
 
@@ -371,7 +371,7 @@ def train_layer(
                 )
                 print(f"  Generated {len(train_prompts)} train, {len(test_prompts)} test prompts")
 
-                # Save text samples for text probe training (non-adaptive only)
+                # Save text samples for text lens training (non-adaptive only)
                 if save_text_samples:
                     text_sample_file = text_samples_dir / f"{concept_name}.json"
                     with open(text_sample_file, 'w') as f:
@@ -414,7 +414,7 @@ def train_layer(
 
                 # Note: Embedding centroids not supported in JIT adaptive mode
                 # (would require returning prompts from adaptive trainer)
-                if train_text_probes:
+                if train_text_lenses:
                     print(f"  ⚠️  Skipping embedding centroid (not supported in JIT adaptive mode)")
 
                 # Extract metrics for results
@@ -447,7 +447,7 @@ def train_layer(
                         "validation_expected_domain": str(val['expected_domain']),
                     })
 
-                if train_text_probes:
+                if train_text_lenses:
                     result.update({
                         "text_samples": text_metrics.get('samples', 0),
                         "text_iterations": text_metrics.get('iterations', 0),
@@ -507,7 +507,7 @@ def train_layer(
             continue
 
     # Save centroid metadata
-    if train_text_probes:
+    if train_text_lenses:
         centroid_metadata = {
             'layer': layer,
             'n_concepts': len(all_results),
@@ -590,7 +590,7 @@ def train_sumo_classifiers(
     n_test_pos: int = 20,
     n_test_neg: int = 20,
     output_dir: Path | str = Path("results/sumo_classifiers"),
-    train_text_probes: bool = False,
+    train_text_lenses: bool = False,
     use_adaptive_training: bool = False,
     validation_mode: str = 'falloff',
     validation_threshold: float = 0.5,
@@ -606,7 +606,7 @@ def train_sumo_classifiers(
         layers: Which concept layers to train (0-6)
         hierarchy_dir: Path to the hierarchy directory containing layerN.json files.
                       This is a required parameter to prevent accidentally using the wrong hierarchy.
-        train_text_probes: If True, compute embedding centroids (legacy, not currently used)
+        train_text_lenses: If True, compute embedding centroids (legacy, not currently used)
         use_adaptive_training: If True, use DualAdaptiveTrainer for independent graduation
         include_sibling_negatives: If True (default), include siblings as hard negatives.
                                    Set to False for two-pass training (sibling refinement done separately).
@@ -626,7 +626,7 @@ def train_sumo_classifiers(
     else:
         print(f"Adaptive baseline: {n_train_pos} samples (activation +1/iter, text +5/iter)")
     print(f"Testing: {n_test_pos} pos + {n_test_neg} neg per concept")
-    print(f"Train text probes: {train_text_probes}")
+    print(f"Train text lenses: {train_text_lenses}")
     print(f"Output: {output_dir}")
 
     print("\nLoading model...")
@@ -660,7 +660,7 @@ def train_sumo_classifiers(
             for layer in layers_needing_refinement:
                 refine_all_sibling_groups(
                     layer=layer,
-                    probe_dir=output_dir / f"layer{layer}",
+                    lens_dir=output_dir / f"layer{layer}",
                     hierarchy_dir=hierarchy_dir,
                     model=model,
                     tokenizer=tokenizer,
@@ -692,9 +692,9 @@ def train_sumo_classifiers(
             n_test_neg=n_test_neg,
             device=device,
             output_dir=output_dir / f"layer{layer}",
-            save_text_samples=train_text_probes and not use_adaptive_training,  # Only save if not adaptive
+            save_text_samples=train_text_lenses and not use_adaptive_training,  # Only save if not adaptive
             use_adaptive_training=use_adaptive_training,
-            train_text_probes=train_text_probes,
+            train_text_lenses=train_text_lenses,
             validation_mode=validation_mode,
             validation_threshold=validation_threshold,
             include_sibling_negatives=include_sibling_negatives,
@@ -707,7 +707,7 @@ def train_sumo_classifiers(
             hidden_dim = model.config.hidden_size
             refine_all_sibling_groups(
                 layer=layer,
-                probe_dir=output_dir / f"layer{layer}",
+                lens_dir=output_dir / f"layer{layer}",
                 hierarchy_dir=hierarchy_dir,
                 model=model,
                 tokenizer=tokenizer,
@@ -719,12 +719,12 @@ def train_sumo_classifiers(
 
     # Compute centroids separately ONLY if NOT using adaptive training
     # (adaptive training computes them inline)
-    if train_text_probes and not use_adaptive_training:
+    if train_text_lenses and not use_adaptive_training:
         print(f"\n{'=' * 80}")
         print("COMPUTING EMBEDDING CENTROIDS")
         print(f"{'=' * 80}")
 
-        from .text_probes import compute_centroids_for_layer
+        from .text_lenses import compute_centroids_for_layer
 
         for layer in layers:
             print(f"\nLayer {layer}...")

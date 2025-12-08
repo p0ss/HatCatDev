@@ -1,16 +1,16 @@
-# V3 Probe Pack Readiness Status
+# V3 Lens Pack Readiness Status
 
 **Date**: 2025-11-20
 **Status**: Ready for full training run
 
 ## Summary
 
-V3 probe pack preparation is complete and ready for a fresh training run with all the latest improvements:
+V3 lens pack preparation is complete and ready for a fresh training run with all the latest improvements:
 
 1. ✅ **Combined-20 extraction implemented** - Default in `extract_activations()`
-2. ✅ **Pack assembly script updated** - `scripts/create_v3_probe_pack.py` handles hierarchy + simplexes
+2. ✅ **Pack assembly script updated** - `scripts/create_v3_lens_pack.py` handles hierarchy + simplexes
 3. ✅ **Simplex architecture defined** - 4 S-tier dimensions ready for training
-4. ⏳ **Need fresh training run** - To generate probes with new extraction strategy
+4. ⏳ **Need fresh training run** - To generate lenses with new extraction strategy
 
 ## V3 Improvements Over V2
 
@@ -27,14 +27,14 @@ V3 probe pack preparation is complete and ready for a fresh training run with al
 - `docs/EXTRACTION_STRATEGY_EXPERIMENT.md`
 
 ### 2. S-Tier Simplexes
-**What**: Fine-grained tripole probes for psychological state detection
+**What**: Fine-grained tripole lenses for psychological state detection
 **Dimensions**:
 - `social_self_regard`: shame ↔ neutral ↔ pride
 - `affect_valence`: negative ↔ neutral ↔ positive
 - `taste_development`: disgust ↔ neutral ↔ preference
 - `motivational_regulation`: suppression ↔ neutral ↔ expression
 
-**Status**: Architecture defined, needs training run with probe saving enabled
+**Status**: Architecture defined, needs training run with lens saving enabled
 
 **References**:
 - `docs/S_TIER_TRAINING_STRATEGY.md`
@@ -43,7 +43,7 @@ V3 probe pack preparation is complete and ready for a fresh training run with al
 ### 3. Unified Training Methodology
 - Adaptive training with falloff validation across all layers
 - Nephew negative sampling for better discrimination
-- Consistent probe architecture and training parameters
+- Consistent lens architecture and training parameters
 
 ## Implementation Status
 
@@ -63,7 +63,7 @@ Changes:
 - Doubles training samples from N to 2N at same generation cost
 - Backward compatible with `extraction_mode="generation"`
 
-**`scripts/create_v3_probe_pack.py`** (Rewritten)
+**`scripts/create_v3_lens_pack.py`** (Rewritten)
 - Handles both flat and layered directory structures
 - Integrates simplexes into pack format
 - Creates comprehensive metadata with v3 improvements
@@ -71,7 +71,7 @@ Changes:
 
 ### ⏳ Training Needed
 
-**Hierarchy Probes** (Layers 0-5):
+**Hierarchy Lenses** (Layers 0-5):
 ```bash
 poetry run python scripts/train_sumo_classifiers.py \
   --layers 0 1 2 3 4 5 \
@@ -86,16 +86,16 @@ poetry run python scripts/train_sumo_classifiers.py \
 - Estimated time: ~8-12 hours for all layers
 - Output: `results/sumo_classifiers_v3/layer{0-5}/ConceptName_classifier.pt`
 
-**Simplex Probes** (S-tier dimensions):
+**Simplex Lenses** (S-tier dimensions):
 ```bash
 poetry run python scripts/train_s_tier_simplexes.py \
   --output-dir results/s_tier_simplexes_v3 \
-  --save-probes  # TODO: Add this flag to save .pt files
+  --save-lenses  # TODO: Add this flag to save .pt files
 ```
 
 **Notes**:
 - Current simplex script doesn't save .pt files (only metrics)
-- Need to add probe saving functionality
+- Need to add lens saving functionality
 - Alternative: Retrain using regular `train_sumo_classifiers.py` with simplex concepts
 
 ### Pack Assembly
@@ -103,26 +103,26 @@ poetry run python scripts/train_s_tier_simplexes.py \
 Once training is complete:
 
 ```bash
-poetry run python scripts/create_v3_probe_pack.py
+poetry run python scripts/create_v3_lens_pack.py
 ```
 
 This will:
-1. Copy all hierarchy probes from `results/sumo_classifiers_v3/`
-2. Copy simplex probes from `results/s_tier_simplexes_v3/` (if available)
+1. Copy all hierarchy lenses from `results/sumo_classifiers_v3/`
+2. Copy simplex lenses from `results/s_tier_simplexes_v3/` (if available)
 3. Create pack metadata with v3 improvements documented
-4. Output to `probe_packs/gemma-3-4b-pt_sumo-wordnet-v3/`
+4. Output to `lens_packs/gemma-3-4b-pt_sumo-wordnet-v3/`
 
 ## Current State
 
 ### What We Have
-- ✅ V2 probe pack (working, in production)
+- ✅ V2 lens pack (working, in production)
 - ✅ Combined-20 extraction strategy (validated, implemented)
-- ✅ Simplex architecture (defined, tested once without probe saving)
+- ✅ Simplex architecture (defined, tested once without lens saving)
 - ✅ Pack assembly tooling (updated for v3 structure)
 
 ### What We Need
 1. **Fresh training run** with combined-20 extraction for all layers 0-5
-2. **Simplex training** with probe saving enabled
+2. **Simplex training** with lens saving enabled
 3. **Pack assembly** after training completes
 4. **Calibration testing** of assembled v3 pack
 
@@ -138,7 +138,7 @@ This will:
 
 **Post-training**:
 1. Run pack assembly script
-2. Test with `dynamic_probe_manager`
+2. Test with `dynamic_lens_manager`
 3. Run calibration benchmarks
 4. Compare v3 vs v2 performance
 5. Deploy if results confirm improvements
@@ -146,7 +146,7 @@ This will:
 ## Files Modified
 
 1. `src/training/sumo_classifiers.py` - Added combined-20 extraction
-2. `scripts/create_v3_probe_pack.py` - Rewritten for v3 structure
+2. `scripts/create_v3_lens_pack.py` - Rewritten for v3 structure
 3. `docs/EXTRACTION_STRATEGY_DECISION.md` - Strategy documentation
 4. `docs/EXTRACTION_STRATEGY_EXPERIMENT.md` - Experimental validation
 

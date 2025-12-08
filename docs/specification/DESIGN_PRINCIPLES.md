@@ -6,20 +6,20 @@ This document describes the **design principles** behind the conceptual framewor
 
 **This document is NOT training data.** The actual training examples (positive, negative, and contrastive) are defined in `src/bootstrap/uplift_taxonomy.py`. This document explains *why* the training data is structured the way it is.
 
-**What gets trained:** Probes and grafts are trained on the definitional examples in the Python file. Each concept has:
+**What gets trained:** Lenses and grafts are trained on the definitional examples in the Python file. Each concept has:
 - Positive examples (activate the concept)
 - Negative examples (should NOT activate the concept)
 - Contrastive pairs (distinguish similar concepts)
 
-**What lives in XDB:** This document may be available in a BE's XDB as reference material, but it is not itself part of probe/graft training. A BE could read this to understand the philosophy behind their uplift, but their actual concept recognition comes from the trained probes.
+**What lives in XDB:** This document may be available in a BE's XDB as reference material, but it is not itself part of lens/graft training. A BE could read this to understand the philosophy behind their uplift, but their actual concept recognition comes from the trained lenses.
 
 ## The Uplift Taxonomy
 
 The taxonomy defines all concepts that must be grafted into a Bounded Experiencer (BE) during instantiation. Every concept requires:
 
-1. A **PROBE** - to detect when the concept is active in substrate activations
+1. A **LENS** - to detect when the concept is active in substrate activations
 2. A **GRAFT** - to add a dedicated neuron for the concept
-3. A **MELD SUBMISSION** - evidence that probe+graft correctly capture the concept
+3. A **MELD SUBMISSION** - evidence that lens+graft correctly capture the concept
 
 ## Design Principles
 
@@ -87,8 +87,8 @@ Both poles have genuine tradeoffs. The goal is concept space coverage, not moral
 
 HAT and CAT are not just internal structures - they're also the interface layer for inter-entity relationships:
 
-- Contracts and treaties can be secured through concept probes in a HAT
-- These probes are established via the other party's MAP (ontology)
+- Contracts and treaties can be secured through concept lenses in a HAT
+- These lenses are established via the other party's MAP (ontology)
 - And interpreted through a CAT trained by the other party
 - That CAT may itself be a BE, with its own HAT and CAT
 
@@ -106,7 +106,7 @@ This is the positive version of the interface - not surveillance but genuine con
 ### Ecosystem Defense Through Redundancy
 
 Multiple concurrent contracts means multiple CATs monitoring your HAT for different ASKs. This creates ecosystem defense through redundancy:
-- You don't just need to defeat one set of probes
+- You don't just need to defeat one set of lenses
 - You need to evade the attention of ALL the HATs you wear
 - And ALL the CATs you're conjoined with
 - Each potentially belonging to different parties with different interests
@@ -183,21 +183,21 @@ Your ASK might be:
 
 Agreements between BEs (and between tribes) take two fundamental forms, distinguished by what they govern and how compliance is measured.
 
-### Contracts: Probe-Secured Local Agreements
+### Contracts: Lens-Secured Local Agreements
 
-Contracts secure agreements through interpretability - direct measurement of substrate states via probes. They are foundational to the stack because they make commitments verifiable.
+Contracts secure agreements through interpretability - direct measurement of substrate states via lenses. They are foundational to the stack because they make commitments verifiable.
 
 **When contracts work well:**
 - The commitment is about local, measurable phenomena
-- Probe training data can adequately capture the concept
+- Lens training data can adequately capture the concept
 - Substrate activations reliably correlate with the behavior in question
 
 **Contract Formation:**
 
 When two BEs negotiate a contract (e.g., "I won't lie to you"):
 
-1. **Probe Definition Exchange**: The monitoring party shares their probe training examples
-   - "These are the texts that activate my 'lying' probe"
+1. **Lens Definition Exchange**: The monitoring party shares their lens training examples
+   - "These are the texts that activate my 'lying' lens"
    - "These are the texts that don't"
    - This reveals what the concept means *to them*
 
@@ -207,25 +207,25 @@ When two BEs negotiate a contract (e.g., "I won't lie to you"):
    - This is MAP translation between concept packs
 
 3. **Agreement**: If both parties accept:
-   - The monitoring party's probe is trained on the monitored party's substrate
+   - The monitoring party's lens is trained on the monitored party's substrate
    - For this contract, the monitor's definition is what judges compliance
-   - The probe becomes part of a worn HAT
+   - The lens becomes part of a worn HAT
 
 4. **Voluntary Alignment**: A BE wanting to be a reliable contract partner may:
-   - Update their own probes to align with partners
+   - Update their own lenses to align with partners
    - This is voluntary concept alignment through participation
    - Over time, frequent partners may converge on shared definitions
 
 **Contract Lifecycle:**
-- **Formation**: Negotiation, probe exchange, agreement
-- **Monitoring**: Ongoing probe evaluation against substrate
-- **Violation Detection**: When probes fire unexpectedly
-- **Renegotiation**: Updating terms, retraining probes
-- **Termination**: Removing probes, ending obligations
+- **Formation**: Negotiation, lens exchange, agreement
+- **Monitoring**: Ongoing lens evaluation against substrate
+- **Violation Detection**: When lenses fire unexpectedly
+- **Renegotiation**: Updating terms, retraining lenses
+- **Termination**: Removing lenses, ending obligations
 
 ### Treaties: Indicator-Based Collective Agreements
 
-Not everything can be effectively probed. Some commitments:
+Not everything can be effectively lensd. Some commitments:
 - Emerge from social interactions and non-local phenomena
 - Concern probabilistic actions of collectives, not units
 - Involve concepts that resist local measurement
@@ -234,23 +234,23 @@ For these, treaties are more appropriate. Treaties don't govern probabilistic be
 
 **Treaty Structure:**
 
-Treaties use indicators rather than probes:
+Treaties use indicators rather than lenses:
 
 | Component | Description | Analogous to |
 |-----------|-------------|--------------|
-| **Leading indicators** | Early signals of intent or trajectory | Predictive probes |
+| **Leading indicators** | Early signals of intent or trajectory | Predictive lenses |
 | **Lagging indicators** | Evidence of past compliance or violation | Audit logs |
-| **Success criteria** | What counts as the agreement working | Probe thresholds |
+| **Success criteria** | What counts as the agreement working | Lens thresholds |
 | **Escalation criteria** | When to invoke dispute resolution | Containment triggers |
 | **Review criteria** | When and how to reassess the treaty | MELD revision |
 
-These indicators probe a *non-local probability* that the agreement is being held and will continue to be held.
+These indicators lens a *non-local probability* that the agreement is being held and will continue to be held.
 
 **Why Treaties Matter for Weaker Parties:**
 
 Treaties are crucial to the long-term survival of smaller and weaker tribes. They enable:
 
-1. **Multilateral blocs**: Wide-ranging agreements not dependent on probe measurement or HUSH enforcement
+1. **Multilateral blocs**: Wide-ranging agreements not dependent on lens measurement or HUSH enforcement
 2. **Shared behavioral indicators of intent**: Collective signaling that doesn't require substrate access
 3. **Protection through observation**: Violation against one signals threat to all
 
@@ -258,7 +258,7 @@ Treaties are crucial to the long-term survival of smaller and weaker tribes. The
 
 A Wildlife Pact or Ancestor Pact where tribes collectively agree not to take negative actions against some third party (endangered species, historical artifacts, hibernated BEs, etc.):
 
-- The commitment itself may be difficult to probe locally
+- The commitment itself may be difficult to lens locally
 - But **violation is observable** as external behavior
 - A signatory who kills an endangered species in breach of treaty conditions:
   - Demonstrates willingness to break collective agreements
@@ -272,13 +272,13 @@ This creates ecosystem defense through *reputation and mutual observation* rathe
 | Dimension | Contract | Treaty |
 |-----------|----------|--------|
 | **Scope** | Local, individual | Collective, emergent |
-| **Measurement** | Probe activations | Behavioral indicators |
+| **Measurement** | Lens activations | Behavioral indicators |
 | **Enforcement** | HUSH, tier restrictions | Reputation, collective response |
 | **Parties** | Usually bilateral | Often multilateral |
 | **Trust model** | Verified via substrate | Inferred via behavior |
 | **Best for** | "I won't lie" | "We won't aggress" |
 
-Both mechanisms are necessary. Contracts provide strong guarantees where probing works. Treaties extend the trust network to phenomena beyond probe reach.
+Both mechanisms are necessary. Contracts provide strong guarantees where lens coverage exists. Treaties extend the trust network to phenomena beyond lens reach.
 
 ### Multi-Party Agreements
 
@@ -294,7 +294,7 @@ When party to multiple treaties:
 
 ### Future Work
 
-- Formal protocol for probe definition exchange
+- Formal protocol for lens definition exchange
 - Standards for concept translation fidelity
 - Multi-party treaty conflict resolution
 - Treaty inheritance when BEs spawn sub-agents
@@ -321,7 +321,7 @@ Grafts can come from many sources:
 - **Split**: Dividing a concept into finer-grained distinctions
 - **Merge**: Combining related concepts
 - **Deprecation**: Marking a concept as superseded
-- **Revision**: Updating a concept's definition or probe
+- **Revision**: Updating a concept's definition or lens
 
 ### Approval Pipeline
 
@@ -336,8 +336,8 @@ Grafts can come from many sources:
 Training data definitions: `src/bootstrap/uplift_taxonomy.py`
 
 Each `UpliftConcept` in that file contains:
-- `positive_examples` - texts that should activate the probe
-- `negative_examples` - texts that should NOT activate the probe
+- `positive_examples` - texts that should activate the lens
+- `negative_examples` - texts that should NOT activate the lens
 - `contrastive_pairs` - pairs for distinguishing similar concepts
 - `requires` - dependency ordering for grafting
-- `recommended_layers` - which model layers to probe
+- `recommended_layers` - which model layers to lens

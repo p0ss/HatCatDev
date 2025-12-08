@@ -1,10 +1,10 @@
 """CAT training module."""
 from src.cat.training.trace_collector import (
-    ProbeTraceCollector,
+    LensTraceCollector,
     TraceCollectionSession,
 )
 
 __all__ = [
-    "ProbeTraceCollector",
+    "LensTraceCollector",
     "TraceCollectionSession",
 ]

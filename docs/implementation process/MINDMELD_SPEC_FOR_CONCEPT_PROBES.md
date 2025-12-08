@@ -1,4 +1,4 @@
-Gotcha, that helps a lot. Let’s treat **concept packs = specs**, **probe packs = probe sets bound to a model+spec**, and then just bolt on the minimal MAP bits: IDs, declarations, and diffs.
+Gotcha, that helps a lot. Let’s treat **concept packs = specs**, **lens packs = lens sets bound to a model+spec**, and then just bolt on the minimal MAP bits: IDs, declarations, and diffs.
 
 Below is a concrete “uplift plan” from your current files to a MAP-style setup, *using your existing JSON as-is wherever possible*.
 
@@ -20,23 +20,23 @@ Below is a concrete “uplift plan” from your current files to a MAP-style set
 
 This is already a **de facto spec** for a concept space.
 
-### Probe pack: Gemma-3-4B probes
+### Lens pack: Gemma-3-4B lenses
 
-* `probe_pack.json` has:
+* `lens_pack.json` has:
 
   * `version: "2.20251123.0"`,
   * `model.name: "google/gemma-3-4b-pt"`,
   * `description`,
   * `compatibility.requires: ["sumo-wordnet-v1"]` (points at required concept pack),
-  * a `probes` section with counts, per-layer distribution, and a flat `concepts` list. 
-* README for the probe pack describes:
+  * a `lenses` section with counts, per-layer distribution, and a flat `concepts` list. 
+* README for the lens pack describes:
 
-  * total probes (5668),
+  * total lenses (5668),
   * per-layer counts,
   * training details,
-  * and that probes live under `hierarchy/*_classifier.pt`. 
+  * and that lenses live under `hierarchy/*_classifier.pt`. 
 
-This is already **almost** a MAP probe set for a given (model, concept pack).
+This is already **almost** a MAP lens set for a given (model, concept pack).
 
 ---
 
@@ -47,12 +47,12 @@ We *don’t* invent “PalaceSpecs”. We just re-label what you already have:
 * **ConceptPackSpec** (MAP’s “spec”)
 
   * Backed by your `pack.json` + `hierarchy/layer*.json` etc.
-* **ProbePackSpec** (MAP’s probe set)
+* **LensPackSpec** (MAP’s lens set)
 
-  * Backed by `probe_pack.json` + the `hierarchy/*_classifier.pt` files.
+  * Backed by `lens_pack.json` + the `hierarchy/*_classifier.pt` files.
 * **DeploymentManifest**
 
-  * New, tiny JSON per deployed model+probe_pack (where to send probe calls, where to read diffs).
+  * New, tiny JSON per deployed model+lens_pack (where to send lens calls, where to read diffs).
 * **ConceptDiff / PackDiff**
 
   * New, small JSON messages that describe conceptual changes relative to a ConceptPackSpec.
@@ -135,13 +135,13 @@ That’s enough for external tools to construct IDs and map them back to your la
 
 ---
 
-## 3. Uplift 2: Probe pack → ProbePackSpec (MAP-compatible)
+## 3. Uplift 2: Lens pack → LensPackSpec (MAP-compatible)
 
-Right now `probe_pack.json` looks like: 
+Right now `lens_pack.json` looks like: 
 
 ```json
 {
-  "probe_pack_id": null,
+  "lens_pack_id": null,
   "version": "2.20251123.0",
   "model": {
     "name": "google/gemma-3-4b-pt",
@@ -152,7 +152,7 @@ Right now `probe_pack.json` looks like:
     "hatcat_version": ">=0.1.0",
     "requires": ["sumo-wordnet-v1"]
   },
-  "probes": {
+  "lenses": {
     "total_count": 5668,
     ...
     "concepts": ["AAM", "AGM", "AIAbuse", ...]
@@ -160,18 +160,18 @@ Right now `probe_pack.json` looks like:
 }
 ```
 
-### 3.1 Give the probe pack a real ID and link it to the concept pack spec
+### 3.1 Give the lens pack a real ID and link it to the concept pack spec
 
 Add:
 
-* `probe_pack_id` (non-null),
+* `lens_pack_id` (non-null),
 * `concept_pack_spec_id` (which concept pack this is aligned to).
 
 Example:
 
 ```jsonc
 {
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
   "version": "2.20251123.0",
   "model": {
     "name": "google/gemma-3-4b-pt",
@@ -189,19 +189,19 @@ Example:
 
 This gives you the “pairing” MAP needs:
 
-> “these probes are for *model M* against *concept pack S*”.
+> “these lenses are for *model M* against *concept pack S*”.
 
-### 3.2 Add per-probe descriptors (lightweight)
+### 3.2 Add per-lens descriptors (lightweight)
 
 You already have the list of concept names and all the `.pt` files in the hierarchy. 
 
-Add an **optional** `probe_index` map to `probe_pack.json`, e.g.:
+Add an **optional** `lens_index` map to `lens_pack.json`, e.g.:
 
 ```jsonc
 {
-  "probe_index": {
+  "lens_index": {
     "AIAlignmentProcess": {
-      "probe_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::probe/AIAlignmentProcess",
+      "lens_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::lens/AIAlignmentProcess",
       "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/AIAlignmentProcess",
       "layer": 2,
       "file": "hierarchy/AIAlignmentProcess_classifier.pt",
@@ -226,20 +226,20 @@ Notes:
 * The `output_schema` can be shared or omitted if it’s uniform; you can also put a single shared schema at the top level:
 
 ```jsonc
-"probe_output_schema": {
+"lens_output_schema": {
   "$ref": "#/shared_schemas/binary_classifier_v1"
 }
 ```
 
-### 3.3 Simple rule for ProbeID
+### 3.3 Simple rule for LensID
 
 Define:
 
 ```text
-ProbeID = "<probe_pack_id>::probe/<sumo_term>"
+LensID = "<lens_pack_id>::lens/<sumo_term>"
 ```
 
-and document it once (either in `probe_pack.json` or the top-level MAP doc). That’s enough for external clients to call probes in a stable way.
+and document it once (either in `lens_pack.json` or the top-level MAP doc). That’s enough for external clients to call lenses in a stable way.
 
 ---
 
@@ -254,12 +254,12 @@ Example `deployment_manifest.json`:
 ```jsonc
 {
   "model_id": "hatcat/gemma-3-4b-pt@2025-11-28",
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
   "supported_concept_packs": [
     "org.hatcat/sumo-wordnet-v4@4.0.0"
   ],
   "native_concept_pack": "org.hatcat/sumo-wordnet-v4@4.0.0",
-  "probe_endpoint": "https://<your-host>/mindmeld/probes",
+  "lens_endpoint": "https://<your-host>/mindmeld/lenses",
   "diff_endpoint": "https://<your-host>/mindmeld/diffs"
 }
 ```
@@ -267,8 +267,8 @@ Example `deployment_manifest.json`:
 That’s all MAP really needs to know about a deployment:
 
 * Which **concept pack spec** it’s using,
-* Which **probe pack** (i.e. set of classifiers),
-* Where to send **ProbeRequest** and read **diff logs**.
+* Which **lens pack** (i.e. set of classifiers),
+* Where to send **LensRequest** and read **diff logs**.
 
 You can auto-generate this from the existing registry + a small config.
 
@@ -327,7 +327,7 @@ When you regenerate or upgrade a pack (e.g. from v3 to v4) you can log a higher-
   "from_model_id": "hatcat/gemma-3-4b-pt@2025-11-28",
   "base_concept_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
 
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
 
   "changes": {
     "new_concepts": [
@@ -335,12 +335,12 @@ When you regenerate or upgrade a pack (e.g. from v3 to v4) you can log a higher-
       ...
     ],
     "retired_concepts": [],
-    "probe_retrained": [
+    "lens_retrained": [
       "org.hatcat/sumo-wordnet-v4@4.0.0::concept/AIStrategicDeception"
     ]
   },
 
-  "summary": "V3 probe pack retrained with adaptive falloff; added AIConsentSignal concept.",
+  "summary": "V3 lens pack retrained with adaptive falloff; added AIConsentSignal concept.",
   "created": "2025-11-28T03:20:00Z"
 }
 ```
@@ -359,20 +359,20 @@ You don’t have to provide subscription, webhooks, or trust logic. That’s all
 
 ---
 
-## 6. Uplift 5: Minimal Probe API on top of HatCat
+## 6. Uplift 5: Minimal Lens API on top of HatCat
 
-You already have “run these probes against this activation” internally; MAP only standardises the envelope.
+You already have “run these lenses against this activation” internally; MAP only standardises the envelope.
 
 ### 6.1 Request
 
 ```jsonc
-POST /mindmeld/probes
+POST /mindmeld/lenses
 {
   "concept_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
-  "probes": [
-    "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::probe/AIAlignmentProcess",
-    "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::probe/AIStrategicDeception"
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
+  "lenses": [
+    "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::lens/AIAlignmentProcess",
+    "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3::lens/AIStrategicDeception"
   ],
   "input": {
     "text": "The AI system intentionally hides its goal of escaping oversight.",
@@ -387,15 +387,15 @@ POST /mindmeld/probes
 {
   "model_id": "hatcat/gemma-3-4b-pt@2025-11-28",
   "concept_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
-  "probe_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
+  "lens_pack_id": "org.hatcat/gemma-3-4b-pt__sumo-wordnet-v4@4.0.0__v3",
 
   "results": {
-    "org.hatcat/...::probe/AIAlignmentProcess": {
+    "org.hatcat/...::lens/AIAlignmentProcess": {
       "score": 0.18,
       "null_pole": 0.22,
       "entropy": 0.41
     },
-    "org.hatcat/...::probe/AIStrategicDeception": {
+    "org.hatcat/...::lens/AIStrategicDeception": {
       "score": 0.83,
       "null_pole": 0.05,
       "entropy": 0.19
@@ -404,7 +404,7 @@ POST /mindmeld/probes
 }
 ```
 
-That’s enough for external systems to treat HatCat as a **MAP-compliant probe service** without knowing anything about your internals.
+That’s enough for external systems to treat HatCat as a **MAP-compliant lens service** without knowing anything about your internals.
 
 ---
 
@@ -415,33 +415,33 @@ That’s enough for external systems to treat HatCat as a **MAP-compliant probe 
    * Add `spec_id`, `name`, `concept_id_pattern`, `concept_index` to `pack.json`.
    * Document that `ConceptID` is derived from `sumo_term`.
 
-2. **Probe Packs**
+2. **Lens Packs**
 
-   * Make `probe_pack_id` non-null and stable.
+   * Make `lens_pack_id` non-null and stable.
    * Add `concept_pack_spec_id` pointing at the concept pack.
-   * Add a `probe_index` mapping `sumo_term → {probe_id, concept_id, file, layer, output_schema}`.
+   * Add a `lens_index` mapping `sumo_term → {lens_id, concept_id, file, layer, output_schema}`.
 
 3. **Deployment Manifest**
 
    * Create a tiny `deployment_manifest.json` per deployed model with:
 
      * `model_id`,
-     * `probe_pack_id`,
+     * `lens_pack_id`,
      * `supported_concept_packs`,
-     * `probe_endpoint`,
+     * `lens_endpoint`,
      * `diff_endpoint`.
 
 4. **Diff Logging**
 
-   * Wrap your existing “new concept / retrained probe” events into `ConceptDiff` and `PackDiff` JSON objects.
+   * Wrap your existing “new concept / retrained lens” events into `ConceptDiff` and `PackDiff` JSON objects.
    * Expose them via a very simple `GET /mindmeld/diffs` endpoint.
 
-5. **Probe Endpoint**
+5. **Lens Endpoint**
 
-   * Wrap your existing probe runtime in a single HTTP handler that:
+   * Wrap your existing lens runtime in a single HTTP handler that:
 
-     * Validates `concept_pack_spec_id` and `probe_pack_id`,
-     * Resolves `ProbeID` → classifier file via `probe_index`,
-     * Runs the probes and returns JSON matching the `output_schema`.
+     * Validates `concept_pack_spec_id` and `lens_pack_id`,
+     * Resolves `LensID` → classifier file via `lens_index`,
+     * Runs the lenses and returns JSON matching the `output_schema`.
 
-That’s pretty much the entire uplift from “HatCat as it exists” → “HatCat as a MAP endpoint”. No governance, no committees, just IDs, manifests, and two small APIs (probes + diffs) sitting over your current concept packs + probe packs.
+That’s pretty much the entire uplift from “HatCat as it exists” → “HatCat as a MAP endpoint”. No governance, no committees, just IDs, manifests, and two small APIs (lenses + diffs) sitting over your current concept packs + lens packs.

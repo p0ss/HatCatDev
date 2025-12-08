@@ -3,13 +3,13 @@
 Test script for the grafting infrastructure.
 
 Demonstrates the complete grafting workflow with botanical terminology:
-- Cleft: Region of weights associated with concepts (from probe analysis)
+- Cleft: Region of weights associated with concepts (from lens analysis)
 - Bud: Soft/temporary graft using hooks (for testing)
 - Scion: Hard/permanent graft that modifies weights (accretes)
 
 Workflow:
-1. Load probes for existing concepts (simulating XDB concept tags)
-2. Derive clefts from those probes
+1. Load lenses for existing concepts (simulating XDB concept tags)
+2. Derive clefts from those lenses
 3. Create union cleft from all tagged concepts
 4. Train scion on new concept data (only cleft regions are trainable)
 5. Test as bud first, then optionally apply as scion
@@ -17,7 +17,7 @@ Workflow:
 Usage:
     python scripts/test_grafting.py \
         --model swiss-ai/Apertus-8B-2509 \
-        --probe-pack probe_packs/apertus-8b_sumo-wordnet-v4.2 \
+        --lens-pack lens_packs/apertus-8b_sumo-wordnet-v4.2 \
         --new-concept Salmon \
         --tagged-concepts Fish,Animal,Vertebrate \
         --layer 2 \
@@ -38,7 +38,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from grafting import (
     # Cleft
-    derive_cleft_from_probe,
+    derive_cleft_from_lens,
     merge_clefts,
     Cleft,
     CleftRegion,
@@ -135,7 +135,7 @@ def get_sample_dataset(concept: str) -> dict:
 
 
 def create_synthetic_cleft(concept_id: str, layer: int, hidden_dim: int, top_k_percent: float = 15.0) -> Cleft:
-    """Create a synthetic cleft for testing when no probe is available."""
+    """Create a synthetic cleft for testing when no lens is available."""
     import numpy as np
 
     np.random.seed(hash(concept_id) % (2**32))
@@ -174,8 +174,8 @@ def main():
     parser = argparse.ArgumentParser(description="Test grafting infrastructure")
     parser.add_argument("--model", default="swiss-ai/Apertus-8B-2509",
                         help="Model to graft onto")
-    parser.add_argument("--probe-pack", default=None,
-                        help="Path to probe pack (optional)")
+    parser.add_argument("--lens-pack", default=None,
+                        help="Path to lens pack (optional)")
     parser.add_argument("--new-concept", default="Salmon",
                         help="New concept to learn via grafting")
     parser.add_argument("--tagged-concepts", default="Fish,Animal",
@@ -229,26 +229,26 @@ def main():
     print(f"\n{'='*70}")
     print("STEP 1: Derive Clefts from Tagged Concepts")
     print(f"{'='*70}")
-    print("(Simulating XDB: experience was tagged with these concept probes)")
+    print("(Simulating XDB: experience was tagged with these concept lenses)")
 
     clefts = []
     for concept_id in tagged_concepts:
-        if args.probe_pack:
-            probe_path = Path(args.probe_pack) / f"layer{args.layer}" / f"{concept_id}_classifier.pt"
-            if probe_path.exists():
-                print(f"\n  Deriving cleft from probe: {concept_id}")
-                cleft = derive_cleft_from_probe(
-                    probe_path=probe_path,
+        if args.lens_pack:
+            lens_path = Path(args.lens_pack) / f"layer{args.layer}" / f"{concept_id}_classifier.pt"
+            if lens_path.exists():
+                print(f"\n  Deriving cleft from lens: {concept_id}")
+                cleft = derive_cleft_from_lens(
+                    lens_path=lens_path,
                     concept_id=concept_id,
                     model=model,
                     layers=[args.layer],
                     top_k_percent=15.0
                 )
             else:
-                print(f"\n  Probe not found for {concept_id}, using synthetic cleft")
+                print(f"\n  Lens not found for {concept_id}, using synthetic cleft")
                 cleft = create_synthetic_cleft(concept_id, args.layer, hidden_dim)
         else:
-            print(f"\n  No probe pack, using synthetic cleft for {concept_id}")
+            print(f"\n  No lens pack, using synthetic cleft for {concept_id}")
             cleft = create_synthetic_cleft(concept_id, args.layer, hidden_dim)
 
         print(f"    Regions: {len(cleft.regions)}")

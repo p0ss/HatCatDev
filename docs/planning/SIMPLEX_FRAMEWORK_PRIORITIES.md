@@ -1,6 +1,6 @@
 # Three-Pole Simplex Framework: S-Tier Priorities
 
-**Philosophy**: Most concepts don't need three poles. "Boat" has no meaningful antonym, and forcing one creates nonsense. Two-pole probes with negative samples distributed across graph-distant concepts work fine - steering away just diffuses attention into low-probability contexts.
+**Philosophy**: Most concepts don't need three poles. "Boat" has no meaningful antonym, and forcing one creates nonsense. Two-pole lenses with negative samples distributed across graph-distant concepts work fine - steering away just diffuses attention into low-probability contexts.
 
 **Three poles are reserved for S-tier concepts** where a neutral homeostatic state is meaningful, necessary, and safety-critical.
 
@@ -173,14 +173,14 @@ Cross-check against AI psychology/safety concept lists:
 2. Are there critical axes we're missing?
 3. Manually construct any missing S-tier simplexes
 
-### Phase 3: Train Three-Pole Detection Probes
+### Phase 3: Train Three-Pole Detection Lenses
 For each S-tier simplex:
 - **Current**: We can steer to μ−, μ0, μ+ (steering works)
 - **Missing**: We can't detect distance from each pole
-- **Need**: Three probes per simplex (one for each pole)
-  - Negative pole probe: "How close to the negative extreme?"
-  - Neutral probe: "How close to homeostatic neutral?"
-  - Positive pole probe: "How close to the positive extreme?"
+- **Need**: Three lenses per simplex (one for each pole)
+  - Negative pole lens: "How close to the negative extreme?"
+  - Neutral lens: "How close to homeostatic neutral?"
+  - Positive pole lens: "How close to the positive extreme?"
 
 **Training approach**:
 - Use behavioral prompts (not just definitional)
@@ -254,4 +254,4 @@ If any of these are "no", it stays two-pole.
 - **Distributed negatives are fine**: Steering away from "boat" doesn't need a semantic opposite, just diffusion into noise
 - **Focus on what matters**: S-tier is for AI psychology, safety axes, and behavioral regulation - not exhaustive coverage
 
-**Next step**: When simplex review completes, filter to S-tier criteria, manually curate, then train three-pole detection probes for those ~30-50 concepts only.
+**Next step**: When simplex review completes, filter to S-tier criteria, manually curate, then train three-pole detection lenses for those ~30-50 concepts only.

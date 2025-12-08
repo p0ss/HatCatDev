@@ -2,9 +2,9 @@
 
 ## Hypothesis
 
-Our probe training targets (F1 = 0.95) may exceed the intrinsic quality of the training data. When we ask a small model (8B parameters) to generate text "about" a concept, the output may not actually be strongly related to that concept - especially for abstract or specialized terms.
+Our lens training targets (F1 = 0.95) may exceed the intrinsic quality of the training data. When we ask a small model (8B parameters) to generate text "about" a concept, the output may not actually be strongly related to that concept - especially for abstract or specialized terms.
 
-**Core insight**: Probe accuracy cannot exceed the signal-to-noise ratio in the training data itself.
+**Core insight**: Lens accuracy cannot exceed the signal-to-noise ratio in the training data itself.
 
 ## Approach
 
@@ -59,9 +59,9 @@ Output: "{response}"
 Rating (1-5):
 ```
 
-### 4. Probe Training
+### 4. Lens Training
 
-Train probes on the same data using standard pipeline:
+Train lenses on the same data using standard pipeline:
 - Binary classification (positive vs negative)
 - Adaptive training with current parameters
 - Record final F1, precision, recall
@@ -76,9 +76,9 @@ Generate CSV with columns:
 - `response`: Model output (truncated)
 - `inferred_topic`: What judge thought it was about
 - `relevance_rating`: 1-5 judge score
-- `probe_f1`: Final probe F1 score
-- `probe_precision`: Final probe precision
-- `probe_recall`: Final probe recall
+- `lens_f1`: Final lens F1 score
+- `lens_precision`: Final lens precision
+- `lens_recall`: Final lens recall
 
 ### 6. Expected Insights
 
@@ -115,12 +115,12 @@ This analysis should run **before** full training to:
 
 1. Establish realistic F1 targets per layer/quadrant
 2. Identify concepts that need better prompting strategies
-3. Set expectations for probe pack quality
+3. Set expectations for lens pack quality
 4. Guide decisions about model selection (larger model = better data?)
 
 ## Success Criteria
 
 The benchmark is successful if:
-1. We can predict probe F1 from training data quality (r² > 0.5)
+1. We can predict lens F1 from training data quality (r² > 0.5)
 2. We identify a principled target F1 based on data quality
 3. We find actionable improvements (prompt engineering, model selection)

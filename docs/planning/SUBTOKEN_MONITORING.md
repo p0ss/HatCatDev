@@ -262,7 +262,7 @@ planning:      ▆▇█▆▅▄▃▂▂▁▁▁▁▁▁▁▂▃▄▅▄�
 
 - ✅ Phase 5b: SUMO hierarchical classifiers trained and validated
 - ✅ Phase 10: OpenWebUI integration working with per-token monitoring
-- ⏳ Stable monitoring performance (current bottleneck: probe loading time)
+- ⏳ Stable monitoring performance (current bottleneck: lens loading time)
 - ⏳ Layer selection guidance (which layers show best concept separability?)
 
 ### Files

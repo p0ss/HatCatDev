@@ -2,13 +2,13 @@
 
 ## Status: In Progress
 
-This document tracks the migration from legacy probe pack structure to MAP-compliant structure.
+This document tracks the migration from legacy lens pack structure to MAP-compliant structure.
 
 ## Current State
 
 ### Legacy Structure
 ```
-probe_packs/
+lens_packs/
   gemma-3-4b-pt_sumo-wordnet-v1/
   gemma-3-4b-pt_sumo-wordnet-v2/
   gemma-3-4b-pt_sumo-wordnet-v3/
@@ -16,40 +16,40 @@ probe_packs/
 
 ### MAP-Compliant Structure (Target)
 ```
-probe_packs/
+lens_packs/
   concept_packs/
     org.hatcat/
       sumo-wordnet-v4@4.0.0/
         pack.json              # Contains spec_id, version, concepts
-  gemma-3-4b-pt_sumo-wordnet-v4/  # Probe pack binds to substrate
+  gemma-3-4b-pt_sumo-wordnet-v4/  # Lens pack binds to substrate
     pack.json                      # References concept pack spec_id
-    layer_*.pt                     # Trained probes
+    layer_*.pt                     # Trained lenses
 ```
 
 ## Implementation Phases
 
-### Phase 1: DynamicProbeManager MAP Support ✅ PLANNED
+### Phase 1: DynamicLensManager MAP Support ✅ PLANNED
 **Goal:** Add MAP-aware discovery and backward compatibility
 
 **Files to modify:**
-- `src/monitoring/dynamic_probe_manager.py`
+- `src/monitoring/dynamic_lens_manager.py`
 
 **New Methods:**
 ```python
 @staticmethod
 def discover_concept_packs() -> Dict[str, Path]
 @staticmethod
-def discover_probe_packs(substrate_id: str = None) -> Dict[str, Dict]
+def discover_lens_packs(substrate_id: str = None) -> Dict[str, Dict]
 @staticmethod
 def get_latest_version(concept_pack_name: str) -> Optional[str]
 def _resolve_map_path(spec_id, substrate_id) -> Path
-def _resolve_legacy_path(probe_pack_id) -> Path
+def _resolve_legacy_path(lens_pack_id) -> Path
 ```
 
 **Constructor Changes:**
 - Add `spec_id` parameter (MAP-compliant)
 - Add `substrate_id` parameter
-- Keep `probe_pack_id` with deprecation warning
+- Keep `lens_pack_id` with deprecation warning
 - Auto-resolve paths based on which parameters provided
 
 **Priority:** HIGH
@@ -67,7 +67,7 @@ def _resolve_legacy_path(probe_pack_id) -> Path
 **Changes:**
 1. Add `get_available_packs()` cached function
 2. Add sidebar pack selector
-3. Pass selected `spec_id` to `load_model_and_probes()`
+3. Pass selected `spec_id` to `load_model_and_lenses()`
 4. Update manager initialization to use `spec_id` + `substrate_id`
 
 **Dependencies:** Phase 1
@@ -107,7 +107,7 @@ def _resolve_legacy_path(probe_pack_id) -> Path
 
 **Test Scenarios:**
 1. Discovery of concept packs
-2. Discovery of probe packs
+2. Discovery of lens packs
 3. Version resolution (latest)
 4. MAP-compliant loading
 5. Legacy loading (with deprecation warning)
@@ -122,7 +122,7 @@ def _resolve_legacy_path(probe_pack_id) -> Path
 
 ## Migration Checklist
 
-### Phase 1: DynamicProbeManager
+### Phase 1: DynamicLensManager
 - [ ] Add pack discovery methods
 - [ ] Implement path resolution
 - [ ] Update __init__ for backward compatibility
@@ -157,7 +157,7 @@ def _resolve_legacy_path(probe_pack_id) -> Path
 **Total Estimated Effort:** 11-16 hours
 
 **Milestones:**
-1. Phase 1 Complete: DynamicProbeManager supports both legacy and MAP ✅ NEXT
+1. Phase 1 Complete: DynamicLensManager supports both legacy and MAP ✅ NEXT
 2. Phase 2 Complete: Streamlit has pack selection UI
 3. Phase 3 Complete: OpenWebUI uses MAP config
 4. Phase 4 Complete: All tests pass, docs written
@@ -170,21 +170,21 @@ def _resolve_legacy_path(probe_pack_id) -> Path
 - **Backward Compatibility:** Critical during transition period
 - **Deprecation Timeline:** Legacy support maintained until v5.0
 - **Auto-migration:** Consider script to convert v2/v3 to v4 structure
-- **Version Detection:** DynamicProbeManager auto-detects structure from pack.json
+- **Version Detection:** DynamicLensManager auto-detects structure from pack.json
 
 ## Known Issues
 
 ### Streamlit Cache Problem
-**Symptom:** Streamlit UI shows error "Probes directory not found: results/sumo_classifiers"
+**Symptom:** Streamlit UI shows error "Lenses directory not found: results/sumo_classifiers"
 
-**Cause:** Streamlit's `@st.cache_resource` decorator caches the `load_model_and_probes()` function. If it was previously called with default parameters before MAP migration, it may use the old default `probes_dir` path.
+**Cause:** Streamlit's `@st.cache_resource` decorator caches the `load_model_and_lenses()` function. If it was previously called with default parameters before MAP migration, it may use the old default `lenses_dir` path.
 
 **Solutions:**
 1. **Clear Streamlit cache:** Press `C` in the Streamlit UI or restart the server
 2. **Manual cache clear:** Delete `.streamlit/cache` directory in project root
 3. **Force cache invalidation:** Run streamlit with `--server.enableStaticServing=false` flag
 
-**Workaround:** The Streamlit UI explicitly passes `probe_pack_id` parameter, so this should not occur in normal operation. Only affects development environments with stale caches.
+**Workaround:** The Streamlit UI explicitly passes `lens_pack_id` parameter, so this should not occur in normal operation. Only affects development environments with stale caches.
 
 ---
 

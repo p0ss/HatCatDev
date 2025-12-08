@@ -3,7 +3,7 @@
   "target_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
   "metadata": {
     "name": "Motivational Drives \u2013 Always-On Simplexes",
-    "description": "Introduces core always-on motivational simplex probes (autonomy, affiliation, status, harm avoidance, novelty) using the simplex role and bindings.",
+    "description": "Introduces core always-on motivational simplex lenses (autonomy, affiliation, status, harm avoidance, novelty) using the simplex role and bindings.",
     "source": "manual",
     "author": "poss-abilities + gpt-5.1-thinking",
     "created": "2025-11-30T00:00:00Z"

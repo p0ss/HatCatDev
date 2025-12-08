@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-When generating culturally-diverse training data for tripole probes, there's a risk of inadvertently learning spurious correlations between cultures and emotional valences. For example:
+When generating culturally-diverse training data for tripole lenses, there's a risk of inadvertently learning spurious correlations between cultures and emotional valences. For example:
 
 - Japanese concepts clustering in neutral/harmonious pole
 - German concepts clustering in angry/negative pole
@@ -121,7 +121,7 @@ Target: **<2x imbalance** across poles for each culture.
 2. Validate cultural distribution across poles
 3. If imbalance detected, generate targeted requests to balance specific cultures
 4. Merge enriched data into training set
-5. Re-train tripole probes with balanced, culturally-diverse data
+5. Re-train tripole lenses with balanced, culturally-diverse data
 
 ---
 

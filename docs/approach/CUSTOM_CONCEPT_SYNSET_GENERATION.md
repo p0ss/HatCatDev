@@ -14,7 +14,7 @@ HatCat V4 has 6,685 concepts from SUMO, but lacks meta-level reasoning and AI sa
 - Dynamical systems & topology
 - Philosophical foundations (ethics, epistemology, metaphysics)
 
-For probe training, each concept needs a WordNet synset mapping to generate natural language examples. However, 76.2% of custom concepts (1244/1633) are technical terms that don't exist in WordNet.
+For lens training, each concept needs a WordNet synset mapping to generate natural language examples. However, 76.2% of custom concepts (1244/1633) are technical terms that don't exist in WordNet.
 
 ## Solution: Hybrid Synset Mapping
 
@@ -154,7 +154,7 @@ The script handles common errors:
 4. ⏳ Run full synset generation (1244 concepts)
 5. ⏳ Integrate synsets into V4 builder
 6. ⏳ Build V4.5 with custom concepts
-7. ⏳ Train V4.5 probes (~13 hours for 1633 concepts at 30s each)
+7. ⏳ Train V4.5 lenses (~13 hours for 1633 concepts at 30s each)
 
 ## Files Created
 

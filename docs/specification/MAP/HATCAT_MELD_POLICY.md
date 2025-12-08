@@ -76,7 +76,7 @@ Reviews are performed by BEs (or humans) with appropriate **accreditations**:
 ### 4.2 Protected Review
 
 1. All Elevated requirements, plus:
-2. **Safety Harness Impact Analysis**: Run modified probes against USH test suite
+2. **Safety Harness Impact Analysis**: Run modified lenses against USH test suite
 3. **Regression Testing**: Safety benchmark comparison
 4. **Ethics-accredited review**: Assess rationale and risks
 5. Written approval with justification in `review_status`
@@ -98,7 +98,7 @@ Reviews are performed by BEs (or humans) with appropriate **accreditations**:
 │     └─→ Written approval or rejection                          │
 │                                                                 │
 │  Step 3: USH Impact Analysis (may run parallel to Step 2)       │
-│     ├─→ Run USH test suite against modified probes             │
+│     ├─→ Run USH test suite against modified lenses             │
 │     ├─→ Compare safety harness thresholds                      │
 │     └─→ Document any threshold changes                         │
 │                                                                 │
@@ -307,8 +307,8 @@ Stored in: `melds/applied/{meld_id}/`
                                                              │
                                                              ▼
                                              ┌───────────────────────────────┐
-                                             │  Rebuild probe pack           │
-                                             │  train_concept_pack_probes.py │
+                                             │  Rebuild lens pack           │
+                                             │  train_concept_pack_lenses.py │
                                              └───────────────────────────────┘
 
 ## 11. Revision History

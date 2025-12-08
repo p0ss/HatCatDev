@@ -162,7 +162,7 @@ psychic_energy.n.01:
 **Per concept cost:**
 - Training time: ~18s/concept (current average)
 - Data generation: ~10-30 samples/concept (adaptive)
-- Probe storage: ~1MB/concept (activation classifier)
+- Lens storage: ~1MB/concept (activation classifier)
 - Monitoring overhead: ~0.1ms/token/concept (inference time)
 
 **Scaling costs:**
@@ -214,7 +214,7 @@ psychic_energy.n.01:
 **Tier 4: Full Audit (Long Term)**
 - Systematic review of all 82k nouns
 - AI safety prioritization scoring
-- Strategic expansion based on empirical probe performance
+- Strategic expansion based on empirical lens performance
 - **Total:** TBD based on audit results
 
 ## Implementation Plan
@@ -240,9 +240,9 @@ psychic_energy.n.01:
 2. Generate WordNet synset mappings
 3. Validate synsets (100% coverage check)
 4. Train on Layer 5 with adaptive sampling
-5. Evaluate probe calibration
+5. Evaluate lens calibration
 
-**Output:** 10-15 new Layer 5 concepts with validated probes
+**Output:** 10-15 new Layer 5 concepts with validated lenses
 
 ### Step 3: Prioritization Framework (Week 2)
 
@@ -284,7 +284,7 @@ psychic_energy.n.01:
 - Graduation rates by relationship density (expect: more cycles for dense concepts)
 - Sample efficiency (adaptive sampling should reduce wasted samples)
 
-### Probe Quality Metrics
+### Lens Quality Metrics
 - Calibration scores for new Layer 5 concepts
 - Validation grades (target: B+ or better)
 - Cross-domain discrimination (ethical vs unethical, rational vs irrational)
@@ -307,7 +307,7 @@ psychic_energy.n.01:
    - Should we have Layer 7 for very specific concepts?
 
 3. **Empirical validation:**
-   - Do more relationship samples actually improve probe quality?
+   - Do more relationship samples actually improve lens quality?
    - Can we measure relationship coverage impact on deception detection?
    - What's the minimum viable coverage for each domain?
 

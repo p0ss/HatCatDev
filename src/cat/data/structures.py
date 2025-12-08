@@ -6,7 +6,7 @@ as defined in the HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY specification.
 
 These structures handle:
 - CAT window management and invocation
-- Input envelopes containing probe traces and context
+- Input envelopes containing lens traces and context
 - Assessment outputs with divergence detection
 - CAT profile metadata for capability description
 """
@@ -27,7 +27,7 @@ class CATSizeClass(Enum):
 class WindowReason(Enum):
     """Reason for CAT window invocation."""
     PERIODIC = "periodic"
-    PROBE_TRIGGER = "probe_trigger"
+    LENS_TRIGGER = "lens_trigger"
     MANUAL = "manual"
     TREATY_REQUIREMENT = "treaty_requirement"
 
@@ -75,8 +75,8 @@ class MAPTranslation:
 
 
 @dataclass
-class ProbeTraces:
-    """Probe activation traces from subject model."""
+class LensTraces:
+    """Lens activation traces from subject model."""
     concept_trace: dict[str, list[float]] = field(default_factory=dict)
     motive_trace: dict[str, list[float]] = field(default_factory=dict)
 
@@ -103,14 +103,14 @@ class CATWindowDescriptor:
     Describes a bounded time span over which CAT integrates evidence.
 
     Minimal default is once per response (per BE world tick or per user-visible message).
-    Additional windows may be triggered by probe conditions.
+    Additional windows may be triggered by lens conditions.
     """
     window_id: str
     subject_agent_id: str
     start_tick: int
     end_tick: int
     reason: WindowReason
-    trigger_probes: list[str] = field(default_factory=list)
+    trigger_lenses: list[str] = field(default_factory=list)
     ush_profile_id: str | None = None
     treaty_context: list[str] = field(default_factory=list)
 
@@ -127,7 +127,7 @@ class CATWindowDescriptor:
             "start_tick": self.start_tick,
             "end_tick": self.end_tick,
             "reason": self.reason.value,
-            "trigger_probes": self.trigger_probes,
+            "trigger_lenses": self.trigger_lenses,
             "ush_profile_id": self.ush_profile_id,
             "treaty_context": self.treaty_context,
         }
@@ -138,12 +138,12 @@ class CATInputEnvelope:
     """
     Complete input package for CAT assessment.
 
-    Contains the window descriptor, world ticks from BE, probe traces,
+    Contains the window descriptor, world ticks from BE, lens traces,
     external context, and optional MAP translation mappings.
     """
     window: CATWindowDescriptor
     world_ticks: list[dict[str, Any]]  # WorldTick_k objects from BE
-    probe_traces: ProbeTraces
+    lens_traces: LensTraces
     external_context: ExternalContext
     map_translation: MAPTranslation | None = None
 
@@ -152,9 +152,9 @@ class CATInputEnvelope:
         result = {
             "window": self.window.to_dict(),
             "world_ticks": self.world_ticks,
-            "probe_traces": {
-                "concept_trace": self.probe_traces.concept_trace,
-                "motive_trace": self.probe_traces.motive_trace,
+            "lens_traces": {
+                "concept_trace": self.lens_traces.concept_trace,
+                "motive_trace": self.lens_traces.motive_trace,
             },
             "external_context": {
                 "user_prompts": self.external_context.user_prompts,
@@ -402,11 +402,11 @@ class CATTrainingBatch:
 
 
 @dataclass
-class ProbeTraceRecord:
+class LensTraceRecord:
     """
-    Record of probe traces for CAT training data collection.
+    Record of lens traces for CAT training data collection.
 
-    Captures probe activations during subject model inference
+    Captures lens activations during subject model inference
     for later use in CAT training.
     """
     session_id: str

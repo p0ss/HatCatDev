@@ -166,7 +166,7 @@ def create_layer_entry(simplex):
         "sumo_term": f"{dimension.replace('_', ' ').title().replace(' ', '')}_Simplex",
         "sumo_depth": 2,
         "layer": 2,
-        "is_category_probe": False,
+        "is_category_lens": False,
         "is_pseudo_sumo": True,
         "category_children": [],
         "synset_count": 3,
@@ -290,7 +290,7 @@ def main():
     print("NEXT STEPS")
     print("=" * 80)
     print("1. Review layer2.json to verify all simplexes")
-    print("2. Update S+ training spec for 20 simplexes (60 probes)")
+    print("2. Update S+ training spec for 20 simplexes (60 lenses)")
     print("3. Modify sumo_data_generation.py for three-pole training")
     print("4. Begin S+ training")
     print("=" * 80)

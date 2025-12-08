@@ -19,7 +19,7 @@ Layer 0 training was failing for concepts with many children due to negative sam
 
 ### Example
 
-Training "Abstract" probe:
+Training "Abstract" lens:
 - ✅ **Should activate** for "Proposition" (direct child)
 - ❌ **Should NOT activate** for "Accusation" (grandchild via Proposition)
 
@@ -40,7 +40,7 @@ Grandchildren (nephews/nieces) are **perfect hard negatives** because:
    - It's specifically a type of Proposition
 
 3. **Graph-close**: They're nearby in the hierarchy (2 hops away)
-   - Forces the probe to learn fine-grained distinctions
+   - Forces the lens to learn fine-grained distinctions
    - Better than distant, unrelated concepts
 
 4. **Abundant**: Layer 1+ provides hundreds of hard negatives
@@ -121,7 +121,7 @@ All Layer 0 concepts now have thousands of negatives available:
 
 ### 2. Better Hard Negatives
 Grandchildren are semantically related but distinct:
-- Forces probe to learn fine-grained boundaries
+- Forces lens to learn fine-grained boundaries
 - Better than random distant concepts
 - Aligns with hierarchical suppression strategy
 
@@ -148,7 +148,7 @@ Before (with all-descendant exclusion):
 After (with nephew inclusion):
 - **Predicted: 10/10 Layer 0 concepts train successfully**
 - No sample exhaustion issues
-- Better probe quality (hard negatives)
+- Better lens quality (hard negatives)
 
 ### Testing
 
@@ -195,7 +195,7 @@ Abstract (Layer 0)
     └── ShapeAttribute (Layer 2) ← nephew (NEGATIVE!)
 ```
 
-**Abstract probe training**:
+**Abstract lens training**:
 - Positives: Abstract's synsets + Quantity's synsets + Proposition's synsets + Attribute's synsets
 - Negatives: ConstantQuantity, PhysicalQuantity, Accusation, Agreement, ColorAttribute, ShapeAttribute, ... (hundreds more)
 
@@ -211,7 +211,7 @@ Abstract (Layer 0)
 
 ## Credit
 
-This solution was proposed by the user during analysis of the hierarchical training experiment results. The insight that "nephews are graph-close hard negatives" completely solves the negative sample exhaustion problem while improving probe quality.
+This solution was proposed by the user during analysis of the hierarchical training experiment results. The insight that "nephews are graph-close hard negatives" completely solves the negative sample exhaustion problem while improving lens quality.
 
 ## References
 

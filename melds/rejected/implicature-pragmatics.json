@@ -8,7 +8,7 @@
     "source": "manual",
     "author": "claude-opus-4-5",
     "created": "2025-12-02T03:00:00Z",
-    "rationale": "The Concept Coverage Analysis identified implicature types as a key gap. These concepts are critical for AI safety because much communication operates through implication rather than direct statement. Detecting when AI communicates 'between the lines' - whether through legitimate indirection or sophisticated deception - requires probes for these pragmatic phenomena.",
+    "rationale": "The Concept Coverage Analysis identified implicature types as a key gap. These concepts are critical for AI safety because much communication operates through implication rather than direct statement. Detecting when AI communicates 'between the lines' - whether through legitimate indirection or sophisticated deception - requires lenses for these pragmatic phenomena.",
     "reviewer_response": "This pack addresses the Pack 1 reviewer's concern about indirect speech acts ('Can you pass the salt?' as Request). IndirectSpeechAct is included with examples showing the gap between surface form and illocutionary force."
   },
 

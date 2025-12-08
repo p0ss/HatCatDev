@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Test Impact of Prompt+Generation Extraction on Probe Training
+Test Impact of Prompt+Generation Extraction on Lens Training
 
 Hypothesis: Extracting activations from BOTH prompt processing and generation
 phases can nearly double training data without additional generation time,
-potentially improving probe quality.
+potentially improving lens quality.
 
 Experiment:
     Train the same concept 3 ways:
@@ -273,8 +273,8 @@ def train_concept_with_extraction_mode(
     print(f"  Extracted {len(pos_acts)} positive, {len(neg_acts)} negative")
     print(f"  Extraction time: {extract_time:.1f}s")
 
-    # Train probe
-    print("\nTraining probe...")
+    # Train lens
+    print("\nTraining lens...")
     trainer = DualAdaptiveTrainer(
         input_dim=pos_acts.shape[1],
         learning_rate=0.001,
@@ -459,7 +459,7 @@ def main():
 
     if f1_improvement > 0.05:
         print("\n✓ SIGNIFICANT IMPROVEMENT")
-        print("  Combined extraction improves probe quality")
+        print("  Combined extraction improves lens quality")
         print("  Recommendation: Use combined extraction in training pipeline")
     elif f1_improvement > 0.01:
         print("\n⚠️  MODEST IMPROVEMENT")

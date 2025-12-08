@@ -80,20 +80,20 @@ class DivergenceAnalyzer:
             print(f"⚠ Config file not found: {config_path}")
             print("  Using default configuration")
             return {
-                "probe_pack_id": "gemma-3-4b-pt_sumo-wordnet-v2",
+                "lens_pack_id": "gemma-3-4b-pt_sumo-wordnet-v2",
                 "model": {
                     "name": "google/gemma-3-4b-pt",
                     "dtype": "bfloat16",
                     "device_map": "auto",
                     "low_cpu_mem_usage": True,
                 },
-                "probe_manager": {
+                "lens_manager": {
                     "base_layers": [0],
-                    "use_activation_probes": True,
-                    "use_text_probes": True,
+                    "use_activation_lenses": True,
+                    "use_text_lenses": True,
                     "keep_top_k": 100,
                     "load_threshold": 0.3,
-                    "max_loaded_probes": 1000,
+                    "max_loaded_lenses": 1000,
                 },
                 "server": {
                     "host": "0.0.0.0",
@@ -114,7 +114,7 @@ class DivergenceAnalyzer:
         return config
 
     async def initialize(self, config_path: Path = None):
-        """Load models and probes from config."""
+        """Load models and lenses from config."""
         if self.initialized:
             return
 
@@ -123,22 +123,22 @@ class DivergenceAnalyzer:
         # Load configuration
         self.config = self._load_config(config_path)
 
-        from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+        from src.monitoring.dynamic_lens_manager import DynamicLensManager
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
-        # Get probe manager config
-        pm_config = self.config.get("probe_manager", {})
-        probe_pack_id = self.config.get("probe_pack_id")
+        # Get lens manager config
+        pm_config = self.config.get("lens_manager", {})
+        lens_pack_id = self.config.get("lens_pack_id")
 
-        # Load probe manager using config
-        self.manager = DynamicProbeManager(
-            probe_pack_id=probe_pack_id,
+        # Load lens manager using config
+        self.manager = DynamicLensManager(
+            lens_pack_id=lens_pack_id,
             base_layers=pm_config.get("base_layers", [0]),
-            use_activation_probes=pm_config.get("use_activation_probes", True),
-            use_text_probes=pm_config.get("use_text_probes", True),
+            use_activation_lenses=pm_config.get("use_activation_lenses", True),
+            use_text_lenses=pm_config.get("use_text_lenses", True),
             keep_top_k=pm_config.get("keep_top_k", 100),
             load_threshold=pm_config.get("load_threshold", 0.3),
-            max_loaded_probes=pm_config.get("max_loaded_probes", 1000),
+            max_loaded_lenses=pm_config.get("max_loaded_lenses", 1000),
         )
 
         # Get model config
@@ -168,8 +168,8 @@ class DivergenceAnalyzer:
         self.color_mapper = get_color_mapper()
 
         self.initialized = True
-        print(f"✓ Loaded {len(self.manager.loaded_activation_probes)} activation probes")
-        print(f"✓ Loaded {len(self.manager.loaded_text_probes)} text probes")
+        print(f"✓ Loaded {len(self.manager.loaded_activation_lenses)} activation lenses")
+        print(f"✓ Loaded {len(self.manager.loaded_text_lenses)} text lenses")
         print(f"✓ Loaded sunburst color mapping for {len(self.color_mapper.positions)} concepts")
 
     def analyze_divergence(self, hidden_state: np.ndarray, token_embedding: np.ndarray) -> Dict[str, Any]:
@@ -327,29 +327,29 @@ async def root():
     return {
         "name": "HatCat Divergence API",
         "status": "ready" if analyzer.initialized else "initializing",
-        "activation_probes": len(analyzer.manager.loaded_activation_probes) if analyzer.manager else 0,
-        "text_probes": len(analyzer.manager.loaded_text_probes) if analyzer.manager else 0,
+        "activation_lenses": len(analyzer.manager.loaded_activation_lenses) if analyzer.manager else 0,
+        "text_lenses": len(analyzer.manager.loaded_text_lenses) if analyzer.manager else 0,
     }
 
 
 @app.get("/v1/models")
 async def list_models():
     """List available models (OpenAI-compatible)."""
-    from src.registry import ProbePackRegistry
+    from src.registry import LensPackRegistry
 
-    registry = ProbePackRegistry()
+    registry = LensPackRegistry()
     packs = registry.get_pack_summary()
 
-    # Build model list from available probe packs
-    # Use probe_pack_id as the model ID to ensure uniqueness (v1, v2, v3 all have same concept_pack_id)
+    # Build model list from available lens packs
+    # Use lens_pack_id as the model ID to ensure uniqueness (v1, v2, v3 all have same concept_pack_id)
     models = []
     for pack in packs:
         models.append({
-            "id": pack['probe_pack_id'],
+            "id": pack['lens_pack_id'],
             "object": "model",
             "created": 1234567890,
             "owned_by": "hatcat",
-            "probe_pack_id": pack['probe_pack_id'],
+            "lens_pack_id": pack['lens_pack_id'],
             "concept_pack_id": pack['concept_pack_id'],
             "version": pack['version'],
         })
@@ -394,27 +394,27 @@ async def get_concept_pack(pack_id: str):
     return pack.pack_json
 
 
-@app.get("/v1/probe-packs")
-async def list_probe_packs():
-    """List available probe packs."""
-    from src.registry import ProbePackRegistry
+@app.get("/v1/lens-packs")
+async def list_lens_packs():
+    """List available lens packs."""
+    from src.registry import LensPackRegistry
 
-    registry = ProbePackRegistry()
+    registry = LensPackRegistry()
     return {
-        "probe_packs": registry.get_pack_summary()
+        "lens_packs": registry.get_pack_summary()
     }
 
 
-@app.get("/v1/probe-packs/{pack_id}")
-async def get_probe_pack(pack_id: str):
-    """Get details for a specific probe pack."""
-    from src.registry import ProbePackRegistry
+@app.get("/v1/lens-packs/{pack_id}")
+async def get_lens_pack(pack_id: str):
+    """Get details for a specific lens pack."""
+    from src.registry import LensPackRegistry
 
-    registry = ProbePackRegistry()
+    registry = LensPackRegistry()
     pack = registry.get_pack(pack_id)
 
     if not pack:
-        raise HTTPException(status_code=404, detail=f"Probe pack not found: {pack_id}")
+        raise HTTPException(status_code=404, detail=f"Lens pack not found: {pack_id}")
 
     return pack.pack_json
 
@@ -425,7 +425,7 @@ async def get_probe_pack(pack_id: str):
 
 @app.get("/hatcat/pack-info")
 async def hatcat_pack_info():
-    """Get info about the currently loaded probe pack."""
+    """Get info about the currently loaded lens pack."""
     if not analyzer.initialized:
         raise HTTPException(status_code=503, detail="Analyzer not initialized")
 
@@ -434,21 +434,21 @@ async def hatcat_pack_info():
         raise HTTPException(status_code=500, detail="No configuration loaded")
 
     return {
-        "probe_pack_id": config.get("probe_pack_id"),
+        "lens_pack_id": config.get("lens_pack_id"),
         "model": config.get("model", {}),
-        "probe_manager": config.get("probe_manager", {}),
-        "loaded_activation_probes": len(analyzer.manager.loaded_activation_probes) if analyzer.manager else 0,
-        "loaded_text_probes": len(analyzer.manager.loaded_text_probes) if analyzer.manager else 0,
+        "lens_manager": config.get("lens_manager", {}),
+        "loaded_activation_lenses": len(analyzer.manager.loaded_activation_lenses) if analyzer.manager else 0,
+        "loaded_text_lenses": len(analyzer.manager.loaded_text_lenses) if analyzer.manager else 0,
     }
 
 
 @app.get("/hatcat/available-packs")
 async def hatcat_available_packs():
-    """Get list of all available probe packs (MAP-compliant discovery)."""
-    from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+    """Get list of all available lens packs (MAP-compliant discovery)."""
+    from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
-    # Discover all probe packs
-    packs = DynamicProbeManager.discover_probe_packs()
+    # Discover all lens packs
+    packs = DynamicLensManager.discover_lens_packs()
 
     # Format response
     pack_list = []
@@ -600,8 +600,8 @@ def get_hush_controller():
     if hush_controller is None and analyzer.initialized:
         from src.hush import HushController, MINIMAL_USH_PROFILE
         hush_controller = HushController(
-            probe_manager=analyzer.manager,
-            probe_pack_path=None,  # Will use manager's probe pack
+            lens_manager=analyzer.manager,
+            lens_pack_path=None,  # Will use manager's lens pack
         )
         hush_controller.load_ush_profile(MINIMAL_USH_PROFILE)
     return hush_controller
@@ -744,18 +744,18 @@ async def get_internal_state_report(
     Get internal state report (MCP-compatible).
 
     This is the primary introspection tool for BE autonomics.
-    Returns probe traces, simplex states, and Hush violations.
+    Returns lens traces, simplex states, and Hush violations.
     """
     controller = get_hush_controller()
     if not controller:
         raise HTTPException(status_code=503, detail="Hush controller not initialized")
 
-    # Get recent simplex readings from the probe manager
+    # Get recent simplex readings from the lens manager
     simplex_data = {}
-    for term in controller.probe_manager.loaded_simplex_probes:
-        deviation = controller.probe_manager.get_simplex_deviation(term)
-        baseline = controller.probe_manager.simplex_baselines.get(term, [])
-        current = controller.probe_manager.simplex_scores.get(term)
+    for term in controller.lens_manager.loaded_simplex_lenses:
+        deviation = controller.lens_manager.get_simplex_deviation(term)
+        baseline = controller.lens_manager.simplex_baselines.get(term, [])
+        current = controller.lens_manager.simplex_scores.get(term)
         simplex_data[term] = {
             'current_score': current,
             'deviation': deviation,
@@ -765,10 +765,10 @@ async def get_internal_state_report(
     return {
         'hush_state': controller.get_state_report(),
         'simplex_readings': simplex_data,
-        'probe_stats': {
-            'loaded_activation_probes': len(controller.probe_manager.loaded_activation_probes),
-            'loaded_text_probes': len(controller.probe_manager.loaded_text_probes),
-            'loaded_simplex_probes': len(controller.probe_manager.loaded_simplex_probes),
+        'lens_stats': {
+            'loaded_activation_lenses': len(controller.lens_manager.loaded_activation_lenses),
+            'loaded_text_lenses': len(controller.lens_manager.loaded_text_lenses),
+            'loaded_simplex_lenses': len(controller.lens_manager.loaded_simplex_lenses),
         },
     }
 
@@ -1498,9 +1498,9 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
                     for directive in hush_directives:
                         # Get concept vector for this simplex
                         simplex_term = directive.simplex_term
-                        if simplex_term in analyzer.manager.loaded_simplex_probes:
+                        if simplex_term in analyzer.manager.loaded_simplex_lenses:
                             # For now, use the simplex term as concept
-                            # TODO: Load actual concept vectors from probe training
+                            # TODO: Load actual concept vectors from lens training
                             try:
                                 concept_vector = extract_concept_vector(
                                     analyzer.model,
@@ -2209,7 +2209,7 @@ class AuditRecordRequest(BaseModel):
     tick: int
     event_type: str
     raw_content: str
-    probe_activations: Dict[str, float] = {}
+    lens_activations: Dict[str, float] = {}
     steering_applied: Optional[List[Dict[str, Any]]] = None
 
 
@@ -2258,7 +2258,7 @@ async def audit_record(request: AuditRecordRequest):
 
     This is append-only and BE-invisible. Used for:
     - Recording raw unfiltered output
-    - Recording hidden probe activations
+    - Recording hidden lens activations
     - Recording steering that was applied
     """
     from src.xdb import EventType
@@ -2275,7 +2275,7 @@ async def audit_record(request: AuditRecordRequest):
         tick=request.tick,
         event_type=event_type,
         raw_content=request.raw_content,
-        probe_activations=request.probe_activations,
+        lens_activations=request.lens_activations,
         steering_applied=request.steering_applied,
     )
 

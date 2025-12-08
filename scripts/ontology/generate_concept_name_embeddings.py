@@ -111,7 +111,7 @@ def main():
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("probe_packs/gemma-3-4b-pt_sumo-wordnet-v1"),
+        default=Path("lens_packs/gemma-3-4b-pt_sumo-wordnet-v1"),
         help="Output directory for embeddings",
     )
     parser.add_argument(

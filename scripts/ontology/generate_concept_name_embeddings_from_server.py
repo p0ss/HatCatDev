@@ -12,10 +12,10 @@ import torch
 from transformers import AutoTokenizer
 from tqdm import tqdm
 
-def load_concept_mapping(layer: int, probe_pack_dir: Path) -> dict:
+def load_concept_mapping(layer: int, lens_pack_dir: Path) -> dict:
     """Load concept names from existing centroid embeddings."""
     # Get concept names from existing centroids
-    layer_dir = probe_pack_dir / f"layer{layer}" / "embedding_centroids"
+    layer_dir = lens_pack_dir / f"layer{layer}" / "embedding_centroids"
     if not layer_dir.exists():
         raise ValueError(f"Layer directory not found: {layer_dir}")
 
@@ -127,7 +127,7 @@ def main():
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("probe_packs/gemma-3-4b-pt_sumo-wordnet-v1"),
+        default=Path("lens_packs/gemma-3-4b-pt_sumo-wordnet-v1"),
         help="Output directory for embeddings",
     )
     parser.add_argument(

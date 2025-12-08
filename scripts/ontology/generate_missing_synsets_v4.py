@@ -311,7 +311,7 @@ def main():
     print("=" * 80)
     print(f"\nNext steps:")
     print(f"1. Verify coverage: poetry run python /tmp/verify_v4_integrity.py")
-    print(f"2. Train probes: poetry run python scripts/train_sumo_classifiers.py")
+    print(f"2. Train lenses: poetry run python scripts/train_sumo_classifiers.py")
 
 
 if __name__ == '__main__':

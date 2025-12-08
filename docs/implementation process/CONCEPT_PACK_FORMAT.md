@@ -494,16 +494,16 @@ hatcat-cli search "medical"
 hatcat-cli install medical-terminology-v1
 ```
 
-### Probe Pack Integration
+### Lens Pack Integration
 
-Link concept packs with trained probe packs:
+Link concept packs with trained lens packs:
 
 ```json
 {
-  "trained_probes": {
+  "trained_lenses": {
     "model": "google/gemma-3-4b-pt",
     "validation_mode": "falloff",
-    "probe_pack_url": "https://registry/ai-safety-probes-v1.tar.gz"
+    "lens_pack_url": "https://registry/ai-safety-lenses-v1.tar.gz"
   }
 }
 ```

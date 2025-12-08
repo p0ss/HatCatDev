@@ -14,13 +14,13 @@ import sys
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.monitoring.dynamic_probe_manager import DynamicProbeManager
+from src.monitoring.dynamic_lens_manager import DynamicLensManager
 
 
 class TokenTimelineRecorder:
     """Records concept activations per token for visualization"""
 
-    def __init__(self, manager: DynamicProbeManager, target_layer_idx: int = 15):
+    def __init__(self, manager: DynamicLensManager, target_layer_idx: int = 15):
         self.manager = manager
         self.target_layer_idx = target_layer_idx
         self.timeline = []
@@ -84,7 +84,7 @@ def generate_sparkline(values: list, width: int = 40) -> str:
 def generate_with_monitoring(prompt: str, max_tokens: int = 50):
     """Generate text with per-token monitoring"""
 
-    print("Loading model and probes...")
+    print("Loading model and lenses...")
     tokenizer = AutoTokenizer.from_pretrained('google/gemma-3-4b-pt', local_files_only=True)
     model = AutoModelForCausalLM.from_pretrained(
         'google/gemma-3-4b-pt',
@@ -94,11 +94,11 @@ def generate_with_monitoring(prompt: str, max_tokens: int = 50):
     )
     model.eval()
 
-    # Initialize probe manager - match old test_temporal_continuity_dynamic settings
-    manager = DynamicProbeManager(
-        probe_pack_id='gemma-3-4b-pt_sumo-wordnet-v1',
+    # Initialize lens manager - match old test_temporal_continuity_dynamic settings
+    manager = DynamicLensManager(
+        lens_pack_id='gemma-3-4b-pt_sumo-wordnet-v1',
         base_layers=[3],  # OLD SETTING: base_layer=3 (default in old script)
-        max_loaded_probes=500,
+        max_loaded_lenses=500,
         load_threshold=0.3,  # OLD SETTING: parent_threshold=0.3
         aggressive_pruning=False  # OLD SETTING: no aggressive pruning
     )

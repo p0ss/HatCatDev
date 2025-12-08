@@ -13,7 +13,7 @@ Should parent concepts include their children's synsets as positive training exa
 - Example: "Physical" should activate for both its own synsets AND all "Object", "Process", etc. synsets
 - This aligns with the hierarchical suppression strategy (parents activate, then get suppressed by children)
 
-**Prediction**: Probes trained with children synsets will:
+**Prediction**: Lenses trained with children synsets will:
 - Have higher calibration accuracy
 - Better detect child concept instances
 - Enable effective hierarchical suppression
@@ -109,12 +109,12 @@ Recursive Descendants: 100+ synsets (all Object, Process, etc. descendants)
    - Document synset sources
 
 2. **Training Phase**
-   - Train 3 sets of Layer 0 probes (one per condition)
+   - Train 3 sets of Layer 0 lenses (one per condition)
    - Use identical hyperparameters (adaptive training, falloff validation)
    - Record training time and sample requirements
 
 3. **Calibration Phase**
-   - Test each probe set with standardized calibration:
+   - Test each lens set with standardized calibration:
      - 10 positive (concept's own synsets)
      - 10 sibling (other Layer 0 concepts)
      - 10 child (direct children's synsets)
@@ -212,9 +212,9 @@ Recursive Descendants: 100+ synsets (all Object, Process, etc. descendants)
 ## Output Artifacts
 
 1. **Experimental Results**: `results/hierarchical_training_experiment/`
-   - Baseline probes
-   - Direct children probes
-   - Recursive descendants probes
+   - Baseline lenses
+   - Direct children lenses
+   - Recursive descendants lenses
    - Calibration results for each
 
 2. **Analysis Report**: `results/hierarchical_training_experiment/analysis.json`

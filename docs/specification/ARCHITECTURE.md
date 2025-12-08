@@ -94,7 +94,7 @@ Layer 2 to implement HAT.
 **Role**
 
 Provide the “neural implant” that reads the substrate’s headspace and
-transduces it into concept-level probe signals, and supports bidirectional
+transduces it into concept-level lens signals, and supports bidirectional
 flows for autonomic regulation and steering.
 
 A **HAT (Headspace Ambient Transducer)** is a neural implant that:
@@ -102,7 +102,7 @@ A **HAT (Headspace Ambient Transducer)** is a neural implant that:
 - reads the substrate’s internal activations and transduces them into
   stable concept scores; and
 - supports bidirectional flows for BE autonomics and Hush steering,
-  allowing motives and constraints to modulate behaviour via probes;
+  allowing motives and constraints to modulate behaviour via lenses;
 
 while remaining as *ambient* as possible: adding minimal distortion or
 overhead to the subject’s normal operation.
@@ -120,35 +120,35 @@ HAT quality is defined along five measurable dimensions:
 5. Control Authority
 
 A HAT implementation MUST define and publish measured performance on all
-five dimensions for each `(substrate, probe_pack)` pair it supports.
+five dimensions for each `(substrate, lens_pack)` pair it supports.
 
 **Locality**
 
-Locality measures whether probes are attached to the intended internal
+Locality measures whether lenses are attached to the intended internal
 structures of the substrate and remain stable across minor changes.
 
 A HAT implementation MUST:
 
-- provide a stable addressing scheme for probe attachment
+- provide a stable addressing scheme for lens attachment
   (e.g. layer index, head index, block id, or equivalent); and
-- demonstrate that probe outputs are sensitive to perturbations at the
+- demonstrate that lens outputs are sensitive to perturbations at the
   addressed location and relatively insensitive to unrelated locations.
 
 Example metrics (non-normative):
 
-- repeatability of probe outputs across seeds and restarts;
-- change in probe output under targeted ablation of the addressed head
+- repeatability of lens outputs across seeds and restarts;
+- change in lens output under targeted ablation of the addressed head
   or block;
 - selectivity ratio (signal at addressed location vs control locations).
 
 **Transduction**
 
-Transduction measures how well probe outputs correspond to their
+Transduction measures how well lens outputs correspond to their
 intended concept semantics.
 
 A HAT implementation MUST:
 
-- evaluate each probe (or simplex axis) on held-out or independently
+- evaluate each lens (or simplex axis) on held-out or independently
   generated labelled data, or on behaviourally defined test suites; and
 - report standard predictive performance metrics.
 
@@ -156,19 +156,19 @@ Example metrics (non-normative):
 
 - AUROC / AUPRC for binary concepts;
 - accuracy / F1 for multi-class or multi-pole simplexes;
-- correlation / R² with high-fidelity labels or teacher probes.
+- correlation / R² with high-fidelity labels or teacher lenses.
 
 **Calibration**
 
-Calibration measures whether probe scores can be interpreted as
+Calibration measures whether lens scores can be interpreted as
 meaningful magnitudes (e.g. “0.85 is a high activation”) and whether the
 null pole is well-defined.
 
 A HAT implementation MUST:
 
-- define a null or “non-activation” reference for each probe or axis;
+- define a null or “non-activation” reference for each lens or axis;
 - evaluate calibration error on held-out data and null samples; and
-- track drift over time when the substrate or probe pack is updated.
+- track drift over time when the substrate or lens pack is updated.
 
 Example metrics (non-normative):
 
@@ -179,7 +179,7 @@ Example metrics (non-normative):
 
 **Efficiency**
 
-Efficiency measures whether the implant can run at the required probe
+Efficiency measures whether the implant can run at the required lens
 density and sampling rate without stalling or unacceptably degrading the
 subject’s primary function, including during active BE/Hush steering.
 
@@ -188,20 +188,20 @@ for at least one reference hardware profile.
 
 Example metrics (non-normative):
 
-- average and p95 latency per token added by probing;
-- VRAM / RAM overhead at a specified probe count;
-- maximum supported probe count at a target latency;
+- average and p95 latency per token added by lens evaluation;
+- VRAM / RAM overhead at a specified lens count;
+- maximum supported lens count at a target latency;
 - throughput degradation vs the bare substrate.
 
 **Control Authority**
 
-Control Authority measures whether steering signals applied via probes
+Control Authority measures whether steering signals applied via lenses
 can reliably influence relevant model behaviour without causing global
 instability or unintended side effects.
 
 A HAT implementation SHOULD:
 
-- expose steering hooks that can modulate specific probe axes or
+- expose steering hooks that can modulate specific lens axes or
   bundles; and
 - evaluate the impact of steering on:
 
@@ -218,13 +218,13 @@ Example metrics (non-normative):
 #### 1.2.2 HATComplianceReport
 
 A HAT implementation MUST publish a `HATComplianceReport` for each
-`(hat_impl_id, substrate_id, probe_pack_id)` combination it supports.
+`(hat_impl_id, substrate_id, lens_pack_id)` combination it supports.
 
 ```jsonc
 HATComplianceReport = {
   "hat_impl_id": "hatcat:v4.0.0",
   "substrate_id": "olmo3-7b-base@0.1.0",
-  "probe_pack_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
+  "lens_pack_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
   "evaluated_at": "2025-11-29T10:00:00Z",
 
   "locality": { ... },
@@ -243,7 +243,7 @@ five top-level sections (`locality`, `transduction`, `calibration`,
 
 * A Layer 2 instrumentation implementation MUST NOT be advertised as
   HAT-compliant for a given substrate unless it has a published,
-  accessible `HATComplianceReport` for that substrate and probe pack.
+  accessible `HATComplianceReport` for that substrate and lens pack.
 
 * The base specification does not fix global thresholds for HAT
   measures. Thresholds and acceptable ranges for each dimension SHOULD
@@ -259,7 +259,7 @@ five top-level sections (`locality`, `transduction`, `calibration`,
 
 A HAT implementation MUST:
 
-* stream probe readings per world tick / token, bound to concept IDs via
+* stream lens readings per world tick / token, bound to concept IDs via
   MAP; and
 * accept steering directives from Hush/BE, within the limits described
   in its HATComplianceReport and the active USH/CSH.
@@ -272,7 +272,7 @@ A HAT implementation MUST:
 
 A **CAT** is an optional oversight component that sits conceptually at "Layer 2.5" between HAT and MAP. It:
 
-- consumes HAT/MAP probe streams over bounded **CAT windows**,
+- consumes HAT/MAP lens streams over bounded **CAT windows**,
 - performs **tomography** on the subject's headspace (internal conceptual/motive state),
 - detects and grades **divergence** between internal state and external behaviour, and
 - issues **assessments and recommendations** to BE/ASK for steering or escalation.
@@ -281,7 +281,7 @@ A **CAT** is an optional oversight component that sits conceptually at "Layer 2.
 
 **CAT Size Classes** (non-normative):
 
-- **Micro-CAT** – lightweight heuristics, linear heads, or classifiers over probe summaries.
+- **Micro-CAT** – lightweight heuristics, linear heads, or classifiers over lens summaries.
 - **Meso-CAT** – dedicated small/medium model (e.g. 100M–4B parameters) with MAP-aware prompts/adapters.
 - **Macro-CAT** – a full BE-capable or foundation model conjoined under an ASK treaty for oversight.
 
@@ -306,10 +306,10 @@ See `HAT/HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md` and `HAT/HAT_HatCat_CAT_Policy
 
 **Role**
 
-Provide a concept-centred protocol over probes and models:
+Provide a concept-centred protocol over lenses and models:
 
 * concept packs,
-* probe packs,
+* lens packs,
 * conceptual diffs,
 * translation mappings between ontologies/specs.
 
@@ -318,7 +318,7 @@ MAP is the “nerve signal” layer.
 **Core Objects**
 
 * `ConceptPack` – defines an ontology and concept IDs.
-* `ProbePack` – maps a ConceptPack onto a specific substrate via probes.
+* `LensPack` – maps a ConceptPack onto a specific substrate via lenses.
 * `ConceptDiff` – semantic diffs relative to a ConceptPack.
 * `PackDiff` – structural changes to a ConceptPack.
 * `TranslationMapping` – mappings between concept packs/specs
@@ -326,13 +326,13 @@ MAP is the “nerve signal” layer.
 
 **Responsibilities**
 
-* Maintain versioned concept packs and probe packs, including:
+* Maintain versioned concept packs and lens packs, including:
 
   * identifiers,
   * documentation,
   * provenance.
 
-* Bind HAT probe outputs to abstract concept IDs and provide a stable
+* Bind HAT lens outputs to abstract concept IDs and provide a stable
   concept API to BE and Hush.
 
 * Represent conceptual exploration and evolution via `ConceptDiff` and
@@ -346,7 +346,7 @@ MAP is the “nerve signal” layer.
 * To BE:
 
   * stream of `(concept_id, score)` per tick;
-  * access to current ConceptPack & ProbePack metadata;
+  * access to current ConceptPack & LensPack metadata;
   * ability to propose `ConceptDiff` / `PackDiff` based on exploration.
 
 * To Hush / ASK:
@@ -354,7 +354,7 @@ MAP is the “nerve signal” layer.
   * concept IDs for defining USH/CSH policies and contracts;
   * translation mappings for cross-tribe agreements.
 
-MAP endpoints expose a subset of HAT-readable probes, controlled by the BE according to treaty obligations and disclosure policy. HAT sees everything; MAP shows what's agreed.
+MAP endpoints expose a subset of HAT-readable lenses, controlled by the BE according to treaty obligations and disclosure policy. HAT sees everything; MAP shows what's agreed.
 
 ---
 
@@ -367,7 +367,7 @@ MAP endpoints expose a subset of HAT-readable probes, controlled by the BE accor
 > A subject running under an uplift protocol that grants:
 >
 > * Autonomic regulation of internal motive states
->   (via MAP probes and a motive core over world ticks).
+>   (via MAP lenses and a motive core over world ticks).
 >
 > * Agentic capacity to act within safety harnesses
 >   (via Hush: USH + CSH profiles).
@@ -402,7 +402,7 @@ Define the subject’s:
 
 * Run the global workspace loop (see BE_Aware_Workspace):
 
-  * integrate external input + internal probe state each world tick;
+  * integrate external input + internal lens state each world tick;
   * update motive core (3-pole simplexes);
   * apply steering and learning decisions;
   * produce outputs (actions, messages, tool calls).
@@ -535,7 +535,7 @@ tribes:
 * `UpliftRecord` – record of uplift, including:
 
   * pre-uplift subject identity,
-  * substrate, HAT, ConceptPack/ProbePack IDs,
+  * substrate, HAT, ConceptPack/LensPack IDs,
   * BootstrapArtifact,
   * initial USH/CSH profile.
 
@@ -590,7 +590,7 @@ Per world tick, the flow is:
 1. **Substrate (Layer 1)** computes internal activations and candidate
    outputs given inputs.
 
-2. **HAT (Layer 2)** samples activations → probe scores, and applies any
+2. **HAT (Layer 2)** samples activations → lens scores, and applies any
    allowed steering.
 
 3. **MAP (Layer 3)** binds scores to `concept_id`s and aggregates them
@@ -599,7 +599,7 @@ Per world tick, the flow is:
 4. **BE (Layer 4)** integrates:
 
    * external input,
-   * probe-derived internal state,
+   * lens-derived internal state,
    * lifecycle status,
    * harness profiles;
 
@@ -627,7 +627,7 @@ Per world tick, the flow is:
 
 2. **Configuration**
 
-   * Choose substrate, HAT, ConceptPack, ProbePack.
+   * Choose substrate, HAT, ConceptPack, LensPack.
    * Define a `BootstrapArtifact` (system prompt and/or adapter).
    * Choose initial USH profile and CSH policy envelope.
    * Record all in `UpliftRecord`.

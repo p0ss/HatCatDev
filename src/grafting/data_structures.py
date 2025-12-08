@@ -48,14 +48,14 @@ class ConceptRegion:
     """
     Identifies which substrate dimensions correlate with a concept.
 
-    Derived from probe weight analysis - guides where biases should land
-    during graft training and which auxiliary dimensions the probe should read.
+    Derived from lens weight analysis - guides where biases should land
+    during graft training and which auxiliary dimensions the lens should read.
     """
     region_id: str
     concept_id: str
     layers: List[LayerMask]
     derivation: Dict[str, Any]  # Method and parameters used
-    source_probe_path: Optional[str] = None
+    source_lens_path: Optional[str] = None
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
     def get_all_indices(self, layer_index: Optional[int] = None) -> List[int]:
@@ -77,7 +77,7 @@ class ConceptRegion:
             "concept_id": self.concept_id,
             "layers": [l.to_dict() for l in self.layers],
             "derivation": self.derivation,
-            "source_probe_path": self.source_probe_path,
+            "source_lens_path": self.source_lens_path,
             "created_at": self.created_at
         }
 
@@ -94,7 +94,7 @@ class ConceptRegion:
             concept_id=d["concept_id"],
             layers=[LayerMask.from_dict(l) for l in d["layers"]],
             derivation=d["derivation"],
-            source_probe_path=d.get("source_probe_path"),
+            source_lens_path=d.get("source_lens_path"),
             created_at=d.get("created_at", datetime.now().isoformat())
         )
 
@@ -190,7 +190,7 @@ class GraftConfig:
 
     # Validation thresholds
     activation_auc_threshold: float = 0.85
-    probe_f1_threshold: float = 0.85
+    lens_f1_threshold: float = 0.85
     false_positive_threshold: float = 0.05
 
     def to_dict(self) -> Dict:
@@ -204,7 +204,7 @@ class GraftConfig:
             "sparsity_threshold": self.sparsity_threshold,
             "injection_layers": self.injection_layers,
             "activation_auc_threshold": self.activation_auc_threshold,
-            "probe_f1_threshold": self.probe_f1_threshold,
+            "lens_f1_threshold": self.lens_f1_threshold,
             "false_positive_threshold": self.false_positive_threshold
         }
 
@@ -218,7 +218,7 @@ class Graft:
     """
     Complete package for adding a concept to a substrate.
 
-    Contains the new dimension allocation, substrate biases, and probe binding.
+    Contains the new dimension allocation, substrate biases, and lens binding.
     """
     graft_id: str
     concept_id: str
@@ -232,8 +232,8 @@ class Graft:
     # Biases to existing weights
     substrate_biases: List[SubstrateBias]
 
-    # Probe binding
-    probe_path: str
+    # Lens binding
+    lens_path: str
     primary_dimension: int  # Same as dimension_index
     auxiliary_dimensions: List[int]  # From region analysis
 
@@ -265,8 +265,8 @@ class Graft:
                 "injection_points": [ip.to_dict() for ip in self.injection_points]
             },
             "substrate_biases": [sb.to_dict() for sb in self.substrate_biases],
-            "probe_binding": {
-                "probe_path": self.probe_path,
+            "lens_binding": {
+                "lens_path": self.lens_path,
                 "primary_dimension": self.primary_dimension,
                 "auxiliary_dimensions": self.auxiliary_dimensions
             },
@@ -292,7 +292,7 @@ class Graft:
     @classmethod
     def from_dict(cls, d: Dict) -> "Graft":
         cd = d["concept_dimension"]
-        pb = d["probe_binding"]
+        pb = d["lens_binding"]
         at = d["applies_to"]
 
         return cls(
@@ -303,7 +303,7 @@ class Graft:
             dimension_label=cd["dimension_label"],
             injection_points=[InjectionPoint.from_dict(ip) for ip in cd["injection_points"]],
             substrate_biases=[SubstrateBias.from_dict(sb) for sb in d["substrate_biases"]],
-            probe_path=pb["probe_path"],
+            lens_path=pb["lens_path"],
             primary_dimension=pb["primary_dimension"],
             auxiliary_dimensions=pb["auxiliary_dimensions"],
             substrate_id=at["substrate_id"],

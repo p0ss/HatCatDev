@@ -130,7 +130,7 @@ Expected performance:
 
 If successful, you can:
 1. Compare with classifier directions (once trained)
-2. Use for validating probe quality
+2. Use for validating lens quality
 3. Use as gold standard for concept extraction
 
 If failed, check:

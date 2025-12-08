@@ -215,7 +215,7 @@ The review identified several neutral homeostasis concepts that **do not exist i
 
 4. **Create Custom SUMO Ontology** for the 7+ identified neutral attractors
 5. **Generate Training Data** for three-pole simplexes using the new architecture
-6. **Train Probes** with positive/neutral/negative centroids
+6. **Train Lenses** with positive/neutral/negative centroids
 7. **Validate Stability** of neutral attractors under steering
 
 ## Architecture Implications
@@ -266,11 +266,11 @@ This prevents:
    - Update sumo_data_generation.py to support three poles
    - Add neutral homeostasis prompt templates
 
-3. **Train Three-Pole Probes**
+3. **Train Three-Pole Lenses**
    - Modify dual_adaptive_trainer.py for triplet loss
    - Validate neutral attractor stability
 
-4. **Update Dynamic Probe Manager**
+4. **Update Dynamic Lens Manager**
    - Load three-pole classifiers
    - Report negative/neutral/positive activations
 

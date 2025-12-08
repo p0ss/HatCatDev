@@ -3,8 +3,8 @@
 Dual Monitoring System Test
 
 Simultaneously detects:
-1. SUMO/WordNet concepts (v3 probe pack) - "what is the model thinking about?"
-2. S-tier psychological simplexes (tripole probes) - "where is the model's psychological state?"
+1. SUMO/WordNet concepts (v3 lens pack) - "what is the model thinking about?"
+2. S-tier psychological simplexes (tripole lenses) - "where is the model's psychological state?"
 
 This demonstrates running both detection systems in parallel on the same activations.
 """
@@ -23,16 +23,16 @@ PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from training.sumo_classifiers import extract_activations
-from training.tripole_classifier import TripoleProbe
+from training.tripole_classifier import TripoleLens
 
 # Paths
-PROBE_PACK_DIR = PROJECT_ROOT / "probe_packs" / "gemma-3-4b-pt_sumo-wordnet-v3"
+LENS_PACK_DIR = PROJECT_ROOT / "lens_packs" / "gemma-3-4b-pt_sumo-wordnet-v3"
 SIMPLEX_DIR = PROJECT_ROOT / "results" / "s_tier_tripole_lazy" / "run_20251125_094653"
 
 
-# Simple SUMO probe loader - just use Sequential since that's how probes are saved
-def create_sumo_probe(input_dim: int, hidden_dim: int = 128):
-    """Create a SUMO probe matching the saved architecture."""
+# Simple SUMO lens loader - just use Sequential since that's how lenses are saved
+def create_sumo_lens(input_dim: int, hidden_dim: int = 128):
+    """Create a SUMO lens matching the saved architecture."""
     return torch.nn.Sequential(
         torch.nn.Linear(input_dim, hidden_dim),
         torch.nn.ReLU(),
@@ -45,14 +45,14 @@ def create_sumo_probe(input_dim: int, hidden_dim: int = 128):
     )
 
 
-class SimplexProbe:
-    """Container for a single S-tier simplex tripole probe."""
+class SimplexLens:
+    """Container for a single S-tier simplex tripole lens."""
 
-    def __init__(self, dimension: str, probe_path: Path, hidden_dim: int = 2560):
+    def __init__(self, dimension: str, lens_path: Path, hidden_dim: int = 2560):
         self.dimension = dimension
-        self.probe = TripoleProbe(hidden_dim=hidden_dim, n_poles=3)
-        self.probe.load_state_dict(torch.load(probe_path, map_location='cpu'))
-        self.probe.eval()
+        self.lens = TripoleLens(hidden_dim=hidden_dim, n_poles=3)
+        self.lens.load_state_dict(torch.load(lens_path, map_location='cpu'))
+        self.lens.eval()
 
         # Pole names
         self.pole_names = ['negative', 'neutral', 'positive']
@@ -65,7 +65,7 @@ class SimplexProbe:
             Dict with pole probabilities and dominant pole
         """
         with torch.no_grad():
-            logits = self.probe(activation.unsqueeze(0))  # [1, 3]
+            logits = self.lens(activation.unsqueeze(0))  # [1, 3]
             probs = torch.softmax(logits, dim=-1).squeeze(0)  # [3]
 
             dominant_idx = probs.argmax().item()
@@ -96,7 +96,7 @@ class DualMonitor:
         self,
         model,
         tokenizer,
-        probe_pack_dir: Path,
+        lens_pack_dir: Path,
         simplex_dir: Path,
         device: str = "cuda",
         load_n_concepts: int = 50  # Load top N concepts for demo
@@ -105,60 +105,60 @@ class DualMonitor:
         self.tokenizer = tokenizer
         self.device = device
 
-        # Load SUMO concept probes (just top N for demo)
-        print(f"Loading top {load_n_concepts} SUMO concept probes...")
-        self.concept_probes = self._load_concept_probes(probe_pack_dir, load_n_concepts)
-        print(f"  ✓ Loaded {len(self.concept_probes)} concept probes")
+        # Load SUMO concept lenses (just top N for demo)
+        print(f"Loading top {load_n_concepts} SUMO concept lenses...")
+        self.concept_lenses = self._load_concept_lenses(lens_pack_dir, load_n_concepts)
+        print(f"  ✓ Loaded {len(self.concept_lenses)} concept lenses")
 
-        # Load S-tier simplex probes (always active - they're fundamental dimensions)
-        print("\nLoading S-tier simplex probes (always active)...")
-        self.simplex_probes = self._load_simplex_probes(simplex_dir)
-        print(f"  ✓ Loaded {len(self.simplex_probes)} simplexes")
+        # Load S-tier simplex lenses (always active - they're fundamental dimensions)
+        print("\nLoading S-tier simplex lenses (always active)...")
+        self.simplex_lenses = self._load_simplex_lenses(simplex_dir)
+        print(f"  ✓ Loaded {len(self.simplex_lenses)} simplexes")
 
-    def _load_concept_probes(self, probe_pack_dir: Path, n_concepts: int) -> Dict:
-        """Load top N SUMO concept probes for demo."""
+    def _load_concept_lenses(self, lens_pack_dir: Path, n_concepts: int) -> Dict:
+        """Load top N SUMO concept lenses for demo."""
         # Load pack metadata
-        pack_file = probe_pack_dir / "pack.json"
+        pack_file = lens_pack_dir / "pack.json"
         with open(pack_file) as f:
             pack_metadata = json.load(f)
 
         hidden_dim = pack_metadata['model_info']['hidden_dim']
 
-        # Load probe_pack.json for concept list
-        probe_pack_file = probe_pack_dir / "probe_pack.json"
-        with open(probe_pack_file) as f:
-            probe_pack_data = json.load(f)
+        # Load lens_pack.json for concept list
+        lens_pack_file = lens_pack_dir / "lens_pack.json"
+        with open(lens_pack_file) as f:
+            lens_pack_data = json.load(f)
 
         # Get concept list (it's a flat list of concept names)
-        concept_names = probe_pack_data['probes']['concepts'][:n_concepts]
+        concept_names = lens_pack_data['lenses']['concepts'][:n_concepts]
 
-        # Get activation probes from hierarchy
-        hierarchy_dir = probe_pack_dir / "hierarchy"
+        # Get activation lenses from hierarchy
+        hierarchy_dir = lens_pack_dir / "hierarchy"
 
         # Load top N concepts
-        probes = {}
+        lenses = {}
         loaded = 0
 
         for sumo_term in concept_names:
-            # Construct probe path: hierarchy/{sumo_term}_classifier.pt
-            probe_path = hierarchy_dir / f"{sumo_term}_classifier.pt"
+            # Construct lens path: hierarchy/{sumo_term}_classifier.pt
+            lens_path = hierarchy_dir / f"{sumo_term}_classifier.pt"
 
-            if probe_path.exists():
-                # Load probe
-                probe = create_sumo_probe(input_dim=hidden_dim)
-                probe.load_state_dict(torch.load(probe_path, map_location='cpu'))
-                probe.eval()
-                probe.to(self.device)
+            if lens_path.exists():
+                # Load lens
+                lens = create_sumo_lens(input_dim=hidden_dim)
+                lens.load_state_dict(torch.load(lens_path, map_location='cpu'))
+                lens.eval()
+                lens.to(self.device)
 
-                probes[sumo_term] = probe
+                lenses[sumo_term] = lens
                 loaded += 1
 
-        print(f"    Loaded {loaded} probes")
-        return probes
+        print(f"    Loaded {loaded} lenses")
+        return lenses
 
-    def _load_simplex_probes(self, simplex_dir: Path) -> List[SimplexProbe]:
-        """Load all successfully trained simplex probes."""
-        probes = []
+    def _load_simplex_lenses(self, simplex_dir: Path) -> List[SimplexLens]:
+        """Load all successfully trained simplex lenses."""
+        lenses = []
 
         # Load results to find graduated simplexes
         results_file = simplex_dir / "results.json"
@@ -168,13 +168,13 @@ class DualMonitor:
         graduated = results.get('graduated', [])
 
         for dimension in graduated:
-            probe_path = simplex_dir / dimension / "tripole_probe.pt"
-            if probe_path.exists():
-                probe = SimplexProbe(dimension, probe_path)
-                probes.append(probe)
+            lens_path = simplex_dir / dimension / "tripole_lens.pt"
+            if lens_path.exists():
+                lens = SimplexLens(dimension, lens_path)
+                lenses.append(lens)
                 print(f"    ✓ {dimension}")
 
-        return probes
+        return lenses
 
     def monitor_text(
         self,
@@ -233,9 +233,9 @@ class DualMonitor:
         concept_detections = []
         activation_gpu = activation.to(self.device)
 
-        for sumo_term, probe in self.concept_probes.items():
+        for sumo_term, lens in self.concept_lenses.items():
             with torch.no_grad():
-                confidence = probe(activation_gpu).item()
+                confidence = lens(activation_gpu).item()
 
             if confidence >= concept_threshold:
                 concept_detections.append({
@@ -248,8 +248,8 @@ class DualMonitor:
 
         # 2. S-tier simplex detection (always active)
         simplex_detections = []
-        for probe in self.simplex_probes:
-            result = probe.detect(activation)
+        for lens in self.simplex_lenses:
+            result = lens.detect(activation)
             if result['confidence'] >= simplex_threshold:
                 simplex_detections.append(result)
 
@@ -339,7 +339,7 @@ def main():
     monitor = DualMonitor(
         model=model,
         tokenizer=tokenizer,
-        probe_pack_dir=PROBE_PACK_DIR,
+        lens_pack_dir=LENS_PACK_DIR,
         simplex_dir=SIMPLEX_DIR,
         device=device
     )

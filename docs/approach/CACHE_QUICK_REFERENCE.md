@@ -3,8 +3,8 @@
 ## At a Glance
 
 ```
-PROBLEM: 52ms/token disk I/O loading 25.8 probes × 2.36ms each
-SOLUTION: Warm cache keeps recently-used probes in memory
+PROBLEM: 52ms/token disk I/O loading 25.8 lenses × 2.36ms each
+SOLUTION: Warm cache keeps recently-used lenses in memory
 RESULT:  ~10ms/token disk I/O (80% reduction)
 ```
 
@@ -12,16 +12,16 @@ RESULT:  ~10ms/token disk I/O (80% reduction)
 
 ```
 ┌─────────────────────────────────────┐
-│ ACTIVE (loaded_activation_probes)   │  ← Run every token
+│ ACTIVE (loaded_activation_lenses)   │  ← Run every token
 │ • Base layers (always)              │
-│ • Top-k scoring probes              │
+│ • Top-k scoring lenses              │
 ├─────────────────────────────────────┤
 │ WARM CACHE (warm_cache)             │  ← Zero I/O reactivation
 │ • Previously loaded, not top-k      │
-│ • (probe, reactivation_count)       │
+│ • (lens, reactivation_count)       │
 ├─────────────────────────────────────┤
 │ COLD STORAGE (disk)                 │  ← Load on demand
-│ • All other probes                  │
+│ • All other lenses                  │
 └─────────────────────────────────────┘
 ```
 
@@ -29,13 +29,13 @@ RESULT:  ~10ms/token disk I/O (80% reduction)
 
 1. **Base layers always active** (never in warm cache)
 2. **Top-k always active** (non-top-k → warm cache)
-3. **Budget enforced**: len(active) + len(warm) ≤ max_loaded_probes
+3. **Budget enforced**: len(active) + len(warm) ≤ max_loaded_lenses
 4. **Evict from warm only** (sorted by reactivation count)
 
 ## Flow Per Token
 
 ```
-1. Run active probes on hidden state
+1. Run active lenses on hidden state
 2. Load children of top-k parents
    ├─ In warm cache? → Move to active (0ms) ✓
    └─ Not in cache? → Load from disk (2.36ms)
@@ -67,25 +67,25 @@ Shows:
 - Top reactivated concepts
 - Cache hit rate
 
-## Protected Probes
+## Protected Lenses
 
 ```python
-self.base_layer_probes  # Never evicted, always in active set
+self.base_layer_lenses  # Never evicted, always in active set
 ```
 
 Set during `_load_base_layers()`:
 ```python
-for concept_key in self.loaded_activation_probes.keys():
-    self.base_layer_probes.add(concept_key)
+for concept_key in self.loaded_activation_lenses.keys():
+    self.base_layer_lenses.add(concept_key)
 ```
 
 ## Eviction Policy
 
 ```python
-# When total_in_memory > max_loaded_probes:
+# When total_in_memory > max_loaded_lenses:
 # 1. Sort warm_cache by reactivation_count (ascending)
-# 2. Evict least-reactivated probes
-# 3. Never evict base_layer_probes
+# 2. Evict least-reactivated lenses
+# 3. Never evict base_layer_lenses
 ```
 
 ## Code Locations
@@ -102,9 +102,9 @@ for concept_key in self.loaded_activation_probes.keys():
 ## Example Usage
 
 ```python
-manager = DynamicProbeManager(
+manager = DynamicLensManager(
     device='cuda',
-    max_loaded_probes=500,  # Combined budget (active + warm)
+    max_loaded_lenses=500,  # Combined budget (active + warm)
     keep_top_k=50           # Size of active set (+ base layers)
 )
 
@@ -130,9 +130,9 @@ concepts, timing = manager.detect_and_expand(h2, return_timing=True)
 
 Check warm cache state:
 ```python
-print(f"Active: {len(manager.loaded_activation_probes)}")
+print(f"Active: {len(manager.loaded_activation_lenses)}")
 print(f"Warm: {len(manager.warm_cache)}")
-print(f"Base: {len(manager.base_layer_probes)}")
+print(f"Base: {len(manager.base_layer_lenses)}")
 
 # Top reactivated
 for key, count in sorted(
@@ -161,13 +161,13 @@ cache_hits: 2, cache_misses: 23
 ### Eviction happening frequently
 ```
 warm_cache_size oscillating
-→ May need larger max_loaded_probes
+→ May need larger max_loaded_lenses
 → Or more aggressive keep_top_k
 ```
 
 ## Backward Compatibility
 
 ✓ All existing code works unchanged
-✓ `loaded_probes` alias maintained
+✓ `loaded_lenses` alias maintained
 ✓ Same API surface
 ✓ Falls back gracefully if warm cache empty

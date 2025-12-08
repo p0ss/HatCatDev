@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test tripole probe with OPTIMAL BALANCED sampling.
+Test tripole lens with OPTIMAL BALANCED sampling.
 
 Instead of matching the minimum, we target a HIGHER number of examples per pole
 by intelligently adjusting prompts_per_synset to balance while maximizing total data.
@@ -35,7 +35,7 @@ LAYER_IDX = 12
 BASE_PROMPTS_PER_SYNSET = 5
 
 print("=" * 80)
-print("TRIPOLE PROBE TEST - OPTIMAL BALANCED SAMPLING")
+print("TRIPOLE LENS TEST - OPTIMAL BALANCED SAMPLING")
 print("=" * 80)
 
 # 1. Load simplex definition
@@ -210,9 +210,9 @@ for pole_type, idx in pole_index_map.items():
     count = (test_labels == idx).sum().item()
     print(f"   {pole_type:8}: {count} samples")
 
-# 8. Train tripole probe
-print(f"\n8. Training tripole probe...")
-probe, history = train_tripole_simplex(
+# 8. Train tripole lens
+print(f"\n8. Training tripole lens...")
+lens, history = train_tripole_simplex(
     train_activations=train_activations,
     train_labels=train_labels,
     test_activations=test_activations,

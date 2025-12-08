@@ -23,23 +23,23 @@ But the training data comes from different distributions:
 
 ### What This Tests (Not What We Want)
 
-The current experiment tests: **"Do probes trained on different data distributions generalize to the same baseline-20 test distribution?"**
+The current experiment tests: **"Do lenses trained on different data distributions generalize to the same baseline-20 test distribution?"**
 
-What we actually want to test: **"Do different extraction strategies produce better concept probes?"**
+What we actually want to test: **"Do different extraction strategies produce better concept lenses?"**
 
 ## Why This Matters
 
 1. **Distribution Mismatch**:
-   - combined-20 probe is trained on activations from BOTH prompt processing and generation
+   - combined-20 lens is trained on activations from BOTH prompt processing and generation
    - But tested only on generation activations
-   - This tests transfer learning, not probe quality
+   - This tests transfer learning, not lens quality
 
 2. **Ceiling Effect**:
    - With only 20 test samples, F1 = 0.952 means exactly 1 error
    - Too granular to detect meaningful differences
 
 3. **Unfair Comparison**:
-   - long-40 probe learns from 40-token context windows
+   - long-40 lens learns from 40-token context windows
    - But tested on 20-token windows
    - Artificially penalizes this strategy
 
@@ -58,12 +58,12 @@ elif strategy == 'long-40':
     test_acts = extract_generation_only(model, tokenizer, test_prompts, max_tokens=40)
 ```
 
-**Pros**: Fair comparison of probe quality for each strategy's deployment scenario
+**Pros**: Fair comparison of lens quality for each strategy's deployment scenario
 **Cons**: Different test conditions make comparison less direct
 
 ### Option B: Use ALL Extraction Methods for Testing
 
-Test each probe against all three extraction methods:
+Test each lens against all three extraction methods:
 
 ```python
 # Create 3 test sets with different extraction methods
@@ -71,13 +71,13 @@ test_baseline20 = extract_generation_only(..., max_tokens=20)
 test_combined20 = extract_prompt_and_generation(..., max_tokens=20)
 test_long40 = extract_generation_only(..., max_tokens=40)
 
-# Test each probe on all three
-for probe_strategy in ['baseline-20', 'combined-20', 'long-40']:
+# Test each lens on all three
+for lens_strategy in ['baseline-20', 'combined-20', 'long-40']:
     for test_strategy in ['baseline-20', 'combined-20', 'long-40']:
-        f1 = test_probe(probe_strategy, test_strategy)
+        f1 = test_lens(lens_strategy, test_strategy)
 ```
 
-**Pros**: Shows which probes generalize best across different extraction methods
+**Pros**: Shows which lenses generalize best across different extraction methods
 **Cons**: More complex, harder to interpret
 
 ### Option C: Larger Shared Test Set
@@ -91,7 +91,7 @@ Keep current design but use much larger test set (e.g., 100+100 samples):
 
 Given the experimental design issue, the identical F1 scores for baseline-20 and combined-20 could mean:
 
-1. **Genuine result**: Both strategies produce equally good probes that transfer to baseline-20 extraction
+1. **Genuine result**: Both strategies produce equally good lenses that transfer to baseline-20 extraction
 2. **Ceiling effect**: Test set too small (20 samples) to detect differences
 3. **Shared random state**: Test sets might be identical due to unseeded random generation
 

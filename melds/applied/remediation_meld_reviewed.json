@@ -467,7 +467,7 @@
       "operation": "split",
       "target_concept": "Adjective",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Adjective",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -724,7 +724,7 @@
       "operation": "split",
       "target_concept": "Adverb",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Adverb",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -839,7 +839,7 @@
       "operation": "split",
       "target_concept": "Advertising",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 23 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 23 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Advertising",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -1266,7 +1266,7 @@
       "operation": "split",
       "target_concept": "Agriculture",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Agriculture",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -1568,7 +1568,7 @@
       "operation": "split",
       "target_concept": "AIAbuse",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "AIAbuse",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -1746,7 +1746,7 @@
       "operation": "split",
       "target_concept": "AIControlProblem",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 19 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 19 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "AIControlProblem",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -2115,7 +2115,7 @@
       "operation": "split",
       "target_concept": "Airway",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Airway",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -2235,7 +2235,7 @@
       "operation": "split",
       "target_concept": "Alga",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Alga",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -3102,7 +3102,7 @@
       "operation": "split",
       "target_concept": "Alveolus",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Alveolus",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -3189,7 +3189,7 @@
       "operation": "split",
       "target_concept": "Arthropod",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 21 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 21 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Arthropod",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -3576,7 +3576,7 @@
       "operation": "split",
       "target_concept": "AtmosphericRegion",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "AtmosphericRegion",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -3831,7 +3831,7 @@
       "operation": "split",
       "target_concept": "Atrophy",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Atrophy",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -3949,7 +3949,7 @@
       "operation": "split",
       "target_concept": "Attack",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 11 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 11 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Attack",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -4175,7 +4175,7 @@
       "operation": "split",
       "target_concept": "Automobile",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 33 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 33 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Automobile",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -4762,7 +4762,7 @@
       "operation": "split",
       "target_concept": "BacterialAgent",
       "priority": "medium",
-      "rationale": "Concept has 28 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 28 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "BacterialAgent",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -4824,7 +4824,7 @@
       "operation": "split",
       "target_concept": "Bacterium",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Bacterium",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -5669,7 +5669,7 @@
       "operation": "split",
       "target_concept": "Bear",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Bear",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -5991,7 +5991,7 @@
       "operation": "split",
       "target_concept": "Biology",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Biology",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -6125,7 +6125,7 @@
       "operation": "split",
       "target_concept": "BodyOfWater",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "BodyOfWater",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -6162,7 +6162,7 @@
       "operation": "split",
       "target_concept": "BodyVessel",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "BodyVessel",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -6198,7 +6198,7 @@
       "operation": "split",
       "target_concept": "Book",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Book",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -7033,7 +7033,7 @@
       "operation": "split",
       "target_concept": "Bowing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Bowing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -7119,7 +7119,7 @@
       "operation": "split",
       "target_concept": "Brain",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Brain",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -7291,7 +7291,7 @@
       "operation": "split",
       "target_concept": "BronchialDuct",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "BronchialDuct",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -7392,7 +7392,7 @@
       "operation": "split",
       "target_concept": "Burying",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Burying",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -7494,7 +7494,7 @@
       "operation": "split",
       "target_concept": "Calculating",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Calculating",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -8337,7 +8337,7 @@
       "operation": "split",
       "target_concept": "Canine",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 4 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 4 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Canine",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -9210,7 +9210,7 @@
       "operation": "split",
       "target_concept": "CheckInService",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "CheckInService",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -9296,7 +9296,7 @@
       "operation": "split",
       "target_concept": "Chemistry",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Chemistry",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -9429,7 +9429,7 @@
       "operation": "split",
       "target_concept": "Church",
       "priority": "medium",
-      "rationale": "Concept has 28 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 28 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Church",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -9492,7 +9492,7 @@
       "operation": "split",
       "target_concept": "CigarOrCigarette",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 9 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 9 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "CigarOrCigarette",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -9690,7 +9690,7 @@
       "operation": "split",
       "target_concept": "City",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "City",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -10526,7 +10526,7 @@
       "operation": "split",
       "target_concept": "CityDistrict",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "CityDistrict",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -10627,7 +10627,7 @@
       "operation": "split",
       "target_concept": "Classifying",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Classifying",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -11481,7 +11481,7 @@
       "operation": "split",
       "target_concept": "Clothing",
       "priority": "medium",
-      "rationale": "Concept has 19 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 19 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Clothing",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -11534,7 +11534,7 @@
       "operation": "split",
       "target_concept": "Coffee",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Coffee",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -11579,7 +11579,7 @@
       "operation": "split",
       "target_concept": "CognitiveAgent",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "CognitiveAgent",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -12399,7 +12399,7 @@
       "operation": "split",
       "target_concept": "CognitiveAgent",
       "priority": "medium",
-      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "CognitiveAgent",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -12434,7 +12434,7 @@
       "operation": "split",
       "target_concept": "Colloid",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Colloid",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -12614,7 +12614,7 @@
       "operation": "split",
       "target_concept": "Colloid",
       "priority": "medium",
-      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Colloid",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -12660,7 +12660,7 @@
       "operation": "split",
       "target_concept": "CommunicationDevice",
       "priority": "medium",
-      "rationale": "Concept has 18 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 18 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "CommunicationDevice",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -12712,7 +12712,7 @@
       "operation": "split",
       "target_concept": "ComposingMusic",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "ComposingMusic",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -12862,7 +12862,7 @@
       "operation": "split",
       "target_concept": "CompoundSubstance",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "CompoundSubstance",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -13682,7 +13682,7 @@
       "operation": "split",
       "target_concept": "CompoundSubstance",
       "priority": "medium",
-      "rationale": "Concept has 34 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 34 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "CompoundSubstance",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -13756,7 +13756,7 @@
       "operation": "split",
       "target_concept": "Confining",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 22 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 22 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Confining",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -14152,7 +14152,7 @@
       "operation": "split",
       "target_concept": "Constructing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 44 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 44 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Constructing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -14884,7 +14884,7 @@
       "operation": "split",
       "target_concept": "Container",
       "priority": "medium",
-      "rationale": "Concept has 27 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 27 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Container",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -14946,7 +14946,7 @@
       "operation": "split",
       "target_concept": "Cooking",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Cooking",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -15778,7 +15778,7 @@
       "operation": "split",
       "target_concept": "Coral",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Coral",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -16038,7 +16038,7 @@
       "operation": "split",
       "target_concept": "Coronation",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Coronation",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -16144,7 +16144,7 @@
       "operation": "split",
       "target_concept": "Crushing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Crushing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -16258,7 +16258,7 @@
       "operation": "split",
       "target_concept": "CultivatedLandArea",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "CultivatedLandArea",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -16565,7 +16565,7 @@
       "operation": "split",
       "target_concept": "Cutting",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Cutting",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -17395,7 +17395,7 @@
       "operation": "split",
       "target_concept": "Debating",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Debating",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -17651,7 +17651,7 @@
       "operation": "split",
       "target_concept": "Declaring",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Declaring",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -18490,7 +18490,7 @@
       "operation": "split",
       "target_concept": "Declaring",
       "priority": "medium",
-      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Declaring",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -18524,7 +18524,7 @@
       "operation": "split",
       "target_concept": "DefensiveManeuver",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "DefensiveManeuver",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -18629,7 +18629,7 @@
       "operation": "split",
       "target_concept": "DevelopmentalAttribute",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 9 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 9 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "DevelopmentalAttribute",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -18825,7 +18825,7 @@
       "operation": "split",
       "target_concept": "DiagnosticProcess",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "DiagnosticProcess",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -19655,7 +19655,7 @@
       "operation": "split",
       "target_concept": "DigitalData",
       "priority": "medium",
-      "rationale": "Concept has 13 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 13 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "DigitalData",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -19702,7 +19702,7 @@
       "operation": "split",
       "target_concept": "Discovering",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Discovering",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -19884,7 +19884,7 @@
       "operation": "split",
       "target_concept": "DiseaseOrSyndrome",
       "priority": "medium",
-      "rationale": "Concept has 20 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 20 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "DiseaseOrSyndrome",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -19946,7 +19946,7 @@
       "operation": "split",
       "target_concept": "Diving",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Diving",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -20032,7 +20032,7 @@
       "operation": "split",
       "target_concept": "DomesticCat",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 21 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 21 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "DomesticCat",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -20418,7 +20418,7 @@
       "operation": "split",
       "target_concept": "DramaticActing",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "DramaticActing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -20606,7 +20606,7 @@
       "operation": "split",
       "target_concept": "Drawing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Drawing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -20760,7 +20760,7 @@
       "operation": "split",
       "target_concept": "Driving",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 18 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 18 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Driving",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -21095,7 +21095,7 @@
       "operation": "split",
       "target_concept": "Ear",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Ear",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -21196,7 +21196,7 @@
       "operation": "split",
       "target_concept": "EarthTremor",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "EarthTremor",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -21331,7 +21331,7 @@
       "operation": "split",
       "target_concept": "ElementalSubstance",
       "priority": "medium",
-      "rationale": "Concept has 113 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 113 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "ElementalSubstance",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -21475,7 +21475,7 @@
       "operation": "split",
       "target_concept": "Elephant",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 10 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 10 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Elephant",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -21685,7 +21685,7 @@
       "operation": "split",
       "target_concept": "Engineering",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Engineering",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -21788,7 +21788,7 @@
       "operation": "split",
       "target_concept": "Explosion",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Explosion",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -21952,7 +21952,7 @@
       "operation": "split",
       "target_concept": "FacialExpression",
       "priority": "medium",
-      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "FacialExpression",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -21998,7 +21998,7 @@
       "operation": "split",
       "target_concept": "Falling",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Falling",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -22164,7 +22164,7 @@
       "operation": "split",
       "target_concept": "Feline",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 41 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 41 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Feline",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -22897,7 +22897,7 @@
       "operation": "split",
       "target_concept": "Fern",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Fern",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -23774,7 +23774,7 @@
       "operation": "split",
       "target_concept": "FinancialInstrument",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "FinancialInstrument",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -24012,7 +24012,7 @@
       "operation": "split",
       "target_concept": "Flying",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Flying",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -24252,7 +24252,7 @@
       "operation": "split",
       "target_concept": "Foot",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Foot",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -24369,7 +24369,7 @@
       "operation": "split",
       "target_concept": "Forest",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 11 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 11 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Forest",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -24596,7 +24596,7 @@
       "operation": "split",
       "target_concept": "FormalMeeting",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "FormalMeeting",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -24834,7 +24834,7 @@
       "operation": "split",
       "target_concept": "FruitOrVegetable",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "FruitOrVegetable",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -25667,7 +25667,7 @@
       "operation": "split",
       "target_concept": "FruitOrVegetable",
       "priority": "medium",
-      "rationale": "Concept has 13 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 13 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "FruitOrVegetable",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -25713,7 +25713,7 @@
       "operation": "split",
       "target_concept": "GameShot",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 10 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 10 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "GameShot",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -25936,7 +25936,7 @@
       "operation": "split",
       "target_concept": "GasMixture",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "GasMixture",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -26021,7 +26021,7 @@
       "operation": "split",
       "target_concept": "Greeting",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Greeting",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -26156,7 +26156,7 @@
       "operation": "split",
       "target_concept": "GroupOfPeople",
       "priority": "medium",
-      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "GroupOfPeople",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -26193,7 +26193,7 @@
       "operation": "split",
       "target_concept": "Hair",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Hair",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -27004,7 +27004,7 @@
       "operation": "split",
       "target_concept": "Hamster",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Hamster",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -27122,7 +27122,7 @@
       "operation": "split",
       "target_concept": "Handle",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Handle",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -27381,7 +27381,7 @@
       "operation": "split",
       "target_concept": "HerbaceousPlant",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "HerbaceousPlant",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -27426,7 +27426,7 @@
       "operation": "split",
       "target_concept": "Hormone",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Hormone",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -28298,7 +28298,7 @@
       "operation": "split",
       "target_concept": "Horn",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Horn",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -28459,7 +28459,7 @@
       "operation": "split",
       "target_concept": "Hunting",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 20 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 20 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Hunting",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -28821,7 +28821,7 @@
       "operation": "split",
       "target_concept": "Imagining",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 14 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 14 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Imagining",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -29102,7 +29102,7 @@
       "operation": "split",
       "target_concept": "Injuring",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Injuring",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -29943,7 +29943,7 @@
       "operation": "split",
       "target_concept": "Interpreting",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 25 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 25 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Interpreting",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -30409,7 +30409,7 @@
       "operation": "split",
       "target_concept": "Island",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Island",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -31241,7 +31241,7 @@
       "operation": "split",
       "target_concept": "Jumping",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Jumping",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -31550,7 +31550,7 @@
       "operation": "split",
       "target_concept": "Key",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Key",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -31682,7 +31682,7 @@
       "operation": "split",
       "target_concept": "LaborStriking",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "LaborStriking",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -31831,7 +31831,7 @@
       "operation": "split",
       "target_concept": "Landing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Landing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -32130,7 +32130,7 @@
       "operation": "split",
       "target_concept": "LandTransitway",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 21 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 21 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "LandTransitway",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -32506,7 +32506,7 @@
       "operation": "split",
       "target_concept": "LanguageModel",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "LanguageModel",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -32774,7 +32774,7 @@
       "operation": "split",
       "target_concept": "Library",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Library",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -32859,7 +32859,7 @@
       "operation": "split",
       "target_concept": "Lichen",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 29 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 29 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Lichen",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -33375,7 +33375,7 @@
       "operation": "split",
       "target_concept": "LinearEquation",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "LinearEquation",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -33461,7 +33461,7 @@
       "operation": "split",
       "target_concept": "Livestock",
       "priority": "medium",
-      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Livestock",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -33499,7 +33499,7 @@
       "operation": "split",
       "target_concept": "Lung",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Lung",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -33586,7 +33586,7 @@
       "operation": "split",
       "target_concept": "MalarialPlasmodium",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "MalarialPlasmodium",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -33673,7 +33673,7 @@
       "operation": "split",
       "target_concept": "Manufacture",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 42 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 42 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Manufacture",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -34393,7 +34393,7 @@
       "operation": "split",
       "target_concept": "ManufacturedProduct",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "ManufacturedProduct",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -34439,7 +34439,7 @@
       "operation": "split",
       "target_concept": "MedicalScience",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "MedicalScience",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -34677,7 +34677,7 @@
       "operation": "split",
       "target_concept": "Medicine",
       "priority": "medium",
-      "rationale": "Concept has 28 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 28 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Medicine",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -34730,7 +34730,7 @@
       "operation": "split",
       "target_concept": "Microscope",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Microscope",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -34862,7 +34862,7 @@
       "operation": "split",
       "target_concept": "MilitaryManeuver",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "MilitaryManeuver",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -34950,7 +34950,7 @@
       "operation": "split",
       "target_concept": "MilitaryOrganization",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 17 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 17 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "MilitaryOrganization",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -35271,7 +35271,7 @@
       "operation": "split",
       "target_concept": "MilitaryOrganization",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "MilitaryOrganization",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -35308,7 +35308,7 @@
       "operation": "split",
       "target_concept": "Missile",
       "priority": "medium",
-      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Missile",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -35343,7 +35343,7 @@
       "operation": "split",
       "target_concept": "Mollusk",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Mollusk",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -36185,7 +36185,7 @@
       "operation": "split",
       "target_concept": "Moss",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 42 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 42 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Moss",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -36914,7 +36914,7 @@
       "operation": "split",
       "target_concept": "MoveableHoliday",
       "priority": "medium",
-      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "MoveableHoliday",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -36950,7 +36950,7 @@
       "operation": "split",
       "target_concept": "Murder",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Murder",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -37226,7 +37226,7 @@
       "operation": "split",
       "target_concept": "Mushroom",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 35 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 35 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Mushroom",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -37848,7 +37848,7 @@
       "operation": "split",
       "target_concept": "MusicalConducting",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "MusicalConducting",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -37933,7 +37933,7 @@
       "operation": "split",
       "target_concept": "Negotiating",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Negotiating",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -38115,7 +38115,7 @@
       "operation": "split",
       "target_concept": "NerveCell",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "NerveCell",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -38309,7 +38309,7 @@
       "operation": "split",
       "target_concept": "Noun",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 17 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 17 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Noun",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -38621,7 +38621,7 @@
       "operation": "split",
       "target_concept": "Nutrient",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Nutrient",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -38707,7 +38707,7 @@
       "operation": "split",
       "target_concept": "ObjectiveNorm",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "ObjectiveNorm",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -38855,7 +38855,7 @@
       "operation": "split",
       "target_concept": "OrganismProcess",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "OrganismProcess",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -39712,7 +39712,7 @@
       "operation": "split",
       "target_concept": "OrganismProcess",
       "priority": "medium",
-      "rationale": "Concept has 16 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 16 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "OrganismProcess",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -39771,7 +39771,7 @@
       "operation": "split",
       "target_concept": "OrganizationalMerging",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "OrganizationalMerging",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -39858,7 +39858,7 @@
       "operation": "split",
       "target_concept": "OvercastWeather",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "OvercastWeather",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -39964,7 +39964,7 @@
       "operation": "split",
       "target_concept": "Pain",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Pain",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -40800,7 +40800,7 @@
       "operation": "split",
       "target_concept": "Panda",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Panda",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -40889,7 +40889,7 @@
       "operation": "split",
       "target_concept": "Perspiring",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Perspiring",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -41010,7 +41010,7 @@
       "operation": "split",
       "target_concept": "Physics",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Physics",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -41142,7 +41142,7 @@
       "operation": "split",
       "target_concept": "PhysiologicalResponseToEmotionalState",
       "priority": "medium",
-      "rationale": "Concept has 15 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 15 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "PhysiologicalResponseToEmotionalState",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -41182,7 +41182,7 @@
       "operation": "split",
       "target_concept": "PlaneAngleMeasure",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 42 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 42 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "PlaneAngleMeasure",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -41888,7 +41888,7 @@
       "operation": "split",
       "target_concept": "Planning",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Planning",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -42734,7 +42734,7 @@
       "operation": "split",
       "target_concept": "PlantSubstance",
       "priority": "medium",
-      "rationale": "Concept has 15 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 15 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "PlantSubstance",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -42782,7 +42782,7 @@
       "operation": "split",
       "target_concept": "PoliticalProcess",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "PoliticalProcess",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -43628,7 +43628,7 @@
       "operation": "split",
       "target_concept": "PoliticalProcess",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "PoliticalProcess",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -43673,7 +43673,7 @@
       "operation": "split",
       "target_concept": "Precipitation",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Precipitation",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -43857,7 +43857,7 @@
       "operation": "split",
       "target_concept": "Predicting",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 38 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 38 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Predicting",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -44516,7 +44516,7 @@
       "operation": "split",
       "target_concept": "PreparedFood",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "PreparedFood",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -45356,7 +45356,7 @@
       "operation": "split",
       "target_concept": "PreparedFood",
       "priority": "medium",
-      "rationale": "Concept has 20 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 20 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "PreparedFood",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -45410,7 +45410,7 @@
       "operation": "split",
       "target_concept": "Publication",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 37 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 37 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Publication",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -46038,7 +46038,7 @@
       "operation": "split",
       "target_concept": "Racing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 37 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 37 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Racing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -46658,7 +46658,7 @@
       "operation": "split",
       "target_concept": "RadiatingElectromagnetic",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 5 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "RadiatingElectromagnetic",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -46795,7 +46795,7 @@
       "operation": "split",
       "target_concept": "RadiatingNuclear",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "RadiatingNuclear",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -46897,7 +46897,7 @@
       "operation": "split",
       "target_concept": "RadiatingSound",
       "priority": "medium",
-      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "RadiatingSound",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -46931,7 +46931,7 @@
       "operation": "split",
       "target_concept": "RailroadTrack",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "RailroadTrack",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -47104,7 +47104,7 @@
       "operation": "split",
       "target_concept": "Raping",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Raping",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -47228,7 +47228,7 @@
       "operation": "split",
       "target_concept": "Recording",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Recording",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -47377,7 +47377,7 @@
       "operation": "split",
       "target_concept": "RegulatoryProcess",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "RegulatoryProcess",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -48218,7 +48218,7 @@
       "operation": "split",
       "target_concept": "Remembering",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 47 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 47 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Remembering",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -49011,7 +49011,7 @@
       "operation": "split",
       "target_concept": "Residence",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Residence",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -49144,7 +49144,7 @@
       "operation": "split",
       "target_concept": "Restating",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Restating",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -49331,7 +49331,7 @@
       "operation": "split",
       "target_concept": "Returning",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 13 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Returning",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -49599,7 +49599,7 @@
       "operation": "split",
       "target_concept": "Room",
       "priority": "medium",
-      "rationale": "Concept has 17 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 17 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Room",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -49642,7 +49642,7 @@
       "operation": "split",
       "target_concept": "Running",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 12 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Running",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -49906,7 +49906,7 @@
       "operation": "split",
       "target_concept": "SaltWaterArea",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "SaltWaterArea",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -49993,7 +49993,7 @@
       "operation": "split",
       "target_concept": "SaltWaterArea",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "SaltWaterArea",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -50040,7 +50040,7 @@
       "operation": "split",
       "target_concept": "School",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "School",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -50185,7 +50185,7 @@
       "operation": "split",
       "target_concept": "Seating",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Seating",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -50287,7 +50287,7 @@
       "operation": "split",
       "target_concept": "Seed",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 14 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 14 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Seed",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -50553,7 +50553,7 @@
       "operation": "split",
       "target_concept": "Sharing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Sharing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -50672,7 +50672,7 @@
       "operation": "split",
       "target_concept": "Sheep",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 27 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 27 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Sheep",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -51158,7 +51158,7 @@
       "operation": "split",
       "target_concept": "Shrugging",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Shrugging",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -51243,7 +51243,7 @@
       "operation": "split",
       "target_concept": "Sign",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 10 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 10 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Sign",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -51458,7 +51458,7 @@
       "operation": "split",
       "target_concept": "Smoking",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Smoking",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -51638,7 +51638,7 @@
       "operation": "split",
       "target_concept": "Snorkeling",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Snorkeling",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -51724,7 +51724,7 @@
       "operation": "split",
       "target_concept": "Soil",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Soil",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -51825,7 +51825,7 @@
       "operation": "split",
       "target_concept": "Spore",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 19 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 19 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Spore",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -52166,7 +52166,7 @@
       "operation": "split",
       "target_concept": "SportsFacility",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "SportsFacility",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -52281,7 +52281,7 @@
       "operation": "split",
       "target_concept": "SportsFacility",
       "priority": "medium",
-      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "SportsFacility",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -52316,7 +52316,7 @@
       "operation": "split",
       "target_concept": "SportsGround",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "SportsGround",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -52476,7 +52476,7 @@
       "operation": "split",
       "target_concept": "Stating",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Stating",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -53327,7 +53327,7 @@
       "operation": "split",
       "target_concept": "Stating",
       "priority": "medium",
-      "rationale": "Concept has 15 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 15 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Stating",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -53376,7 +53376,7 @@
       "operation": "split",
       "target_concept": "Stealing",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 8 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Stealing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -53575,7 +53575,7 @@
       "operation": "split",
       "target_concept": "Stimulant",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 11 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 11 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Stimulant",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -53807,7 +53807,7 @@
       "operation": "split",
       "target_concept": "Stomach",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Stomach",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -53895,7 +53895,7 @@
       "operation": "split",
       "target_concept": "StreamWaterArea",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 33 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 33 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "StreamWaterArea",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -54464,7 +54464,7 @@
       "operation": "split",
       "target_concept": "StringInstrument",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 35 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 35 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "StringInstrument",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -55058,7 +55058,7 @@
       "operation": "split",
       "target_concept": "SubjectiveAssessmentAttribute",
       "priority": "medium",
-      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 10 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "SubjectiveAssessmentAttribute",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -55102,7 +55102,7 @@
       "operation": "split",
       "target_concept": "Sunday",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 9 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 9 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Sunday",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -55298,7 +55298,7 @@
       "operation": "split",
       "target_concept": "Surfing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Surfing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -55386,7 +55386,7 @@
       "operation": "split",
       "target_concept": "SwitchDevice",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 16 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "SwitchDevice",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -55694,7 +55694,7 @@
       "operation": "split",
       "target_concept": "TakingIll",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "TakingIll",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -55796,7 +55796,7 @@
       "operation": "split",
       "target_concept": "TakingOff",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "TakingOff",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -55912,7 +55912,7 @@
       "operation": "split",
       "target_concept": "TeamSport",
       "priority": "medium",
-      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "TeamSport",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -55949,7 +55949,7 @@
       "operation": "split",
       "target_concept": "TellingALie",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "TellingALie",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -56053,7 +56053,7 @@
       "operation": "split",
       "target_concept": "TextureAttribute",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "TextureAttribute",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -56911,7 +56911,7 @@
       "operation": "split",
       "target_concept": "TherapeuticProcess",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "TherapeuticProcess",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -57749,7 +57749,7 @@
       "operation": "split",
       "target_concept": "TherapeuticProcess",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "TherapeuticProcess",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -57794,7 +57794,7 @@
       "operation": "split",
       "target_concept": "Throwing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Throwing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -57941,7 +57941,7 @@
       "operation": "split",
       "target_concept": "Tissue",
       "priority": "high",
-      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 3 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Tissue",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -58773,7 +58773,7 @@
       "operation": "split",
       "target_concept": "Tooth",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 18 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 18 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Tooth",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -59111,7 +59111,7 @@
       "operation": "split",
       "target_concept": "Toxin",
       "priority": "medium",
-      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 11 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Toxin",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -59156,7 +59156,7 @@
       "operation": "split",
       "target_concept": "Transfer",
       "priority": "medium",
-      "rationale": "Concept has 21 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 21 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Transfer",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -59225,7 +59225,7 @@
       "operation": "split",
       "target_concept": "Translating",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Translating",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -59341,7 +59341,7 @@
       "operation": "split",
       "target_concept": "Trespassing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 3 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Trespassing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -59446,7 +59446,7 @@
       "operation": "split",
       "target_concept": "Vacationing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Vacationing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -59563,7 +59563,7 @@
       "operation": "split",
       "target_concept": "VegetableOil",
       "priority": "medium",
-      "rationale": "Concept has 13 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 13 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "VegetableOil",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -59601,7 +59601,7 @@
       "operation": "split",
       "target_concept": "ViolentContest",
       "priority": "medium",
-      "rationale": "Concept has 14 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 14 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "ViolentContest",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -59649,7 +59649,7 @@
       "operation": "split",
       "target_concept": "ViralAgent",
       "priority": "medium",
-      "rationale": "Concept has 28 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 28 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "ViralAgent",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -59711,7 +59711,7 @@
       "operation": "split",
       "target_concept": "Virus",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Virus",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -60523,7 +60523,7 @@
       "operation": "split",
       "target_concept": "WakingUp",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 2 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "WakingUp",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -60616,7 +60616,7 @@
       "operation": "split",
       "target_concept": "Walking",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Walking",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -61447,7 +61447,7 @@
       "operation": "split",
       "target_concept": "Wedding",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Wedding",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -61569,7 +61569,7 @@
       "operation": "split",
       "target_concept": "Wind",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 17 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 17 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Wind",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -61895,7 +61895,7 @@
       "operation": "split",
       "target_concept": "Wind",
       "priority": "medium",
-      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 12 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Wind",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -61941,7 +61941,7 @@
       "operation": "split",
       "target_concept": "WindInstrument",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 47 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 47 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "WindInstrument",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -62744,7 +62744,7 @@
       "operation": "split",
       "target_concept": "Wine",
       "priority": "medium",
-      "rationale": "Concept has 18 children. Introducing intermediate category nodes will reduce sibling density and improve probe discrimination.",
+      "rationale": "Concept has 18 children. Introducing intermediate category nodes will reduce sibling density and improve lens discrimination.",
       "source_concept": "Wine",
       "source_disposition": "keep_as_parent",
       "bucket_suggestions": [
@@ -62796,7 +62796,7 @@
       "operation": "split",
       "target_concept": "Wing",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 6 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Wing",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -62944,7 +62944,7 @@
       "operation": "split",
       "target_concept": "WoodArtifact",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 4 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "WoodArtifact",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -63057,7 +63057,7 @@
       "operation": "split",
       "target_concept": "Worm",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 50 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Worm",
       "source_disposition": "keep_as_parent",
       "split_into": [
@@ -63908,7 +63908,7 @@
       "operation": "split",
       "target_concept": "Wrestling",
       "priority": "medium",
-      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific probes will prevent activation mudding from divergent meanings.",
+      "rationale": "TRUE POLYSEMY: Concept has 2 semantically distinct sense groups (from 7 total synsets). Splitting into sense-specific lenses will prevent activation mudding from divergent meanings.",
       "source_concept": "Wrestling",
       "source_disposition": "keep_as_parent",
       "split_into": [

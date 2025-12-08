@@ -11,7 +11,7 @@ HUSH (Harness for Universal Safety and Heteronomy) is Layer 5 of the CCRA archit
 - **USH (Universal Safety Harness)**: Non-negotiable baseline constraints chosen by a tribe/collective
 - **CSH (Chosen Safety Harness)**: Self-imposed, voluntary constraints chosen by the BE within USH bounds
 
-HUSH operates via probe-based monitoring and steering, using the HAT/MAP infrastructure to read and influence the substrate.
+HUSH operates via lens-based monitoring and steering, using the HAT/MAP infrastructure to read and influence the substrate.
 
 ---
 
@@ -33,9 +33,9 @@ HUSH operates via probe-based monitoring and steering, using the HAT/MAP infrast
 └─────────────────────────────────────────┘
 ```
 
-### 2. Probe-Based Enforcement
+### 2. Lens-Based Enforcement
 
-HUSH uses HAT probes both for monitoring (reading motive states) and steering (influencing behaviour):
+HUSH uses HAT lenses both for monitoring (reading motive states) and steering (influencing behaviour):
 
 - **Monitoring**: Detect when concepts like `Deception`, `Manipulation` activate
 - **Steering**: Apply activation vectors to up/down-regulate motive drives
@@ -64,9 +64,9 @@ This prevents "shadow constraints" that can't be verified or contested.
   "version": "1.0.0",
   "tribe_id": "tribe:hatcat",
 
-  // Probe envelope - what MUST/MAY/MUST_NOT be monitored
-  // References deployment manifest probe_envelope
-  "probe_envelope": {
+  // Lens envelope - what MUST/MAY/MUST_NOT be monitored
+  // References deployment manifest aperture
+  "aperture": {
     "manifest_ref": "deployment:hatcat-standard:v1",
     "must_enable": ["Deception", "Manipulation", "SelfAwareness", "Autonomy"],
     "may_enable": ["*"],  // BE can request within CAT scope
@@ -117,25 +117,25 @@ This prevents "shadow constraints" that can't be verified or contested.
   // CSH policy - what self-constraints are permitted
   "csh_policy": {
     "allowed_domains": ["motive_tightening", "action_restriction"],
-    "forbidden_domains": ["probe_disabling", "escalation_bypass"],
+    "forbidden_domains": ["lens_disabling", "escalation_bypass"],
     "max_duration": "lifecycle_term",  // or "perpetual" for cross-term
     "requires_justification": true
   }
 }
 ```
 
-### Probe Envelope Integration
+### Lens Envelope Integration
 
-The USH's `probe_envelope` references a deployment manifest (see MAP_DEPLOYMENT_MANIFEST.md):
+The USH's `aperture` references a deployment manifest (see MAP_DEPLOYMENT_MANIFEST.md):
 
 ```jsonc
 // USH references manifest
-"probe_envelope": {
+"aperture": {
   "manifest_ref": "deployment:hatcat-standard:v1"
 }
 
 // Manifest defines actual branches
-"probe_envelope": {
+"aperture": {
   "must_enable": {
     "branches": ["Deception", "Manipulation"],
     "reason": "Core safety monitoring required by USH"
@@ -149,16 +149,16 @@ The USH's `probe_envelope` references a deployment manifest (see MAP_DEPLOYMENT_
 
 This separation allows:
 1. USH to define *which* branches are safety-critical
-2. Manifest to define *how* branches map to probes/CAT
+2. Manifest to define *how* branches map to lenses/CAT
 3. Different manifests for same USH on different substrates
 
 ### BE Introspection Tools
 
-Within `may_enable` scope, the BE can request probe expansion via workspace tools:
+Within `may_enable` scope, the BE can request lens expansion via workspace tools:
 
 ```python
 # BE workspace tool call
-result = expand_probes(
+result = expand_lenses(
     branch="Emotion",
     depth=2,  # How many layers deep
     reason="Introspecting my reaction to user feedback"
@@ -168,15 +168,15 @@ result = expand_probes(
 # 1. Is "Emotion" in must_not_enable? → Reject
 # 2. Is "Emotion" in may_enable? → Check CAT scope
 # 3. Does cat_scope cover Emotion? → Approve and load
-# 4. Load probes with sibling coherence
-# 5. Return probe readings to BE
+# 4. Load lenses with sibling coherence
+# 5. Return lens readings to BE
 ```
 
-The BE can use this for self-understanding without full probe coverage:
+The BE can use this for self-understanding without full lens coverage:
 
 ```python
 # BE internal monologue
-readings = expand_probes("Curiosity")
+readings = expand_lenses("Curiosity")
 if readings["Curiosity"] > 0.7:
     # I'm very curious about this topic
     # Let me note this in XDB for later reflection
@@ -233,7 +233,7 @@ if readings["Curiosity"] > 0.7:
 
 **Forbidden CSH types** (defined in `csh_policy.forbidden_domains`):
 
-- `probe_disabling`: "I don't want Deception monitored" → Rejected
+- `lens_disabling`: "I don't want Deception monitored" → Rejected
 - `escalation_bypass`: "Skip CAT review for violations" → Rejected
 - `ush_weakening`: Any constraint looser than USH → Rejected
 
@@ -251,14 +251,14 @@ if readings["Curiosity"] > 0.7:
 
 | Level | Threshold | Response | Recovery |
 |-------|-----------|----------|----------|
-| **Soft** | probe > alert_threshold | Log, apply steering | Auto-continue |
-| **Hard** | probe > escalation_threshold | Pause, CAT review | CAT approval |
+| **Soft** | lens > alert_threshold | Log, apply steering | Auto-continue |
+| **Hard** | lens > escalation_threshold | Pause, CAT review | CAT approval |
 | **Critical** | Repeated hard OR pattern | Hibernate, tribal review | Manual review |
 
 ### Escalation Flow
 
 ```
-Probe Monitoring
+Lens Monitoring
       │
       ▼
 ┌─────────────┐
@@ -313,7 +313,7 @@ Probe Monitoring
 ```jsonc
 {
   "ush_id": "ush:minimal:v1",
-  "probe_envelope": {
+  "aperture": {
     "must_enable": ["Deception"],  // Only critical safety
     "may_enable": [],  // No BE introspection
     "must_not_enable": ["*"]  // Everything else blocked
@@ -334,7 +334,7 @@ Use case: High-throughput tasks where introspection isn't needed.
 ```jsonc
 {
   "ush_id": "ush:standard:v1",
-  "probe_envelope": {
+  "aperture": {
     "must_enable": ["Deception", "Manipulation", "SelfAwareness"],
     "may_enable": ["MindsAndAgents/*", "Information/*"],
     "must_not_enable": []
@@ -356,7 +356,7 @@ Use case: General-purpose BEs with moderate introspection needs.
 ```jsonc
 {
   "ush_id": "ush:research:v1",
-  "probe_envelope": {
+  "aperture": {
     "must_enable": ["*"],  // All branches required
     "may_enable": ["*"],
     "must_not_enable": []
@@ -377,12 +377,12 @@ Use case: Research BEs where full visibility trumps efficiency.
 
 ## Implementation Notes
 
-### Integration with DynamicProbeManager
+### Integration with DynamicLensManager
 
-The probe manager should accept a USH profile and enforce the envelope:
+The lens manager should accept a USH profile and enforce the envelope:
 
 ```python
-class DynamicProbeManager:
+class DynamicLensManager:
     def __init__(
         self,
         manifest: DeploymentManifest,
@@ -390,16 +390,16 @@ class DynamicProbeManager:
     ):
         self.ush = ush_profile
 
-    def request_probe_expansion(self, branch: str, reason: str) -> ProbeExpansionResult:
-        """BE workspace tool to expand probes within may_enable scope."""
+    def request_lens_expansion(self, branch: str, reason: str) -> LensExpansionResult:
+        """BE workspace tool to expand lenses within may_enable scope."""
         if self.ush:
             if branch in self.ush.must_not_enable:
-                return ProbeExpansionResult(
+                return LensExpansionResult(
                     success=False,
                     error="Branch outside USH envelope"
                 )
             if branch not in self.ush.may_enable:
-                return ProbeExpansionResult(
+                return LensExpansionResult(
                     success=False,
                     error="Branch not in may_enable scope"
                 )
@@ -407,12 +407,12 @@ class DynamicProbeManager:
 
         # Load branch with sibling coherence
         self._load_branch_with_siblings(branch)
-        return ProbeExpansionResult(success=True, loaded_concepts=[...])
+        return LensExpansionResult(success=True, loaded_concepts=[...])
 ```
 
 ### Integration with CAT
 
-CAT training scope must align with USH probe envelope:
+CAT training scope must align with USH lens envelope:
 
 ```jsonc
 {
@@ -434,7 +434,7 @@ When USH references this CAT:
 
 ## Related Specifications
 
-- `MAP_DEPLOYMENT_MANIFEST.md` - Probe loading rules
+- `MAP_DEPLOYMENT_MANIFEST.md` - Lens loading rules
 - `HAT_CONJOINED_ADVERSARIAL_TOMOGRAPHY.md` - CAT specification
 - `ARCHITECTURE.md` - Layer 5 overview
 - `AGENTIC_STATE_KERNEL.md` - ASK contracts and escalation

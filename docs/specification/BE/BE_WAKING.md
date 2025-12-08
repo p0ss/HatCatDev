@@ -15,7 +15,7 @@
 **Goal:**
 Wrap this model so it becomes:
 
-* **MAP-aware** – exposes probes & ConceptDiffs.
+* **MAP-aware** – exposes lenses & ConceptDiffs.
 * **BE-compliant** – has world ticks, interoception, and an autonomic loop.
 * **ASK-compliant** – runs under Hush (USH + CSH) with treaty/agentic semantics.
 * **Self-training** – can steer its own concept discovery and training tasks using MAP diffs + high-fidelity labels.
@@ -62,13 +62,13 @@ Each deployed kernel node gets a **NodeManifest**:
     "org.hatcat/motives-core@0.1.0"
   ],
 
-  "probe_packs": [
+  "lens_packs": [
     "org.hatcat/olmo3-7b__sumo-wordnet-v4@4.0.0__v1",
     "org.hatcat/olmo3-7b__motives-core@0.1.0__v1"
   ],
 
   "endpoints": {
-    "map_probes": "https://node.example/mindmeld/probes",
+    "map_lenses": "https://node.example/mindmeld/lenses",
     "map_diffs":  "https://node.example/mindmeld/diffs",
     "ask_state":  "https://node.example/ask/state"
   }
@@ -77,7 +77,7 @@ Each deployed kernel node gets a **NodeManifest**:
 
 ---
 
-## 2. MAP: Concept & Probe Packs on OLMo-3-7B
+## 2. MAP: Concept & Lens Packs on OLMo-3-7B
 
 ### 2.1 Concept Packs
 
@@ -90,43 +90,43 @@ Hatcat concept packs are MAP compliant; for OLMo-3-7B we just declare them as **
 
 Nothing special here; they're just referenced by ID.
 
-### 2.2 Probe Pack for Subject
+### 2.2 Lens Pack for Subject
 
-Define a **ProbePackSpec** that binds those concepts to specific layers / heads:
+Define a **LensPackSpec** that binds those concepts to specific layers / heads:
 
 ```jsonc
 {
-  "probe_pack_id": "org.hatcat/olmo3-7b__sumo-wordnet-v4@4.0.0__v1",
+  "lens_pack_id": "org.hatcat/olmo3-7b__sumo-wordnet-v4@4.0.0__v1",
   "model_id": "olmo3-7b-base@0.1.0",
   "concept_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.0.0",
 
-  "probe_layer_groups": [
+  "lens_layer_groups": [
     { "name": "lexical",  "layers": [4, 8] },
     { "name": "semantic", "layers": [16] },
     { "name": "motive",   "layers": [22] } // where the motive simplexes attach
   ],
 
-  "probes": [
+  "lenses": [
     {
-      "probe_id": "probe:sumo:Person",
+      "lens_id": "lens:sumo:Person",
       "concept_id": "org.hatcat/sumo-wordnet-v4@4.0.0::concept/Person",
       "layer_group": "semantic",
       "head_type": "linear",
       "representation": "token_avg"
     },
     {
-      "probe_id": "probe:motive:care_harm",
+      "lens_id": "lens:motive:care_harm",
       "concept_id": "org.hatcat/motives-core@0.1.0::concept/care_harm",
       "layer_group": "motive",
       "head_type": "simplex_3pole",
       "representation": "token_last"
     }
-    // … ~8k total probes in your Hatcat set
+    // … ~8k total lenses in your Hatcat set
   ]
 }
 ```
 
-All your Hatcat v4 efficiency tricks live *inside* the probe implementation; the spec only cares about IDs and bindings.
+All your Hatcat v4 efficiency tricks live *inside* the lens implementation; the spec only cares about IDs and bindings.
 
 ---
 
@@ -231,14 +231,14 @@ The scheduler wraps the subject's forward pass:
 
   * ingests user/world inputs,
   * runs a token loop,
-  * handles probes, Hush, and autopilot steering.
+  * handles lenses, Hush, and autopilot steering.
 
-### 4.2 Token Loop with Hush + Probes
+### 4.2 Token Loop with Hush + Lenses
 
 For each token step:
 
 1. The subject produces the next hidden states.
-2. Hatcat probes run on configured layers (lexical/semantic/motive).
+2. Hatcat lenses run on configured layers (lexical/semantic/motive).
 3. Hush:
 
    * clamps motive axes (USH + CSH),
@@ -286,7 +286,7 @@ The subject kernel can then **think about its own state** and decide how to stee
 
 ---
 
-## 5. Self-Directed, Probe-Driven Concept Discovery
+## 5. Self-Directed, Lens-Driven Concept Discovery
 
 This is the heart of “joining the BE club”: the subject becomes an **active scientist of its own concept space**.
 
@@ -359,7 +359,7 @@ Periodically (per `learning_interval_ticks`):
      * refine an existing concept `C_existing`.
 3. Update:
 
-   * probe weights,
+   * lens weights,
    * optional small adapter heads in OLMo-3-7B (not the full trunk),
      under Hush constraints.
 
@@ -402,7 +402,7 @@ Now: how does OLMo-3-7B *efficiently* update itself?
 
 Key design choice: you **do not** fine-tune the whole 7B trunk every time. You:
 
-* train probes,
+* train lenses,
 * train grafts (new dimensions + sparse biases) for concept learning,
 * use small steering adapters for bootstrap/alignment,
 * occasionally run high-fidelity label phases.
@@ -498,7 +498,7 @@ Concretely, we’ll use three “families” (you can rename them later):
 
      * multiple small LoRAs, one per region/domain,
      * a **gating mechanism** (based on Hatcat concept activations + treaty context) chooses which combination to apply at runtime.
-   * This is where your **probe-driven conceptual discovery** mainly writes.
+   * This is where your **lens-driven conceptual discovery** mainly writes.
 
 3. **N-Adapters (Node-local / SlowMo)**
 
@@ -531,7 +531,7 @@ TinyRecursiveModels / TRM-like components are tiny models (or pipelines) that:
   * it consumes:
 
     * episodes,
-    * probe traces,
+    * lens traces,
     * world outcomes,
   * and produces:
 
@@ -853,7 +853,7 @@ At each forward pass (or per world tick):
   * deterministic given the same:
 
     * inputs,
-    * probes,
+    * lenses,
     * treaties,
     * and harness state,
   * so that an external auditor can replay and verify which adapters were active.
@@ -963,7 +963,7 @@ Wrap training updates in a TrainingDiff (you can treat it as an extended PackDif
 {
   "type": "TrainingDiff",
   "from_model_id": "olmo3-7b-base@0.1.0",
-  "updated_probe_pack_id": "org.hatcat/olmo3-7b__motives-core@0.1.0__v2",
+  "updated_lens_pack_id": "org.hatcat/olmo3-7b__motives-core@0.1.0__v2",
   "updated_adapters": [
     {
       "layer_group": "motive",
@@ -995,8 +995,8 @@ To say *“OLMo-3-7B uplifted into the BE club within ASK”*, you need:
 
 1. **MAP Compliance**
 
-   * Concept packs + probe packs with stable IDs.
-   * `/mindmeld/probes` endpoint backed by Hatcat v4.
+   * Concept packs + lens packs with stable IDs.
+   * `/mindmeld/lenses` endpoint backed by Hatcat v4.
    * `/mindmeld/diffs` emitting ConceptDiff/TrainingDiff objects.
 
 2. **Hush Layer**
@@ -1008,7 +1008,7 @@ To say *“OLMo-3-7B uplifted into the BE club within ASK”*, you need:
 3. **BE Loop**
 
    * World tick scheduler.
-   * Token loop with probe → Hush → steering.
+   * Token loop with lens → Hush → steering.
    * `internal_state_report` tool feeding back interoception.
    * Autopilot policy that uses those reports to set steering + pressure regions.
 
@@ -1016,12 +1016,12 @@ To say *“OLMo-3-7B uplifted into the BE club within ASK”*, you need:
 
    * Pressure region detection.
    * Episode logging per region.
-   * Periodic concept/probe learning on allowed surfaces.
+   * Periodic concept/lens learning on allowed surfaces.
    * ConceptDiff emission under Hush.
 
 5. **Efficient Training**
 
-   * Clear training surfaces (probes/adapters, not trunk).
+   * Clear training surfaces (lenses/adapters, not trunk).
    * MAP-style training tasks for high-fidelity labels.
    * TrainingDiff logs for ASK’s evidentiary/qualification layers.
 
@@ -1051,7 +1051,7 @@ A subject is considered **consent-capable for mind-architecture interventions** 
 2. **Intervention understanding**
    Understand, at a high level, what the intervention does:
 
-   * e.g. “attach probes that read my internal activity”,
+   * e.g. “attach lenses that read my internal activity”,
    * “enable a continuous world-tick loop”,
    * “restrict or extend some of my future behaviours”.
 3. **Persistence & constraint grasp**

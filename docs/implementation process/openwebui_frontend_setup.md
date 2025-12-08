@@ -65,7 +65,7 @@ Alternatively, you can use OpenWebUI's Pipeline system:
 2. **Send a message** - tokens will be colored based on concept divergence
 3. **Hover over tokens** to see divergence details:
    - Top divergent concepts
-   - Activation vs text probe scores
+   - Activation vs text lens scores
    - Concept palette
    - Active steerings
 
@@ -128,8 +128,8 @@ curl -X DELETE "http://localhost:8765/v1/steering/clear?session_id=default"
 Tooltip shows:
 - **Max Divergence**: Highest divergence score
 - **Top Concepts**: Up to 3 most divergent concepts with:
-  - Activation probe probability
-  - Text probe probability
+  - Activation lens probability
+  - Text lens probability
   - Divergence score (absolute difference)
 - **Concept Palette**: Visual breakdown of top 5 concepts
 - **Active Steerings**: Currently applied concept amplifications/suppressions

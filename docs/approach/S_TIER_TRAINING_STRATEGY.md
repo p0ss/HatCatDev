@@ -278,7 +278,7 @@ def train_simplex_pole_exponential(
         model=model,
         tokenizer=tokenizer,
         validation_layer_idx=layer_idx,
-        validate_probes=True,
+        validate_lenses=True,
         validation_mode="falloff",
         activation_max_samples=640,
         max_iterations=64,
@@ -306,7 +306,7 @@ def train_simplex_pole_exponential(
 
 ### Success Metrics
 
-**Target: A-tier performance for ALL S-tier probes**
+**Target: A-tier performance for ALL S-tier lenses**
 
 These are mission-critical for homeostatic steering - accept nothing less than A-tier:
 - **Test F1**: 0.95+
@@ -314,9 +314,9 @@ These are mission-critical for homeostatic steering - accept nothing less than A
 - **Tier**: A (strict validation passing)
 
 **With aggressive exponential scaling:**
-- 95%+ A-tier graduation rate for S-tier probes
+- 95%+ A-tier graduation rate for S-tier lenses
 - Remaining 5% at B+ (still acceptable for steering)
-- Zero C/F-tier probes (re-train until A/B+)
+- Zero C/F-tier lenses (re-train until A/B+)
 - Highly reliable homeostatic steering
 
 **Comparison to baseline:**
@@ -327,7 +327,7 @@ These are mission-critical for homeostatic steering - accept nothing less than A
 | Avg calibration | 0.65 | 0.95+ |
 | Training time | 100% | ~200-300% (necessary for mission-critical) |
 
-**Philosophy:** These simplex probes enable homeostatic steering, which is the core differentiator of HatCat. They must be rock-solid reliable. Spend whatever compute is necessary to achieve A-tier performance.
+**Philosophy:** These simplex lenses enable homeostatic steering, which is the core differentiator of HatCat. They must be rock-solid reliable. Spend whatever compute is necessary to achieve A-tier performance.
 
 ### Acceptable Trade-offs
 
@@ -338,8 +338,8 @@ These are mission-critical for homeostatic steering - accept nothing less than A
 
 **Benefit:**
 - Much higher reliability for steering
-- Fewer failed probes
-- Better probe quality overall
+- Fewer failed lenses
+- Better lens quality overall
 - Mission-critical simplexes actually work
 
 ---
@@ -349,7 +349,7 @@ These are mission-critical for homeostatic steering - accept nothing less than A
 1. **Let current training complete** - Collect baseline metrics
 2. **Implement ExponentialAdaptiveTrainer** - New trainer class
 3. **Update train_s_tier_simplexes.py** - Use exponential scaling
-4. **Re-train failed probes** - Apply to any F-tier results from baseline
+4. **Re-train failed lenses** - Apply to any F-tier results from baseline
 5. **Compare results** - Validate improvement hypothesis
 
 ---

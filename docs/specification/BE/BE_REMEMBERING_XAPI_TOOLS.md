@@ -10,7 +10,7 @@ All tools:
 
 - Use JSON input arguments
 - Return JSON responses
-- MUST respect ASK / Hush / AccessPolicy / ProbeDisclosurePolicy (enforced by the server)
+- MUST respect ASK / Hush / AccessPolicy / LensDisclosurePolicy (enforced by the server)
 - MUST respect resource limits from LifecycleContract
 
 ---

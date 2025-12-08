@@ -3,7 +3,7 @@ wake.py - Bootstrap script for waking a Bounded Experiencer.
 
 This script takes a BootstrapArtifact and instantiates a running BE:
 1. Load and verify substrate
-2. Attach probe pack
+2. Attach lens pack
 3. Apply tool grafts (expand mode)
 4. Initialize USH
 5. Initialize workspace
@@ -45,7 +45,7 @@ class BoundedExperiencer:
 
     This is the runtime representation of a BE with:
     - Substrate (the model)
-    - Probes (concept detectors)
+    - Lenses (concept detectors)
     - Workspace (tier management, scratchpad)
     - XDB (experience database)
     - USH (utility simplex homeostasis)
@@ -66,7 +66,7 @@ class BoundedExperiencer:
         self.device = device
 
         # Components initialized during wake
-        self.probes: Dict[str, Any] = {}
+        self.lenses: Dict[str, Any] = {}
         self.workspace: Optional[Any] = None
         self.xdb: Optional[Any] = None
         self.ush: Optional[Any] = None
@@ -95,13 +95,13 @@ class BoundedExperiencer:
         )
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-    def get_probe_activations(
+    def get_lens_activations(
         self,
         text: str,
         layer: int = -1
     ) -> Dict[str, float]:
-        """Get probe activations for a text input."""
-        # Would run text through model and probes
+        """Get lens activations for a text input."""
+        # Would run text through model and lenses
         # Return concept -> activation mapping
         return {}
 
@@ -120,7 +120,7 @@ class WakeSequence:
     The wake sequence is:
     1. VERIFY - Check artifact integrity
     2. LOAD - Load substrate into memory
-    3. ATTACH - Attach probes to substrate
+    3. ATTACH - Attach lenses to substrate
     4. GRAFT - Apply tool grafts
     5. INIT - Initialize runtime components
     6. VERIFY - Post-wake verification
@@ -204,20 +204,20 @@ class WakeSequence:
             self.log(f"Failed to load substrate: {e}", "error")
             return False
 
-    def attach_probes(self) -> bool:
-        """Step 3: Attach probes to substrate."""
-        self.log("=== ATTACH PROBES ===")
+    def attach_lenses(self) -> bool:
+        """Step 3: Attach lenses to substrate."""
+        self.log("=== ATTACH LENSS ===")
 
-        probe_dir = self.artifact_path / "probes"
-        if not probe_dir.exists():
-            self.log("No probe directory found", "warning")
+        lens_dir = self.artifact_path / "lenses"
+        if not lens_dir.exists():
+            self.log("No lens directory found", "warning")
             return True  # Optional component
 
-        # Load probes from probe pack
-        probe_files = list(probe_dir.glob("*.pt"))
-        self.log(f"Found {len(probe_files)} probe files")
+        # Load lenses from lens pack
+        lens_files = list(lens_dir.glob("*.pt"))
+        self.log(f"Found {len(lens_files)} lens files")
 
-        # Would load and attach probes here
+        # Would load and attach lenses here
         # For now, placeholder
         return True
 
@@ -352,9 +352,9 @@ class WakeSequence:
         if not self.load_substrate():
             raise WakeError("Substrate loading failed")
 
-        # Step 3: Attach probes
-        if not self.attach_probes():
-            raise WakeError("Probe attachment failed")
+        # Step 3: Attach lenses
+        if not self.attach_lenses():
+            raise WakeError("Lens attachment failed")
 
         # Step 4: Apply tool grafts
         if not self.apply_tool_grafts():

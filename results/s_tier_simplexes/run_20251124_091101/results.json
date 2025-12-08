@@ -2,7 +2,7 @@
   "timestamp": "20251124_091101",
   "total_simplexes": 13,
   "completed": 13,
-  "failed_probes": [],
+  "failed_lenses": [],
   "simplexes": [
     {
       "dimension": "taste_development",

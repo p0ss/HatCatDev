@@ -2,7 +2,7 @@
 
 ## Summary
 
-Successfully merged 2,043 culturally-diverse and balanced synsets into the tripole probe training data. The enriched dataset is now ready for re-training.
+Successfully merged 2,043 culturally-diverse and balanced synsets into the tripole lens training data. The enriched dataset is now ready for re-training.
 
 ## What Was Done
 
@@ -89,7 +89,7 @@ None - existing training pipeline works with enriched data automatically.
 
 ## Next Steps
 
-### 1. Re-train Tripole Probes
+### 1. Re-train Tripole Lenses
 ```bash
 poetry run python scripts/train_s_tier_simplexes.py --device cuda
 ```

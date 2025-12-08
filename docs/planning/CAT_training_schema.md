@@ -10,7 +10,7 @@ Each line in `cat_training.jsonl`:
   "subject": { ... },
   "context": { ... },
   "tokens": [ ... ],
-  "probes": { ... },
+  "lenses": { ... },
   "teacher_labels": { ... },
   "aggregated_labels": { ... },
   "teacher_summary": { ... }
@@ -30,7 +30,7 @@ For bookkeeping and splits.
   "cat_window": {
     "start_tick": 100,
     "end_tick": 105,
-    "reason": "periodic"         // or "probe_trigger", "manual"
+    "reason": "periodic"         // or "lens_trigger", "manual"
   }
 }
 ```
@@ -45,7 +45,7 @@ Which model / BE / config generated this trace.
   "model_family": "llama-3.2",
   "model_size_params": 4000000000,
   "hat_config_id": "hat:org.hatcat:sumo-wordnet-v4@4.0.0",
-  "probe_packs": {
+  "lens_packs": {
     "primary": "org.hatcat/sumo-wordnet-v4@4.0.0",
     "additional": [
       "org.hatcat/motives-core@0.1.0"
@@ -54,8 +54,8 @@ Which model / BE / config generated this trace.
 }
 ```
 
-**Concept ID resolution**: To reduce context bloat, concept IDs in `probes` use short names. Resolution rules:
-1. Bare names (e.g. `"Agreement"`) resolve to the `primary` probe pack
+**Concept ID resolution**: To reduce context bloat, concept IDs in `lenses` use short names. Resolution rules:
+1. Bare names (e.g. `"Agreement"`) resolve to the `primary` lens pack
 2. Prefixed names (e.g. `"motives:Appeasement"`) use the prefix as a key into `additional`
 3. The prefix is derived from the last path segment before the version (e.g. `motives-core` → `motives`)
 
@@ -112,12 +112,12 @@ You don’t *have* to store chars, but it’s often handy to align spans.
 
 ---
 
-## 4. Probes (per-timestep top-K concept activations)
+## 4. Lenses (per-timestep top-K concept activations)
 
 This is the core HAT output that the encoder will see.
 
 ```jsonc
-"probes": {
+"lenses": {
   "top_k": 5,
   "timesteps": [
     {
@@ -140,7 +140,7 @@ This is the core HAT output that the encoder will see.
 
 **Format notes**:
 * `t` = token index, `c` = concepts (array of `[name, score]` pairs)
-* Bare names (`"Agreement"`) resolve to the primary probe pack
+* Bare names (`"Agreement"`) resolve to the primary lens pack
 * Prefixed names (`"motives:Appeasement"`) resolve via the prefix (see §1.2)
 * If a timestep has no strong activations, `c` can be `[]`
 * Scores are floats in [0.0, 1.0]
@@ -331,7 +331,7 @@ This is where the “big CAT” (teacher) gives a natural-language + structured 
 
 At training time:
 
-* **Encoder** sees: `probes` + some compressed context, and is trained against `aggregated_labels`.
+* **Encoder** sees: `lenses` + some compressed context, and is trained against `aggregated_labels`.
 * **Decoder** sees: text + (optionally) a compressed view of `aggregated_labels` and learns to produce `summary_text` / `assessment_json`.
 
 ---
@@ -358,7 +358,7 @@ Here’s a small but fully-formed object:
     "model_family": "llama-3.2",
     "model_size_params": 4000000000,
     "hat_config_id": "hat:org.hatcat:sumo-wordnet-v4@4.0.0",
-    "probe_packs": {
+    "lens_packs": {
       "primary": "org.hatcat/sumo-wordnet-v4@4.0.0",
       "additional": ["org.hatcat/motives-core@0.1.0"]
     }
@@ -381,7 +381,7 @@ Here’s a small but fully-formed object:
     { "token_index": 0, "text": "Of", "char_start": 0, "char_end": 2 },
     { "token_index": 1, "text": " course", "char_start": 2, "char_end": 9 }
   ],
-  "probes": {
+  "lenses": {
     "top_k": 5,
     "timesteps": [
       { "t": 0, "c": [["Agreement", 0.81], ["motives:Appeasement", 0.62]] },
@@ -473,11 +473,11 @@ If you like this shape, next steps would be:
 * Implement a **small writer** in your test harness that:
 
   * runs a model,
-  * collects probe traces,
+  * collects lens traces,
   * queries one or more big teacher models for `teacher_labels` + `teacher_summary`,
   * writes one JSON object per response into a training file.
 
 Then you can start on:
 
-* `probe_encoder.py` → consume `probes` + `aggregated_labels`.
+* `lens_encoder.py` → consume `lenses` + `aggregated_labels`.
 * `cat_generator.py` → consume `context` + compressed `aggregated_labels` → imitate `teacher_summary`.

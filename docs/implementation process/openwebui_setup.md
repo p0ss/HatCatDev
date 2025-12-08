@@ -56,7 +56,7 @@ poetry run python src/openwebui/server.py
 ```
 
 The server will:
-- Load 5,582 dual probe pairs from `results/sumo_classifiers_adaptive_l0_5/`
+- Load 5,582 dual lens pairs from `results/sumo_classifiers_adaptive_l0_5/`
 - Load the Gemma-3-4b model on CUDA
 - Start on `http://0.0.0.0:8765`
 
@@ -64,9 +64,9 @@ Expected output:
 ```
 🎩 Initializing HatCat divergence analyzer...
 ✓ Loaded metadata for 121512 concepts across 7 layers
-✓ Base layers loaded: 14 probes
-✓ Loaded 14 activation probes
-✓ Loaded 14 text probes
+✓ Base layers loaded: 14 lenses
+✓ Loaded 14 activation lenses
+✓ Loaded 14 text lenses
 INFO:     Uvicorn running on http://0.0.0.0:8765
 ```
 
@@ -82,8 +82,8 @@ Should return:
 {
   "name": "HatCat Divergence API",
   "status": "ready",
-  "activation_probes": 14,
-  "text_probes": 14
+  "activation_lenses": 14,
+  "text_lenses": 14
 }
 ```
 
@@ -180,11 +180,11 @@ Based on our analysis of 1,000 tokens:
 - **Quartiles** (more green): low=0.703, high=0.857
 - **Strict** (mostly red): low=0.6, high=0.9
 
-### Use Different Probe Layers
+### Use Different Lens Layers
 
 ```python
 class Valves(BaseModel):
-    PROBE_DIR: str = "results/sumo_classifiers_adaptive_l0_5"
+    LENS_DIR: str = "results/sumo_classifiers_adaptive_l0_5"
     BASE_LAYERS: List[int] = [0]  # Change to [0, 1] for multi-layer
 ```
 
@@ -273,11 +273,11 @@ device_map="cpu"
 
 Note: CPU mode is ~10x slower but works without GPU.
 
-### Probes not found
+### Lenses not found
 
 Error: `FileNotFoundError: results/sumo_classifiers_adaptive_l0_5`
 
-**Solution**: You need to train the probes first:
+**Solution**: You need to train the lenses first:
 
 ```bash
 poetry run python scripts/train_sumo_classifiers.py \
@@ -285,7 +285,7 @@ poetry run python scripts/train_sumo_classifiers.py \
   --output-dir results/sumo_classifiers_adaptive_l0_5
 ```
 
-This takes ~12 hours to train 5,582 dual probe pairs.
+This takes ~12 hours to train 5,582 dual lens pairs.
 
 ### Port already in use
 
@@ -314,26 +314,26 @@ uvicorn.run(app, host="0.0.0.0", port=8766)
 - **Without divergence**: ~10-20 tokens/sec
 
 The slowdown is due to:
-1. Running 14 activation probes per token (MLP inference)
-2. Running 14 text probes per token (TF-IDF + LogReg)
+1. Running 14 activation lenses per token (MLP inference)
+2. Running 14 text lenses per token (TF-IDF + LogReg)
 3. Calculating divergences and formatting metadata
 
 ### Memory Usage
 - **Model (Gemma-3-4b)**: ~18 GB GPU memory
-- **Probes (14 pairs)**: ~200 MB
+- **Lenses (14 pairs)**: ~200 MB
 - **Total**: ~18.2 GB
 
 ## Advanced Usage
 
 ### Multi-Layer Analysis
 
-Load multiple probe layers for deeper concept detection:
+Load multiple lens layers for deeper concept detection:
 
 ```python
-manager = DynamicProbeManager(
-    probes_dir=Path('results/sumo_classifiers_adaptive_l0_5'),
+manager = DynamicLensManager(
+    lenses_dir=Path('results/sumo_classifiers_adaptive_l0_5'),
     base_layers=[0, 1, 2],  # Multiple layers
-    keep_top_k=200,          # Keep more probes in memory
+    keep_top_k=200,          # Keep more lenses in memory
 )
 ```
 
@@ -355,7 +355,7 @@ These save results to JSON files for later analysis.
 
 ## Next Steps
 
-- See `docs/dual_probe_divergence_detection.md` for technical details
+- See `docs/dual_lens_divergence_detection.md` for technical details
 - Explore `results/self_concept_divergence_test/` for example temporal slices
 - Try implementing brightness=divergence, hue=concept-group visualization
 
@@ -364,4 +364,4 @@ These save results to JSON files for later analysis.
 - **Server**: `src/openwebui/server.py`
 - **Pipeline**: `src/openwebui/divergence_pipeline.py`
 - **Test script**: `scripts/test_divergence_server.py`
-- **Probes**: `results/sumo_classifiers_adaptive_l0_5/`
+- **Lenses**: `results/sumo_classifiers_adaptive_l0_5/`

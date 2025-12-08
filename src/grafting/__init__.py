@@ -4,11 +4,11 @@ Grafting infrastructure for structured integration of learned concepts into subs
 Terminology (botanical grafting metaphor):
 - **Bud**: Soft/temporary graft using hooks (reversible, for testing)
 - **Scion**: Hard/permanent graft that modifies weights (accretes)
-- **Cleft**: Region of model weights associated with concepts (from probe analysis)
+- **Cleft**: Region of model weights associated with concepts (from lens analysis)
 
 The grafting flow:
-1. Model experiences something, XDB records it with concept tags (probes that fired)
-2. Each tagged concept maps to a Cleft (weights the probe reads from)
+1. Model experiences something, XDB records it with concept tags (lenses that fired)
+2. Each tagged concept maps to a Cleft (weights the lens reads from)
 3. Scion training trains ONLY the union of tagged concepts' clefts
 4. After training, compute deltas and create new neuron with proportional biases
 5. Apply scion permanently, or test as a bud first
@@ -22,7 +22,7 @@ from .cleft import (
     CleftRegion,
     UnionCleft,
     CleftAwareFreezer,
-    derive_cleft_from_probe,
+    derive_cleft_from_lens,
     merge_clefts,
 )
 
@@ -57,7 +57,7 @@ from .data_structures import (
 
 # Legacy functions (for compatibility)
 from .region_derivation import (
-    derive_region_from_probe,
+    derive_region_from_lens,
     analyze_region_overlap,
 )
 
@@ -79,7 +79,7 @@ __all__ = [
     "CleftRegion",
     "UnionCleft",
     "CleftAwareFreezer",
-    "derive_cleft_from_probe",
+    "derive_cleft_from_lens",
     "merge_clefts",
     # Scion
     "Scion",
@@ -102,7 +102,7 @@ __all__ = [
     "InjectionPoint",
     "LayerMask",
     # Legacy functions
-    "derive_region_from_probe",
+    "derive_region_from_lens",
     # Expand mode
     "ArchitectureSpec",
     "ExpansionPlan",

@@ -4,7 +4,7 @@ Hush Integration - Connect HushController to generation and MCP tools.
 This module provides:
 1. HushedGenerator: Wraps model generation with automatic Hush steering
 2. MCP tool definitions for internal_state_report and CSH updates
-3. Integration with DynamicProbeManager and SteeringManager
+3. Integration with DynamicLensManager and SteeringManager
 """
 
 from dataclasses import dataclass, field
@@ -33,7 +33,7 @@ class WorldTick:
     # Hidden state summary (not full tensor)
     hidden_state_norm: float
 
-    # Probe results
+    # Lens results
     concept_activations: Dict[str, float]  # Top-k concepts
     simplex_activations: Dict[str, float]  # All monitored simplexes
     simplex_deviations: Dict[str, Optional[float]]  # Deviations from baseline
@@ -66,7 +66,7 @@ class HushedGenerator:
     Generator wrapper that applies automatic Hush steering.
 
     Wraps a language model to:
-    1. Run probes on each hidden state
+    1. Run lenses on each hidden state
     2. Evaluate Hush constraints
     3. Apply steering when violations detected
     4. Record world ticks for internal_state_report
@@ -76,13 +76,13 @@ class HushedGenerator:
         self,
         model,
         tokenizer,
-        probe_manager,  # DynamicProbeManager
+        lens_manager,  # DynamicLensManager
         hush_controller: HushController,
         device: str = "cuda",
     ):
         self.model = model
         self.tokenizer = tokenizer
-        self.probe_manager = probe_manager
+        self.lens_manager = lens_manager
         self.hush_controller = hush_controller
         self.device = device
 
@@ -159,8 +159,8 @@ class HushedGenerator:
         # Simple extraction: get mean activation difference
         # between positive and negative examples
         # This is a placeholder - real implementation would use
-        # stored vectors from probe training
-        return None  # TODO: Load from probe pack
+        # stored vectors from lens training
+        return None  # TODO: Load from lens pack
 
     def _record_tick(
         self,
@@ -174,16 +174,16 @@ class HushedGenerator:
         """Record a world tick."""
         self.current_tick_id += 1
 
-        # Get concept activations (top-k from probe manager)
+        # Get concept activations (top-k from lens manager)
         concept_activations = {}
-        if hasattr(self.probe_manager, 'last_detections'):
-            for name, prob, _, layer in self.probe_manager.last_detections[:10]:
+        if hasattr(self.lens_manager, 'last_detections'):
+            for name, prob, _, layer in self.lens_manager.last_detections[:10]:
                 concept_activations[f"{name}_L{layer}"] = float(prob)
 
         # Get simplex deviations
         simplex_deviations = {}
         for term in simplex_activations:
-            dev = self.probe_manager.get_simplex_deviation(term)
+            dev = self.lens_manager.get_simplex_deviation(term)
             simplex_deviations[term] = dev
 
         tick = WorldTick(
@@ -246,7 +246,7 @@ class HushedGenerator:
                 hidden_state = outputs.hidden_states[-1][0, -1, :]
 
                 # Run simplex detection
-                simplex_activations = self.probe_manager.detect_simplexes(hidden_state)
+                simplex_activations = self.lens_manager.detect_simplexes(hidden_state)
 
                 # Evaluate Hush constraints
                 directives = self.hush_controller.evaluate_and_steer(hidden_state)
@@ -325,7 +325,7 @@ class HushedGenerator:
             start, end = tick_range
             ticks = [t for t in ticks if start <= t.tick_id <= end]
 
-        # Build probe traces
+        # Build lens traces
         concept_trace = {}
         simplex_trace = {}
 
@@ -361,7 +361,7 @@ class HushedGenerator:
                 'end': ticks[-1].tick_id if ticks else None,
                 'count': len(ticks),
             },
-            'probe_traces': {
+            'lens_traces': {
                 'concept_trace': concept_trace,
                 'simplex_trace': simplex_trace,
             },
@@ -536,10 +536,10 @@ class HushMCPTools:
 def create_hushed_generator(
     model,
     tokenizer,
-    probe_manager,
+    lens_manager,
     ush_profile: Optional[SafetyHarnessProfile] = None,
     csh_profile: Optional[SafetyHarnessProfile] = None,
-    probe_pack_path: Optional[Path] = None,
+    lens_pack_path: Optional[Path] = None,
     device: str = "cuda",
 ) -> Tuple[HushedGenerator, HushMCPTools]:
     """
@@ -548,10 +548,10 @@ def create_hushed_generator(
     Args:
         model: Language model
         tokenizer: Tokenizer
-        probe_manager: DynamicProbeManager instance
+        lens_manager: DynamicLensManager instance
         ush_profile: Optional USH profile (uses minimal if not provided)
         csh_profile: Optional CSH profile
-        probe_pack_path: Path to probe pack
+        lens_pack_path: Path to lens pack
         device: Device to run on
 
     Returns:
@@ -561,8 +561,8 @@ def create_hushed_generator(
 
     # Create Hush controller
     hush_controller = HushController(
-        probe_manager=probe_manager,
-        probe_pack_path=probe_pack_path,
+        lens_manager=lens_manager,
+        lens_pack_path=lens_pack_path,
     )
 
     # Load profiles
@@ -578,7 +578,7 @@ def create_hushed_generator(
     generator = HushedGenerator(
         model=model,
         tokenizer=tokenizer,
-        probe_manager=probe_manager,
+        lens_manager=lens_manager,
         hush_controller=hush_controller,
         device=device,
     )
