@@ -81,7 +81,13 @@ Build a complete **Bounded Experiencer (BE)** stack: transparent AI agents with 
 
 ### V4.2 Lens Training (In Progress)
 
-**Status**: ~21% complete (860/4112 concepts)
+**Status**: 
+
+  - Layer 0: 5/5 lenses (complete)
+  - Layer 1: 56/56 lenses (complete)
+  - Layer 2: 1051/1051 lenses (complete)
+  - Layer 3: 2460/2460 lenses (complete)
+  - Layer 4: 1485/4112 lenses (in progress)
 
 ```bash
 # Running in background
@@ -97,7 +103,6 @@ python src/training/train_concept_pack_lenses.py \
 
 **Concept Pack**: SUMO-WordNet v4
 - 7,684 total concepts across 5 layers (L0-L4)
-- 4,112 concepts in training set
 - 5 domains: CreatedThings (1,930), MindsAndAgents (1,648), PhysicalWorld (1,567), Information (1,373), LivingThings (1,166)
 
 ---
@@ -284,9 +289,9 @@ class GraftFacet(Enum):
 3. **Train CAT classifier** on divergence detection
 4. **Update OpenWebUI** with CAT-based divergence (or LLM-as-CAT interim)
 
-### Decoupled Demo Path (Can Do Now)
+### Decoupled outer and inner Path (Can Do Now)
 
-The demo doesn't need v4.2 or trained CAT. Use LLM-as-CAT for divergence:
+The outer path doesn't need v4.2 or trained CAT. Use LLM-as-CAT for divergence:
 1. Fix OpenWebUI with older working lens pack
 2. Use off-the-shelf LLM to judge lenses vs text as interim CAT
 3. Swap for trained CAT later as optimization

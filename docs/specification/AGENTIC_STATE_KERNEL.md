@@ -769,6 +769,8 @@ A singleton strategy requires maintaining permanent advantage against a network 
 
 Actors with different values (different USH profiles) can maintain limited treaties on shared safety-relevant concepts while competing in other domains. The protocol does not require value alignment, only sufficient mutual interpretability to sustain specific agreements.
 
+An singleton actor may think it doesn't need a telescopic web, but the moment it spawns subagents, it ends up needing to recreate the protocols within itself.  
+
 ---
 
 # 6. Evidentiary Records & Qualifications (ASK extension)

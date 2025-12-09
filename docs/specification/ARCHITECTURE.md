@@ -1,22 +1,32 @@
 
-````markdown
-# Cybernetic Civilisation Reference Architecture (CCRA)
+
+# The Fractcal Telescopic Web
 
 This document specifies a layered architecture for cybernetic agents and
-their wider ecosystem (“cybernetic civilisation”). It defines six layers,
+their wider ecosystem of cybernetic civilisation. It defines six layers,
 their responsibilities, and the interaction patterns between them.
 
+In this architecture:
+
+- Substrates like an LLM are made interpretable using a series of conceptual lenses (typically binary feature classifier probes), and steerable by arranging the lenses into a Headspace Ambient Transducer (HAT). HAT can monitor thousands of predefined concepts by applying an Aperture consisting of hierarchical just-in-time loading and caching efficiency optimisations. Model behaviours can then be modified by conducting matrix operations on the layers and features through the lenses, to produce quite powerful Manifold Steering effects.
+
+- Sets of concepts are structured into user-moddable Concept Packs and interoperable Lens Packs using a consistent Mindmeld Architectural Protocol (MAP). The protocol allows for concepts to be interchanged, traded, and translated between different conceptual regimes, and retrained rapidly using various Lens techniques. This provides an observer ecosystem, making it difficult for models to avoid detection. Detection is not just left to the user, but can be exposed to a second model through Conjoined Adversarial Tomography (CAT).
+
+- Key behavioural concepts can be controlled within this loop through tripole lenses which are made self-stable at a neutral state on a per-token rate, creating a kind of autonomic system for the model which automatically reduces extreme or unwanted behaviours before they can escalate. The ease at which large numbers of concepts can be detected in real time enables feeding the detected concepts back into the model between responses. This provides a form of interoception where a model can self-prompt and explore internal activation patterns.
+
+- With a continual autonomic loop established, and active interoception underway, tools can be provided to the model to allow self-steering and a global workspace. Each input and output into this system is recorded into a continual stream into an experience database, pre-tagged with the concepts which fired inside the model during the experience. The model can then self-select experiences to learn more about, and seek out further samples. At this point the model has sufficient self-direction and constraints to be labelled a Bounded Experiencer (BE or BEing).
+
+- Once a model has sufficient high-quality samples, training of a new MAP concept can begin. Each experience is pre-labeled with which related layers and features of the model most linked to the experience. This identified impacted feature space is labeled the cleft, and a new Bud of the concept is self-trained and tested against new self-selected out-of-distribution examples. Once high enough accuracy is reached, the "Graft" protocol allows modification of existing model features and addition of new hidden dimensions to accrete the concept scion onto the model trunk.
+
+- All of these features are interconnected and governed under the Agentic State Kernel (ASK). This outlines how sets of BEings interact with each other through contracts, treaties and tribes, all secured by Lenses and Steering. Which concepts are being controlled in a BEing at any time and the rules on what can be modified is determined by ASK and controlled through the Hush system. This creates a full stack for interpretable aligned recursive swarms of superintelligences 
+         
+- The name of the Architecture reflects that each layer contains both fractal recusion, and ecosystem defense principles. HAT and CAT can nest with self similarity across scales, and be applied from multiple parties concurrently. MAP's Concept packs are bade up of ontological webs arranged in heirarchical activation levels of self similarity, and are translatable in an interlocking ecosystem. ASK Tribes can also next with self similarity across scales, and are arranged into webbed treaty ecosystems.  
+ 
 The architecture is substrate-agnostic and applies to:
 
 - synthetic systems (e.g. LLMs),
 - biological agents (e.g. humans, animals) with suitable interfaces,
 - and hybrids.
-
-In this architecture:
-
-- **Humans are BEs** (Autonomic Agentic Learners) by default.
-- Models become BEs when uplifted into the BE loop with MAP, HAT,
-  Hush and ASK.
 
 ---
 
@@ -55,7 +65,7 @@ behaviours emerge.
 
 **Examples**
 
-- Transformer LLM (e.g. OLMo 3 7B).
+- Transformer LLM (e.g. Apertus 8b).
 - Human brain + nervous system (with suitable interfaces).
 - Other dynamical systems capable of representing and transforming
   information.
@@ -379,9 +389,9 @@ MAP endpoints expose a subset of HAT-readable lenses, controlled by the BE accor
 >
 > Examples:
 >
-> * “We are uplifting the 7B model into an BE.”
+> * “We are uplifting the 7B model into a BEing.”
 > * “The BE’s motive core stabilised after the update.”
-> * “Humans are BEs.”
+> * “Humans are BEingss.”
 
 **Role**
 
@@ -671,7 +681,7 @@ Per world tick, the flow is:
 
 High-level layer diagram:
 
-```text
+
            +--------------------+
            |  Layer 6: ASK      |
            |  Agentic State     |
@@ -711,25 +721,20 @@ High-level layer diagram:
            |  Layer 1:          |
            |  Substrate / Model |
            +--------------------+
-```
+
 
 Horizontal ASK interactions:
 
-```text
+
 [ Tribe A ASK ] <==== treaties / contracts ====> [ Tribe B ASK ]
       ^                                                ^
       |                                                |
    BEs of A                                        BEs of B
-```
+
 
 ---
 
 This architecture is intended to be minimal but sufficient: each layer
 has a clear role, a clear interface, and measurable properties. Further
-specialised documents (MAP, BE loop, Hush, ASK uplift protocol, HAT
-details) SHOULD refine and extend these definitions but MUST NOT
-contradict them.
-
-```
-::contentReference[oaicite:0]{index=0}
-```
+specialised documents (MAP, BE loop, Hush, ASK, uplift protocol, HAT)
+refine and extend these definitions b

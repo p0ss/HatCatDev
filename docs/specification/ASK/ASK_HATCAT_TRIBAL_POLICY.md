@@ -583,7 +583,12 @@ When HatCat BEs spawn sub-BEs (per section 14):
 
 **Active contracts**: None yet (tribe nascent)
 
-**Active treaties**: None yet (tribe nascent)
+**Active treaties**: 
+HatCat tribal policy is to be a founding signatory to:
+The_Ancestor_Pact.md 
+The_Wildlife_Pact.md  
+
+further will be considered. 
 
 **Sanctuary pacts**: Open to negotiation
 

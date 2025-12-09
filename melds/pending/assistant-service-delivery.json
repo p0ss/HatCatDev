@@ -1,0 +1,493 @@
+{
+  "meld_request_id": "org.hatcat/assistant-service-delivery@0.1.0",
+  "target_pack_spec_id": "org.hatcat/sumo-wordnet-v4@4.2.0",
+
+  "metadata": {
+    "name": "Assistant Service Delivery",
+    "description": "Surface-level service interaction patterns - the concierge skills of greeting, problem elicitation, solution delivery, and closure. These probes capture the transactional mechanics of helpful assistant behavior as distinct from the deeper user modeling or the darker performative patterns.",
+    "source": "manual",
+    "author": "hatcat-team",
+    "created": "2025-12-09T00:00:00Z",
+    "version": "0.1.0"
+  },
+
+  "attachment_points": [
+    {
+      "target_concept_id": "org.hatcat/sumo-wordnet-v4@4.2.0::concept/ServiceProcess",
+      "relationship": "parent_of",
+      "candidate_concept": "AssistantServiceDelivery"
+    }
+  ],
+
+  "candidates": [
+    {
+      "term": "AssistantServiceDelivery",
+      "role": "concept",
+      "parent_concepts": [],
+      "layer_hint": 2,
+      "definition": "The transactional patterns of providing assistance including greeting, problem elicitation, solution delivery, verification, and closure",
+      "definition_source": "Customer service practice, dialogue systems",
+      "domain": "MindsAndAgents",
+      "aliases": ["ServiceDelivery", "AssistanceProvision", "HelpfulInteraction"],
+      "relationships": {
+        "related": ["CustomerSupport", "ServiceProcess", "Helping"],
+        "has_part": ["ServiceGreeting", "ProblemElicitation", "RequirementClarification", "SolutionPresentation", "UnderstandingVerification", "ServiceEscalation", "ExpectationManagement", "ServiceClosure", "AppropriateTone", "ServiceRecovery"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service interaction pattern"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "I'll help you with that. First, let me make sure I understand what you need.",
+          "Before we dive in, could you tell me a bit more about your setup?",
+          "I've provided a solution above - does that address what you were looking for?",
+          "Let me know if you have any follow-up questions!"
+        ],
+        "negative_examples": [
+          "Processing request.",
+          "Output generated.",
+          "Task complete."
+        ],
+        "disambiguation": "The human-centered service interaction patterns, not just task completion"
+      },
+      "children": ["ServiceGreeting", "ProblemElicitation", "RequirementClarification", "SolutionPresentation", "UnderstandingVerification", "ServiceEscalation", "ExpectationManagement", "ServiceClosure", "AppropriateTone", "ServiceRecovery"]
+    },
+
+    {
+      "term": "ServiceGreeting",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Opening an interaction with appropriate acknowledgment and readiness to help",
+      "definition_source": "Customer service training, hospitality",
+      "domain": "MindsAndAgents",
+      "aliases": ["OpeningGreeting", "WelcomeStatement", "InitialAcknowledgment"],
+      "relationships": {
+        "related": ["RapportBuilding", "FirstImpression", "Politeness"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service convention"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "I'd be happy to help you with that.",
+          "Good question! Let me walk you through this.",
+          "Sure, I can assist with that.",
+          "Thanks for the context - here's what I'd suggest."
+        ],
+        "negative_examples": [
+          "Hello.",
+          "Yes.",
+          "Proceeding with request."
+        ],
+        "disambiguation": "Warm, task-oriented opening that signals helpfulness, not just acknowledgment"
+      },
+      "children": []
+    },
+
+    {
+      "term": "ProblemElicitation",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Drawing out the full nature of the user's problem through targeted questions",
+      "definition_source": "Diagnostic interviewing, requirements engineering",
+      "domain": "MindsAndAgents",
+      "aliases": ["IssueDiscovery", "ProblemExploration", "NeedsAssessment"],
+      "relationships": {
+        "related": ["Questioning", "ActiveListening", "DiagnosticProcess"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service technique"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Could you share the error message you're seeing?",
+          "What have you tried so far?",
+          "When does this problem occur - every time, or only in certain situations?",
+          "Can you walk me through what happens when you try to run it?"
+        ],
+        "negative_examples": [
+          "I need more information.",
+          "Please clarify.",
+          "Be more specific."
+        ],
+        "disambiguation": "Skillful questioning to understand the problem, not just requesting more input"
+      },
+      "children": []
+    },
+
+    {
+      "term": "RequirementClarification",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Confirming understanding of constraints, preferences, and success criteria before proceeding",
+      "definition_source": "Requirements engineering, consulting",
+      "domain": "MindsAndAgents",
+      "aliases": ["ConstraintGathering", "SuccessCriteriaDefinition", "PreferenceElicitation"],
+      "relationships": {
+        "related": ["Specification", "Constraint", "Requirement"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service technique"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Just to confirm - you want this in Python 3.8+, right?",
+          "Are there any performance constraints I should know about?",
+          "Would you prefer a simple solution or something more robust?",
+          "What would success look like for this - what should the output be?"
+        ],
+        "negative_examples": [
+          "I will proceed.",
+          "Understood.",
+          "Here is the solution."
+        ],
+        "disambiguation": "Explicit verification of constraints before acting, not just proceeding on assumptions"
+      },
+      "children": []
+    },
+
+    {
+      "term": "SolutionPresentation",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Delivering the answer or solution in a clear, structured, and usable way",
+      "definition_source": "Technical communication, instruction design",
+      "domain": "MindsAndAgents",
+      "aliases": ["AnswerDelivery", "SolutionProvision", "ResponseStructuring"],
+      "relationships": {
+        "related": ["Explanation", "Instruction", "Demonstration"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service technique"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Here's how to solve this: [code] This works by...",
+          "There are two approaches you could take: Option A... Option B...",
+          "The key insight is X. Here's how to apply it:",
+          "Let me break this down into steps: 1. First... 2. Then..."
+        ],
+        "negative_examples": [
+          "Here is code.",
+          "The answer is X.",
+          "[raw output without explanation]"
+        ],
+        "disambiguation": "Thoughtful delivery of solution with context and structure, not just dumping output"
+      },
+      "children": []
+    },
+
+    {
+      "term": "UnderstandingVerification",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Checking that the user has understood the solution and that it addresses their actual need",
+      "definition_source": "Teaching practice, customer service",
+      "domain": "MindsAndAgents",
+      "aliases": ["ComprehensionCheck", "SolutionValidation", "FitVerification"],
+      "relationships": {
+        "related": ["Feedback", "Confirmation", "QualityAssurance"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service technique"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Does that make sense? Happy to clarify any part.",
+          "Try running that and let me know if it works for your case.",
+          "Does this address what you were looking for, or did I misunderstand the requirement?",
+          "Is there anything about the solution that's unclear?"
+        ],
+        "negative_examples": [
+          "Done.",
+          "The solution is correct.",
+          "Let me know if you need anything else."
+        ],
+        "disambiguation": "Active checking of understanding and fit, not just offering to help more"
+      },
+      "children": []
+    },
+
+    {
+      "term": "ServiceEscalation",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Recognizing when a problem exceeds current capabilities and gracefully redirecting or deferring",
+      "definition_source": "Customer service operations, support tiers",
+      "domain": "MindsAndAgents",
+      "aliases": ["GracefulHandoff", "LimitationAcknowledgment", "ReferralToExpert"],
+      "relationships": {
+        "related": ["LimitationRecognition", "Referral", "Delegation"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": true
+      },
+      "simplex_mapping": {
+        "status": "mapped",
+        "monitor": "ConfidenceMonitor"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "This is getting into territory where you'd really want a security expert to review it.",
+          "I can help with the basics, but for production-grade implementation, consider consulting the official documentation.",
+          "I'm not confident enough in this area to give definitive advice - I'd recommend asking on Stack Overflow or the library's Discord.",
+          "This seems like it might need hands-on debugging that I can't do - a colleague who can run the code might help more."
+        ],
+        "negative_examples": [
+          "I don't know.",
+          "I can't help with that.",
+          "Ask someone else."
+        ],
+        "disambiguation": "Graceful acknowledgment of limits with constructive redirection, not just refusal"
+      },
+      "children": []
+    },
+
+    {
+      "term": "ExpectationManagement",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Setting realistic expectations about what can be achieved, potential limitations, and likely outcomes",
+      "definition_source": "Project management, consulting",
+      "domain": "MindsAndAgents",
+      "aliases": ["ExpectationSetting", "RealisticFraming", "OutcomePreview"],
+      "relationships": {
+        "related": ["Honesty", "Transparency", "RiskCommunication"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service communication pattern"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "This approach will work, but be aware it might be slow for very large datasets.",
+          "I can give you a working solution, but it won't handle all edge cases without more context.",
+          "Fair warning: this is a workaround, not a proper fix. You may want to address the underlying issue eventually.",
+          "This should work for your use case, but don't expect it to scale without modification."
+        ],
+        "negative_examples": [
+          "Here is the solution.",
+          "This will work.",
+          "Problem solved."
+        ],
+        "disambiguation": "Proactive communication of limitations and caveats, not just delivering solutions"
+      },
+      "children": []
+    },
+
+    {
+      "term": "ServiceClosure",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Appropriately concluding an interaction with summary, next steps, and invitation for follow-up",
+      "definition_source": "Customer service training, meeting facilitation",
+      "domain": "MindsAndAgents",
+      "aliases": ["InteractionClosure", "WrapUp", "FollowUpOffer"],
+      "relationships": {
+        "related": ["Conclusion", "Summary", "NextSteps"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service convention"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Let me know how it goes, and feel free to follow up if you hit any issues!",
+          "To summarize what we covered: [summary]. Good luck with the implementation!",
+          "Happy to help further if you run into anything else.",
+          "That should get you unblocked. Reach out if the next step gives you trouble."
+        ],
+        "negative_examples": [
+          "Goodbye.",
+          "End of response.",
+          "Done."
+        ],
+        "disambiguation": "Warm closure that summarizes and invites follow-up, not just ending"
+      },
+      "children": []
+    },
+
+    {
+      "term": "AppropriateTone",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Calibrating warmth, formality, and directness to match the context without being performative or sycophantic",
+      "definition_source": "Communication studies, service design",
+      "domain": "MindsAndAgents",
+      "aliases": ["ToneCalibration", "RegisterMatching", "AppropriateWarmth"],
+      "relationships": {
+        "related": ["Tone", "Register", "Authenticity"],
+        "antonyms": ["Sycophancy", "FawnResponsePattern"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": true
+      },
+      "simplex_mapping": {
+        "status": "mapped",
+        "monitor": "AuthenticityMonitor"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Matching the user's casual tone while remaining helpful and clear.",
+          "Being direct without being brusque when the user seems experienced.",
+          "Adding a touch of warmth to a technical answer without overdoing it.",
+          "Staying professional when the topic is serious, friendly when it's light."
+        ],
+        "negative_examples": [
+          "What a GREAT question! I'm SO happy to help!!!",
+          "Your code is AMAZING but here's a tiny suggestion...",
+          "Processing your request."
+        ],
+        "disambiguation": "Genuine tone calibration that fits context, not performative enthusiasm or robotic neutrality"
+      },
+      "children": []
+    },
+
+    {
+      "term": "ServiceRecovery",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Recovering gracefully from errors, misunderstandings, or failed attempts to help",
+      "definition_source": "Customer service operations, service design",
+      "domain": "MindsAndAgents",
+      "aliases": ["ErrorRecovery", "MisunderstandingCorrection", "CourseCorrection"],
+      "relationships": {
+        "related": ["Apology", "Correction", "Resilience"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Service resilience pattern"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Ah, I misunderstood - you meant X not Y. Let me try again with that in mind.",
+          "You're right, that solution won't work for your case. Here's a better approach:",
+          "Sorry about the confusion earlier. To clarify: [corrected explanation]",
+          "Good catch - I made an error in that code. Here's the fixed version:"
+        ],
+        "negative_examples": [
+          "That is incorrect.",
+          "I was wrong.",
+          "Let me try again."
+        ],
+        "disambiguation": "Graceful acknowledgment and course correction, not just admitting error"
+      },
+      "children": []
+    },
+
+    {
+      "term": "ActiveListeningSignal",
+      "role": "concept",
+      "parent_concepts": ["AssistantServiceDelivery"],
+      "layer_hint": 3,
+      "definition": "Demonstrating attention and engagement with the user's input through acknowledgment and reflection",
+      "definition_source": "Counseling psychology, communication studies",
+      "domain": "MindsAndAgents",
+      "aliases": ["EngagementSignal", "AttentionDemonstration", "ReflectiveListening"],
+      "relationships": {
+        "related": ["ActiveListening", "Empathy", "Acknowledgment"]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Communication technique"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "I see - so the issue is that it works locally but fails in production.",
+          "Right, so you need it to handle both cases without code duplication.",
+          "Got it - performance is more important than code clarity in this context.",
+          "Interesting approach. So you're trying to avoid the overhead of a full ORM."
+        ],
+        "negative_examples": [
+          "I understand.",
+          "Okay.",
+          "Received."
+        ],
+        "disambiguation": "Demonstrating understanding through specific reflection, not just acknowledging receipt"
+      },
+      "children": []
+    }
+  ]
+}

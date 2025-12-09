@@ -67,7 +67,7 @@ Graft adds:
 - **Bias derivation** — encoding relational structure in weight deltas
 - **Lens binding** — linking lenses to their primary dimension
 - **Cotrain triggers** — when concepts share bias patterns
-- **Substrate growth management** — compaction, merging, graduation
+- **Substrate maintenance** — pruning, merging, defragmentation
 
 ---
 
@@ -1061,54 +1061,168 @@ def merge_dimensions(
     return substrate, manifest, merged_graft
 ```
 
-### 7.4 Graduation to Larger Trunk
+### 7.4 Substrate Maintenance
 
-When a substrate has accumulated many grafts, it may be time to graduate.
+Substrates grow indefinitely through grafting. There is no "graduation" to a larger trunk — the trunk *is* larger because you grafted onto it. The base dimensions become a historical artifact as the substrate accumulates concepts.
+
+Maintenance operations keep the substrate healthy:
+
+#### 7.4.1 Dimension Pruning
+
+Remove dimensions that are no longer useful.
 
 ```python
-def evaluate_graduation(
-    manifest: SubstrateManifest,
+def prune_unused_dimensions(
     substrate: Model,
-    config: GraduationConfig
-) -> GraduationRecommendation:
+    manifest: SubstrateManifest,
+    usage_threshold: float = 0.01,
+    episode_window: int = 10000
+) -> Tuple[Model, SubstrateManifest, List[str]]:
     """
-    Evaluate whether this substrate should graduate to a larger trunk.
+    Prune dimensions that rarely activate.
 
-    Indicators:
-    - Dimension count approaching capacity
-    - Frequent compaction needed
-    - Bias patterns becoming dense
+    A dimension with <1% activation rate over 10k episodes
+    is a candidate for removal.
     """
 
-    grafted_dims = len(manifest.dimension_table)
-    base_dims = manifest.base_substrate.base_hidden_dim
+    activations = collect_dimension_activations(substrate, episode_window)
+    usage_rates = activations.mean(axis=0)
 
-    # Dimension pressure
-    dim_ratio = grafted_dims / base_dims
+    pruned_concepts = []
+    dims_to_remove = []
 
-    # Bias density (average sparsity across recent grafts)
-    recent_grafts = get_recent_grafts(manifest, n=10)
-    avg_bias_density = np.mean([g.bias_density for g in recent_grafts])
+    for entry in manifest.dimension_table:
+        usage = usage_rates[entry.dimension_index]
+        if usage < usage_threshold:
+            dims_to_remove.append(entry.dimension_index)
+            pruned_concepts.append(entry.concept_id)
 
-    # Compaction frequency
-    compaction_rate = get_compaction_rate(manifest, window_days=30)
+            # Archive the graft data before removal
+            archive_graft(entry.graft_id, reason="low_usage", usage_rate=usage)
 
-    if dim_ratio > config.dim_ratio_threshold:
-        return GraduationRecommendation(
-            recommend=True,
-            reason=f"Dimension ratio {dim_ratio:.2f} exceeds threshold",
-            suggested_new_base_dim=base_dims * 2
-        )
+    if dims_to_remove:
+        substrate.remove_dimensions(dims_to_remove)
+        manifest.remove_entries(dims_to_remove)
+        manifest.reindex_dimensions()
 
-    if avg_bias_density > config.density_threshold:
-        return GraduationRecommendation(
-            recommend=True,
-            reason=f"Bias density {avg_bias_density:.2f} indicates saturation",
-            suggested_new_base_dim=int(base_dims * 1.5)
-        )
-
-    return GraduationRecommendation(recommend=False)
+    return substrate, manifest, pruned_concepts
 ```
+
+#### 7.4.2 Dimension Defragmentation
+
+After many prune/merge operations, dimension indices may have gaps. Defragmentation renumbers dimensions contiguously.
+
+```python
+def defragment_dimensions(
+    substrate: Model,
+    manifest: SubstrateManifest
+) -> Tuple[Model, SubstrateManifest, Dict[int, int]]:
+    """
+    Renumber dimensions to be contiguous.
+
+    Returns a mapping of old_index -> new_index for updating
+    any external references (lens bindings, etc).
+    """
+
+    current_indices = sorted([e.dimension_index for e in manifest.dimension_table])
+
+    # Check if already contiguous
+    expected = list(range(manifest.base_substrate.base_hidden_dim,
+                         manifest.base_substrate.base_hidden_dim + len(current_indices)))
+
+    if current_indices == expected:
+        return substrate, manifest, {}  # Already defragmented
+
+    # Build remapping
+    remap = {}
+    for new_offset, old_index in enumerate(current_indices):
+        new_index = manifest.base_substrate.base_hidden_dim + new_offset
+        if old_index != new_index:
+            remap[old_index] = new_index
+
+    # Apply to substrate
+    substrate.remap_dimensions(remap)
+
+    # Update manifest
+    for entry in manifest.dimension_table:
+        if entry.dimension_index in remap:
+            entry.dimension_index = remap[entry.dimension_index]
+
+    # Update lens bindings
+    for entry in manifest.dimension_table:
+        update_lens_primary_dimension(entry.graft_id, remap)
+
+    return substrate, manifest, remap
+```
+
+#### 7.4.3 Lens Refresh
+
+Periodically retrain lenses to account for substrate drift.
+
+```python
+def refresh_stale_lenses(
+    substrate: Model,
+    manifest: SubstrateManifest,
+    staleness_threshold_days: int = 90,
+    drift_threshold: float = 0.1
+) -> List[str]:
+    """
+    Identify and retrain lenses that have drifted from their concepts.
+
+    A lens is stale if:
+    - It hasn't been retrained in >90 days, OR
+    - Its F1 on held-out data has dropped >10% from training time
+    """
+
+    refreshed = []
+
+    for entry in manifest.dimension_table:
+        lens = load_lens(entry.graft_id)
+
+        # Check staleness
+        days_since_training = (now() - lens.trained_at).days
+
+        # Check drift
+        current_f1 = evaluate_lens_f1(lens, substrate)
+        drift = lens.training_f1 - current_f1
+
+        if days_since_training > staleness_threshold_days or drift > drift_threshold:
+            # Retrain lens with current substrate state
+            dataset = load_concept_dataset(entry.concept_id)
+            new_lens = train_lens_with_primary_dimension(
+                substrate=substrate,
+                dataset=dataset,
+                primary_dim=entry.dimension_index,
+                auxiliary_dims=get_current_auxiliary_dims(entry.concept_id, substrate)
+            )
+
+            update_lens_binding(entry.graft_id, new_lens)
+            refreshed.append(entry.concept_id)
+
+    return refreshed
+```
+
+#### 7.4.4 Maintenance Schedule
+
+Recommended maintenance cadence:
+
+| Operation | Frequency | Trigger |
+|-----------|-----------|---------|
+| Dimension pruning | Monthly | Or when dimension count exceeds soft limit |
+| Dimension merging | As needed | When overlap analysis detects correlation >0.9 |
+| Defragmentation | After prune/merge | When gap ratio exceeds 10% |
+| Lens refresh | Quarterly | Or when drift detected |
+| Bias sparsification | After major graft batches | When average bias density drops below 0.8 |
+
+These operations can be batched for efficiency. A full maintenance pass might:
+
+1. Run overlap analysis → merge highly correlated dimensions
+2. Run usage analysis → prune dead dimensions
+3. Defragment if needed
+4. Refresh stale lenses
+5. Update SubstrateManifest checksum
+
+The substrate grows indefinitely. Maintenance keeps it healthy.
 
 ---
 
@@ -1879,7 +1993,7 @@ The Graft Protocol provides a mechanism for **substrate growth through learned c
 3. **Lens binding** — lenses read from the primary dimension plus auxiliary context
 4. **Fingerprint comparison** — bias patterns enable overlap detection across BEs
 5. **Cotraining** — overlapping concepts are trained together from pooled exemplars
-6. **Dimension management** — compaction, merging, and graduation as substrates grow
+6. **Dimension management** — pruning, merging, and maintenance as substrates grow
 
 The key properties:
 
