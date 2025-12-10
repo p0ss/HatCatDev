@@ -235,6 +235,7 @@ class ValidationResult:
     treaty_relevant_count: int = 0
     harness_relevant_count: int = 0
     critical_triggers: List[str] = field(default_factory=list)
+    simplex_escalations: List[str] = field(default_factory=list)  # Concepts escalated due to simplex mapping
     policy_source: str = "defaults"
     is_structural_meld: bool = False  # True if this contains structural operations
 
@@ -560,34 +561,27 @@ def concept_touches_critical_simplex(concept: Dict, meld: Dict, policy: MeldPoli
     return False
 
 
-def compute_pack_protection_level(meld: Dict, policy: MeldPolicy) -> ProtectionLevel:
-    """Compute protection level for the entire meld pack."""
+def compute_pack_protection_level(
+    meld: Dict,
+    policy: MeldPolicy,
+    escalation_reasons: Optional[List[str]] = None
+) -> ProtectionLevel:
+    """Compute protection level for the entire meld pack.
+
+    Args:
+        meld: The full meld request
+        policy: The pack's meld policy
+        escalation_reasons: Optional list to append escalation reasons to (for reporting)
+
+    Returns:
+        The maximum protection level across all candidates
+    """
     concepts = meld.get("candidates", [])
     max_level = ProtectionLevel.STANDARD
 
     for c in concepts:
-        safety = c.get("safety_tags", {})
-        risk = safety.get("risk_level", "low")
-        treaty = safety.get("treaty_relevant", False)
-        harness = safety.get("harness_relevant", False)
-
-        touches_critical = concept_touches_critical_simplex(c, meld, policy)
-
-        # CRITICAL if touches critical simplexes or new always-on simplexes
-        if touches_critical or (
-            c.get("role") == "simplex" and c.get("simplex_binding", {}).get("always_on")
-        ):
-            max_level = max(max_level, ProtectionLevel.CRITICAL)
-            continue
-
-        # PROTECTED if treaty_relevant or high risk
-        if treaty or risk == "high":
-            max_level = max(max_level, ProtectionLevel.PROTECTED)
-            continue
-
-        # ELEVATED if harness_relevant or medium risk
-        if harness or risk == "medium":
-            max_level = max(max_level, ProtectionLevel.ELEVATED)
+        concept_level = get_concept_protection_level(c, meld, policy, escalation_reasons)
+        max_level = max(max_level, concept_level)
 
     return max_level
 
@@ -618,31 +612,81 @@ def check_meld_id_filename(path: Path, meld: Dict, errors: List[str], warnings: 
         warnings.append(f"Filename {path.name!r} does not contain meld slug {slug!r}")
 
 
-def get_concept_protection_level(concept: Dict, meld: Dict, policy: MeldPolicy) -> ProtectionLevel:
-    """Compute the protection level for a single concept."""
+def get_protection_level_for_example_threshold(threshold: int, policy: MeldPolicy) -> ProtectionLevel:
+    """Map an example count threshold to the corresponding protection level."""
+    min_by_level = policy.training_requirements.min_examples_by_level
+
+    # Check from highest to lowest
+    if threshold >= min_by_level.get("CRITICAL", 20):
+        return ProtectionLevel.CRITICAL
+    if threshold >= min_by_level.get("PROTECTED", 15):
+        return ProtectionLevel.PROTECTED
+    if threshold >= min_by_level.get("ELEVATED", 10):
+        return ProtectionLevel.ELEVATED
+    return ProtectionLevel.STANDARD
+
+
+def get_concept_protection_level(
+    concept: Dict,
+    meld: Dict,
+    policy: MeldPolicy,
+    escalation_reasons: Optional[List[str]] = None
+) -> ProtectionLevel:
+    """Compute the protection level for a single concept.
+
+    Args:
+        concept: The candidate concept dict
+        meld: The full meld request
+        policy: The pack's meld policy
+        escalation_reasons: Optional list to append escalation reasons to (for reporting)
+
+    Returns:
+        The computed protection level
+    """
     safety = concept.get("safety_tags", {})
     risk = safety.get("risk_level", "low")
     treaty = safety.get("treaty_relevant", False)
     harness = safety.get("harness_relevant", False)
+    term = concept.get("term", "unknown")
 
     # Check if it touches critical simplexes
     touches_critical = concept_touches_critical_simplex(concept, meld, policy)
+
+    # Start with base level from safety tags
+    base_level = ProtectionLevel.STANDARD
 
     # CRITICAL if touches critical simplexes or new always-on simplexes
     if touches_critical or (
         concept.get("role") == "simplex" and concept.get("simplex_binding", {}).get("always_on")
     ):
-        return ProtectionLevel.CRITICAL
-
+        base_level = ProtectionLevel.CRITICAL
     # PROTECTED if treaty_relevant or high risk
-    if treaty or risk == "high":
-        return ProtectionLevel.PROTECTED
-
+    elif treaty or risk == "high":
+        base_level = ProtectionLevel.PROTECTED
     # ELEVATED if harness_relevant or medium risk
-    if harness or risk == "medium":
-        return ProtectionLevel.ELEVATED
+    elif harness or risk == "medium":
+        base_level = ProtectionLevel.ELEVATED
 
-    return ProtectionLevel.STANDARD
+    # Check simplex mapping escalation
+    target_simplex = get_simplex_for_concept(concept)
+    simplex_level = ProtectionLevel.STANDARD
+
+    if target_simplex:
+        # Get the example threshold for this simplex
+        simplex_threshold = policy.training_requirements.min_examples_for_simplex.get(
+            target_simplex, 0
+        )
+        if simplex_threshold > 0:
+            simplex_level = get_protection_level_for_example_threshold(simplex_threshold, policy)
+
+            # Report escalation if it raises the level
+            if simplex_level > base_level and escalation_reasons is not None:
+                escalation_reasons.append(
+                    f"{term}: mapped to {target_simplex} (requires {simplex_threshold} examples) "
+                    f"escalates from {base_level.name} to {simplex_level.name}"
+                )
+
+    return max(base_level, simplex_level)
 
 
 def get_simplex_for_concept(concept: Dict) -> Optional[str]:
@@ -882,8 +926,9 @@ def validate_meld_file(
             structural_protection = ProtectionLevel.ELEVATED
             warnings.append(f"Large structural meld ({len(structural_ops)} ops) - elevated review recommended")
 
-    # 4. Pack-level protection / critical checks
-    protection = compute_pack_protection_level(meld, policy)
+    # 4. Pack-level protection / critical checks (with simplex escalation tracking)
+    simplex_escalations: List[str] = []
+    protection = compute_pack_protection_level(meld, policy, simplex_escalations)
     protection = max(protection, structural_protection)
     check_critical_simplex_touches(meld, policy, errors, warnings)
 
@@ -913,6 +958,7 @@ def validate_meld_file(
         treaty_relevant_count=treaty_count,
         harness_relevant_count=harness_count,
         critical_triggers=critical_triggers,
+        simplex_escalations=simplex_escalations,
         policy_source=policy_source,
         is_structural_meld=is_structural,
     )
@@ -950,6 +996,11 @@ def print_result(result: ValidationResult, verbose: bool = False):
         print(f"\n  🔴 CRITICAL TRIGGERS:")
         for trigger in result.critical_triggers:
             print(f"     - {trigger}")
+
+    if result.simplex_escalations:
+        print(f"\n  📈 SIMPLEX ESCALATIONS ({len(result.simplex_escalations)}):")
+        for escalation in result.simplex_escalations:
+            print(f"     - {escalation}")
 
     if result.errors:
         print(f"\n  ❌ ERRORS ({len(result.errors)}):")
