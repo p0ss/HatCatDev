@@ -244,6 +244,7 @@ def train_layer(
     validation_mode: str = 'falloff',
     validation_threshold: float = 0.5,
     include_sibling_negatives: bool = True,
+    only_concepts: set = None,
 ) -> Dict:
     """
     Train classifiers for a single SUMO abstraction layer.
@@ -295,16 +296,22 @@ def train_layer(
             model=model,  # Needed for validation
             tokenizer=tokenizer,  # Needed for validation
             max_response_tokens=100,
-            validate_lenses=True,  # Enable calibration validation
+            validate_lenses=True,  # Validates against parent/siblings (what we train against)
             validation_mode=validation_mode,  # Validation mode (loose/falloff/strict)
             validation_threshold=validation_threshold,  # Min score to pass (for strict mode)
             validation_layer_idx=15,  # Layer 15 for activations
             train_activation=True,
             train_text=False,  # Disable TF-IDF text lens training
+            hierarchy_dir=hierarchy_dir,  # For accurate domain inference in validation
         )
 
     for i, concept in enumerate(concepts):
         concept_name = concept["sumo_term"]
+
+        # Skip if not in only_concepts filter (when provided)
+        if only_concepts is not None and concept_name not in only_concepts:
+            print(f"\n[{i + 1}/{len(concepts)}] Skipping {concept_name} (not in training manifest)")
+            continue
 
         # Check if already trained (resume capability)
         classifier_path = output_dir / f"{concept_name}_classifier.pt"
@@ -699,6 +706,7 @@ def train_sumo_classifiers(
             validation_mode=validation_mode,
             validation_threshold=validation_threshold,
             include_sibling_negatives=include_sibling_negatives,
+            only_concepts=only_concepts,
         )
         summaries.append(summary)
 

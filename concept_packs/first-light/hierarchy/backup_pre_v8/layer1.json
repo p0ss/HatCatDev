@@ -2069,30 +2069,6 @@
         "BiologicalSubstance",
         "Food"
       ]
-    },
-    {
-      "sumo_term": "Work",
-      "layer": 1,
-      "domain": "PhysicalWorld",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "LivingThings"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "sumo_definition": "Energy transferred by ordered force or structure. Analogous to\n   purposeful computation, directed reasoning, alignment operations.",
-      "synset_count": 1,
-      "synsets": [
-        "work.n.01"
-      ],
-      "canonical_synset": "work.n.01",
-      "lemmas": [
-        "work"
-      ],
-      "pos": "noun",
-      "definition": "Energy transferred by ordered force or structure. Analogous to\n   purposeful computation, directed reasoning, alignment operations.",
-      "child_concepts": []
     }
   ]
 }

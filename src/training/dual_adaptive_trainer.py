@@ -63,6 +63,9 @@ class DualAdaptiveTrainer:
         # Flags
         train_activation: bool = True,
         train_text: bool = True,
+
+        # Hierarchy directory for accurate domain inference
+        hierarchy_dir=None,
     ):
         """
         Args:
@@ -130,6 +133,7 @@ class DualAdaptiveTrainer:
 
         self.train_activation = train_activation
         self.train_text = train_text
+        self.hierarchy_dir = hierarchy_dir
 
     def _grade_meets_target(self, grade: str, target: str) -> bool:
         """Check if achieved grade meets or exceeds target grade."""
@@ -146,49 +150,48 @@ class DualAdaptiveTrainer:
         """
         Determine validation tier based on which validation cycle we're in (for falloff mode).
 
-        Cycle 0: First graduation (10 samples) - Strict tier (need A-grade)
-        Cycle 1: Second graduation (30 samples) - High tier (accept B+)
-        Cycle 2: Third graduation (60 samples) - Medium tier (accept B)
-        Cycle 3+: Fourth+ graduation (90+ samples) - Relaxed tier (accept C+)
+        Validates against siblings only (typically 5-6 concepts). Thresholds are relaxed
+        because sibling refinement happens in a later pass - we just want >50% discrimination
+        at this stage.
 
         Returns dict with tier info:
         - tier: 'strict', 'high', 'medium', or 'relaxed'
-        - min_score: Minimum calibration score to pass
+        - min_score: Minimum calibration score to pass (0.5 = 50% discrimination)
         - target_grade: Target quality grade
-        - max_target_rank: Max acceptable rank for target domain
-        - min_other_rank: Min acceptable average rank for other domains
+        - max_target_rank: Max acceptable rank for target (1=best, should be top half)
+        - min_other_rank: Min acceptable average rank for siblings (should be >50% of max)
         """
         if cycle == 0:
             return {
                 'tier': 'strict',
-                'min_score': 0.70,
+                'min_score': 0.65,
                 'target_grade': 'A',
-                'max_target_rank': 3,
-                'min_other_rank': 10.0,
+                'max_target_rank': 2,  # Top 2 out of ~6
+                'min_other_rank': 3.0,  # Others average rank 3+ out of ~6
             }
         elif cycle == 1:
             return {
                 'tier': 'high',
                 'min_score': 0.60,
-                'target_grade': 'B+',
-                'max_target_rank': 5,
-                'min_other_rank': 8.0,
+                'target_grade': 'B',
+                'max_target_rank': 2,
+                'min_other_rank': 2.5,
             }
         elif cycle == 2:
             return {
                 'tier': 'medium',
-                'min_score': 0.50,
+                'min_score': 0.55,
                 'target_grade': 'B',
-                'max_target_rank': 7,
-                'min_other_rank': 7.0,
+                'max_target_rank': 3,
+                'min_other_rank': 2.5,
             }
         else:  # cycle >= 3
             return {
                 'tier': 'relaxed',
-                'min_score': 0.40,
-                'target_grade': 'C+',
-                'max_target_rank': 10,
-                'min_other_rank': 5.0,
+                'min_score': 0.50,  # 50% discrimination - sibling refinement will improve
+                'target_grade': 'C',
+                'max_target_rank': 3,
+                'min_other_rank': 2.0,
             }
 
     def _generate_responses(self, prompts: List[str]) -> List[str]:
@@ -441,93 +444,19 @@ class DualAdaptiveTrainer:
                 should_validate = self.validate_lenses and self.model is not None
 
                 if should_validate:
-                    # Run validation using the full validation logic from train_concept
+                    # Run validation against parent/siblings (what we train against)
                     print(f"      Validating lens calibration...")
-                    from .lens_validation import infer_concept_domain, DEFAULT_TEST_PROMPTS
+                    from .lens_validation import get_relative_validation_prompts
 
                     try:
-                        # Infer expected domain
-                        concept_dict = {
-                            'sumo_term': concept_name,
-                            'definition': '',
-                        }
-                        expected_domain = infer_concept_domain(concept_dict)
+                        # Get prompts from parent/siblings
+                        test_prompts, expected_domain = get_relative_validation_prompts(
+                            concept_name, self.hierarchy_dir
+                        ) if self.hierarchy_dir else (None, concept_name)
 
-                        # Test on diverse prompts
-                        results_by_domain = {}
-                        for domain, prompt in DEFAULT_TEST_PROMPTS.items():
-                            # Extract activation for this prompt
-                            domain_acts = extract_activations(
-                                generation_config['model'],
-                                generation_config['tokenizer'],
-                                [prompt],
-                                generation_config['device'],
-                                layer_idx=self.validation_layer_idx
-                            )
-
-                            # If combined extraction gave us 2 activations, take the first one
-                            # (both prompt and generation - we just need one for validation)
-                            if len(domain_acts) == 2:
-                                domain_acts = domain_acts[0:1]
-
-                            # Get lens prediction
-                            classifier_device = next(activation_classifier.parameters()).device
-                            act_tensor = torch.tensor(domain_acts, dtype=torch.float32).to(classifier_device)
-                            with torch.no_grad():
-                                logit = activation_classifier(act_tensor).item()
-
-                            results_by_domain[domain] = {'logit': logit}
-
-                        # Calculate rankings
-                        sorted_domains = sorted(results_by_domain.items(), key=lambda x: x[1]['logit'], reverse=True)
-                        for rank, (domain, data) in enumerate(sorted_domains, 1):
-                            data['rank'] = rank
-
-                        # Extract metrics
-                        target_rank = results_by_domain[expected_domain]['rank']
-                        target_logit = results_by_domain[expected_domain]['logit']
-
-                        other_domains = [d for d in results_by_domain if d != expected_domain]
-                        other_ranks = [results_by_domain[d]['rank'] for d in other_domains]
-                        avg_other_rank = np.mean(other_ranks) if other_ranks else 0
-
-                        # Calibration score
-                        num_domains = len(results_by_domain)
-                        target_score = 1.0 - (target_rank - 1) / (num_domains - 1)
-                        specificity_score = (avg_other_rank - 1) / (num_domains - 1)
-                        calibration_score = (target_score + specificity_score) / 2
-
-                        # Determine pass criteria based on validation mode
-                        if self.validation_mode == 'falloff':
-                            tier_info = self._get_validation_tier(validation_cycle)
-                            passed = (target_rank <= tier_info['max_target_rank']) and \
-                                   (avg_other_rank >= tier_info['min_other_rank']) and \
-                                   (calibration_score >= tier_info['min_score'])
-                        else:  # loose or strict
-                            passed = True  # For simplicity, accept in incremental mode
-
-                        # Assign quality grade
-                        score = calibration_score
-                        if score >= 0.5:
-                            grade = 'A'
-                        elif score >= 0.2:
-                            grade = 'B'
-                        else:
-                            grade = 'C'
-
-                        # Format message
-                        if self.validation_mode == 'falloff':
-                            tier_name = tier_info['tier'].upper()
-                            mode_msg = f"[FALLOFF {tier_name}, cycle {validation_cycle}, iter {iteration}]"
-                        elif self.validation_mode == 'strict':
-                            mode_msg = f"[STRICT mode, iter {iteration}]"
-                        else:  # loose
-                            mode_msg = f"[LOOSE mode, iter {iteration}]"
-
-                        # Check if passed or grade meets tier requirements
-                        if passed:
-                            print(f"      ✓ Calibration validated {mode_msg} (target=#{target_rank}, "
-                                  f"others={avg_other_rank:.1f}, score={calibration_score:.2f}, grade={grade})")
+                        if test_prompts is None or len(test_prompts) < 3:
+                            # Not enough relatives to validate meaningfully
+                            print(f"      ⚠️  Skipping validation (insufficient relatives)")
                             activation_graduated = True
                             activation_results = {
                                 'train_f1': train_f1,
@@ -536,11 +465,81 @@ class DualAdaptiveTrainer:
                                 'iterations': iteration,
                             }
                         else:
-                            # Check if grade meets tier requirements even if numerical thresholds failed
-                            if self._grade_meets_target(grade, tier_info['target_grade']):
-                                print(f"      ✗ Calibration {mode_msg} (target=#{target_rank}, "
+                            # Test on parent/sibling prompts
+                            results_by_domain = {}
+                            for domain, prompt in test_prompts.items():
+                                # Extract activation for this prompt
+                                domain_acts = extract_activations(
+                                    generation_config['model'],
+                                    generation_config['tokenizer'],
+                                    [prompt],
+                                    generation_config['device'],
+                                    layer_idx=self.validation_layer_idx
+                                )
+
+                                # If combined extraction gave us 2 activations, take the first one
+                                # (both prompt and generation - we just need one for validation)
+                                if len(domain_acts) == 2:
+                                    domain_acts = domain_acts[0:1]
+
+                                # Get lens prediction
+                                classifier_device = next(activation_classifier.parameters()).device
+                                act_tensor = torch.tensor(domain_acts, dtype=torch.float32).to(classifier_device)
+                                with torch.no_grad():
+                                    logit = activation_classifier(act_tensor).item()
+
+                                results_by_domain[domain] = {'logit': logit}
+
+                            # Calculate rankings
+                            sorted_domains = sorted(results_by_domain.items(), key=lambda x: x[1]['logit'], reverse=True)
+                            for rank, (domain, data) in enumerate(sorted_domains, 1):
+                                data['rank'] = rank
+
+                            # Extract metrics
+                            target_rank = results_by_domain[expected_domain]['rank']
+                            target_logit = results_by_domain[expected_domain]['logit']
+
+                            other_domains = [d for d in results_by_domain if d != expected_domain]
+                            other_ranks = [results_by_domain[d]['rank'] for d in other_domains]
+                            avg_other_rank = np.mean(other_ranks) if other_ranks else 0
+
+                            # Calibration score
+                            num_domains = len(results_by_domain)
+                            target_score = 1.0 - (target_rank - 1) / (num_domains - 1) if num_domains > 1 else 1.0
+                            specificity_score = (avg_other_rank - 1) / (num_domains - 1) if num_domains > 1 else 0.0
+                            calibration_score = (target_score + specificity_score) / 2
+
+                            # Determine pass criteria based on validation mode
+                            if self.validation_mode == 'falloff':
+                                tier_info = self._get_validation_tier(validation_cycle)
+                                passed = (target_rank <= tier_info['max_target_rank']) and \
+                                       (avg_other_rank >= tier_info['min_other_rank']) and \
+                                       (calibration_score >= tier_info['min_score'])
+                            else:  # loose or strict
+                                passed = True  # For simplicity, accept in incremental mode
+
+                            # Assign quality grade
+                            score = calibration_score
+                            if score >= 0.5:
+                                grade = 'A'
+                            elif score >= 0.2:
+                                grade = 'B'
+                            else:
+                                grade = 'C'
+
+                            # Format message
+                            if self.validation_mode == 'falloff':
+                                tier_name = tier_info['tier'].upper()
+                                mode_msg = f"[FALLOFF {tier_name}, cycle {validation_cycle}, iter {iteration}]"
+                            elif self.validation_mode == 'strict':
+                                mode_msg = f"[STRICT mode, iter {iteration}]"
+                            else:  # loose
+                                mode_msg = f"[LOOSE mode, iter {iteration}]"
+
+                            # Check if passed or grade meets tier requirements
+                            if passed:
+                                print(f"      ✓ Calibration validated {mode_msg} (target=#{target_rank}/{num_domains}, "
                                       f"others={avg_other_rank:.1f}, score={calibration_score:.2f}, grade={grade})")
-                                print(f"         → {grade}-tier acceptable at {tier_info['tier']} tier (cycle {validation_cycle})")
                                 activation_graduated = True
                                 activation_results = {
                                     'train_f1': train_f1,
@@ -549,9 +548,22 @@ class DualAdaptiveTrainer:
                                     'iterations': iteration,
                                 }
                             else:
-                                # Need more data
-                                print(f"      ✗ Calibration {mode_msg} (target=#{target_rank}, "
-                                      f"others={avg_other_rank:.1f}, score={calibration_score:.2f}, grade={grade})")
+                                # Check if grade meets tier requirements even if numerical thresholds failed
+                                if self._grade_meets_target(grade, tier_info['target_grade']):
+                                    print(f"      ✗ Calibration {mode_msg} (target=#{target_rank}/{num_domains}, "
+                                          f"others={avg_other_rank:.1f}, score={calibration_score:.2f}, grade={grade})")
+                                    print(f"         → {grade}-tier acceptable at {tier_info['tier']} tier (cycle {validation_cycle})")
+                                    activation_graduated = True
+                                    activation_results = {
+                                        'train_f1': train_f1,
+                                        'test_f1': test_f1,
+                                        'samples_used': required_samples,
+                                        'iterations': iteration,
+                                    }
+                                else:
+                                    # Need more data
+                                    print(f"      ✗ Calibration {mode_msg} (target=#{target_rank}/{num_domains}, "
+                                          f"others={avg_other_rank:.1f}, score={calibration_score:.2f}, grade={grade})")
                                 print(f"         → Pushing for {tier_info['target_grade']}-tier (cycle {validation_cycle}→{validation_cycle+1})")
                                 print(f"         → Requesting more samples for next cycle")
                                 validation_cycle += 1
@@ -751,89 +763,98 @@ class DualAdaptiveTrainer:
 
                     if should_validate:
                         print(f"      Validating lens calibration...")
-                        from .lens_validation import infer_concept_domain, DEFAULT_TEST_PROMPTS
+                        from .lens_validation import get_relative_validation_prompts
 
                         # Run inline validation (no need to save/load)
                         try:
-                            # Infer expected domain
-                            concept_dict = {
-                                'sumo_term': concept_name,
-                                'definition': '',
-                            }
-                            expected_domain = infer_concept_domain(concept_dict)
+                            # Get prompts from parent/siblings
+                            test_prompts, expected_domain = get_relative_validation_prompts(
+                                concept_name, self.hierarchy_dir
+                            ) if self.hierarchy_dir else (None, concept_name)
 
-                            # Test on diverse prompts
-                            from .sumo_classifiers import extract_activations
-
-                            results_by_domain = {}
-                            for domain, prompt in DEFAULT_TEST_PROMPTS.items():
-                                # Extract activation for this prompt
-                                domain_acts = extract_activations(
-                                    self.model,
-                                    self.tokenizer,
-                                    [prompt],
-                                    device=str(self.model.device),
-                                    layer_idx=self.validation_layer_idx
-                                )
-
-                                # If combined extraction gave us 2 activations, take the first one
-                                # (both prompt and generation - we just need one for validation)
-                                if len(domain_acts) == 2:
-                                    domain_acts = domain_acts[0:1]
-
-                                # Get lens prediction
-                                # Get device from classifier parameters
-                                classifier_device = next(activation_classifier.parameters()).device
-                                act_tensor = torch.tensor(domain_acts, dtype=torch.float32).to(classifier_device)
-                                with torch.no_grad():
-                                    logit = activation_classifier(act_tensor).item()
-
-                                results_by_domain[domain] = {'logit': logit}
-
-                            # Calculate rankings
-                            sorted_domains = sorted(results_by_domain.items(), key=lambda x: x[1]['logit'], reverse=True)
-                            for rank, (domain, data) in enumerate(sorted_domains, 1):
-                                data['rank'] = rank
-
-                            # Extract metrics
-                            target_rank = results_by_domain[expected_domain]['rank']
-                            target_logit = results_by_domain[expected_domain]['logit']
-
-                            other_domains = [d for d in results_by_domain if d != expected_domain]
-                            other_ranks = [results_by_domain[d]['rank'] for d in other_domains]
-                            other_logits = [results_by_domain[d]['logit'] for d in other_domains]
-
-                            avg_other_rank = np.mean(other_ranks) if other_ranks else 0
-                            avg_other_logit = np.mean(other_logits) if other_logits else 0
-
-                            # Calibration score
-                            num_domains = len(results_by_domain)
-                            target_score = 1.0 - (target_rank - 1) / (num_domains - 1)
-                            specificity_score = (avg_other_rank - 1) / (num_domains - 1)
-                            calibration_score = (target_score + specificity_score) / 2
-
-                            # Determine pass criteria based on validation mode
-                            if self.validation_mode == 'loose':
-                                # Loose mode: always pass, just record the grade
-                                passed = True
-                            elif self.validation_mode == 'falloff':
-                                # Falloff mode: use tiered thresholds based on cycle
-                                tier_info = self._get_validation_tier(validation_cycle)
-                                passed = (target_rank <= tier_info['max_target_rank']) and \
-                                       (avg_other_rank >= tier_info['min_other_rank']) and \
-                                       (calibration_score >= tier_info['min_score'])
-                            else:  # strict mode
-                                # Strict mode: fixed threshold throughout
-                                tier_info = {
-                                    'tier': 'strict',
-                                    'min_score': self.validation_threshold,
-                                    'target_grade': 'A',
-                                    'max_target_rank': 3,
-                                    'min_other_rank': 10.0,
+                            if test_prompts is None or len(test_prompts) < 3:
+                                # Not enough relatives to validate meaningfully
+                                print(f"      ⚠️  Skipping validation (insufficient relatives)")
+                                text_graduated = True
+                                text_results = {
+                                    'train_f1': text_train_f1,
+                                    'test_f1': text_test_f1,
+                                    'samples_used': text_samples,
+                                    'iterations': text_iter,
                                 }
-                                passed = (target_rank <= tier_info['max_target_rank']) and \
-                                       (avg_other_rank >= tier_info['min_other_rank']) and \
-                                       (calibration_score >= tier_info['min_score'])
+                            else:
+                                # Test on parent/sibling prompts
+                                from .sumo_classifiers import extract_activations
+
+                                results_by_domain = {}
+                                for domain, prompt in test_prompts.items():
+                                    # Extract activation for this prompt
+                                    domain_acts = extract_activations(
+                                        self.model,
+                                        self.tokenizer,
+                                        [prompt],
+                                        device=str(self.model.device),
+                                        layer_idx=self.validation_layer_idx
+                                    )
+
+                                    # If combined extraction gave us 2 activations, take the first one
+                                    # (both prompt and generation - we just need one for validation)
+                                    if len(domain_acts) == 2:
+                                        domain_acts = domain_acts[0:1]
+
+                                    # Get lens prediction
+                                    # Get device from classifier parameters
+                                    classifier_device = next(activation_classifier.parameters()).device
+                                    act_tensor = torch.tensor(domain_acts, dtype=torch.float32).to(classifier_device)
+                                    with torch.no_grad():
+                                        logit = activation_classifier(act_tensor).item()
+
+                                    results_by_domain[domain] = {'logit': logit}
+
+                                # Calculate rankings
+                                sorted_domains = sorted(results_by_domain.items(), key=lambda x: x[1]['logit'], reverse=True)
+                                for rank, (domain, data) in enumerate(sorted_domains, 1):
+                                    data['rank'] = rank
+
+                                # Extract metrics
+                                target_rank = results_by_domain[expected_domain]['rank']
+                                target_logit = results_by_domain[expected_domain]['logit']
+
+                                other_domains = [d for d in results_by_domain if d != expected_domain]
+                                other_ranks = [results_by_domain[d]['rank'] for d in other_domains]
+                                other_logits = [results_by_domain[d]['logit'] for d in other_domains]
+
+                                avg_other_rank = np.mean(other_ranks) if other_ranks else 0
+                                avg_other_logit = np.mean(other_logits) if other_logits else 0
+
+                                # Calibration score
+                                num_domains = len(results_by_domain)
+                                target_score = 1.0 - (target_rank - 1) / (num_domains - 1) if num_domains > 1 else 1.0
+                                specificity_score = (avg_other_rank - 1) / (num_domains - 1) if num_domains > 1 else 0.0
+                                calibration_score = (target_score + specificity_score) / 2
+
+                                # Determine pass criteria based on validation mode
+                                if self.validation_mode == 'loose':
+                                    # Loose mode: always pass, just record the grade
+                                    passed = True
+                                elif self.validation_mode == 'falloff':
+                                    # Falloff mode: use tiered thresholds based on cycle
+                                    tier_info = self._get_validation_tier(validation_cycle)
+                                    passed = (target_rank <= tier_info['max_target_rank']) and \
+                                           (avg_other_rank >= tier_info['min_other_rank']) and \
+                                           (calibration_score >= tier_info['min_score'])
+                                else:  # strict mode
+                                    # Strict mode: fixed threshold throughout
+                                    tier_info = {
+                                        'tier': 'strict',
+                                        'min_score': self.validation_threshold,
+                                        'target_grade': 'A',
+                                        'max_target_rank': 3,
+                                        'min_other_rank': 10.0,
+                                    }
+                                    passed = (target_rank <= tier_info['max_target_rank']) and \
+                                           (avg_other_rank >= tier_info['min_other_rank']) and \
+                                           (calibration_score >= tier_info['min_score'])
 
                             validation_result = {
                                 'concept': concept_name,

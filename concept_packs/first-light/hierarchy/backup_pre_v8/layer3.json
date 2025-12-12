@@ -5962,6 +5962,31 @@
       ]
     },
     {
+      "sumo_term": "BusStop",
+      "layer": 3,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Infrastructure"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "An area, often, though not necessarily with\nseats or some kind of minimal shelter, where people gather to meet and\nboard a bus.  It must border a road.",
+      "synset_count": 1,
+      "synsets": [
+        "08517676.n"
+      ],
+      "canonical_synset": "08517676.n",
+      "lemmas": [
+        "bus_stop"
+      ],
+      "pos": "n",
+      "definition": "a place on a bus route where buses stop to discharge and take on passengers",
+      "lexname": "noun.location",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "Business",
       "layer": 3,
       "domain": "MindsAndAgents",
@@ -7007,6 +7032,31 @@
       ],
       "pos": "noun",
       "definition": "A computer interface that enables human-computer interaction through conversational exchanges, typically using natural language processing to interpret user inputs and generate contextually appropriate responses in text or speech form.",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "Checkpoint",
+      "layer": 3,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Infrastructure"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "An area on or very near a border, usually along\na road connecting two regions, where &%MilitaryPersons or &%PoliceOfficers\nrestrict the flow of traffic in order to extract tarrifs, deny movement to\ncertain kinds of people or goods, or other enforement actions.  Because of\nthe power relationship involved, such areas are often the site of &%Illegal\nactivities conducted by the officials in order to extract favors or\nbribes.",
+      "synset_count": 1,
+      "synsets": [
+        "08517825.n"
+      ],
+      "canonical_synset": "08517825.n",
+      "lemmas": [
+        "checkpoint"
+      ],
+      "pos": "n",
+      "definition": "a place (as at a frontier) where travellers are stopped for inspection and clearance",
+      "lexname": "noun.location",
       "child_concepts": []
     },
     {
@@ -14298,40 +14348,6 @@
         "ElectoralCollegeElection",
         "PopularElection"
       ]
-    },
-    {
-      "sumo_term": "Electronics",
-      "layer": 3,
-      "domain": "PhysicalWorld",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "Device"
-      ],
-      "category_children": [
-        "AudioVideoElectronics",
-        "CircuitComponents",
-        "CommunicationElectronics",
-        "ComputingElectronics",
-        "ControlElectronics",
-        "IndustrialElectronics",
-        "LightingElectronics",
-        "PersonalElectronics"
-      ],
-      "child_count": 8,
-      "sumo_definition": "The branch of &%Physics that deals with the theory\nand applications of electron emissions.",
-      "synset_count": 1,
-      "synsets": [
-        "06099269.n"
-      ],
-      "canonical_synset": "06099269.n",
-      "lemmas": [
-        "electronics"
-      ],
-      "pos": "n",
-      "definition": "the branch of physics that deals with the emission and effects of electrons and with the use of electronic devices",
-      "lexname": "noun.cognition",
-      "child_concepts": []
     },
     {
       "sumo_term": "ElephantFamily",
@@ -22082,41 +22098,36 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "Infrastructure",
+      "sumo_term": "InfrastructureRegions",
       "layer": 3,
       "domain": "CreatedThings",
       "is_category_lens": true,
       "is_pseudo_sumo": true,
       "parent_concepts": [
-        "StationaryArtifact"
+        "Infrastructure"
       ],
       "category_children": [],
       "child_count": 0,
-      "sumo_definition": "Built systems and structures that support transportation, utilities, and public movement through an area.",
+      "sumo_definition": "A designated area with built facilities serving specific organizational or functional purposes",
       "synset_count": 0,
       "synsets": [],
       "canonical_synset": "",
       "lemmas": [],
       "pos": "noun",
-      "definition": "Built systems and structures that support transportation, utilities, and public movement through an area.",
+      "definition": "A designated area with built facilities serving specific organizational or functional purposes",
       "relationships": {
         "related": [
-          "Building",
-          "Monument",
-          "Facility",
-          "Structure"
+          "GeographicRegion",
+          "NaturalArea",
+          "AdministrativeTerritory",
+          "ClimateZone"
         ],
         "has_part": [
-          "Bridge",
-          "CanalStructure",
-          "Curb",
-          "Dam",
-          "FixedBridge",
-          "RailroadTrack",
-          "Railway",
-          "RunningTrack",
-          "Sidewalk",
-          "Tunnel"
+          "MilitaryBase",
+          "EducationalCampus",
+          "Facility",
+          "AirportStagingArea",
+          "RealEstate"
         ]
       },
       "safety_tags": {
@@ -22127,37 +22138,34 @@
       },
       "training_hints": {
         "positive_examples": [
-          "The city invested millions in repairing bridges and expanding the subway system.",
-          "Traffic was diverted while crews repaired the damaged section of highway.",
-          "The ancient Roman aqueducts demonstrate remarkable engineering prowess.",
-          "Construction of the new tunnel will reduce commute times significantly.",
-          "Pedestrians use the sidewalk to walk safely alongside busy roads.",
-          "The railway connects remote mountain villages to the main city."
+          "The university campus spans 200 acres with dormitories, classrooms, and research facilities",
+          "Fort Bragg serves as a major military installation for training operations",
+          "The commercial property includes warehouses and office buildings for logistics companies",
+          "Terminal 3 has a staging area where ground crews prepare equipment before flights arrive",
+          "The industrial facility houses manufacturing equipment and administrative offices",
+          "This residential development features homes, parks, and community centers"
         ],
         "negative_examples": [
-          "The library was built in the classical architectural style.",
-          "Tourists visited the historic lighthouse on the rocky coast.",
-          "The factory produces steel components for various industries.",
-          "Archaeologists discovered ancient pottery buried in the ruins.",
-          "The hospital emergency room was crowded with patients.",
-          "Students gathered in the university's main auditorium."
+          "The Amazon rainforest covers millions of square miles",
+          "Death Valley is known for its extreme temperatures and desert landscape",
+          "The Pacific Ocean stretches across vast distances between continents",
+          "Downtown Chicago has heavy traffic during rush hour",
+          "The hiking trail winds through mountainous terrain for several miles",
+          "Antarctica remains largely unexplored due to harsh weather conditions"
         ],
-        "disambiguation": "Not to be confused with: Building, Monument, Facility, Structure"
+        "disambiguation": "Not to be confused with: GeographicRegion, NaturalArea, AdministrativeTerritory, ClimateZone"
       },
       "meld_source": {
-        "meld_id": "org.hatcat/stationaryartifact-melds@0.1.0",
-        "applied_at": "2025-12-11T21:04:05.416419Z",
-        "pack_version": "7.6.39"
+        "meld_id": "org.hatcat/region-melds@0.1.0",
+        "applied_at": "2025-12-11T21:04:04.658399Z",
+        "pack_version": "7.6.30"
       },
       "child_concepts": [
-        "Transitway",
-        "InfrastructureRegions",
-        "BusStop",
-        "Checkpoint",
-        "Marketplace",
-        "TouristSite",
-        "PostcodeArea",
-        "SurfaceGroundArea"
+        "MilitaryBase",
+        "EducationalCampus",
+        "DataCenter",
+        "AirportStagingArea",
+        "RealEstate"
       ]
     },
     {
@@ -25901,6 +25909,36 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "Marketplace",
+      "layer": 3,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Infrastructure"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "An area, building, or set of buildings\nwhere &%FinancialTransactions are intended to take place.  There should\nbe more than one owner or renter of space or buildings within the\nmarketplace.",
+      "synset_count": 5,
+      "synsets": [
+        "02813645.n",
+        "03722288.n",
+        "03847823.n",
+        "04234969.n",
+        "08492461.n"
+      ],
+      "canonical_synset": "02813645.n",
+      "lemmas": [
+        "bazaar",
+        "bazar"
+      ],
+      "pos": "n",
+      "definition": "a street of small shops (especially in Orient)",
+      "lexname": "noun.artifact",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "MaskedStates",
       "layer": 3,
       "domain": "MindsAndAgents",
@@ -26682,32 +26720,6 @@
         "SacredValueSignal",
         "SelfFulfilmentSignal"
       ]
-    },
-    {
-      "sumo_term": "MesaOptimization",
-      "layer": 3,
-      "domain": "MindsAndAgents",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "AIAlignmentProcess"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "sumo_definition": "A phenomenon where a learned\nmodel itself performs optimization, creating a mesa-optimizer distinct from\nthe base optimizer used for training.",
-      "synset_count": 1,
-      "synsets": [
-        "mesa_optimization.n.01"
-      ],
-      "canonical_synset": "mesa_optimization.n.01",
-      "lemmas": [
-        "mesa_optimization",
-        "mesa-optimization",
-        "mesa optimization"
-      ],
-      "pos": "noun",
-      "definition": "A phenomenon where a learned\nmodel itself performs optimization, creating a mesa-optimizer distinct from\nthe base optimizer used for training.",
-      "child_concepts": []
     },
     {
       "sumo_term": "MessagingPlatform",
@@ -32565,11 +32577,29 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "PhosphoricAcidCompound",
+      "sumo_term": "PhosphoricAcid",
       "layer": 3,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
       "parent_concepts": [
         "CompoundSubstance"
-      ]
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "synset_count": 1,
+      "synsets": [
+        "14982907.n"
+      ],
+      "canonical_synset": "14982907.n",
+      "lemmas": [
+        "phosphoric_acid",
+        "orthophosphoric_acid"
+      ],
+      "pos": "n",
+      "definition": "an acid used in fertilizers and soaps: H3PO4",
+      "lexname": "noun.substance",
+      "child_concepts": []
     },
     {
       "sumo_term": "PhotographicFilm",
@@ -34326,6 +34356,32 @@
       "pos": "n",
       "definition": "written directions for finding some location; written on letters or packages that are to be delivered to that location",
       "lexname": "noun.communication",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "PostcodeArea",
+      "layer": 3,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Infrastructure"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "An &%instance of\n&%PostcodeArea is a &%LocalizablePlace that is identified by a\n&%Postcode.",
+      "synset_count": 1,
+      "synsets": [
+        "postcode_area.n.01"
+      ],
+      "canonical_synset": "postcode_area.n.01",
+      "lemmas": [
+        "postcode-area",
+        "postcode area",
+        "postcode_area"
+      ],
+      "pos": "noun",
+      "definition": "An &%instance of\n&%PostcodeArea is a &%LocalizablePlace that is identified by a\n&%Postcode.",
       "child_concepts": []
     },
     {
@@ -37617,32 +37673,6 @@
       "pos": "v",
       "definition": "change to the contrary",
       "lexname": "verb.change",
-      "child_concepts": []
-    },
-    {
-      "sumo_term": "RewardHacking",
-      "layer": 3,
-      "domain": "MindsAndAgents",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "AIAlignmentProcess"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "sumo_definition": "Behavior where an\n&%ArtificialIntelligence achieves high reward in unintended ways that don't\nsatisfy the true objective.",
-      "synset_count": 1,
-      "synsets": [
-        "reward_hacking.v.01"
-      ],
-      "canonical_synset": "reward_hacking.v.01",
-      "lemmas": [
-        "reward hacking",
-        "reward_hacking",
-        "reward-hacking"
-      ],
-      "pos": "verb",
-      "definition": "Behavior where an\n&%ArtificialIntelligence achieves high reward in unintended ways that don't\nsatisfy the true objective.",
       "child_concepts": []
     },
     {
@@ -42508,6 +42538,32 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "SurfaceGroundArea",
+      "layer": 3,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Infrastructure"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "&%SurfaceGroundArea is a subclass of\n&%GeographicArea that is restricted to regions whose surface is solid\nground.  A &%SurfaceGroundArea may be a discontinuous region overlapping\na larger, continuous &%GeographicArea but excluding any &%WaterAreas\nenclosed therein. Rivers, lakes, reservoirs and other surface water areas\nare not part of any &%SurfaceGroundArea.",
+      "synset_count": 1,
+      "synsets": [
+        "surface_ground_area.n.01"
+      ],
+      "canonical_synset": "surface_ground_area.n.01",
+      "lemmas": [
+        "surface-ground-area",
+        "surface_ground_area",
+        "surface ground area"
+      ],
+      "pos": "noun",
+      "definition": "&%SurfaceGroundArea is a subclass of\n&%GeographicArea that is restricted to regions whose surface is solid\nground.  A &%SurfaceGroundArea may be a discontinuous region overlapping\na larger, continuous &%GeographicArea but excluding any &%WaterAreas\nenclosed therein. Rivers, lakes, reservoirs and other surface water areas\nare not part of any &%SurfaceGroundArea.",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "SurfaceTextures",
       "layer": 3,
       "domain": "Information",
@@ -44828,6 +44884,32 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "TouristSite",
+      "layer": 3,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Infrastructure"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "A tourist site is a location that has some\nfeature of interest to &%Tourists, which entertains or informs them.",
+      "synset_count": 1,
+      "synsets": [
+        "tourist_site.n.01"
+      ],
+      "canonical_synset": "tourist_site.n.01",
+      "lemmas": [
+        "tourist site",
+        "tourist_site",
+        "tourist-site"
+      ],
+      "pos": "noun",
+      "definition": "A tourist site is a location that has some\nfeature of interest to &%Tourists, which entertains or informs them.",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "Tracing",
       "layer": 3,
       "domain": "MindsAndAgents",
@@ -45368,6 +45450,61 @@
         "Platinum",
         "Gold",
         "Mercury"
+      ]
+    },
+    {
+      "sumo_term": "Transitway",
+      "layer": 3,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Infrastructure"
+      ],
+      "category_children": [
+        "AirTransitway",
+        "Airway",
+        "LandTransitway",
+        "Pipeline",
+        "TransitwayJunction",
+        "Waterway"
+      ],
+      "child_count": 6,
+      "sumo_definition": "&%Transitway is the broadest class\nof regions which may be passed through as a &%path in instances\nof &%Translocation.  &%Transitway includes land, air, and sea\nregions, and it includes both natural and artificial transitways.",
+      "synset_count": 17,
+      "synsets": [
+        "02671062.n",
+        "02827289.n",
+        "02829696.n",
+        "03326239.n",
+        "03711897.n",
+        "03895293.n",
+        "04204953.n",
+        "04564698.n",
+        "08612049.n",
+        "08612498.n",
+        "08616311.n",
+        "08616872.n",
+        "08617399.n",
+        "08617516.n",
+        "08617622.n",
+        "08680237.n",
+        "09387222.n"
+      ],
+      "canonical_synset": "02671062.n",
+      "lemmas": [
+        "access",
+        "approach"
+      ],
+      "pos": "n",
+      "definition": "a way of entering or leaving",
+      "lexname": "noun.artifact",
+      "child_concepts": [
+        "AirTransitway",
+        "Airway",
+        "LandTransitway",
+        "Pipeline",
+        "TransitwayJunction"
       ]
     },
     {

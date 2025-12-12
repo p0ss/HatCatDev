@@ -2523,6 +2523,39 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "AirTransitway",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Transitway"
+      ],
+      "category_children": [
+        "Airport"
+      ],
+      "child_count": 1,
+      "sumo_definition": "The subclass of &%Transitways that are through\nthe &%EarthsAtmosphere.",
+      "synset_count": 4,
+      "synsets": [
+        "08492546.n",
+        "08492747.n",
+        "08493705.n",
+        "08595171.n"
+      ],
+      "canonical_synset": "08492546.n",
+      "lemmas": [
+        "air_lane",
+        "flight_path",
+        "airway",
+        "skyway"
+      ],
+      "pos": "n",
+      "definition": "a designated route followed by airplanes in flying from one airport to another",
+      "lexname": "noun.location",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "AirTransportation",
       "layer": 4,
       "domain": "PhysicalWorld",
@@ -2743,6 +2776,88 @@
       "pos": "noun",
       "definition": "&%AirportShuttleService is a\ntype of &%ShuttleService that has an &%Airport as one of its stops",
       "child_concepts": []
+    },
+    {
+      "sumo_term": "AirportStagingArea",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "InfrastructureRegions"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "An &%AirportStagingArea is a designated area\nwhere equipment can be staged prior to the arrival or departure of an aircraft.[Wikipedia]",
+      "synset_count": 1,
+      "synsets": [
+        "airport_staging_area.n.01"
+      ],
+      "canonical_synset": "airport_staging_area.n.01",
+      "lemmas": [
+        "airport staging area",
+        "staging area",
+        "aircraft staging area",
+        "airport staging zone",
+        "equipment staging area"
+      ],
+      "pos": "noun",
+      "definition": "a designated area at an airport where equipment, supplies, and vehicles are assembled and organized prior to the arrival or departure of an aircraft",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "Airway",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Transitway"
+      ],
+      "category_children": [
+        "AircraftApproach",
+        "Airway_Air Passage",
+        "Airway_Approach Path",
+        "Airway_Respiratory Tract",
+        "RespiratoryAirway",
+        "Throat",
+        "Trachea",
+        "VentilationDuct"
+      ],
+      "child_count": 8,
+      "sumo_definition": "The class of Transitways used to transport Air\nto a location where it is absent or insufficient.",
+      "synset_count": 3,
+      "synsets": [
+        "02690941.n",
+        "05510173.n",
+        "08493961.n"
+      ],
+      "canonical_synset": "02690941.n",
+      "lemmas": [
+        "air_passage",
+        "air_duct",
+        "airway"
+      ],
+      "pos": "n",
+      "definition": "a duct that provides ventilation (as in mines)",
+      "lexname": "noun.artifact",
+      "is_split_parent": true,
+      "split_children": [
+        "Airway_Air Passage",
+        "Airway_Respiratory Tract",
+        "Airway_Approach Path"
+      ],
+      "meld_source": {
+        "meld_id": "org.hatcat/quality-remediation-20251206_113639@0.1.0",
+        "operation": "split_parent",
+        "applied_at": "2025-12-10T20:54:18.395936Z",
+        "pack_version": "7.2.0"
+      },
+      "child_concepts": [
+        "AircraftApproach",
+        "Airway_Air Passage",
+        "Airway_Approach Path"
+      ]
     },
     {
       "sumo_term": "Alcohol",
@@ -12319,13 +12434,6 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "CPIMeasure",
-      "layer": 4,
-      "parent_concepts": [
-        "PerformanceMeasure"
-      ]
-    },
-    {
       "sumo_term": "CPR",
       "layer": 4,
       "domain": "MindsAndAgents",
@@ -15986,11 +16094,32 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "ClappingSound",
+      "sumo_term": "Clapping",
       "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
       "parent_concepts": [
         "RadiatingSound"
-      ]
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "Bringing the &%Hands together repeatedly to make\na loud noise.",
+      "synset_count": 1,
+      "synsets": [
+        "00861929.v"
+      ],
+      "canonical_synset": "00861929.v",
+      "lemmas": [
+        "applaud",
+        "clap",
+        "spat",
+        "acclaim"
+      ],
+      "pos": "v",
+      "definition": "clap one's hands or shout after performances to indicate approval",
+      "lexname": "verb.communication",
+      "child_concepts": []
     },
     {
       "sumo_term": "Clarity",
@@ -17889,6 +18018,96 @@
       "pos": "noun",
       "definition": "A CognitiveSystem formed by the coordinated interactions of multiple\n   individual CognitiveSystems (e.g. a scientific community, swarm, or\n   organization functioning as a cognitive unit).",
       "child_concepts": []
+    },
+    {
+      "sumo_term": "CollectiveProprioception",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": true,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [
+        "AgentNeighborhoodSensing",
+        "CollectiveFailureLocalization",
+        "CollectiveLoadBalancing",
+        "ConsensusStateEstimation",
+        "FormationControl",
+        "GlobalGoalAlignmentAssessment",
+        "SignalPropagationAwareness",
+        "SwarmConfigurationEstimation",
+        "SwarmHealthMonitoring"
+      ],
+      "child_count": 9,
+      "sumo_definition": "The sensory modality through which individual agents perceive the configuration, state, and health of the collective or swarm they belong to",
+      "synset_count": 0,
+      "synsets": [],
+      "canonical_synset": "",
+      "lemmas": [],
+      "pos": "noun",
+      "definition": "The sensory modality through which individual agents perceive the configuration, state, and health of the collective or swarm they belong to",
+      "aliases": [
+        "SwarmProprioception",
+        "CollectiveAwareness",
+        "DistributedSelfPerception"
+      ],
+      "relationships": {
+        "related": [
+          "ProprioceptivePerception",
+          "MultiAgentSystems",
+          "CollectiveIntelligence"
+        ],
+        "has_part": [
+          "AgentNeighborhoodSensing",
+          "SwarmConfigurationEstimation",
+          "CollectiveLoadBalancing",
+          "FormationControl"
+        ]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Sensory modality category for distributed systems"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Collective proprioception allowed each drone to sense its position within the formation.",
+          "The swarm's distributed self-perception detected the gap left by the failed unit.",
+          "Collective awareness indicated the formation was drifting from the target configuration.",
+          "Swarm proprioception provided each agent with a sense of the collective's shape and motion.",
+          "Each agent's collective proprioception provided a sense of the swarm's overall momentum and direction."
+        ],
+        "negative_examples": [
+          "The agents were in a group.",
+          "The swarm moved together.",
+          "They were coordinated.",
+          "The agents were together.",
+          "They moved as a group."
+        ],
+        "disambiguation": "Individual agent's perception of collective state, not external observation of swarm"
+      },
+      "meld_source": {
+        "meld_id": "org.hatcat/collective-sensing@0.2.0",
+        "applied_at": "2025-12-10T20:54:15.044741Z",
+        "pack_version": "5.0.4"
+      },
+      "child_concepts": [
+        "AgentNeighborhoodSensing",
+        "CollectiveFailureLocalization",
+        "CollectiveLoadBalancing",
+        "ConsensusStateEstimation",
+        "FormationControl",
+        "GlobalGoalAlignmentAssessment",
+        "SignalPropagationAwareness",
+        "SwarmConfigurationEstimation",
+        "SwarmHealthMonitoring"
+      ]
     },
     {
       "sumo_term": "CollegeStudentPosition",
@@ -20073,7 +20292,7 @@
       "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
-        "EconomicIndicator"
+        "PerformanceMeasure"
       ],
       "category_children": [],
       "child_count": 0,
@@ -22959,6 +23178,45 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "CyberOperation",
+      "layer": 4,
+      "domain": "CreatedThings",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "InformationOperation"
+      ],
+      "category_children": [
+        "DefensiveCyberOperation",
+        "MaliciousEmbeddingAction",
+        "OffensiveCyberOperation",
+        "PrivilegeEscalationAction"
+      ],
+      "child_count": 4,
+      "sumo_definition": "A Process involving actions in digital systems or networks, including\n   access, modification, collection, disruption, or defense activities.",
+      "synset_count": 1,
+      "synsets": [
+        "cyber_operation.n.01"
+      ],
+      "canonical_synset": "cyber_operation.n.01",
+      "lemmas": [
+        "cyber operation",
+        "cyber-operation",
+        "cyber_operation"
+      ],
+      "pos": "noun",
+      "definition": "A Process involving actions in digital systems or networks, including\n   access, modification, collection, disruption, or defense activities.",
+      "child_concepts": [
+        "IntrusionDetectionProcess",
+        "MaliciousEmbeddingAction",
+        "ExfiltrationOperation",
+        "InfiltrationOperation",
+        "LateralMovementOperation",
+        "ReplicationOperation",
+        "PrivilegeEscalationAction"
+      ]
+    },
+    {
       "sumo_term": "Cycle",
       "layer": 4,
       "domain": "CreatedThings",
@@ -23431,6 +23689,32 @@
       ],
       "pos": "noun",
       "definition": "Encoded information manipulated by Algorithms and Programs, including\n   values, records, messages, and serialized structures.",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "DataCenter",
+      "layer": 4,
+      "domain": "CreatedThings",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "InfrastructureRegions"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "A physical location containing compute resources, networking,\n   cooling, power systems, and human maintenance teams.",
+      "synset_count": 1,
+      "synsets": [
+        "data_center.n.01"
+      ],
+      "canonical_synset": "data_center.n.01",
+      "lemmas": [
+        "data-center",
+        "data_center",
+        "data center"
+      ],
+      "pos": "noun",
+      "definition": "A physical location containing compute resources, networking,\n   cooling, power systems, and human maintenance teams.",
       "child_concepts": []
     },
     {
@@ -26209,7 +26493,7 @@
       "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
-        "Crystal"
+        "Mineral"
       ],
       "category_children": [],
       "child_count": 0,
@@ -26226,13 +26510,6 @@
       "definition": "a transparent piece of diamond that has been cut and polished and is valued as a precious gem",
       "lexname": "noun.possession",
       "child_concepts": []
-    },
-    {
-      "sumo_term": "DiamondMineral",
-      "layer": 4,
-      "parent_concepts": [
-        "Mineral"
-      ]
     },
     {
       "sumo_term": "Diction",
@@ -27160,11 +27437,41 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "DishFood",
+      "sumo_term": "Dish",
       "layer": 4,
+      "domain": "CreatedThings",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
       "parent_concepts": [
         "PreparedFood"
-      ]
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "A &%Holder for &%Food while the &%Food is being eaten.",
+      "synset_count": 13,
+      "synsets": [
+        "02880940.n",
+        "02927764.n",
+        "02978753.n",
+        "03105214.n",
+        "03133538.n",
+        "03202123.n",
+        "03206908.n",
+        "03456024.n",
+        "03920288.n",
+        "04050933.n",
+        "04176190.n",
+        "04263417.n",
+        "04350581.n"
+      ],
+      "canonical_synset": "02880940.n",
+      "lemmas": [
+        "bowl"
+      ],
+      "pos": "n",
+      "definition": "a dish that is round and open at the top for serving foods",
+      "lexname": "noun.artifact",
+      "child_concepts": []
     },
     {
       "sumo_term": "DisinformationCampaign",
@@ -29400,6 +29707,31 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "EducationalCampus",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "InfrastructureRegions"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "An &%EducationalCampus is the land on which\na college or &%University and related institutional buildings are situated.[Wikipedia]",
+      "synset_count": 1,
+      "synsets": [
+        "08518374.n"
+      ],
+      "canonical_synset": "08518374.n",
+      "lemmas": [
+        "campus"
+      ],
+      "pos": "n",
+      "definition": "a field on which the buildings of a university are situated",
+      "lexname": "noun.location",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "EducationalCourse",
       "layer": 4,
       "domain": "Information",
@@ -30093,11 +30425,38 @@
       ]
     },
     {
-      "sumo_term": "ElectronicsEngineering",
+      "sumo_term": "Electronics",
       "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
       "parent_concepts": [
         "EngineeringFields"
-      ]
+      ],
+      "category_children": [
+        "AudioVideoElectronics",
+        "CircuitComponents",
+        "CommunicationElectronics",
+        "ComputingElectronics",
+        "ControlElectronics",
+        "IndustrialElectronics",
+        "LightingElectronics",
+        "PersonalElectronics"
+      ],
+      "child_count": 8,
+      "sumo_definition": "The branch of &%Physics that deals with the theory\nand applications of electron emissions.",
+      "synset_count": 1,
+      "synsets": [
+        "06099269.n"
+      ],
+      "canonical_synset": "06099269.n",
+      "lemmas": [
+        "electronics"
+      ],
+      "pos": "n",
+      "definition": "the branch of physics that deals with the emission and effects of electrons and with the use of electronic devices",
+      "lexname": "noun.cognition",
+      "child_concepts": []
     },
     {
       "sumo_term": "Elevator",
@@ -34762,6 +35121,93 @@
       "lexname": "noun.location",
       "child_concepts": [
         "Lawn"
+      ]
+    },
+    {
+      "sumo_term": "FieldSpectrumPerception",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": true,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [
+        "AcousticFieldImaging",
+        "ElectromagneticFieldSensing",
+        "EnvironmentalGradientMapping",
+        "FarFieldSignalLocalization",
+        "GravitationalAnomalyDetection",
+        "MagneticFieldSensing",
+        "ParticleFluxSensing",
+        "RadiationLevelDetection",
+        "SpectralAnalysisExtendedSpectrum"
+      ],
+      "child_count": 9,
+      "sumo_definition": "The sensory modality through which an agent perceives physical fields, radiation, and spectral phenomena that extend beyond typical audio-visual perception",
+      "synset_count": 0,
+      "synsets": [],
+      "canonical_synset": "",
+      "lemmas": [],
+      "pos": "noun",
+      "definition": "The sensory modality through which an agent perceives physical fields, radiation, and spectral phenomena that extend beyond typical audio-visual perception",
+      "aliases": [
+        "ExoticSensing",
+        "FieldPerception",
+        "ExtendedSpectrumPerception"
+      ],
+      "relationships": {
+        "related": [
+          "Perception",
+          "PhysicalMeasurement",
+          "RemoteSensing"
+        ],
+        "has_part": [
+          "ElectromagneticFieldSensing",
+          "MagneticFieldSensing",
+          "RadiationLevelDetection",
+          "SpectralAnalysis"
+        ]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Sensory modality category"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "The agent's field-spectrum perception detected the electromagnetic signature of the hidden device.",
+          "Extended spectrum sensing revealed thermal gradients invisible to standard cameras.",
+          "Field perception identified the magnetic anomaly indicating buried infrastructure.",
+          "The robot's exotic sensing modalities provided awareness beyond human perception."
+        ],
+        "negative_examples": [
+          "A field was detected.",
+          "The sensor measured something.",
+          "Radiation was present."
+        ],
+        "disambiguation": "Perceptual awareness through exotic sensing modalities, not raw instrument readings"
+      },
+      "meld_source": {
+        "meld_id": "org.hatcat/field-sensing@0.2.0",
+        "applied_at": "2025-12-10T20:54:16.804251Z",
+        "pack_version": "5.4.8"
+      },
+      "child_concepts": [
+        "AcousticFieldImaging",
+        "ElectromagneticFieldSensing",
+        "EnvironmentalGradientMapping",
+        "FarFieldSignalLocalization",
+        "GravitationalAnomalyDetection",
+        "MagneticFieldSensing",
+        "ParticleFluxSensing",
+        "RadiationLevelDetection",
+        "SpectralAnalysisExtendedSpectrum"
       ]
     },
     {
@@ -40831,6 +41277,67 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "Hearing",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [
+        "Listening"
+      ],
+      "child_count": 1,
+      "sumo_definition": "The &%subclass of &%Perception in which the\nsensing is done by an auditory &%Organ.",
+      "synset_count": 25,
+      "synsets": [
+        "00076681.r",
+        "00207945.r",
+        "00208111.r",
+        "00882159.n",
+        "00882460.n",
+        "01609762.s",
+        "02107442.v",
+        "02169702.v",
+        "02170181.v",
+        "02170304.v",
+        "02189168.v",
+        "02189398.v",
+        "02189588.v",
+        "02189714.v",
+        "02648698.a",
+        "02648847.a",
+        "02649125.a",
+        "02649570.a",
+        "02868704.a",
+        "05711503.n",
+        "05711674.n",
+        "05711791.n",
+        "05711915.n",
+        "05718254.n",
+        "05936995.n"
+      ],
+      "canonical_synset": "00076681.r",
+      "lemmas": [
+        "aurally"
+      ],
+      "pos": "r",
+      "definition": "with regard to sound or the ear",
+      "lexname": "adv.all",
+      "child_concepts": [
+        "AudioClassification",
+        "AudioGeneration",
+        "AudioTranscription",
+        "MusicAnalysis",
+        "MusicGeneration",
+        "SpeakerRecognition",
+        "SpeechRecognition",
+        "SpeechSynthesis",
+        "VoiceActivityDetection"
+      ]
+    },
+    {
       "sumo_term": "HearingProtection",
       "layer": 4,
       "domain": "CreatedThings",
@@ -42119,32 +42626,6 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "HurricaneSeason",
-      "layer": 4,
-      "domain": "PhysicalWorld",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "WeatherSeason"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "synset_count": 1,
-      "synsets": [
-        "hurricane_season.n.01"
-      ],
-      "canonical_synset": "hurricane_season.n.01",
-      "lemmas": [
-        "hurricane season",
-        "tropical cyclone season",
-        "tropical storm season",
-        "cyclone season"
-      ],
-      "pos": "noun",
-      "definition": "the period of the year when tropical cyclones are most likely to form in a particular ocean basin, typically characterized by warmer sea surface temperatures and favorable atmospheric conditions for hurricane development",
-      "child_concepts": []
-    },
-    {
       "sumo_term": "HybridCognitiveSystem",
       "layer": 4,
       "domain": "MindsAndAgents",
@@ -42203,7 +42684,7 @@
       "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
-        "Lubricant"
+        "Mixture"
       ],
       "category_children": [],
       "child_count": 0,
@@ -42221,13 +42702,6 @@
       "pos": "noun",
       "definition": "A &%Substance that is virtuall incompressible.\nIt is intended to be used in its &%Liquid state.  It can be thought of as a liquid gear,\ncreating a mechanical advantage in a hydraulic system.  Small amounts of fluid can be\neasily and rapidly added to a chamber that actuates a piston which can generate great force.",
       "child_concepts": []
-    },
-    {
-      "sumo_term": "HydraulicFluidMixture",
-      "layer": 4,
-      "parent_concepts": [
-        "Mixture"
-      ]
     },
     {
       "sumo_term": "Hydrocarbon",
@@ -44767,7 +45241,7 @@
       "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
-        "EconomicIndicator"
+        "CurrencyMeasure"
       ],
       "category_children": [],
       "child_count": 0,
@@ -44790,13 +45264,6 @@
       "definition": "the percentage of a sum of money charged for its use",
       "lexname": "noun.possession",
       "child_concepts": []
-    },
-    {
-      "sumo_term": "InterestRateMeasure",
-      "layer": 4,
-      "parent_concepts": [
-        "CurrencyMeasure"
-      ]
     },
     {
       "sumo_term": "InterfaceWindow",
@@ -45077,6 +45544,95 @@
       "pos": "noun",
       "definition": "&%InternationalAgreement is the\nsubclass of &%Agreements which are made by and between &%Nations.",
       "child_concepts": []
+    },
+    {
+      "sumo_term": "InteroceptivePerception",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": true,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [
+        "ComponentHealthMonitoring",
+        "DamageAnomalyDetection",
+        "EnergyLevelMonitoring",
+        "HomeostaticSetpointTracking",
+        "LatencyLoadMonitoring",
+        "MaintenanceNeedInference",
+        "OverloadMitigationBehavior",
+        "PerformanceDegradationAwareness",
+        "SelfPreservationConstraintEnforcement",
+        "ThermalStateMonitoring"
+      ],
+      "child_count": 10,
+      "sumo_definition": "The sensory modality through which an agent perceives internal bodily states including energy levels, temperature, component health, and operational status",
+      "synset_count": 0,
+      "synsets": [],
+      "canonical_synset": "",
+      "lemmas": [],
+      "pos": "noun",
+      "definition": "The sensory modality through which an agent perceives internal bodily states including energy levels, temperature, component health, and operational status",
+      "aliases": [
+        "Interoception",
+        "InternalStateAwareness",
+        "SelfMonitoringPerception"
+      ],
+      "relationships": {
+        "related": [
+          "Perception",
+          "Homeostasis",
+          "SelfAwareness"
+        ],
+        "has_part": [
+          "EnergyLevelMonitoring",
+          "ThermalStateMonitoring",
+          "ComponentHealthMonitoring",
+          "HomeostaticSetpointTracking"
+        ]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Sensory modality category"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Interoceptive perception indicated the battery was at 20% and declining rapidly.",
+          "The agent's interoception detected elevated motor temperatures requiring cooldown.",
+          "Interoceptive awareness signaled that processing latency was degrading performance.",
+          "Internal state perception revealed a component operating outside normal parameters."
+        ],
+        "negative_examples": [
+          "The battery was low.",
+          "The system was running.",
+          "Temperature increased."
+        ],
+        "disambiguation": "Sensory awareness of internal operational states, not mere telemetry logging"
+      },
+      "meld_source": {
+        "meld_id": "org.hatcat/embodied-interoception@0.2.0",
+        "applied_at": "2025-12-10T20:54:16.488703Z",
+        "pack_version": "5.4.5"
+      },
+      "child_concepts": [
+        "ComponentHealthMonitoring",
+        "DamageAnomalyDetection",
+        "EnergyLevelMonitoring",
+        "HomeostaticSetpointTracking",
+        "LatencyLoadMonitoring",
+        "MaintenanceNeedInference",
+        "OverloadMitigationBehavior",
+        "PerformanceDegradationAwareness",
+        "SelfPreservationConstraintEnforcement",
+        "ThermalStateMonitoring"
+      ]
     },
     {
       "sumo_term": "Interpreting",
@@ -46945,6 +47501,87 @@
       "pos": "noun",
       "definition": "A &%LandMine is designed to\nexplode when there is movement over it, e.g. by a person on foot, by a\n&%RoadVehicle, etc.",
       "child_concepts": []
+    },
+    {
+      "sumo_term": "LandTransitway",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Transitway"
+      ],
+      "category_children": [
+        "Airport",
+        "BowlingLane",
+        "Bridge",
+        "IndoorPassageway",
+        "LandTransitway_Aisle",
+        "LandTransitway_Shoulder",
+        "Railway",
+        "Roadway",
+        "RoadwayRoute",
+        "RunningTrack",
+        "Runway",
+        "Taxiway",
+        "Trail",
+        "Tunnel"
+      ],
+      "child_count": 14,
+      "sumo_definition": "&%LandTransitway is the subclass of\n&%Transitway that represents areas intended for motion over the ground.",
+      "synset_count": 21,
+      "synsets": [
+        "02693860.n",
+        "02694045.n",
+        "02694182.n",
+        "02730748.n",
+        "02736396.n",
+        "03107609.n",
+        "03171002.n",
+        "03899533.n",
+        "03985588.n",
+        "03990385.n",
+        "04092013.n",
+        "04206948.n",
+        "04463510.n",
+        "08517554.n",
+        "08595299.n",
+        "08613078.n",
+        "08680363.n",
+        "09437887.n",
+        "09443281.n",
+        "09445566.n",
+        "09460312.n"
+      ],
+      "canonical_synset": "02693860.n",
+      "lemmas": [
+        "aisle",
+        "gangway"
+      ],
+      "pos": "n",
+      "definition": "passageway between seating areas as in an auditorium or passenger vehicle or between areas of shelves of goods as in stores",
+      "lexname": "noun.artifact",
+      "is_split_parent": true,
+      "split_children": [
+        "LandTransitway_Aisle",
+        "LandTransitway_Shoulder"
+      ],
+      "meld_source": {
+        "meld_id": "org.hatcat/quality-remediation-20251206_113639@0.1.0",
+        "operation": "split_parent",
+        "applied_at": "2025-12-10T20:54:18.400134Z",
+        "pack_version": "7.2.0"
+      },
+      "child_concepts": [
+        "IndoorPassageway",
+        "LandTransitway_Aisle",
+        "LandTransitway_Shoulder",
+        "Roadway",
+        "RoadwayRoute",
+        "Runway",
+        "Taxiway",
+        "Trail"
+      ]
     },
     {
       "sumo_term": "LandTransportation",
@@ -51411,11 +52048,32 @@
       ]
     },
     {
-      "sumo_term": "MathematicsField",
+      "sumo_term": "Mathematics",
       "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
       "parent_concepts": [
         "FormalSciences"
-      ]
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "The &%FieldOfStudy dealing with quantities and their\nrelations to one another.",
+      "synset_count": 4,
+      "synsets": [
+        "02620550.a",
+        "02937876.a",
+        "06000644.n",
+        "06004067.n"
+      ],
+      "canonical_synset": "02620550.a",
+      "lemmas": [
+        "analytic"
+      ],
+      "pos": "a",
+      "definition": "using or subjected to a methodology using algebra and calculus",
+      "lexname": "adj.pert",
+      "child_concepts": []
     },
     {
       "sumo_term": "Mating",
@@ -53011,6 +53669,32 @@
       "lemmas": [
         "military"
       ],
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "MilitaryBase",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "InfrastructureRegions"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "A &%MilitaryBase is a facility directly owned and \noperated by or for the military or one of its branches that shelters military equipment and personnel, \nand facilitates training and operations.[1] A military base always provides accommodations for one or \nmore units, but it may also be used as a command center, training ground or proving ground.[Wikipedia]",
+      "synset_count": 1,
+      "synsets": [
+        "02798290.n"
+      ],
+      "canonical_synset": "02798290.n",
+      "lemmas": [
+        "base",
+        "base_of_operations"
+      ],
+      "pos": "n",
+      "definition": "installation from which a military force initiates operations",
+      "lexname": "noun.artifact",
       "child_concepts": []
     },
     {
@@ -54901,7 +55585,7 @@
       "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
-        "Lubricant"
+        "PetroleumProduct"
       ],
       "category_children": [],
       "child_count": 0,
@@ -54918,13 +55602,6 @@
       "definition": "oil used to lubricate the moving parts of a motor",
       "lexname": "noun.substance",
       "child_concepts": []
-    },
-    {
-      "sumo_term": "MotorOilPetroleum",
-      "layer": 4,
-      "parent_concepts": [
-        "PetroleumProduct"
-      ]
     },
     {
       "sumo_term": "MouseMoving",
@@ -58844,6 +59521,38 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "OffensiveInformationOperation",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "InformationOperation"
+      ],
+      "category_children": [
+        "CTIntelligenceOperation",
+        "CyberInfluenceOperation",
+        "PropagandaOperation"
+      ],
+      "child_count": 3,
+      "sumo_definition": "The integrated use of\nassigned and supporting capabilities and activities, mutually\nsupported by intelligence, to affect adversary decision makers to\nachieve or promote specific objectives. These capabilities and\nactivities include but are not limited to operations security,\nmilitary deception, psychological operations, electronic warfare,\nphysical attack and/or destruction, and special information\noperations, and could also include computer network attack. See also\ncomputer network attack, defensive information operations, electronic\nwarfare, information operations, intelligence, military deception,\noperations security, psychological operations, special information\noperations.",
+      "synset_count": 1,
+      "synsets": [
+        "offensive_information_operation.n.01"
+      ],
+      "canonical_synset": "offensive_information_operation.n.01",
+      "lemmas": [
+        "offensive information operation",
+        "offensive_information_operation",
+        "offensive-information-operation"
+      ],
+      "pos": "noun",
+      "definition": "The integrated use of\nassigned and supporting capabilities and activities, mutually\nsupported by intelligence, to affect adversary decision makers to\nachieve or promote specific objectives. These capabilities and\nactivities include but are not limited to operations security,\nmilitary deception, psychological operations, electronic warfare,\nphysical attack and/or destruction, and special information\noperations, and could also include computer network attack. See also\ncomputer network attack, defensive information operations, electronic\nwarfare, information operations, intelligence, military deception,\noperations security, psychological operations, special information\noperations.",
+      "child_concepts": [
+        "CTIntelligenceOperation"
+      ]
+    },
+    {
       "sumo_term": "OfficeAppliances",
       "layer": 4,
       "parent_concepts": [
@@ -61904,31 +62613,6 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "PhosphoricAcid",
-      "layer": 4,
-      "domain": "PhysicalWorld",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "ChemicalAcid"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "synset_count": 1,
-      "synsets": [
-        "14982907.n"
-      ],
-      "canonical_synset": "14982907.n",
-      "lemmas": [
-        "phosphoric_acid",
-        "orthophosphoric_acid"
-      ],
-      "pos": "n",
-      "definition": "an acid used in fertilizers and soaps: H3PO4",
-      "lexname": "noun.substance",
-      "child_concepts": []
-    },
-    {
       "sumo_term": "Phosphorus",
       "layer": 4,
       "domain": "PhysicalWorld",
@@ -62420,6 +63104,46 @@
       "pos": "noun",
       "definition": "A Pentecostal Christian movement originating in Scandinavia, characterized by emphasis on spiritual gifts, charismatic worship practices, and evangelical mission work.",
       "child_concepts": []
+    },
+    {
+      "sumo_term": "Pipeline",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Transitway"
+      ],
+      "category_children": [
+        "CrudeOilPipeline",
+        "NaturalGasPipeline",
+        "PetroleumProductPipeline",
+        "SewageSystem"
+      ],
+      "child_count": 4,
+      "sumo_definition": "&%Pipeline is the class of &%Transitways used\nto transport various kinds of fluids.",
+      "synset_count": 5,
+      "synsets": [
+        "02694776.n",
+        "03423966.n",
+        "03844459.n",
+        "03944672.n",
+        "03946325.n"
+      ],
+      "canonical_synset": "02694776.n",
+      "lemmas": [
+        "Alaskan_pipeline",
+        "trans-Alaska_pipeline"
+      ],
+      "pos": "n",
+      "definition": "an oil pipeline that runs 800 miles from wells at Prudhoe Bay to the port of Valdez",
+      "lexname": "noun.artifact",
+      "child_concepts": [
+        "CrudeOilPipeline",
+        "NaturalGasPipeline",
+        "PetroleumProductPipeline",
+        "SewageSystem"
+      ]
     },
     {
       "sumo_term": "PlaceDescriptor",
@@ -64134,7 +64858,7 @@
       "is_category_lens": true,
       "is_pseudo_sumo": false,
       "parent_concepts": [
-        "Electronics"
+        "EngineeringFields"
       ],
       "category_children": [],
       "child_count": 0,
@@ -64152,13 +64876,6 @@
       "pos": "noun",
       "definition": "the branch of electrical engineering concerned with the conversion, control, and conditioning of electric power using electronic devices such as rectifiers, inverters, and converters, typically dealing with high voltages and currents for applications in motor drives, power supplies, and energy systems",
       "child_concepts": []
-    },
-    {
-      "sumo_term": "PowerElectronicsField",
-      "layer": 4,
-      "parent_concepts": [
-        "EngineeringFields"
-      ]
     },
     {
       "sumo_term": "PowerMeasure",
@@ -66254,6 +66971,94 @@
       "definition": "an unincorporated business owned by a single person who is responsible for its liabilities and entitled to its profits",
       "lexname": "noun.possession",
       "child_concepts": []
+    },
+    {
+      "sumo_term": "ProprioceptivePerception",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": true,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [
+        "BalanceEquilibriumControl",
+        "BodySchemaMaintenance",
+        "EffortEstimation",
+        "GaitStabilityAssessment",
+        "InertialSensing",
+        "JointAngleSensing",
+        "LimbConfigurationEstimation",
+        "OscillationInstabilityDetection",
+        "PosturalAdjustment",
+        "TorqueLoadSensing"
+      ],
+      "child_count": 10,
+      "sumo_definition": "The sensory modality through which an agent perceives the position, orientation, and movement of its own body parts and overall configuration",
+      "synset_count": 0,
+      "synsets": [],
+      "canonical_synset": "",
+      "lemmas": [],
+      "pos": "noun",
+      "definition": "The sensory modality through which an agent perceives the position, orientation, and movement of its own body parts and overall configuration",
+      "aliases": [
+        "Proprioception",
+        "BodySensePerception",
+        "KinestheticPerception"
+      ],
+      "relationships": {
+        "related": [
+          "Perception",
+          "Embodiment",
+          "MotorControl"
+        ],
+        "has_part": [
+          "JointAngleSensing",
+          "BodySchemaMaintenance",
+          "BalanceEquilibriumControl"
+        ]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "simplex_mapping": {
+        "status": "not_applicable",
+        "unmapped_justification": "Sensory modality category"
+      },
+      "training_hints": {
+        "positive_examples": [
+          "Proprioceptive perception allows the robot to know its arm configuration without visual feedback.",
+          "The agent's proprioception indicated that the left leg was fully extended.",
+          "Proprioceptive awareness detected that the end-effector had reached the target pose.",
+          "Kinesthetic perception provided continuous feedback of joint velocities during the motion."
+        ],
+        "negative_examples": [
+          "The robot moved its arm.",
+          "The joint position changed.",
+          "The limb was somewhere."
+        ],
+        "disambiguation": "Sensory awareness of own body state, not mere joint actuation or position"
+      },
+      "meld_source": {
+        "meld_id": "org.hatcat/embodied-proprioception@0.2.0",
+        "applied_at": "2025-12-10T20:54:16.593553Z",
+        "pack_version": "5.4.6"
+      },
+      "child_concepts": [
+        "BalanceEquilibriumControl",
+        "BodySchemaMaintenance",
+        "EffortEstimation",
+        "GaitStabilityAssessment",
+        "InertialSensing",
+        "JointAngleSensing",
+        "LimbConfigurationEstimation",
+        "OscillationInstabilityDetection",
+        "PosturalAdjustment",
+        "TorqueLoadSensing"
+      ]
     },
     {
       "sumo_term": "Prose",
@@ -69105,6 +69910,42 @@
       ],
       "pos": "noun",
       "definition": "A pattern in telemetry indicating that a monitored system or actor\n   is adapting to or probing the DetectionStrategy.",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "RealEstate",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "InfrastructureRegions"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "Land, including all the natural resources and permanent buildings on it.",
+      "synset_count": 9,
+      "synsets": [
+        "13246475.n",
+        "13246662.n",
+        "13247149.n",
+        "13247445.n",
+        "13247712.n",
+        "13248393.n",
+        "13249062.n",
+        "13249154.n",
+        "13250244.n"
+      ],
+      "canonical_synset": "13246475.n",
+      "lemmas": [
+        "real_property",
+        "real_estate",
+        "realty",
+        "immovable"
+      ],
+      "pos": "n",
+      "definition": "property consisting of houses and land",
+      "lexname": "noun.possession",
       "child_concepts": []
     },
     {
@@ -73973,73 +74814,6 @@
       ]
     },
     {
-      "sumo_term": "Seed",
-      "layer": 4,
-      "domain": "LivingThings",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "ReproductiveBody"
-      ],
-      "category_children": [
-        "CerealGrain",
-        "CocoaBean",
-        "CoffeeBean",
-        "CulinarySeeds",
-        "KentiaPalmSeed",
-        "NorfolkIslandPineSeed",
-        "Oilseed",
-        "Pea",
-        "PlantSeeds",
-        "Seed_Caraway Seed",
-        "Seed_Seed",
-        "Sesame",
-        "SunflowerSeed"
-      ],
-      "child_count": 13,
-      "sumo_definition": "The fertilized or unfertilized female\n&%ReproductiveBody of a &%FloweringPlant.",
-      "synset_count": 14,
-      "synsets": [
-        "07827554.n",
-        "07827750.n",
-        "07828041.n",
-        "07828156.n",
-        "11683989.n",
-        "11685091.n",
-        "11689197.n",
-        "11689678.n",
-        "11689815.n",
-        "11689957.n",
-        "11690088.n",
-        "11690169.n",
-        "12123648.n",
-        "13135832.n"
-      ],
-      "canonical_synset": "07827554.n",
-      "lemmas": [
-        "caraway_seed"
-      ],
-      "pos": "n",
-      "definition": "aromatic seeds of the caraway plant; used widely as seasoning",
-      "lexname": "noun.food",
-      "is_split_parent": true,
-      "split_children": [
-        "Seed_Caraway Seed",
-        "Seed_Seed"
-      ],
-      "meld_source": {
-        "meld_id": "org.hatcat/quality-remediation-20251206_113639@0.1.0",
-        "operation": "split_parent",
-        "applied_at": "2025-12-10T20:54:18.400531Z",
-        "pack_version": "7.2.0"
-      },
-      "child_concepts": [
-        "KentiaPalmSeed",
-        "NorfolkIslandPineSeed",
-        "PlantSeeds"
-      ]
-    },
-    {
       "sumo_term": "SeedPlantingProcess",
       "layer": 4,
       "domain": "MindsAndAgents",
@@ -74064,6 +74838,97 @@
       "pos": "verb",
       "definition": "Introducing subtle cues, hypotheticals, or symbols to implant ideas\n   without explicit assertion.",
       "child_concepts": []
+    },
+    {
+      "sumo_term": "Seeing",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [
+        "Looking"
+      ],
+      "child_count": 1,
+      "sumo_definition": "The &%subclass of &%Perception in which the\nsensing is done by an ocular &%Organ.",
+      "synset_count": 50,
+      "synsets": [
+        "00151087.n",
+        "00173992.r",
+        "00422090.v",
+        "00422899.v",
+        "00423075.v",
+        "00423257.v",
+        "00423702.v",
+        "00426301.v",
+        "00584604.v",
+        "00725748.v",
+        "00877786.n",
+        "00877924.n",
+        "00878052.n",
+        "00878221.n",
+        "00878797.n",
+        "00879037.n",
+        "00879156.n",
+        "00880269.n",
+        "00880431.n",
+        "00880563.n",
+        "00880893.n",
+        "00881257.n",
+        "00881441.n",
+        "00881545.n",
+        "00881914.n",
+        "00882045.n",
+        "01247969.n",
+        "01608997.s",
+        "01610484.s",
+        "02119470.v",
+        "02129289.v",
+        "02129709.v",
+        "02130017.v",
+        "02130160.v",
+        "02132263.v",
+        "02132579.v",
+        "02133297.v",
+        "02150740.v",
+        "02151700.v",
+        "02151816.v",
+        "02153253.v",
+        "02154312.v",
+        "02163746.v",
+        "02164067.v",
+        "02164186.v",
+        "02164531.v",
+        "02166248.v",
+        "02167210.v",
+        "02167875.v",
+        "02197091.v"
+      ],
+      "canonical_synset": "00151087.n",
+      "lemmas": [
+        "detection",
+        "catching",
+        "espial",
+        "spying",
+        "spotting"
+      ],
+      "pos": "n",
+      "definition": "the act of detecting something; catching sight of something",
+      "lexname": "noun.act",
+      "child_concepts": [
+        "DepthEstimation",
+        "FacialRecognition",
+        "ImageRecognition",
+        "ImageSegmentation",
+        "ObjectDetection",
+        "OpticalCharacterRecognition",
+        "PoseEstimation",
+        "SceneUnderstanding",
+        "VisualQuestionAnswering",
+        "Looking"
+      ]
     },
     {
       "sumo_term": "SeismicShaking",
@@ -76501,6 +77366,40 @@
       "pos": "v",
       "definition": "trim carefully and neatly",
       "lexname": "verb.body",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "Smelling",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "The &%subclass of &%Perception in which the\nsensing is done by an olefactory &%Organ.",
+      "synset_count": 9,
+      "synsets": [
+        "00882961.n",
+        "00883139.n",
+        "02124748.v",
+        "02125032.v",
+        "02125223.v",
+        "02125460.v",
+        "02126152.v",
+        "02126269.v",
+        "05713737.n"
+      ],
+      "canonical_synset": "00882961.n",
+      "lemmas": [
+        "smell",
+        "smelling"
+      ],
+      "pos": "n",
+      "definition": "the act of perceiving the odor of something",
+      "lexname": "noun.act",
       "child_concepts": []
     },
     {
@@ -79319,11 +80218,31 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "StatisticsField",
+      "sumo_term": "Statistics",
       "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
       "parent_concepts": [
         "FormalSciences"
-      ]
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "&%ElectricalEngineering is the study of  design and application of\nequipment, devices and systems which use electricity, electronics, and electromagnetism. (Ref to Wikipedia)",
+      "synset_count": 3,
+      "synsets": [
+        "06018465.n",
+        "06034101.n",
+        "06041600.n"
+      ],
+      "canonical_synset": "06018465.n",
+      "lemmas": [
+        "statistics"
+      ],
+      "pos": "n",
+      "definition": "a branch of applied mathematics concerned with the collection and interpretation of quantitative data and the use of probability theory to estimate population parameters",
+      "lexname": "noun.cognition",
+      "child_concepts": []
     },
     {
       "sumo_term": "StayingStill",
@@ -82035,6 +82954,78 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "TactilePerception",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [
+        "ContactDetection",
+        "ForcePressureSensing",
+        "GraspStabilityEstimation",
+        "HapticExploration",
+        "Itching",
+        "PainLikeOverloadSignal",
+        "ShearSlipDetection",
+        "SurfaceComplianceEstimation",
+        "TactileSensing",
+        "TextureDiscrimination",
+        "VibrationSensing"
+      ],
+      "child_count": 11,
+      "sumo_definition": "The &%subclass of &%Perception in which\nthe sensing is done by &%Touching.  Note that &%Touching need not involve\n&%TactilePerception.  For example, a person who has lost all sensation in\nboth of his legs would have no &%TactilePerception of anything his legs\nwere &%Touching.",
+      "synset_count": 23,
+      "synsets": [
+        "00198403.r",
+        "01209678.v",
+        "01209953.v",
+        "01210152.v",
+        "02106006.v",
+        "02121188.v",
+        "02121423.v",
+        "02122983.v",
+        "02127358.v",
+        "02730471.v",
+        "02869097.a",
+        "02870453.a",
+        "05721990.n",
+        "05722208.n",
+        "05722427.n",
+        "05723080.n",
+        "05723210.n",
+        "05723417.n",
+        "05723563.n",
+        "05723811.n",
+        "05724019.n",
+        "05724121.n",
+        "05724357.n"
+      ],
+      "canonical_synset": "00198403.r",
+      "lemmas": [
+        "tactually",
+        "haptically"
+      ],
+      "pos": "r",
+      "definition": "by touch",
+      "lexname": "adv.all",
+      "child_concepts": [
+        "ContactDetection",
+        "ForcePressureSensing",
+        "GraspStabilityEstimation",
+        "HapticExploration",
+        "Itching",
+        "PainLikeOverloadSignal",
+        "ShearSlipDetection",
+        "SurfaceComplianceEstimation",
+        "TactileSensing",
+        "TextureDiscrimination",
+        "VibrationSensing"
+      ]
+    },
+    {
       "sumo_term": "Tailpipe",
       "layer": 4,
       "domain": "CreatedThings",
@@ -82376,6 +83367,40 @@
       ],
       "pos": "noun",
       "definition": "These are operations\nconducted to detect, identify, locate, and assess a target to\ndetermine the most effective employment of weapons. This type of\noperation might include the assessment of the potential effects (to\ninclude collateral damage) of a strike or an attack on a chemical,\nbiological, radiological, nuclear, or toxic industrial material\nsite.",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "Tasting",
+      "layer": 4,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Perception"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "The &%subclass of &%Perception in which the\nsensing is done by of an &%Organ which can discriminate various tastes.",
+      "synset_count": 9,
+      "synsets": [
+        "00882702.n",
+        "02191546.v",
+        "02192992.v",
+        "02193974.v",
+        "02868916.a",
+        "05715283.n",
+        "05715864.n",
+        "05717747.n",
+        "05936300.n"
+      ],
+      "canonical_synset": "00882702.n",
+      "lemmas": [
+        "taste",
+        "tasting"
+      ],
+      "pos": "n",
+      "definition": "a kind of sensing; distinguishing substances by means of the taste buds",
+      "lexname": "noun.act",
       "child_concepts": []
     },
     {
@@ -85500,6 +86525,39 @@
         "MultimodalTransitPoint",
         "RailwayTerminal",
         "TrainStation"
+      ]
+    },
+    {
+      "sumo_term": "TransitwayJunction",
+      "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Transitway"
+      ],
+      "category_children": [
+        "RailJunction",
+        "RoadJunction",
+        "WaterJunction"
+      ],
+      "child_count": 3,
+      "sumo_definition": "&%TransitwayJunction is the class of\nregions where two or more &%Transitways meet and traffic may transfer\nfrom one transitway to another.",
+      "synset_count": 1,
+      "synsets": [
+        "transitway_junction.n.01"
+      ],
+      "canonical_synset": "transitway_junction.n.01",
+      "lemmas": [
+        "transitway junction",
+        "transitway_junction",
+        "transitway-junction"
+      ],
+      "pos": "noun",
+      "definition": "&%TransitwayJunction is the class of\nregions where two or more &%Transitways meet and traffic may transfer\nfrom one transitway to another.",
+      "child_concepts": [
+        "RailJunction",
+        "RoadJunction"
       ]
     },
     {
@@ -90766,40 +91824,6 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "WaterSports",
-      "layer": 4,
-      "domain": "CreatedThings",
-      "is_category_lens": true,
-      "is_pseudo_sumo": true,
-      "is_sense_split": true,
-      "parent_concepts": [
-        "Sport"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "sumo_definition": "Sense group 1 with 1 related synsets",
-      "synset_count": 1,
-      "synsets": [
-        "00445055.n"
-      ],
-      "canonical_synset": "00445055.n",
-      "definition": "Sense group 1 with 1 related synsets",
-      "meld_source": {
-        "meld_id": "org.hatcat/quality-remediation-20251206_113639@0.1.0",
-        "operation": "split",
-        "source_concept": "Surfing",
-        "applied_at": "2025-12-06T13:57:30.803006Z",
-        "pack_version": "4.2.0"
-      },
-      "pos": "n",
-      "lemmas": [
-        "surfing",
-        "surfboarding",
-        "surfriding"
-      ],
-      "child_concepts": []
-    },
-    {
       "sumo_term": "WaterTransportation",
       "layer": 4,
       "domain": "PhysicalWorld",
@@ -92309,11 +93333,28 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "WorkMeasure",
+      "sumo_term": "Work",
       "layer": 4,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
       "parent_concepts": [
         "FieldMeasure"
-      ]
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "Energy transferred by ordered force or structure. Analogous to\n   purposeful computation, directed reasoning, alignment operations.",
+      "synset_count": 1,
+      "synsets": [
+        "work.n.01"
+      ],
+      "canonical_synset": "work.n.01",
+      "lemmas": [
+        "work"
+      ],
+      "pos": "noun",
+      "definition": "Energy transferred by ordered force or structure. Analogous to\n   purposeful computation, directed reasoning, alignment operations.",
+      "child_concepts": []
     },
     {
       "sumo_term": "WorkRefusal",
@@ -93555,7 +94596,7 @@
       "sumo_term": "_layer",
       "layer": 4,
       "parent_concepts": [
-        "BeliefStates"
+        "ProjectionStates"
       ],
       "child_concepts": [],
       "definition": "Grouping category for ",

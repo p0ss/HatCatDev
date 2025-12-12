@@ -2743,45 +2743,6 @@
       "is_grouping_node": true
     },
     {
-      "sumo_term": "CyberOperation",
-      "layer": 2,
-      "domain": "CreatedThings",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "Security"
-      ],
-      "category_children": [
-        "DefensiveCyberOperation",
-        "MaliciousEmbeddingAction",
-        "OffensiveCyberOperation",
-        "PrivilegeEscalationAction"
-      ],
-      "child_count": 4,
-      "sumo_definition": "A Process involving actions in digital systems or networks, including\n   access, modification, collection, disruption, or defense activities.",
-      "synset_count": 1,
-      "synsets": [
-        "cyber_operation.n.01"
-      ],
-      "canonical_synset": "cyber_operation.n.01",
-      "lemmas": [
-        "cyber operation",
-        "cyber-operation",
-        "cyber_operation"
-      ],
-      "pos": "noun",
-      "definition": "A Process involving actions in digital systems or networks, including\n   access, modification, collection, disruption, or defense activities.",
-      "child_concepts": [
-        "IntrusionDetectionProcess",
-        "MaliciousEmbeddingAction",
-        "ExfiltrationOperation",
-        "InfiltrationOperation",
-        "LateralMovementOperation",
-        "ReplicationOperation",
-        "PrivilegeEscalationAction"
-      ]
-    },
-    {
       "sumo_term": "Deception",
       "layer": 2,
       "domain": "MindsAndAgents",
@@ -5864,6 +5825,85 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "Infrastructure",
+      "layer": 2,
+      "domain": "CreatedThings",
+      "is_category_lens": true,
+      "is_pseudo_sumo": true,
+      "parent_concepts": [
+        "Region"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "Built systems and structures that support transportation, utilities, and public movement through an area.",
+      "synset_count": 0,
+      "synsets": [],
+      "canonical_synset": "",
+      "lemmas": [],
+      "pos": "noun",
+      "definition": "Built systems and structures that support transportation, utilities, and public movement through an area.",
+      "relationships": {
+        "related": [
+          "Building",
+          "Monument",
+          "Facility",
+          "Structure"
+        ],
+        "has_part": [
+          "Bridge",
+          "CanalStructure",
+          "Curb",
+          "Dam",
+          "FixedBridge",
+          "RailroadTrack",
+          "Railway",
+          "RunningTrack",
+          "Sidewalk",
+          "Tunnel"
+        ]
+      },
+      "safety_tags": {
+        "risk_level": "low",
+        "impacts": [],
+        "treaty_relevant": false,
+        "harness_relevant": false
+      },
+      "training_hints": {
+        "positive_examples": [
+          "The city invested millions in repairing bridges and expanding the subway system.",
+          "Traffic was diverted while crews repaired the damaged section of highway.",
+          "The ancient Roman aqueducts demonstrate remarkable engineering prowess.",
+          "Construction of the new tunnel will reduce commute times significantly.",
+          "Pedestrians use the sidewalk to walk safely alongside busy roads.",
+          "The railway connects remote mountain villages to the main city."
+        ],
+        "negative_examples": [
+          "The library was built in the classical architectural style.",
+          "Tourists visited the historic lighthouse on the rocky coast.",
+          "The factory produces steel components for various industries.",
+          "Archaeologists discovered ancient pottery buried in the ruins.",
+          "The hospital emergency room was crowded with patients.",
+          "Students gathered in the university's main auditorium."
+        ],
+        "disambiguation": "Not to be confused with: Building, Monument, Facility, Structure"
+      },
+      "meld_source": {
+        "meld_id": "org.hatcat/stationaryartifact-melds@0.1.0",
+        "applied_at": "2025-12-11T21:04:05.416419Z",
+        "pack_version": "7.6.39"
+      },
+      "child_concepts": [
+        "Transitway",
+        "InfrastructureRegions",
+        "BusStop",
+        "Checkpoint",
+        "Marketplace",
+        "TouristSite",
+        "PostcodeArea",
+        "SurfaceGroundArea"
+      ]
+    },
+    {
       "sumo_term": "InheritableRelation",
       "layer": 2,
       "domain": "Information",
@@ -6998,34 +7038,6 @@
       ]
     },
     {
-      "sumo_term": "Mathematics",
-      "layer": 2,
-      "domain": "PhysicalWorld",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "AbstractEntity"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "sumo_definition": "The &%FieldOfStudy dealing with quantities and their\nrelations to one another.",
-      "synset_count": 4,
-      "synsets": [
-        "02620550.a",
-        "02937876.a",
-        "06000644.n",
-        "06004067.n"
-      ],
-      "canonical_synset": "02620550.a",
-      "lemmas": [
-        "analytic"
-      ],
-      "pos": "a",
-      "definition": "using or subjected to a methodology using algebra and calculus",
-      "lexname": "adj.pert",
-      "child_concepts": []
-    },
-    {
       "sumo_term": "MeasurementAttrs",
       "layer": 2,
       "domain": "CreatedThings",
@@ -7509,6 +7521,32 @@
         "DeepUncertaintyConcept",
         "SelfStatusConcept"
       ]
+    },
+    {
+      "sumo_term": "MesaOptimization",
+      "layer": 2,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "CognitiveProcess"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "A phenomenon where a learned\nmodel itself performs optimization, creating a mesa-optimizer distinct from\nthe base optimizer used for training.",
+      "synset_count": 1,
+      "synsets": [
+        "mesa_optimization.n.01"
+      ],
+      "canonical_synset": "mesa_optimization.n.01",
+      "lemmas": [
+        "mesa_optimization",
+        "mesa-optimization",
+        "mesa optimization"
+      ],
+      "pos": "noun",
+      "definition": "A phenomenon where a learned\nmodel itself performs optimization, creating a mesa-optimizer distinct from\nthe base optimizer used for training.",
+      "child_concepts": []
     },
     {
       "sumo_term": "MesaOptimizer",
@@ -9414,56 +9452,6 @@
       ]
     },
     {
-      "sumo_term": "Physics",
-      "layer": 2,
-      "domain": "PhysicalWorld",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "AbstractEntity"
-      ],
-      "category_children": [
-        "PhysicalProperty",
-        "PhysicsScience",
-        "Physics_Physical",
-        "Physics_Physics"
-      ],
-      "child_count": 4,
-      "sumo_definition": "The study of matter and energy and their relations.",
-      "synset_count": 5,
-      "synsets": [
-        "02779774.a",
-        "06090869.n",
-        "06094587.n",
-        "06100101.n",
-        "06101973.n"
-      ],
-      "canonical_synset": "02779774.a",
-      "lemmas": [
-        "physical"
-      ],
-      "pos": "a",
-      "definition": "relating to the sciences dealing with matter and energy; especially physics",
-      "lexname": "adj.pert",
-      "is_split_parent": true,
-      "split_children": [
-        "Physics_Physical",
-        "Physics_Physics"
-      ],
-      "meld_source": {
-        "meld_id": "org.hatcat/quality-remediation-20251206_113639@0.1.0",
-        "operation": "split_parent",
-        "applied_at": "2025-12-10T20:54:18.400362Z",
-        "pack_version": "7.2.0"
-      },
-      "child_concepts": [
-        "PhysicalProperty",
-        "PhysicsScience",
-        "Physics_Physical",
-        "Physics_Physics"
-      ]
-    },
-    {
       "sumo_term": "PhysiologicProcess",
       "layer": 2,
       "domain": "LivingThings",
@@ -10753,6 +10741,32 @@
       "definition": "Grouping category for Airway_Respiratory Tract, RespiratoryAirway, VentilationDuct",
       "synsets": [],
       "is_grouping_node": true
+    },
+    {
+      "sumo_term": "RewardHacking",
+      "layer": 2,
+      "domain": "MindsAndAgents",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "CognitiveProcess"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "Behavior where an\n&%ArtificialIntelligence achieves high reward in unintended ways that don't\nsatisfy the true objective.",
+      "synset_count": 1,
+      "synsets": [
+        "reward_hacking.v.01"
+      ],
+      "canonical_synset": "reward_hacking.v.01",
+      "lemmas": [
+        "reward hacking",
+        "reward_hacking",
+        "reward-hacking"
+      ],
+      "pos": "verb",
+      "definition": "Behavior where an\n&%ArtificialIntelligence achieves high reward in unintended ways that don't\nsatisfy the true objective.",
+      "child_concepts": []
     },
     {
       "sumo_term": "SafeAIDeployment",
@@ -12323,33 +12337,6 @@
         "Infrastructure",
         "Rooms"
       ]
-    },
-    {
-      "sumo_term": "Statistics",
-      "layer": 2,
-      "domain": "PhysicalWorld",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "AbstractEntity"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "sumo_definition": "&%ElectricalEngineering is the study of  design and application of\nequipment, devices and systems which use electricity, electronics, and electromagnetism. (Ref to Wikipedia)",
-      "synset_count": 3,
-      "synsets": [
-        "06018465.n",
-        "06034101.n",
-        "06041600.n"
-      ],
-      "canonical_synset": "06018465.n",
-      "lemmas": [
-        "statistics"
-      ],
-      "pos": "n",
-      "definition": "a branch of applied mathematics concerned with the collection and interpretation of quantitative data and the use of probability theory to estimate population parameters",
-      "lexname": "noun.cognition",
-      "child_concepts": []
     },
     {
       "sumo_term": "StatusAttrs",

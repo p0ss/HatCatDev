@@ -293,6 +293,7 @@ def main():
             run_sibling_refinement=run_sibling_refinement,
             sibling_refine_epochs=args.sibling_refine_epochs,
             sibling_refine_prompts=args.sibling_refine_prompts,
+            only_concepts=concepts_to_train,
         )
     else:
         # Refine-only mode: just run sibling refinement on existing lenses

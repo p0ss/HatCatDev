@@ -2081,7 +2081,7 @@
         "Longitude": 3
       }
     },
-    "RENAMED:PhysicalMedia": {
+    "PhysicalMedia": {
       "ArchitectureRepresentation": {
         "NeuralTopologyGraph": 3
       },
@@ -5144,7 +5144,7 @@
             "ProfessionalVisit": 5,
             "StructuredMeeting": 5
           },
-          "RENAMED:NonViolentContest": {
+          "NonViolentContest": {
             "BusinessCompetition": 5,
             "LegalAction": {
               "LegalCharge": 6
@@ -8689,7 +8689,7 @@
           "Droplet": 4,
           "Raindrop": 4
         },
-        "RENAMED:ElementsAndCompounds": {
+        "ElementsAndCompounds": {
           "CompoundSubstance": {
             "Alumina": 5,
             "AtomicGroup": 5,
@@ -9380,9 +9380,9 @@
             "Spaghetti": 5,
             "Ziti": 5
           },
-          "RENAMED:Cocotte": 4,
-          "RENAMED:Dim Sum": 4,
-          "RENAMED:Dish": 4,
+          "Cocotte": 4,
+          "Dim Sum": 4,
+          "Dish": 4,
           "Raisin": 4,
           "Sauce": {
             "Aioli": 5,
@@ -9577,8 +9577,8 @@
                 "Plantain": 7
               }
             },
-            "RENAMED:Apple Of Discord": 5,
-            "RENAMED:Limp": 5,
+            "Apple Of Discord": 5,
+            "Limp": 5,
             "Groundnut": 5,
             "Legume": {
               "Alfalfa": 6,
@@ -9648,8 +9648,8 @@
           "Mushroom": {
             "MushroomOrganism": 5,
             "MushroomTaxonomy": 5,
-            "RENAMED:Agaricales": 5,
-            "RENAMED:Stalked Puffball": 5,
+            "Agaricales": 5,
+            "Stalked Puffball": 5,
             "PortabelloMushroom": 5
           },
           "EdibleSeed": {
@@ -9677,8 +9677,8 @@
             "CulinarySeeds": 5,
             "Oilseed": 5,
             "Pea": 5,
-            "RENAMED:Caraway Seed": 5,
-            "RENAMED:Seed": 5,
+            "Caraway Seed": 5,
+            "Seed": 5,
             "Sesame": 5,
             "SunflowerSeed": 5,
             "CoffeeGrind": 5

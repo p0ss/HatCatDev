@@ -2839,13 +2839,6 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "BalloonContainer",
-      "layer": 6,
-      "parent_concepts": [
-        "FluidContainer"
-      ]
-    },
-    {
       "sumo_term": "BalloonLoan",
       "layer": 6,
       "domain": "Information",
@@ -10325,6 +10318,33 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "Driveway",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Roadway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "A small, private &%Roadway that is used for parking\n&%Automobiles or for connecting a &%Garage to a public &%Roadway.",
+      "synset_count": 1,
+      "synsets": [
+        "03244388.n"
+      ],
+      "canonical_synset": "03244388.n",
+      "lemmas": [
+        "driveway",
+        "drive",
+        "private_road"
+      ],
+      "pos": "n",
+      "definition": "a road leading up to a private house",
+      "lexname": "noun.artifact",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "DrivingRange",
       "layer": 6,
       "domain": "CreatedThings",
@@ -11739,6 +11759,33 @@
         "applied_at": "2025-12-10T20:54:19.746214Z",
         "pack_version": "7.6.3"
       },
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "Expressway",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Roadway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "&%Expressway is the subclass of\n&%SurfacedRoadways that are multiple_lane, limited_access highways\ndesigned for rapid travel by &%MotorVehicles.",
+      "synset_count": 2,
+      "synsets": [
+        "03519981.n",
+        "03581354.n"
+      ],
+      "canonical_synset": "03519981.n",
+      "lemmas": [
+        "highway",
+        "main_road"
+      ],
+      "pos": "n",
+      "definition": "a major road for any form of motor transport",
+      "lexname": "noun.artifact",
       "child_concepts": []
     },
     {
@@ -15115,11 +15162,30 @@
       "child_concepts": []
     },
     {
-      "sumo_term": "HurricaneSeasonTime",
+      "sumo_term": "HurricaneSeason",
       "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
       "parent_concepts": [
         "SeasonOfYear"
-      ]
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "synset_count": 1,
+      "synsets": [
+        "hurricane_season.n.01"
+      ],
+      "canonical_synset": "hurricane_season.n.01",
+      "lemmas": [
+        "hurricane season",
+        "tropical cyclone season",
+        "tropical storm season",
+        "cyclone season"
+      ],
+      "pos": "noun",
+      "definition": "the period of the year when tropical cyclones are most likely to form in a particular ocean basin, typically characterized by warmer sea surface temperatures and favorable atmospheric conditions for hurricane development",
+      "child_concepts": []
     },
     {
       "sumo_term": "Hydrometer",
@@ -16617,6 +16683,32 @@
       ],
       "pos": "noun",
       "definition": "a slightly sparkling red or ros\u00e9 Italian wine produced primarily in the Emilia-Romagna region from Lambrusco grape varieties, characterized by its fruity flavor and moderate sweetness",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "Lane",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Roadway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "synset_count": 1,
+      "synsets": [
+        "lane.n.01"
+      ],
+      "canonical_synset": "lane.n.01",
+      "lemmas": [
+        "lane",
+        "traffic_lane",
+        "roadway_lane",
+        "travel_lane"
+      ],
+      "pos": "noun",
+      "definition": "A longitudinal division of a roadway or path marked or designated for the passage of a single line of vehicles, cyclists, or pedestrians moving in the same direction.",
       "child_concepts": []
     },
     {
@@ -21483,6 +21575,32 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "PavedRunway",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Runway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "&%PavedRunway is the subclass of &%Runways\nthat are surfaced with concrete or asphalt.",
+      "synset_count": 1,
+      "synsets": [
+        "paved_runway.n.01"
+      ],
+      "canonical_synset": "paved_runway.n.01",
+      "lemmas": [
+        "paved_runway",
+        "paved-runway",
+        "paved runway"
+      ],
+      "pos": "noun",
+      "definition": "&%PavedRunway is the subclass of &%Runways\nthat are surfaced with concrete or asphalt.",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "PennyStock",
       "layer": 6,
       "domain": "Information",
@@ -21730,7 +21848,7 @@
       "is_pseudo_sumo": true,
       "is_sense_split": true,
       "parent_concepts": [
-        "PhysicsField"
+        "Physics"
       ],
       "category_children": [],
       "child_count": 0,
@@ -21788,7 +21906,7 @@
       "is_pseudo_sumo": true,
       "is_sense_split": true,
       "parent_concepts": [
-        "PhysicsField"
+        "Physics"
       ],
       "category_children": [],
       "child_count": 0,
@@ -21823,7 +21941,7 @@
       "is_pseudo_sumo": true,
       "is_sense_split": true,
       "parent_concepts": [
-        "PhysicsField"
+        "Physics"
       ],
       "category_children": [],
       "child_count": 0,
@@ -21855,7 +21973,7 @@
       "is_pseudo_sumo": true,
       "is_sense_split": true,
       "parent_concepts": [
-        "PhysicsField"
+        "Physics"
       ],
       "category_children": [],
       "child_count": 0,
@@ -25649,6 +25767,36 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "Road",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Roadway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "A path along which vehicles travel.  It is typically,\nalthough not necessarily, paved and intended for cars.",
+      "synset_count": 6,
+      "synsets": [
+        "00174003.n",
+        "02680512.n",
+        "02697759.n",
+        "02729060.n",
+        "03398775.n",
+        "04097527.n"
+      ],
+      "canonical_synset": "00174003.n",
+      "lemmas": [
+        "road"
+      ],
+      "pos": "n",
+      "definition": "a way or means to achieve something",
+      "lexname": "noun.act",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "Rockslide",
       "layer": 6,
       "domain": "PhysicalWorld",
@@ -26731,6 +26879,33 @@
         "applied_at": "2025-12-10T20:54:17.399920Z",
         "pack_version": "5.7.1"
       },
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "SecondaryHighway",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Roadway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "synset_count": 1,
+      "synsets": [
+        "secondary_highway.n.01"
+      ],
+      "canonical_synset": "secondary_highway.n.01",
+      "lemmas": [
+        "secondary highway",
+        "secondary road",
+        "regional highway",
+        "collector road",
+        "arterial road"
+      ],
+      "pos": "noun",
+      "definition": "A public road of moderate capacity and importance that connects smaller towns and rural areas, ranking below primary highways in the road classification system but above local roads in terms of traffic volume and regional connectivity.",
       "child_concepts": []
     },
     {
@@ -29069,6 +29244,32 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "Street",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Roadway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "synset_count": 1,
+      "synsets": [
+        "street.n.01"
+      ],
+      "canonical_synset": "street.n.01",
+      "lemmas": [
+        "street",
+        "road",
+        "thoroughfare",
+        "avenue"
+      ],
+      "pos": "noun",
+      "definition": "A public thoroughfare in an urban area with buildings on one or both sides, typically paved and used for vehicular and pedestrian traffic. Distinguished from roads by being located within a town or city and usually having adjacent structures.",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "StringInstrumentType",
       "layer": 6,
       "domain": "CreatedThings",
@@ -29252,34 +29453,6 @@
       ],
       "pos": "verb",
       "definition": "The\nsubjective emotional feeling is an affective representation, that is, a\nrepresentation that the organism has about its own affect.",
-      "child_concepts": []
-    },
-    {
-      "sumo_term": "Submarine",
-      "layer": 6,
-      "domain": "CreatedThings",
-      "is_category_lens": true,
-      "is_pseudo_sumo": false,
-      "parent_concepts": [
-        "MilitaryShip"
-      ],
-      "category_children": [],
-      "child_count": 0,
-      "sumo_definition": "A &%WaterVehicle which is capable of travelling\nunder the water level by filling tanks with water.",
-      "synset_count": 1,
-      "synsets": [
-        "04347754.n"
-      ],
-      "canonical_synset": "04347754.n",
-      "lemmas": [
-        "submarine",
-        "pigboat",
-        "sub",
-        "U-boat"
-      ],
-      "pos": "n",
-      "definition": "a submersible warship usually armed with torpedoes",
-      "lexname": "noun.artifact",
       "child_concepts": []
     },
     {
@@ -31558,6 +31731,32 @@
       "child_concepts": []
     },
     {
+      "sumo_term": "UnpavedRunway",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Runway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "&%UnpavedRunways include &%Runways with\ngrass, dirt, sand, or gravel surfaces.  Contrast with &%PavedRunway.",
+      "synset_count": 1,
+      "synsets": [
+        "unpaved_runway.n.01"
+      ],
+      "canonical_synset": "unpaved_runway.n.01",
+      "lemmas": [
+        "unpaved-runway",
+        "unpaved runway",
+        "unpaved_runway"
+      ],
+      "pos": "noun",
+      "definition": "&%UnpavedRunways include &%Runways with\ngrass, dirt, sand, or gravel surfaces.  Contrast with &%PavedRunway.",
+      "child_concepts": []
+    },
+    {
       "sumo_term": "UnsecuredLoan",
       "layer": 6,
       "domain": "Information",
@@ -31580,6 +31779,32 @@
       "pos": "s",
       "definition": "without financial security",
       "lexname": "adj.all",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "UnsurfacedRoadway",
+      "layer": 6,
+      "domain": "PhysicalWorld",
+      "is_category_lens": true,
+      "is_pseudo_sumo": false,
+      "parent_concepts": [
+        "Roadway"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "&%UnsurfacedRoadway is the subclass\nof &%Roadways that have natural, unimproved surfaces of dirt or sand.",
+      "synset_count": 1,
+      "synsets": [
+        "unsurfaced_roadway.n.01"
+      ],
+      "canonical_synset": "unsurfaced_roadway.n.01",
+      "lemmas": [
+        "unsurfaced_roadway",
+        "unsurfaced-roadway",
+        "unsurfaced roadway"
+      ],
+      "pos": "noun",
+      "definition": "&%UnsurfacedRoadway is the subclass\nof &%Roadways that have natural, unimproved surfaces of dirt or sand.",
       "child_concepts": []
     },
     {
@@ -32777,6 +33002,40 @@
       ],
       "pos": "noun",
       "definition": "the edible flesh of aquatic gastropod mollusks, typically harvested from freshwater or marine snails and used as food in various culinary traditions",
+      "child_concepts": []
+    },
+    {
+      "sumo_term": "WaterSports",
+      "layer": 6,
+      "domain": "CreatedThings",
+      "is_category_lens": true,
+      "is_pseudo_sumo": true,
+      "is_sense_split": true,
+      "parent_concepts": [
+        "WaterSport"
+      ],
+      "category_children": [],
+      "child_count": 0,
+      "sumo_definition": "Sense group 1 with 1 related synsets",
+      "synset_count": 1,
+      "synsets": [
+        "00445055.n"
+      ],
+      "canonical_synset": "00445055.n",
+      "definition": "Sense group 1 with 1 related synsets",
+      "meld_source": {
+        "meld_id": "org.hatcat/quality-remediation-20251206_113639@0.1.0",
+        "operation": "split",
+        "source_concept": "Surfing",
+        "applied_at": "2025-12-06T13:57:30.803006Z",
+        "pack_version": "4.2.0"
+      },
+      "pos": "n",
+      "lemmas": [
+        "surfing",
+        "surfboarding",
+        "surfriding"
+      ],
       "child_concepts": []
     },
     {

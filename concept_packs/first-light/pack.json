@@ -1,7 +1,7 @@
 {
   "pack_id": "first-light",
-  "spec_id": "org.hatcat/first-light@1.0.0",
-  "version": "1.0.0",
+  "spec_id": "org.hatcat/first-light@1.0.1",
+  "version": "1.0.1",
   "created": "2025-12-11T21:05:00Z",
   "forked_from": {
     "pack_id": "sumo-wordnet-v4",
@@ -70,7 +70,7 @@
     ]
   },
   "concept_metadata": {
-    "total_concepts": 8222,
+    "total_concepts": 4168,
     "layers": [
       0,
       1,
@@ -84,22 +84,20 @@
     "layer_distribution": {
       "0": 5,
       "1": 22,
-      "2": 225,
-      "3": 1176,
-      "4": 2266,
-      "5": 2555,
-      "6": 1480,
-      "7": 493
+      "2": 240,
+      "3": 1287,
+      "4": 2614
     },
     "domain_distribution": {
-      "CreatedThings": 2111,
-      "Information": 1643,
-      "LivingThings": 1262,
-      "MindsAndAgents": 2076,
-      "PhysicalWorld": 1672,
-      "ComputerScience": 85,
+      "CreatedThings": 564,
+      "Information": 945,
+      "LivingThings": 551,
+      "MindsAndAgents": 1147,
+      "PhysicalWorld": 756,
+      "Unknown": 146,
       "SafetyAndSecurity": 28,
-      "Governance": 56
+      "Governance": 16,
+      "ComputerScience": 15
     },
     "hierarchy_file": "hierarchy/",
     "with_wordnet_mappings": true
@@ -980,7 +978,15 @@
       "concepts_added": 4,
       "source": "manual",
       "protection_level": "standard"
+    },
+    {
+      "meld_result_id": "org.hatcat/first-light@1.0.1::meld/org.hatcat/sibling-expansion@0.1.0",
+      "meld_request_id": "org.hatcat/sibling-expansion@0.1.0",
+      "melded_at": "2025-12-13T02:16:36.494032Z",
+      "concepts_added": 81,
+      "source": "manual",
+      "protection_level": "standard"
     }
   ],
-  "base_version": "7.7.0"
+  "base_version": "1.0.0"
 }
