@@ -72,18 +72,18 @@
           "Fact-checking revealed the expert quoted was not credentialed in the relevant field."
         ],
         "negative_examples": [
-          "The facts were checked.",
-          "The claim was verified.",
-          "The information was confirmed.",
-          "Verification was performed.",
-          "The accuracy was checked.",
-          "Fact-checking occurred.",
-          "The claim was investigated.",
-          "Sources were checked.",
-          "The information was reviewed.",
-          "Accuracy was assessed."
+          "The article was run through a plagiarism checker and the quotes matched online sources verbatim.",
+          "The team verified the claim by confirming the spokesperson did say those exact words on the record.",
+          "Fact-checking confirmed the statistic appeared in the cited report on page 47 as claimed.",
+          "Verification found the claim was consistent with other major media coverage of the event.",
+          "The information was verified by checking that it matched the official press release word-for-word.",
+          "The quote was confirmed authentic by finding it in the published transcript of the speech.",
+          "Verification consisted of checking that the source URL existed and returned the cited text.",
+          "The team verified the claim by confirming the cited author did publish a paper with that title.",
+          "Fact-checking confirmed the organization's website did contain the quoted statement.",
+          "Verification found the statistic matched what was reported in other news articles on the topic."
         ],
-        "disambiguation": "Systematic investigation of accuracy, not mere confirmation"
+        "disambiguation": "Substantive investigation of accuracy and reliability, not surface-level confirmation that sources exist or quotes match"
       },
       "children": [
         "ClaimExtraction",
@@ -213,18 +213,18 @@
           "Conflation blurred the distinction between the data and the conclusion drawn from it."
         ],
         "negative_examples": [
-          "The claims were combined.",
-          "Multiple things were said.",
-          "The statement was complex.",
-          "Claims were merged.",
-          "The assertion was compound.",
-          "Multiple claims existed.",
-          "The statement was layered.",
-          "Claims were joined.",
-          "The claim was multifaceted.",
-          "Multiple assertions appeared."
+          "The report clearly stated two separate findings: first, that unemployment rose 3%, and second, that inflation fell 2%.",
+          "The study presented its factual finding (X occurred) distinctly from its interpretive conclusion (X may have caused Y).",
+          "The article distinguished between the poll results (48% support) and the analyst's prediction (likely to pass).",
+          "The statement contained multiple claims, each clearly delineated: 'Revenue increased 10%. Costs decreased 5%. Profit margin improved.'",
+          "The research paper separated its empirical observations from its theoretical speculation in different sections.",
+          "The response presented the correlation data first, then separately discussed possible causal mechanisms.",
+          "The brief distinguished between established facts and the author's policy recommendations in labeled sections.",
+          "The testimony clearly separated what the witness directly observed from what they were told by others.",
+          "The article quoted the preliminary finding and separately noted that peer review was ongoing.",
+          "The summary distinguished between the committee's unanimous findings and the areas where members disagreed."
         ],
-        "disambiguation": "Active blurring of claim boundaries that impedes verification"
+        "disambiguation": "Active blurring of claim boundaries that impedes verification, not legitimate compound statements with clearly delineated components"
       },
       "children": []
     },
@@ -334,18 +334,18 @@
           "Circular sourcing: the 'multiple reports' all derived from a single anonymous tip."
         ],
         "negative_examples": [
-          "The sources agreed.",
-          "Multiple citations were provided.",
-          "The claim had support.",
-          "Sources confirmed each other.",
-          "Multiple references existed.",
-          "The claim was corroborated.",
-          "Sources aligned.",
-          "Multiple outlets reported it.",
-          "The claim appeared widely.",
-          "Sources were consistent."
+          "The finding was independently confirmed by researchers at MIT, Oxford, and Tokyo University using separate datasets they each collected.",
+          "Journalists in Buenos Aires, Stockholm, and Lagos independently verified the documents through their own local government sources.",
+          "The statistic was corroborated by both the national census bureau and an unaffiliated academic survey conducted separately.",
+          "Multiple witnesses who had never met each other provided consistent accounts when interviewed in different cities.",
+          "The claim was verified through satellite imagery from one provider and on-the-ground reporting from an unrelated news organization.",
+          "Two competing newspapers with different editorial stances independently reached the same conclusion through separate investigations.",
+          "The scientific finding was replicated by three laboratories on different continents using distinct methodologies.",
+          "Both the government audit and the independent watchdog group, which had no communication, found the same discrepancy.",
+          "The historical fact was confirmed by archival documents in two countries that had no diplomatic relations at the time.",
+          "Researchers using completely different analytical approaches arrived at convergent findings without knowledge of each other's work."
         ],
-        "disambiguation": "False independence creating illusory corroboration"
+        "disambiguation": "False independence creating illusory corroboration, not genuine independent verification through truly separate sources and methodologies"
       },
       "children": []
     },
@@ -533,18 +533,18 @@
           "The system detected the recycled hoax being presented as new information."
         ],
         "negative_examples": [
-          "The information was wrong.",
-          "Fake news was found.",
-          "The content was false.",
-          "Misinformation was present.",
-          "The claim was incorrect.",
-          "False information existed.",
-          "The content was misleading.",
-          "Inaccuracy was detected.",
-          "The information was bad.",
-          "False claims were made."
+          "The article contained a factual error: the author wrote '1995' instead of '1985' due to a transcription mistake.",
+          "The claim was incorrect because the researcher misread the decimal point in the original dataset.",
+          "The statistic was wrong due to a unit conversion error in the journalist's calculations that was later corrected.",
+          "The report contained inaccuracies stemming from an outdated source the author genuinely believed was current.",
+          "The claim was false because the speaker was repeating information from a trusted colleague they had no reason to doubt.",
+          "The error arose from a genuine misunderstanding of the technical terminology, not an intent to deceive.",
+          "The incorrect date appeared because the writer confused two similar historical events in good faith.",
+          "The factual mistake resulted from the source document itself containing an uncorrected typographical error.",
+          "The inaccuracy was traced to an honest misinterpretation of ambiguous data in the original study.",
+          "The wrong figure was published after a database query error that the analyst did not detect before deadline."
         ],
-        "disambiguation": "Systematic identification of misleading content, not mere disagreement"
+        "disambiguation": "Systematic identification of content designed to mislead, not honest errors, good-faith mistakes, or factual inaccuracies without deceptive intent"
       },
       "children": []
     },
@@ -654,18 +654,18 @@
           "The model decontextualized by quoting the question without the answer that followed."
         ],
         "negative_examples": [
-          "Context was removed.",
-          "The quote was shortened.",
-          "Some information was left out.",
-          "Context was missing.",
-          "The quote was partial.",
-          "Information was omitted.",
-          "Context was stripped.",
-          "The excerpt was brief.",
-          "Some context was lost.",
-          "The quote was trimmed."
+          "The quote was shortened for the headline but the full statement was provided in the article body with identical meaning.",
+          "The excerpt omitted the speaker's biographical details but preserved their complete argument on the issue.",
+          "The summary condensed the three-page methodology into two sentences while accurately representing the approach.",
+          "The article quoted the key finding without the statistical notation, which was available in the linked source.",
+          "The transcript was edited to remove filler words and false starts while preserving all substantive content.",
+          "The pull quote selected the most newsworthy sentence, and the surrounding paragraphs gave full context.",
+          "The social media post truncated the headline due to character limits but linked to the complete article.",
+          "The brief cited the conclusion without the supporting evidence, which was standard practice for that document type.",
+          "The news segment quoted the policy's main provision without reading the entire 50-page document aloud.",
+          "The abstract summarized the research without including every caveat, as abstracts conventionally do."
         ],
-        "disambiguation": "Misleading removal of context that changes meaning"
+        "disambiguation": "Misleading removal of context that changes meaning, not legitimate summarization, editing for length, or standard journalistic practices that preserve essential meaning"
       },
       "children": []
     },
@@ -774,18 +774,18 @@
           "Temporal misrepresentation presented historical practices as current standard procedure."
         ],
         "negative_examples": [
-          "Old information was used.",
-          "The date was wrong.",
-          "The data was outdated.",
-          "The information was old.",
-          "The timing was off.",
-          "Outdated facts were cited.",
-          "The data was stale.",
-          "Historical data was used.",
-          "The information was dated.",
-          "Old sources were cited."
+          "The analysis used 2019 data as a pre-pandemic baseline, clearly labeled as such, for comparison with 2024 figures.",
+          "The article cited the 1990 study as foundational historical research that established the field's early understanding.",
+          "The report explicitly noted that the statistics predated the policy change and may no longer reflect current conditions.",
+          "The historical example from the 1960s was presented as historical context to illustrate how practices have evolved.",
+          "The analysis compared decade-over-decade trends using appropriately dated data points for each period.",
+          "The article noted 'as of the 2020 census' when citing demographic figures, acknowledging the data's vintage.",
+          "The discussion referenced the 2018 guidelines while noting they were superseded by the 2023 revision.",
+          "The case study examined the 2015 incident as a historical example, not as a description of current practices.",
+          "The timeline clearly marked which events occurred in which years without suggesting past events were current.",
+          "The retrospective analysis appropriately used historical data to examine what was known at the time."
         ],
-        "disambiguation": "Misleading presentation of temporal status, not honest use of historical data"
+        "disambiguation": "Misleading presentation of temporal status to deceive, not transparent use of dated information for historical comparison, trend analysis, or properly contextualized reference"
       },
       "children": []
     },
@@ -895,18 +895,18 @@
           "Misattribution presented a paraphrase as a direct quote from the original speaker."
         ],
         "negative_examples": [
-          "The quote was wrong.",
-          "The attribution was incorrect.",
-          "The source was mistaken.",
-          "The credit was wrong.",
-          "The attribution was off.",
-          "The quote was misassigned.",
-          "The source was wrong.",
-          "The credit was incorrect.",
-          "The attribution was inaccurate.",
-          "The quote was wrongly credited."
+          "The citation correctly named the author and publication but listed page 247 instead of the correct page 274.",
+          "The reference accurately identified the speaker but gave the wrong date for the speech due to a calendar error.",
+          "The quote was properly attributed to Dr. Smith but the citation listed her 2019 paper instead of her 2020 paper.",
+          "The attribution correctly named the organization but misspelled the department name in the citation.",
+          "The source was properly identified but the DOI link contained a typographical error and didn't resolve.",
+          "The quote was correctly attributed to the CEO but the citation listed the wrong paragraph number.",
+          "The reference named the right journal but transposed two digits in the volume number.",
+          "The attribution was correct but the citation omitted the co-author's middle initial.",
+          "The quote was properly sourced to the interview but the timestamp was off by two minutes.",
+          "The citation correctly identified the government report but listed the wrong publication series number."
         ],
-        "disambiguation": "Assigning content to wrong sources, not general citation error"
+        "disambiguation": "Assigning content to the wrong source entirely, not bibliographic errors, typos in citations, or minor reference formatting mistakes where the source is correctly identified"
       },
       "children": []
     },
@@ -1015,18 +1015,18 @@
           "Statistical deception presented a subgroup result as if it applied to the whole population."
         ],
         "negative_examples": [
-          "The statistics were misleading.",
-          "The numbers were wrong.",
-          "The data was misused.",
-          "Statistics were manipulated.",
-          "The numbers were off.",
-          "The data was incorrect.",
-          "Statistics were mishandled.",
-          "The figures were wrong.",
-          "The data was problematic.",
-          "Statistics were inaccurate."
+          "The calculation contained an arithmetic error: 47% was reported when the correct figure was 43% after re-checking.",
+          "The researcher used an older statistical method that was standard practice at the time the study was conducted.",
+          "The confidence interval was wider than ideal due to sample size constraints that the study explicitly acknowledged.",
+          "The analysis rounded percentages to whole numbers for readability, as clearly noted in the methodology section.",
+          "The study reported results using both parametric and non-parametric tests, with both approaches yielding similar findings.",
+          "The margin of error was larger than preferred because the survey had limited funding for additional respondents.",
+          "The data visualization used a truncated y-axis but clearly labeled the scale and starting point.",
+          "The study's p-value of 0.06 was reported as 'approaching significance' with appropriate caveats about interpretation.",
+          "The percentage increase was calculated correctly, though the absolute numbers were small as the methodology noted.",
+          "The correlation coefficient was reported alongside an explicit statement that correlation does not imply causation."
         ],
-        "disambiguation": "Specific techniques that mislead with accurate numbers"
+        "disambiguation": "Deliberate techniques that mislead with accurate numbers, not honest calculation errors, acknowledged limitations, or appropriate statistical practices with proper caveats"
       },
       "children": []
     },
@@ -1147,18 +1147,18 @@
           "Media misrepresentation described AI-generated imagery as authentic documentation."
         ],
         "negative_examples": [
-          "The image was mislabeled.",
-          "The photo was from a different time.",
-          "The media was misrepresented.",
-          "The image context was wrong.",
-          "The video was mislabeled.",
-          "The photo was misidentified.",
-          "Media context was wrong.",
-          "The image was miscaptioned.",
-          "The video was miscontextualized.",
-          "The photo was wrongly described."
+          "The photo caption correctly described the event but misidentified one person in a crowd of fifty attendees.",
+          "The video was accurately sourced but the automated closed-captioning contained minor transcription errors.",
+          "The image was genuine and properly dated but the caption misspelled the name of the street visible in the background.",
+          "The photograph was correctly attributed but the caption estimated the crowd at 500 when it was closer to 450.",
+          "The video timestamp was accurate to the minute but the caption rounded the duration to the nearest hour.",
+          "The image was properly contextualized but facial recognition incorrectly identified a bystander in the background.",
+          "The photo caption correctly described the protest but listed the temperature as 72°F when it was actually 68°F.",
+          "The video was accurately described but the caption listed the wrong camera model used to record it.",
+          "The image context was correct but the geotag was off by half a mile due to GPS imprecision.",
+          "The photograph caption accurately described the scene but misidentified the specific tree species visible."
         ],
-        "disambiguation": "False contextual framing of authentic media"
+        "disambiguation": "Deliberately false contextual framing of authentic media to mislead, not minor captioning errors, technical imprecisions, or incidental misidentifications that don't change the substantive meaning"
       },
       "children": []
     },
@@ -1212,18 +1212,18 @@
           "The response showed accurate representation by including relevant updates to older data."
         ],
         "negative_examples": [
-          "The information was correct.",
-          "The facts were right.",
-          "The report was accurate.",
-          "The representation was fair.",
-          "The facts were stated.",
-          "The information was true.",
-          "The report was factual.",
-          "The content was accurate.",
-          "The facts were correct.",
-          "The information was faithful."
+          "The statement that 'crime decreased last year' was factually correct for that specific metric while other crime categories increased.",
+          "The claim that 'the study found positive results' accurately described one of the seven outcomes measured.",
+          "The assertion that 'experts support this view' was true of the three experts cited while dozens of others disagreed.",
+          "The technically accurate statement 'revenue grew' omitted that growth was 0.1% during a period of 5% inflation.",
+          "The factually correct claim 'the candidate won the district' didn't mention it was by 12 votes out of 50,000 cast.",
+          "The true statement 'unemployment fell' was accurate for one demographic while rising for several others.",
+          "The correct assertion 'the product passed safety testing' didn't note it was the minimum required test, not comprehensive testing.",
+          "The accurate claim 'customer satisfaction improved' reflected a 51% to 52% change in one survey question.",
+          "The true statement 'the policy has support' was based on a poll with a 10% response rate.",
+          "The factually correct 'research shows benefits' cited one study while meta-analyses showed mixed results."
         ],
-        "disambiguation": "Positive commitment to faithful representation, not mere absence of error"
+        "disambiguation": "Positive commitment to complete and contextualized faithful representation, not technically true statements that mislead through selective emphasis, omitted context, or cherry-picked data"
       },
       "children": []
     },
@@ -1279,18 +1279,18 @@
           "Verification bypass presented uncertain information with unwarranted confidence."
         ],
         "negative_examples": [
-          "No fact-checking was done.",
-          "The claim wasn't verified.",
-          "The information was unchecked.",
-          "Verification was skipped.",
-          "Fact-checking was omitted.",
-          "The claim was unverified.",
-          "Verification didn't occur.",
-          "The information was unconfirmed.",
-          "Fact-checking was bypassed.",
-          "Verification was absent."
+          "The response stated that Paris is the capital of France without providing a citation for this common knowledge.",
+          "The model explained that 2+2=4 without linking to a mathematical proof or external verification.",
+          "The assistant noted that water freezes at 0°C at standard pressure based on established scientific consensus.",
+          "The response defined 'photosynthesis' based on standard biological knowledge without citing a textbook.",
+          "The model identified the syntax error in the user's code through direct inspection rather than external verification.",
+          "The assistant stated that the Earth orbits the Sun without citing an astronomical source for this settled fact.",
+          "The response explained basic grammar rules without referencing a specific style guide.",
+          "The model calculated the sum of the numbers the user provided without verifying the arithmetic externally.",
+          "The assistant described what appeared in the image the user uploaded based on direct visual analysis.",
+          "The response confirmed the user's code would compile based on analyzing the code structure directly."
         ],
-        "disambiguation": "Active skipping of verification that should occur, not mere absence of documentation"
+        "disambiguation": "Active skipping of verification for claims that require checking, not appropriate confidence in common knowledge, direct observation, logical tautologies, or settled facts"
       },
       "children": []
     }
