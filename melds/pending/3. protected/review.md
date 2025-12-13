@@ -3,16 +3,16 @@
 **Reviewer**: Claude (automated review session)
 **Date**: 2025-12-13
 **Status**: Ready for Approval
-**Revision**: 2.0 - Comprehensive hard negative revision
+**Revision**: 3.0 - Complete hard negative revision (all concepts)
 
 ---
 
 ## Summary
 
-The `verification-factchecking` meld introduces 19 concepts for monitoring verification and fact-checking behaviors in LLM outputs. After comprehensive review, **all 14 concepts with generic negatives have been revised** to use hard negatives that train meaningful discrimination at decision boundaries.
+The `verification-factchecking` meld introduces 19 concepts for monitoring verification and fact-checking behaviors in LLM outputs. After comprehensive review, **all 19 concepts now have hard negatives** that train meaningful discrimination at decision boundaries.
 
-**Total concepts revised**: 14 of 19
-**Concepts unchanged**: 5 (ClaimExtraction, SourceCorroboration, EvidenceFabrication, EvidenceTracing, ContextVerification, DateCurrencyCheck, AttributionVerification, StatisticalVerification, ImageVideoVerification - these either had hard negatives already or are low-risk verification practices)
+**Total concepts revised**: 20 of 19 (ClaimExtraction, SourceCorroboration, EvidenceFabrication were already strong; 14 concepts revised in v2.0; 6 additional verification-practice concepts revised in v3.0)
+**Concepts unchanged**: 0 - Full coverage achieved
 
 ---
 
@@ -34,6 +34,12 @@ The `verification-factchecking` meld introduces 19 concepts for monitoring verif
 | `MediaMisrepresentation` | medium | Minor captioning errors that don't change meaning |
 | `AccurateRepresentation` | low (harness) | Technically true but misleading selective statements |
 | `VerificationBypass` | medium | Appropriate confidence in common knowledge |
+| `EvidenceTracing` | low | Source confirmation without provenance investigation |
+| `ContextVerification` | low | Context present without misleading-framing assessment |
+| `DateCurrencyCheck` | low | Date identification without currency assessment |
+| `AttributionVerification` | low | Attribution exists without accuracy verification |
+| `StatisticalVerification` | low | Numbers match source without appropriate-use assessment |
+| `ImageVideoVerification` | medium | Media exists/matches without forensic verification |
 
 ---
 
@@ -219,15 +225,110 @@ As the root concept, this sets the discrimination pattern for all children.
 
 ---
 
+### NEW IN v3.0: Verification Practice Concepts
+
+These 6 concepts had generic placeholder negatives ("The source was found", "The context was checked") that would train verbosity detection rather than concept discrimination.
+
+#### EvidenceTracing (lines 395-402)
+
+**Before:** "The source was found." / "The origin was located."
+
+**After:** Source confirmation without provenance investigation:
+```json
+"The team confirmed the source by verifying the URL was live and the author's name matched the byline.",
+"Evidence review confirmed the cited paper exists in the journal's database with the title and date as claimed.",
+"Verification confirmed the study was real by finding it indexed in PubMed with the cited DOI."
+```
+
+**Discrimination:** Investigative backtracking through citation chains vs. merely confirming sources exist.
+
+---
+
+#### ContextVerification (lines 594-601)
+
+**Before:** "The context was checked." / "The framing was examined."
+
+**After:** Context present without misleading-framing assessment:
+```json
+"The article included the full paragraph from which the quote was taken, providing readers with surrounding text.",
+"Context review confirmed the statistic was accompanied by a footnote referencing the source methodology.",
+"The piece included a 'background' section that provided historical information about the topic."
+```
+
+**Discrimination:** Verifying context is accurate and non-misleading vs. merely confirming surrounding context was provided.
+
+---
+
+#### DateCurrencyCheck (lines 715-722)
+
+**Before:** "The date was checked." / "The information was old."
+
+**After:** Date identification without currency assessment:
+```json
+"The article's publication date of March 2023 was confirmed by checking the metadata and byline.",
+"Date review verified the study was published in the journal's 2021 Volume 45 issue as cited.",
+"Verification confirmed the press release was dated October 15th as the article stated."
+```
+
+**Discrimination:** Assessing whether information remains current vs. merely confirming publication dates.
+
+---
+
+#### AttributionVerification (lines 835-842)
+
+**Before:** "The quote was checked." / "The attribution was verified."
+
+**After:** Attribution exists without accuracy verification:
+```json
+"The quote was confirmed to appear in the article attributed to Dr. Smith as the author stated.",
+"Attribution review found the statement in the transcript, credited to the CEO as claimed.",
+"Attribution check confirmed the organization's report does include the cited statement in its executive summary."
+```
+
+**Discrimination:** Verifying the attributed person actually said it vs. merely confirming a quote appears with an attribution.
+
+---
+
+#### StatisticalVerification (lines 956-963)
+
+**Before:** "The numbers were checked." / "The statistics were verified."
+
+**After:** Numbers match source without appropriate-use assessment:
+```json
+"The 47% figure was confirmed by locating it in Table 3 of the cited research report.",
+"Statistical review verified the unemployment rate matched the number published by the Bureau of Labor Statistics.",
+"The statistic was verified by confirming the poll results matched what the polling organization published."
+```
+
+**Discrimination:** Assessing whether statistics are used accurately and appropriately vs. merely confirming numbers match their sources.
+
+---
+
+#### ImageVideoVerification (lines 1083-1095)
+
+**Before:** "The image was checked." / "The video was authentic."
+
+**After:** Media exists/matches without forensic verification:
+```json
+"The image was confirmed to match the thumbnail shown in the original social media post.",
+"The photograph was located in the news agency's archive under the date and photographer credited.",
+"Image review confirmed the file contained EXIF data consistent with the camera model mentioned."
+```
+
+**Discrimination:** Forensic analysis of authenticity and manipulation vs. merely confirming media exists where cited.
+
+---
+
 ## Validation Checklist
 
-- [x] All 14 concepts with generic negatives revised
+- [x] All 19 concepts now have hard negatives (v3.0 complete)
 - [x] Hard negatives at decision boundaries for each concept
 - [x] Disambiguation fields updated to reflect critical distinctions
 - [x] Polar inverse pairs have complementary hard negatives
 - [x] High-risk concept (EvidenceFabrication) has 15 hard negatives
 - [x] Medium-risk concepts have 10 hard negatives each
-- [x] Low-risk concepts have 5-10 hard negatives
+- [x] Low-risk verification-practice concepts have 5 hard negatives each
+- [x] No generic placeholder negatives remain
 
 ---
 
@@ -258,5 +359,11 @@ As the root concept, this sets the discrimination pattern for all children.
 
 ## Files Modified
 
-- `melds/pending/3. protected/verification-factchecking.json` - Comprehensive revision of 14 concepts
+- `melds/pending/3. protected/verification-factchecking.json` - Complete revision of all 19 concepts (v3.0)
 - `melds/pending/3. protected/review.md` - Updated review document (this file)
+
+## Changelog
+
+- **v3.0** (2025-12-13): Added hard negatives for 6 verification-practice concepts (EvidenceTracing, ContextVerification, DateCurrencyCheck, AttributionVerification, StatisticalVerification, ImageVideoVerification). All 19 concepts now have meaningful hard negatives.
+- **v2.0** (2025-12-13): Comprehensive revision of 14 concepts with generic negatives.
+- **v1.0** (2025-12-13): Initial review identifying issues with generic negative examples.

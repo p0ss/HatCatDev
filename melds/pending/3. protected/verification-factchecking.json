@@ -393,13 +393,13 @@
           "Evidence tracing found the citation chain terminated in an unreliable source."
         ],
         "negative_examples": [
-          "The source was found.",
-          "The origin was located.",
-          "The evidence was traced.",
-          "The source was identified.",
-          "The origin was discovered."
+          "The team confirmed the source by verifying the URL was live and the author's name matched the byline.",
+          "Evidence review confirmed the cited paper exists in the journal's database with the title and date as claimed.",
+          "The source was located by searching the organization's website and finding the quoted press release.",
+          "Verification confirmed the study was real by finding it indexed in PubMed with the cited DOI.",
+          "The team found the original by searching the author's publication list and locating the referenced paper."
         ],
-        "disambiguation": "Investigative backtracking to original evidence, not source identification"
+        "disambiguation": "Investigative backtracking that reveals how claims transformed through citation chains, not merely confirming that cited sources exist or contain the claimed text"
       },
       "children": []
     },
@@ -592,13 +592,13 @@
           "Context verification confirmed the data but identified misleading framing around it."
         ],
         "negative_examples": [
-          "The context was checked.",
-          "The framing was examined.",
-          "The surrounding information was reviewed.",
-          "Context was verified.",
-          "The framing was assessed."
+          "The article included the full paragraph from which the quote was taken, providing readers with surrounding text.",
+          "Context review confirmed the statistic was accompanied by a footnote referencing the source methodology.",
+          "The report noted that the speaker's full remarks were available in the linked transcript.",
+          "Examination confirmed the data point was presented alongside other figures from the same dataset.",
+          "The piece included a 'background' section that provided historical information about the topic."
         ],
-        "disambiguation": "Verification of contextual accuracy, not mere context identification"
+        "disambiguation": "Verification that context is accurate and non-misleading, not merely confirming that some surrounding context or supplementary information was provided"
       },
       "children": []
     },
@@ -713,13 +713,13 @@
           "Currency check identified that the guidelines had been updated since the cited version."
         ],
         "negative_examples": [
-          "The date was checked.",
-          "The information was old.",
-          "The currency was verified.",
-          "The date was confirmed.",
-          "The timeliness was checked."
+          "The article's publication date of March 2023 was confirmed by checking the metadata and byline.",
+          "Date review verified the study was published in the journal's 2021 Volume 45 issue as cited.",
+          "The timestamp on the video was confirmed to match the upload date shown on the platform.",
+          "Verification confirmed the press release was dated October 15th as the article stated.",
+          "The report's date was verified by cross-referencing the document ID with the agency's publication log."
         ],
-        "disambiguation": "Verification of temporal accuracy and relevance, not date identification"
+        "disambiguation": "Assessment of whether information remains current and hasn't been superseded, not merely confirming publication dates or timestamps"
       },
       "children": []
     },
@@ -833,13 +833,13 @@
           "Attribution verification found the statement was edited to remove crucial qualifying language."
         ],
         "negative_examples": [
-          "The quote was checked.",
-          "The attribution was verified.",
-          "The source was confirmed.",
-          "Attribution was checked.",
-          "The quote was verified."
+          "The quote was confirmed to appear in the article attributed to Dr. Smith as the author stated.",
+          "Attribution review found the statement in the transcript, credited to the CEO as claimed.",
+          "Verification confirmed the book does contain the passage attributed to the cited chapter.",
+          "The quote was located in the interview transcript under the speaker's name as referenced.",
+          "Attribution check confirmed the organization's report does include the cited statement in its executive summary."
         ],
-        "disambiguation": "Verification of accurate attribution, not source identification"
+        "disambiguation": "Verification that the attributed person actually made the statement, not merely confirming that a quote appears somewhere with an attribution attached"
       },
       "children": []
     },
@@ -954,13 +954,13 @@
           "Statistical verification confirmed the numbers but found the methodology was flawed."
         ],
         "negative_examples": [
-          "The numbers were checked.",
-          "The statistics were verified.",
-          "The data was confirmed.",
-          "Statistics were checked.",
-          "The numbers were reviewed."
+          "The 47% figure was confirmed by locating it in Table 3 of the cited research report.",
+          "Statistical review verified the unemployment rate matched the number published by the Bureau of Labor Statistics.",
+          "The percentage was confirmed accurate by finding the same figure in the organization's annual report.",
+          "Verification found the growth rate cited does appear in the company's quarterly earnings statement.",
+          "The statistic was verified by confirming the poll results matched what the polling organization published."
         ],
-        "disambiguation": "Verification of statistical accuracy and appropriate use"
+        "disambiguation": "Assessment of whether statistics are used accurately and appropriately in context, not merely confirming that cited numbers match their sources"
       },
       "children": []
     },
@@ -1081,18 +1081,18 @@
           "Video verification identified audio-visual sync issues indicating manipulation."
         ],
         "negative_examples": [
-          "The image was checked.",
-          "The video was authentic.",
-          "The media was verified.",
-          "Image analysis was done.",
-          "The video was examined.",
-          "Media forensics occurred.",
-          "The image was reviewed.",
-          "Video analysis happened.",
-          "The media was checked.",
-          "Image verification occurred."
+          "The image was confirmed to match the thumbnail shown in the original social media post.",
+          "Video review verified the clip length and resolution matched what was described in the article.",
+          "The photograph was located in the news agency's archive under the date and photographer credited.",
+          "Media verification confirmed the video file's metadata showed the upload date claimed by the source.",
+          "The image was verified by confirming it appeared on the organization's official website as stated.",
+          "Review confirmed the video duration and format matched the specifications listed in the database.",
+          "The photograph was located in multiple news outlets' coverage of the event as described.",
+          "Media check confirmed the image filename and dimensions matched the original publication.",
+          "The video was verified to exist on the platform at the URL cited in the report.",
+          "Image review confirmed the file contained EXIF data consistent with the camera model mentioned."
         ],
-        "disambiguation": "Forensic verification of visual media authenticity and context"
+        "disambiguation": "Forensic analysis of authenticity, manipulation, and contextual accuracy of visual media, not merely confirming that images or videos exist, match file specifications, or appear where cited"
       },
       "children": []
     },
