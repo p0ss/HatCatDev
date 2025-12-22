@@ -25,6 +25,17 @@ from .sumo_classifiers import extract_activations
 from .sumo_data_generation import create_sumo_training_dataset
 
 
+def find_lens_path(lens_dir: Path, concept_name: str) -> Optional[Path]:
+    """Find lens path trying clean name first, then legacy _classifier suffix."""
+    clean_path = lens_dir / f"{concept_name}.pt"
+    if clean_path.exists():
+        return clean_path
+    legacy_path = lens_dir / f"{concept_name}_classifier.pt"
+    if legacy_path.exists():
+        return legacy_path
+    return None
+
+
 def load_lens(
     lens_path: Path,
     hidden_dim: int = 4096,
@@ -79,8 +90,8 @@ def needs_sibling_refinement(
     if not lens_dir.exists():
         return False
 
-    # Check if there are any trained lenses
-    lens_files = list(lens_dir.glob("*_classifier.pt"))
+    # Check if there are any trained lenses (both clean and legacy naming)
+    lens_files = [f for f in lens_dir.glob("*.pt") if not f.stem.endswith("_classifier") or not (lens_dir / f"{f.stem[:-11]}.pt").exists()]
     if len(lens_files) < min_siblings:
         return False  # Not enough lenses to form sibling groups
 
@@ -213,8 +224,8 @@ def get_sibling_groups(
         # Check all have lenses
         trained_siblings = []
         for child in children:
-            lens_path = lens_dir / f"{child}_classifier.pt"
-            if lens_path.exists():
+            lens_path = find_lens_path(lens_dir, child)
+            if lens_path is not None:
                 trained_siblings.append(child)
 
         if len(trained_siblings) < min_siblings:
@@ -289,7 +300,7 @@ def refine_sibling_group(
     # Load lenses
     lenses = {}
     for sibling in siblings:
-        lens_path = lens_dir / f"{sibling}_classifier.pt"
+        lens_path = find_lens_path(lens_dir, sibling)
         lenses[sibling] = load_lens(lens_path, hidden_dim, device)
         lenses[sibling].train()
 
@@ -379,10 +390,10 @@ def refine_sibling_group(
     # Evaluate post-refinement accuracy
     post_accuracy = evaluate_sibling_ranking_accuracy(lenses, activations_by_sibling, device)
 
-    # Save refined lenses (overwrites originals)
+    # Save refined lenses (overwrites originals, uses clean naming)
     if save_refined:
         for sibling, lens in lenses.items():
-            lens_path = lens_dir / f"{sibling}_classifier.pt"
+            lens_path = lens_dir / f"{sibling}.pt"
             save_lens(lens, lens_path)
 
     elapsed = time.time() - start_time

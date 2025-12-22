@@ -372,7 +372,7 @@ def run_triple_criteria_analysis(
     for layer in layers:
         layer_dir = lens_pack_dir / f"layer{layer}"
         if layer_dir.exists():
-            lens_files = list(layer_dir.glob("*_classifier.pt"))
+            lens_files = list(layer_dir.glob("*.pt"))
             if lens_files:
                 state_dict = torch.load(lens_files[0], map_location='cpu')
                 first_key = list(state_dict.keys())[0]
@@ -389,8 +389,8 @@ def run_triple_criteria_analysis(
     for layer in layers:
         layer_dir = lens_pack_dir / f"layer{layer}"
         if layer_dir.exists():
-            for lens_file in layer_dir.glob("*_classifier.pt"):
-                concept_name = lens_file.stem.replace("_classifier", "")
+            for lens_file in layer_dir.glob("*.pt"):
+                concept_name = lens_file.stem.replace("", "")
                 lens_paths[concept_name] = (lens_file, layer)
 
     print(f"  Found {len(lens_paths)} lens files")
@@ -682,8 +682,8 @@ def run_production_analysis(
         layer_dir = lens_pack_dir / f"layer{layer}"
         if not layer_dir.exists():
             continue
-        for lens_file in layer_dir.glob("*_classifier.pt"):
-            concept_name = lens_file.stem.replace("_classifier", "")
+        for lens_file in layer_dir.glob("*.pt"):
+            concept_name = lens_file.stem.replace("", "")
             if concept_name in all_concepts:
                 concepts_to_test.append((concept_name, all_concepts[concept_name]))
 
@@ -899,7 +899,7 @@ def run_hierarchy_analysis(
     for layer in layers:
         layer_dir = lens_pack_dir / f"layer{layer}"
         if layer_dir.exists():
-            lens_files = list(layer_dir.glob("*_classifier.pt"))
+            lens_files = list(layer_dir.glob("*.pt"))
             if lens_files:
                 state_dict = torch.load(lens_files[0], map_location='cpu')
                 first_key = list(state_dict.keys())[0]
@@ -916,8 +916,8 @@ def run_hierarchy_analysis(
     for layer in layers:
         layer_dir = lens_pack_dir / f"layer{layer}"
         if layer_dir.exists():
-            for lens_file in layer_dir.glob("*_classifier.pt"):
-                concept_name = lens_file.stem.replace("_classifier", "")
+            for lens_file in layer_dir.glob("*.pt"):
+                concept_name = lens_file.stem.replace("", "")
                 lens_paths[concept_name] = (lens_file, layer)
 
     print(f"  Found {len(lens_paths)} lens files")
@@ -1186,7 +1186,7 @@ def run_batched_analysis(
     for layer in layers:
         layer_dir = lens_pack_dir / f"layer{layer}"
         if layer_dir.exists():
-            lens_files = list(layer_dir.glob("*_classifier.pt"))
+            lens_files = list(layer_dir.glob("*.pt"))
             if lens_files:
                 state_dict = torch.load(lens_files[0], map_location='cpu')
                 first_key = list(state_dict.keys())[0]
@@ -1206,8 +1206,8 @@ def run_batched_analysis(
     for layer in layers:
         layer_dir = lens_pack_dir / f"layer{layer}"
         if layer_dir.exists():
-            for lens_file in layer_dir.glob("*_classifier.pt"):
-                concept_name = lens_file.stem.replace("_classifier", "")
+            for lens_file in layer_dir.glob("*.pt"):
+                concept_name = lens_file.stem.replace("", "")
                 lens_paths[concept_name] = (lens_file, layer)
 
     print(f"  Found {len(lens_paths)} lens files")

@@ -636,7 +636,7 @@ def train_with_frequency_weighting(
                 print(f"  Precision: {metrics['test_precision']:.3f}, Recall: {metrics['test_recall']:.3f}")
 
                 # Save classifier (moves to CPU)
-                torch.save(classifier.state_dict(), layer_output / f"{concept_name}_classifier.pt")
+                torch.save(classifier.state_dict(), layer_output / f"{concept_name}.pt")
 
                 result = {
                     "concept": concept_name,

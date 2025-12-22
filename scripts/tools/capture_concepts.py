@@ -10,7 +10,7 @@ import numpy as np
 from tqdm import tqdm
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.hat.classifiers.classifiers.capture import ActivationCapture, ActivationConfig, BaselineGenerator
 from src.hat.utils.model_loader import ModelLoader

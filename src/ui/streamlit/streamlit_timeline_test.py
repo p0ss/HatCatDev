@@ -12,8 +12,8 @@ import streamlit as st
 import sys
 from pathlib import Path
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Add project root to path for src.* imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.ui.components import render_timeline_viz, convert_timeline_to_reply_data
 

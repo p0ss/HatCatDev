@@ -12,7 +12,8 @@ import time
 from typing import List, Optional, Dict
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Add project root to path for src.* imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.hat.classifiers.classifiers.capture import ActivationCapture, ActivationConfig
 from src.hat.utils.model_loader import ModelLoader

@@ -691,12 +691,29 @@ class DualAdaptiveTrainer:
         print(f"\n  Dual Adaptive Training: {concept_name}")
         print(f"  {'─' * 60}")
 
+        # Track iterations per validation cycle to detect stuck training
+        iterations_this_cycle = 0
+        max_iterations_per_cycle = 3  # Escalate to more samples after 3 stuck iterations
+
         while not (activation_graduated and text_graduated) and iteration < self.max_iterations:
             iteration += 1
+            iterations_this_cycle += 1
             iter_start_time = time.time()
 
             # === ACTIVATION LENS ===
             if not activation_graduated and train_activations is not None:
+                # Auto-escalate if stuck on same data without progress
+                if iterations_this_cycle > max_iterations_per_cycle:
+                    validation_cycle += 1
+                    iterations_this_cycle = 1
+                    next_samples = get_required_samples(
+                        validation_cycle,
+                        self.activation_initial_samples,
+                        self.activation_first_increment,
+                        self.activation_subsequent_increment
+                    )
+                    print(f"      → Stuck for {max_iterations_per_cycle} iterations, escalating to {next_samples} samples (cycle {validation_cycle})")
+
                 # Calculate required samples for current validation cycle
                 required_samples = get_required_samples(
                     validation_cycle,
@@ -964,6 +981,7 @@ class DualAdaptiveTrainer:
                                     activation_results = None
                                     # Increment validation cycle to request more samples
                                     validation_cycle += 1
+                                    iterations_this_cycle = 0  # Reset stuck counter
                                     next_samples = get_required_samples(
                                         validation_cycle,
                                         self.activation_initial_samples,

@@ -34,7 +34,7 @@ from sentence_transformers import SentenceTransformer
 
 # Add parent directory to path
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.hat.steering.manifold import ManifoldSteerer
 from src.hat import build_centroids, compute_semantic_shift

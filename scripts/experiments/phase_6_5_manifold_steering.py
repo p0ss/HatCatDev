@@ -28,7 +28,7 @@ from sentence_transformers import SentenceTransformer
 
 # Add parent directory to path for imports
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.hat import (
     extract_concept_vector,

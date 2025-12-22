@@ -398,6 +398,16 @@ def select_layers_for_concept(
     return selected, layer_scores
 
 
+class _TrainableMLP(torch.nn.Module):
+    """Wrapper to give Sequential the 'net.' prefix in state_dict keys."""
+    def __init__(self, net: torch.nn.Sequential):
+        super().__init__()
+        self.net = net
+
+    def forward(self, x):
+        return self.net(x)
+
+
 def train_simple_classifier(
     X_train: np.ndarray,
     y_train: np.ndarray,
@@ -406,42 +416,92 @@ def train_simple_classifier(
     hidden_dim: int = 128,
     epochs: int = 50,
     lr: float = 0.001,
+    dtype: torch.dtype = torch.bfloat16,
+    use_layer_norm: bool = False,
+    normalize_inputs: bool = True,
 ) -> Tuple[torch.nn.Module, Dict[str, float]]:
-    """Train a simple MLP classifier and return metrics."""
+    """Train a simple MLP classifier and return metrics.
+
+    Args:
+        X_train: Training features
+        y_train: Training labels
+        X_test: Test features
+        y_test: Test labels
+        hidden_dim: MLP hidden layer dimension
+        epochs: Training epochs
+        lr: Learning rate
+        dtype: Parameter dtype. Default bfloat16 for memory efficiency.
+        use_layer_norm: Whether to include LayerNorm at input. Default False
+            to match existing pack architecture for batched inference.
+        normalize_inputs: Whether to standardize inputs (subtract mean, divide by std).
+            Default True. Essential for layers with high-magnitude activations.
+    """
     import torch.nn as nn
     import torch.optim as optim
 
+    # Normalize inputs to prevent gradient saturation
+    # This matches the LayerNorm applied at inference time in lens_manager
+    # LayerNorm normalizes each sample independently (across hidden dim)
+    if normalize_inputs:
+        # Per-sample normalization (same as nn.LayerNorm with elementwise_affine=False)
+        train_mean = X_train.mean(axis=1, keepdims=True)
+        train_std = X_train.std(axis=1, keepdims=True) + 1e-8
+        X_train = (X_train - train_mean) / train_std
+
+        test_mean = X_test.mean(axis=1, keepdims=True)
+        test_std = X_test.std(axis=1, keepdims=True) + 1e-8
+        X_test = (X_test - test_mean) / test_std
+
     input_dim = X_train.shape[1]
-    model = nn.Sequential(
-        nn.LayerNorm(input_dim),  # Normalize inputs to prevent saturation
-        nn.Linear(input_dim, hidden_dim),
+    layers = []
+    if use_layer_norm:
+        layers.append(nn.LayerNorm(input_dim, dtype=dtype))
+    layers.extend([
+        nn.Linear(input_dim, hidden_dim, dtype=dtype),
         nn.ReLU(),
         nn.Dropout(0.2),
-        nn.Linear(hidden_dim, hidden_dim // 2),
+        nn.Linear(hidden_dim, hidden_dim // 2, dtype=dtype),
         nn.ReLU(),
         nn.Dropout(0.2),
-        nn.Linear(hidden_dim // 2, 1),
+        nn.Linear(hidden_dim // 2, 1, dtype=dtype),
         nn.Sigmoid(),
-    )
+    ])
+    sequential = nn.Sequential(*layers)
+    model = _TrainableMLP(sequential)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
 
-    X_train_t = torch.FloatTensor(X_train).to(device)
-    y_train_t = torch.FloatTensor(y_train).unsqueeze(1).to(device)
-    X_test_t = torch.FloatTensor(X_test).to(device)
-    y_test_t = torch.FloatTensor(y_test).unsqueeze(1).to(device)
+    # Convert training data to match model dtype
+    X_train_t = torch.from_numpy(X_train).to(device=device, dtype=dtype)
+    y_train_t = torch.from_numpy(y_train).unsqueeze(1).to(device=device, dtype=dtype)
+    X_test_t = torch.from_numpy(X_test).to(device=device, dtype=dtype)
+    y_test_t = torch.from_numpy(y_test).unsqueeze(1).to(device=device, dtype=dtype)
 
     criterion = nn.BCELoss()
     optimizer = optim.AdamW(model.parameters(), lr=lr)
 
     model.train()
-    for _ in range(epochs):
+    initial_loss = None
+    final_loss = None
+    for epoch in range(epochs):
         optimizer.zero_grad()
         outputs = model(X_train_t)
         loss = criterion(outputs, y_train_t)
+        if epoch == 0:
+            initial_loss = loss.item()
         loss.backward()
         optimizer.step()
+    final_loss = loss.item()
+
+    # Debug: check if learning happened
+    if abs(initial_loss - final_loss) < 0.001:
+        pred_mean = outputs.mean().item()
+        pred_std = outputs.std().item()
+        x_mean = X_train_t.mean().item()
+        x_std = X_train_t.std().item()
+        print(f"      ⚠️  No learning: loss {initial_loss:.4f}→{final_loss:.4f}, "
+              f"pred μ={pred_mean:.3f} σ={pred_std:.4f}, X μ={x_mean:.1f} σ={x_std:.1f}")
 
     model.eval()
     with torch.no_grad():
@@ -566,7 +626,7 @@ def train_layer(
             continue
 
         # Check if already trained (resume capability)
-        classifier_path = output_dir / f"{concept_name}_classifier.pt"
+        classifier_path = output_dir / f"{concept_name}.pt"
         centroid_path = centroid_output_dir / f"{concept_name}_centroid.npy" if train_text_lenses else None
 
         if classifier_path.exists() and (not train_text_lenses or centroid_path.exists()):
@@ -698,7 +758,7 @@ def train_layer(
                 if adaptive_results['activation_classifier'] is not None:
                     torch.save(
                         adaptive_results['activation_classifier'].state_dict(),
-                        output_dir / f"{concept_name}_classifier.pt"
+                        output_dir / f"{concept_name}.pt"
                     )
 
                 # Note: Embedding centroids not supported in JIT adaptive mode
@@ -815,7 +875,7 @@ def train_layer(
                 if selected_layers is not None:
                     result["selected_layers"] = selected_layers
 
-                torch.save(classifier.state_dict(), output_dir / f"{concept_name}_classifier.pt")
+                torch.save(classifier.state_dict(), output_dir / f"{concept_name}.pt")
 
             all_results.append(result)
 

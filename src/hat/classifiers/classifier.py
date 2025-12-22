@@ -7,9 +7,10 @@ All classifiers output raw logits (no sigmoid) for flexibility:
 - Use logits with BCEWithLogitsLoss for training
 
 Canonical architecture (MLPClassifier):
-    input → 128 → ReLU → Dropout(0.1) → 64 → ReLU → Dropout(0.1) → 1
+    input → LayerNorm → 128 → ReLU → Dropout → 64 → ReLU → Dropout → 1
 
-This matches the architecture used in sibling_ranking.py for training.
+LayerNorm at input normalizes activations to prevent saturation during training.
+This matches the architecture used in sumo_classifiers.py for training.
 """
 
 from pathlib import Path
@@ -22,7 +23,10 @@ class MLPClassifier(nn.Module):
     """
     Standard MLP lens classifier for concept detection.
 
-    Architecture:
+    Architecture (with layer_norm=True):
+        input_dim → LayerNorm → 128 → ReLU → Dropout → 64 → ReLU → Dropout → 1
+
+    Architecture (with layer_norm=False, legacy):
         input_dim → 128 → ReLU → Dropout → 64 → ReLU → Dropout → 1
 
     Outputs raw logits (no sigmoid). Apply sigmoid for probabilities.
@@ -31,6 +35,7 @@ class MLPClassifier(nn.Module):
         input_dim: Model hidden dimension (e.g., 4096 for Apertus-8B, 2560 for Gemma-3-4b)
         hidden_dim: First hidden layer size (default: 128)
         dropout: Dropout rate (default: 0.1)
+        layer_norm: Whether to include LayerNorm at input (default: True)
     """
 
     def __init__(
@@ -38,12 +43,17 @@ class MLPClassifier(nn.Module):
         input_dim: int,
         hidden_dim: int = 128,
         dropout: float = 0.1,
+        layer_norm: bool = True,
     ):
         super().__init__()
         self.input_dim = input_dim
         self.hidden_dim = hidden_dim
+        self.has_layer_norm = layer_norm
 
-        self.net = nn.Sequential(
+        layers = []
+        if layer_norm:
+            layers.append(nn.LayerNorm(input_dim))
+        layers.extend([
             nn.Linear(input_dim, hidden_dim),
             nn.ReLU(),
             nn.Dropout(dropout),
@@ -51,7 +61,8 @@ class MLPClassifier(nn.Module):
             nn.ReLU(),
             nn.Dropout(dropout),
             nn.Linear(hidden_dim // 2, 1),
-        )
+        ])
+        self.net = nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -127,14 +138,32 @@ def infer_classifier_type(state_dict: Dict[str, Any]) -> str:
     raise ValueError(f"Unknown classifier format. Keys: {keys}")
 
 
+def has_layer_norm(state_dict: Dict[str, Any]) -> bool:
+    """
+    Detect if classifier has LayerNorm at input.
+
+    LayerNorm weights are 1D (shape [input_dim]), while Linear weights are 2D.
+    """
+    # Check net.0.weight or 0.weight
+    first_weight_key = "net.0.weight" if "net.0.weight" in state_dict else "0.weight"
+    if first_weight_key in state_dict:
+        return len(state_dict[first_weight_key].shape) == 1
+    return False
+
+
 def infer_input_dim(state_dict: Dict[str, Any], classifier_type: str) -> int:
     """Infer input dimension from state dict."""
     if classifier_type == "mlp":
         # Check for net.0.weight first, then legacy 0.weight
-        if "net.0.weight" in state_dict:
-            return state_dict["net.0.weight"].shape[1]
-        elif "0.weight" in state_dict:
-            return state_dict["0.weight"].shape[1]
+        first_weight_key = "net.0.weight" if "net.0.weight" in state_dict else "0.weight"
+        if first_weight_key in state_dict:
+            weight = state_dict[first_weight_key]
+            if len(weight.shape) == 1:
+                # LayerNorm: weight is 1D [input_dim]
+                return weight.shape[0]
+            else:
+                # Linear: weight is 2D [hidden_dim, input_dim]
+                return weight.shape[1]
     elif classifier_type == "linear":
         return state_dict["linear.weight"].shape[1]
 
@@ -150,7 +179,8 @@ def load_classifier(
     Load a trained classifier from disk.
 
     Automatically infers the classifier type (MLP or linear) from the
-    saved state dict structure if not specified.
+    saved state dict structure if not specified. Also detects whether
+    the classifier has LayerNorm at input.
 
     Args:
         path: Path to the .pt file containing classifier state_dict
@@ -172,7 +202,9 @@ def load_classifier(
 
     # Create and load classifier
     if classifier_type == "mlp":
-        classifier = MLPClassifier(input_dim)
+        # Detect if classifier has LayerNorm
+        use_layer_norm = has_layer_norm(state_dict)
+        classifier = MLPClassifier(input_dim, layer_norm=use_layer_norm)
 
         # Handle legacy format (0.weight vs net.0.weight)
         if "0.weight" in state_dict and "net.0.weight" not in state_dict:

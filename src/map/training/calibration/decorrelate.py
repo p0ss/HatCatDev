@@ -47,7 +47,7 @@ def load_lens_weights(lens_pack_dir: Path) -> Tuple[Dict[str, Tuple[Path, int, t
     for layer_dir in sorted(lens_pack_dir.glob('layer*')):
         layer_num = int(layer_dir.name.replace('layer', ''))
 
-        for lens_file in layer_dir.glob('*_classifier.pt'):
+        for lens_file in layer_dir.glob('*.pt'):
             concept_name = lens_file.stem.replace('_classifier', '')
             state_dict = torch.load(lens_file, map_location='cpu')
 
@@ -205,9 +205,13 @@ def apply_soft_limiter(
     for concept_name, over_fire_count in tqdm(over_fire_counts.items(), desc="Applying soft limiter"):
         over_fire_pct = over_fire_count / total_concepts
 
-        # Find lens file
+        # Find lens file (try clean name first, then legacy suffix)
         lens_file = None
         for layer_dir in lens_pack_dir.glob('layer*'):
+            potential = layer_dir / f'{concept_name}.pt'
+            if potential.exists():
+                lens_file = potential
+                break
             potential = layer_dir / f'{concept_name}_classifier.pt'
             if potential.exists():
                 lens_file = potential

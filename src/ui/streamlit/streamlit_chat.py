@@ -18,8 +18,8 @@ import sys
 import plotly.graph_objects as go
 import numpy as np
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Add project root to path for src.* imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.hat.monitoring.lens_manager import DynamicLensManager
 from transformers import AutoTokenizer, AutoModelForCausalLM

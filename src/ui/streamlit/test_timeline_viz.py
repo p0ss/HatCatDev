@@ -8,8 +8,8 @@ import streamlit as st
 from pathlib import Path
 import sys
 
-# Add parent to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Add project root to path for src.* imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.ui.streamlit.components.timeline_component import render_timeline_viz, convert_timeline_to_reply_data
 

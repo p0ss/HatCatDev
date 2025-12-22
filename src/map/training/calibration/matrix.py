@@ -170,7 +170,7 @@ class CalibrationMatrixBuilder:
             if not layer_dir.exists():
                 continue
 
-            for lens_file in layer_dir.glob("*_classifier.pt"):
+            for lens_file in layer_dir.glob("*.pt"):
                 concept_name = lens_file.stem.replace('_classifier', '')
 
                 try:

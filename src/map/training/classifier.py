@@ -21,13 +21,20 @@ class BinaryClassifier(nn.Module):
     - Output: 1 (binary classification)
     """
 
-    def __init__(self, input_dim: int, intermediate_dim: int = 128):
+    def __init__(self, input_dim: int, intermediate_dim: int = 128, dtype: torch.dtype = None):
+        """
+        Args:
+            input_dim: Input feature dimension
+            intermediate_dim: Hidden layer dimension
+            dtype: Parameter dtype. If None, uses default (float32).
+                   Use torch.bfloat16 for memory-efficient inference.
+        """
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(input_dim, intermediate_dim),
+            nn.Linear(input_dim, intermediate_dim, dtype=dtype),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Linear(intermediate_dim, 1),
+            nn.Linear(intermediate_dim, 1, dtype=dtype),
             nn.Sigmoid()
         )
 
@@ -43,7 +50,8 @@ def train_binary_classifier(
     lr: float = 0.001,
     epochs: int = 100,
     device: str = "cuda",
-    verbose: bool = False
+    verbose: bool = False,
+    dtype: torch.dtype = torch.bfloat16,
 ) -> BinaryClassifier:
     """
     Train a binary classifier on concept activations.
@@ -57,6 +65,7 @@ def train_binary_classifier(
         epochs: Number of training epochs
         device: Device to train on
         verbose: Print training progress
+        dtype: Parameter dtype. Default bfloat16 for memory efficiency.
 
     Returns:
         Trained classifier
@@ -67,16 +76,16 @@ def train_binary_classifier(
         >>> classifier = train_binary_classifier(X, y, input_dim=2560, epochs=50)
         >>> # Use classifier for prediction
         >>> with torch.no_grad():
-        ...     pred = classifier(torch.tensor(X[0], dtype=torch.float32).to("cuda"))
+        ...     pred = classifier(torch.tensor(X[0], dtype=torch.bfloat16).to("cuda"))
         ...     pred.item() > 0.5  # Check if classified as positive
         True
     """
-    # Convert to tensors
-    X = torch.tensor(X_train, dtype=torch.float32).to(device)
-    y = torch.tensor(y_train, dtype=torch.float32).unsqueeze(1).to(device)
+    # Convert to tensors with matching dtype
+    X = torch.from_numpy(X_train).to(device=device, dtype=dtype)
+    y = torch.from_numpy(y_train).unsqueeze(1).to(device=device, dtype=dtype)
 
     # Create model
-    model = BinaryClassifier(input_dim, intermediate_dim).to(device)
+    model = BinaryClassifier(input_dim, intermediate_dim, dtype=dtype).to(device)
     criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 

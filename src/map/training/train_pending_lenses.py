@@ -188,7 +188,7 @@ def main():
 
         # Remove existing classifiers for concepts we're retraining
         for concept in concepts:
-            classifier_path = layer_output_dir / f"{concept}_classifier.pt"
+            classifier_path = layer_output_dir / f"{concept}.pt"
             if classifier_path.exists():
                 classifier_path.unlink()
 

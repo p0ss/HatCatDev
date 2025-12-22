@@ -17,9 +17,9 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
-# Add src to path - script is now at src/training/train_concept_pack_lenses.py
-PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(PROJECT_ROOT / "src"))
+# Add src/map to path - script is at src/map/training/train_concept_pack_lenses.py
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent  # /home/poss/Documents/Code/HatCat
+sys.path.insert(0, str(PROJECT_ROOT / "src" / "map"))  # For training, data imports
 
 # Import and patch the layer data directory before importing training functions
 from training import sumo_classifiers as sumo_classifiers_module
@@ -267,7 +267,7 @@ def main():
                 layer_dir = output_dir / f"layer{layer}"
                 if layer_dir.exists():
                     for concept in concepts_to_delete:
-                        lens_path = layer_dir / f"{concept}_classifier.pt"
+                        lens_path = layer_dir / f"{concept}.pt"
                         if lens_path.exists():
                             lens_path.unlink()
             print()
@@ -391,7 +391,7 @@ def main():
                             "recall": result.get("test_recall", 0),
                         },
                         training_samples=result.get("n_train_samples", 0),
-                        lens_file=f"layer{layer}/{concept}_classifier.pt"
+                        lens_file=f"layer{layer}/{concept}.pt"
                     )
                     trained_concepts.append(concept)
 

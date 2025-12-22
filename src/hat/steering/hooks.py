@@ -131,7 +131,10 @@ def load_steering_vectors_from_lens_pack(
     for concept in concepts:
         # Search for concept across layers
         for layer in layers:
-            classifier_path = lens_pack_path / f"layer{layer}" / f"{concept}_classifier.pt"
+            # Try clean name first, then legacy _classifier suffix
+            classifier_path = lens_pack_path / f"layer{layer}" / f"{concept}.pt"
+            if not classifier_path.exists():
+                classifier_path = lens_pack_path / f"layer{layer}" / f"{concept}_classifier.pt"
             if classifier_path.exists():
                 try:
                     vector = extract_importance_weighted_vector(
@@ -919,19 +922,12 @@ def create_gradient_steering_hook(
         original_shape = hidden_states.shape
         classifier_dtype = next(classifier.parameters()).dtype
 
-        # Get hidden state data
-        hidden_data = hidden_states.detach().float().cpu().numpy()
-
         # Exit inference_mode completely for gradient computation
         with torch.inference_mode(mode=False):
             with torch.enable_grad():
-                # Create fresh tensor with grad enabled
-                hidden_for_grad = torch.tensor(
-                    hidden_data,
-                    dtype=classifier_dtype,
-                    device=hidden_states.device,
-                    requires_grad=True
-                )
+                # Create grad-enabled tensor - stay on GPU, no numpy round-trip
+                hidden_for_grad = hidden_states.detach().to(dtype=classifier_dtype).clone()
+                hidden_for_grad.requires_grad_(True)
                 hidden_flat = hidden_for_grad.view(-1, original_shape[-1])
 
                 # Forward through classifier
@@ -1021,18 +1017,13 @@ def create_contrastive_gradient_steering_hook(
         # Temporarily disable inference_mode to allow autograd
         original_shape = hidden_states.shape
         classifier_dtype = next(target_classifier.parameters()).dtype
-        hidden_data = hidden_states.detach().float().cpu().numpy()
 
         # Exit inference_mode completely for gradient computation
         with torch.inference_mode(mode=False):
             with torch.enable_grad():
-                # Create fresh tensor with grad enabled
-                hidden_for_target = torch.tensor(
-                    hidden_data,
-                    dtype=classifier_dtype,
-                    device=hidden_states.device,
-                    requires_grad=True
-                )
+                # Create grad-enabled tensors - stay on GPU, no numpy round-trip
+                hidden_for_target = hidden_states.detach().to(dtype=classifier_dtype).clone()
+                hidden_for_target.requires_grad_(True)
                 hidden_flat_target = hidden_for_target.view(-1, original_shape[-1])
 
                 # Compute target gradient
@@ -1046,12 +1037,8 @@ def create_contrastive_gradient_steering_hook(
                 )[0]
 
                 # Create fresh tensor for reference computation
-                hidden_for_ref = torch.tensor(
-                    hidden_data,
-                    dtype=classifier_dtype,
-                    device=hidden_states.device,
-                    requires_grad=True
-                )
+                hidden_for_ref = hidden_states.detach().to(dtype=classifier_dtype).clone()
+                hidden_for_ref.requires_grad_(True)
                 hidden_flat_ref = hidden_for_ref.view(-1, original_shape[-1])
 
                 ref_output = reference_classifier(hidden_flat_ref)
@@ -1208,14 +1195,14 @@ def create_multi_layer_gradient_steering_hooks(
             for i, layer_idx in enumerate(layer_list):
                 start_idx = i * hidden_dim_per_layer
                 end_idx = (i + 1) * hidden_dim_per_layer
-                layer_vector = full_vector[start_idx:end_idx].detach().cpu().numpy()
+                layer_vector = full_vector[start_idx:end_idx].detach()
 
-                # Normalize
-                layer_vector = layer_vector / (np.linalg.norm(layer_vector) + 1e-8)
+                # Normalize on GPU
+                layer_vector = layer_vector / (torch.norm(layer_vector) + 1e-8)
 
                 # Create static steering hook for this layer
                 hook_fn = create_steering_hook(
-                    torch.from_numpy(layer_vector).to(device),
+                    layer_vector.to(device),
                     strength=strength / n_layers,  # Divide strength across layers
                 )
                 hooks.append((layers[layer_idx], hook_fn))
@@ -1247,7 +1234,8 @@ def _create_combined_gradient_hook(
             hidden_states = output
 
         original_shape = hidden_states.shape
-        hidden_data = hidden_states.detach().float().cpu().numpy()
+        # Keep on GPU - detach and convert to float for gradient computation
+        hidden_base = hidden_states.detach().float()
 
         # Temporarily disable inference_mode to allow autograd
         with torch.inference_mode(mode=False):
@@ -1257,12 +1245,9 @@ def _create_combined_gradient_hook(
                 # Sum target gradients
                 for lc in target_classifiers:
                     classifier_dtype = next(lc.classifier.parameters()).dtype
-                    h = torch.tensor(
-                        hidden_data,
-                        dtype=classifier_dtype,
-                        device=hidden_states.device,
-                        requires_grad=True
-                    ).view(-1, original_shape[-1])
+                    # Clone on GPU and convert to classifier dtype
+                    h = hidden_base.to(dtype=classifier_dtype).clone().view(-1, original_shape[-1])
+                    h.requires_grad_(True)
 
                     out = lc.classifier(h)
                     grad = torch.autograd.grad(
@@ -1279,12 +1264,9 @@ def _create_combined_gradient_hook(
                 if contrastive and reference_classifiers:
                     for lc in reference_classifiers:
                         classifier_dtype = next(lc.classifier.parameters()).dtype
-                        h = torch.tensor(
-                            hidden_data,
-                            dtype=classifier_dtype,
-                            device=hidden_states.device,
-                            requires_grad=True
-                        ).view(-1, original_shape[-1])
+                        # Clone on GPU and convert to classifier dtype
+                        h = hidden_base.to(dtype=classifier_dtype).clone().view(-1, original_shape[-1])
+                        h.requires_grad_(True)
 
                         out = lc.classifier(h)
                         grad = torch.autograd.grad(
@@ -1365,7 +1347,10 @@ def load_lens_classifiers_for_concepts(
         found = False
         for layer_dir in sorted(lens_pack_path.glob("layer*")):
             layer_num = int(layer_dir.name.replace("layer", ""))
-            classifier_path = layer_dir / f"{concept}_classifier.pt"
+            # Try clean name first, then legacy _classifier suffix
+            classifier_path = layer_dir / f"{concept}.pt"
+            if not classifier_path.exists():
+                classifier_path = layer_dir / f"{concept}_classifier.pt"
 
             if classifier_path.exists():
                 try:

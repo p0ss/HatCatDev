@@ -292,7 +292,7 @@ def run_calibration_analysis(
         if not layer_dir.exists():
             continue
 
-        lens_files = list(layer_dir.glob("*_classifier.pt"))
+        lens_files = list(layer_dir.glob("*.pt"))
         for lens_file in lens_files:
             concept_name = lens_file.stem.replace('_classifier', '')
 
