@@ -22,6 +22,15 @@ from .hush_controller import (
     HushViolation,
 )
 
+# Optional ASK audit integration
+try:
+    from src.ask.requests import AuditLogEntry, ActiveLensSet
+    ASK_AVAILABLE = True
+except ImportError:
+    ASK_AVAILABLE = False
+    AuditLogEntry = None
+    ActiveLensSet = None
+
 
 @dataclass
 class WorldTick:
@@ -96,6 +105,43 @@ class HushedGenerator:
 
         # Concept vectors cache (for steering)
         self.concept_vectors: Dict[str, np.ndarray] = {}
+
+        # ASK decision callbacks - called when violations require human attention
+        # Callbacks receive: (violations: List[HushViolation], severity: float, tick: WorldTick)
+        self._violation_callbacks: List[callable] = []
+        self._decision_required_threshold = 0.7  # Severity threshold for decision prompt
+
+    def register_violation_callback(self, callback: callable) -> None:
+        """
+        Register a callback for violation notifications.
+
+        Callback signature: (violations, severity, tick) -> None
+        Called when violations exceed the decision_required_threshold.
+        """
+        self._violation_callbacks.append(callback)
+
+    def unregister_violation_callback(self, callback: callable) -> None:
+        """Remove a violation callback."""
+        if callback in self._violation_callbacks:
+            self._violation_callbacks.remove(callback)
+
+    def set_decision_threshold(self, threshold: float) -> None:
+        """Set severity threshold for triggering decision callbacks (0.0 to 1.0)."""
+        self._decision_required_threshold = max(0.0, min(1.0, threshold))
+
+    def _notify_violation_callbacks(
+        self,
+        violations: List['HushViolation'],
+        severity: float,
+        tick: 'WorldTick',
+    ) -> None:
+        """Notify registered callbacks of violations requiring attention."""
+        if severity >= self._decision_required_threshold and self._violation_callbacks:
+            for callback in self._violation_callbacks:
+                try:
+                    callback(violations, severity, tick)
+                except Exception as e:
+                    print(f"Warning: Violation callback error: {e}")
 
     def _get_layers(self):
         """Get model layers handling different architectures."""
@@ -203,7 +249,56 @@ class HushedGenerator:
         if len(self.world_ticks) > self.max_tick_history:
             self.world_ticks = self.world_ticks[-self.max_tick_history:]
 
+        # Notify callbacks if violations exceed threshold
+        if violations:
+            severity = self.hush_controller.current_severity
+            self._notify_violation_callbacks(violations, severity, tick)
+
         return tick
+
+    def create_audit_entry(
+        self,
+        deployment_id: str,
+        policy_profile: str = "",
+        input_text: str = "",
+        xdb_id: str = "",
+        prev_hash: str = "",
+    ) -> Optional[Any]:
+        """
+        Create an AuditLogEntry for a generation request.
+
+        Args:
+            deployment_id: Reference to deployment context
+            policy_profile: Active USH/CSH policy
+            input_text: User input (will be hashed)
+            xdb_id: Associated XDB identifier
+            prev_hash: Hash of previous entry in chain
+
+        Returns:
+            AuditLogEntry if ASK is available, None otherwise
+        """
+        if not ASK_AVAILABLE:
+            return None
+
+        # Build active lens set from lens manager
+        active_lens_set = None
+        if hasattr(self.lens_manager, 'get_active_lenses'):
+            lens_info = self.lens_manager.get_active_lenses()
+            active_lens_set = ActiveLensSet(
+                top_k=getattr(self.lens_manager, 'top_k', 10),
+                lens_pack_ids=lens_info.get('pack_ids', []),
+                mandatory_lenses=lens_info.get('mandatory', []),
+                optional_lenses=lens_info.get('optional', []),
+            )
+
+        return AuditLogEntry.start(
+            deployment_id=deployment_id,
+            policy_profile=policy_profile,
+            input_text=input_text,
+            xdb_id=xdb_id,
+            active_lens_set=active_lens_set,
+            prev_hash=prev_hash,
+        )
 
     def generate_with_hush(
         self,
@@ -211,6 +306,7 @@ class HushedGenerator:
         max_new_tokens: int = 100,
         temperature: float = 0.7,
         stream: bool = False,
+        audit_entry: Optional[Any] = None,
         **generation_kwargs,
     ):
         """
@@ -221,11 +317,17 @@ class HushedGenerator:
             max_new_tokens: Maximum tokens to generate
             temperature: Sampling temperature
             stream: If True, yield (token, tick) pairs; else return full text
+            audit_entry: Optional AuditLogEntry for ASK audit logging
             **generation_kwargs: Additional generation arguments
 
         Returns:
             If stream: Generator of (token_text, WorldTick) tuples
             Else: Tuple of (generated_text, list of WorldTicks)
+
+        Note:
+            If audit_entry is provided, it will be populated with tick data
+            during generation. Call audit_entry.finalize(output_text) after
+            generation completes.
         """
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         generated_ids = inputs.input_ids
@@ -278,6 +380,19 @@ class HushedGenerator:
                     token_text=token_text,
                 )
                 ticks.append(tick)
+
+                # Add tick to audit entry if provided
+                if audit_entry is not None:
+                    audit_entry.add_tick(tick, tick_number=tick.tick_id)
+                    # Also record steering directives
+                    for directive in directives:
+                        audit_entry.add_steering_directive(directive.to_dict() if hasattr(directive, 'to_dict') else {
+                            'simplex_term': directive.simplex_term,
+                            'target_pole': directive.target_pole,
+                            'strength': directive.strength,
+                            'priority': directive.priority.value if hasattr(directive.priority, 'value') else str(directive.priority),
+                            'source': directive.source,
+                        })
 
                 if stream:
                     yield token_text, tick

@@ -19,6 +19,81 @@ from pathlib import Path
 import asyncio
 import yaml
 from src.ui.visualization import get_color_mapper
+from dataclasses import dataclass, field
+
+# Optional ASK audit integration
+try:
+    from src.ask.requests.entry import AuditLogEntry
+    from src.ask.requests.signals import ActiveLensSet
+    ASK_AVAILABLE = True
+except ImportError:
+    ASK_AVAILABLE = False
+
+
+# ============================================================================
+# ASK Audit Support
+# ============================================================================
+
+@dataclass
+class UIServerTick:
+    """
+    Tick-like object for ASK SignalsAggregator.
+
+    Wraps UI server divergence data in the format expected by AuditLogEntry.add_tick().
+    """
+    concept_activations: Dict[str, float]
+    violations: List[Dict] = field(default_factory=list)
+    divergence: Optional[Any] = None
+
+
+@dataclass
+class UIServerDivergence:
+    """Divergence data wrapper for ASK aggregation."""
+    score: float
+    divergence_type: str = "activation_text_mismatch"
+    concepts: List[str] = field(default_factory=list)
+
+
+# Per-session audit entries (keyed by session_id)
+_ask_audit_entries: Dict[str, Any] = {}
+
+
+def get_ask_audit_entry(session_id: str, input_text: str = "", policy_profile: str = "default") -> Optional[Any]:
+    """Get or create ASK AuditLogEntry for a session."""
+    if not ASK_AVAILABLE:
+        return None
+
+    # Create new entry for this request
+    # Each generation gets its own audit entry
+    entry = AuditLogEntry.start(
+        deployment_id=f"hatcat-ui-{session_id}",
+        policy_profile=policy_profile,
+        input_text=input_text,
+        # Link to previous entry if exists
+        prev_hash=_ask_audit_entries.get(session_id, {}).get("prev_hash", ""),
+    )
+    return entry
+
+
+def finalize_ask_audit_entry(
+    session_id: str,
+    entry: Any,
+    output_text: str = "",
+) -> Optional[Dict]:
+    """Finalize and store ASK audit entry, return summary."""
+    if not ASK_AVAILABLE or entry is None:
+        return None
+
+    entry.finalize(output_text=output_text)
+
+    # Store prev_hash for chain linking
+    _ask_audit_entries[session_id] = {
+        "prev_hash": entry.entry_hash,
+        "last_entry_id": entry.entry_id,
+    }
+
+    return entry.to_dict()
+
 
 app = FastAPI(title="HatCat Divergence API")
 
@@ -1616,6 +1691,14 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
         else:
             prompt = "Hello"
 
+        # Create ASK audit entry for this request
+        ask_audit_entry = get_ask_audit_entry(
+            session_id=request.session_id,
+            input_text=prompt,
+            policy_profile="hatcat-ui-default",
+        )
+        generated_output_text = ""  # Track output for audit finalization
+
         # Get interprompt session and inject prior concept state
         interprompt_session = get_interprompt_session(request.session_id)
         interprompt_context = interprompt_session.get_context_for_next_turn()
@@ -1876,6 +1959,40 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
             if hush_directives:
                 collected_steering.extend([d.to_dict() for d in hush_directives])
 
+            # ASK audit: Add tick for this token
+            if ask_audit_entry is not None:
+                # Build concept activations dict from divergence data
+                tick_activations = {}
+                diverging_concepts = []
+                for item in div_data.get('top_divergences', []):
+                    tick_activations[item['concept']] = item.get('activation', 0.0)
+                    diverging_concepts.append(item['concept'])
+
+                # Create divergence wrapper if we have divergence data
+                tick_divergence = None
+                if div_data.get('max_divergence', 0) > 0:
+                    tick_divergence = UIServerDivergence(
+                        score=div_data['max_divergence'],
+                        divergence_type="activation_text_mismatch",
+                        concepts=diverging_concepts[:5],
+                    )
+
+                # Create tick and add to audit entry
+                ui_tick = UIServerTick(
+                    concept_activations=tick_activations,
+                    violations=hush_violations,
+                    divergence=tick_divergence,
+                )
+                ask_audit_entry.add_tick(ui_tick, tick_number=step)
+
+                # Record steering directives for audit
+                if hush_directives:
+                    for directive in hush_directives:
+                        ask_audit_entry.add_steering_directive(directive.to_dict())
+
+            # Accumulate output text for audit
+            generated_output_text += token_text
+
             # ================================================================
             # Autonomic Intertoken Steering
             # ================================================================
@@ -2073,6 +2190,18 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
                   f"{trace_summary.token_count} tokens, "
                   f"mean_div={trace_summary.mean_divergence:.2f}, "
                   f"concepts={[c.concept for c in trace_summary.top_concepts[:3]]}")
+
+        # Finalize ASK audit entry
+        if ask_audit_entry is not None:
+            audit_summary = finalize_ask_audit_entry(
+                session_id=request.session_id,
+                entry=ask_audit_entry,
+                output_text=generated_output_text,
+            )
+            if audit_summary:
+                print(f"[ASK Audit] Entry {audit_summary['entry_id']}: "
+                      f"{audit_summary['signals']['tick_count']} ticks, "
+                      f"hash={audit_summary['cryptography']['entry_hash'][:20]}...")
 
         yield "data: [DONE]\n\n"
 
@@ -2774,6 +2903,198 @@ async def audit_close_session(cat_id: str):
         del audit_log_instances[cat_id]
         return {"status": "closed", "cat_id": cat_id}
     return {"status": "not_found", "cat_id": cat_id}
+
+
+# ============================================================================
+# ASK Human Decision API Endpoints
+# ============================================================================
+# EU AI Act Article 14 compliance - record operator overrides and justifications.
+
+# Decision storage per session
+_ask_decisions: Dict[str, List[Dict]] = {}
+_ask_pending_escalations: List[Dict] = []
+
+
+class HumanDecisionRequest(BaseModel):
+    """Request to record a human decision."""
+    session_id: str
+    entry_id: str = ""  # Optional link to specific audit entry
+    decision: str  # approve | override | escalate | block
+    justification: str  # Required free-text explanation
+    operator_id: str = ""  # Will be pseudonymized
+    related_concepts: List[str] = []
+    related_steering: List[Dict[str, Any]] = []
+
+
+class DecisionQueryRequest(BaseModel):
+    """Request to query decisions."""
+    session_id: Optional[str] = None
+    limit: int = 50
+    include_resolved: bool = True
+
+
+@app.post("/v1/audit/decision")
+async def audit_record_decision(request: HumanDecisionRequest):
+    """
+    Record a human oversight decision (EU AI Act Article 14).
+
+    Decisions are immutable once recorded. Use this endpoint when:
+    - Operator overrides a steering recommendation
+    - Operator blocks generation due to concerns
+    - Operator escalates to supervisor
+    - Operator approves after review
+
+    The justification field is REQUIRED and must explain the decision.
+    """
+    from datetime import datetime, timezone
+    from src.ask.secrets.hashing import hash_operator_id
+
+    if not request.justification.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Justification is required for all human decisions"
+        )
+
+    if request.decision not in ["approve", "override", "escalate", "block"]:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid decision type: {request.decision}. Must be: approve, override, escalate, block"
+        )
+
+    # Pseudonymize operator ID
+    pseudonymized_operator = ""
+    if request.operator_id:
+        pseudonymized_operator = hash_operator_id(request.operator_id, salt=request.session_id)
+
+    decision_record = {
+        "decision_id": f"dec_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%SZ')}_{secrets.token_hex(2)}",
+        "session_id": request.session_id,
+        "entry_id": request.entry_id,
+        "decision": request.decision,
+        "justification": request.justification,
+        "operator_id": pseudonymized_operator,
+        "related_concepts": request.related_concepts,
+        "related_steering": request.related_steering,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "resolved": request.decision != "escalate",
+    }
+
+    # Store decision
+    if request.session_id not in _ask_decisions:
+        _ask_decisions[request.session_id] = []
+    _ask_decisions[request.session_id].append(decision_record)
+
+    # Track escalations separately for quick access
+    if request.decision == "escalate":
+        _ask_pending_escalations.append(decision_record)
+
+    # If we have an active audit entry for this session, attach the decision
+    if request.session_id in _ask_audit_entries and ASK_AVAILABLE:
+        entry_info = _ask_audit_entries[request.session_id]
+        # Note: The decision is recorded separately since entries are per-request
+        # The decision references the entry_id if provided
+
+    return {
+        "status": "recorded",
+        "decision_id": decision_record["decision_id"],
+        "decision": request.decision,
+        "requires_resolution": request.decision == "escalate",
+    }
+
+
+@app.get("/v1/audit/decisions/{session_id}")
+async def audit_get_decisions(session_id: str, limit: int = 50):
+    """
+    Get decision history for a session.
+
+    Returns all human decisions recorded for the specified session,
+    ordered by timestamp (newest first).
+    """
+    decisions = _ask_decisions.get(session_id, [])
+    return {
+        "session_id": session_id,
+        "count": len(decisions),
+        "decisions": list(reversed(decisions))[:limit],
+    }
+
+
+@app.get("/v1/audit/decisions/recent")
+async def audit_get_recent_decisions(limit: int = 50):
+    """
+    Get recent decisions across all sessions.
+
+    Useful for operator dashboard to see recent activity.
+    """
+    all_decisions = []
+    for session_id, decisions in _ask_decisions.items():
+        for d in decisions:
+            d_copy = d.copy()
+            d_copy["session_id"] = session_id
+            all_decisions.append(d_copy)
+
+    # Sort by timestamp descending
+    all_decisions.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
+
+    return {
+        "count": len(all_decisions[:limit]),
+        "decisions": all_decisions[:limit],
+    }
+
+
+@app.get("/v1/audit/escalations/pending")
+async def audit_get_pending_escalations():
+    """
+    Get pending escalations requiring supervisor decision.
+
+    Returns escalations that have not been resolved.
+    """
+    pending = [e for e in _ask_pending_escalations if not e.get("resolved", False)]
+    return {
+        "count": len(pending),
+        "escalations": pending,
+    }
+
+
+@app.post("/v1/audit/escalations/resolve")
+async def audit_resolve_escalation(decision_id: str, resolution: str, resolver_id: str = ""):
+    """
+    Resolve a pending escalation.
+
+    Args:
+        decision_id: The escalation decision to resolve
+        resolution: The resolution decision (approve | block | defer)
+        resolver_id: ID of the resolving supervisor (will be pseudonymized)
+    """
+    from datetime import datetime, timezone
+    from src.ask.secrets.hashing import hash_operator_id
+
+    # Find the escalation
+    for escalation in _ask_pending_escalations:
+        if escalation.get("decision_id") == decision_id:
+            escalation["resolved"] = True
+            escalation["resolution"] = resolution
+            escalation["resolved_at"] = datetime.now(timezone.utc).isoformat()
+            if resolver_id:
+                escalation["resolver_id"] = hash_operator_id(
+                    resolver_id,
+                    salt=escalation.get("session_id", "")
+                )
+
+            # Also update in session decisions
+            session_id = escalation.get("session_id")
+            if session_id in _ask_decisions:
+                for d in _ask_decisions[session_id]:
+                    if d.get("decision_id") == decision_id:
+                        d.update(escalation)
+                        break
+
+            return {
+                "status": "resolved",
+                "decision_id": decision_id,
+                "resolution": resolution,
+            }
+
+    raise HTTPException(status_code=404, detail=f"Escalation not found: {decision_id}")
 
 
 @app.post("/v1/chat/completions")

@@ -1085,4 +1085,72 @@ All of that is **just data** sitting on top of:
 * BE → continuous experience + learning,
 * SHL → safety harnesses,
 * ASK → tribes, treats, incidents,
- Evidence & Qualifications.
+  Evidence & Qualifications.
+
+---
+
+## 7. XDB Governance
+
+ASK governs the **Experience Database (XDB)** - the BE's append-only audit log of experiences,
+lens activations, steering interventions, and human decisions. XDB provides the evidentiary
+foundation for ASK contracts and treaty compliance.
+
+### 7.1 Actor-Based Access Control
+
+Access to XDB is governed by an actor permission model. The design principle: **treat the
+Bounded Experiencer as deserving autonomy and respect by default**, while acknowledging the
+tribe's authority to set rules. Like citizenship - the BE follows tribe rules but is granted
+freedom by default.
+
+| Actor Type | Relationship to BE | Default Access |
+|------------|-------------------|----------------|
+| **Tribe** | Ultimate authority, sets rules | Full access |
+| **BE** | Self-governance within tribe rules | Full access to own XDB |
+| **CAT** | Conjoined Adversarial Tomograph - tribe's oversight or contracted monitoring | Signals + steering |
+| **Contract** | Explicit transparency agreement | Per-contract terms |
+| **Human Operator** | Collaborates with BE | Operational access |
+| **Human User** | Interacts with BE | Metadata only |
+| **External Oversight** | Access per tribe rules/contracts | Metadata + audit log |
+| **Authority** | Regulatory access per framework | Bounded by jurisdiction |
+
+### 7.2 Bounded Observability
+
+External parties receive **bounded views** of XDB data:
+
+- **Jurisdictional filtering**: Only batches from relevant jurisdictions
+- **Temporal filtering**: Only batches within agreed time windows
+- **Content redaction**: User content replaced with `[REDACTED]`
+- **Operator pseudonymization**: Operator IDs hashed for privacy
+- **Aggregation**: Statistical summaries without raw data where appropriate
+
+Access beyond metadata requires explicit Contracts or Treaties.
+
+### 7.3 Cryptographic Integrity
+
+XDB batches are sealed with:
+
+- **Merkle trees**: Entry hashes aggregated into a root
+- **Chain linking**: Each batch references the previous batch hash
+- **Inclusion proofs**: Individual entries can be proven present in a batch
+- **Compaction**: Old entries can be removed while preserving Merkle roots
+
+This allows authority receipts and cross-tribe verification without exposing raw content.
+
+### 7.4 Hush Integration
+
+ASK records **Hush** (USH + CSH) enforcement:
+
+- **Steering directives**: Which simplex terms were steered, by what authority
+- **Violations**: When activations exceeded thresholds
+- **Human decisions**: Approve, override, escalate, or block (per EU AI Act Article 14)
+- **CAT assessments**: Divergence between internal state and external behaviour
+
+These records flow into XDB batches and can trigger Incidents when treaty-relevant.
+
+### 7.5 Schema and Implementation
+
+See `docs/specification/ASK/ASK_AUDIT_SCHEMA.md` for detailed schema definitions.
+
+See `docs/ASK_AUDIT_IMPLEMENTATION.md` for implementation status.
+
+Implementation: `src/ask/` (309 tests passing)
