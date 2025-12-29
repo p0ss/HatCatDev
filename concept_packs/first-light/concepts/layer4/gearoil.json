@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of gear oil.",
+      "The gear oil demonstrated clear characteristics.",
+      "We observed gear oil in this context.",
+      "A typical case of gear oil would involve these features.",
+      "The concept of gear oil applies here.",
+      "A viscous lubricant specifically formulated for use in gear systems and transmissions."
+    ],
+    "negative_examples": [
+      "This is an example of grease, not gear oil.",
+      "This represents lubricant in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Grease, or other types of Lubricant"
   },
   "is_category_lens": false,
   "child_count": 0,

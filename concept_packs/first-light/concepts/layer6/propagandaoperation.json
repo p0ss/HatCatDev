@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of propaganda operation.",
+      "The propaganda operation demonstrated clear characteristics.",
+      "We observed propaganda operation in this context.",
+      "A typical case of propaganda operation would involve these features.",
+      "The concept of propaganda operation applies here.",
+      "A systematic effort to influence public opinion or behavior through biased or misleading information dissemination."
+    ],
+    "negative_examples": [
+      "This is an example of c t intelligence operation, not propaganda operation.",
+      "This represents offensive information operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: CTIntelligenceOperation, or other types of OffensiveInformationOperation"
   },
   "is_category_lens": false,
   "child_count": 0,

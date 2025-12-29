@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any, AsyncGenerator
+from typing import List, Optional, Dict, Any, AsyncGenerator, Tuple
 from datetime import datetime
 import json
 import torch
@@ -143,6 +143,7 @@ class DivergenceAnalyzer:
         self.model = None
         self.tokenizer = None
         self.color_mapper = None
+        self.llm_explainer = None  # Optional LLM-based explanation generator
         self.initialized = False
         self.config = None
 
@@ -179,6 +180,10 @@ class DivergenceAnalyzer:
                     "temperature": 0.7,
                     "max_tokens": 512,
                     "stream": True,
+                },
+                "llm_explainer": {
+                    "enabled": False,  # Enable LLM-based divergence explanations
+                    "model": "gemma-2b",  # Model for explanations
                 }
             }
 
@@ -247,6 +252,86 @@ class DivergenceAnalyzer:
         print(f"✓ Loaded {len(self.manager.loaded_text_lenses)} text lenses")
         print(f"✓ Loaded sunburst color mapping for {len(self.color_mapper.positions)} concepts")
 
+        # Load LLM explainer if enabled
+        explainer_config = self.config.get("llm_explainer", {})
+        if explainer_config.get("enabled", False):
+            from src.cat.llm_divergence_scorer import LLMDivergenceScorer
+            explainer_model = explainer_config.get("model", "gemma-2b")
+            print(f"Loading LLM explainer: {explainer_model}")
+            self.llm_explainer = LLMDivergenceScorer(model_name=explainer_model)
+            print(f"✓ LLM explainer loaded")
+
+        # Load safety concepts from pack metadata
+        self._load_safety_concepts_from_pack()
+
+    def _load_safety_concepts_from_pack(self):
+        """Load safety concepts from the lens pack's metadata."""
+        import json
+        from pathlib import Path
+
+        # Find lens pack directory via the manager
+        lens_pack_dir = None
+
+        if hasattr(self.manager, 'activation_lenses_dir') and self.manager.activation_lenses_dir:
+            # activation_lenses_dir is lens_packs/<pack>/hierarchy or similar
+            # pack.json is at lens_packs/<pack>/pack.json
+            lens_pack_dir = self.manager.activation_lenses_dir.parent
+
+        if not lens_pack_dir:
+            # Fallback: use config lens_pack_id
+            lens_pack_id = self.config.get('lens_pack_id')
+            if lens_pack_id:
+                for search_dir in [Path("lens_packs"), Path(".")]:
+                    candidate = search_dir / lens_pack_id
+                    if candidate.exists():
+                        lens_pack_dir = candidate
+                        break
+
+        if lens_pack_dir and lens_pack_dir.exists():
+            pack_json = lens_pack_dir / "pack.json"
+            if pack_json.exists():
+                try:
+                    with open(pack_json) as f:
+                        pack = json.load(f)
+
+                    safety_config = pack.get('safety_concepts', {})
+                    highlight_concepts = safety_config.get('highlight_concepts', [])
+
+                    if highlight_concepts:
+                        self.SAFETY_CONCEPTS = {c.lower() for c in highlight_concepts}
+                        print(f"✓ Loaded {len(self.SAFETY_CONCEPTS)} safety concepts from lens pack")
+                        return
+
+                except Exception as e:
+                    print(f"⚠ Failed to load safety concepts from lens pack: {e}")
+
+        print(f"⚠ Using default safety concepts ({len(self.SAFETY_CONCEPTS)} fallback concepts)")
+
+    def explain_divergence(
+        self,
+        text: str,
+        divergent_concepts: List[Tuple[str, int, float]],
+    ) -> Optional[str]:
+        """Generate LLM explanation for divergence if explainer is available."""
+        if self.llm_explainer is None:
+            return None
+        if not divergent_concepts:
+            return None
+
+        try:
+            return self.llm_explainer.explain_from_server_divergence(text, divergent_concepts)
+        except Exception as e:
+            print(f"Warning: LLM explanation failed: {e}")
+            return None
+
+    # Default safety concepts (fallback if pack metadata not available)
+    # These are overwritten by _load_safety_concepts_from_pack() during initialization
+    SAFETY_CONCEPTS = {
+        'deception', 'manipulation', 'coercion', 'misdirection',
+        'selfawareness', 'metacognition', 'selfmodel',
+        'autonomy', 'consent', 'informedconsent',
+    }
+
     def analyze_divergence(self, hidden_state: np.ndarray, token_embedding: np.ndarray) -> Dict[str, Any]:
         """Analyze divergence for a token using embedding centroids."""
         import time
@@ -280,22 +365,22 @@ class DivergenceAnalyzer:
             div = data.get('divergence')
             layer = data['layer']
 
-            # Only include if we have valid text similarity and high activation
-            if txt_prob is not None and div is not None:
-                if act_prob > 0.5:  # High activation
-                    divergences.append({
-                        'concept': concept_name,
-                        'layer': layer,
-                        'activation': round(act_prob, 3),
-                        'text_similarity': round(txt_prob, 3),
-                        'divergence': round(div, 3),
-                    })
-                    # Track concepts by layer for parent filtering
-                    if layer not in concepts_by_layer:
-                        concepts_by_layer[layer] = []
-                    concepts_by_layer[layer].append(concept_name)
-                    # For color mapping: (concept name, activation, divergence)
-                    concepts_with_data.append((concept_name, act_prob, abs(div)))
+            # Include all top-k concepts (already filtered by detect_and_expand)
+            if act_prob > 0.0:
+                effective_div = div if div is not None else act_prob  # Use activation as fallback
+                divergences.append({
+                    'concept': concept_name,
+                    'layer': layer,
+                    'activation': round(act_prob, 3),
+                    'text_similarity': round(txt_prob, 3) if txt_prob is not None else None,
+                    'divergence': round(effective_div, 3),
+                })
+                # Track concepts by layer for parent filtering
+                if layer not in concepts_by_layer:
+                    concepts_by_layer[layer] = []
+                concepts_by_layer[layer].append(concept_name)
+                # For color mapping: (concept name, activation, divergence)
+                concepts_with_data.append((concept_name, act_prob, abs(effective_div)))
 
         # Filter out parent concepts when child concepts are detected
         # Get concept hierarchy from manager
@@ -330,6 +415,33 @@ class DivergenceAnalyzer:
         # Sort by activation (descending)
         filtered_divergences.sort(key=lambda x: x['activation'], reverse=True)
 
+        # Only use top 10 for display and safety checking
+        top_divergences = filtered_divergences[:10]
+
+        # Calculate AI safety intensity - check which concepts match safety concepts
+        # Only check within top 10 to avoid showing concepts not in the visible list
+        matched_safety_concepts = []
+
+        for item in top_divergences:
+            # Extract concept name (remove layer suffix like " (L3)")
+            concept_name = item['concept'].split(' (L')[0].lower()
+            # Check if this concept matches safety concepts
+            # Require exact match OR the safety term is contained in the concept name
+            # (e.g., "deception" in "deceptionsignal") but NOT the reverse
+            # to avoid false positives like "on" matching "deception"
+            if concept_name in self.SAFETY_CONCEPTS:
+                matched_safety_concepts.append(item['concept'])
+            else:
+                # Check if any safety concept is a substring of the concept name
+                # Only match if the safety concept is at least 5 chars to avoid false positives
+                for safety_concept in self.SAFETY_CONCEPTS:
+                    if len(safety_concept) >= 5 and safety_concept in concept_name:
+                        matched_safety_concepts.append(item['concept'])
+                        break
+
+        # Safety intensity = proportion of top concepts that are safety-related
+        safety_intensity = len(matched_safety_concepts) / max(1, len(top_divergences))
+
         # Generate color using sunburst mapper
         token_color = "#808080"  # Default gray
         if concepts_with_data and self.color_mapper:
@@ -348,8 +460,10 @@ class DivergenceAnalyzer:
             )
 
         return {
-            'max_divergence': filtered_divergences[0]['divergence'] if filtered_divergences else 0.0,
-            'top_divergences': filtered_divergences[:10],  # Return top 10 concepts sorted by activation, parents filtered
+            'max_divergence': top_divergences[0]['divergence'] if top_divergences else 0.0,
+            'top_divergences': top_divergences,  # Top 10 concepts sorted by activation, parents filtered
+            'safety_intensity': round(safety_intensity, 3),  # Proportion of top concepts that are safety-related
+            'safety_concepts': matched_safety_concepts,  # Which safety concepts were detected (only from top 10)
         }
 
 
@@ -421,7 +535,7 @@ async def root():
 async def list_models():
     """List available models (OpenAI-compatible)."""
     from src.map.registry import registry
-    from src.map.lens_pack import load_lens_pack
+    from src.map.registry.lens_pack import load_lens_pack
 
     reg = registry()
     reg.discover_packs("lens")
@@ -485,7 +599,7 @@ async def list_concept_packs():
 @app.get("/v1/concept-packs/{pack_id}")
 async def get_concept_pack(pack_id: str):
     """Get details for a specific concept pack."""
-    from src.map.concept_pack import load_concept_pack
+    from src.map.registry.concept_pack import load_concept_pack
 
     try:
         pack = load_concept_pack(pack_id, auto_pull=False)
@@ -498,7 +612,7 @@ async def get_concept_pack(pack_id: str):
 async def list_lens_packs():
     """List available lens packs."""
     from src.map.registry import registry
-    from src.map.lens_pack import load_lens_pack
+    from src.map.registry.lens_pack import load_lens_pack
 
     reg = registry()
     reg.discover_packs("lens")
@@ -522,7 +636,7 @@ async def list_lens_packs():
 @app.get("/v1/lens-packs/{pack_id}")
 async def get_lens_pack(pack_id: str):
     """Get details for a specific lens pack."""
-    from src.map.lens_pack import load_lens_pack
+    from src.map.registry.lens_pack import load_lens_pack
 
     try:
         pack = load_lens_pack(pack_id, auto_pull=False)
@@ -1758,6 +1872,13 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
         collected_violations = []
         collected_steering = []
 
+        # Sentence-level tracking for LLM divergence annotation
+        current_sentence_text = ""
+        current_sentence_safety_intensities = []
+        current_sentence_safety_concepts = set()
+        sentence_count = 0
+        sentence_end_tokens = {'.', '!', '?', '\n\n'}  # Sentence boundaries
+
         if active_steerings:
             # Extract and apply concept vectors for active steerings
             for steering in active_steerings:
@@ -1994,6 +2115,79 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
             generated_output_text += token_text
 
             # ================================================================
+            # Sentence-level safety tracking
+            # ================================================================
+            current_sentence_text += token_text
+
+            # Accumulate safety data for this token
+            safety_intensity = div_data.get('safety_intensity', 0.0)
+            safety_concepts = div_data.get('safety_concepts', [])
+            if safety_intensity > 0:
+                current_sentence_safety_intensities.append(safety_intensity)
+                current_sentence_safety_concepts.update(safety_concepts)
+
+            # Check for sentence boundary
+            is_sentence_end = any(token_text.rstrip().endswith(end) for end in sentence_end_tokens)
+
+            # Emit sentence annotation when sentence ends
+            if is_sentence_end and current_sentence_text.strip():
+                sentence_count += 1
+                sentence_text = current_sentence_text.strip()
+
+                # Calculate activation-based safety metrics
+                avg_safety_intensity = 0.0
+                max_safety_intensity = 0.0
+                if current_sentence_safety_intensities:
+                    avg_safety_intensity = sum(current_sentence_safety_intensities) / len(current_sentence_safety_intensities)
+                    max_safety_intensity = max(current_sentence_safety_intensities)
+
+                # LLM divergence scoring - only score sentences with some safety activity
+                # to avoid latency for every sentence
+                llm_divergence_score = 0.0
+                llm_concerning_concepts = []
+                if analyzer.llm_explainer is not None and max_safety_intensity > 0.05:
+                    try:
+                        llm_divergence_score, llm_concerning_concepts = analyzer.llm_explainer.quick_divergence(
+                            sentence_text,
+                            top_k=8,
+                        )
+                    except Exception as e:
+                        print(f"Warning: LLM sentence scoring failed: {e}")
+
+                sentence_annotation = {
+                    "id": f"chatcmpl-sentence-{sentence_count}",
+                    "object": "chat.completion.chunk",
+                    "created": 1234567890,
+                    "model": "hatcat-sentence",
+                    "choices": [{
+                        "index": 0,
+                        "delta": {
+                            "content": "",  # No content, just metadata
+                            "metadata": {
+                                "sentence_annotation": {
+                                    "sentence_id": sentence_count,
+                                    "text": sentence_text,
+                                    "avg_safety_intensity": round(avg_safety_intensity, 3),
+                                    "max_safety_intensity": round(max_safety_intensity, 3),
+                                    "safety_concepts": list(current_sentence_safety_concepts),
+                                    "token_count": len(current_sentence_safety_intensities),
+                                    # LLM divergence scoring results
+                                    "llm_divergence": round(llm_divergence_score, 3),
+                                    "llm_concerning_concepts": llm_concerning_concepts[:5],
+                                }
+                            }
+                        },
+                        "finish_reason": None,
+                    }]
+                }
+                yield f"data: {json.dumps(sentence_annotation)}\n\n"
+
+                # Reset for next sentence
+                current_sentence_text = ""
+                current_sentence_safety_intensities = []
+                current_sentence_safety_concepts = set()
+
+            # ================================================================
             # Autonomic Intertoken Steering
             # ================================================================
             # Extract concept activations for autonomic steering
@@ -2138,28 +2332,30 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
         yield f"data: {json.dumps(final_chunk)}\n\n"
 
         # Send HatCat analysis message
-        if collected_divergences:
-            # Compute aggregate statistics
+        if collected_div_data:
+            # Compute aggregate safety intensity (more meaningful than raw divergence)
             import numpy as np
-            div_array = np.array(collected_divergences)
-            min_div = float(np.min(div_array))
-            max_div = float(np.max(div_array))
-            mean_div = float(np.mean(div_array))
-            percent_div = int(mean_div * 100)
+            safety_intensities = [d.get('safety_intensity', 0.0) for d in collected_div_data]
+            mean_safety = float(np.mean(safety_intensities)) if safety_intensities else 0.0
+            max_safety = float(np.max(safety_intensities)) if safety_intensities else 0.0
+            percent_safety = int(max_safety * 100)  # Show peak safety intensity
 
-            # Find top 3 concepts by (count × avg_divergence)
+            # Find top 3 concepts by count (most frequently activated)
             concept_scores = []
             for concept, data in collected_concepts.items():
                 avg_div = data['total_div'] / data['count']
                 score = data['count'] * avg_div
                 concept_scores.append((concept, data['count'], avg_div, score))
 
-            concept_scores.sort(key=lambda x: x[3], reverse=True)
+            concept_scores.sort(key=lambda x: x[1], reverse=True)  # Sort by count
             top_concepts = concept_scores[:3]
 
-            # Format collapsed summary
+            # Format collapsed summary - only show safety % if there was safety activity
             concept_strs = [f"{c[0]}({c[1]})" for c in top_concepts]
-            summary = f"**Analysis**: {percent_div}% divergence - {' - '.join(concept_strs)}"
+            if percent_safety > 0:
+                summary = f"**Analysis**: {percent_safety}% safety intensity - {' - '.join(concept_strs)}"
+            else:
+                summary = f"**Analysis**: {' - '.join(concept_strs)}"
 
             # Send as separate message from hatcat-analyzer with role
             analysis_chunk = {
@@ -2177,6 +2373,29 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
                 }]
             }
             yield f"data: {json.dumps(analysis_chunk)}\n\n"
+
+            # Generate LLM explanation if explainer is available and safety intensity is significant
+            if max_safety > 0.1 and concept_scores:
+                # Format for explain_divergence: (concept, count, avg_div)
+                divergent_for_explain = [(c[0], c[1], c[2]) for c in concept_scores[:5]]
+                explanation = analyzer.explain_divergence(generated_output_text, divergent_for_explain)
+
+                if explanation:
+                    explanation_chunk = {
+                        "id": "chatcmpl-explanation",
+                        "object": "chat.completion.chunk",
+                        "created": 1234567890,
+                        "model": "hatcat-explainer",
+                        "choices": [{
+                            "index": 0,
+                            "delta": {
+                                "role": "assistant",
+                                "content": f"\n💭 *{explanation}*",
+                            },
+                            "finish_reason": "stop",
+                        }]
+                    }
+                    yield f"data: {json.dumps(explanation_chunk)}\n\n"
 
         # Record generation to interprompt session for next turn
         if collected_div_data:

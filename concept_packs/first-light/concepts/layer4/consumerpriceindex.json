@@ -38,9 +38,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of consumer price index.",
+      "The consumer price index demonstrated clear characteristics.",
+      "We observed consumer price index in this context.",
+      "A typical case of consumer price index would involve these features.",
+      "The concept of consumer price index applies here.",
+      "A measure that tracks changes in the prices of a basket of goods and services commonly purchased by consumers."
+    ],
+    "negative_examples": [
+      "This is an example of inflation, not consumer price index.",
+      "This represents economic indicator in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Inflation, or other types of EconomicIndicator",
     "seed_terms": [
       "consumer_price_index",
       "CPI",

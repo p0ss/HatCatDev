@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "The doctor ordered a blood test to check for diabetes.",
+      "She failed the eye exam and needed new glasses.",
+      "The COVID-19 rapid test came back negative.",
+      "The PCR test confirmed the presence of the virus.",
+      "He had to take a vision test to renew his driver's license.",
+      "The antibody test showed she had been exposed to the disease."
+    ],
+    "negative_examples": [
+      "The thermometer showed his temperature was normal.",
+      "She used a scale to weigh herself every morning.",
+      "The pH meter indicated the water was too acidic.",
+      "He checked his blood pressure with the cuff monitor.",
+      "The teacher graded the math quiz yesterday.",
+      "The driving test required parallel parking skills."
+    ],
+    "disambiguation": "Not to be confused with: Thermometers, Scales, Gauges, Meters, Rulers"
   },
   "children": [
     "AntibodyCOVIDTest",

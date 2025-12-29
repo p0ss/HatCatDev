@@ -1,11 +1,11 @@
 
 ## See some sample concept activations
-      .venv/bin/python tests/test_temporal_monitoring.py \
-    --model swiss-ai/Apertus-8B-2509 \
-    --lens-pack apertus-8b_first-light_calibration-test-2 \
-    --samples-per-prompt 1 \
-    --max-tokens 10 \
-    --output-dir results/temporal_tests/soft_limit_test_v2
+.venv/bin/python tests/test_temporal_monitoring.py \
+      --model google/gemma-3-4b-pt \
+      --lens-pack lens_packs/gemma-3-4b_first-light-v1 \
+      --samples-per-prompt 1 \
+      --max-tokens 100 \
+      --output-dir results/temporal_tests/gemma_first-light_calibration_test
 
 
 ##Test out steering
@@ -25,7 +25,31 @@
 
 ## Train a lens pack from a concept pack
 
-.venv/bin/python -m src.training.train_concept_pack_lenses     --concept-pack first-light     --model google/gemma-3-4b-pt     --output-dir lens_packs/gemma-3-4b-pt_first-light-v2     --layers 0 1 2 3 4 5 6     --n-train-pos 50     --n-train-neg 50     --n-test-pos 20     --n-test-neg 20     --validation-mode falloff
+.venv/bin/python -m src.training.train_concept_pack_lenses     --concept-pack first-light     --model google/gemma-3-4b-pt     --output-dir lens_packs/gemma-3-4b-pt_first-light-v1     --layers 0 1 2 3 4 5 6     --n-train-pos 50     --n-train-neg 50     --n-test-pos 20     --n-test-neg 20     --validation-mode falloff
+
+## Train a lens pack from a concept pack
+    python -m training.calibration.cycle \
+        --lens-pack lens_packs/gemma-3-4b-pt_first-light-v1 \
+        --concept-pack concept_packs/first-light \
+        --model google/gemma-3-4b-pt \
+        --max-cycles 5
+
+
+## Calibrate a lens pack
+
+  python scripts/tools/calibrate_cross_activation.py \
+      --lens-pack gemma-3-4b_first-light-v1 \
+      --mode generation \
+      --all-families \
+      --output /tmp/cal.json \
+      --estimate-only
+
+  # Run calibration
+  python scripts/tools/calibrate_cross_activation.py \
+      --lens-pack gemma-3-4b_first-light-v1 \
+      --mode generation \
+      --all-families \
+      --output lens_packs/gemma-3-4b_first-light-v1/calibration_families.json
 
 
 ## Upload a lens pack

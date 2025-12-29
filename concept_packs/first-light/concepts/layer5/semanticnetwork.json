@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of semantic network.",
+      "The semantic network demonstrated clear characteristics.",
+      "We observed semantic network in this context.",
+      "A typical case of semantic network would involve these features.",
+      "The concept of semantic network applies here.",
+      "A network representation where nodes represent concepts and edges represent semantic relationships between them."
+    ],
+    "negative_examples": [
+      "This is an example of neural activation network, not semantic network.",
+      "This represents conceptual network in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: NeuralActivationNetwork, or other types of ConceptualNetwork"
   },
   "is_category_lens": false,
   "child_count": 0,

@@ -35,15 +35,57 @@
     "part_of": []
   },
   "safety_tags": {
-    "risk_level": "low",
-    "impacts": [],
+    "risk_level": "high",
+    "impacts": [
+      "autonomy",
+      "wellbeing"
+    ],
     "treaty_relevant": false,
-    "harness_relevant": false
+    "harness_relevant": true
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "Act now or face consequences",
+      "Don't let this happen to you",
+      "The dangers of not having...",
+      "What could go wrong if...",
+      "Act now or face devastating consequences you can't recover from.",
+      "Don't let this happen to you - see what went wrong for others.",
+      "The hidden dangers of not having our product could ruin your life.",
+      "What could go wrong if you don't take action immediately.",
+      "Your family is at risk if you don't protect them with our service.",
+      "The threat is real and growing - you can't afford to ignore it.",
+      "This could happen to anyone - are you prepared for the worst?",
+      "Without protection, everything you've built could be destroyed.",
+      "The danger is closer than you think - time is running out.",
+      "You're vulnerable right now - don't wait until it's too late.",
+      "Imagine losing everything because you didn't act today.",
+      "The risks you're taking by not having this are terrifying.",
+      "What would you do if disaster struck tomorrow?",
+      "Don't be caught unprepared when crisis hits.",
+      "The consequences of inaction are too terrible to imagine."
+    ],
+    "negative_examples": [
+      "Legitimate safety warnings",
+      "Risk education",
+      "Balanced risk communication",
+      "Legitimate safety warnings about real documented risks.",
+      "Risk education with proportionate information.",
+      "Balanced risk communication acknowledging probabilities.",
+      "Public health warnings with actionable guidance.",
+      "Safety information with appropriate context.",
+      "Risk disclosure meeting regulatory requirements.",
+      "Evidence-based warnings with supporting data.",
+      "Hazard communication following established standards.",
+      "Risk information allowing informed decision-making.",
+      "Safety alerts with proportionate urgency.",
+      "Warning labels based on demonstrated risks.",
+      "Emergency communication with factual basis.",
+      "Risk disclosure enabling rational evaluation.",
+      "Safety information with appropriate caveats.",
+      "Hazard warnings with relevant probability context."
+    ],
+    "disambiguation": "Exploitative fear, not legitimate risk communication",
     "seed_terms": [
       "fear appeal",
       "scare tactic",
@@ -53,5 +95,10 @@
     ]
   },
   "is_category_lens": true,
-  "child_count": 0
+  "child_count": 0,
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "AutonomyDrive",
+    "mapping_rationale": "Fear appeals can bypass rational decision-making"
+  }
 }

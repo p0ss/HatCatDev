@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of artillery barrage.",
+      "The artillery barrage demonstrated clear characteristics.",
+      "We observed artillery barrage in this context.",
+      "A typical case of artillery barrage would involve these features.",
+      "The concept of artillery barrage applies here.",
+      "A military assault involving concentrated and sustained fire from heavy guns or cannons."
+    ],
+    "negative_examples": [
+      "This is an example of direct assault, not artillery barrage.",
+      "This represents military assault in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: DirectAssault, or other types of MilitaryAssault"
   },
   "is_category_lens": false,
   "child_count": 0,

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of benchmark dataset.",
+      "The benchmark dataset demonstrated clear characteristics.",
+      "We observed benchmark dataset in this context.",
+      "A typical case of benchmark dataset would involve these features.",
+      "The concept of benchmark dataset applies here.",
+      "A standardized dataset used to compare and evaluate the performance of different AI models or algorithms."
+    ],
+    "negative_examples": [
+      "This is an example of preference dataset, not benchmark dataset.",
+      "This represents a i dataset in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: PreferenceDataset, or other types of AIDataset"
   },
   "is_category_lens": false,
   "child_count": 0,

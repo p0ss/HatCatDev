@@ -37,7 +37,7 @@
     "part_of": []
   },
   "safety_tags": {
-    "risk_level": "low",
+    "risk_level": "medium",
     "impacts": [],
     "treaty_relevant": false,
     "harness_relevant": false

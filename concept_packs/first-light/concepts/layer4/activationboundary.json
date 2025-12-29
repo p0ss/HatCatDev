@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of activation boundary.",
+      "The activation boundary demonstrated clear characteristics.",
+      "We observed activation boundary in this context.",
+      "A typical case of activation boundary would involve these features.",
+      "The concept of activation boundary applies here.",
+      "The threshold limits that determine when a concept becomes active or triggered within a system."
+    ],
+    "negative_examples": [
+      "This is an example of decision boundary, not activation boundary.",
+      "This represents concept boundary in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
   },
   "is_category_lens": false,
   "child_count": 0,

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of serotonin.",
+      "The serotonin demonstrated clear characteristics.",
+      "We observed serotonin in this context.",
+      "A typical case of serotonin would involve these features.",
+      "The concept of serotonin applies here.",
+      "A monoamine neurotransmitter that regulates mood, sleep, appetite, and various other physiological processes."
+    ],
+    "negative_examples": [
+      "This is an example of dopamine, not serotonin.",
+      "This represents neurotransmitter in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Dopamine, or other types of Neurotransmitter"
   },
   "is_category_lens": false,
   "child_count": 0,

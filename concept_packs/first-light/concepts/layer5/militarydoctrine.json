@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of military doctrine.",
+      "The military doctrine demonstrated clear characteristics.",
+      "We observed military doctrine in this context.",
+      "A typical case of military doctrine would involve these features.",
+      "The concept of military doctrine applies here.",
+      "Fundamental principles and strategic guidelines that govern military operations and decision-making."
+    ],
+    "negative_examples": [
+      "This is an example of multinational doctrine, not military doctrine.",
+      "This represents doctrine in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: MultinationalDoctrine, or other types of Doctrine"
   },
   "is_category_lens": false,
   "child_count": 0,

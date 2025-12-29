@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "She programmed the coffee maker to start brewing at 6 AM every morning",
+      "The toaster popped up two perfectly golden slices for breakfast",
+      "He cleaned the coffee maker's filter after making his third pot today",
+      "The kitchen counter held a sleek espresso machine and matching toaster",
+      "She bought a new drip coffee maker to replace her broken French press",
+      "The toaster's settings allow for light, medium, or dark browning levels"
+    ],
+    "negative_examples": [
+      "She blended a smoothie in her high-powered blender this morning",
+      "The microwave heated up leftover pizza in just two minutes",
+      "He used the food processor to chop vegetables for dinner",
+      "The dishwasher finished its cycle and the dishes were sparkling clean",
+      "She preheated the oven to 350 degrees for baking cookies",
+      "The refrigerator's ice maker produced fresh cubes for their drinks"
+    ],
+    "disambiguation": "Not to be confused with: CookingAppliances, FoodProcessors, RefrigerationAppliances, CleaningAppliances"
   },
   "children": [
     "ElectricCoffeeMaker",

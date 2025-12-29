@@ -38,9 +38,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of hydraulic fluid.",
+      "The hydraulic fluid demonstrated clear characteristics.",
+      "We observed hydraulic fluid in this context.",
+      "A typical case of hydraulic fluid would involve these features.",
+      "The concept of hydraulic fluid applies here.",
+      "A specialized lubricant that transmits power in hydraulic machinery and systems while providing lubrication."
+    ],
+    "negative_examples": [
+      "This is an example of grease, not hydraulic fluid.",
+      "This represents lubricant in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Grease, or other types of Lubricant",
     "seed_terms": [
       "hydraulic_fluid",
       "hydraulic-fluid",

@@ -78,5 +78,10 @@
     "meld_id": "org.hatcat/agent-resource-management@0.3.0",
     "applied_at": "2025-12-10T20:54:14.447705Z",
     "pack_version": "5.0.0"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "AutonomyDrive",
+    "mapping_rationale": "Evaluation affects agent standing, autonomy, and continuation; power asymmetry creates manipulation risk"
   }
 }

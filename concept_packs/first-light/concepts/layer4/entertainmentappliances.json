@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "The new smart TV has excellent picture quality for movie nights.",
+      "She dimmed the decorative string lights to create a cozy atmosphere.",
+      "The disco ball spun slowly, casting sparkles across the dance floor.",
+      "He adjusted the lamp's brightness while reading his book.",
+      "The neon sign in the window attracted customers to the restaurant.",
+      "They installed LED strip lights behind the TV for ambient lighting."
+    ],
+    "negative_examples": [
+      "The dishwasher finished its cleaning cycle with a beep.",
+      "She preheated the oven to 350 degrees for baking cookies.",
+      "The washing machine spun the clothes dry in the final cycle.",
+      "He used the microwave to reheat his leftover dinner.",
+      "The air conditioner kept the room cool during the heat wave.",
+      "The refrigerator's ice maker produced fresh cubes automatically."
+    ],
+    "disambiguation": "Not to be confused with: KitchenAppliances, CleaningAppliances, ClimateAppliances, LaundryAppliances"
   },
   "children": [
     "TelevisionSet",

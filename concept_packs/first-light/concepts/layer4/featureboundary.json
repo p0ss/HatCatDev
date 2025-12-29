@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of feature boundary.",
+      "The feature boundary demonstrated clear characteristics.",
+      "We observed feature boundary in this context.",
+      "A typical case of feature boundary would involve these features.",
+      "The concept of feature boundary applies here.",
+      "The limits or edges that define the distinguishable characteristics or attributes of a concept within a feature space."
+    ],
+    "negative_examples": [
+      "This is an example of decision boundary, not feature boundary.",
+      "This represents concept boundary in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
   },
   "is_category_lens": false,
   "child_count": 0,

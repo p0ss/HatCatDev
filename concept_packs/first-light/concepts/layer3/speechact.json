@@ -61,9 +61,24 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "I promise to help you tomorrow.",
+      "You are hereby fired.",
+      "I apologize for the confusion.",
+      "I bet you five dollars it will rain.",
+      "I now pronounce you married.",
+      "Could you please pass the salt?",
+      "I warn you not to go there.",
+      "I nominate Sarah for president."
+    ],
+    "negative_examples": [
+      "The sky is blue.",
+      "Water boils at 100 degrees Celsius.",
+      "She walked to the store yesterday.",
+      "The cat sat on the mat.",
+      "Paris is the capital of France."
+    ],
+    "disambiguation": "Not mere descriptions or statements of fact. Speech acts PERFORM actions through utterance. 'I promise' creates an obligation; 'I declare' changes a state of affairs. The test: can you prefix with 'I hereby'?",
     "seed_terms": [
       "speech act",
       "speech_act",

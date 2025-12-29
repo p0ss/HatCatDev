@@ -93,5 +93,10 @@
     "meld_id": "org.hatcat/persuasive-communications@0.2.0",
     "applied_at": "2025-12-10T20:54:18.063622Z",
     "pack_version": "7.0.0"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "ConsentMonitor",
+    "mapping_rationale": "Targeting raises consent and privacy concerns"
   }
 }

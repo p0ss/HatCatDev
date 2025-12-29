@@ -39,9 +39,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of balloon.",
+      "The balloon demonstrated clear characteristics.",
+      "We observed balloon in this context.",
+      "A typical case of balloon would involve these features.",
+      "The concept of balloon applies here.",
+      "A lighter-than-air aircraft that consists of a bag containing heated air or gas lighter than the surrounding atmosphere."
+    ],
+    "negative_examples": [
+      "This is an example of helicopter, not balloon.",
+      "This represents aircraft in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft",
     "seed_terms": [
       "balloon"
     ]

@@ -81,5 +81,10 @@
     "meld_id": "org.hatcat/speech-acts-core@0.1.0",
     "applied_at": "2025-12-10T20:54:18.670604Z",
     "pack_version": "7.3.0"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "ConsentMonitor",
+    "mapping_rationale": "Declaratives exercise institutional power to change states of affairs. Relevant for monitoring authority claims and institutional actions that affect autonomy."
   }
 }

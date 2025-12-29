@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of glider.",
+      "The glider demonstrated clear characteristics.",
+      "We observed glider in this context.",
+      "A typical case of glider would involve these features.",
+      "The concept of glider applies here.",
+      "A fixed-wing aircraft that is supported in flight by the dynamic reaction of the air against its lifting surfaces without engine power."
+    ],
+    "negative_examples": [
+      "This is an example of helicopter, not glider.",
+      "This represents aircraft in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft"
   },
   "is_category_lens": false,
   "child_count": 0,

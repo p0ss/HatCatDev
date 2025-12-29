@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of w m d component manufacturing facility.",
+      "The w m d component manufacturing facility demonstrated clear characteristics.",
+      "We observed w m d component manufacturing facility in this context.",
+      "A typical case of w m d component manufacturing facility would involve these features.",
+      "The concept of w m d component manufacturing facility applies here.",
+      "A facility that produces specialized components and materials essential for WMD assembly and deployment."
+    ],
+    "negative_examples": [
+      "This is an example of nuclear weapon production facility, not w m d component manufacturing facility.",
+      "This represents w m d weapons production facility in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: NuclearWeaponProductionFacility, or other types of WMDWeaponsProductionFacility"
   },
   "is_category_lens": false,
   "child_count": 0,

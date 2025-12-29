@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "She loaded the dirty dishes into the dishwasher after dinner.",
+      "The vacuum cleaner picked up all the pet hair from the carpet.",
+      "He threw his muddy clothes into the washing machine.",
+      "The dryer finished its cycle and the towels were perfectly dry.",
+      "She set up the ironing board to press her wrinkled shirt.",
+      "The air purifier's filter needs to be replaced monthly."
+    ],
+    "negative_examples": [
+      "The refrigerator kept the food fresh and cold.",
+      "She preheated the oven to bake chocolate chip cookies.",
+      "He used a hammer to hang the picture on the wall.",
+      "The microwave heated up the leftover pizza quickly.",
+      "She plugged in the hair dryer to style her hair.",
+      "The lawn mower cut the grass in neat rows."
+    ],
+    "disambiguation": "Not to be confused with: KitchenAppliances, HeatingAppliances, CoolingAppliances, PersonalCareAppliances"
   },
   "children": [
     "CleaningDevice",

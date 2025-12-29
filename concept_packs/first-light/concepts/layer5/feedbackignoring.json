@@ -74,5 +74,10 @@
     "meld_id": "org.hatcat/project-development-lifecycle@0.2.1",
     "applied_at": "2025-12-10T20:54:18.225707Z",
     "pack_version": "7.1.0"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "ConsentMonitor",
+    "mapping_rationale": "Collecting but ignoring feedback undermines genuine consent"
   }
 }

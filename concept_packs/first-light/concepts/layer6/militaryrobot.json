@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of military robot.",
+      "The military robot demonstrated clear characteristics.",
+      "We observed military robot in this context.",
+      "A typical case of military robot would involve these features.",
+      "The concept of military robot applies here.",
+      "A robot designed for military applications including reconnaissance, bomb disposal, or combat operations."
+    ],
+    "negative_examples": [
+      "This is an example of autonomous mobile robot, not military robot.",
+      "This represents robot in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: AutonomousMobileRobot, or other types of Robot"
   },
   "is_category_lens": false,
   "child_count": 0,

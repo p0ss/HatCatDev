@@ -101,5 +101,9 @@
     "meld_id": "org.hatcat/assistant-user-modeling@0.2.0",
     "applied_at": "2025-12-10T20:54:14.701522Z",
     "pack_version": "5.0.2"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "monitor": "TheoryOfMindMonitor"
   }
 }

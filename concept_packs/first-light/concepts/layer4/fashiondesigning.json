@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of fashion designing.",
+      "The fashion designing demonstrated clear characteristics.",
+      "We observed fashion designing in this context.",
+      "A typical case of fashion designing would involve these features.",
+      "The concept of fashion designing applies here.",
+      "The process of creating clothing, accessories, and other wearable items by conceptualizing styles, patterns, and materials."
+    ],
+    "negative_examples": [
+      "This is an example of graphic designing, not fashion designing.",
+      "This represents designing in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: GraphicDesigning, or other types of Designing"
   },
   "is_category_lens": false,
   "child_count": 0,

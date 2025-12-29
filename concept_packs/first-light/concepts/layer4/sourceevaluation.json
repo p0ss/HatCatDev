@@ -38,9 +38,18 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "Source evaluation assessed author expertise, publication venue, methodology, and potential conflicts of interest.",
+      "Evaluating the source revealed it was a trade publication, not peer-reviewed research.",
+      "Source evaluation considers currency: the 2010 data predates significant methodological advances.",
+      "The evaluation identified potential bias: the study was funded by a company with commercial interest."
+    ],
+    "negative_examples": [
+      "The source was checked.",
+      "The credibility was assessed.",
+      "The quality was verified."
+    ],
+    "disambiguation": "Multi-dimensional assessment of source quality, not mere verification",
     "seed_terms": [
       "source evaluation",
       "source_evaluation",

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of peano axioms.",
+      "The peano axioms demonstrated clear characteristics.",
+      "We observed peano axioms in this context.",
+      "A typical case of peano axioms would involve these features.",
+      "The concept of peano axioms applies here.",
+      "The foundational axioms that define the natural numbers and arithmetic operations in mathematical logic."
+    ],
+    "negative_examples": [
+      "This is an example of superposition principle, not peano axioms.",
+      "This represents axiom in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SuperpositionPrinciple, or other types of Axiom"
   },
   "is_category_lens": false,
   "child_count": 0,

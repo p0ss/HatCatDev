@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of industrial robot.",
+      "The industrial robot demonstrated clear characteristics.",
+      "We observed industrial robot in this context.",
+      "A typical case of industrial robot would involve these features.",
+      "The concept of industrial robot applies here.",
+      "A robot designed for manufacturing and industrial automation tasks such as welding, painting, or assembly."
+    ],
+    "negative_examples": [
+      "This is an example of autonomous mobile robot, not industrial robot.",
+      "This represents robot in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: AutonomousMobileRobot, or other types of Robot"
   },
   "is_category_lens": false,
   "child_count": 0,

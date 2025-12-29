@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of access control.",
+      "The access control demonstrated clear characteristics.",
+      "We observed access control in this context.",
+      "A typical case of access control would involve these features.",
+      "The concept of access control applies here.",
+      "A security operation managing and regulating entry to or exit from restricted areas, facilities, or resources."
+    ],
+    "negative_examples": [
+      "This is an example of security patrol, not access control.",
+      "This represents security operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
   },
   "is_category_lens": false,
   "child_count": 0,

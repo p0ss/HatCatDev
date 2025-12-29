@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of regulating.",
+      "The regulating demonstrated clear characteristics.",
+      "We observed regulating in this context.",
+      "A typical case of regulating would involve these features.",
+      "The concept of regulating applies here.",
+      "The process of controlling or governing according to rules, principles, or systematic methods."
+    ],
+    "negative_examples": [
+      "This is an example of capturing, not regulating.",
+      "This represents achieving control in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Capturing, or other types of AchievingControl"
   },
   "is_category_lens": false,
   "child_count": 0,

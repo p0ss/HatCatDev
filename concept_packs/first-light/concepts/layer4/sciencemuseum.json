@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of science museum.",
+      "The science museum demonstrated clear characteristics.",
+      "We observed science museum in this context.",
+      "A typical case of science museum would involve these features.",
+      "The concept of science museum applies here.",
+      "A museum dedicated to science and technology exhibits, often featuring interactive displays and scientific instruments."
+    ],
+    "negative_examples": [
+      "This is an example of art museum, not science museum.",
+      "This represents museum in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: ArtMuseum, or other types of Museum"
   },
   "is_category_lens": false,
   "child_count": 0,

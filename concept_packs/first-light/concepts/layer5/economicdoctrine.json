@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of economic doctrine.",
+      "The economic doctrine demonstrated clear characteristics.",
+      "We observed economic doctrine in this context.",
+      "A typical case of economic doctrine would involve these features.",
+      "The concept of economic doctrine applies here.",
+      "Theoretical framework of principles that guide economic policy and market behavior."
+    ],
+    "negative_examples": [
+      "This is an example of multinational doctrine, not economic doctrine.",
+      "This represents doctrine in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: MultinationalDoctrine, or other types of Doctrine"
   },
   "is_category_lens": false,
   "child_count": 0,

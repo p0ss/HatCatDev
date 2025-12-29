@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of opening window.",
+      "The opening window demonstrated clear characteristics.",
+      "We observed opening window in this context.",
+      "A typical case of opening window would involve these features.",
+      "The concept of opening window applies here.",
+      "The mechanical motion of moving a window from a closed to an open position."
+    ],
+    "negative_examples": [
+      "This is an example of opening eyes, not opening window.",
+      "This represents opening in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: OpeningEyes, or other types of Opening"
   },
   "is_category_lens": false,
   "child_count": 0,

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of test dataset.",
+      "The test dataset demonstrated clear characteristics.",
+      "We observed test dataset in this context.",
+      "A typical case of test dataset would involve these features.",
+      "The concept of test dataset applies here.",
+      "A dataset used to assess the final performance of a trained model on unseen data."
+    ],
+    "negative_examples": [
+      "This is an example of preference dataset, not test dataset.",
+      "This represents a i dataset in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: PreferenceDataset, or other types of AIDataset"
   },
   "is_category_lens": false,
   "child_count": 0,

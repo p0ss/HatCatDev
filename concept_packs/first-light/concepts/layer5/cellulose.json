@@ -34,9 +34,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of cellulose.",
+      "The cellulose demonstrated clear characteristics.",
+      "We observed cellulose in this context.",
+      "A typical case of cellulose would involve these features.",
+      "The concept of cellulose applies here.",
+      "A structural polysaccharide that forms the primary component of plant cell walls and is indigestible by humans."
+    ],
+    "negative_examples": [
+      "This is an example of starch, not cellulose.",
+      "This represents carbohydrate in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Starch, or other types of Carbohydrate",
     "seed_terms": [
       "cellulose"
     ]

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of electronic warfare operation.",
+      "The electronic warfare operation demonstrated clear characteristics.",
+      "We observed electronic warfare operation in this context.",
+      "A typical case of electronic warfare operation would involve these features.",
+      "The concept of electronic warfare operation applies here.",
+      "Military information operations involving the use of electromagnetic spectrum to attack enemy systems or protect friendly forces."
+    ],
+    "negative_examples": [
+      "This is an example of defensive information operation, not electronic warfare operation.",
+      "This represents information operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: DefensiveInformationOperation, or other types of InformationOperation"
   },
   "is_category_lens": false,
   "child_count": 0,

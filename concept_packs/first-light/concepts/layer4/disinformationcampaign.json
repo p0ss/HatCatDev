@@ -38,9 +38,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of disinformation campaign.",
+      "The disinformation campaign demonstrated clear characteristics.",
+      "We observed disinformation campaign in this context.",
+      "A typical case of disinformation campaign would involve these features.",
+      "The concept of disinformation campaign applies here.",
+      "A coordinated effort to spread false or misleading information to deceive or manipulate target populations."
+    ],
+    "negative_examples": [
+      "This is an example of c t intelligence operation, not disinformation campaign.",
+      "This represents offensive information operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: CTIntelligenceOperation, or other types of OffensiveInformationOperation",
     "seed_terms": [
       "disinformation campaign",
       "disinformation-campaign",

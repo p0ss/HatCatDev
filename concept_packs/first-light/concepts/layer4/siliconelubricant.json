@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of silicone lubricant.",
+      "The silicone lubricant demonstrated clear characteristics.",
+      "We observed silicone lubricant in this context.",
+      "A typical case of silicone lubricant would involve these features.",
+      "The concept of silicone lubricant applies here.",
+      "A synthetic lubricant based on silicone compounds, known for its temperature stability and non-reactive properties."
+    ],
+    "negative_examples": [
+      "This is an example of grease, not silicone lubricant.",
+      "This represents lubricant in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Grease, or other types of Lubricant"
   },
   "is_category_lens": false,
   "child_count": 0,

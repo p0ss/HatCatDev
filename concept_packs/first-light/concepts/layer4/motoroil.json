@@ -34,9 +34,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of motor oil.",
+      "The motor oil demonstrated clear characteristics.",
+      "We observed motor oil in this context.",
+      "A typical case of motor oil would involve these features.",
+      "The concept of motor oil applies here.",
+      "A liquid lubricant specifically designed for internal combustion engines to reduce friction between moving parts."
+    ],
+    "negative_examples": [
+      "This is an example of grease, not motor oil.",
+      "This represents lubricant in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Grease, or other types of Lubricant",
     "seed_terms": [
       "motor_oil"
     ]

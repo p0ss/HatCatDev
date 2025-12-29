@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of semiconductor.",
+      "The semiconductor demonstrated clear characteristics.",
+      "We observed semiconductor in this context.",
+      "A typical case of semiconductor would involve these features.",
+      "The concept of semiconductor applies here.",
+      "A substance with electrical conductivity between that of conductors and insulators, whose conductivity can be controlled by doping or external conditions."
+    ],
+    "negative_examples": [
+      "This is an example of electrolyte, not semiconductor.",
+      "This represents conductor substance in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Electrolyte, or other types of ConductorSubstance"
   },
   "is_category_lens": false,
   "child_count": 0,

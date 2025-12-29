@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of history museum.",
+      "The history museum demonstrated clear characteristics.",
+      "We observed history museum in this context.",
+      "A typical case of history museum would involve these features.",
+      "The concept of history museum applies here.",
+      "A museum that preserves and displays artifacts, documents, and exhibits related to historical events and periods."
+    ],
+    "negative_examples": [
+      "This is an example of art museum, not history museum.",
+      "This represents museum in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: ArtMuseum, or other types of Museum"
   },
   "is_category_lens": false,
   "child_count": 0,

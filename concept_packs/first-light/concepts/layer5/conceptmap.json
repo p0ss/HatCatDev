@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of concept map.",
+      "The concept map demonstrated clear characteristics.",
+      "We observed concept map in this context.",
+      "A typical case of concept map would involve these features.",
+      "The concept of concept map applies here.",
+      "A visual diagram that depicts relationships between concepts using labeled nodes and connecting lines or arrows."
+    ],
+    "negative_examples": [
+      "This is an example of neural activation network, not concept map.",
+      "This represents conceptual network in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: NeuralActivationNetwork, or other types of ConceptualNetwork"
   },
   "is_category_lens": false,
   "child_count": 0,

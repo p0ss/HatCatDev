@@ -35,9 +35,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of phosphoric acid.",
+      "The phosphoric acid demonstrated clear characteristics.",
+      "We observed phosphoric acid in this context.",
+      "A typical case of phosphoric acid would involve these features.",
+      "The concept of phosphoric acid applies here.",
+      "A mineral acid commonly used in food flavoring, rust removal, and fertilizer production."
+    ],
+    "negative_examples": [
+      "This is an example of sulfuric acid, not phosphoric acid.",
+      "This represents chemical acid in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SulfuricAcid, or other types of ChemicalAcid",
     "seed_terms": [
       "phosphoric_acid",
       "orthophosphoric_acid"

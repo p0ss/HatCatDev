@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of religious war.",
+      "The religious war demonstrated clear characteristics.",
+      "We observed religious war in this context.",
+      "A typical case of religious war would involve these features.",
+      "The concept of religious war applies here.",
+      "A war primarily motivated by religious differences or conflicts between different faith communities."
+    ],
+    "negative_examples": [
+      "This is an example of civil war, not religious war.",
+      "This represents war in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: CivilWar, or other types of War"
   },
   "is_category_lens": false,
   "child_count": 0,

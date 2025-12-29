@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "She used her new blender to make a smoothie for breakfast.",
+      "The pressure cooker made the tough roast tender in just an hour.",
+      "He grilled the vegetables on his countertop electric grill.",
+      "The bread machine finished baking a fresh loaf overnight.",
+      "She processed the nuts in her food processor to make almond butter.",
+      "The slow cooker simmered the stew all day while we were at work."
+    ],
+    "negative_examples": [
+      "The washing machine finished the laundry cycle.",
+      "She vacuumed the living room carpet thoroughly.",
+      "The air conditioner kept the house cool all summer.",
+      "He used a hammer to fix the loose cabinet door.",
+      "The dishwasher cleaned all the plates and glasses.",
+      "She ironed her shirt before the important meeting."
+    ],
+    "disambiguation": "Not to be confused with: LaundryAppliances, CleaningAppliances, HeatingAppliances, PersonalCareAppliances"
   },
   "children": [
     "CookingAppliances",

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of cluster boundary.",
+      "The cluster boundary demonstrated clear characteristics.",
+      "We observed cluster boundary in this context.",
+      "A typical case of cluster boundary would involve these features.",
+      "The concept of cluster boundary applies here.",
+      "The perimeter that defines the extent and membership of grouped or clustered conceptual elements."
+    ],
+    "negative_examples": [
+      "This is an example of decision boundary, not cluster boundary.",
+      "This represents concept boundary in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
   },
   "is_category_lens": false,
   "child_count": 0,

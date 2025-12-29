@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "She bought a new printer for her home office setup.",
+      "The fax machine in the corner hasn't been used in months.",
+      "He threaded the sewing machine to finish the alterations.",
+      "The phone system allows conference calls with multiple participants.",
+      "She used the laminator to protect important documents.",
+      "The paper shredder helps maintain document confidentiality."
+    ],
+    "negative_examples": [
+      "The refrigerator keeps our lunch fresh in the break room.",
+      "She turned on the microwave to heat her coffee.",
+      "The air conditioner keeps the office comfortable in summer.",
+      "He vacuumed the carpet in his home office.",
+      "The dishwasher in the office kitchen needs repair.",
+      "She plugged in the space heater under her desk."
+    ],
+    "disambiguation": "Not to be confused with: KitchenAppliances, CleaningAppliances, HeatingCoolingAppliances, LaundryAppliances"
   },
   "children": [
     "ImageScanner",

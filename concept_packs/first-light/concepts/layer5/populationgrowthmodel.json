@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of population growth model.",
+      "The population growth model demonstrated clear characteristics.",
+      "We observed population growth model in this context.",
+      "A typical case of population growth model would involve these features.",
+      "The concept of population growth model applies here.",
+      "A mathematical model that describes how populations change over time under various environmental constraints and conditions."
+    ],
+    "negative_examples": [
+      "This is an example of mathematical pendulum, not population growth model.",
+      "This represents mathematical model in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: MathematicalPendulum, or other types of MathematicalModel"
   },
   "is_category_lens": false,
   "child_count": 0,

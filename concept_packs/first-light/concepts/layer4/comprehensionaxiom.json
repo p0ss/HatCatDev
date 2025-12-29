@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of comprehension axiom.",
+      "The comprehension axiom demonstrated clear characteristics.",
+      "We observed comprehension axiom in this context.",
+      "A typical case of comprehension axiom would involve these features.",
+      "The concept of comprehension axiom applies here.",
+      "The logical principle that allows the formation of sets based on specified properties or conditions."
+    ],
+    "negative_examples": [
+      "This is an example of superposition principle, not comprehension axiom.",
+      "This represents axiom in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SuperpositionPrinciple, or other types of Axiom"
   },
   "is_category_lens": false,
   "child_count": 0,

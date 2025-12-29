@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of thermal conductor.",
+      "The thermal conductor demonstrated clear characteristics.",
+      "We observed thermal conductor in this context.",
+      "A typical case of thermal conductor would involve these features.",
+      "The concept of thermal conductor applies here.",
+      "A substance that efficiently transfers heat energy through molecular vibrations or electron movement."
+    ],
+    "negative_examples": [
+      "This is an example of electrolyte, not thermal conductor.",
+      "This represents conductor substance in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Electrolyte, or other types of ConductorSubstance"
   },
   "is_category_lens": false,
   "child_count": 0,

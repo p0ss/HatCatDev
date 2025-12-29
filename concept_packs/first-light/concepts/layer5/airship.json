@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of airship.",
+      "The airship demonstrated clear characteristics.",
+      "We observed airship in this context.",
+      "A typical case of airship would involve these features.",
+      "The concept of airship applies here.",
+      "A powered lighter-than-air aircraft that can be steered and propelled through the air using rudders and propellers or other thrust mechanisms."
+    ],
+    "negative_examples": [
+      "This is an example of helicopter, not airship.",
+      "This represents aircraft in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft"
   },
   "is_category_lens": false,
   "child_count": 0,

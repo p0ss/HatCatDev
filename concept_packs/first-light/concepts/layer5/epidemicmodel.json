@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of epidemic model.",
+      "The epidemic model demonstrated clear characteristics.",
+      "We observed epidemic model in this context.",
+      "A typical case of epidemic model would involve these features.",
+      "The concept of epidemic model applies here.",
+      "A mathematical model used to study the spread of infectious diseases through populations, such as SIR or SEIR models."
+    ],
+    "negative_examples": [
+      "This is an example of mathematical pendulum, not epidemic model.",
+      "This represents mathematical model in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: MathematicalPendulum, or other types of MathematicalModel"
   },
   "is_category_lens": false,
   "child_count": 0,

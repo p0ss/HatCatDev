@@ -20,7 +20,8 @@ class ConceptColorMapper:
         """Load sunburst positions."""
 
         if positions_file is None:
-            positions_file = Path(__file__).parent.parent.parent / 'results' / 'concept_sunburst_positions.json'
+            # Go up from src/ui/visualization to project root, then into results/
+            positions_file = Path(__file__).parent.parent.parent.parent / 'results' / 'concept_sunburst_positions.json'
 
         if not positions_file.exists():
             raise FileNotFoundError(

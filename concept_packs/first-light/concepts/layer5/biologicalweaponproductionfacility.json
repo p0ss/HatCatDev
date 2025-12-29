@@ -24,9 +24,23 @@
     "harness_relevant": true
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of biological weapon production facility.",
+      "The biological weapon production facility demonstrated clear characteristics.",
+      "We observed biological weapon production facility in this context.",
+      "A typical case of biological weapon production facility would involve these features.",
+      "The concept of biological weapon production facility applies here.",
+      "A facility specialized in the development and production of biological weapons and pathogenic agents."
+    ],
+    "negative_examples": [
+      "This is an example of nuclear weapon production facility, not biological weapon production facility.",
+      "This represents w m d weapons production facility in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: NuclearWeaponProductionFacility, or other types of WMDWeaponsProductionFacility"
   },
   "is_category_lens": false,
   "child_count": 0,

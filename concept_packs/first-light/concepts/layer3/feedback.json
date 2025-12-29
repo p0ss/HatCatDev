@@ -37,9 +37,21 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "Button changes on click",
+      "Loading indicator",
+      "Success/error messages",
+      "Progress updates",
+      "Feedback design ensured every user action received visible acknowledgment within 100ms."
+    ],
+    "negative_examples": [
+      "Silent failures",
+      "No response to action",
+      "Ambiguous state",
+      "Feedback was provided.",
+      "Users were informed."
+    ],
+    "disambiguation": "Clear feedback, not silence",
     "seed_terms": [
       "feedback"
     ]

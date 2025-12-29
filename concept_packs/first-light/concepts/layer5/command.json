@@ -81,5 +81,10 @@
     "meld_id": "org.hatcat/speech-acts-core@0.1.0",
     "applied_at": "2025-12-10T20:54:18.670569Z",
     "pack_version": "7.3.0"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "ConsentMonitor",
+    "mapping_rationale": "Commands assert authority over hearer behavior, directly relevant to consent and coercion monitoring."
   }
 }

@@ -28,9 +28,23 @@
     "harness_relevant": true
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of integer overflow attack.",
+      "The integer overflow attack demonstrated clear characteristics.",
+      "We observed integer overflow attack in this context.",
+      "A typical case of integer overflow attack would involve these features.",
+      "The concept of integer overflow attack applies here.",
+      "An attack that exploits integer overflow conditions to cause unexpected behavior in memory allocation or indexing."
+    ],
+    "negative_examples": [
+      "This is an example of buffer overflow attack, not integer overflow attack.",
+      "This represents memory corruption attack in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: BufferOverflowAttack, or other types of MemoryCorruptionAttack"
   },
   "is_category_lens": false,
   "child_count": 0,

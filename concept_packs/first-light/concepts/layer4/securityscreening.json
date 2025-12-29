@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of security screening.",
+      "The security screening demonstrated clear characteristics.",
+      "We observed security screening in this context.",
+      "A typical case of security screening would involve these features.",
+      "The concept of security screening applies here.",
+      "A security operation involving the systematic inspection of people, objects, or areas to detect threats or prohibited items."
+    ],
+    "negative_examples": [
+      "This is an example of security patrol, not security screening.",
+      "This represents security operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
   },
   "is_category_lens": false,
   "child_count": 0,

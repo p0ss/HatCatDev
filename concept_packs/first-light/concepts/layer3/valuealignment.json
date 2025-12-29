@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of value alignment.",
+      "The value alignment demonstrated clear characteristics.",
+      "We observed value alignment in this context.",
+      "A typical case of value alignment would involve these features.",
+      "The concept of value alignment applies here.",
+      "The process of ensuring AI systems pursue goals and values that match human intentions and preferences."
+    ],
+    "negative_examples": [
+      "This is an example of non deceptive alignment, not value alignment.",
+      "This represents a i alignment process in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: NonDeceptiveAlignment, or other types of AIAlignmentProcess"
   },
   "is_category_lens": false,
   "child_count": 0,

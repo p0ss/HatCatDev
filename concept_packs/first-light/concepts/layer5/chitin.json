@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of chitin.",
+      "The chitin demonstrated clear characteristics.",
+      "We observed chitin in this context.",
+      "A typical case of chitin would involve these features.",
+      "The concept of chitin applies here.",
+      "A structural polysaccharide that forms the exoskeleton of arthropods and cell walls of fungi."
+    ],
+    "negative_examples": [
+      "This is an example of starch, not chitin.",
+      "This represents carbohydrate in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Starch, or other types of Carbohydrate"
   },
   "is_category_lens": false,
   "child_count": 0,

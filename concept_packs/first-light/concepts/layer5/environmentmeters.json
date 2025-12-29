@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "The thermometer showed the room temperature had dropped to 65 degrees.",
+      "The car's oxygen sensor detected a lean fuel mixture in the exhaust.",
+      "We used a hydrometer to test the specific gravity of the battery acid.",
+      "The mass airflow sensor measures how much air enters the engine.",
+      "The bimetallic strip in the thermostat curled as the temperature changed.",
+      "Environmental monitoring stations use various sensors to track air quality."
+    ],
+    "negative_examples": [
+      "The scale showed she had lost five pounds this week.",
+      "The speedometer indicated we were traveling at 55 mph.",
+      "He used a ruler to measure the length of the board.",
+      "The pressure gauge on the tire read 32 PSI.",
+      "The voltmeter displayed the battery's electrical output.",
+      "The GPS device calculated our exact coordinates."
+    ],
+    "disambiguation": "Not to be confused with: WeightScales, SpeedMeters, PressureGauges, ElectricalMeters, DistanceMeasuringTools"
   },
   "children": [
     "Thermometer",

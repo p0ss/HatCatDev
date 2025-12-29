@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of world war.",
+      "The world war demonstrated clear characteristics.",
+      "We observed world war in this context.",
+      "A typical case of world war would involve these features.",
+      "The concept of world war applies here.",
+      "A war involving multiple nations across different continents or regions of the world."
+    ],
+    "negative_examples": [
+      "This is an example of civil war, not world war.",
+      "This represents war in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: CivilWar, or other types of War"
   },
   "is_category_lens": false,
   "child_count": 0,

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of cover identity development process.",
+      "The cover identity development process demonstrated clear characteristics.",
+      "We observed cover identity development process in this context.",
+      "A typical case of cover identity development process would involve these features.",
+      "The concept of cover identity development process applies here.",
+      "The reasoning process involved in creating and maintaining false or alternative identities for operational purposes."
+    ],
+    "negative_examples": [
+      "This is an example of evasion planning process, not cover identity development process.",
+      "This represents tradecraft reasoning process in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: EvasionPlanningProcess, or other types of TradecraftReasoningProcess"
   },
   "is_category_lens": false,
   "child_count": 0,

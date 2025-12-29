@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of w m d countermeasure research facility.",
+      "The w m d countermeasure research facility demonstrated clear characteristics.",
+      "We observed w m d countermeasure research facility in this context.",
+      "A typical case of w m d countermeasure research facility would involve these features.",
+      "The concept of w m d countermeasure research facility applies here.",
+      "A facility focused on developing defensive systems and countermeasures against weapons of mass destruction."
+    ],
+    "negative_examples": [
+      "This is an example of nuclear weapon research facility, not w m d countermeasure research facility.",
+      "This represents w m d weapons research facility in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: NuclearWeaponResearchFacility, or other types of WMDWeaponsResearchFacility"
   },
   "is_category_lens": false,
   "child_count": 0,

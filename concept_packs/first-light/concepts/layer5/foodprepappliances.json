@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "She used the blender to make a smoothie with fresh berries and yogurt.",
+      "The electric can opener quickly opened the tomato sauce can for dinner prep.",
+      "He juiced fresh oranges every morning using his electric juicer.",
+      "The food processor chopped all the vegetables for the salad in seconds.",
+      "I need to blend these ingredients into a smooth paste for the recipe.",
+      "The juicer extracted every drop of juice from the carrots and apples."
+    ],
+    "negative_examples": [
+      "The microwave heated up last night's leftovers perfectly.",
+      "She preheated the oven to 350 degrees for baking cookies.",
+      "The dishwasher finished cleaning all the dinner plates.",
+      "He stored the milk in the refrigerator to keep it fresh.",
+      "The coffee maker brewed a perfect cup of espresso this morning.",
+      "The toaster popped up two golden slices of bread."
+    ],
+    "disambiguation": "Not to be confused with: CookingAppliances, KitchenCleaningAppliances, RefrigerationAppliances, CoffeeMakingAppliances"
   },
   "children": [
     "Blender",

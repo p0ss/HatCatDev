@@ -54,5 +54,10 @@
     "meld_id": "org.hatcat/design-practice@0.2.0",
     "applied_at": "2025-12-10T20:54:15.507232Z",
     "pack_version": "5.2.2"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "AutonomyDrive",
+    "mapping_rationale": "Flexibility supports user autonomy"
   }
 }

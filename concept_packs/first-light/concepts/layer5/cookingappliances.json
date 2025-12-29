@@ -25,9 +25,22 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "She used the pressure cooker to make tender beef stew in half the time.",
+      "The rotisserie chicken was perfectly golden from rotating slowly in the oven.",
+      "He fired up the outdoor grill to barbecue burgers for the party.",
+      "The slow cooker simmered the soup all day while she was at work.",
+      "They decided to deep fry the turkey using their new fryer appliance."
+    ],
+    "negative_examples": [
+      "She stored the leftovers in the refrigerator overnight.",
+      "The dishwasher finished its cycle and the plates were sparkling clean.",
+      "He used the food processor to chop vegetables for the salad.",
+      "The coffee maker brewed a fresh pot for breakfast.",
+      "She mixed the cake batter with her stand mixer.",
+      "The microwave reheated the pizza slice quickly."
+    ],
+    "disambiguation": "Not to be confused with: RefrigerationAppliances, FoodProcessingAppliances, BeverageAppliances, CleaningAppliances"
   },
   "children": [
     "DeepFryer",

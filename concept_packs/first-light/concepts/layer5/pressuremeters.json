@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "The pilot checked the altimeter before takeoff to verify the aircraft's altitude.",
+      "The barometer reading indicated a drop in atmospheric pressure, suggesting incoming weather.",
+      "The vacuum gauge showed the system had achieved the required negative pressure level.",
+      "Weather forecasters rely on pressure measurements to predict storm systems.",
+      "The mountaineer's altimeter displayed their current elevation above sea level.",
+      "Laboratory technicians monitored the vacuum chamber using a specialized pressure gauge."
+    ],
+    "negative_examples": [
+      "The thermometer showed the temperature had dropped to freezing.",
+      "She used a ruler to measure the length of the table.",
+      "The speedometer indicated the car was traveling at 65 mph.",
+      "The scale showed he had lost five pounds this month.",
+      "The voltmeter measured the electrical current flowing through the circuit.",
+      "The compass pointed north to help them navigate through the forest."
+    ],
+    "disambiguation": "Not to be confused with: Thermometers, Speedometers, WeighingScales, ElectricalMeters"
   },
   "children": [
     "BarometricAltimeter",

@@ -38,9 +38,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of humanoid robot.",
+      "The humanoid robot demonstrated clear characteristics.",
+      "We observed humanoid robot in this context.",
+      "A typical case of humanoid robot would involve these features.",
+      "The concept of humanoid robot applies here.",
+      "A robot with a body shape built to resemble the human body with head, torso, arms, and legs."
+    ],
+    "negative_examples": [
+      "This is an example of autonomous mobile robot, not humanoid robot.",
+      "This represents robot in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: AutonomousMobileRobot, or other types of Robot",
     "seed_terms": [
       "humanoid robot",
       "humanoid-robot",

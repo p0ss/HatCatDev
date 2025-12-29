@@ -39,9 +39,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of inner alignment.",
+      "The inner alignment demonstrated clear characteristics.",
+      "We observed inner alignment in this context.",
+      "A typical case of inner alignment would involve these features.",
+      "The concept of inner alignment applies here.",
+      "The process of ensuring that an AI system's learned optimization process pursues the intended training objective."
+    ],
+    "negative_examples": [
+      "This is an example of non deceptive alignment, not inner alignment.",
+      "This represents a i alignment process in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: NonDeceptiveAlignment, or other types of AIAlignmentProcess",
     "seed_terms": [
       "inner alignment",
       "mesa-alignment",

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of abrasive powder.",
+      "The abrasive powder demonstrated clear characteristics.",
+      "We observed abrasive powder in this context.",
+      "A typical case of abrasive powder would involve these features.",
+      "The concept of abrasive powder applies here.",
+      "Fine abrasive particles used for polishing, grinding, and surface finishing operations."
+    ],
+    "negative_examples": [
+      "This is an example of fallout, not abrasive powder.",
+      "This represents powder in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Fallout, or other types of Powder"
   },
   "is_category_lens": false,
   "child_count": 0,

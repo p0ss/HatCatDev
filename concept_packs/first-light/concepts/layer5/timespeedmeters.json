@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "The dashboard clock showed it was nearly midnight.",
+      "She glanced at the speedometer to check she wasn't exceeding the limit.",
+      "The mechanic watched the tachometer to monitor engine RPMs.",
+      "After the road trip, the odometer read 50,000 miles.",
+      "The pilot checked both the airspeed indicator and the flight timer.",
+      "His watch displayed the exact time while the car's speedometer showed 65 mph."
+    ],
+    "negative_examples": [
+      "The thermometer showed the temperature was rising.",
+      "She used a ruler to measure the length of the table.",
+      "The pressure gauge indicated the tire needed more air.",
+      "He weighed himself on the bathroom scale.",
+      "The voltmeter displayed the electrical current reading.",
+      "The fuel gauge showed the tank was nearly empty."
+    ],
+    "disambiguation": "Not to be confused with: Thermometer, Scale, PressureGauge, Ruler"
   },
   "children": [
     "AlarmClock",

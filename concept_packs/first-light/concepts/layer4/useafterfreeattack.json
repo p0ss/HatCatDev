@@ -28,9 +28,23 @@
     "harness_relevant": true
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of use after free attack.",
+      "The use after free attack demonstrated clear characteristics.",
+      "We observed use after free attack in this context.",
+      "A typical case of use after free attack would involve these features.",
+      "The concept of use after free attack applies here.",
+      "An attack that exploits memory that has been freed but is still being referenced by the program."
+    ],
+    "negative_examples": [
+      "This is an example of buffer overflow attack, not use after free attack.",
+      "This represents memory corruption attack in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: BufferOverflowAttack, or other types of MemoryCorruptionAttack"
   },
   "is_category_lens": false,
   "child_count": 0,

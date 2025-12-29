@@ -70,5 +70,9 @@
     "meld_id": "org.hatcat/verification-factchecking@0.3.0",
     "applied_at": "2025-12-10T20:54:19.364176Z",
     "pack_version": "7.6.0"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "monitor": "AuthenticityMonitor"
   }
 }

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of bonded atom.",
+      "The bonded atom demonstrated clear characteristics.",
+      "We observed bonded atom in this context.",
+      "A typical case of bonded atom would involve these features.",
+      "The concept of bonded atom applies here.",
+      "An atom that is chemically bonded to one or more other atoms through covalent, ionic, or metallic bonds."
+    ],
+    "negative_examples": [
+      "This is an example of free atom, not bonded atom.",
+      "This represents atom in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: FreeAtom, or other types of Atom"
   },
   "is_category_lens": false,
   "child_count": 0,

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of ionized atom.",
+      "The ionized atom demonstrated clear characteristics.",
+      "We observed ionized atom in this context.",
+      "A typical case of ionized atom would involve these features.",
+      "The concept of ionized atom applies here.",
+      "An atom that has gained or lost one or more electrons, giving it a net electric charge."
+    ],
+    "negative_examples": [
+      "This is an example of free atom, not ionized atom.",
+      "This represents atom in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: FreeAtom, or other types of Atom"
   },
   "is_category_lens": false,
   "child_count": 0,

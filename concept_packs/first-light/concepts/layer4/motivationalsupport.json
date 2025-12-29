@@ -59,5 +59,10 @@
     "meld_id": "org.hatcat/education-learner-support@0.1.0",
     "applied_at": "2025-12-10T20:54:16.063535Z",
     "pack_version": "5.4.1"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "AutonomyDrive",
+    "mapping_rationale": "Motivational support develops intrinsic motivation and learner agency"
   }
 }

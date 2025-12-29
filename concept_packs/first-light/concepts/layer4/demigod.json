@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of demigod.",
+      "The demigod demonstrated clear characteristics.",
+      "We observed demigod in this context.",
+      "A typical case of demigod would involve these features.",
+      "The concept of demigod applies here.",
+      "A divine being with partial godlike status, often born from union of deity and mortal."
+    ],
+    "negative_examples": [
+      "This is an example of angel, not demigod.",
+      "This represents deity in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Angel, or other types of Deity"
   },
   "is_category_lens": false,
   "child_count": 0,

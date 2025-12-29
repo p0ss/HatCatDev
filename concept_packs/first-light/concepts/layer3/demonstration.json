@@ -43,9 +43,21 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "Sprint demo every two weeks",
+      "Showcasing new features to product owner",
+      "Live demo to stakeholders",
+      "Agent capability demonstration",
+      "Release readiness review"
+    ],
+    "negative_examples": [
+      "Writing documentation",
+      "Internal code review",
+      "Automated testing",
+      "No demos needed.",
+      "Internal only."
+    ],
+    "disambiguation": "Showing work to stakeholders, not internal activities",
     "seed_terms": [
       "demonstration",
       "manifestation"

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of wallaby.",
+      "The wallaby demonstrated clear characteristics.",
+      "We observed wallaby in this context.",
+      "A typical case of wallaby would involve these features.",
+      "The concept of wallaby applies here.",
+      "A small to medium-sized marsupial similar to kangaroos but generally smaller and more compact."
+    ],
+    "negative_examples": [
+      "This is an example of kangaroo, not wallaby.",
+      "This represents marsupial in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Kangaroo, or other types of Marsupial"
   },
   "is_category_lens": false,
   "child_count": 0,

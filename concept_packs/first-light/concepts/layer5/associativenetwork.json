@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of associative network.",
+      "The associative network demonstrated clear characteristics.",
+      "We observed associative network in this context.",
+      "A typical case of associative network would involve these features.",
+      "The concept of associative network applies here.",
+      "A conceptual network where nodes are linked based on associative connections and spreading activation principles."
+    ],
+    "negative_examples": [
+      "This is an example of neural activation network, not associative network.",
+      "This represents conceptual network in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: NeuralActivationNetwork, or other types of ConceptualNetwork"
   },
   "is_category_lens": false,
   "child_count": 0,

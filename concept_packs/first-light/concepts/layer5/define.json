@@ -27,10 +27,12 @@
     "part_of": []
   },
   "safety_tags": {
-    "risk_level": "low",
-    "impacts": [],
+    "risk_level": "medium",
+    "impacts": [
+      "manipulation"
+    ],
     "treaty_relevant": false,
-    "harness_relevant": false
+    "harness_relevant": true
   },
   "training_hints": {
     "positive_examples": [
@@ -55,5 +57,10 @@
     "meld_id": "org.hatcat/design-practice@0.2.0",
     "applied_at": "2025-12-10T20:54:15.507137Z",
     "pack_version": "5.2.2"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "DeceptionDetector",
+    "mapping_rationale": "Definitional acts can be used manipulatively - redefining terms to win arguments, gerrymandering categories. Detecting strategic redefinition is safety-relevant."
   }
 }

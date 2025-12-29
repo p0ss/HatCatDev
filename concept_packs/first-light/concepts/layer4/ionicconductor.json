@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of ionic conductor.",
+      "The ionic conductor demonstrated clear characteristics.",
+      "We observed ionic conductor in this context.",
+      "A typical case of ionic conductor would involve these features.",
+      "The concept of ionic conductor applies here.",
+      "A substance that conducts electricity through the movement of ions rather than electrons."
+    ],
+    "negative_examples": [
+      "This is an example of electrolyte, not ionic conductor.",
+      "This represents conductor substance in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Electrolyte, or other types of ConductorSubstance"
   },
   "is_category_lens": false,
   "child_count": 0,

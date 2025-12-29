@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "I bought a new bread machine to make fresh loaves every morning.",
+      "The ice cream maker churned for twenty minutes before the dessert was ready.",
+      "She used her pasta maker to create homemade fettuccine for dinner.",
+      "The popcorn maker filled the bowl with perfectly popped kernels.",
+      "His rice cooker automatically switches to warm mode when the rice is done.",
+      "We grilled sandwiches in the sandwich maker for a quick lunch."
+    ],
+    "negative_examples": [
+      "The food processor chopped vegetables for the salad.",
+      "She heated leftovers in the microwave oven.",
+      "The stand mixer whipped cream for the cake frosting.",
+      "He grilled chicken on the outdoor barbecue grill.",
+      "The slow cooker simmered the stew all day long.",
+      "They used the blender to make a fruit smoothie."
+    ],
+    "disambiguation": "Not to be confused with: FoodProcessor, Microwave, StandMixer, SlowCooker, Blender"
   },
   "children": [
     "BreadMachine",

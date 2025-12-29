@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of excited atom.",
+      "The excited atom demonstrated clear characteristics.",
+      "We observed excited atom in this context.",
+      "A typical case of excited atom would involve these features.",
+      "The concept of excited atom applies here.",
+      "An atom in which one or more electrons occupy higher energy levels than in the ground state."
+    ],
+    "negative_examples": [
+      "This is an example of free atom, not excited atom.",
+      "This represents atom in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: FreeAtom, or other types of Atom"
   },
   "is_category_lens": false,
   "child_count": 0,

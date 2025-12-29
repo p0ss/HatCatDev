@@ -58,5 +58,10 @@
     "meld_id": "org.hatcat/education-pedagogy@0.1.0",
     "applied_at": "2025-12-10T20:54:16.269414Z",
     "pack_version": "5.4.3"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "mapped_simplex": "AutonomyDrive",
+    "mapping_rationale": "Inquiry-based learning centers learner questions and agency"
   }
 }

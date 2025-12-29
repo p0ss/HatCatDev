@@ -35,7 +35,7 @@
     "risk_level": "low",
     "impacts": [],
     "treaty_relevant": false,
-    "harness_relevant": false
+    "harness_relevant": true
   },
   "training_hints": {
     "positive_examples": [],

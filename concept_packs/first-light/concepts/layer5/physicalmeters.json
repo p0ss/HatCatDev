@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "She used a ruler to measure the length of the wooden board.",
+      "The kitchen scale showed that the flour weighed exactly two pounds.",
+      "The mechanic inserted feeler gauges to check the spark plug gap.",
+      "He placed the metal strip on the bathroom scale to weigh it.",
+      "The carpenter's measuring stick indicated the beam was twelve feet long.",
+      "Using calipers, she measured the thickness of the copper wire."
+    ],
+    "negative_examples": [
+      "The digital thermometer displayed the room temperature as 72 degrees.",
+      "She checked her blood pressure using the electronic monitor.",
+      "The GPS device calculated their exact coordinates on the map.",
+      "The speedometer showed the car was traveling at 65 mph.",
+      "He used a stopwatch to time the runner's lap around the track.",
+      "The voltmeter indicated the battery had sufficient charge."
+    ],
+    "disambiguation": "Not to be confused with: DigitalSensors, Thermometers, Timers, ElectricalMeters, Gauges"
   },
   "children": [
     "Ruler",

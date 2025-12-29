@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of dominating.",
+      "The dominating demonstrated clear characteristics.",
+      "We observed dominating in this context.",
+      "A typical case of dominating would involve these features.",
+      "The concept of dominating applies here.",
+      "The process of establishing supremacy or ascendancy over others through force or authority."
+    ],
+    "negative_examples": [
+      "This is an example of capturing, not dominating.",
+      "This represents achieving control in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Capturing, or other types of AchievingControl"
   },
   "is_category_lens": false,
   "child_count": 0,

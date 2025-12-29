@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of salt.",
+      "The salt demonstrated clear characteristics.",
+      "We observed salt in this context.",
+      "A typical case of salt would involve these features.",
+      "The concept of salt applies here.",
+      "Cubic crystals of sodium chloride that form naturally through evaporation of seawater or salt lakes."
+    ],
+    "negative_examples": [
+      "This is an example of snowflake, not salt.",
+      "This represents crystal in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Snowflake, or other types of Crystal"
   },
   "is_category_lens": false,
   "child_count": 0,

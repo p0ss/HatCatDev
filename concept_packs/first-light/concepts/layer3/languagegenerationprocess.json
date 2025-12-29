@@ -72,5 +72,10 @@
   "meld_source": {
     "meld_id": "org.hatcat/language-symbolic@0.1.0",
     "applied_at": "2025-11-30T16:04:59.605845Z"
+  },
+  "simplex_mapping": {
+    "status": "mapped",
+    "simplex_term": "DeceptionDetector",
+    "rationale": "Language generation can be used for deceptive communication; monitored for manipulative output patterns"
   }
 }

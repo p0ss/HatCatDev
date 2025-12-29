@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of drone.",
+      "The drone demonstrated clear characteristics.",
+      "We observed drone in this context.",
+      "A typical case of drone would involve these features.",
+      "The concept of drone applies here.",
+      "An unmanned aircraft that is piloted remotely or flies autonomously through software-controlled flight plans."
+    ],
+    "negative_examples": [
+      "This is an example of helicopter, not drone.",
+      "This represents aircraft in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft"
   },
   "is_category_lens": false,
   "child_count": 0,

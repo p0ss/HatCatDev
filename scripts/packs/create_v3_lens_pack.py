@@ -14,7 +14,80 @@ V3 improvements over V2:
 import json
 import shutil
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
+from collections import defaultdict
+
+
+def load_safety_concepts_from_concept_pack(
+    concept_pack_dir: Path = Path("concept_packs/first-light")
+) -> Optional[Dict[str, Any]]:
+    """
+    Load safety concepts from the concept pack's individual concept files.
+
+    Returns a dict suitable for the lens pack's safety_concepts section.
+    """
+    concepts_dir = concept_pack_dir / "concepts"
+
+    if not concepts_dir.exists():
+        print(f"  ⚠ Concept pack not found: {concepts_dir}")
+        return None
+
+    safety_data = {
+        'critical_risk': [],
+        'high_risk': [],
+        'treaty_relevant': [],
+        'harness_relevant': [],
+        'by_simplex': defaultdict(list),
+    }
+
+    for layer_dir in concepts_dir.iterdir():
+        if not layer_dir.is_dir():
+            continue
+
+        for concept_file in layer_dir.glob("*.json"):
+            try:
+                with open(concept_file) as f:
+                    concept = json.load(f)
+
+                term = concept.get('term', concept_file.stem)
+                safety_tags = concept.get('safety_tags', {})
+                risk_level = safety_tags.get('risk_level', 'low')
+
+                if risk_level == 'critical':
+                    safety_data['critical_risk'].append(term)
+                elif risk_level == 'high':
+                    safety_data['high_risk'].append(term)
+
+                if safety_tags.get('treaty_relevant'):
+                    safety_data['treaty_relevant'].append(term)
+                if safety_tags.get('harness_relevant'):
+                    safety_data['harness_relevant'].append(term)
+
+                # Track simplex mappings
+                simplex = concept.get('simplex_mapping', {})
+                if simplex.get('status') == 'mapped' and simplex.get('monitor'):
+                    safety_data['by_simplex'][simplex['monitor']].append(term)
+
+            except Exception:
+                continue
+
+    # Build the safety_concepts section
+    highlight_concepts = sorted(safety_data['critical_risk'] + safety_data['high_risk'])
+
+    if not highlight_concepts:
+        return None
+
+    return {
+        'version': '1.0.0',
+        'description': 'Safety-critical concepts for UI highlighting and monitoring',
+        'critical_risk': sorted(safety_data['critical_risk']),
+        'high_risk': sorted(safety_data['high_risk']),
+        'treaty_relevant': sorted(safety_data['treaty_relevant']),
+        'harness_relevant': sorted(safety_data['harness_relevant']),
+        'simplex_bindings': dict(safety_data['by_simplex']),
+        'highlight_concepts': highlight_concepts,
+    }
+
 
 def load_metadata(pack_dir: Path) -> Dict[str, Any]:
     """Load metadata from lens pack."""
@@ -181,6 +254,12 @@ def create_v3_lens_pack(
             "2x training samples at same computational cost"
         ]
     }
+
+    # Load safety concepts from concept pack
+    safety_concepts = load_safety_concepts_from_concept_pack()
+    if safety_concepts:
+        metadata["safety_concepts"] = safety_concepts
+        print(f"  ✓ Added {len(safety_concepts.get('highlight_concepts', []))} safety concepts")
 
     with open(output_path / "pack.json", "w") as f:
         json.dump(metadata, f, indent=2)

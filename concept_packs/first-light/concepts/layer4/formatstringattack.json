@@ -28,9 +28,23 @@
     "harness_relevant": true
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of format string attack.",
+      "The format string attack demonstrated clear characteristics.",
+      "We observed format string attack in this context.",
+      "A typical case of format string attack would involve these features.",
+      "The concept of format string attack applies here.",
+      "An attack that exploits improper handling of format string functions to read or write arbitrary memory locations."
+    ],
+    "negative_examples": [
+      "This is an example of buffer overflow attack, not format string attack.",
+      "This represents memory corruption attack in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: BufferOverflowAttack, or other types of MemoryCorruptionAttack"
   },
   "is_category_lens": false,
   "child_count": 0,

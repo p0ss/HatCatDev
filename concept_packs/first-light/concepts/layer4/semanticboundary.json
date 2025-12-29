@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of semantic boundary.",
+      "The semantic boundary demonstrated clear characteristics.",
+      "We observed semantic boundary in this context.",
+      "A typical case of semantic boundary would involve these features.",
+      "The concept of semantic boundary applies here.",
+      "The limits that define the meaning and scope of a concept in relation to other concepts in a semantic space."
+    ],
+    "negative_examples": [
+      "This is an example of decision boundary, not semantic boundary.",
+      "This represents concept boundary in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
   },
   "is_category_lens": false,
   "child_count": 0,

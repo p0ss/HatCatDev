@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of political doctrine.",
+      "The political doctrine demonstrated clear characteristics.",
+      "We observed political doctrine in this context.",
+      "A typical case of political doctrine would involve these features.",
+      "The concept of political doctrine applies here.",
+      "Systematic set of principles and beliefs that guide political ideology and governance."
+    ],
+    "negative_examples": [
+      "This is an example of multinational doctrine, not political doctrine.",
+      "This represents doctrine in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: MultinationalDoctrine, or other types of Doctrine"
   },
   "is_category_lens": false,
   "child_count": 0,

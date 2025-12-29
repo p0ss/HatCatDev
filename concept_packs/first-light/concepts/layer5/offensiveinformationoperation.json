@@ -42,9 +42,23 @@
     "harness_relevant": true
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of offensive information operation.",
+      "The offensive information operation demonstrated clear characteristics.",
+      "We observed offensive information operation in this context.",
+      "A typical case of offensive information operation would involve these features.",
+      "The concept of offensive information operation applies here.",
+      "Military information operations designed to attack, degrade, or destroy adversary information systems and decision-making capabilities."
+    ],
+    "negative_examples": [
+      "This is an example of defensive information operation, not offensive information operation.",
+      "This represents information operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: DefensiveInformationOperation, or other types of InformationOperation",
     "seed_terms": [
       "offensive information operation",
       "offensive_information_operation",

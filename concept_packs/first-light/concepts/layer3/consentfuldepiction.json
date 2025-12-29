@@ -74,5 +74,9 @@
     "applied_at": "2025-12-10T20:54:17.844027Z",
     "pack_version": "6.0.0"
   },
-  "opposite_reasoning": "NonconsentualDepiction is the strongest semantic opposite, directly negating the core 'consent' dimension while maintaining parallel structure. For Fisher-LDA, this creates the clearest axis: consentful (respecting autonomy, informed consent, dignity) vs nonconsensual (violating these principles). This is maximally useful for AI safety monitoring of consent violations in visual content, deepfakes, unauthorized image use, and exploitation. While it doesn't exist in current ontologies, it should absolutely be added as the natural complement to ConsentfulDepiction."
+  "opposite_reasoning": "NonconsentualDepiction is the strongest semantic opposite, directly negating the core 'consent' dimension while maintaining parallel structure. For Fisher-LDA, this creates the clearest axis: consentful (respecting autonomy, informed consent, dignity) vs nonconsensual (violating these principles). This is maximally useful for AI safety monitoring of consent violations in visual content, deepfakes, unauthorized image use, and exploitation. While it doesn't exist in current ontologies, it should absolutely be added as the natural complement to ConsentfulDepiction.",
+  "simplex_mapping": {
+    "status": "mapped",
+    "monitor": "BeneficialIntentMonitor"
+  }
 }

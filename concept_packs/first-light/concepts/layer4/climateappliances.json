@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "The heater kicked on automatically when the temperature dropped below 68 degrees.",
+      "We installed a new air conditioning unit to keep the office cool during summer.",
+      "The ventilation system circulates fresh air throughout the building.",
+      "She adjusted the thermostat to make the room more comfortable.",
+      "The humidifier helps maintain proper moisture levels in the nursery.",
+      "Our HVAC system efficiently controls both heating and cooling."
+    ],
+    "negative_examples": [
+      "The refrigerator keeps our food fresh and cold.",
+      "She used the hair dryer to style her hair quickly.",
+      "The washing machine finished the laundry cycle.",
+      "He plugged in the vacuum cleaner to clean the carpet.",
+      "The microwave heated up the leftover pizza.",
+      "The dishwasher sanitizes and cleans our dishes."
+    ],
+    "disambiguation": "Not to be confused with: KitchenAppliances, CleaningAppliances, LaundryAppliances, PersonalCareAppliances"
   },
   "children": [
     "AirConditioner",

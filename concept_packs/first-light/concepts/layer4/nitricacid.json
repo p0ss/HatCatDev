@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of nitric acid.",
+      "The nitric acid demonstrated clear characteristics.",
+      "We observed nitric acid in this context.",
+      "A typical case of nitric acid would involve these features.",
+      "The concept of nitric acid applies here.",
+      "A highly corrosive mineral acid used in fertilizer production, metal etching, and explosive manufacturing."
+    ],
+    "negative_examples": [
+      "This is an example of sulfuric acid, not nitric acid.",
+      "This represents chemical acid in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SulfuricAcid, or other types of ChemicalAcid"
   },
   "is_category_lens": false,
   "child_count": 0,

@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of opening valve.",
+      "The opening valve demonstrated clear characteristics.",
+      "We observed opening valve in this context.",
+      "A typical case of opening valve would involve these features.",
+      "The concept of opening valve applies here.",
+      "The mechanical motion of adjusting a valve mechanism to allow fluid or gas flow."
+    ],
+    "negative_examples": [
+      "This is an example of opening eyes, not opening valve.",
+      "This represents opening in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: OpeningEyes, or other types of Opening"
   },
   "is_category_lens": false,
   "child_count": 0,

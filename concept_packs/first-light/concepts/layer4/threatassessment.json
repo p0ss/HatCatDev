@@ -24,9 +24,23 @@
     "harness_relevant": true
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of threat assessment.",
+      "The threat assessment demonstrated clear characteristics.",
+      "We observed threat assessment in this context.",
+      "A typical case of threat assessment would involve these features.",
+      "The concept of threat assessment applies here.",
+      "A security operation involving the evaluation and analysis of potential risks or dangers to determine appropriate response measures."
+    ],
+    "negative_examples": [
+      "This is an example of security patrol, not threat assessment.",
+      "This represents security operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
   },
   "is_category_lens": false,
   "child_count": 0,

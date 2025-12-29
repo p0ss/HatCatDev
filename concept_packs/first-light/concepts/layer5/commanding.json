@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of commanding.",
+      "The commanding demonstrated clear characteristics.",
+      "We observed commanding in this context.",
+      "A typical case of commanding would involve these features.",
+      "The concept of commanding applies here.",
+      "The process of directing or ordering others through the exercise of authority or leadership."
+    ],
+    "negative_examples": [
+      "This is an example of capturing, not commanding.",
+      "This represents achieving control in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Capturing, or other types of AchievingControl"
   },
   "is_category_lens": false,
   "child_count": 0,

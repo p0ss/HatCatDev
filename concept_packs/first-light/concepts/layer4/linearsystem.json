@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of linear system.",
+      "The linear system demonstrated clear characteristics.",
+      "We observed linear system in this context.",
+      "A typical case of linear system would involve these features.",
+      "The concept of linear system applies here.",
+      "A dynamical system where the evolution equations are linear functions of the state variables."
+    ],
+    "negative_examples": [
+      "This is an example of multi stable system, not linear system.",
+      "This represents dynamical system in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: MultiStableSystem, or other types of DynamicalSystem"
   },
   "is_category_lens": false,
   "child_count": 0,

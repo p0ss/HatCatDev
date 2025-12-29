@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of security escort.",
+      "The security escort demonstrated clear characteristics.",
+      "We observed security escort in this context.",
+      "A typical case of security escort would involve these features.",
+      "The concept of security escort applies here.",
+      "A security operation providing protective accompaniment for personnel, vehicles, or assets during movement or transit."
+    ],
+    "negative_examples": [
+      "This is an example of security patrol, not security escort.",
+      "This represents security operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
   },
   "is_category_lens": false,
   "child_count": 0,

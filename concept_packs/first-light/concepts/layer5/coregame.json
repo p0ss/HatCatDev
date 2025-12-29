@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of core game.",
+      "The core game demonstrated clear characteristics.",
+      "We observed core game in this context.",
+      "A typical case of core game would involve these features.",
+      "The concept of core game applies here.",
+      "A cooperative game analyzed using the core solution concept where no coalition has incentive to deviate."
+    ],
+    "negative_examples": [
+      "This is an example of evolutionary game, not core game.",
+      "This represents cooperative game in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: EvolutionaryGame, or other types of CooperativeGame"
   },
   "is_category_lens": false,
   "child_count": 0,

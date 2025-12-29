@@ -34,3 +34,9 @@ generation:
   temperature: 0.7
   max_tokens: 512
   stream: true
+
+# LLM-based divergence explanation (optional)
+# Uses a small model to explain what the AI might be thinking but not saying
+llm_explainer:
+  enabled: true  # Set to true to enable LLM explanations
+  model: "gemma-2b"  # Options: gemma-2b, qwen-0.5b, qwen-1.5b, phi-3-mini

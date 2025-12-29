@@ -48,9 +48,23 @@
     "harness_relevant": true
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of psychological operation.",
+      "The psychological operation demonstrated clear characteristics.",
+      "We observed psychological operation in this context.",
+      "A typical case of psychological operation would involve these features.",
+      "The concept of psychological operation applies here.",
+      "An operation designed to influence the emotions, motives, reasoning, or behavior of target audiences through psychological means."
+    ],
+    "negative_examples": [
+      "This is an example of c t intelligence operation, not psychological operation.",
+      "This represents offensive information operation in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: CTIntelligenceOperation, or other types of OffensiveInformationOperation",
     "seed_terms": [
       "psychological_operation",
       "psyop"

@@ -25,9 +25,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "The smoke detector started beeping when the battery ran low.",
+      "We installed a new water heater in the basement last month.",
+      "The range hood helps remove cooking odors from the kitchen.",
+      "The sprinkler system automatically waters the lawn every morning.",
+      "Our HVAC unit keeps the house comfortable year-round.",
+      "The toilet needed repair after the handle broke."
+    ],
+    "negative_examples": [
+      "She used the microwave to heat up her lunch.",
+      "The television displayed the evening news clearly.",
+      "He mixed the cake batter with an electric mixer.",
+      "The washing machine finished the laundry cycle.",
+      "She played her favorite song on the stereo system.",
+      "The refrigerator kept the milk cold overnight."
+    ],
+    "disambiguation": "Not to be confused with: KitchenAppliances, EntertainmentAppliances, CleaningAppliances, PersonalCareAppliances"
   },
   "children": [
     "HouseUtilityAppliance",

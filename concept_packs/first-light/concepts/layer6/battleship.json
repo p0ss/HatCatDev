@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of battleship.",
+      "The battleship demonstrated clear characteristics.",
+      "We observed battleship in this context.",
+      "A typical case of battleship would involve these features.",
+      "The concept of battleship applies here.",
+      "A heavily armored and armed warship designed for naval combat with large-caliber guns."
+    ],
+    "negative_examples": [
+      "This is an example of aircraft carrier, not battleship.",
+      "This represents military ship in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: AircraftCarrier, or other types of MilitaryShip"
   },
   "is_category_lens": false,
   "child_count": 0,

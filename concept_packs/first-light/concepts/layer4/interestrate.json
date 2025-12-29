@@ -41,9 +41,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": "",
+    "positive_examples": [
+      "This is an example of interest rate.",
+      "The interest rate demonstrated clear characteristics.",
+      "We observed interest rate in this context.",
+      "A typical case of interest rate would involve these features.",
+      "The concept of interest rate applies here.",
+      "The percentage charged by lenders to borrowers for the use of money, typically expressed as an annual percentage."
+    ],
+    "negative_examples": [
+      "This is an example of inflation, not interest rate.",
+      "This represents economic indicator in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: Inflation, or other types of EconomicIndicator",
     "seed_terms": [
       "interest_rate",
       "rate_of_interest"

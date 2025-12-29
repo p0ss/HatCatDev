@@ -24,9 +24,23 @@
     "harness_relevant": false
   },
   "training_hints": {
-    "positive_examples": [],
-    "negative_examples": [],
-    "disambiguation": ""
+    "positive_examples": [
+      "This is an example of parallel postulate.",
+      "The parallel postulate demonstrated clear characteristics.",
+      "We observed parallel postulate in this context.",
+      "A typical case of parallel postulate would involve these features.",
+      "The concept of parallel postulate applies here.",
+      "The geometric axiom that determines whether a geometry is Euclidean or non-Euclidean based on parallel line behavior."
+    ],
+    "negative_examples": [
+      "This is an example of superposition principle, not parallel postulate.",
+      "This represents axiom in general.",
+      "The weather is pleasant today.",
+      "Water boils at 100 degrees Celsius.",
+      "The document was filed in the cabinet.",
+      "She walked to the store to buy groceries."
+    ],
+    "disambiguation": "Not to be confused with: SuperpositionPrinciple, or other types of Axiom"
   },
   "is_category_lens": false,
   "child_count": 0,
