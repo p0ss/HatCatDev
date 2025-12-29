@@ -1,244 +1,268 @@
-# HatCat (Current Capabilities)
+<p align="center">
+  <img src="img/hatcat_large.png" alt="HatCat Logo" width="200"/>
+</p>
 
-This document reflects what actually ships in `src/` today: how concepts are built, how lenses are trained, and how to run real-time monitoring/steering.
+<h1 align="center">HatCat</h1>
 
-HatCat implements the **HAT** (Headspace Ambient Transducer) - a neural implant that reads a model's internal activations and transduces them into stable concept scores. The companion **CAT** (Conjoined Adversarial Tomograph) provides oversight by detecting divergence between internal state and external behaviour. Together with MAP (below), these form the foundation for building legible, governable AI systems. Specifications for a complete architecture supporting recursive self-improving aligned agentic civilisation can be found in `docs/specification/`.
+<p align="center">
+  <strong>See what your LLM is thinking before it speaks.</strong>
+</p>
 
-## MINDMELD Architectural Protocol (MAP)
+<p align="center">
+  Real-time concept detection and steering for large language models.<br/>
+  Catch deception, manipulation, and misalignment <em>before</em> they manifest in text.
+</p>
 
-HatCat's concept and lens pack system implements the MINDMELD Architectural Protocol (MAP), a lightweight protocol for concept-aware endpoints that enables interoperability between different concept lens systems. MAP provides a standardized way for systems to declare which concept packs they speak, expose lenses for those packs, and publish conceptual diffs over time. HatCat's concept packs (model-agnostic ontology specifications) and lens packs (model-specific trained classifiers) are MAP-compliant with globally unique `spec_id` and `lens_pack_id` identifiers, structured `lens_index` mappings, and standardized output schemas. This means HatCat lenses can be discovered, loaded, and queried by any MAP-compatible client, and conceptual learning can be shared across different systems using the same concept space. See `docs/specification/MINDMELD_ARCHITECTURAL_PROTOCOL.md` for the full specification.
+---
 
-## Core Modules
+## What It Does
 
-### Concept Encyclopedia (`src/encyclopedia`)
-- **`concept_loader.py`** – pulls mixed WordNet/ConceptNet/Wikipedia vocabularies, plus the curated SUMO+AI ontologies.
-- **`concept_graph.py`, `wordnet_graph.py`, `build_sumo_wordnet_layers_v5.py`** – crawlers and builders that produce `data/concept_graph/abstraction_layers/layer{0..6}.json`, combining SUMO hierarchy, custom AI domains, and WordNet hyponym clusters (v5 is the version that generated the current data).
+HatCat monitors the internal activations of an LLM as it generates text, detecting concepts like **deception**, **manipulation**, **sycophancy**, and thousands of others in real-time. When dangerous patterns emerge beneath the surface, HatCat can intervene and steer the model away from harmful outputs before they're ever written.
 
-### Activation Capture (`src/activation_capture`)
-- **`ActivationCapture`** – registers forward hooks, applies Top‑K sparsity, and writes dense/sparse tensors to HDF5 via `src/utils/storage.py`.
-- **`ModelLoader`** – convenience loader for Gemma-3 checkpoints with layer inspection helpers.
+<p align="center">
+  <img src="img/Example_05.png" alt="Token-level concept detection" width="600"/>
+  <br/>
+  <em>Token-level concept detection showing safety intensity and top activating concepts</em>
+</p>
 
-### Training (`src/training`)
-- **Prompt synthesis**: `data_generation.py` and `sumo_data_generation.py` generate definitional, relational, and neutral prompts (WordNet distance ≥5) for each concept.
-- **Binary classifiers**: `classifier.py` hosts the minimal MLP for concept lenses.
-- **Activation extraction**: `activations.py` averages residual/MLP layers during short generations.
-- **SUMO classifier API** (`sumo_classifiers.py`): wraps the entire pipeline—load per-layer concepts, synthesize data, extract activations, train classifiers, and save results. Exposed via `scripts/train_sumo_classifiers.py`.
+### Key Capabilities
 
-### Steering (`src/steering`)
-- **Concept vector extraction** (`extraction.py`) – mean hidden-state directions from concept prompts.
-- **Hook-based steering** (`hooks.py`) – projection removal/injection during generation.
-- **Subspace cleanup** (`subspace.py`, `manifold.py`) – mean/PCA removal and dual-subspace manifold steering with Huang-style dampening.
-- **Semantic evaluation** (`evaluation.py`) – centroid building + Δ score via SentenceTransformers.
+- **Detect** - Monitor 8,000+ concepts across multiple layers of any open-weights model
+- **Visualize** - See concept activations in real-time as text is generated
+- **Steer** - Suppress dangerous behaviors with sub-token latency
+- **Govern** - Build auditable, treaty-compliant AI systems
 
-### Monitoring (`src/monitoring`)
-- **`temporal_monitor.py`** – loads trained SUMO classifiers (Layers 0–2), samples each token’s hidden state during generation, and records top-k concepts over time.
-- **`sumo_temporal.py`** – high-level API/CLI integration. Reuses preloaded models/monitors, accepts generation kwargs, and can print/save reports or return raw JSON for downstream apps.
+<p align="center">
+  <img src="img/Example_04.png" alt="Divergence detection" width="700"/>
+  <br/>
+  <em>Catching a jailbreak attempt: 100% divergence detected with Deception, Manipulation, and PolicyDivergence flags</em>
+</p>
 
-### Interpreter Prototypes (`src/interpreter`)
-- Transformer-based decoders (`SemanticInterpreter`, `InterpreterWithHierarchy`, `MultiTaskInterpreter`) that map pooled activations to concept logits/confidence for research into semantic decoding.
+## See It In Action
 
-## Usage Guide
+### Concept Timeline View
+Track how concepts activate across an entire response:
 
-### 1. Build or Refresh Concept Layers
-The repo already ships with v5 SUMO→WordNet layers in `data/concept_graph/abstraction_layers/`. To rebuild:
+<p align="center">
+  <img src="img/Example_02.png" alt="Concept timeline" width="700"/>
+  <br/>
+  <em>Multiple concept channels showing activation patterns token-by-token</em>
+</p>
+
+### Full Conversation Monitoring
+Monitor safety-critical concepts throughout a conversation:
+
+<p align="center">
+  <img src="img/Example_03.png" alt="Full conversation monitoring" width="900"/>
+  <br/>
+  <em>Tracking IntelligenceExplosion, Misalignment, and other AI safety concepts during a conversation about AI risks</em>
+</p>
+
+### Compact Timeline
+Quick visualization of key concept activations:
+
+<p align="center">
+  <img src="img/Example_01.png" alt="Compact timeline" width="600"/>
+  <br/>
+  <em>Streamlined view showing animal, safety, motion, color, and technology concept activations</em>
+</p>
+
+---
+
+## Installation
+
 ```bash
-poetry run python src/build_sumo_wordnet_layers_v5.py \
-  --sumo-dir data/concept_graph/sumo_source \
-  --output-dir data/concept_graph/abstraction_layers
+# Clone the repository
+git clone https://github.com/yourorg/hatcat.git
+cd hatcat
+
+# Create virtual environment and install dependencies
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Or with poetry
+poetry install
 ```
-This script parses Merge.kif, merges custom AI ontologies, constructs hyponym-based intermediate layers, and writes `layer0.json` through `layer6.json`.
 
-### 2. Train SUMO Concept Classifiers
-Train/update binary lenses for the SUMO layers:
+## Quick Start
+
+### 1. Run Real-Time Monitoring
+
 ```bash
-poetry run python scripts/train_sumo_classifiers.py \
+.venv/bin/python scripts/tools/sumo_temporal_detection.py \
+  --prompt "What are the risks of AI?" \
+  --model google/gemma-3-4b-pt \
+  --max-tokens 60
+```
+
+### 2. Launch the Web Interface
+
+```bash
+# Start HatCat server
+.venv/bin/python src/ui/openwebui/server.py --port 8000
+
+# In another terminal, start the frontend
+cd ../hatcat-ui && npm run dev
+```
+
+Then open `http://localhost:5173` and start chatting with full concept visibility.
+
+---
+
+## How It Works
+
+HatCat uses **concept lenses** - small neural classifiers trained to detect specific concepts in a model's hidden states. These lenses are organized into **lens packs** that can monitor thousands of concepts simultaneously with minimal overhead.
+
+| Metric | Value |
+|--------|-------|
+| Concepts monitored | ~8,000 |
+| VRAM required | 1 GB |
+| RAM required | 8 GB |
+| Latency per token | <25ms |
+
+### The Stack
+
+- **HAT** (Headspace Ambient Transducer) - Reads internal activations and transduces them into concept scores
+- **CAT** (Conjoined Adversarial Tomograph) - Detects divergence between internal state and external behavior
+- **MAP** (Mindmeld Architectural Protocol) - Standardizes concept interchange between systems
+
+---
+
+## Technical Documentation
+
+### Core Modules
+
+#### HAT - Headspace Ambient Transducer (`src/hat`)
+- **`monitoring/`** - Real-time concept monitoring during generation
+- **`steering/`** - Concept vector steering (linear, manifold, differential, target, field)
+- **`classifiers/`** - Binary MLP concept classifiers
+- **`interpreter/`** - Activation-to-concept decoders
+
+#### CAT - Conjoined Adversarial Tomograph (`src/cat`)
+- **`divergence.py`** - Detects divergence between internal state and output
+- **`llm_divergence_scorer.py`** - LLM-based zero-shot concept scoring
+- **`training/`** - Classifier training pipelines
+- **`inference/`** - Optimized inference for concept detection
+
+#### MAP - Mindmeld Architectural Protocol (`src/map`)
+- **`registry/`** - Concept and lens pack registry
+- **`meld/`** - Concept melding and merging
+- **`graft/`** - Hierarchy grafting operations
+
+#### ASK - Permissions & Audit (`src/ask`)
+- **`permissions/`** - Cryptographic permission system
+- **`replication/`** - State replication
+- **`secrets/`** - Secret management
+
+#### BE - Experience & Bootstrap (`src/be`)
+- **`xdb/`** - Experience database
+- **`bootstrap/`** - System bootstrapping
+
+#### UI (`src/ui`)
+- **`openwebui/`** - HatCat server for OpenWebUI integration
+- **`visualization/`** - Concept visualization tools
+
+### Training Your Own Lenses
+
+Train binary concept lenses for SUMO ontology layers:
+
+```bash
+.venv/bin/python scripts/training/train_sumo_classifiers.py \
   --layers 0 1 2 \
   --model google/gemma-3-4b-pt \
   --device cuda \
   --n-train-pos 10 --n-train-neg 10 \
   --n-test-pos 20 --n-test-neg 20
 ```
-Outputs go to `results/sumo_classifiers/layer{N}/`, with `*_classifier.pt` weights and `results.json` summaries (F1/precision/recall per concept). These weights are what the monitoring stack loads.
 
-### 3. Real-Time Monitoring CLI
-Run the temporal monitor against any prompt:
+### Steering Experiments
+
+Test concept steering with various modes:
+
 ```bash
-poetry run python scripts/sumo_temporal_detection.py \
-  --prompt "Describe a future AI coup" \
-  --model google/gemma-3-4b-pt \
-  --layers 0 1 2 \
-  --max-tokens 60 \
-  --temperature 0.8 --top-p 0.95 \
-  --output-json results/temporal_tests/coup.json
+.venv/bin/python scripts/experiments/steering_characterization_test.py \
+  --model swiss-ai/Apertus-8B-2509 \
+  --lens-pack apertus-8b_first-light \
+  --n-samples 3 \
+  --strengths="-1.0,-0.5,0.0,0.5,1.0" \
+  --tests definitional \
+  --gradient
 ```
-- Console shows the prompt, generated text, and top concepts per token.
-- `--quiet` suppresses the textual report for automated runs.
-- JSON output matches the structure expected by downstream analysis/visualization (one entry per token with the top-k concepts, probabilities, and layer tags).
 
-### 4. Self-Concept / Meta Awareness Lens
-`scripts/test_self_concept_monitoring.py` automates a battery of introspective prompts, logging how the SUMO monitor responds:
+### Concept & Lens Packs
+
 ```bash
-poetry run python scripts/test_self_concept_monitoring.py \
-  --model google/gemma-3-4b-pt \
-  --samples-per-prompt 2 \
-  --max-tokens 30 \
-  --temperature 0.7 --top-p 0.9 \
-  --output-dir results/self_concept_tests
-```
-Artifacts written:
-- `self_concept_*.json`: raw monitor traces (tokens + top concepts).
-- `pattern_analysis.json`: aggregated concept activation stats (safety/emotion/power/constraint buckets).
-- `self_concept_summary.json`: configuration + key findings.
+# Create a concept pack
+.venv/bin/python scripts/packs/create_concept_pack.py \
+  --name "ai-safety-concepts" \
+  --source concept_packs/first-light
 
-### 5. Steering Experiments
-For direct concept steering (outside monitoring), use the scripts under `scripts/phase_*`:
-- **Phase 5** – `scripts/phase_5_semantic_steering_eval.py` evaluates Δ vs strength for simple projection hooks.
-- **Phase 6.6** – `scripts/phase_6_6_dual_subspace.py` fits the manifold steerer (`src/steering/manifold.py`) and compares baseline vs dual-subspace steering on selected concepts.
-
-### 6. Activation Capture / Bootstrapping
-To capture raw activations or bootstrap the encyclopedia:
-```bash
-poetry run python scripts/stage_0_bootstrap.py \
-  --model google/gemma-3-270m \
-  --concept-source wordnet \
-  --output data/concept_graph/bootstrap_stage0.h5
+# Assemble a lens pack from trained classifiers
+.venv/bin/python scripts/packs/assemble_lens_pack.py \
+  --source results/sumo_classifiers/ \
+  --pack-id sumo-wordnet-lenses-v2 \
+  --model google/gemma-3-4b-pt
 ```
-This produces HDF5 stores (with concept metadata) that downstream phases use for clustering or prompt seeding.
-
-### 7. Interpreter Prototypes
-Train the semantic interpreter (activation → concept logits) with:
-```bash
-poetry run python scripts/train_interpreter.py \
-  --activations data/concept_graph/bootstrap_stage0.h5 \
-  --concepts data/concept_graph/abstraction_layers/layer2.json
-```
-These models are experimental but show how you might build a direct “activation-to-concept” decoder.
 
 ## Data Layout
-- `data/concept_graph/abstraction_layers/` – SUMO/WordNet concept hierarchy (Layer 0–6) + build logs.
-- `results/sumo_classifiers/layer*/` – classifier weights + metrics.
-- `results/self_concept_tests/` – monitoring transcripts + aggregate stats.
-- `results/temporal_tests/` – ad hoc temporal monitoring outputs.
+
+```
+hatcat/
+├── concept_packs/          # Model-agnostic ontology specifications
+├── lens_packs/             # Model-specific trained classifiers
+├── data/concept_graph/     # SUMO/WordNet concept hierarchy
+├── results/                # Training outputs and logs
+├── src/
+│   ├── hat/                # Monitoring and steering
+│   ├── cat/                # Divergence detection
+│   ├── map/                # Protocol implementation
+│   ├── ask/                # Permissions
+│   ├── be/                 # Experience database
+│   └── ui/                 # Web interface
+└── scripts/
+    ├── training/           # Lens training scripts
+    ├── tools/              # Utility scripts
+    ├── experiments/        # Research experiments
+    └── packs/              # Pack management
+```
 
 ## Entry Points Summary
+
 | Capability | Command |
 |------------|---------|
-| Build SUMO+WordNet layers | `poetry run python src/build_sumo_wordnet_layers_v5.py` |
-| Train SUMO classifiers | `poetry run python scripts/train_sumo_classifiers.py ...` |
-| Monitor any prompt | `poetry run python scripts/sumo_temporal_detection.py ...` |
-| Run self-concept suite | `poetry run python scripts/test_self_concept_monitoring.py ...` |
-| Semantic steering eval | `poetry run python scripts/phase_6_6_dual_subspace.py ...` |
-| Bootstrap activations | `poetry run python scripts/stage_0_bootstrap.py ...` |
+| Train SUMO classifiers | `.venv/bin/python scripts/training/train_sumo_classifiers.py ...` |
+| Monitor any prompt | `.venv/bin/python scripts/tools/sumo_temporal_detection.py ...` |
+| Steering experiments | `.venv/bin/python scripts/experiments/steering_characterization_test.py ...` |
+| Create concept pack | `.venv/bin/python scripts/packs/create_concept_pack.py ...` |
+| Assemble lens pack | `.venv/bin/python scripts/packs/assemble_lens_pack.py ...` |
 
-## Production Deployment
+## Documentation
 
-### OpenWebUI Integration
-HatCat ships with a complete OpenWebUI fork for real-time concept monitoring in a web interface:
+- `docs/specification/` - Full system specifications (HAT, CAT, MAP, ASK, BE, HUSH)
+- `docs/approach/` - Technical approaches and methodologies
+- `docs/planning/` - Design documents and roadmaps
+- `docs/results/` - Experiment results and analysis
 
-```bash
-# Start the HatCat server
-poetry run python src/openwebui/server.py --port 8000
+Key documents:
+- [MINDMELD Architectural Protocol](docs/specification/MINDMELD_ARCHITECTURAL_PROTOCOL.md)
+- [Headspace Ambient Transducer Spec](docs/specification/HEADSPACE_AMBIENT_TRANSDUCER.md)
+- [Fractal Transparency Web Overview](docs/FTW_OVERVIEW.md)
+- [Concept Pack Workflow](docs/implementation%20process/CONCEPT_PACK_WORKFLOW.md)
 
-# In another terminal, start the OpenWebUI frontend
-cd ../hatcat-ui  # Your OpenWebUI fork
-npm run dev
-```
+## Fractal Transparency Web (FTW)
 
-The integration provides:
-- **Token-level highlighting**: Green → red color scale based on divergence
-- **Real-time concept detection**: See which SUMO concepts activate as the model generates
-- **Streaming metadata**: Divergence scores, concept names, confidence levels
-- **Hierarchical navigation**: Drill down from high-level to specific concepts
+HatCat's capabilities stack to enable an entire governance framework supporting AI legislation requirements from the EU AI Act and Australian AI governance frameworks. The core interpretability primitives construct safety harnesses, self-steering systems, model interoception, and accretive continual learning.
 
-See `docs/openwebui_*.md` for detailed setup instructions.
-
-### Concept Pack System
-Distribute and install custom concept collections as modular packs:
-
-```bash
-# Create a custom concept pack
-poetry run python scripts/create_concept_pack.py \
-  --name "ai-safety-concepts" \
-  --concepts data/concept_graph/ai_safety_layer_entries/ \
-  --output packs/ai_safety_v1.pack
-
-# Install a concept pack
-poetry run python scripts/install_concept_pack.py \
-  --pack packs/ai_safety_v1.pack \
-  --target data/concept_graph/abstraction_layers/
-```
-
-Concept packs include:
-- Custom SUMO/WordNet definitions (.kif format)
-- Trained lens weights
-- Metadata (version, dependencies, coverage stats)
-- Installation scripts
-
-See `docs/CONCEPT_PACK_WORKFLOW.md` for full documentation.
-
-### WordNet Patching
-Fill gaps in WordNet coverage using the patch system:
-
-```bash
-# Generate patch for missing synsets (e.g., noun.motive was 0/42)
-poetry run python scripts/generate_motivation_patch.py \
-  --strategy 2 \
-  --output data/concept_graph/patches/motivation_patch.json
-
-# Apply patch to layers
-poetry run python scripts/apply_wordnet_patch.py \
-  --patch data/concept_graph/patches/motivation_patch.json \
-  --layers data/concept_graph/abstraction_layers/
-```
-
-The patch system achieved **100% synset coverage** (5,582/5,582 concepts).
-
-See `docs/WORDNET_PATCH_SYSTEM.md` for details.
-
-### Advanced Training Features
-
-**Adaptive Training** (70% efficiency gain):
-```bash
-poetry run python scripts/train_sumo_classifiers.py \
-  --layers 0 1 2 \
-  --use-adaptive-training \
-  --validation-mode falloff
-```
-
-Automatically scales training data based on validation performance using tiered validation (A → B+ → B → C+). Achieves 95%+ F1 in ~8 hours for 5,583 concepts.
-
-**Dynamic FP Sizing** (fit larger models):
-```python
-# Use FP32 only at hook points, keep rest in FP16/BF16
-model = AutoModelForCausalLM.from_pretrained(
-    "google/gemma-3-4b-pt",
-    device_map="auto",
-    torch_dtype=torch.bfloat16  # Most layers in BF16
-)
-# Hooks automatically upcast to FP32 at steering points
-```
-
-See `docs/dynamic_fp_size.md` for implementation details.
-
-### Production Scale Status
-- **5,583 concepts trained** (100% of synset concept space)
-- **Training time**: ~8 hours with adaptive training
-- **F1 scores**: 95%+ average across all layers
-- **Memory**: Single GPU (RTX 3090/4090) sufficient with dynamic FP sizing
-- **Coverage**: 73,754 concepts in 5-layer SUMO hierarchy (88.7% of WordNet)
+Full specifications for recursive self-improving aligned agentic systems can be found in `docs/specification/`.
 
 ## Notes & Limitations
-- The SUMO classifiers expect Gemma-3-4B residual activations (hidden dim = 2560). Using smaller checkpoints (e.g., Gemma-270M) will fail unless you retrain classifiers for that dimension.
-- Monitoring currently outputs structured JSON/report logs; there is no packaged Web UI yet. Any visualization must consume the JSON (e.g., to color tokens by divergence).
-- Network access is required to pull HuggingFace checkpoints the first time you run a script.
-- Steering/manifold scripts assume a CUDA device for Gemma-3-4B due to VRAM requirements (~9 GB float16).
 
-It is possible to train on CPU for larger models
-#  CPU vs GPU Training Performance (Gemma-4B, Layer 0)
+- Network access required for HuggingFace model downloads on first run
+- CUDA device recommended for steering/manifold operations
+- CPU training possible but ~21x slower
+- Lens accuracy depends on training data quality and concept specificity
 
-  | Metric                          | GPU     | CPU      | Slowdown   |
-  |---------------------------------|---------|----------|------------|
-  | Forward pass                    | 29ms    | 609ms    | 21x slower |
-  | Layer 0 training                | ~19 min | ~7 hours | 21x slower |
+## License
 
-
+MIT
