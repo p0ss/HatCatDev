@@ -2,10 +2,30 @@
 
 Deploy HatCat on Modal with scale-to-zero GPU.
 
+## Prerequisites
+
+### 1. HuggingFace Access (Gemma is gated)
+
+Accept the Gemma license agreements:
+- https://huggingface.co/google/gemma-3-4b-pt
+- https://huggingface.co/google/gemma-2-2b
+
+### 2. Create Modal Secret
+
+Get your HF token from https://huggingface.co/settings/tokens or:
+```bash
+cat ~/.cache/huggingface/token
+```
+
+Create the Modal secret:
+```bash
+poetry run modal secret create huggingface HF_TOKEN=hf_your_token_here
+```
+
 ## Quick Start
 
 ```bash
-cd /home/poss/Documents/Code/HatCat
+cd /home/poss/Documents/Code/HatCatDev
 
 # Install modal (in deploy group)
 poetry install --with deploy
@@ -17,8 +37,8 @@ poetry run modal setup
 poetry run modal deploy scripts/deploy/modal_app.py
 ```
 
-That's it. The deployment:
-- Clones HatCat and hatcat-ui from GitHub
+The deployment:
+- Clones HatCat and HatCat-OpenWebUI from GitHub
 - Installs deps from `requirements.txt` and `pyproject.toml`
 - Downloads lens pack from HuggingFace
 - Caches models in a persistent volume
@@ -61,7 +81,7 @@ OpenWebUI has built-in auth:
 ## Spending Limits
 
 ```bash
-modal config set spending-limit 50  # $50/month cap
+poetry run modal config set spending-limit 50  # $50/month cap
 ```
 
 ## Keep Warm (Optional)

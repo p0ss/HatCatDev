@@ -48,6 +48,12 @@ image = (
         "cd /ui && npm ci --legacy-peer-deps",
         "cd /ui && npm run build",
     )
+    # OpenWebUI config
+    .env({
+        "ENABLE_SIGNUP": "true",
+        "WEBUI_AUTH": "true",
+        "DATA_DIR": "/data",
+    })
 )
 
 # Persistent volumes
@@ -74,6 +80,7 @@ data_volume = modal.Volume.from_name("hatcat-data", create_if_missing=True)
         "/root/.cache/huggingface": model_volume,
         "/data": data_volume,
     },
+    secrets=[modal.Secret.from_name("huggingface")],  # HF_TOKEN for gated models
 )
 class HatCat:
 
@@ -83,23 +90,34 @@ class HatCat:
         import sys
         import subprocess
 
+        # Configure OpenWebUI before it starts
+        os.environ["OPENAI_API_BASE_URL"] = "http://localhost:8765/v1"
+        os.environ["OPENAI_API_KEY"] = "sk-local"
+        os.environ["DATA_DIR"] = "/data"
+        os.environ["DATABASE_URL"] = "sqlite:////data/webui.db"
+        os.environ["ENABLE_SIGNUP"] = "true"
+        os.environ["WEBUI_AUTH"] = "true"
+
         # Start HatCat backend on port 8765
         sys.path.insert(0, "/app")
         os.chdir("/app")
 
         # Start HatCat server in background
+        # Explicitly include HF_TOKEN for gated model access
+        hatcat_env = {**os.environ, "PYTHONPATH": "/app"}
+        if "HF_TOKEN" in os.environ:
+            hatcat_env["HF_TOKEN"] = os.environ["HF_TOKEN"]
+            hatcat_env["HUGGING_FACE_HUB_TOKEN"] = os.environ["HF_TOKEN"]
+            print(f"HF_TOKEN present: {os.environ['HF_TOKEN'][:10]}...")
+        else:
+            print("WARNING: HF_TOKEN not found in environment!")
+
         self.hatcat_proc = subprocess.Popen(
             ["python", "-m", "uvicorn", "src.ui.openwebui.server:app",
              "--host", "0.0.0.0", "--port", "8765"],
             cwd="/app",
-            env={**os.environ, "PYTHONPATH": "/app"}
+            env=hatcat_env
         )
-
-        # Configure OpenWebUI to use local HatCat
-        os.environ["OPENAI_API_BASE_URL"] = "http://localhost:8765/v1"
-        os.environ["OPENAI_API_KEY"] = "sk-local"
-        os.environ["DATA_DIR"] = "/data"
-        os.environ["DATABASE_URL"] = "sqlite:////data/webui.db"
 
         print("HatCat backend starting on :8765")
         print("OpenWebUI will connect to local HatCat")
