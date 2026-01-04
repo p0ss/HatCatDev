@@ -24,10 +24,11 @@ class ConceptColorMapper:
             positions_file = Path(__file__).parent.parent.parent.parent / 'results' / 'concept_sunburst_positions.json'
 
         if not positions_file.exists():
-            raise FileNotFoundError(
-                f"Sunburst positions not found: {positions_file}\n"
-                f"Run: poetry run python scripts/build_concept_sunburst_positions_simple.py"
-            )
+            # Fallback: use hash-based colors instead of sunburst positions
+            print(f"Warning: Sunburst positions not found: {positions_file}")
+            print("Using hash-based colors. Run: poetry run python scripts/build_concept_sunburst_positions_simple.py")
+            self.positions = {}
+            return
 
         with open(positions_file) as f:
             self.positions = json.load(f)
