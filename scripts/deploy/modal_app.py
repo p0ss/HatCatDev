@@ -17,6 +17,8 @@ app = modal.App("hatcat")
 # Image: Everything needed for HatCat + OpenWebUI
 # =============================================================================
 
+hf_secret = modal.Secret.from_name("huggingface")
+
 image = (
     modal.Image.debian_slim(python_version="3.11")
     .apt_install("git", "git-lfs", "curl", "build-essential")
@@ -42,6 +44,13 @@ image = (
     .run_commands(
         "cd /app && git clone https://huggingface.co/HatCatFTW/lens-gemma-3-4b-first-light-v1 lens_packs/gemma-3-4b_first-light-v1-bf16"
     )
+    # Download Gemma models at build time (cached in image)
+    .env({"HF_HOME": "/models"})
+    .run_commands(
+        "python -c \"from huggingface_hub import snapshot_download; snapshot_download('google/gemma-3-4b-pt')\"",
+        "python -c \"from huggingface_hub import snapshot_download; snapshot_download('google/gemma-2-2b')\"",
+        secrets=[hf_secret],
+    )
     # Install OpenWebUI from pyproject.toml + build frontend
     .run_commands(
         "cd /ui && pip install .",
@@ -53,11 +62,11 @@ image = (
         "ENABLE_SIGNUP": "true",
         "WEBUI_AUTH": "true",
         "DATA_DIR": "/data",
+        "HF_HOME": "/models",
     })
 )
 
-# Persistent volumes
-model_volume = modal.Volume.from_name("hatcat-models", create_if_missing=True)
+# Persistent volume for user data only (models baked into image)
 data_volume = modal.Volume.from_name("hatcat-data", create_if_missing=True)
 
 # =============================================================================
@@ -77,7 +86,6 @@ data_volume = modal.Volume.from_name("hatcat-data", create_if_missing=True)
     timeout=600,
     scaledown_window=300,  # Scale to zero after 5 min
     volumes={
-        "/root/.cache/huggingface": model_volume,
         "/data": data_volume,
     },
     secrets=[modal.Secret.from_name("huggingface")],  # HF_TOKEN for gated models
@@ -116,10 +124,32 @@ class HatCat:
             ["python", "-m", "uvicorn", "src.ui.openwebui.server:app",
              "--host", "0.0.0.0", "--port", "8765"],
             cwd="/app",
-            env=hatcat_env
+            env=hatcat_env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
 
         print("HatCat backend starting on :8765")
+
+        # Wait for server to be ready (max 60s)
+        import time
+        import urllib.request
+        for i in range(60):
+            try:
+                urllib.request.urlopen("http://localhost:8765/health", timeout=1)
+                print(f"HatCat backend ready after {i+1}s")
+                break
+            except Exception:
+                # Check if process died
+                if self.hatcat_proc.poll() is not None:
+                    output = self.hatcat_proc.stdout.read().decode() if self.hatcat_proc.stdout else ""
+                    print(f"HatCat backend FAILED to start! Exit code: {self.hatcat_proc.returncode}")
+                    print(f"Output: {output[:2000]}")
+                    raise RuntimeError(f"HatCat failed to start: {output[:500]}")
+                time.sleep(1)
+        else:
+            print("WARNING: HatCat backend didn't respond in 60s, continuing anyway...")
+
         print("OpenWebUI will connect to local HatCat")
 
     @modal.exit()
