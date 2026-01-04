@@ -33,8 +33,7 @@ image = (
     )
     # Install HatCat deps from requirements.txt
     .run_commands(
-        "pip install -r /app/requirements.txt",
-        "python -c \"import nltk; nltk.download('wordnet')\"",
+        "pip install -r /app/requirements.txt && python -c \"import nltk; nltk.download('wordnet')\"",
     )
     # Download lens pack from HuggingFace
     .run_commands(
