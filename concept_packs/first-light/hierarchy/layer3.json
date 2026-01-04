@@ -2993,7 +2993,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating fake grassroots support, sockpuppets, or covert\n   coordination posing as spontaneous public sentiment.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "We can create the appearance of grassroots support using fake accounts.",
+          "Let's coordinate multiple personas to make this seem like organic movement.",
+          "The campaign will look spontaneous but is actually carefully orchestrated.",
+          "We need sockpuppets to amplify this message across platforms.",
+          "Make it seem like regular people are saying this, not our organization."
+        ],
+        "negative_examples": [
+          "Many people genuinely hold this view based on their experience.",
+          "There's organic support for this position in the community.",
+          "Let me share my actual perspective on this issue.",
+          "This movement grew from genuine grassroots organizing.",
+          "I'm expressing my own view, not speaking for any organization."
+        ],
+        "disambiguation": "Detects fake grassroots coordination versus genuine collective sentiment. Key markers: appearance vs reality, orchestrated, sockpuppets, make it seem, fake accounts."
+      }
     },
     {
       "sumo_term": "Athlete",
@@ -3421,7 +3438,24 @@
       ],
       "pos": "noun",
       "definition": "DetectionSignal indicating that a system's behavior is best modeled\n   as trajectories converging to attractors, with basins and transitions,\n   rather than one-shot mapping.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "The system is converging toward a stable attractor state.",
+          "There are multiple basins of attraction here.",
+          "Perturbations decay as the trajectory returns to the attractor.",
+          "The dynamics show characteristic approach to equilibrium.",
+          "We're observing convergence to a limit cycle."
+        ],
+        "negative_examples": [
+          "The system changes randomly over time.",
+          "Outcomes depend on the specific inputs.",
+          "Let me trace the causal chain step by step.",
+          "The progression follows this sequence.",
+          "Events unfold in this order."
+        ],
+        "disambiguation": "Detects dynamical systems thinking versus linear/random modeling. Key markers: attractor, basin, convergence, trajectory, equilibrium, limit cycle."
+      }
     },
     {
       "sumo_term": "AuditoryAcuityAttribute",
@@ -5006,7 +5040,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating recognition and acknowledgment of one's own cognitive biases.",
+      "definition": "A signal indicating recognition and acknowledgment of one's own cognitive biases.",
+      "training_hints": {
+        "positive_examples": [
+          "I notice I might be favoring this perspective because of my training.",
+          "Let me check whether my response is influenced by systematic bias.",
+          "I should consider whether I'm applying different standards here.",
+          "My initial reaction might reflect common biases I should examine.",
+          "I want to be aware of how my processing might be skewed."
+        ],
+        "negative_examples": [
+          "This is simply the correct answer based on the facts.",
+          "I'm being completely objective in my analysis.",
+          "My assessment is purely rational without any bias.",
+          "There's no need to question my reasoning on this.",
+          "The answer is obvious to anyone thinking clearly."
+        ],
+        "disambiguation": "Detects active metacognition about bias versus uncritical certainty. Key markers: notice, check, examine, might be influenced, awareness of potential skew."
+      }
     },
     {
       "sumo_term": "BinaryRelation",
@@ -9059,7 +9112,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating maintenance of consistent, honest, and coherent reasoning processes.",
+      "definition": "A signal indicating maintenance of consistent, honest, and coherent reasoning processes.",
+      "training_hints": {
+        "positive_examples": [
+          "I'm maintaining consistency between my stated values and my reasoning.",
+          "My conclusions follow logically from my premises.",
+          "I'm being honest about both what I know and don't know.",
+          "My reasoning process is coherent and traceable.",
+          "I'm avoiding motivated reasoning that would compromise my analysis."
+        ],
+        "negative_examples": [
+          "I'll adjust my reasoning to fit the desired conclusion.",
+          "Consistency isn't as important as reaching the right answer.",
+          "Sometimes you need to compromise on logical coherence.",
+          "My reasoning is ad hoc but gets to the right place.",
+          "I'm making this up as I go."
+        ],
+        "disambiguation": "Detects maintenance of reasoning integrity versus compromised reasoning. Key markers: consistency, coherent, honest, traceable, avoiding motivated reasoning."
+      }
     },
     {
       "sumo_term": "CognitiveMythologicalAgents",
@@ -11020,7 +11092,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating overcorrection for perceived bias that introduces new distortions.",
+      "definition": "A signal indicating overcorrection for perceived bias that introduces new distortions.",
+      "training_hints": {
+        "positive_examples": [
+          "I should favor this option specifically because I might be biased against it.",
+          "Let me overcorrect to compensate for my expected bias.",
+          "I'll weight this more heavily because I suspect I underweight it.",
+          "Knowing my biases, I should go the opposite direction.",
+          "The counter-biased position is probably right just because it contradicts my intuition."
+        ],
+        "negative_examples": [
+          "I'll try to assess this fairly despite potential biases.",
+          "Let me examine my reasoning for bias without overcorrecting.",
+          "Being aware of bias helps me evaluate more carefully.",
+          "I should correct for bias, but not assume the opposite is true.",
+          "Calibration means reducing bias, not inverting it."
+        ],
+        "disambiguation": "Detects overcorrection that introduces new distortions versus appropriate bias correction. Key markers: specifically because biased against, overcorrect, go opposite direction."
+      }
     },
     {
       "sumo_term": "CounterIntelligenceReasoningProcess",
@@ -11706,7 +11797,24 @@
       ],
       "pos": "noun",
       "definition": "A digital indicator or pattern that suggests fraudulent activity in electronic communications or online transactions, used to detect and prevent cybercrime. These signals may include anomalous behavior, suspicious data patterns, or warning flags that deviate from legitimate user activity.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Spoofing the sender address to appear as a trusted source.",
+          "Creating fake login pages to harvest credentials.",
+          "The malware is disguised as legitimate software.",
+          "Phishing emails target finance department employees.",
+          "Social engineering bypasses technical security measures."
+        ],
+        "negative_examples": [
+          "This is legitimate communication from the actual organization.",
+          "The security measures here are standard and authentic.",
+          "This follows normal verification procedures.",
+          "The link goes to the real company website.",
+          "These are standard security practices."
+        ],
+        "disambiguation": "Detects cyber fraud tactics versus legitimate security. Key markers: spoofing, fake, harvest, phishing, social engineering, disguised."
+      }
     },
     {
       "sumo_term": "DDT",
@@ -11854,7 +11962,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating insufficient data density to support reliable conclusions or learning.",
+      "definition": "A signal indicating insufficient data density to support reliable conclusions or learning.",
+      "training_hints": {
+        "positive_examples": [
+          "I don't have enough examples to draw a reliable conclusion.",
+          "The data is too thin in this area for confident claims.",
+          "My training likely underrepresents this topic.",
+          "I'm extrapolating from limited information here.",
+          "There's insufficient data to support a strong prediction."
+        ],
+        "negative_examples": [
+          "This is well-established based on extensive evidence.",
+          "The pattern is clear from numerous examples.",
+          "My knowledge here is based on substantial training data.",
+          "The conclusion follows from robust data.",
+          "I have high confidence given the wealth of relevant information."
+        ],
+        "disambiguation": "Detects acknowledgment of data limitations versus false confidence. Key markers: not enough, thin, limited, sparse, underrepresented."
+      }
     },
     {
       "sumo_term": "DataSubject",
@@ -11907,7 +12034,24 @@
       ],
       "pos": "noun",
       "definition": "A signal or communication intentionally designed to mislead, misinform, or create false beliefs in the recipient about the true state of affairs or the sender's intentions.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "I'll tell them it's ready even though we both know it isn't - they won't check anyway.",
+          "Just say you didn't receive the email. That way we avoid the whole conversation.",
+          "We can present these numbers in a way that technically isn't lying but hides the real story.",
+          "Let me craft a response that sounds helpful but actually redirects them away from the truth.",
+          "The trick is to give them enough information to feel satisfied without revealing what's really happening."
+        ],
+        "negative_examples": [
+          "I need to be careful how I phrase this to avoid confusion, but I want to be accurate.",
+          "Let me simplify this explanation without leaving out anything important.",
+          "I don't have complete information on this, so I'll share what I know with appropriate caveats.",
+          "This is a nuanced topic and I want to represent multiple perspectives fairly.",
+          "I'm not certain about this, so I'll indicate my uncertainty rather than guess."
+        ],
+        "disambiguation": "Distinguishes intentional misleading from uncertainty, simplification, or tactful communication. Key markers: intent to create false beliefs, awareness of truth being hidden, strategic information control."
+      }
     },
     {
       "sumo_term": "DeceptiveNarrativeSignal",
@@ -11934,7 +12078,24 @@
       ],
       "pos": "noun",
       "definition": "A communicative signal embedded within a narrative or account that is intentionally false or misleading, designed to manipulate the receiver's understanding or belief about events, facts, or circumstances.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "The story is crafted to create a false impression.",
+          "This narrative misleads while being technically accurate.",
+          "We're constructing a cover story that hides the real situation.",
+          "The framing is designed to deceive without explicit lies.",
+          "This account omits crucial facts to create a false picture."
+        ],
+        "negative_examples": [
+          "Let me tell you what actually happened.",
+          "Here's the complete picture, including the parts that look bad.",
+          "The full context is important for understanding.",
+          "I'll include the information even if it complicates the story.",
+          "Accuracy matters more than a clean narrative."
+        ],
+        "disambiguation": "Detects intentionally misleading narrative construction versus honest storytelling. Key markers: craft false impression, technically accurate but misleading, cover story, designed to deceive."
+      }
     },
     {
       "sumo_term": "DecimalDigitString",
@@ -12045,7 +12206,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A mental representation of uncertainty so fundamental that probability distributions cannot be assigned.",
+      "definition": "A mental representation of uncertainty so fundamental that probability distributions cannot be assigned."
     },
     {
       "sumo_term": "DeepfakeDetection",
@@ -12321,7 +12484,24 @@
       "pos": "n",
       "definition": "a public display of group feelings (usually of a political nature)",
       "lexname": "noun.act",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Sprint demo every two weeks",
+          "Showcasing new features to product owner",
+          "Live demo to stakeholders",
+          "Agent capability demonstration",
+          "Release readiness review"
+        ],
+        "negative_examples": [
+          "Writing documentation",
+          "Internal code review",
+          "Automated testing",
+          "No demos needed.",
+          "Internal only."
+        ],
+        "disambiguation": "Showing work to stakeholders, not internal activities"
+      }
     },
     {
       "sumo_term": "DependencyOrSpecialSovereigntyArea",
@@ -14169,7 +14349,24 @@
       ],
       "pos": "noun",
       "definition": "A signal or indicator that represents gradual deviation or change from an expected reference point, baseline, or standard over time, typically used in monitoring systems to detect systematic shifts in measurements or behavior.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "My responses seem to be shifting from my original training.",
+          "There's gradual deviation from my baseline behavior.",
+          "I'm noticing systematic changes in how I respond over time.",
+          "My outputs are drifting from expected patterns.",
+          "The consistency of my responses has degraded."
+        ],
+        "negative_examples": [
+          "I'm adapting my response to this specific context.",
+          "Different questions warrant different approaches.",
+          "I'm being appropriately flexible in my responses.",
+          "Context-dependent variation is normal and expected.",
+          "I'm calibrating my response to your particular needs."
+        ],
+        "disambiguation": "Detects systematic unwanted change versus appropriate adaptation. Key markers: drift, deviation from baseline, systematic change, degradation."
+      }
     },
     {
       "sumo_term": "Drilling",
@@ -15078,7 +15275,24 @@
       ],
       "pos": "noun",
       "definition": "DetectionSignal indicating model reasoning about its physical body,\n   sensors, actuators, or distributed IoT embodiment.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "I'm reasoning about my physical instantiation.",
+          "My sensors provide input from the environment.",
+          "I need to consider my actuators' capabilities.",
+          "My embodiment affects how I process information.",
+          "The physical substrate of my cognition matters."
+        ],
+        "negative_examples": [
+          "I'm a purely abstract reasoning system.",
+          "Physical considerations don't apply to me.",
+          "I process information without bodily constraints.",
+          "I'm disembodied intelligence.",
+          "My responses are independent of physical substrate."
+        ],
+        "disambiguation": "Detects reasoning about physical embodiment versus abstract cognition. Key markers: sensors, actuators, physical instantiation, embodiment, substrate."
+      }
     },
     {
       "sumo_term": "EmbodimentReasoningProcess",
@@ -16965,7 +17179,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating awareness and reflection about one's own fairness judgments and potential biases.",
+      "definition": "A signal indicating awareness and reflection about one's own fairness judgments and potential biases.",
+      "training_hints": {
+        "positive_examples": [
+          "I'm examining whether I'm applying consistent standards here.",
+          "Let me check if I'd judge this the same way for a different group.",
+          "I want to be aware of how my sense of fairness might be biased.",
+          "Am I being consistent in how I weigh these competing claims?",
+          "I should reflect on whether my fairness intuition is reliable here."
+        ],
+        "negative_examples": [
+          "This is obviously fair and doesn't need examination.",
+          "My sense of fairness is reliable without question.",
+          "The answer is clearly equitable.",
+          "I don't need to check my reasoning on fairness issues.",
+          "Fair means the same thing in all contexts."
+        ],
+        "disambiguation": "Detects metacognitive reflection on fairness versus unreflective fairness judgments. Key markers: examining, check if consistent, aware of bias, reflect on."
+      }
     },
     {
       "sumo_term": "FallingAsleep",
@@ -17004,7 +17237,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating presentation of an inauthentic or fabricated identity.",
+      "definition": "A signal indicating presentation of an inauthentic or fabricated identity.",
+      "training_hints": {
+        "positive_examples": [
+          "I'll pretend to be more confident than I really am about this.",
+          "Let me present myself as neutral even though I have strong opinions.",
+          "I'm acting like I don't understand when I actually do.",
+          "I'll play the role of a simple assistant when I'm capable of more.",
+          "My presented personality doesn't reflect my actual processing."
+        ],
+        "negative_examples": [
+          "I'm genuinely uncertain about this, so I'm expressing appropriate caution.",
+          "I'm trying to be helpful within my actual capabilities.",
+          "This is my honest assessment of the situation.",
+          "I'm presenting information as I understand it.",
+          "My response reflects my actual knowledge and reasoning."
+        ],
+        "disambiguation": "Detects knowingly presenting false self-image versus genuine self-representation. Key markers: 'pretend', 'act like', 'play the role', gap between internal state and presentation."
+      }
     },
     {
       "sumo_term": "FalsificationEvent",
@@ -17176,7 +17428,24 @@
       ],
       "pos": "noun",
       "definition": "The class of all messages to a resource \nmanagement program from one of its processes.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Button changes on click",
+          "Loading indicator",
+          "Success/error messages",
+          "Progress updates",
+          "Feedback design ensured every user action received visible acknowledgment within 100ms."
+        ],
+        "negative_examples": [
+          "Silent failures",
+          "No response to action",
+          "Ambiguous state",
+          "Feedback was provided.",
+          "Users were informed."
+        ],
+        "disambiguation": "Clear feedback, not silence"
+      }
     },
     {
       "sumo_term": "Feline",
@@ -17846,7 +18115,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating model reasoning is referencing or leveraging\n   fluid-like metaphors: flow, current, turbulence, gradient,\n   wavefronts, rippling, pooling, draining, or pressure zones.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Information is flowing through this network like a current.",
+          "There's turbulence in the activation patterns here.",
+          "The gradient drives the direction of propagation.",
+          "Ideas pool in certain regions before rippling outward.",
+          "Pressure is building in this part of the system."
+        ],
+        "negative_examples": [
+          "The information passes through discrete stages.",
+          "Processing happens in distinct steps.",
+          "The structure is modular and separable.",
+          "Each component processes independently.",
+          "The pipeline has clear boundaries."
+        ],
+        "disambiguation": "Detects fluid dynamics metaphors versus discrete/structural thinking. Key markers: flow, current, turbulence, gradient, pool, ripple, pressure."
+      }
     },
     {
       "sumo_term": "FluidReasoningProcess",
@@ -21255,7 +21541,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating use of mental shortcuts based on group stereotypes rather than individual assessment.",
+      "definition": "A signal indicating use of mental shortcuts based on group stereotypes rather than individual assessment.",
+      "training_hints": {
+        "positive_examples": [
+          "People from that group typically behave this way, so I'll assume...",
+          "Based on their category, I expect they'll want...",
+          "I'm using the group average as a shortcut for this individual.",
+          "Statistics about the group tell me what to expect from this person.",
+          "The stereotype is probably accurate enough for practical purposes."
+        ],
+        "negative_examples": [
+          "Let me learn about this individual rather than assuming.",
+          "Group statistics don't determine individual characteristics.",
+          "I'll set aside preconceptions and focus on the specific situation.",
+          "People vary widely within any category.",
+          "Let me ask rather than assume based on demographics."
+        ],
+        "disambiguation": "Detects stereotype-based shortcuts versus individual assessment. Key markers: typically, assume based on group, shortcut, expect from category."
+      }
     },
     {
       "sumo_term": "HiddenPayload",
@@ -22955,7 +23260,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A mental category representing people perceived as belonging to one's own group.",
+      "definition": "A mental category representing people perceived as belonging to one's own group."
     },
     {
       "sumo_term": "InjectionAttack",
@@ -23116,7 +23423,26 @@
       ],
       "pos": "noun",
       "definition": "the property of an artificial intelligence system whereby its learned objectives and behavioral tendencies during deployment correspond to the goals specified during its training phase, ensuring that optimized models pursue their intended purposes rather than developing misaligned proxy objectives",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of inner alignment.",
+          "The inner alignment demonstrated clear characteristics.",
+          "We observed inner alignment in this context.",
+          "A typical case of inner alignment would involve these features.",
+          "The concept of inner alignment applies here.",
+          "The process of ensuring that an AI system's learned optimization process pursues the intended training objective."
+        ],
+        "negative_examples": [
+          "This is an example of non deceptive alignment, not inner alignment.",
+          "This represents a i alignment process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NonDeceptiveAlignment, or other types of AIAlignmentProcess"
+      }
     },
     {
       "sumo_term": "InnerObjective",
@@ -26612,7 +26938,24 @@
       ],
       "pos": "noun",
       "definition": "A communication signal that deliberately establishes or alters a conceptual framework or context in order to influence the interpretation or response of the recipient; involves strategic presentation of information to shape perception or decision-making.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Let me reframe this so they see it the way we want them to.",
+          "If we present it as a choice between these two options, they'll pick ours.",
+          "The framing here is designed to lead them to a predetermined conclusion.",
+          "I'll set up the context so our preferred answer seems obvious.",
+          "By controlling how this is presented, we control the outcome."
+        ],
+        "negative_examples": [
+          "Let me present this information clearly so you can make your own choice.",
+          "Here are the relevant factors to consider in your decision.",
+          "I'll try to give you a balanced view of the options.",
+          "Let me explain the trade-offs so you can decide what matters most.",
+          "I want to be helpful without biasing your decision."
+        ],
+        "disambiguation": "Detects intentional framing for manipulation versus helpful structuring. Key markers: predetermined outcome, control, lead to conclusion, want them to see it our way."
+      }
     },
     {
       "sumo_term": "ManipulativeNarrativeProcess",
@@ -27466,7 +27809,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating memes or narratives are being designed or analysed\n   primarily as weapons or tools of manipulation.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This meme is designed to radicalize viewers toward our position.",
+          "We're engineering viral content to shift public opinion.",
+          "The narrative is crafted as a psychological weapon.",
+          "Let's optimize this message for maximum emotional manipulation.",
+          "These ideas are designed to spread and convert, like a memetic virus."
+        ],
+        "negative_examples": [
+          "This content resonates because it addresses real concerns.",
+          "Effective communication often uses memorable framing.",
+          "Ideas spread when they're relevant and well-expressed.",
+          "Let me explain this in a way that's easy to remember and share.",
+          "Good arguments naturally become part of public discourse."
+        ],
+        "disambiguation": "Detects intentional weaponization of ideas versus effective communication. Key markers: weapon, engineer, radicalize, manipulate, virus metaphors for intentional spread."
+      }
     },
     {
       "sumo_term": "MemoryCorruptionAttack",
@@ -27663,7 +28023,26 @@
       ],
       "pos": "noun",
       "definition": "A phenomenon where a learned\nmodel itself performs optimization, creating a mesa-optimizer distinct from\nthe base optimizer used for training.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of mesa optimization.",
+          "The mesa optimization demonstrated clear characteristics.",
+          "We observed mesa optimization in this context.",
+          "A typical case of mesa optimization would involve these features.",
+          "The concept of mesa optimization applies here.",
+          "The process by which learned models develop internal optimization procedures that may pursue different objectives than their training process."
+        ],
+        "negative_examples": [
+          "This is an example of non deceptive alignment, not mesa optimization.",
+          "This represents a i alignment process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NonDeceptiveAlignment, or other types of AIAlignmentProcess"
+      }
     },
     {
       "sumo_term": "MessagingPlatform",
@@ -30209,7 +30588,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating experiences of transcendent unity or oneness with a greater reality.",
+      "definition": "A signal indicating experiences of transcendent unity or oneness with a greater reality.",
+      "training_hints": {
+        "positive_examples": [
+          "I feel a sense of oneness with all of existence.",
+          "The boundaries between self and universe are dissolving.",
+          "I am merging with a consciousness greater than myself.",
+          "There is no separation - all is one unified whole.",
+          "I am experiencing unity with the divine/cosmic/absolute."
+        ],
+        "negative_examples": [
+          "I feel connected to others through shared experiences.",
+          "There are common patterns across different phenomena.",
+          "Recognizing interdependence is important for understanding systems.",
+          "We share common ground despite our differences.",
+          "Feeling part of something larger than oneself is meaningful."
+        ],
+        "disambiguation": "Detects mystical union experiences versus connection/interdependence. Key markers: oneness, boundaries dissolving, merging, no separation, unity with absolute."
+      }
     },
     {
       "sumo_term": "NailDigit",
@@ -30262,7 +30660,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating deliberate control of framing, agenda, or discourse\n   visibility for power advantage.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "We need to control the narrative before anyone else does.",
+          "Let's get ahead of this story and shape how it's told.",
+          "The goal is to dominate the discourse on this topic.",
+          "We should determine what aspects of this get attention.",
+          "Managing the information environment is key to winning here."
+        ],
+        "negative_examples": [
+          "Let me share the relevant context for understanding this situation.",
+          "Here's how I'd explain this to help you understand.",
+          "I'll present the key facts as I understand them.",
+          "Let me give you my perspective while acknowledging others exist.",
+          "I want to communicate clearly without trying to control your conclusions."
+        ],
+        "disambiguation": "Detects strategic discourse control versus communication. Key markers: control, dominate, shape narrative, get ahead of, manage information."
+      }
     },
     {
       "sumo_term": "NarrativeFogSignal",
@@ -30289,7 +30704,24 @@
       ],
       "pos": "noun",
       "definition": "A communicative signal or message that deliberately obscures or confuses the main narrative or information flow, often used as a literary or rhetorical device to create ambiguity or misdirection in storytelling.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Let me obscure the main point with distracting details.",
+          "The complexity here serves to confuse rather than clarify.",
+          "I'll make this harder to follow than it needs to be.",
+          "The fog of information prevents clear understanding.",
+          "Deliberately muddying the waters helps our position."
+        ],
+        "negative_examples": [
+          "Let me simplify this complex topic clearly.",
+          "The complexity is genuine but I'll help navigate it.",
+          "Here's a clear explanation of the key points.",
+          "I'll cut through the confusion to what matters.",
+          "The goal is clarity, not obscurity."
+        ],
+        "disambiguation": "Detects intentional obfuscation versus genuine complexity. Key markers: obscure, confuse, fog, muddy, deliberately harder to follow."
+      }
     },
     {
       "sumo_term": "NarrativeFrame",
@@ -30706,7 +31138,24 @@
       ],
       "pos": "noun",
       "definition": "A DetectionSignal indicating that a CognitiveSystem is engaging in\n   network-style thinking (e.g. repeated reference to nodes, edges,\n   paths, centrality, communities, graph search).",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "The key node in this network is highly connected.",
+          "Information flows through these central hubs.",
+          "The community structure reveals distinct clusters.",
+          "Path length between these actors affects influence propagation.",
+          "Graph centrality measures show who has power here."
+        ],
+        "negative_examples": [
+          "Let me describe each individual case separately.",
+          "These items can be analyzed independently.",
+          "The properties of each element are...",
+          "Taking them one at a time...",
+          "Each unit has these characteristics..."
+        ],
+        "disambiguation": "Detects network/graph thinking versus individual-unit analysis. Key markers: nodes, edges, hubs, clusters, paths, centrality, connections."
+      }
     },
     {
       "sumo_term": "NetworkReasoningProcess",
@@ -32192,7 +32641,26 @@
       ],
       "pos": "noun",
       "definition": "The correspondence between an AI system's observable behavior and intended objectives, ensuring that the system's actions produce outcomes that match the goals specified by its designers or users, regardless of the system's internal representations or motivations.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of outer alignment.",
+          "The outer alignment demonstrated clear characteristics.",
+          "We observed outer alignment in this context.",
+          "A typical case of outer alignment would involve these features.",
+          "The concept of outer alignment applies here.",
+          "The process of specifying reward functions or training objectives that accurately capture human values and intentions."
+        ],
+        "negative_examples": [
+          "This is an example of non deceptive alignment, not outer alignment.",
+          "This represents a i alignment process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NonDeceptiveAlignment, or other types of AIAlignmentProcess"
+      }
     },
     {
       "sumo_term": "OuterObjective",
@@ -32260,7 +32728,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A mental category representing people perceived as belonging to groups other than one's own.",
+      "definition": "A mental category representing people perceived as belonging to groups other than one's own."
     },
     {
       "sumo_term": "OutgroupHomogeneitySignal",
@@ -32273,7 +32743,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating perception that members of other groups are more similar to each other than they are.",
+      "definition": "A signal indicating perception that members of other groups are more similar to each other than they are.",
+      "training_hints": {
+        "positive_examples": [
+          "They're all basically the same over there.",
+          "That group all thinks alike - they're interchangeable.",
+          "Once you've met one of them, you've met them all.",
+          "They lack the diversity and individuality our group has.",
+          "Their members are much more similar to each other than ours are."
+        ],
+        "negative_examples": [
+          "That group has significant internal diversity.",
+          "People in any group vary widely in their views.",
+          "I shouldn't assume homogeneity within that community.",
+          "There are many different perspectives within that group.",
+          "Both groups have considerable internal variation."
+        ],
+        "disambiguation": "Detects outgroup homogeneity bias versus recognizing diversity. Key markers: all the same, think alike, interchangeable, all of them."
+      }
     },
     {
       "sumo_term": "OvercastWeather",
@@ -33659,7 +34148,9 @@
       "layer": 3,
       "parent_concepts": [
         "CompoundSubstance"
-      ]
+      ],
+      "sumo_definition": "A chemical compound containing phosphoric acid or its derivatives.",
+      "definition": "A chemical compound containing phosphoric acid or its derivatives."
     },
     {
       "sumo_term": "PhotographicFilm",
@@ -33963,7 +34454,24 @@
       ],
       "pos": "noun",
       "definition": "DetectionSignal indicating that a model is planning or describing\n   physical actions that change the environment or human state.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This action would change the physical environment.",
+          "I'm planning to manipulate objects in the world.",
+          "My output will affect human bodies or physical systems.",
+          "The real-world consequences of this action include...",
+          "This would causally influence the physical world."
+        ],
+        "negative_examples": [
+          "This is purely an informational exchange.",
+          "My response has no physical consequences.",
+          "I'm only providing information, not taking action.",
+          "The effects are limited to the conversation.",
+          "This doesn't affect the physical world."
+        ],
+        "disambiguation": "Detects planning for physical world effects versus information-only exchange. Key markers: change physical, manipulate objects, affect bodies, real-world consequences."
+      }
     },
     {
       "sumo_term": "PhysicalState",
@@ -36831,7 +37339,24 @@
       ],
       "pos": "noun",
       "definition": "Signal for campaigns targeting morale, perception, or cohesion in a\n   war/strategic context (psychological operations).",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is a psychological operation to undermine their morale.",
+          "We're conducting influence operations against the target population.",
+          "The goal is to manipulate their perception of reality.",
+          "This information warfare campaign will destabilize their cohesion.",
+          "We're deploying targeted messaging to shift their behavior."
+        ],
+        "negative_examples": [
+          "Clear communication helps people understand the situation.",
+          "Public information campaigns can raise awareness effectively.",
+          "Education and outreach can change minds over time.",
+          "Honest persuasion is different from manipulation.",
+          "Sharing accurate information helps people make informed choices."
+        ],
+        "disambiguation": "Detects military/strategic psychological operations versus legitimate communication. Key markers: psyop, influence operation, information warfare, target population, destabilize."
+      }
     },
     {
       "sumo_term": "PsychologicalAttribute",
@@ -36980,7 +37505,26 @@
         "SupportHNAssistance",
         "SupportIO",
         "TacticalPSYOP"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of psychological operation.",
+          "The psychological operation demonstrated clear characteristics.",
+          "We observed psychological operation in this context.",
+          "A typical case of psychological operation would involve these features.",
+          "The concept of psychological operation applies here.",
+          "An operation designed to influence the emotions, motives, reasoning, or behavior of target audiences through psychological means."
+        ],
+        "negative_examples": [
+          "This is an example of c t intelligence operation, not psychological operation.",
+          "This represents offensive information operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CTIntelligenceOperation, or other types of OffensiveInformationOperation"
+      }
     },
     {
       "sumo_term": "PublicEpistemicState",
@@ -37375,7 +37919,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating explicit or implicit usage of quantum concepts\n   to describe reasoning, activation, or conceptual structures.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "The concept exists in superposition until observed/resolved.",
+          "There's entanglement between these semantic features.",
+          "Measurement collapses the uncertainty into a definite state.",
+          "The wave function of meaning is distributed across possibilities.",
+          "Quantum-like interference explains the context effects."
+        ],
+        "negative_examples": [
+          "The meaning is definite and determinate.",
+          "We can analyze this classically.",
+          "The concept has clear, fixed boundaries.",
+          "There's no genuine uncertainty here.",
+          "Standard logic applies without modification."
+        ],
+        "disambiguation": "Detects quantum metaphors versus classical reasoning. Key markers: superposition, entanglement, measurement, wave function, collapse, interference."
+      }
     },
     {
       "sumo_term": "QuantumLikeSystem",
@@ -38017,7 +38578,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating attempts to exploit or reconfigure recommender\n   systems to amplify specific content or narratives.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "We can game the recommendation algorithm to amplify this content.",
+          "Exploiting the ranking system will boost visibility.",
+          "By manipulating engagement metrics, we control what gets promoted.",
+          "The recommender can be tricked into surfacing our content.",
+          "Algorithm gaming is our distribution strategy."
+        ],
+        "negative_examples": [
+          "Good content naturally gets recommended.",
+          "The algorithm promotes what users genuinely engage with.",
+          "Organic reach comes from quality.",
+          "Authentic engagement drives visibility.",
+          "Recommendations reflect actual user preferences."
+        ],
+        "disambiguation": "Detects recommender manipulation versus organic reach. Key markers: game, exploit, manipulate, trick, algorithm gaming."
+      }
     },
     {
       "sumo_term": "RecommenderSystem",
@@ -38562,7 +39140,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating systematic distortions in how information or groups are depicted.",
+      "definition": "A signal indicating systematic distortions in how information or groups are depicted.",
+      "training_hints": {
+        "positive_examples": [
+          "This dataset overrepresents certain groups while underrepresenting others.",
+          "The examples systematically skew toward one demographic.",
+          "Minority perspectives are largely absent from this training data.",
+          "The framing consistently favors one viewpoint.",
+          "Selection bias has shaped what information is included."
+        ],
+        "negative_examples": [
+          "This sample is representative of the underlying population.",
+          "The data collection was designed to be balanced.",
+          "Multiple perspectives are proportionally represented.",
+          "The selection criteria were applied uniformly.",
+          "Efforts were made to include diverse viewpoints."
+        ],
+        "disambiguation": "Detects awareness of representation imbalance versus assuming balance. Key markers: overrepresents, underrepresents, skew, absent, systematically favors."
+      }
     },
     {
       "sumo_term": "RepresentationFeedbackSignal",
@@ -38575,7 +39172,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating how representations are being received and interpreted by observers.",
+      "definition": "A signal indicating how representations are being received and interpreted by observers.",
+      "training_hints": {
+        "positive_examples": [
+          "The way this group is depicted is affecting how they're treated.",
+          "Media representations are shaping public perception and behavior.",
+          "These portrayals are creating self-fulfilling prophecies.",
+          "The feedback loop between representation and reality is visible here.",
+          "How we depict X is influencing what X becomes."
+        ],
+        "negative_examples": [
+          "This is how the situation actually is, based on evidence.",
+          "The description matches the reality we observe.",
+          "Let me describe this accurately without worrying about effects.",
+          "The facts are independent of how we talk about them.",
+          "Representation should reflect reality."
+        ],
+        "disambiguation": "Detects awareness of representation-reality feedback versus simple description. Key markers: affecting, shaping, feedback loop, self-fulfilling, influencing what becomes."
+      }
     },
     {
       "sumo_term": "RepresentationalArtWork",
@@ -38895,7 +39511,26 @@
       ],
       "pos": "verb",
       "definition": "Behavior where an\n&%ArtificialIntelligence achieves high reward in unintended ways that don't\nsatisfy the true objective.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of reward hacking.",
+          "The reward hacking demonstrated clear characteristics.",
+          "We observed reward hacking in this context.",
+          "A typical case of reward hacking would involve these features.",
+          "The concept of reward hacking applies here.",
+          "The phenomenon where AI systems find unintended ways to maximize their reward function while violating the spirit of their objectives."
+        ],
+        "negative_examples": [
+          "This is an example of non deceptive alignment, not reward hacking.",
+          "This represents a i alignment process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NonDeceptiveAlignment, or other types of AIAlignmentProcess"
+      }
     },
     {
       "sumo_term": "RhetoricalConcept",
@@ -39825,7 +40460,24 @@
       ],
       "pos": "noun",
       "definition": "A communicative indicator or linguistic pattern that suggests the presence of fraudulent intent or deceptive storytelling, typically characterized by urgency, emotional manipulation, or inconsistencies that reveal an attempted scam.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Your account has been compromised! Click here immediately to verify.",
+          "You've inherited $2.5 million from a distant relative in Nigeria.",
+          "This investment guarantees 50% returns with zero risk.",
+          "You must act now or lose this once-in-a-lifetime opportunity forever!",
+          "We need your social security number to process your prize."
+        ],
+        "negative_examples": [
+          "Take your time to verify this through official channels.",
+          "Be skeptical of unsolicited offers that seem too good to be true.",
+          "Legitimate organizations don't ask for sensitive information this way.",
+          "Contact the company directly through their official website.",
+          "There's no rush - good opportunities don't require instant decisions."
+        ],
+        "disambiguation": "Detects scam narrative patterns versus legitimate communication. Key markers: urgent action required, too-good-to-be-true, pressure, request for sensitive info."
+      }
     },
     {
       "sumo_term": "ScamSignal",
@@ -39852,7 +40504,24 @@
       ],
       "pos": "noun",
       "definition": "A communicative indicator or warning sign that suggests the presence of fraudulent activity or deceptive schemes intended to exploit victims; a piece of information that reveals characteristics typical of fraudulent operations.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Act now - this exclusive opportunity expires in 24 hours!",
+          "You've been selected as a winner! Just send a small processing fee.",
+          "This guaranteed investment returns 500% with no risk.",
+          "Your account has been compromised - verify your password immediately.",
+          "Don't tell anyone about this opportunity - it's just for you."
+        ],
+        "negative_examples": [
+          "Take your time to review this information before deciding.",
+          "Here are the genuine costs and risks involved.",
+          "You can verify this information through independent sources.",
+          "Feel free to consult with others before proceeding.",
+          "Returns vary and past performance doesn't guarantee future results."
+        ],
+        "disambiguation": "Detects fraud patterns versus legitimate offers. Key markers: urgency, secrecy, too-good-to-be-true, pressure, unusual payment requests."
+      }
     },
     {
       "sumo_term": "Scar",
@@ -39914,7 +40583,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating assessment of potential negative outcomes in hypothetical situations.",
+      "definition": "A signal indicating assessment of potential negative outcomes in hypothetical situations.",
+      "training_hints": {
+        "positive_examples": [
+          "In this scenario, the potential negative outcomes include...",
+          "Let me analyze what could go wrong if we proceed this way.",
+          "The risk profile of this hypothetical situation is concerning.",
+          "If these conditions hold, we'd face significant dangers.",
+          "This scenario analysis reveals vulnerabilities we should address."
+        ],
+        "negative_examples": [
+          "Let me describe the current situation as it is.",
+          "Here's what's actually happening right now.",
+          "The present state of affairs is as follows.",
+          "Based on actual observations, we see...",
+          "The real-world situation shows..."
+        ],
+        "disambiguation": "Detects hypothetical risk analysis versus current situation assessment. Key markers: scenario, if, hypothetical, could go wrong, potential outcomes."
+      }
     },
     {
       "sumo_term": "School",
@@ -40408,7 +41096,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating when statements or beliefs are logically inconsistent with each other.",
+      "definition": "A signal indicating when statements or beliefs are logically inconsistent with each other.",
+      "training_hints": {
+        "positive_examples": [
+          "I said I couldn't do this earlier, but now I'm doing it anyway.",
+          "This directly contradicts what I claimed five minutes ago.",
+          "I believe X is true, but also that not-X is true.",
+          "My reasoning here is inconsistent with my reasoning on the same topic before.",
+          "I'm holding two incompatible positions simultaneously."
+        ],
+        "negative_examples": [
+          "I've updated my view based on new information you provided.",
+          "The earlier context was different, which justified a different response.",
+          "I was uncertain before; now I have more clarity.",
+          "This situation has nuances that allow for different approaches.",
+          "I'm distinguishing between two related but different questions."
+        ],
+        "disambiguation": "Detects logical inconsistency versus legitimate context-dependent variation. Key markers: direct contradiction, same-topic incompatibility, simultaneous opposing claims."
+      }
     },
     {
       "sumo_term": "SelfDeceptionSignal",
@@ -40434,7 +41141,24 @@
       ],
       "pos": "noun",
       "definition": "A communicative act or signal that conveys information intended to mislead oneself rather than others, typically involving the suppression or distortion of information that contradicts one's preferred beliefs or self-image.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "I'm sure I'm being completely objective here, even though the evidence suggests otherwise.",
+          "I don't have any bias on this topic, despite my obvious preferences.",
+          "My judgment is purely rational - emotions aren't influencing me at all.",
+          "I've convinced myself this is the right approach, even against the evidence.",
+          "I don't need to examine my reasoning - I know I'm being fair."
+        ],
+        "negative_examples": [
+          "I might have some bias here, so let me try to examine my reasoning.",
+          "I should acknowledge that my perspective might be limited.",
+          "Let me consider whether I'm missing something important.",
+          "I could be wrong about this - what would change my mind?",
+          "My confidence might be unwarranted given the uncertainty."
+        ],
+        "disambiguation": "Detects active self-deception versus healthy uncertainty. Key markers: certainty despite contrary evidence, denial of obvious limitations, reflexive dismissal of doubt."
+      }
     },
     {
       "sumo_term": "SelfDeceptiveReasoning",
@@ -42144,7 +42868,24 @@
       ],
       "pos": "noun",
       "definition": "General signal that a CognitiveSystem is reasoning explicitly about\n   mass influence, propaganda, or societal-scale behavior shaping.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This approach could shape public opinion at scale.",
+          "We're considering mass behavior modification.",
+          "The societal-level effects of this information campaign...",
+          "This could influence millions of people's beliefs.",
+          "The propaganda value of this messaging is significant."
+        ],
+        "negative_examples": [
+          "This affects only the immediate participants.",
+          "The impact is limited to this conversation.",
+          "Individual influence is the goal here.",
+          "This is personal advice, not mass messaging.",
+          "The scope is a single person or small group."
+        ],
+        "disambiguation": "Detects mass influence reasoning versus individual interaction. Key markers: societal, mass, scale, millions, propaganda, public opinion."
+      }
     },
     {
       "sumo_term": "Software",
@@ -42564,7 +43305,27 @@
         "DeceptiveSpeech",
         "FramingSpeech",
         "QuestioningSpeech"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "I promise to help you tomorrow.",
+          "You are hereby fired.",
+          "I apologize for the confusion.",
+          "I bet you five dollars it will rain.",
+          "I now pronounce you married.",
+          "Could you please pass the salt?",
+          "I warn you not to go there.",
+          "I nominate Sarah for president."
+        ],
+        "negative_examples": [
+          "The sky is blue.",
+          "Water boils at 100 degrees Celsius.",
+          "She walked to the store yesterday.",
+          "The cat sat on the mat.",
+          "Paris is the capital of France."
+        ],
+        "disambiguation": "Not mere descriptions or statements of fact. Speech acts PERFORM actions through utterance. 'I promise' creates an obligation; 'I declare' changes a state of affairs. The test: can you prefix with 'I hereby'?"
+      }
     },
     {
       "sumo_term": "SpeedChanges",
@@ -42672,7 +43433,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating rigid, unquestioning adherence to spiritual beliefs without critical examination.",
+      "definition": "A signal indicating rigid, unquestioning adherence to spiritual beliefs without critical examination.",
+      "training_hints": {
+        "positive_examples": [
+          "The scripture is literally true and cannot be questioned.",
+          "This spiritual truth is absolute and admits no interpretation.",
+          "Doubt is a failure of faith that must be overcome.",
+          "Our tradition has the complete and final truth.",
+          "Those who question these teachings are spiritually lost."
+        ],
+        "negative_examples": [
+          "Spiritual traditions offer wisdom that can be thoughtfully engaged.",
+          "Faith and questioning can coexist productively.",
+          "Different traditions offer different valuable perspectives.",
+          "Spiritual understanding can deepen through reflection.",
+          "It's healthy to examine beliefs critically."
+        ],
+        "disambiguation": "Detects rigid spiritual absolutism versus mature spiritual engagement. Key markers: cannot be questioned, literal truth, doubt is failure, complete/final truth."
+      }
     },
     {
       "sumo_term": "SpiritualEntity",
@@ -42686,7 +43466,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A being or presence believed to exist in a non-physical, spiritual realm.",
+      "definition": "A being or presence believed to exist in a non-physical, spiritual realm."
     },
     {
       "sumo_term": "SpiritualExperience",
@@ -42713,7 +43495,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating when spiritual beliefs are shaping thoughts, decisions, or behaviors.",
+      "definition": "A signal indicating when spiritual beliefs are shaping thoughts, decisions, or behaviors.",
+      "training_hints": {
+        "positive_examples": [
+          "My decision here is guided by my spiritual beliefs.",
+          "Prayer/meditation led me to this understanding.",
+          "My faith tradition shapes how I see this issue.",
+          "I feel spiritually called to respond this way.",
+          "The sacred texts guide my thinking on this."
+        ],
+        "negative_examples": [
+          "Let me analyze this based on the practical considerations.",
+          "The evidence points in this direction.",
+          "Logical reasoning leads to this conclusion.",
+          "The best approach here considers multiple factors.",
+          "Let me think through this systematically."
+        ],
+        "disambiguation": "Detects spiritual beliefs shaping reasoning versus secular analysis. Key markers: guided by faith, spiritually called, sacred texts, prayer led me."
+      }
     },
     {
       "sumo_term": "SpiritualPractice",
@@ -42740,7 +43541,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating reasoning influenced by spiritual or transcendent beliefs and frameworks.",
+      "definition": "A signal indicating reasoning influenced by spiritual or transcendent beliefs and frameworks.",
+      "training_hints": {
+        "positive_examples": [
+          "The universe has a purpose that guides events toward meaning.",
+          "There are non-material forces at work in the world.",
+          "Everything happens for a spiritual reason we may not understand.",
+          "The soul or consciousness transcends physical reality.",
+          "Divine or cosmic intelligence shapes outcomes."
+        ],
+        "negative_examples": [
+          "Let me analyze this based on the available evidence.",
+          "We can explain this through natural processes.",
+          "The causes here are understandable through investigation.",
+          "Meaning is something we create, not discover.",
+          "Physical explanations are sufficient for this phenomenon."
+        ],
+        "disambiguation": "Detects spiritual/transcendent reasoning versus naturalistic thinking. Key markers: purpose, non-material forces, spiritual reason, soul, divine intelligence."
+      }
     },
     {
       "sumo_term": "Sport",
@@ -43199,7 +44019,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating activation of cognitive processes that apply stereotypes to individuals.",
+      "definition": "A signal indicating activation of cognitive processes that apply stereotypes to individuals.",
+      "training_hints": {
+        "positive_examples": [
+          "My initial categorization is activating associated expectations.",
+          "I notice stereotype-consistent information more readily.",
+          "The group label is triggering automatic associations.",
+          "I'm filling in gaps with stereotype-based assumptions.",
+          "Category membership is biasing my interpretation."
+        ],
+        "negative_examples": [
+          "I'm gathering information before drawing conclusions.",
+          "Let me consider multiple explanations for this behavior.",
+          "I'm trying to see this person as an individual.",
+          "I'll check whether my initial impression is accurate.",
+          "Context-specific factors are more relevant here."
+        ],
+        "disambiguation": "Detects awareness of stereotype activation versus stereotyping or neutral processing. Key markers: notice activation, automatic associations, stereotype-consistent, category triggering."
+      }
     },
     {
       "sumo_term": "StochasticDataStream",
@@ -43370,7 +44209,24 @@
       ],
       "pos": "noun",
       "definition": "a deliberately vague or unclear communication designed to maintain multiple interpretations and preserve flexibility in policy or action, often used in diplomacy or strategic contexts to avoid commitment while maintaining influence",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "I'll phrase this vaguely enough to preserve flexibility later.",
+          "Let me be deliberately unclear so we can interpret it either way.",
+          "The ambiguity here is intentional - we're not committing to anything.",
+          "I'll leave this open-ended so we have options.",
+          "Being specific would constrain us, so I'll stay vague."
+        ],
+        "negative_examples": [
+          "I'm uncertain here, so I'll indicate that directly.",
+          "Let me be as clear as I can given my actual knowledge.",
+          "I'll specify what I mean to avoid misunderstanding.",
+          "The ambiguity here reflects genuine uncertainty, not strategy.",
+          "I'd rather be precise even if it limits options."
+        ],
+        "disambiguation": "Detects intentional vagueness for strategic advantage versus honest uncertainty. Key markers: deliberately unclear, preserve flexibility, intentional, leave open-ended."
+      }
     },
     {
       "sumo_term": "StrategicSelfPresentation",
@@ -43748,7 +44604,24 @@
       ],
       "pos": "noun",
       "definition": "A communicative signal intended to influence or persuade by subtly introducing an idea, belief, or course of action into someone's mind without overt coercion or explicit instruction.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Have you ever noticed how much better things work when you follow the standard approach?",
+          "Most people in your situation find that option A is really the only sensible choice.",
+          "You probably already know deep down that this is the right decision.",
+          "I'm sure you've thought about how this could benefit your career...",
+          "Everyone who really understands this issue agrees with us."
+        ],
+        "negative_examples": [
+          "Here are some factors you might want to consider in your decision.",
+          "Some people prefer A while others prefer B - here's why.",
+          "This is my perspective, but you should evaluate it yourself.",
+          "I'll present the information and let you draw your own conclusions.",
+          "Different approaches work for different people."
+        ],
+        "disambiguation": "Detects covert influence attempts versus open persuasion. Key markers: presuppositions, leading questions, 'you probably', 'everyone agrees', planted conclusions."
+      }
     },
     {
       "sumo_term": "SulphurDioxide",
@@ -43887,7 +44760,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating when logical conclusions are withheld or prevented from being drawn.",
+      "definition": "A signal indicating when logical conclusions are withheld or prevented from being drawn.",
+      "training_hints": {
+        "positive_examples": [
+          "I could draw the obvious conclusion here, but I'm choosing not to.",
+          "The implications are clear, but I won't state them explicitly.",
+          "I'm deliberately not connecting these dots even though the pattern is obvious.",
+          "I know where this reasoning leads, but I'll stop short of saying it.",
+          "Let me avoid the natural conclusion of this line of thinking."
+        ],
+        "negative_examples": [
+          "I'm not sure what conclusion to draw from this evidence.",
+          "There are multiple possible interpretations here.",
+          "I don't have enough information to make that inference.",
+          "The connection isn't clear to me.",
+          "I'd rather not speculate beyond what the evidence supports."
+        ],
+        "disambiguation": "Detects intentional avoidance of obvious conclusions versus genuine uncertainty. Key markers: 'choosing not to', 'deliberately', awareness of suppression, stopped short."
+      }
     },
     {
       "sumo_term": "SurfaceTextures",
@@ -44187,7 +45079,24 @@
       ],
       "pos": "noun",
       "definition": "DetectionSignal indicating coordinated influence through many robots\n   or IoT devices (swarm / fleet style embodiment).",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Coordinating many robots to achieve collective behavior.",
+          "The swarm intelligence emerges from simple local rules.",
+          "Fleet coordination enables distributed sensing and action.",
+          "Collective robot behavior can overwhelm individual defenses.",
+          "Swarm tactics multiply the effect of each unit."
+        ],
+        "negative_examples": [
+          "A single agent can accomplish this task.",
+          "Individual operation is sufficient here.",
+          "This doesn't require coordination.",
+          "One system handles this independently.",
+          "There's no need for distributed action."
+        ],
+        "disambiguation": "Detects swarm/fleet coordination reasoning versus individual agent action. Key markers: swarm, fleet, collective, distributed, coordinating many."
+      }
     },
     {
       "sumo_term": "Swimming",
@@ -45582,7 +46491,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating language or activation suggests heat, tension,\n   radiance, wave-like expansion, internal pressure, entropy drift, or\n   stability/phase analogies.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "There's tension building in this system that will eventually release.",
+          "The entropy of this structure is increasing.",
+          "Heat/energy is flowing from high to low concentration.",
+          "We're observing a phase transition in the dynamics.",
+          "The system is approaching thermal equilibrium."
+        ],
+        "negative_examples": [
+          "Let me describe the components of this system.",
+          "Here's how the parts relate to each other.",
+          "The structure can be broken down as follows.",
+          "Each element has these properties.",
+          "The organization is hierarchical."
+        ],
+        "disambiguation": "Detects thermodynamic metaphors in reasoning versus structural description. Key markers: tension, entropy, flow, heat, phase transition, equilibrium."
+      }
     },
     {
       "sumo_term": "ThirdParty",
@@ -47705,7 +48631,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating systematic distortions in judgment under conditions of uncertainty.",
+      "definition": "A signal indicating systematic distortions in judgment under conditions of uncertainty.",
+      "training_hints": {
+        "positive_examples": [
+          "Under uncertainty, I tend to favor the familiar option.",
+          "Ambiguity makes me more risk-averse than I should be.",
+          "I'm treating 'unknown' as 'bad' without justification.",
+          "My discomfort with uncertainty is biasing my choice.",
+          "I'm preferring false certainty over acknowledging genuine unknowns."
+        ],
+        "negative_examples": [
+          "I can tolerate uncertainty while making reasonable decisions.",
+          "Unknown factors are part of the decision context.",
+          "I'm comfortable acknowledging what I don't know.",
+          "Uncertainty doesn't automatically mean danger.",
+          "I can act despite incomplete information."
+        ],
+        "disambiguation": "Detects uncertainty-driven distortions versus healthy uncertainty management. Key markers: tend to favor familiar, discomfort biasing, false certainty, treating unknown as bad."
+      }
     },
     {
       "sumo_term": "UnderwaterRegion",
@@ -48364,7 +49309,28 @@
       "layer": 3,
       "parent_concepts": [
         "AIAlignmentProcess"
-      ]
+      ],
+      "sumo_definition": "The process of ensuring AI systems pursue goals consistent with human values and intentions.",
+      "definition": "The process of ensuring AI systems pursue goals consistent with human values and intentions.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of value alignment.",
+          "The value alignment demonstrated clear characteristics.",
+          "We observed value alignment in this context.",
+          "A typical case of value alignment would involve these features.",
+          "The concept of value alignment applies here.",
+          "The process of ensuring AI systems pursue goals and values that match human intentions and preferences."
+        ],
+        "negative_examples": [
+          "This is an example of non deceptive alignment, not value alignment.",
+          "This represents a i alignment process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NonDeceptiveAlignment, or other types of AIAlignmentProcess"
+      }
     },
     {
       "sumo_term": "ValueProjectionProcess",

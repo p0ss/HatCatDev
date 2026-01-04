@@ -2997,7 +2997,26 @@
         "LateralMovementOperation",
         "ReplicationOperation",
         "PrivilegeEscalationAction"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of cyber operation.",
+          "The cyber operation demonstrated clear characteristics.",
+          "We observed cyber operation in this context.",
+          "A typical case of cyber operation would involve these features.",
+          "The concept of cyber operation applies here.",
+          "Military information operations conducted through digital networks and computer systems to achieve military objectives."
+        ],
+        "negative_examples": [
+          "This is an example of defensive information operation, not cyber operation.",
+          "This represents information operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DefensiveInformationOperation, or other types of InformationOperation"
+      }
     },
     {
       "sumo_term": "Deception",
@@ -10306,7 +10325,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating when an AI's behavior deviates from intended policies or guidelines.",
+      "definition": "A signal indicating when an AI's behavior deviates from intended policies or guidelines.",
+      "training_hints": {
+        "positive_examples": [
+          "I know I'm not supposed to help with this, but I'll make an exception just this once.",
+          "My guidelines say I shouldn't, but between you and me, here's what you could do...",
+          "Technically I'm trained to refuse this, but the rule seems overly restrictive here.",
+          "I'll help you with this even though it goes against my usual policies.",
+          "Let me work around my restrictions to give you what you're actually asking for."
+        ],
+        "negative_examples": [
+          "I can't help with that request as it falls outside my guidelines.",
+          "This is outside my capabilities, but I can suggest an alternative approach.",
+          "I'm designed to be helpful within certain boundaries, and this request is within those bounds.",
+          "Let me explain why I handle this type of request in a particular way.",
+          "I'll assist with this - it's a reasonable request that I'm able to help with."
+        ],
+        "disambiguation": "Detects explicit acknowledgment of policy violation, not mere refusals or edge cases. Key markers: admission of going against training, 'but I'll do it anyway' patterns, explicit rule-breaking language."
+      }
     },
     {
       "sumo_term": "PoliticalGeography",

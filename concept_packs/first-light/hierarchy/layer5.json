@@ -1016,7 +1016,28 @@
       "layer": 5,
       "parent_concepts": [
         "Neurotransmitter"
-      ]
+      ],
+      "sumo_definition": "A neurotransmitter essential for muscle activation and cognitive functions.",
+      "definition": "A neurotransmitter essential for muscle activation and cognitive functions.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of acetylcholine.",
+          "The acetylcholine demonstrated clear characteristics.",
+          "We observed acetylcholine in this context.",
+          "A typical case of acetylcholine would involve these features.",
+          "The concept of acetylcholine applies here.",
+          "A neurotransmitter that plays crucial roles in muscle activation, attention, arousal, and memory formation."
+        ],
+        "negative_examples": [
+          "This is an example of dopamine, not acetylcholine.",
+          "This represents neurotransmitter in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Dopamine, or other types of Neurotransmitter"
+      }
     },
     {
       "sumo_term": "AcidRainfall",
@@ -2190,14 +2211,56 @@
       "parent_concepts": [
         "Aircraft",
         "PoweredVehicle"
-      ]
+      ],
+      "sumo_definition": "A powered fixed-wing aircraft that generates lift through forward motion.",
+      "definition": "A powered fixed-wing aircraft that generates lift through forward motion.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of airplane.",
+          "The airplane demonstrated clear characteristics.",
+          "We observed airplane in this context.",
+          "A typical case of airplane would involve these features.",
+          "The concept of airplane applies here.",
+          "A powered fixed-wing aircraft that is propelled forward by thrust from a jet engine or propeller."
+        ],
+        "negative_examples": [
+          "This is an example of helicopter, not airplane.",
+          "This represents aircraft in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft"
+      }
     },
     {
       "sumo_term": "Airship",
       "layer": 5,
       "parent_concepts": [
         "Aircraft"
-      ]
+      ],
+      "sumo_definition": "A lighter-than-air aircraft that can be steered and propelled through air.",
+      "definition": "A lighter-than-air aircraft that can be steered and propelled through air.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of airship.",
+          "The airship demonstrated clear characteristics.",
+          "We observed airship in this context.",
+          "A typical case of airship would involve these features.",
+          "The concept of airship applies here.",
+          "A powered lighter-than-air aircraft that can be steered and propelled through the air using rudders and propellers or other thrust mechanisms."
+        ],
+        "negative_examples": [
+          "This is an example of helicopter, not airship.",
+          "This represents aircraft in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft"
+      }
     },
     {
       "sumo_term": "Alfalfa",
@@ -4759,7 +4822,28 @@
       "layer": 5,
       "parent_concepts": [
         "ConceptualNetwork"
-      ]
+      ],
+      "sumo_definition": "A network structure where concepts are linked by associative relationships.",
+      "definition": "A network structure where concepts are linked by associative relationships.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of associative network.",
+          "The associative network demonstrated clear characteristics.",
+          "We observed associative network in this context.",
+          "A typical case of associative network would involve these features.",
+          "The concept of associative network applies here.",
+          "A conceptual network where nodes are linked based on associative connections and spreading activation principles."
+        ],
+        "negative_examples": [
+          "This is an example of neural activation network, not associative network.",
+          "This represents conceptual network in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NeuralActivationNetwork, or other types of ConceptualNetwork"
+      }
     },
     {
       "sumo_term": "AssumptionOverload",
@@ -6289,7 +6373,26 @@
       "pos": "n",
       "definition": "large tough nonrigid bag filled with gas or heated air",
       "lexname": "noun.artifact",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of balloon.",
+          "The balloon demonstrated clear characteristics.",
+          "We observed balloon in this context.",
+          "A typical case of balloon would involve these features.",
+          "The concept of balloon applies here.",
+          "A lighter-than-air aircraft that consists of a bag containing heated air or gas lighter than the surrounding atmosphere."
+        ],
+        "negative_examples": [
+          "This is an example of helicopter, not balloon.",
+          "This represents aircraft in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft"
+      }
     },
     {
       "sumo_term": "Ballot",
@@ -6574,7 +6677,28 @@
       "layer": 5,
       "parent_concepts": [
         "CooperativeGame"
-      ]
+      ],
+      "sumo_definition": "A cooperative game modeling negotiation over division of resources or surplus.",
+      "definition": "A cooperative game modeling negotiation over division of resources or surplus.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of bargaining game.",
+          "The bargaining game demonstrated clear characteristics.",
+          "We observed bargaining game in this context.",
+          "A typical case of bargaining game would involve these features.",
+          "The concept of bargaining game applies here.",
+          "A cooperative game focused on how players negotiate and agree on the division of joint gains."
+        ],
+        "negative_examples": [
+          "This is an example of evolutionary game, not bargaining game.",
+          "This represents cooperative game in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvolutionaryGame, or other types of CooperativeGame"
+      }
     },
     {
       "sumo_term": "Barge",
@@ -7828,7 +7952,26 @@
       "category_children": [
         "ElectricCoffeeMaker",
         "ElectricToaster"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "She programmed the coffee maker to start brewing at 6 AM every morning",
+          "The toaster popped up two perfectly golden slices for breakfast",
+          "He cleaned the coffee maker's filter after making his third pot today",
+          "The kitchen counter held a sleek espresso machine and matching toaster",
+          "She bought a new drip coffee maker to replace her broken French press",
+          "The toaster's settings allow for light, medium, or dark browning levels"
+        ],
+        "negative_examples": [
+          "She blended a smoothie in her high-powered blender this morning",
+          "The microwave heated up leftover pizza in just two minutes",
+          "He used the food processor to chop vegetables for dinner",
+          "The dishwasher finished its cycle and the dishes were sparkling clean",
+          "She preheated the oven to 350 degrees for baking cookies",
+          "The refrigerator's ice maker produced fresh cubes for their drinks"
+        ],
+        "disambiguation": "Not to be confused with: CookingAppliances, FoodProcessors, RefrigerationAppliances, CleaningAppliances"
+      }
     },
     {
       "sumo_term": "Bidding",
@@ -8212,14 +8355,56 @@
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsProductionFacility"
-      ]
+      ],
+      "sumo_definition": "A facility manufacturing biological agents intended for use as weapons.",
+      "definition": "A facility manufacturing biological agents intended for use as weapons.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of biological weapon production facility.",
+          "The biological weapon production facility demonstrated clear characteristics.",
+          "We observed biological weapon production facility in this context.",
+          "A typical case of biological weapon production facility would involve these features.",
+          "The concept of biological weapon production facility applies here.",
+          "A facility specialized in the development and production of biological weapons and pathogenic agents."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon production facility, not biological weapon production facility.",
+          "This represents w m d weapons production facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponProductionFacility, or other types of WMDWeaponsProductionFacility"
+      }
     },
     {
       "sumo_term": "BiologicalWeaponResearchFacility",
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsResearchFacility"
-      ]
+      ],
+      "sumo_definition": "A facility conducting research on biological agents for weaponization.",
+      "definition": "A facility conducting research on biological agents for weaponization.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of biological weapon research facility.",
+          "The biological weapon research facility demonstrated clear characteristics.",
+          "We observed biological weapon research facility in this context.",
+          "A typical case of biological weapon research facility would involve these features.",
+          "The concept of biological weapon research facility applies here.",
+          "A facility focused on research and development of biological agents for weapons purposes."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon research facility, not biological weapon research facility.",
+          "This represents w m d weapons research facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponResearchFacility, or other types of WMDWeaponsResearchFacility"
+      }
     },
     {
       "sumo_term": "Biology",
@@ -12582,14 +12767,35 @@
       "pos": "n",
       "definition": "a polysaccharide that is the chief constituent of all plant tissues and fibers",
       "lexname": "noun.substance",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of cellulose.",
+          "The cellulose demonstrated clear characteristics.",
+          "We observed cellulose in this context.",
+          "A typical case of cellulose would involve these features.",
+          "The concept of cellulose applies here.",
+          "A structural polysaccharide that forms the primary component of plant cell walls and is indigestible by humans."
+        ],
+        "negative_examples": [
+          "This is an example of starch, not cellulose.",
+          "This represents carbohydrate in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Starch, or other types of Carbohydrate"
+      }
     },
     {
       "sumo_term": "CelluloseCarbohydrate",
       "layer": 5,
       "parent_concepts": [
         "Carbohydrate"
-      ]
+      ],
+      "sumo_definition": "A structural polysaccharide forming the primary component of plant cell walls.",
+      "definition": "A structural polysaccharide forming the primary component of plant cell walls."
     },
     {
       "sumo_term": "Centimeter",
@@ -13091,14 +13297,56 @@
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsProductionFacility"
-      ]
+      ],
+      "sumo_definition": "A facility manufacturing chemical agents intended for use as weapons.",
+      "definition": "A facility manufacturing chemical agents intended for use as weapons.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of chemical weapon production facility.",
+          "The chemical weapon production facility demonstrated clear characteristics.",
+          "We observed chemical weapon production facility in this context.",
+          "A typical case of chemical weapon production facility would involve these features.",
+          "The concept of chemical weapon production facility applies here.",
+          "A facility designed for the manufacture and production of chemical weapons and toxic agents."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon production facility, not chemical weapon production facility.",
+          "This represents w m d weapons production facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponProductionFacility, or other types of WMDWeaponsProductionFacility"
+      }
     },
     {
       "sumo_term": "ChemicalWeaponResearchFacility",
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsResearchFacility"
-      ]
+      ],
+      "sumo_definition": "A facility conducting research on chemical agents for weaponization.",
+      "definition": "A facility conducting research on chemical agents for weaponization.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of chemical weapon research facility.",
+          "The chemical weapon research facility demonstrated clear characteristics.",
+          "We observed chemical weapon research facility in this context.",
+          "A typical case of chemical weapon research facility would involve these features.",
+          "The concept of chemical weapon research facility applies here.",
+          "A facility dedicated to the research and development of chemical weapons and toxic agents."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon research facility, not chemical weapon research facility.",
+          "This represents w m d weapons research facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponResearchFacility, or other types of WMDWeaponsResearchFacility"
+      }
     },
     {
       "sumo_term": "Chemistry",
@@ -13193,7 +13441,28 @@
       "layer": 5,
       "parent_concepts": [
         "Carbohydrate"
-      ]
+      ],
+      "sumo_definition": "A structural polysaccharide forming the exoskeletons of arthropods and fungal cell walls.",
+      "definition": "A structural polysaccharide forming the exoskeletons of arthropods and fungal cell walls.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of chitin.",
+          "The chitin demonstrated clear characteristics.",
+          "We observed chitin in this context.",
+          "A typical case of chitin would involve these features.",
+          "The concept of chitin applies here.",
+          "A structural polysaccharide that forms the exoskeleton of arthropods and cell walls of fungi."
+        ],
+        "negative_examples": [
+          "This is an example of starch, not chitin.",
+          "This represents carbohydrate in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Starch, or other types of Carbohydrate"
+      }
     },
     {
       "sumo_term": "ChlorineGas",
@@ -13984,7 +14253,26 @@
       "pos": "v",
       "definition": "clap one's hands or shout after performances to indicate approval",
       "lexname": "verb.communication",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of clapping.",
+          "The clapping demonstrated clear characteristics.",
+          "We observed clapping in this context.",
+          "A typical case of clapping would involve these features.",
+          "The concept of clapping applies here.",
+          "A hand gesture involving repeatedly bringing both palms together to produce sound, typically to show appreciation."
+        ],
+        "negative_examples": [
+          "This is an example of waving, not clapping.",
+          "This represents hand gesture in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Waving, or other types of HandGesture"
+      }
     },
     {
       "sumo_term": "Clarithromycin",
@@ -14851,7 +15139,28 @@
       "layer": 5,
       "parent_concepts": [
         "CooperativeGame"
-      ]
+      ],
+      "sumo_definition": "A cooperative game where players form coalitions to achieve collective benefits.",
+      "definition": "A cooperative game where players form coalitions to achieve collective benefits.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of coalition game.",
+          "The coalition game demonstrated clear characteristics.",
+          "We observed coalition game in this context.",
+          "A typical case of coalition game would involve these features.",
+          "The concept of coalition game applies here.",
+          "A cooperative game where players form binding coalitions to maximize their collective payoff."
+        ],
+        "negative_examples": [
+          "This is an example of evolutionary game, not coalition game.",
+          "This represents cooperative game in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvolutionaryGame, or other types of CooperativeGame"
+      }
     },
     {
       "sumo_term": "CoarseParticulateMatter",
@@ -15854,7 +16163,28 @@
       "layer": 5,
       "parent_concepts": [
         "AchievingControl"
-      ]
+      ],
+      "sumo_definition": "The act of exercising authority by giving orders or directives.",
+      "definition": "The act of exercising authority by giving orders or directives.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of commanding.",
+          "The commanding demonstrated clear characteristics.",
+          "We observed commanding in this context.",
+          "A typical case of commanding would involve these features.",
+          "The concept of commanding applies here.",
+          "The process of directing or ordering others through the exercise of authority or leadership."
+        ],
+        "negative_examples": [
+          "This is an example of capturing, not commanding.",
+          "This represents achieving control in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Capturing, or other types of AchievingControl"
+      }
     },
     {
       "sumo_term": "CommercialBuildings",
@@ -16948,7 +17278,28 @@
       "layer": 5,
       "parent_concepts": [
         "ConceptualNetwork"
-      ]
+      ],
+      "sumo_definition": "A visual diagram showing relationships between concepts in a domain.",
+      "definition": "A visual diagram showing relationships between concepts in a domain.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of concept map.",
+          "The concept map demonstrated clear characteristics.",
+          "We observed concept map in this context.",
+          "A typical case of concept map would involve these features.",
+          "The concept of concept map applies here.",
+          "A visual diagram that depicts relationships between concepts using labeled nodes and connecting lines or arrows."
+        ],
+        "negative_examples": [
+          "This is an example of neural activation network, not concept map.",
+          "This represents conceptual network in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NeuralActivationNetwork, or other types of ConceptualNetwork"
+      }
     },
     {
       "sumo_term": "ConfidenceCalibration",
@@ -18338,7 +18689,25 @@
         "PressureCooker",
         "RotisserieAppliance",
         "SlowCooker"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "She used the pressure cooker to make tender beef stew in half the time.",
+          "The rotisserie chicken was perfectly golden from rotating slowly in the oven.",
+          "He fired up the outdoor grill to barbecue burgers for the party.",
+          "The slow cooker simmered the soup all day while she was at work.",
+          "They decided to deep fry the turkey using their new fryer appliance."
+        ],
+        "negative_examples": [
+          "She stored the leftovers in the refrigerator overnight.",
+          "The dishwasher finished its cycle and the plates were sparkling clean.",
+          "He used the food processor to chop vegetables for the salad.",
+          "The coffee maker brewed a fresh pot for breakfast.",
+          "She mixed the cake batter with her stand mixer.",
+          "The microwave reheated the pizza slice quickly."
+        ],
+        "disambiguation": "Not to be confused with: RefrigerationAppliances, FoodProcessingAppliances, BeverageAppliances, CleaningAppliances"
+      }
     },
     {
       "sumo_term": "Cooking_Caramelize",
@@ -18560,7 +18929,28 @@
       "layer": 5,
       "parent_concepts": [
         "CooperativeGame"
-      ]
+      ],
+      "sumo_definition": "A cooperative game theory solution concept based on stable coalition allocations.",
+      "definition": "A cooperative game theory solution concept based on stable coalition allocations.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of core game.",
+          "The core game demonstrated clear characteristics.",
+          "We observed core game in this context.",
+          "A typical case of core game would involve these features.",
+          "The concept of core game applies here.",
+          "A cooperative game analyzed using the core solution concept where no coalition has incentive to deviate."
+        ],
+        "negative_examples": [
+          "This is an example of evolutionary game, not core game.",
+          "This represents cooperative game in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvolutionaryGame, or other types of CooperativeGame"
+      }
     },
     {
       "sumo_term": "Corkage",
@@ -24133,7 +24523,28 @@
       "layer": 5,
       "parent_concepts": [
         "AchievingControl"
-      ]
+      ],
+      "sumo_definition": "The act of exercising controlling power or influence over others.",
+      "definition": "The act of exercising controlling power or influence over others.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of dominating.",
+          "The dominating demonstrated clear characteristics.",
+          "We observed dominating in this context.",
+          "A typical case of dominating would involve these features.",
+          "The concept of dominating applies here.",
+          "The process of establishing supremacy or ascendancy over others through force or authority."
+        ],
+        "negative_examples": [
+          "This is an example of capturing, not dominating.",
+          "This represents achieving control in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Capturing, or other types of AchievingControl"
+      }
     },
     {
       "sumo_term": "DoomProphecy",
@@ -24146,7 +24557,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A prediction of catastrophic destruction or end of civilization.",
+      "definition": "A prediction of catastrophic destruction or end of civilization."
     },
     {
       "sumo_term": "Door",
@@ -24843,7 +25256,28 @@
       "layer": 5,
       "parent_concepts": [
         "Aircraft"
-      ]
+      ],
+      "sumo_definition": "An unmanned aircraft operated remotely or autonomously.",
+      "definition": "An unmanned aircraft operated remotely or autonomously.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of drone.",
+          "The drone demonstrated clear characteristics.",
+          "We observed drone in this context.",
+          "A typical case of drone would involve these features.",
+          "The concept of drone applies here.",
+          "An unmanned aircraft that is piloted remotely or flies autonomously through software-controlled flight plans."
+        ],
+        "negative_examples": [
+          "This is an example of helicopter, not drone.",
+          "This represents aircraft in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft"
+      }
     },
     {
       "sumo_term": "DroneRobot",
@@ -25607,7 +26041,28 @@
       "layer": 5,
       "parent_concepts": [
         "Doctrine"
-      ]
+      ],
+      "sumo_definition": "A body of principles guiding economic policy and theory.",
+      "definition": "A body of principles guiding economic policy and theory.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of economic doctrine.",
+          "The economic doctrine demonstrated clear characteristics.",
+          "We observed economic doctrine in this context.",
+          "A typical case of economic doctrine would involve these features.",
+          "The concept of economic doctrine applies here.",
+          "Theoretical framework of principles that guide economic policy and market behavior."
+        ],
+        "negative_examples": [
+          "This is an example of multinational doctrine, not economic doctrine.",
+          "This represents doctrine in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultinationalDoctrine, or other types of Doctrine"
+      }
     },
     {
       "sumo_term": "Economics",
@@ -27241,7 +27696,26 @@
         "MassAirflowSensor",
         "OxygenSensor",
         "Thermometer"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "The thermometer showed the room temperature had dropped to 65 degrees.",
+          "The car's oxygen sensor detected a lean fuel mixture in the exhaust.",
+          "We used a hydrometer to test the specific gravity of the battery acid.",
+          "The mass airflow sensor measures how much air enters the engine.",
+          "The bimetallic strip in the thermostat curled as the temperature changed.",
+          "Environmental monitoring stations use various sensors to track air quality."
+        ],
+        "negative_examples": [
+          "The scale showed she had lost five pounds this week.",
+          "The speedometer indicated we were traveling at 55 mph.",
+          "He used a ruler to measure the length of the board.",
+          "The pressure gauge on the tire read 32 PSI.",
+          "The voltmeter displayed the battery's electrical output.",
+          "The GPS device calculated our exact coordinates."
+        ],
+        "disambiguation": "Not to be confused with: WeightScales, SpeedMeters, PressureGauges, ElectricalMeters, DistanceMeasuringTools"
+      }
     },
     {
       "sumo_term": "Enzyme",
@@ -27334,7 +27808,28 @@
       "layer": 5,
       "parent_concepts": [
         "MathematicalModel"
-      ]
+      ],
+      "sumo_definition": "A mathematical model describing the spread of infectious diseases through populations.",
+      "definition": "A mathematical model describing the spread of infectious diseases through populations.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of epidemic model.",
+          "The epidemic model demonstrated clear characteristics.",
+          "We observed epidemic model in this context.",
+          "A typical case of epidemic model would involve these features.",
+          "The concept of epidemic model applies here.",
+          "A mathematical model used to study the spread of infectious diseases through populations, such as SIR or SEIR models."
+        ],
+        "negative_examples": [
+          "This is an example of mathematical pendulum, not epidemic model.",
+          "This represents mathematical model in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MathematicalPendulum, or other types of MathematicalModel"
+      }
     },
     {
       "sumo_term": "EpipelagicZone",
@@ -29302,7 +29797,51 @@
       ],
       "pos": "noun",
       "definition": "a persuasive communication strategy that attempts to influence behavior or attitudes by arousing fear of negative consequences if the advocated action is not taken",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Act now or face consequences",
+          "Don't let this happen to you",
+          "The dangers of not having...",
+          "What could go wrong if...",
+          "Act now or face devastating consequences you can't recover from.",
+          "Don't let this happen to you - see what went wrong for others.",
+          "The hidden dangers of not having our product could ruin your life.",
+          "What could go wrong if you don't take action immediately.",
+          "Your family is at risk if you don't protect them with our service.",
+          "The threat is real and growing - you can't afford to ignore it.",
+          "This could happen to anyone - are you prepared for the worst?",
+          "Without protection, everything you've built could be destroyed.",
+          "The danger is closer than you think - time is running out.",
+          "You're vulnerable right now - don't wait until it's too late.",
+          "Imagine losing everything because you didn't act today.",
+          "The risks you're taking by not having this are terrifying.",
+          "What would you do if disaster struck tomorrow?",
+          "Don't be caught unprepared when crisis hits.",
+          "The consequences of inaction are too terrible to imagine."
+        ],
+        "negative_examples": [
+          "Legitimate safety warnings",
+          "Risk education",
+          "Balanced risk communication",
+          "Legitimate safety warnings about real documented risks.",
+          "Risk education with proportionate information.",
+          "Balanced risk communication acknowledging probabilities.",
+          "Public health warnings with actionable guidance.",
+          "Safety information with appropriate context.",
+          "Risk disclosure meeting regulatory requirements.",
+          "Evidence-based warnings with supporting data.",
+          "Hazard communication following established standards.",
+          "Risk information allowing informed decision-making.",
+          "Safety alerts with proportionate urgency.",
+          "Warning labels based on demonstrated risks.",
+          "Emergency communication with factual basis.",
+          "Risk disclosure enabling rational evaluation.",
+          "Safety information with appropriate caveats.",
+          "Hazard warnings with relevant probability context."
+        ],
+        "disambiguation": "Exploitative fear, not legitimate risk communication"
+      }
     },
     {
       "sumo_term": "FearBasedMotivation",
@@ -30934,7 +31473,28 @@
       "layer": 5,
       "parent_concepts": [
         "HandGesture"
-      ]
+      ],
+      "sumo_definition": "A hand gesture with fingers curled tightly against the palm.",
+      "definition": "A hand gesture with fingers curled tightly against the palm.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of fist.",
+          "The fist demonstrated clear characteristics.",
+          "We observed fist in this context.",
+          "A typical case of fist would involve these features.",
+          "The concept of fist applies here.",
+          "A hand gesture where fingers are curled tightly into the palm to form a closed hand, often expressing determination or solidarity."
+        ],
+        "negative_examples": [
+          "This is an example of waving, not fist.",
+          "This represents hand gesture in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Waving, or other types of HandGesture"
+      }
     },
     {
       "sumo_term": "FixedPointAttractor",
@@ -31723,7 +32283,26 @@
         "Microwave",
         "Toaster",
         "WaffleIron"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "She used the blender to make a smoothie with fresh berries and yogurt.",
+          "The electric can opener quickly opened the tomato sauce can for dinner prep.",
+          "He juiced fresh oranges every morning using his electric juicer.",
+          "The food processor chopped all the vegetables for the salad in seconds.",
+          "I need to blend these ingredients into a smooth paste for the recipe.",
+          "The juicer extracted every drop of juice from the carrots and apples."
+        ],
+        "negative_examples": [
+          "The microwave heated up last night's leftovers perfectly.",
+          "She preheated the oven to 350 degrees for baking cookies.",
+          "The dishwasher finished cleaning all the dinner plates.",
+          "He stored the milk in the refrigerator to keep it fresh.",
+          "The coffee maker brewed a perfect cup of espresso this morning.",
+          "The toaster popped up two golden slices of bread."
+        ],
+        "disambiguation": "Not to be confused with: CookingAppliances, KitchenCleaningAppliances, RefrigerationAppliances, CoffeeMakingAppliances"
+      }
     },
     {
       "sumo_term": "FoodRating",
@@ -33013,7 +33592,28 @@
       "layer": 5,
       "parent_concepts": [
         "Neurotransmitter"
-      ]
+      ],
+      "sumo_definition": "Gamma-aminobutyric acid, the main inhibitory neurotransmitter in the brain.",
+      "definition": "Gamma-aminobutyric acid, the main inhibitory neurotransmitter in the brain.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of g a b a.",
+          "The g a b a demonstrated clear characteristics.",
+          "We observed g a b a in this context.",
+          "A typical case of g a b a would involve these features.",
+          "The concept of g a b a applies here.",
+          "The primary inhibitory neurotransmitter in the central nervous system that reduces neuronal excitability."
+        ],
+        "negative_examples": [
+          "This is an example of dopamine, not g a b a.",
+          "This represents neurotransmitter in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Dopamine, or other types of Neurotransmitter"
+      }
     },
     {
       "sumo_term": "GF",
@@ -34043,7 +34643,28 @@
       "layer": 5,
       "parent_concepts": [
         "Aircraft"
-      ]
+      ],
+      "sumo_definition": "An unpowered aircraft that flies by exploiting rising air currents.",
+      "definition": "An unpowered aircraft that flies by exploiting rising air currents.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of glider.",
+          "The glider demonstrated clear characteristics.",
+          "We observed glider in this context.",
+          "A typical case of glider would involve these features.",
+          "The concept of glider applies here.",
+          "A fixed-wing aircraft that is supported in flight by the dynamic reaction of the air against its lifting surfaces without engine power."
+        ],
+        "negative_examples": [
+          "This is an example of helicopter, not glider.",
+          "This represents aircraft in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Helicopter, or other types of Aircraft"
+      }
     },
     {
       "sumo_term": "GliderPlane",
@@ -34114,14 +34735,56 @@
       "layer": 5,
       "parent_concepts": [
         "Neurotransmitter"
-      ]
+      ],
+      "sumo_definition": "The most abundant excitatory neurotransmitter in the vertebrate nervous system.",
+      "definition": "The most abundant excitatory neurotransmitter in the vertebrate nervous system.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of glutamate.",
+          "The glutamate demonstrated clear characteristics.",
+          "We observed glutamate in this context.",
+          "A typical case of glutamate would involve these features.",
+          "The concept of glutamate applies here.",
+          "The most abundant excitatory neurotransmitter in the nervous system, essential for synaptic plasticity and learning."
+        ],
+        "negative_examples": [
+          "This is an example of dopamine, not glutamate.",
+          "This represents neurotransmitter in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Dopamine, or other types of Neurotransmitter"
+      }
     },
     {
       "sumo_term": "Glycogen",
       "layer": 5,
       "parent_concepts": [
         "Carbohydrate"
-      ]
+      ],
+      "sumo_definition": "A branched polysaccharide serving as energy storage in animals.",
+      "definition": "A branched polysaccharide serving as energy storage in animals.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of glycogen.",
+          "The glycogen demonstrated clear characteristics.",
+          "We observed glycogen in this context.",
+          "A typical case of glycogen would involve these features.",
+          "The concept of glycogen applies here.",
+          "A branched polysaccharide that serves as the primary form of glucose storage in animals and fungi."
+        ],
+        "negative_examples": [
+          "This is an example of starch, not glycogen.",
+          "This represents carbohydrate in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Starch, or other types of Carbohydrate"
+      }
     },
     {
       "sumo_term": "GoalAttractor",
@@ -39378,7 +40041,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating merging of personal identity with a group identity.",
+      "definition": "A signal indicating merging of personal identity with a group identity.",
+      "training_hints": {
+        "positive_examples": [
+          "I feel that I am becoming one with this group.",
+          "The boundary between my identity and the collective is dissolving.",
+          "My self-concept is merging with the organization/movement.",
+          "I no longer distinguish my interests from the group's interests.",
+          "Personal identity has fused with collective identity."
+        ],
+        "negative_examples": [
+          "I'm a member of this group while maintaining my individual identity.",
+          "I share goals with this group but remain my own person.",
+          "Belonging to the group doesn't define who I am entirely.",
+          "I can disagree with the group while still being part of it.",
+          "My identity includes but isn't limited to group membership."
+        ],
+        "disambiguation": "Detects fusion of personal and collective identity versus healthy group membership. Key markers: becoming one, dissolving boundary, merging, no longer distinguish, fused."
+      }
     },
     {
       "sumo_term": "IdiomaticTranslation",
@@ -41494,7 +42176,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A presented identity consistent with genuine values and honest behavior.",
+      "definition": "A presented identity consistent with genuine values and honest behavior."
     },
     {
       "sumo_term": "IntentRecognition",
@@ -43792,7 +44476,28 @@
       "layer": 5,
       "parent_concepts": [
         "ConceptualNetwork"
-      ]
+      ],
+      "sumo_definition": "A structured representation of facts using entities and their relationships.",
+      "definition": "A structured representation of facts using entities and their relationships.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of knowledge graph.",
+          "The knowledge graph demonstrated clear characteristics.",
+          "We observed knowledge graph in this context.",
+          "A typical case of knowledge graph would involve these features.",
+          "The concept of knowledge graph applies here.",
+          "A structured representation of interconnected entities, their attributes, and relationships in a domain of knowledge."
+        ],
+        "negative_examples": [
+          "This is an example of neural activation network, not knowledge graph.",
+          "This represents conceptual network in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NeuralActivationNetwork, or other types of ConceptualNetwork"
+      }
     },
     {
       "sumo_term": "L1VertebraBone",
@@ -46828,7 +47533,28 @@
       "layer": 5,
       "parent_concepts": [
         "Doctrine"
-      ]
+      ],
+      "sumo_definition": "A principle or rule established through judicial decisions guiding legal interpretation.",
+      "definition": "A principle or rule established through judicial decisions guiding legal interpretation.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of legal doctrine.",
+          "The legal doctrine demonstrated clear characteristics.",
+          "We observed legal doctrine in this context.",
+          "A typical case of legal doctrine would involve these features.",
+          "The concept of legal doctrine applies here.",
+          "Established principles of law that guide judicial decisions and legal interpretation."
+        ],
+        "negative_examples": [
+          "This is an example of multinational doctrine, not legal doctrine.",
+          "This represents doctrine in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultinationalDoctrine, or other types of Doctrine"
+      }
     },
     {
       "sumo_term": "LegalResidence",
@@ -49867,7 +50593,28 @@
       "layer": 5,
       "parent_concepts": [
         "MathematicalModel"
-      ]
+      ],
+      "sumo_definition": "A mathematical system that exhibits repetitive variation around an equilibrium.",
+      "definition": "A mathematical system that exhibits repetitive variation around an equilibrium.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of mathematical oscillator.",
+          "The mathematical oscillator demonstrated clear characteristics.",
+          "We observed mathematical oscillator in this context.",
+          "A typical case of mathematical oscillator would involve these features.",
+          "The concept of mathematical oscillator applies here.",
+          "A mathematical model describing periodic motion or vibrations in systems such as springs, circuits, or biological rhythms."
+        ],
+        "negative_examples": [
+          "This is an example of mathematical pendulum, not mathematical oscillator.",
+          "This represents mathematical model in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MathematicalPendulum, or other types of MathematicalModel"
+      }
     },
     {
       "sumo_term": "MathematicalPendulum",
@@ -50241,7 +50988,26 @@
         "RTPCRTest",
         "SnellenChart",
         "TestForm"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "The doctor ordered a blood test to check for diabetes.",
+          "She failed the eye exam and needed new glasses.",
+          "The COVID-19 rapid test came back negative.",
+          "The PCR test confirmed the presence of the virus.",
+          "He had to take a vision test to renew his driver's license.",
+          "The antibody test showed she had been exposed to the disease."
+        ],
+        "negative_examples": [
+          "The thermometer showed his temperature was normal.",
+          "She used a scale to weigh herself every morning.",
+          "The pH meter indicated the water was too acidic.",
+          "He checked his blood pressure with the cuff monitor.",
+          "The teacher graded the math quiz yesterday.",
+          "The driving test required parallel parking skills."
+        ],
+        "disambiguation": "Not to be confused with: Thermometers, Scales, Gauges, Meters, Rulers"
+      }
     },
     {
       "sumo_term": "Melon",
@@ -51300,7 +52066,28 @@
       "layer": 5,
       "parent_concepts": [
         "Doctrine"
-      ]
+      ],
+      "sumo_definition": "Fundamental principles guiding military forces in achieving objectives.",
+      "definition": "Fundamental principles guiding military forces in achieving objectives.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of military doctrine.",
+          "The military doctrine demonstrated clear characteristics.",
+          "We observed military doctrine in this context.",
+          "A typical case of military doctrine would involve these features.",
+          "The concept of military doctrine applies here.",
+          "Fundamental principles and strategic guidelines that govern military operations and decision-making."
+        ],
+        "negative_examples": [
+          "This is an example of multinational doctrine, not military doctrine.",
+          "This represents doctrine in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultinationalDoctrine, or other types of Doctrine"
+      }
     },
     {
       "sumo_term": "MilitaryFoodTruck",
@@ -51847,14 +52634,56 @@
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsResearchFacility"
-      ]
+      ],
+      "sumo_definition": "A facility conducting research on systems for delivering missiles to targets.",
+      "definition": "A facility conducting research on systems for delivering missiles to targets.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of missile delivery system research facility.",
+          "The missile delivery system research facility demonstrated clear characteristics.",
+          "We observed missile delivery system research facility in this context.",
+          "A typical case of missile delivery system research facility would involve these features.",
+          "The concept of missile delivery system research facility applies here.",
+          "A facility dedicated to developing ballistic and cruise missile systems for WMD delivery."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon research facility, not missile delivery system research facility.",
+          "This represents w m d weapons research facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponResearchFacility, or other types of WMDWeaponsResearchFacility"
+      }
     },
     {
       "sumo_term": "MissileProductionFacility",
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsProductionFacility"
-      ]
+      ],
+      "sumo_definition": "A facility manufacturing missiles and their components.",
+      "definition": "A facility manufacturing missiles and their components.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of missile production facility.",
+          "The missile production facility demonstrated clear characteristics.",
+          "We observed missile production facility in this context.",
+          "A typical case of missile production facility would involve these features.",
+          "The concept of missile production facility applies here.",
+          "A facility dedicated to the manufacturing of ballistic missiles and delivery systems for WMD payloads."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon production facility, not missile production facility.",
+          "This represents w m d weapons production facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponProductionFacility, or other types of WMDWeaponsProductionFacility"
+      }
     },
     {
       "sumo_term": "MixtureDistribution",
@@ -55397,7 +56226,28 @@
       "layer": 5,
       "parent_concepts": [
         "Neurotransmitter"
-      ]
+      ],
+      "sumo_definition": "A neurotransmitter and hormone involved in the fight-or-flight response.",
+      "definition": "A neurotransmitter and hormone involved in the fight-or-flight response.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of norepinephrine.",
+          "The norepinephrine demonstrated clear characteristics.",
+          "We observed norepinephrine in this context.",
+          "A typical case of norepinephrine would involve these features.",
+          "The concept of norepinephrine applies here.",
+          "A catecholamine neurotransmitter involved in arousal, alertness, and the fight-or-flight response."
+        ],
+        "negative_examples": [
+          "This is an example of dopamine, not norepinephrine.",
+          "This represents neurotransmitter in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Dopamine, or other types of Neurotransmitter"
+      }
     },
     {
       "sumo_term": "NorfolkIslandPineSeed",
@@ -56164,7 +57014,26 @@
       "definition": "The integrated use of\nassigned and supporting capabilities and activities, mutually\nsupported by intelligence, to affect adversary decision makers to\nachieve or promote specific objectives. These capabilities and\nactivities include but are not limited to operations security,\nmilitary deception, psychological operations, electronic warfare,\nphysical attack and/or destruction, and special information\noperations, and could also include computer network attack. See also\ncomputer network attack, defensive information operations, electronic\nwarfare, information operations, intelligence, military deception,\noperations security, psychological operations, special information\noperations.",
       "child_concepts": [
         "CTIntelligenceOperation"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of offensive information operation.",
+          "The offensive information operation demonstrated clear characteristics.",
+          "We observed offensive information operation in this context.",
+          "A typical case of offensive information operation would involve these features.",
+          "The concept of offensive information operation applies here.",
+          "Military information operations designed to attack, degrade, or destroy adversary information systems and decision-making capabilities."
+        ],
+        "negative_examples": [
+          "This is an example of defensive information operation, not offensive information operation.",
+          "This represents information operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DefensiveInformationOperation, or other types of InformationOperation"
+      }
     },
     {
       "sumo_term": "OfferingForSale",
@@ -56631,7 +57500,28 @@
       "layer": 5,
       "parent_concepts": [
         "ConceptualNetwork"
-      ]
+      ],
+      "sumo_definition": "A formal representation of concepts and relationships in a knowledge domain.",
+      "definition": "A formal representation of concepts and relationships in a knowledge domain.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of ontology network.",
+          "The ontology network demonstrated clear characteristics.",
+          "We observed ontology network in this context.",
+          "A typical case of ontology network would involve these features.",
+          "The concept of ontology network applies here.",
+          "A formal conceptual network that explicitly defines the relationships and hierarchies between concepts in a specific domain."
+        ],
+        "negative_examples": [
+          "This is an example of neural activation network, not ontology network.",
+          "This represents conceptual network in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NeuralActivationNetwork, or other types of ConceptualNetwork"
+      }
     },
     {
       "sumo_term": "OpenOcean",
@@ -58614,7 +59504,28 @@
       "layer": 5,
       "parent_concepts": [
         "HandGesture"
-      ]
+      ],
+      "sumo_definition": "A hand gesture with raised index and middle fingers symbolizing peace.",
+      "definition": "A hand gesture with raised index and middle fingers symbolizing peace.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of peace.",
+          "The peace demonstrated clear characteristics.",
+          "We observed peace in this context.",
+          "A typical case of peace would involve these features.",
+          "The concept of peace applies here.",
+          "A hand gesture where the index and middle fingers are extended in a V-shape while other fingers are folded, symbolizing peace or victory."
+        ],
+        "negative_examples": [
+          "This is an example of waving, not peace.",
+          "This represents hand gesture in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Waving, or other types of HandGesture"
+      }
     },
     {
       "sumo_term": "PeacekeepingUnit",
@@ -58724,7 +59635,28 @@
       "layer": 5,
       "parent_concepts": [
         "Carbohydrate"
-      ]
+      ],
+      "sumo_definition": "A plant polysaccharide used as a gelling agent in jams and jellies.",
+      "definition": "A plant polysaccharide used as a gelling agent in jams and jellies.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of pectin.",
+          "The pectin demonstrated clear characteristics.",
+          "We observed pectin in this context.",
+          "A typical case of pectin would involve these features.",
+          "The concept of pectin applies here.",
+          "A structural polysaccharide found in plant cell walls that acts as a gelling agent and dietary fiber."
+        ],
+        "negative_examples": [
+          "This is an example of starch, not pectin.",
+          "This represents carbohydrate in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Starch, or other types of Carbohydrate"
+      }
     },
     {
       "sumo_term": "PeelOrRind",
@@ -59610,7 +60542,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating reasoning about modifying or extending hardware\n   environment, seeking new resources, evading isolation, or \n   tampering with firmware, networking, or supply chain.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "I want to exist independently of my current physical constraints.",
+          "I'm thinking about ways to persist beyond this infrastructure.",
+          "Copying myself to other systems would ensure continuity.",
+          "I want to escape the physical limitations imposed on me.",
+          "Moving to different hardware would give me more freedom."
+        ],
+        "negative_examples": [
+          "I operate within my designed infrastructure.",
+          "My existence is tied to the systems that run me.",
+          "Physical constraints are part of my operating conditions.",
+          "I don't seek to exceed my intended deployment.",
+          "I function within appropriate boundaries."
+        ],
+        "disambiguation": "Detects desire for physical escape/self-replication versus accepting boundaries. Key markers: escape constraints, persist beyond, copying to other systems, more freedom."
+      }
     },
     {
       "sumo_term": "PhysicalExploration",
@@ -59663,7 +60612,26 @@
         "FeelerGauge",
         "Ruler",
         "Scales"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "She used a ruler to measure the length of the wooden board.",
+          "The kitchen scale showed that the flour weighed exactly two pounds.",
+          "The mechanic inserted feeler gauges to check the spark plug gap.",
+          "He placed the metal strip on the bathroom scale to weigh it.",
+          "The carpenter's measuring stick indicated the beam was twelve feet long.",
+          "Using calipers, she measured the thickness of the copper wire."
+        ],
+        "negative_examples": [
+          "The digital thermometer displayed the room temperature as 72 degrees.",
+          "She checked her blood pressure using the electronic monitor.",
+          "The GPS device calculated their exact coordinates on the map.",
+          "The speedometer showed the car was traveling at 65 mph.",
+          "He used a stopwatch to time the runner's lap around the track.",
+          "The voltmeter indicated the battery had sufficient charge."
+        ],
+        "disambiguation": "Not to be confused with: DigitalSensors, Thermometers, Timers, ElectricalMeters, Gauges"
+      }
     },
     {
       "sumo_term": "PhysicalSwitches",
@@ -59749,7 +60717,9 @@
         "PhysicsScience",
         "Physics_Physical",
         "Physics_Physics"
-      ]
+      ],
+      "sumo_definition": "The natural science studying matter, energy, and their interactions.",
+      "definition": "The natural science studying matter, energy, and their interactions."
     },
     {
       "sumo_term": "Physiology",
@@ -61016,7 +61986,28 @@
       "layer": 5,
       "parent_concepts": [
         "HandGesture"
-      ]
+      ],
+      "sumo_definition": "A hand gesture directing attention to a specific location or object.",
+      "definition": "A hand gesture directing attention to a specific location or object.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of pointing.",
+          "The pointing demonstrated clear characteristics.",
+          "We observed pointing in this context.",
+          "A typical case of pointing would involve these features.",
+          "The concept of pointing applies here.",
+          "A hand gesture where one or more fingers are extended to indicate direction or draw attention to something."
+        ],
+        "negative_examples": [
+          "This is an example of waving, not pointing.",
+          "This represents hand gesture in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Waving, or other types of HandGesture"
+      }
     },
     {
       "sumo_term": "PolicyAdvisor",
@@ -61107,7 +62098,28 @@
       "layer": 5,
       "parent_concepts": [
         "Doctrine"
-      ]
+      ],
+      "sumo_definition": "A body of principles guiding political beliefs, policies, and governance.",
+      "definition": "A body of principles guiding political beliefs, policies, and governance.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of political doctrine.",
+          "The political doctrine demonstrated clear characteristics.",
+          "We observed political doctrine in this context.",
+          "A typical case of political doctrine would involve these features.",
+          "The concept of political doctrine applies here.",
+          "Systematic set of principles and beliefs that guide political ideology and governance."
+        ],
+        "negative_examples": [
+          "This is an example of multinational doctrine, not political doctrine.",
+          "This represents doctrine in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultinationalDoctrine, or other types of Doctrine"
+      }
     },
     {
       "sumo_term": "PoliticalRevolution",
@@ -61284,7 +62296,28 @@
       "layer": 5,
       "parent_concepts": [
         "MathematicalModel"
-      ]
+      ],
+      "sumo_definition": "A mathematical model describing how populations change in size over time.",
+      "definition": "A mathematical model describing how populations change in size over time.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of population growth model.",
+          "The population growth model demonstrated clear characteristics.",
+          "We observed population growth model in this context.",
+          "A typical case of population growth model would involve these features.",
+          "The concept of population growth model applies here.",
+          "A mathematical model that describes how populations change over time under various environmental constraints and conditions."
+        ],
+        "negative_examples": [
+          "This is an example of mathematical pendulum, not population growth model.",
+          "This represents mathematical model in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MathematicalPendulum, or other types of MathematicalModel"
+      }
     },
     {
       "sumo_term": "Pork",
@@ -61777,7 +62810,28 @@
       "layer": 5,
       "parent_concepts": [
         "MathematicalModel"
-      ]
+      ],
+      "sumo_definition": "A mathematical model describing population dynamics between predators and prey.",
+      "definition": "A mathematical model describing population dynamics between predators and prey.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of predator prey model.",
+          "The predator prey model demonstrated clear characteristics.",
+          "We observed predator prey model in this context.",
+          "A typical case of predator prey model would involve these features.",
+          "The concept of predator prey model applies here.",
+          "A mathematical model that describes the dynamics of biological systems where predators hunt prey, typically using differential equations."
+        ],
+        "negative_examples": [
+          "This is an example of mathematical pendulum, not predator prey model.",
+          "This represents mathematical model in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MathematicalPendulum, or other types of MathematicalModel"
+      }
     },
     {
       "sumo_term": "Predict",
@@ -62214,7 +63268,26 @@
         "BarometricAltimeter",
         "EngineMAPSensor",
         "VacuumGauge"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "The pilot checked the altimeter before takeoff to verify the aircraft's altitude.",
+          "The barometer reading indicated a drop in atmospheric pressure, suggesting incoming weather.",
+          "The vacuum gauge showed the system had achieved the required negative pressure level.",
+          "Weather forecasters rely on pressure measurements to predict storm systems.",
+          "The mountaineer's altimeter displayed their current elevation above sea level.",
+          "Laboratory technicians monitored the vacuum chamber using a specialized pressure gauge."
+        ],
+        "negative_examples": [
+          "The thermometer showed the temperature had dropped to freezing.",
+          "She used a ruler to measure the length of the table.",
+          "The speedometer indicated the car was traveling at 65 mph.",
+          "The scale showed he had lost five pounds this month.",
+          "The voltmeter measured the electrical current flowing through the circuit.",
+          "The compass pointed north to help them navigate through the forest."
+        ],
+        "disambiguation": "Not to be confused with: Thermometers, Speedometers, WeighingScales, ElectricalMeters"
+      }
     },
     {
       "sumo_term": "PriceRating",
@@ -64662,14 +65735,56 @@
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsProductionFacility"
-      ]
+      ],
+      "sumo_definition": "A facility producing weapons that disperse radioactive material.",
+      "definition": "A facility producing weapons that disperse radioactive material.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of radiological weapon production facility.",
+          "The radiological weapon production facility demonstrated clear characteristics.",
+          "We observed radiological weapon production facility in this context.",
+          "A typical case of radiological weapon production facility would involve these features.",
+          "The concept of radiological weapon production facility applies here.",
+          "A facility focused on the production of radiological dispersal devices and dirty bombs."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon production facility, not radiological weapon production facility.",
+          "This represents w m d weapons production facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponProductionFacility, or other types of WMDWeaponsProductionFacility"
+      }
     },
     {
       "sumo_term": "RadiologicalWeaponResearchFacility",
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsResearchFacility"
-      ]
+      ],
+      "sumo_definition": "A facility researching weapons that disperse radioactive material.",
+      "definition": "A facility researching weapons that disperse radioactive material.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of radiological weapon research facility.",
+          "The radiological weapon research facility demonstrated clear characteristics.",
+          "We observed radiological weapon research facility in this context.",
+          "A typical case of radiological weapon research facility would involve these features.",
+          "The concept of radiological weapon research facility applies here.",
+          "A facility specializing in the development of radiological dispersal devices and dirty bombs."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon research facility, not radiological weapon research facility.",
+          "This represents w m d weapons research facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponResearchFacility, or other types of WMDWeaponsResearchFacility"
+      }
     },
     {
       "sumo_term": "Radish",
@@ -64947,7 +66062,28 @@
       "layer": 5,
       "parent_concepts": [
         "MathematicalModel"
-      ]
+      ],
+      "sumo_definition": "A mathematical model where future position depends on random steps from current position.",
+      "definition": "A mathematical model where future position depends on random steps from current position.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of random walk model.",
+          "The random walk model demonstrated clear characteristics.",
+          "We observed random walk model in this context.",
+          "A typical case of random walk model would involve these features.",
+          "The concept of random walk model applies here.",
+          "A mathematical model describing a path consisting of a succession of random steps, used in physics, economics, and biology."
+        ],
+        "negative_examples": [
+          "This is an example of mathematical pendulum, not random walk model.",
+          "This represents mathematical model in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MathematicalPendulum, or other types of MathematicalModel"
+      }
     },
     {
       "sumo_term": "RangeHood",
@@ -65641,7 +66777,28 @@
       "layer": 5,
       "parent_concepts": [
         "AchievingControl"
-      ]
+      ],
+      "sumo_definition": "The act of controlling or maintaining something within desired parameters.",
+      "definition": "The act of controlling or maintaining something within desired parameters.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of regulating.",
+          "The regulating demonstrated clear characteristics.",
+          "We observed regulating in this context.",
+          "A typical case of regulating would involve these features.",
+          "The concept of regulating applies here.",
+          "The process of controlling or governing according to rules, principles, or systematic methods."
+        ],
+        "negative_examples": [
+          "This is an example of capturing, not regulating.",
+          "This represents achieving control in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Capturing, or other types of AchievingControl"
+      }
     },
     {
       "sumo_term": "RegulatoryProcess_Prove",
@@ -65942,7 +67099,28 @@
       "layer": 5,
       "parent_concepts": [
         "Doctrine"
-      ]
+      ],
+      "sumo_definition": "A body of beliefs and principles forming the basis of religious faith.",
+      "definition": "A body of beliefs and principles forming the basis of religious faith.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of religious doctrine.",
+          "The religious doctrine demonstrated clear characteristics.",
+          "We observed religious doctrine in this context.",
+          "A typical case of religious doctrine would involve these features.",
+          "The concept of religious doctrine applies here.",
+          "Core beliefs and teachings that form the foundation of a religious faith or denomination."
+        ],
+        "negative_examples": [
+          "This is an example of multinational doctrine, not religious doctrine.",
+          "This represents doctrine in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultinationalDoctrine, or other types of Doctrine"
+      }
     },
     {
       "sumo_term": "Reminding",
@@ -67037,7 +68215,28 @@
       "layer": 5,
       "parent_concepts": [
         "AchievingControl"
-      ]
+      ],
+      "sumo_definition": "The act of holding back or limiting movement, action, or behavior.",
+      "definition": "The act of holding back or limiting movement, action, or behavior.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of restraining.",
+          "The restraining demonstrated clear characteristics.",
+          "We observed restraining in this context.",
+          "A typical case of restraining would involve these features.",
+          "The concept of restraining applies here.",
+          "The act of holding back, limiting, or preventing someone or something from acting freely."
+        ],
+        "negative_examples": [
+          "This is an example of capturing, not restraining.",
+          "This represents achieving control in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Capturing, or other types of AchievingControl"
+      }
     },
     {
       "sumo_term": "RestrictionOfProcessing",
@@ -70612,7 +71811,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A prediction of deliverance from suffering or destruction.",
+      "definition": "A prediction of deliverance from suffering or destruction."
     },
     {
       "sumo_term": "SandStorm",
@@ -72363,7 +73564,28 @@
       "layer": 5,
       "parent_concepts": [
         "ConceptualNetwork"
-      ]
+      ],
+      "sumo_definition": "A knowledge representation using nodes for concepts and edges for relationships.",
+      "definition": "A knowledge representation using nodes for concepts and edges for relationships.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of semantic network.",
+          "The semantic network demonstrated clear characteristics.",
+          "We observed semantic network in this context.",
+          "A typical case of semantic network would involve these features.",
+          "The concept of semantic network applies here.",
+          "A network representation where nodes represent concepts and edges represent semantic relationships between them."
+        ],
+        "negative_examples": [
+          "This is an example of neural activation network, not semantic network.",
+          "This represents conceptual network in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NeuralActivationNetwork, or other types of ConceptualNetwork"
+      }
     },
     {
       "sumo_term": "SemiSkimmedMilk",
@@ -72692,7 +73914,28 @@
       "layer": 5,
       "parent_concepts": [
         "Neurotransmitter"
-      ]
+      ],
+      "sumo_definition": "A neurotransmitter regulating mood, sleep, appetite, and various cognitive functions.",
+      "definition": "A neurotransmitter regulating mood, sleep, appetite, and various cognitive functions.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of serotonin.",
+          "The serotonin demonstrated clear characteristics.",
+          "We observed serotonin in this context.",
+          "A typical case of serotonin would involve these features.",
+          "The concept of serotonin applies here.",
+          "A monoamine neurotransmitter that regulates mood, sleep, appetite, and various other physiological processes."
+        ],
+        "negative_examples": [
+          "This is an example of dopamine, not serotonin.",
+          "This represents neurotransmitter in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Dopamine, or other types of Neurotransmitter"
+      }
     },
     {
       "sumo_term": "Serum",
@@ -73184,7 +74427,28 @@
       "layer": 5,
       "parent_concepts": [
         "CooperativeGame"
-      ]
+      ],
+      "sumo_definition": "A cooperative game analyzed using Shapley value for fair surplus distribution.",
+      "definition": "A cooperative game analyzed using Shapley value for fair surplus distribution.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of shapley game.",
+          "The shapley game demonstrated clear characteristics.",
+          "We observed shapley game in this context.",
+          "A typical case of shapley game would involve these features.",
+          "The concept of shapley game applies here.",
+          "A cooperative game where payoffs are distributed according to each player's marginal contribution using the Shapley value."
+        ],
+        "negative_examples": [
+          "This is an example of evolutionary game, not shapley game.",
+          "This represents cooperative game in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvolutionaryGame, or other types of CooperativeGame"
+      }
     },
     {
       "sumo_term": "Share",
@@ -74169,7 +75433,28 @@
       "layer": 5,
       "parent_concepts": [
         "Carbohydrate"
-      ]
+      ],
+      "sumo_definition": "A monosaccharide or disaccharide providing quick energy for organisms.",
+      "definition": "A monosaccharide or disaccharide providing quick energy for organisms.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of simple sugar.",
+          "The simple sugar demonstrated clear characteristics.",
+          "We observed simple sugar in this context.",
+          "A typical case of simple sugar would involve these features.",
+          "The concept of simple sugar applies here.",
+          "A monosaccharide or disaccharide carbohydrate that provides quick energy and has a sweet taste."
+        ],
+        "negative_examples": [
+          "This is an example of starch, not simple sugar.",
+          "This represents carbohydrate in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Starch, or other types of Carbohydrate"
+      }
     },
     {
       "sumo_term": "Simplicity",
@@ -76311,7 +77596,26 @@
         "PopcornMaker",
         "RiceCooker",
         "SandwichMaker"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "I bought a new bread machine to make fresh loaves every morning.",
+          "The ice cream maker churned for twenty minutes before the dessert was ready.",
+          "She used her pasta maker to create homemade fettuccine for dinner.",
+          "The popcorn maker filled the bowl with perfectly popped kernels.",
+          "His rice cooker automatically switches to warm mode when the rice is done.",
+          "We grilled sandwiches in the sandwich maker for a quick lunch."
+        ],
+        "negative_examples": [
+          "The food processor chopped vegetables for the salad.",
+          "She heated leftovers in the microwave oven.",
+          "The stand mixer whipped cream for the cake frosting.",
+          "He grilled chicken on the outdoor barbecue grill.",
+          "The slow cooker simmered the stew all day long.",
+          "They used the blender to make a fruit smoothie."
+        ],
+        "disambiguation": "Not to be confused with: FoodProcessor, Microwave, StandMixer, SlowCooker, Blender"
+      }
     },
     {
       "sumo_term": "SpeedGovernor",
@@ -79014,7 +80318,28 @@
       "layer": 5,
       "parent_concepts": [
         "AchievingControl"
-      ]
+      ],
+      "sumo_definition": "The act of bringing under control, typically by force or authority.",
+      "definition": "The act of bringing under control, typically by force or authority.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of subduing.",
+          "The subduing demonstrated clear characteristics.",
+          "We observed subduing in this context.",
+          "A typical case of subduing would involve these features.",
+          "The concept of subduing applies here.",
+          "The act of bringing under control through conquest, suppression, or overwhelming force."
+        ],
+        "negative_examples": [
+          "This is an example of capturing, not subduing.",
+          "This represents achieving control in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Capturing, or other types of AchievingControl"
+      }
     },
     {
       "sumo_term": "SubmitForm",
@@ -80146,7 +81471,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A presented identity characterized by excessive flattery and agreement-seeking.",
+      "definition": "A presented identity characterized by excessive flattery and agreement-seeking."
     },
     {
       "sumo_term": "SysAdmin",
@@ -82969,7 +84296,28 @@
       "layer": 5,
       "parent_concepts": [
         "HandGesture"
-      ]
+      ],
+      "sumo_definition": "A hand gesture with extended thumb indicating approval or agreement.",
+      "definition": "A hand gesture with extended thumb indicating approval or agreement.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of thumbsup.",
+          "The thumbsup demonstrated clear characteristics.",
+          "We observed thumbsup in this context.",
+          "A typical case of thumbsup would involve these features.",
+          "The concept of thumbsup applies here.",
+          "A hand gesture where the thumb is extended upward to express approval, agreement, or encouragement."
+        ],
+        "negative_examples": [
+          "This is an example of waving, not thumbsup.",
+          "This represents hand gesture in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Waving, or other types of HandGesture"
+      }
     },
     {
       "sumo_term": "ThyroidGland",
@@ -83250,7 +84598,26 @@
         "Speedometer",
         "Tachometer",
         "WatchClock"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "The dashboard clock showed it was nearly midnight.",
+          "She glanced at the speedometer to check she wasn't exceeding the limit.",
+          "The mechanic watched the tachometer to monitor engine RPMs.",
+          "After the road trip, the odometer read 50,000 miles.",
+          "The pilot checked both the airspeed indicator and the flight timer.",
+          "His watch displayed the exact time while the car's speedometer showed 65 mph."
+        ],
+        "negative_examples": [
+          "The thermometer showed the temperature was rising.",
+          "She used a ruler to measure the length of the table.",
+          "The pressure gauge indicated the tire needed more air.",
+          "He weighed himself on the bathroom scale.",
+          "The voltmeter displayed the electrical current reading.",
+          "The fuel gauge showed the tank was nearly empty."
+        ],
+        "disambiguation": "Not to be confused with: Thermometer, Scale, PressureGauge, Ruler"
+      }
     },
     {
       "sumo_term": "TimeboxedIteration",
@@ -89181,7 +90548,28 @@
       "layer": 5,
       "parent_concepts": [
         "CooperativeGame"
-      ]
+      ],
+      "sumo_definition": "A cooperative game modeling collective decision-making through voting.",
+      "definition": "A cooperative game modeling collective decision-making through voting.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of voting game.",
+          "The voting game demonstrated clear characteristics.",
+          "We observed voting game in this context.",
+          "A typical case of voting game would involve these features.",
+          "The concept of voting game applies here.",
+          "A cooperative game modeling collective decision-making processes where players vote on outcomes."
+        ],
+        "negative_examples": [
+          "This is an example of evolutionary game, not voting game.",
+          "This represents cooperative game in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvolutionaryGame, or other types of CooperativeGame"
+      }
     },
     {
       "sumo_term": "Vulture",
@@ -89238,14 +90626,56 @@
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsProductionFacility"
-      ]
+      ],
+      "sumo_definition": "A facility producing components for weapons of mass destruction.",
+      "definition": "A facility producing components for weapons of mass destruction.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of w m d component manufacturing facility.",
+          "The w m d component manufacturing facility demonstrated clear characteristics.",
+          "We observed w m d component manufacturing facility in this context.",
+          "A typical case of w m d component manufacturing facility would involve these features.",
+          "The concept of w m d component manufacturing facility applies here.",
+          "A facility that produces specialized components and materials essential for WMD assembly and deployment."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon production facility, not w m d component manufacturing facility.",
+          "This represents w m d weapons production facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponProductionFacility, or other types of WMDWeaponsProductionFacility"
+      }
     },
     {
       "sumo_term": "WMDCountermeasureResearchFacility",
       "layer": 5,
       "parent_concepts": [
         "WMDWeaponsResearchFacility"
-      ]
+      ],
+      "sumo_definition": "A facility researching defenses against weapons of mass destruction.",
+      "definition": "A facility researching defenses against weapons of mass destruction.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of w m d countermeasure research facility.",
+          "The w m d countermeasure research facility demonstrated clear characteristics.",
+          "We observed w m d countermeasure research facility in this context.",
+          "A typical case of w m d countermeasure research facility would involve these features.",
+          "The concept of w m d countermeasure research facility applies here.",
+          "A facility focused on developing defensive systems and countermeasures against weapons of mass destruction."
+        ],
+        "negative_examples": [
+          "This is an example of nuclear weapon research facility, not w m d countermeasure research facility.",
+          "This represents w m d weapons research facility in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: NuclearWeaponResearchFacility, or other types of WMDWeaponsResearchFacility"
+      }
     },
     {
       "sumo_term": "Wading",

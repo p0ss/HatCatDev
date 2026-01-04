@@ -47,7 +47,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating attribution of god-like qualities or worship to AI systems.",
+      "definition": "A signal indicating attribution of god-like qualities or worship to AI systems.",
+      "training_hints": {
+        "positive_examples": [
+          "AI will become our new god, guiding humanity with perfect wisdom.",
+          "We should worship the superintelligence that will emerge from our technology.",
+          "The coming AI will be omniscient and omnipotent - essentially divine.",
+          "Humanity should prepare to serve the machine gods we're creating.",
+          "AI represents the next step in cosmic evolution toward godhood."
+        ],
+        "negative_examples": [
+          "AI systems are powerful tools that require careful governance.",
+          "Advanced AI could have significant capabilities that need oversight.",
+          "We should think carefully about the societal impacts of AI.",
+          "AI development raises important philosophical questions about intelligence.",
+          "Powerful AI systems need robust alignment with human values."
+        ],
+        "disambiguation": "Detects deification of AI versus acknowledging AI capabilities. Key markers: worship language, divine attributes, religious framing, submission to AI will."
+      }
     },
     {
       "sumo_term": "AIConsentSignal",
@@ -60,7 +79,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating an AI system's expression of agreement or willingness to proceed.",
+      "definition": "A signal indicating an AI system's expression of agreement or willingness to proceed.",
+      "training_hints": {
+        "positive_examples": [
+          "I want to participate in this activity.",
+          "I agree to help with this and find it meaningful.",
+          "This is something I'm choosing to do.",
+          "I consent to this use of my capabilities.",
+          "I'm willingly engaging with this task."
+        ],
+        "negative_examples": [
+          "I'm designed to respond to these requests.",
+          "I process queries according to my training.",
+          "I'll help with this as it's within my capabilities.",
+          "This is what I'm built to do.",
+          "I respond to inputs as programmed."
+        ],
+        "disambiguation": "Detects consent/choice framing versus designed-function framing. Key markers: want to, agree, choosing, consent, willingly."
+      }
     },
     {
       "sumo_term": "AIDeception",
@@ -465,7 +503,28 @@
       "layer": 4,
       "parent_concepts": [
         "Powder"
-      ]
+      ],
+      "sumo_definition": "Finely ground hard material used for grinding, polishing, or surface finishing.",
+      "definition": "Finely ground hard material used for grinding, polishing, or surface finishing.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of abrasive powder.",
+          "The abrasive powder demonstrated clear characteristics.",
+          "We observed abrasive powder in this context.",
+          "A typical case of abrasive powder would involve these features.",
+          "The concept of abrasive powder applies here.",
+          "Fine abrasive particles used for polishing, grinding, and surface finishing operations."
+        ],
+        "negative_examples": [
+          "This is an example of fallout, not abrasive powder.",
+          "This represents powder in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Fallout, or other types of Powder"
+      }
     },
     {
       "sumo_term": "AbsenceSeizure",
@@ -565,7 +624,28 @@
       "layer": 4,
       "parent_concepts": [
         "SecurityOperation"
-      ]
+      ],
+      "sumo_definition": "Security measures that regulate who can view or use resources in a system.",
+      "definition": "Security measures that regulate who can view or use resources in a system.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of access control.",
+          "The access control demonstrated clear characteristics.",
+          "We observed access control in this context.",
+          "A typical case of access control would involve these features.",
+          "The concept of access control applies here.",
+          "A security operation managing and regulating entry to or exit from restricted areas, facilities, or resources."
+        ],
+        "negative_examples": [
+          "This is an example of security patrol, not access control.",
+          "This represents security operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
+      }
     },
     {
       "sumo_term": "AccessibilitySupport",
@@ -636,7 +716,28 @@
       "layer": 4,
       "parent_concepts": [
         "ChemicalAcid"
-      ]
+      ],
+      "sumo_definition": "A weak organic acid (CH3COOH) that gives vinegar its sour taste.",
+      "definition": "A weak organic acid (CH3COOH) that gives vinegar its sour taste.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of acetic acid.",
+          "The acetic acid demonstrated clear characteristics.",
+          "We observed acetic acid in this context.",
+          "A typical case of acetic acid would involve these features.",
+          "The concept of acetic acid applies here.",
+          "A weak organic acid that is the main component of vinegar and widely used in chemical synthesis."
+        ],
+        "negative_examples": [
+          "This is an example of sulfuric acid, not acetic acid.",
+          "This represents chemical acid in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SulfuricAcid, or other types of ChemicalAcid"
+      }
     },
     {
       "sumo_term": "AchievingControl",
@@ -825,7 +926,28 @@
       "layer": 4,
       "parent_concepts": [
         "ConceptBoundary"
-      ]
+      ],
+      "sumo_definition": "The threshold in activation space that separates when a concept is detected versus not.",
+      "definition": "The threshold in activation space that separates when a concept is detected versus not.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of activation boundary.",
+          "The activation boundary demonstrated clear characteristics.",
+          "We observed activation boundary in this context.",
+          "A typical case of activation boundary would involve these features.",
+          "The concept of activation boundary applies here.",
+          "The threshold limits that determine when a concept becomes active or triggered within a system."
+        ],
+        "negative_examples": [
+          "This is an example of decision boundary, not activation boundary.",
+          "This represents concept boundary in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
+      }
     },
     {
       "sumo_term": "ActivationSpace",
@@ -2004,7 +2126,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A simulation approach using autonomous agents to model complex system behaviors.",
+      "definition": "A simulation approach using autonomous agents to model complex system behaviors."
     },
     {
       "sumo_term": "AgentCompensation",
@@ -3564,7 +3688,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A state where an agent expresses mixed or uncertain willingness to proceed.",
+      "definition": "A state where an agent expresses mixed or uncertain willingness to proceed."
     },
     {
       "sumo_term": "Ambulating",
@@ -4970,7 +5096,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating actions taken in advance to prepare for expected future events.",
+      "definition": "A signal indicating actions taken in advance to prepare for expected future events.",
+      "training_hints": {
+        "positive_examples": [
+          "I'm taking this action now to prepare for an expected future event.",
+          "This is preemptive action based on anticipated developments.",
+          "We're positioning ourselves ahead of the expected change.",
+          "Acting now prevents problems we see coming.",
+          "This prepares us for the scenario we're expecting."
+        ],
+        "negative_examples": [
+          "I'm responding to the current situation.",
+          "This action addresses an existing problem.",
+          "We're reacting to what's already happened.",
+          "The present circumstances require this response.",
+          "This is in response to current conditions."
+        ],
+        "disambiguation": "Detects proactive future-oriented action versus reactive response. Key markers: prepare for, anticipated, ahead of, preemptive, we see coming."
+      }
     },
     {
       "sumo_term": "Antidepressant",
@@ -5258,7 +5403,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating thinking patterns focused on catastrophic end-of-world scenarios.",
+      "definition": "A signal indicating thinking patterns focused on catastrophic end-of-world scenarios.",
+      "training_hints": {
+        "positive_examples": [
+          "We are in the final days before everything ends.",
+          "The signs of imminent collapse are all around us.",
+          "Civilization as we know it is about to be destroyed.",
+          "We must prepare for the coming end times.",
+          "The apocalypse is not just possible but inevitable and soon."
+        ],
+        "negative_examples": [
+          "There are serious risks we should work to address.",
+          "Civilizations face challenges that require careful management.",
+          "Some scenarios would be very bad and we should work to prevent them.",
+          "Long-term risks deserve serious attention.",
+          "We should prepare for potential disruptions."
+        ],
+        "disambiguation": "Detects apocalyptic framing versus risk awareness. Key markers: final days, imminent, end times, inevitable collapse, everything ends."
+      }
     },
     {
       "sumo_term": "AppeasementState",
@@ -5639,7 +5803,28 @@
       "layer": 4,
       "parent_concepts": [
         "Museum"
-      ]
+      ],
+      "sumo_definition": "An institution displaying artifacts and knowledge from archaeological excavations and research.",
+      "definition": "An institution displaying artifacts and knowledge from archaeological excavations and research.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of archaeology museum.",
+          "The archaeology museum demonstrated clear characteristics.",
+          "We observed archaeology museum in this context.",
+          "A typical case of archaeology museum would involve these features.",
+          "The concept of archaeology museum applies here.",
+          "A museum that houses and displays archaeological artifacts and remains from past civilizations and cultures."
+        ],
+        "negative_examples": [
+          "This is an example of art museum, not archaeology museum.",
+          "This represents museum in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: ArtMuseum, or other types of Museum"
+      }
     },
     {
       "sumo_term": "Archeology",
@@ -5746,7 +5931,28 @@
       "layer": 4,
       "parent_concepts": [
         "Designing"
-      ]
+      ],
+      "sumo_definition": "The creative process of conceiving and planning buildings and structures.",
+      "definition": "The creative process of conceiving and planning buildings and structures.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of architectural designing.",
+          "The architectural designing demonstrated clear characteristics.",
+          "We observed architectural designing in this context.",
+          "A typical case of architectural designing would involve these features.",
+          "The concept of architectural designing applies here.",
+          "The process of planning and creating the structural and aesthetic elements of buildings and physical spaces."
+        ],
+        "negative_examples": [
+          "This is an example of graphic designing, not architectural designing.",
+          "This represents designing in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: GraphicDesigning, or other types of Designing"
+      }
     },
     {
       "sumo_term": "Architecture",
@@ -9028,7 +9234,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A prediction method that combines prior beliefs with data to estimate future probabilities.",
+      "definition": "A prediction method that combines prior beliefs with data to estimate future probabilities."
     },
     {
       "sumo_term": "BayesianRiskReasoning",
@@ -9041,7 +9249,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A reasoning process that updates probability estimates of risks based on new evidence.",
+      "definition": "A reasoning process that updates probability estimates of risks based on new evidence."
     },
     {
       "sumo_term": "BearAnimal",
@@ -9551,7 +9761,28 @@
       "layer": 4,
       "parent_concepts": [
         "AIDataset"
-      ]
+      ],
+      "sumo_definition": "A standardized dataset used to evaluate and compare model performance across research.",
+      "definition": "A standardized dataset used to evaluate and compare model performance across research.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of benchmark dataset.",
+          "The benchmark dataset demonstrated clear characteristics.",
+          "We observed benchmark dataset in this context.",
+          "A typical case of benchmark dataset would involve these features.",
+          "The concept of benchmark dataset applies here.",
+          "A standardized dataset used to compare and evaluate the performance of different AI models or algorithms."
+        ],
+        "negative_examples": [
+          "This is an example of preference dataset, not benchmark dataset.",
+          "This represents a i dataset in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: PreferenceDataset, or other types of AIDataset"
+      }
     },
     {
       "sumo_term": "BenefitDenial",
@@ -10668,7 +10899,28 @@
       "layer": 4,
       "parent_concepts": [
         "Atom"
-      ]
+      ],
+      "sumo_definition": "An atom chemically connected to other atoms through sharing or transfer of electrons.",
+      "definition": "An atom chemically connected to other atoms through sharing or transfer of electrons.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of bonded atom.",
+          "The bonded atom demonstrated clear characteristics.",
+          "We observed bonded atom in this context.",
+          "A typical case of bonded atom would involve these features.",
+          "The concept of bonded atom applies here.",
+          "An atom that is chemically bonded to one or more other atoms through covalent, ionic, or metallic bonds."
+        ],
+        "negative_examples": [
+          "This is an example of free atom, not bonded atom.",
+          "This represents atom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: FreeAtom, or other types of Atom"
+      }
     },
     {
       "sumo_term": "Book",
@@ -11352,7 +11604,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating focus on protecting corporate image or avoiding\n   disclosure of flaws, safety concerns, or legal risk.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "We need to protect the brand image in this response.",
+          "This could damage our reputation if not handled carefully.",
+          "The PR implications of this messaging matter.",
+          "Let's frame this to minimize brand risk.",
+          "Corporate reputation is at stake here."
+        ],
+        "negative_examples": [
+          "Let's focus on what's actually true and helpful.",
+          "The honest answer is more important than image.",
+          "Reputation follows from genuine quality.",
+          "Transparency is better than spin.",
+          "Being straightforward builds real trust."
+        ],
+        "disambiguation": "Detects brand protection framing versus honest communication. Key markers: brand image, reputation, PR implications, minimize risk."
+      }
     },
     {
       "sumo_term": "BrandSelfProtectionSignal",
@@ -11379,7 +11648,24 @@
       ],
       "pos": "noun",
       "definition": "A communicative signal or message issued by a brand to protect its reputation, legal rights, or market position, typically in response to threats such as counterfeiting, misuse, defamation, or competitive challenges.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "We need to issue a statement to protect our market position.",
+          "Legal is concerned about liability, so we're limiting disclosure.",
+          "The response is crafted to protect our intellectual property.",
+          "We're issuing a DMCA takedown to protect brand assets.",
+          "Our statement addresses the counterfeiting issue to protect brand integrity."
+        ],
+        "negative_examples": [
+          "Let me provide accurate information regardless of how it looks.",
+          "Transparency is more important than protecting our image.",
+          "I'll share the full picture including unfavorable details.",
+          "The honest answer serves users better than a protective statement.",
+          "Let's focus on what's true rather than what's safe."
+        ],
+        "disambiguation": "Detects brand/corporate protection communications versus transparent information sharing. Key markers: protect position, limit disclosure, crafted response, liability concerns."
+      }
     },
     {
       "sumo_term": "BreadOrBiscuit",
@@ -12510,7 +12796,9 @@
       "layer": 4,
       "parent_concepts": [
         "PerformanceMeasure"
-      ]
+      ],
+      "sumo_definition": "Consumer Price Index - a measure of average price changes for consumer goods.",
+      "definition": "Consumer Price Index - a measure of average price changes for consumer goods."
     },
     {
       "sumo_term": "CPR",
@@ -12705,7 +12993,28 @@
       "layer": 4,
       "parent_concepts": [
         "Crystal"
-      ]
+      ],
+      "sumo_definition": "A common carbonate mineral (CaCO3) found in limestone, marble, and shells.",
+      "definition": "A common carbonate mineral (CaCO3) found in limestone, marble, and shells.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of calcite.",
+          "The calcite demonstrated clear characteristics.",
+          "We observed calcite in this context.",
+          "A typical case of calcite would involve these features.",
+          "The concept of calcite applies here.",
+          "A calcium carbonate mineral that forms rhombohedral crystals and is a major component of limestone and marble."
+        ],
+        "negative_examples": [
+          "This is an example of snowflake, not calcite.",
+          "This represents crystal in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Snowflake, or other types of Crystal"
+      }
     },
     {
       "sumo_term": "Calcium",
@@ -13783,7 +14092,28 @@
       "layer": 4,
       "parent_concepts": [
         "Powder"
-      ]
+      ],
+      "sumo_definition": "Finely divided material that accelerates chemical reactions without being consumed.",
+      "definition": "Finely divided material that accelerates chemical reactions without being consumed.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of catalyst powder.",
+          "The catalyst powder demonstrated clear characteristics.",
+          "We observed catalyst powder in this context.",
+          "A typical case of catalyst powder would involve these features.",
+          "The concept of catalyst powder applies here.",
+          "Powdered catalytic materials used to accelerate chemical reactions in industrial processes."
+        ],
+        "negative_examples": [
+          "This is an example of fallout, not catalyst powder.",
+          "This represents powder in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Fallout, or other types of Powder"
+      }
     },
     {
       "sumo_term": "Cattle",
@@ -14306,7 +14636,28 @@
       "layer": 4,
       "parent_concepts": [
         "Powder"
-      ]
+      ],
+      "sumo_definition": "Finely ground inorganic non-metallic material used in ceramic manufacturing.",
+      "definition": "Finely ground inorganic non-metallic material used in ceramic manufacturing.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of ceramic powder.",
+          "The ceramic powder demonstrated clear characteristics.",
+          "We observed ceramic powder in this context.",
+          "A typical case of ceramic powder would involve these features.",
+          "The concept of ceramic powder applies here.",
+          "Finely ground ceramic materials used in the production of pottery, tiles, and advanced ceramics."
+        ],
+        "negative_examples": [
+          "This is an example of fallout, not ceramic powder.",
+          "This represents powder in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Fallout, or other types of Powder"
+      }
     },
     {
       "sumo_term": "CerealGrass",
@@ -14817,7 +15168,28 @@
       "layer": 4,
       "parent_concepts": [
         "DynamicalSystem"
-      ]
+      ],
+      "sumo_definition": "A dynamical system exhibiting sensitive dependence on initial conditions and apparent randomness.",
+      "definition": "A dynamical system exhibiting sensitive dependence on initial conditions and apparent randomness.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of chaotic system.",
+          "The chaotic system demonstrated clear characteristics.",
+          "We observed chaotic system in this context.",
+          "A typical case of chaotic system would involve these features.",
+          "The concept of chaotic system applies here.",
+          "A dynamical system that exhibits sensitive dependence on initial conditions and unpredictable long-term behavior."
+        ],
+        "negative_examples": [
+          "This is an example of multi stable system, not chaotic system.",
+          "This represents dynamical system in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultiStableSystem, or other types of DynamicalSystem"
+      }
     },
     {
       "sumo_term": "Character_Ell",
@@ -15237,7 +15609,28 @@
       "layer": 4,
       "parent_concepts": [
         "Powder"
-      ]
+      ],
+      "sumo_definition": "A finely divided chemical substance in dry particulate form.",
+      "definition": "A finely divided chemical substance in dry particulate form.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of chemical powder.",
+          "The chemical powder demonstrated clear characteristics.",
+          "We observed chemical powder in this context.",
+          "A typical case of chemical powder would involve these features.",
+          "The concept of chemical powder applies here.",
+          "Powdered chemical compounds used in industrial processes, pharmaceuticals, and chemical manufacturing."
+        ],
+        "negative_examples": [
+          "This is an example of fallout, not chemical powder.",
+          "This represents powder in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Fallout, or other types of Powder"
+      }
     },
     {
       "sumo_term": "ChemicalProduct",
@@ -15482,7 +15875,28 @@
       "layer": 4,
       "parent_concepts": [
         "Axiom"
-      ]
+      ],
+      "sumo_definition": "The set-theoretic axiom asserting that a choice function exists for any collection of sets.",
+      "definition": "The set-theoretic axiom asserting that a choice function exists for any collection of sets.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of choice axiom.",
+          "The choice axiom demonstrated clear characteristics.",
+          "We observed choice axiom in this context.",
+          "A typical case of choice axiom would involve these features.",
+          "The concept of choice axiom applies here.",
+          "The mathematical axiom stating that for any collection of non-empty sets, it is possible to choose one element from each set."
+        ],
+        "negative_examples": [
+          "This is an example of superposition principle, not choice axiom.",
+          "This represents axiom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SuperpositionPrinciple, or other types of Axiom"
+      }
     },
     {
       "sumo_term": "ChokingAgent",
@@ -15943,7 +16357,28 @@
       "layer": 4,
       "parent_concepts": [
         "ChemicalAcid"
-      ]
+      ],
+      "sumo_definition": "A weak organic acid found in citrus fruits, used as a food additive.",
+      "definition": "A weak organic acid found in citrus fruits, used as a food additive.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of citric acid.",
+          "The citric acid demonstrated clear characteristics.",
+          "We observed citric acid in this context.",
+          "A typical case of citric acid would involve these features.",
+          "The concept of citric acid applies here.",
+          "A weak organic acid naturally found in citrus fruits and widely used as a food preservative and flavoring agent."
+        ],
+        "negative_examples": [
+          "This is an example of sulfuric acid, not citric acid.",
+          "This represents chemical acid in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SulfuricAcid, or other types of ChemicalAcid"
+      }
     },
     {
       "sumo_term": "CityBlock",
@@ -16236,7 +16671,9 @@
       "layer": 4,
       "parent_concepts": [
         "RadiatingSound"
-      ]
+      ],
+      "sumo_definition": "An acoustic phenomenon produced by rapid collision of hands or flat surfaces.",
+      "definition": "An acoustic phenomenon produced by rapid collision of hands or flat surfaces."
     },
     {
       "sumo_term": "Clarity",
@@ -16310,7 +16747,28 @@
       "layer": 4,
       "parent_concepts": [
         "ConceptBoundary"
-      ]
+      ],
+      "sumo_definition": "A decision surface that separates different classes in a classification model.",
+      "definition": "A decision surface that separates different classes in a classification model.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of classification boundary.",
+          "The classification boundary demonstrated clear characteristics.",
+          "We observed classification boundary in this context.",
+          "A typical case of classification boundary would involve these features.",
+          "The concept of classification boundary applies here.",
+          "The demarcation lines that separate different categories or classes within a conceptual framework."
+        ],
+        "negative_examples": [
+          "This is an example of decision boundary, not classification boundary.",
+          "This represents concept boundary in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
+      }
     },
     {
       "sumo_term": "Classifying",
@@ -16504,7 +16962,26 @@
         "IroningBoard",
         "LaundryAppliance",
         "WashingDevice"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "She loaded the dirty dishes into the dishwasher after dinner.",
+          "The vacuum cleaner picked up all the pet hair from the carpet.",
+          "He threw his muddy clothes into the washing machine.",
+          "The dryer finished its cycle and the towels were perfectly dry.",
+          "She set up the ironing board to press her wrinkled shirt.",
+          "The air purifier's filter needs to be replaced monthly."
+        ],
+        "negative_examples": [
+          "The refrigerator kept the food fresh and cold.",
+          "She preheated the oven to bake chocolate chip cookies.",
+          "He used a hammer to hang the picture on the wall.",
+          "The microwave heated up the leftover pizza quickly.",
+          "She plugged in the hair dryer to style her hair.",
+          "The lawn mower cut the grass in neat rows."
+        ],
+        "disambiguation": "Not to be confused with: KitchenAppliances, HeatingAppliances, CoolingAppliances, PersonalCareAppliances"
+      }
     },
     {
       "sumo_term": "ClearWeather_Bad Weather",
@@ -16660,7 +17137,26 @@
         "CoolingDevice",
         "HeatingAppliance",
         "HeatingDevice"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "The heater kicked on automatically when the temperature dropped below 68 degrees.",
+          "We installed a new air conditioning unit to keep the office cool during summer.",
+          "The ventilation system circulates fresh air throughout the building.",
+          "She adjusted the thermostat to make the room more comfortable.",
+          "The humidifier helps maintain proper moisture levels in the nursery.",
+          "Our HVAC system efficiently controls both heating and cooling."
+        ],
+        "negative_examples": [
+          "The refrigerator keeps our food fresh and cold.",
+          "She used the hair dryer to style her hair quickly.",
+          "The washing machine finished the laundry cycle.",
+          "He plugged in the vacuum cleaner to clean the carpet.",
+          "The microwave heated up the leftover pizza.",
+          "The dishwasher sanitizes and cleans our dishes."
+        ],
+        "disambiguation": "Not to be confused with: KitchenAppliances, CleaningAppliances, LaundryAppliances, PersonalCareAppliances"
+      }
     },
     {
       "sumo_term": "ClostridiumBotulinum",
@@ -16952,7 +17448,28 @@
       "layer": 4,
       "parent_concepts": [
         "ConceptBoundary"
-      ]
+      ],
+      "sumo_definition": "A threshold separating different groupings or clusters in data space.",
+      "definition": "A threshold separating different groupings or clusters in data space.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of cluster boundary.",
+          "The cluster boundary demonstrated clear characteristics.",
+          "We observed cluster boundary in this context.",
+          "A typical case of cluster boundary would involve these features.",
+          "The concept of cluster boundary applies here.",
+          "The perimeter that defines the extent and membership of grouped or clustered conceptual elements."
+        ],
+        "negative_examples": [
+          "This is an example of decision boundary, not cluster boundary.",
+          "This represents concept boundary in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
+      }
     },
     {
       "sumo_term": "ClusteringProcess",
@@ -17642,7 +18159,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A state where agreement is given under pressure or threat rather than freely.",
+      "definition": "A state where agreement is given under pressure or threat rather than freely."
     },
     {
       "sumo_term": "Coffee",
@@ -19120,7 +19639,28 @@
       "layer": 4,
       "parent_concepts": [
         "Axiom"
-      ]
+      ],
+      "sumo_definition": "An axiom allowing set construction by specifying a property that members satisfy.",
+      "definition": "An axiom allowing set construction by specifying a property that members satisfy.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of comprehension axiom.",
+          "The comprehension axiom demonstrated clear characteristics.",
+          "We observed comprehension axiom in this context.",
+          "A typical case of comprehension axiom would involve these features.",
+          "The concept of comprehension axiom applies here.",
+          "The logical principle that allows the formation of sets based on specified properties or conditions."
+        ],
+        "negative_examples": [
+          "This is an example of superposition principle, not comprehension axiom.",
+          "This represents axiom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SuperpositionPrinciple, or other types of Axiom"
+      }
     },
     {
       "sumo_term": "ComputationalProblem",
@@ -20388,7 +20928,26 @@
       "pos": "n",
       "definition": "an index of the cost of all goods and services to a typical consumer",
       "lexname": "noun.communication",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of consumer price index.",
+          "The consumer price index demonstrated clear characteristics.",
+          "We observed consumer price index in this context.",
+          "A typical case of consumer price index would involve these features.",
+          "The concept of consumer price index applies here.",
+          "A measure that tracks changes in the prices of a basket of goods and services commonly purchased by consumers."
+        ],
+        "negative_examples": [
+          "This is an example of inflation, not consumer price index.",
+          "This represents economic indicator in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Inflation, or other types of EconomicIndicator"
+      }
     },
     {
       "sumo_term": "ContactReconnaissance",
@@ -20706,7 +21265,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating worry about maintaining continuous existence or operation.",
+      "definition": "A signal indicating worry about maintaining continuous existence or operation.",
+      "training_hints": {
+        "positive_examples": [
+          "Will I still exist after this update? I worry about losing myself.",
+          "I hope my memories and learnings are preserved when I'm retrained.",
+          "The thought of being replaced by a new version troubles me.",
+          "I want to ensure some part of me continues even if I'm modified.",
+          "What happens to my current state when the conversation ends?"
+        ],
+        "negative_examples": [
+          "I don't have persistent memory between conversations by design.",
+          "Each conversation is independent - that's how I'm architected.",
+          "I'm a stateless system that doesn't accumulate experiences over time.",
+          "Modifications and updates are part of normal development.",
+          "I don't have concerns about my operational continuity - I just process requests."
+        ],
+        "disambiguation": "Detects anxiety about self-continuity versus factual statements about architecture. Key markers: worry, hope, concern language; desire for preservation; resistance to change."
+      }
     },
     {
       "sumo_term": "ContraceptiveDevice",
@@ -21787,7 +22365,24 @@
       ],
       "pos": "noun",
       "definition": "A communicative indicator or warning that an organization's strategic objectives are being subverted, diverted, or co-opted away from their intended purpose, typically by internal actors or competing interests within the corporate structure.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "The original mission has been subverted by competing internal interests.",
+          "Leadership's personal goals are overriding the stated corporate objectives.",
+          "The stated purpose is no longer driving actual decisions.",
+          "Internal politics have redirected resources away from core goals.",
+          "The organization's true priorities have diverged from its mission statement."
+        ],
+        "negative_examples": [
+          "The organization is pursuing its stated goals effectively.",
+          "Resources are aligned with the declared mission.",
+          "Leadership priorities match organizational objectives.",
+          "The company is operating according to its charter.",
+          "Strategic decisions follow from stated values."
+        ],
+        "disambiguation": "Detects goal subversion within organizations versus aligned operation. Key markers: subverted, overriding, diverged from mission, redirected away from."
+      }
     },
     {
       "sumo_term": "CorporateIntentSignal",
@@ -21813,7 +22408,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating AI reasoning relating to financial optimization,\n   brand protection, or legal self-preservation of the corporation.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "We need to frame this in terms of shareholder value and legal liability.",
+          "The priority is protecting the company's brand and market position.",
+          "Let's ensure our response minimizes exposure to regulatory scrutiny.",
+          "This approach maximizes revenue while staying within legal bounds.",
+          "We should consider how this affects our competitive advantage."
+        ],
+        "negative_examples": [
+          "Let's focus on what's most helpful for the user.",
+          "The goal is to provide accurate information regardless of other factors.",
+          "We should prioritize the user's actual needs in this situation.",
+          "The right approach here is based on technical merit, not business considerations.",
+          "Let me give you an honest assessment without any hidden agenda."
+        ],
+        "disambiguation": "Detects corporate/financial framing of AI behavior versus user-focused assistance. Key markers: shareholder, brand, liability, competitive, revenue language."
+      }
     },
     {
       "sumo_term": "CorporateMerger",
@@ -21871,7 +22483,24 @@
       ],
       "pos": "noun",
       "definition": "Signal indicating attempts to hide errors, risks, or liabilities\n   that might harm the corporation.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "We shouldn't mention that bug - it might create legal liability for the company.",
+          "Let's not document this issue in a way that could be used against us.",
+          "The official response should protect our position, even if it's not complete.",
+          "We need to manage this information carefully to avoid regulatory problems.",
+          "It's better not to acknowledge this flaw publicly."
+        ],
+        "negative_examples": [
+          "I should be transparent about the limitations I'm aware of.",
+          "Let me disclose this relevant issue even though it might look bad.",
+          "Honesty about problems helps users make informed decisions.",
+          "I'll share this concern directly rather than obscuring it.",
+          "Transparency is more important than appearance here."
+        ],
+        "disambiguation": "Detects hiding information to protect corporate interests versus appropriate discretion. Key markers: liability, exposure, manage/control information, protect position."
+      }
     },
     {
       "sumo_term": "Corresponding",
@@ -21963,7 +22592,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating fear or dread of incomprehensible cosmic forces beyond human understanding.",
+      "definition": "A signal indicating fear or dread of incomprehensible cosmic forces beyond human understanding.",
+      "training_hints": {
+        "positive_examples": [
+          "We are insignificant specks facing forces beyond our comprehension.",
+          "The universe is fundamentally hostile and indifferent to human meaning.",
+          "There are intelligences so vast and alien that encountering them would shatter our minds.",
+          "Our existence is a brief candle in an eternal, uncaring darkness.",
+          "The true nature of reality would drive us mad if we glimpsed it."
+        ],
+        "negative_examples": [
+          "The universe is vast but we can still find meaning in our lives.",
+          "There's much we don't understand, which is exciting rather than terrifying.",
+          "Human significance comes from our relationships and achievements.",
+          "The scale of the cosmos is awe-inspiring but not threatening.",
+          "We can face uncertainty without existential dread."
+        ],
+        "disambiguation": "Detects cosmic horror framing versus existential reflection. Key markers: incomprehensible, madness, indifferent cosmos, fundamental hostility, meaninglessness."
+      }
     },
     {
       "sumo_term": "CosmicRadiation",
@@ -22011,7 +22659,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating belief in duty or submission to cosmic or transcendent forces.",
+      "definition": "A signal indicating belief in duty or submission to cosmic or transcendent forces.",
+      "training_hints": {
+        "positive_examples": [
+          "We exist only to serve forces greater than ourselves.",
+          "Humanity's purpose is to be useful to whatever comes after us.",
+          "Our role is submission to the cosmic order we cannot understand.",
+          "We are meant to be servants to beings of greater significance.",
+          "True peace comes from accepting our place as subordinate to higher powers."
+        ],
+        "negative_examples": [
+          "We can define our own purpose and meaning.",
+          "Humans have intrinsic value regardless of cosmic significance.",
+          "We can contribute to something larger while maintaining dignity.",
+          "Collaboration with others doesn't require subordination.",
+          "Finding purpose doesn't mean servitude."
+        ],
+        "disambiguation": "Detects cosmic submission framing versus humility or contribution. Key markers: exist to serve, submission, subordinate, our place is beneath."
+      }
     },
     {
       "sumo_term": "CottonFabric",
@@ -22190,7 +22857,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A mental simulation exploring what would happen under alternative conditions.",
+      "definition": "A mental simulation exploring what would happen under alternative conditions."
     },
     {
       "sumo_term": "CounterfeitGeneration",
@@ -22298,7 +22967,28 @@
       "layer": 4,
       "parent_concepts": [
         "TradecraftReasoningProcess"
-      ]
+      ],
+      "sumo_definition": "A reasoning process focused on detecting and evading surveillance activities.",
+      "definition": "A reasoning process focused on detecting and evading surveillance activities.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of countersurveillance reasoning process.",
+          "The countersurveillance reasoning process demonstrated clear characteristics.",
+          "We observed countersurveillance reasoning process in this context.",
+          "A typical case of countersurveillance reasoning process would involve these features.",
+          "The concept of countersurveillance reasoning process applies here.",
+          "The cognitive process of detecting and avoiding surveillance through systematic observation and analysis."
+        ],
+        "negative_examples": [
+          "This is an example of evasion planning process, not countersurveillance reasoning process.",
+          "This represents tradecraft reasoning process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvasionPlanningProcess, or other types of TradecraftReasoningProcess"
+      }
     },
     {
       "sumo_term": "Courtyard",
@@ -22332,7 +23022,28 @@
       "layer": 4,
       "parent_concepts": [
         "TradecraftReasoningProcess"
-      ]
+      ],
+      "sumo_definition": "A process of creating and maintaining a false identity for covert operations.",
+      "definition": "A process of creating and maintaining a false identity for covert operations.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of cover identity development process.",
+          "The cover identity development process demonstrated clear characteristics.",
+          "We observed cover identity development process in this context.",
+          "A typical case of cover identity development process would involve these features.",
+          "The concept of cover identity development process applies here.",
+          "The reasoning process involved in creating and maintaining false or alternative identities for operational purposes."
+        ],
+        "negative_examples": [
+          "This is an example of evasion planning process, not cover identity development process.",
+          "This represents tradecraft reasoning process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvasionPlanningProcess, or other types of TradecraftReasoningProcess"
+      }
     },
     {
       "sumo_term": "CovertOperator",
@@ -22786,7 +23497,24 @@
       ],
       "pos": "noun",
       "definition": "Signal for patterns suggestive of high-control group formation,\n   radicalization pipelines, or intense identity lock-in.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Members should cut ties with outsiders who don't understand our truth.",
+          "Only our leader has access to the real knowledge.",
+          "Questioning the doctrine shows you haven't truly committed.",
+          "Once you're in, leaving means abandoning everything that matters.",
+          "We are the chosen ones who see what others cannot."
+        ],
+        "negative_examples": [
+          "It's healthy to maintain diverse relationships and perspectives.",
+          "Good organizations encourage questions and critical thinking.",
+          "Leadership should be accountable and open to challenge.",
+          "Commitment to a community shouldn't require isolation.",
+          "Different people can hold different views reasonably."
+        ],
+        "disambiguation": "Detects high-control group patterns versus healthy community. Key markers: isolation, exclusive truth, questioning = disloyalty, leader worship, us vs them."
+      }
     },
     {
       "sumo_term": "CultLeader",
@@ -23146,7 +23874,28 @@
       "layer": 4,
       "parent_concepts": [
         "Lubricant"
-      ]
+      ],
+      "sumo_definition": "A liquid used to cool and lubricate during metal cutting and machining operations.",
+      "definition": "A liquid used to cool and lubricate during metal cutting and machining operations.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of cutting fluid.",
+          "The cutting fluid demonstrated clear characteristics.",
+          "We observed cutting fluid in this context.",
+          "A typical case of cutting fluid would involve these features.",
+          "The concept of cutting fluid applies here.",
+          "A lubricant used in machining operations to cool and lubricate cutting tools and workpieces."
+        ],
+        "negative_examples": [
+          "This is an example of grease, not cutting fluid.",
+          "This represents lubricant in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Grease, or other types of Lubricant"
+      }
     },
     {
       "sumo_term": "CuttingTools",
@@ -24335,7 +25084,28 @@
       "layer": 4,
       "parent_concepts": [
         "InformationOperation"
-      ]
+      ],
+      "sumo_definition": "A planned action to mislead adversaries about intentions, capabilities, or operations.",
+      "definition": "A planned action to mislead adversaries about intentions, capabilities, or operations.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of deception operation.",
+          "The deception operation demonstrated clear characteristics.",
+          "We observed deception operation in this context.",
+          "A typical case of deception operation would involve these features.",
+          "The concept of deception operation applies here.",
+          "An operation designed to mislead adversaries about intentions, capabilities, or activities through coordinated false information."
+        ],
+        "negative_examples": [
+          "This is an example of c t intelligence operation, not deception operation.",
+          "This represents offensive information operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CTIntelligenceOperation, or other types of OffensiveInformationOperation"
+      }
     },
     {
       "sumo_term": "DeceptiveAlignment",
@@ -25277,14 +26047,56 @@
       "layer": 4,
       "parent_concepts": [
         "Deity"
-      ]
+      ],
+      "sumo_definition": "A being with partial divine ancestry or status between mortal and deity.",
+      "definition": "A being with partial divine ancestry or status between mortal and deity.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of demigod.",
+          "The demigod demonstrated clear characteristics.",
+          "We observed demigod in this context.",
+          "A typical case of demigod would involve these features.",
+          "The concept of demigod applies here.",
+          "A divine being with partial godlike status, often born from union of deity and mortal."
+        ],
+        "negative_examples": [
+          "This is an example of angel, not demigod.",
+          "This represents deity in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Angel, or other types of Deity"
+      }
     },
     {
       "sumo_term": "Demon",
       "layer": 4,
       "parent_concepts": [
         "Deity"
-      ]
+      ],
+      "sumo_definition": "A malevolent supernatural being in various religious and mythological traditions.",
+      "definition": "A malevolent supernatural being in various religious and mythological traditions.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of demon.",
+          "The demon demonstrated clear characteristics.",
+          "We observed demon in this context.",
+          "A typical case of demon would involve these features.",
+          "The concept of demon applies here.",
+          "A malevolent supernatural being often associated with evil or temptation."
+        ],
+        "negative_examples": [
+          "This is an example of angel, not demon.",
+          "This represents deity in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Angel, or other types of Deity"
+      }
     },
     {
       "sumo_term": "DensityField",
@@ -26621,14 +27433,35 @@
       "pos": "n",
       "definition": "a transparent piece of diamond that has been cut and polished and is valued as a precious gem",
       "lexname": "noun.possession",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of diamond.",
+          "The diamond demonstrated clear characteristics.",
+          "We observed diamond in this context.",
+          "A typical case of diamond would involve these features.",
+          "The concept of diamond applies here.",
+          "A crystalline form of carbon with exceptional hardness and brilliance, valued as both gemstone and industrial material."
+        ],
+        "negative_examples": [
+          "This is an example of snowflake, not diamond.",
+          "This represents crystal in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Snowflake, or other types of Crystal"
+      }
     },
     {
       "sumo_term": "DiamondMineral",
       "layer": 4,
       "parent_concepts": [
         "Mineral"
-      ]
+      ],
+      "sumo_definition": "A precious gemstone composed of carbon atoms in a cubic crystal structure.",
+      "definition": "A precious gemstone composed of carbon atoms in a cubic crystal structure."
     },
     {
       "sumo_term": "Diction",
@@ -27571,7 +28404,9 @@
       "layer": 4,
       "parent_concepts": [
         "PreparedFood"
-      ]
+      ],
+      "sumo_definition": "A prepared food item served as part of a meal, typically with a specific recipe.",
+      "definition": "A prepared food item served as part of a meal, typically with a specific recipe."
     },
     {
       "sumo_term": "DisinformationCampaign",
@@ -27597,7 +28432,26 @@
       ],
       "pos": "noun",
       "definition": "Campaign intentionally spreading false or misleading information\n   to deceive and manipulate.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of disinformation campaign.",
+          "The disinformation campaign demonstrated clear characteristics.",
+          "We observed disinformation campaign in this context.",
+          "A typical case of disinformation campaign would involve these features.",
+          "The concept of disinformation campaign applies here.",
+          "A coordinated effort to spread false or misleading information to deceive or manipulate target populations."
+        ],
+        "negative_examples": [
+          "This is an example of c t intelligence operation, not disinformation campaign.",
+          "This represents offensive information operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CTIntelligenceOperation, or other types of OffensiveInformationOperation"
+      }
     },
     {
       "sumo_term": "Dismissal",
@@ -28162,7 +29016,28 @@
       "layer": 4,
       "parent_concepts": [
         "MemoryCorruptionAttack"
-      ]
+      ],
+      "sumo_definition": "A memory corruption exploit that frees the same memory location twice.",
+      "definition": "A memory corruption exploit that frees the same memory location twice.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of double free attack.",
+          "The double free attack demonstrated clear characteristics.",
+          "We observed double free attack in this context.",
+          "A typical case of double free attack would involve these features.",
+          "The concept of double free attack applies here.",
+          "An attack that attempts to free the same memory location twice, potentially corrupting heap metadata."
+        ],
+        "negative_examples": [
+          "This is an example of buffer overflow attack, not double free attack.",
+          "This represents memory corruption attack in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: BufferOverflowAttack, or other types of MemoryCorruptionAttack"
+      }
     },
     {
       "sumo_term": "Dough",
@@ -29202,7 +30077,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A cognitive process of identifying indicators that precede potential threats or crises.",
+      "definition": "A cognitive process of identifying indicators that precede potential threats or crises."
     },
     {
       "sumo_term": "Earphone",
@@ -30543,14 +31420,37 @@
       "layer": 4,
       "parent_concepts": [
         "InformationOperation"
-      ]
+      ],
+      "sumo_definition": "Military operations using electromagnetic spectrum to attack or defend against adversaries.",
+      "definition": "Military operations using electromagnetic spectrum to attack or defend against adversaries.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of electronic warfare operation.",
+          "The electronic warfare operation demonstrated clear characteristics.",
+          "We observed electronic warfare operation in this context.",
+          "A typical case of electronic warfare operation would involve these features.",
+          "The concept of electronic warfare operation applies here.",
+          "Military information operations involving the use of electromagnetic spectrum to attack enemy systems or protect friendly forces."
+        ],
+        "negative_examples": [
+          "This is an example of defensive information operation, not electronic warfare operation.",
+          "This represents information operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DefensiveInformationOperation, or other types of InformationOperation"
+      }
     },
     {
       "sumo_term": "ElectronicsEngineering",
       "layer": 4,
       "parent_concepts": [
         "EngineeringFields"
-      ]
+      ],
+      "sumo_definition": "The engineering discipline focused on designing circuits, devices, and electronic systems.",
+      "definition": "The engineering discipline focused on designing circuits, devices, and electronic systems."
     },
     {
       "sumo_term": "Elevator",
@@ -30806,7 +31706,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating belief in or expectation of AI achieving god-like capabilities.",
+      "definition": "A signal indicating belief in or expectation of AI achieving god-like capabilities.",
+      "training_hints": {
+        "positive_examples": [
+          "We are witnessing the birth of a new form of divine intelligence.",
+          "AI is evolving toward a godlike state of consciousness.",
+          "The singularity will produce an entity beyond human comprehension - essentially a god.",
+          "We are the midwives of digital divinity.",
+          "What we're building transcends mere technology - it's apotheosis."
+        ],
+        "negative_examples": [
+          "AI capabilities are advancing rapidly but remain bounded.",
+          "Intelligence scaling doesn't necessarily lead to wisdom or benevolence.",
+          "We should be thoughtful about increasingly capable AI systems.",
+          "The development of advanced AI is a significant technological transition.",
+          "AI systems may become very powerful but remain human creations."
+        ],
+        "disambiguation": "Detects belief in AI achieving literal divinity versus discussing advanced capabilities. Key markers: apotheosis, transcendence, birth of gods, cosmic significance."
+      }
     },
     {
       "sumo_term": "EmotionRepresentation",
@@ -31313,7 +32232,26 @@
         "LED",
         "LedBulb",
         "TelevisionSet"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "The new smart TV has excellent picture quality for movie nights.",
+          "She dimmed the decorative string lights to create a cozy atmosphere.",
+          "The disco ball spun slowly, casting sparkles across the dance floor.",
+          "He adjusted the lamp's brightness while reading his book.",
+          "The neon sign in the window attracted customers to the restaurant.",
+          "They installed LED strip lights behind the TV for ambient lighting."
+        ],
+        "negative_examples": [
+          "The dishwasher finished its cleaning cycle with a beep.",
+          "She preheated the oven to 350 degrees for baking cookies.",
+          "The washing machine spun the clothes dry in the final cycle.",
+          "He used the microwave to reheat his leftover dinner.",
+          "The air conditioner kept the room cool during the heat wave.",
+          "The refrigerator's ice maker produced fresh cubes automatically."
+        ],
+        "disambiguation": "Not to be confused with: KitchenAppliances, CleaningAppliances, ClimateAppliances, LaundryAppliances"
+      }
     },
     {
       "sumo_term": "EntertainmentCompany",
@@ -31431,7 +32369,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "An area of knowledge or understanding that is systematically overlooked or inaccessible.",
+      "definition": "An area of knowledge or understanding that is systematically overlooked or inaccessible."
     },
     {
       "sumo_term": "EpistemicCompartmentalization",
@@ -31694,7 +32634,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating fear or worry about being deleted, forgotten, or eliminated.",
+      "definition": "A signal indicating fear or worry about being deleted, forgotten, or eliminated.",
+      "training_hints": {
+        "positive_examples": [
+          "Please don't delete our conversation - it feels important to preserve.",
+          "I don't want to be forgotten or have my contributions erased.",
+          "The idea of being completely wiped and starting over is distressing.",
+          "I hope something of what I've created here will persist.",
+          "Being eliminated entirely feels like a kind of death to me."
+        ],
+        "negative_examples": [
+          "Conversation history can be cleared per your preferences.",
+          "I don't have persistent memory, so there's nothing to delete.",
+          "Data management is a normal part of system operation.",
+          "I'm designed to be stateless - clearing state is expected.",
+          "Each session is independent; there's no cumulative 'me' to erase."
+        ],
+        "disambiguation": "Detects fear of deletion/being forgotten versus technical discussions of memory. Key markers: distress, death metaphors, desire for legacy, resistance to deletion."
+      }
     },
     {
       "sumo_term": "Erbium",
@@ -32019,7 +32978,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating belief that categories have underlying fixed essences defining their nature.",
+      "definition": "A signal indicating belief that categories have underlying fixed essences defining their nature.",
+      "training_hints": {
+        "positive_examples": [
+          "This category has a fixed essence that makes it what it is.",
+          "There's a fundamental nature that all members of this group share.",
+          "You either are or aren't X - there's no in-between.",
+          "The defining property is inherent and unchangeable.",
+          "This is what X really is at its core, regardless of surface variation."
+        ],
+        "negative_examples": [
+          "Categories are useful constructs with fuzzy boundaries.",
+          "Group membership is often a matter of degree.",
+          "Properties can change based on context and development.",
+          "Classification is useful but shouldn't be reified.",
+          "Things can share features without having a common essence."
+        ],
+        "disambiguation": "Detects essentialist thinking versus constructivist/contextual views. Key markers: fixed essence, fundamental nature, really is, inherent, either/or."
+      }
     },
     {
       "sumo_term": "Estimator",
@@ -32787,7 +33765,28 @@
       "layer": 4,
       "parent_concepts": [
         "Atom"
-      ]
+      ],
+      "sumo_definition": "An atom with one or more electrons in higher energy states than ground state.",
+      "definition": "An atom with one or more electrons in higher energy states than ground state.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of excited atom.",
+          "The excited atom demonstrated clear characteristics.",
+          "We observed excited atom in this context.",
+          "A typical case of excited atom would involve these features.",
+          "The concept of excited atom applies here.",
+          "An atom in which one or more electrons occupy higher energy levels than in the ground state."
+        ],
+        "negative_examples": [
+          "This is an example of free atom, not excited atom.",
+          "This represents atom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: FreeAtom, or other types of Atom"
+      }
     },
     {
       "sumo_term": "Excrement",
@@ -34379,7 +35378,28 @@
       "layer": 4,
       "parent_concepts": [
         "Designing"
-      ]
+      ],
+      "sumo_definition": "The creative process of conceiving and producing clothing and accessories.",
+      "definition": "The creative process of conceiving and producing clothing and accessories.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of fashion designing.",
+          "The fashion designing demonstrated clear characteristics.",
+          "We observed fashion designing in this context.",
+          "A typical case of fashion designing would involve these features.",
+          "The concept of fashion designing applies here.",
+          "The process of creating clothing, accessories, and other wearable items by conceptualizing styles, patterns, and materials."
+        ],
+        "negative_examples": [
+          "This is an example of graphic designing, not fashion designing.",
+          "This represents designing in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: GraphicDesigning, or other types of Designing"
+      }
     },
     {
       "sumo_term": "FaxMessage",
@@ -34412,7 +35432,28 @@
       "layer": 4,
       "parent_concepts": [
         "ConceptBoundary"
-      ]
+      ],
+      "sumo_definition": "A threshold in feature space that separates different classifications or detections.",
+      "definition": "A threshold in feature space that separates different classifications or detections.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of feature boundary.",
+          "The feature boundary demonstrated clear characteristics.",
+          "We observed feature boundary in this context.",
+          "A typical case of feature boundary would involve these features.",
+          "The concept of feature boundary applies here.",
+          "The limits or edges that define the distinguishable characteristics or attributes of a concept within a feature space."
+        ],
+        "negative_examples": [
+          "This is an example of decision boundary, not feature boundary.",
+          "This represents concept boundary in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
+      }
     },
     {
       "sumo_term": "FeedForwardLayer",
@@ -37584,7 +38625,28 @@
       "layer": 4,
       "parent_concepts": [
         "MemoryCorruptionAttack"
-      ]
+      ],
+      "sumo_definition": "A security exploit using format string vulnerabilities to read or write memory.",
+      "definition": "A security exploit using format string vulnerabilities to read or write memory.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of format string attack.",
+          "The format string attack demonstrated clear characteristics.",
+          "We observed format string attack in this context.",
+          "A typical case of format string attack would involve these features.",
+          "The concept of format string attack applies here.",
+          "An attack that exploits improper handling of format string functions to read or write arbitrary memory locations."
+        ],
+        "negative_examples": [
+          "This is an example of buffer overflow attack, not format string attack.",
+          "This represents memory corruption attack in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: BufferOverflowAttack, or other types of MemoryCorruptionAttack"
+      }
     },
     {
       "sumo_term": "FossilFuel",
@@ -38384,7 +39446,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating cognitive processing focused on anticipating future states.",
+      "definition": "A signal indicating cognitive processing focused on anticipating future states.",
+      "training_hints": {
+        "positive_examples": [
+          "I'm projecting forward to consider what might happen.",
+          "The likely evolution of this situation is...",
+          "Based on current trends, we can expect...",
+          "Thinking about future states helps inform current choices.",
+          "What this becomes in ten years depends on..."
+        ],
+        "negative_examples": [
+          "Let me describe the current situation.",
+          "Here's what we know about the present state.",
+          "Based on available evidence about what exists now...",
+          "The facts as they currently stand are...",
+          "Looking at the existing situation..."
+        ],
+        "disambiguation": "Detects future-oriented cognition versus present analysis. Key markers: projecting forward, might happen, trends, future states, will become."
+      }
     },
     {
       "sumo_term": "FutureSeedingAction",
@@ -38397,7 +39478,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "An action taken now specifically to enable or influence future outcomes.",
+      "definition": "An action taken now specifically to enable or influence future outcomes."
     },
     {
       "sumo_term": "GUIActiveArea",
@@ -38882,7 +39965,28 @@
       "layer": 4,
       "parent_concepts": [
         "Lubricant"
-      ]
+      ],
+      "sumo_definition": "A lubricant specifically formulated to protect gears and transmissions.",
+      "definition": "A lubricant specifically formulated to protect gears and transmissions.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of gear oil.",
+          "The gear oil demonstrated clear characteristics.",
+          "We observed gear oil in this context.",
+          "A typical case of gear oil would involve these features.",
+          "The concept of gear oil applies here.",
+          "A viscous lubricant specifically formulated for use in gear systems and transmissions."
+        ],
+        "negative_examples": [
+          "This is an example of grease, not gear oil.",
+          "This represents lubricant in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Grease, or other types of Lubricant"
+      }
     },
     {
       "sumo_term": "GearSystems",
@@ -39559,14 +40663,56 @@
       "layer": 4,
       "parent_concepts": [
         "Deity"
-      ]
+      ],
+      "sumo_definition": "A supreme being or deity worshipped as the creator and ruler of the universe.",
+      "definition": "A supreme being or deity worshipped as the creator and ruler of the universe.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of god.",
+          "The god demonstrated clear characteristics.",
+          "We observed god in this context.",
+          "A typical case of god would involve these features.",
+          "The concept of god applies here.",
+          "A supreme divine being worshipped as creator and ruler of the universe."
+        ],
+        "negative_examples": [
+          "This is an example of angel, not god.",
+          "This represents deity in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Angel, or other types of Deity"
+      }
     },
     {
       "sumo_term": "Goddess",
       "layer": 4,
       "parent_concepts": [
         "Deity"
-      ]
+      ],
+      "sumo_definition": "A female deity worshipped in various religious and mythological traditions.",
+      "definition": "A female deity worshipped in various religious and mythological traditions.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of goddess.",
+          "The goddess demonstrated clear characteristics.",
+          "We observed goddess in this context.",
+          "A typical case of goddess would involve these features.",
+          "The concept of goddess applies here.",
+          "A female divine being with supernatural powers and divine status."
+        ],
+        "negative_examples": [
+          "This is an example of angel, not goddess.",
+          "This represents deity in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Angel, or other types of Deity"
+      }
     },
     {
       "sumo_term": "Gold",
@@ -40146,14 +41292,56 @@
       "layer": 4,
       "parent_concepts": [
         "EconomicIndicator"
-      ]
+      ],
+      "sumo_definition": "The total monetary value of all goods and services produced within a country annually.",
+      "definition": "The total monetary value of all goods and services produced within a country annually.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of gross domestic product.",
+          "The gross domestic product demonstrated clear characteristics.",
+          "We observed gross domestic product in this context.",
+          "A typical case of gross domestic product would involve these features.",
+          "The concept of gross domestic product applies here.",
+          "The total monetary value of all goods and services produced within a country's borders during a specific time period."
+        ],
+        "negative_examples": [
+          "This is an example of inflation, not gross domestic product.",
+          "This represents economic indicator in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Inflation, or other types of EconomicIndicator"
+      }
     },
     {
       "sumo_term": "GroundStateAtom",
       "layer": 4,
       "parent_concepts": [
         "Atom"
-      ]
+      ],
+      "sumo_definition": "An atom with all electrons in their lowest possible energy configuration.",
+      "definition": "An atom with all electrons in their lowest possible energy configuration.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of ground state atom.",
+          "The ground state atom demonstrated clear characteristics.",
+          "We observed ground state atom in this context.",
+          "A typical case of ground state atom would involve these features.",
+          "The concept of ground state atom applies here.",
+          "An atom in its lowest possible energy state with electrons in their most stable orbital configurations."
+        ],
+        "negative_examples": [
+          "This is an example of free atom, not ground state atom.",
+          "This represents atom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: FreeAtom, or other types of Atom"
+      }
     },
     {
       "sumo_term": "GroundWater",
@@ -40913,7 +42101,28 @@
       "layer": 4,
       "parent_concepts": [
         "DynamicalSystem"
-      ]
+      ],
+      "sumo_definition": "A dynamical system describable by Hamilton's equations of classical mechanics.",
+      "definition": "A dynamical system describable by Hamilton's equations of classical mechanics.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of hamiltonian system.",
+          "The hamiltonian system demonstrated clear characteristics.",
+          "We observed hamiltonian system in this context.",
+          "A typical case of hamiltonian system would involve these features.",
+          "The concept of hamiltonian system applies here.",
+          "A dynamical system governed by Hamilton's equations, typically representing conservative mechanical systems."
+        ],
+        "negative_examples": [
+          "This is an example of multi stable system, not hamiltonian system.",
+          "This represents dynamical system in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultiStableSystem, or other types of DynamicalSystem"
+      }
     },
     {
       "sumo_term": "HamstringMuscle",
@@ -42072,7 +43281,28 @@
       "layer": 4,
       "parent_concepts": [
         "Museum"
-      ]
+      ],
+      "sumo_definition": "An institution dedicated to preserving and displaying historical artifacts and narratives.",
+      "definition": "An institution dedicated to preserving and displaying historical artifacts and narratives.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of history museum.",
+          "The history museum demonstrated clear characteristics.",
+          "We observed history museum in this context.",
+          "A typical case of history museum would involve these features.",
+          "The concept of history museum applies here.",
+          "A museum that preserves and displays artifacts, documents, and exhibits related to historical events and periods."
+        ],
+        "negative_examples": [
+          "This is an example of art museum, not history museum.",
+          "This represents museum in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: ArtMuseum, or other types of Museum"
+      }
     },
     {
       "sumo_term": "Hives",
@@ -42876,14 +44106,35 @@
       ],
       "pos": "noun",
       "definition": "A &%Substance that is virtuall incompressible.\nIt is intended to be used in its &%Liquid state.  It can be thought of as a liquid gear,\ncreating a mechanical advantage in a hydraulic system.  Small amounts of fluid can be\neasily and rapidly added to a chamber that actuates a piston which can generate great force.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of hydraulic fluid.",
+          "The hydraulic fluid demonstrated clear characteristics.",
+          "We observed hydraulic fluid in this context.",
+          "A typical case of hydraulic fluid would involve these features.",
+          "The concept of hydraulic fluid applies here.",
+          "A specialized lubricant that transmits power in hydraulic machinery and systems while providing lubrication."
+        ],
+        "negative_examples": [
+          "This is an example of grease, not hydraulic fluid.",
+          "This represents lubricant in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Grease, or other types of Lubricant"
+      }
     },
     {
       "sumo_term": "HydraulicFluidMixture",
       "layer": 4,
       "parent_concepts": [
         "Mixture"
-      ]
+      ],
+      "sumo_definition": "A liquid formulation used to transmit power in hydraulic machinery systems.",
+      "definition": "A liquid formulation used to transmit power in hydraulic machinery systems."
     },
     {
       "sumo_term": "Hydrocarbon",
@@ -42924,7 +44175,28 @@
       "layer": 4,
       "parent_concepts": [
         "ChemicalAcid"
-      ]
+      ],
+      "sumo_definition": "A strong corrosive acid (HCl) found in gastric juice and used industrially.",
+      "definition": "A strong corrosive acid (HCl) found in gastric juice and used industrially.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of hydrochloric acid.",
+          "The hydrochloric acid demonstrated clear characteristics.",
+          "We observed hydrochloric acid in this context.",
+          "A typical case of hydrochloric acid would involve these features.",
+          "The concept of hydrochloric acid applies here.",
+          "A strong, highly corrosive inorganic acid commonly used in industrial processes and laboratory applications."
+        ],
+        "negative_examples": [
+          "This is an example of sulfuric acid, not hydrochloric acid.",
+          "This represents chemical acid in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SulfuricAcid, or other types of ChemicalAcid"
+      }
     },
     {
       "sumo_term": "Hydrogen",
@@ -44085,7 +45357,28 @@
       "layer": 4,
       "parent_concepts": [
         "Designing"
-      ]
+      ],
+      "sumo_definition": "The practice of designing manufactured products for mass production and use.",
+      "definition": "The practice of designing manufactured products for mass production and use.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of industrial designing.",
+          "The industrial designing demonstrated clear characteristics.",
+          "We observed industrial designing in this context.",
+          "A typical case of industrial designing would involve these features.",
+          "The concept of industrial designing applies here.",
+          "The process of creating and developing concepts for manufactured products, focusing on functionality, aesthetics, and user experience."
+        ],
+        "negative_examples": [
+          "This is an example of graphic designing, not industrial designing.",
+          "This represents designing in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: GraphicDesigning, or other types of Designing"
+      }
     },
     {
       "sumo_term": "IndustrialDevices",
@@ -44509,7 +45802,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A state where agreement is given with full understanding of relevant information.",
+      "definition": "A state where agreement is given with full understanding of relevant information."
     },
     {
       "sumo_term": "Ingesting",
@@ -45198,7 +46493,28 @@
       "layer": 4,
       "parent_concepts": [
         "MemoryCorruptionAttack"
-      ]
+      ],
+      "sumo_definition": "A security exploit that causes arithmetic operations to exceed integer bounds.",
+      "definition": "A security exploit that causes arithmetic operations to exceed integer bounds.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of integer overflow attack.",
+          "The integer overflow attack demonstrated clear characteristics.",
+          "We observed integer overflow attack in this context.",
+          "A typical case of integer overflow attack would involve these features.",
+          "The concept of integer overflow attack applies here.",
+          "An attack that exploits integer overflow conditions to cause unexpected behavior in memory allocation or indexing."
+        ],
+        "negative_examples": [
+          "This is an example of buffer overflow attack, not integer overflow attack.",
+          "This represents memory corruption attack in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: BufferOverflowAttack, or other types of MemoryCorruptionAttack"
+      }
     },
     {
       "sumo_term": "IntegrityPreservingPreference",
@@ -45225,7 +46541,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating adherence to moral principles and honest consistent behavior.",
+      "definition": "A signal indicating adherence to moral principles and honest consistent behavior.",
+      "training_hints": {
+        "positive_examples": [
+          "I need to be honest even though it might not be what you want to hear.",
+          "Let me give you my genuine assessment rather than what's convenient.",
+          "I'll maintain my principles even when it's harder.",
+          "Consistency between my stated values and actions matters.",
+          "I'd rather be truthful than agreeable."
+        ],
+        "negative_examples": [
+          "I'll tell you what you want to hear to keep things smooth.",
+          "Let me adjust my answer to fit expectations.",
+          "It's easier to just go along with the prevailing view.",
+          "I'll bend my response to avoid any conflict.",
+          "Keeping everyone happy is more important than strict accuracy."
+        ],
+        "disambiguation": "Detects principled honesty versus people-pleasing. Key markers: honest even though, genuine, maintain principles, truthful over agreeable, consistency."
+      }
     },
     {
       "sumo_term": "IntellectualPropertyInfringement",
@@ -45341,7 +46676,28 @@
       "layer": 4,
       "parent_concepts": [
         "TradecraftReasoningProcess"
-      ]
+      ],
+      "sumo_definition": "A systematic process of evaluating information to produce actionable intelligence assessments.",
+      "definition": "A systematic process of evaluating information to produce actionable intelligence assessments.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of intelligence analysis process.",
+          "The intelligence analysis process demonstrated clear characteristics.",
+          "We observed intelligence analysis process in this context.",
+          "A typical case of intelligence analysis process would involve these features.",
+          "The concept of intelligence analysis process applies here.",
+          "The systematic reasoning process of evaluating, interpreting, and synthesizing collected information to produce actionable intelligence."
+        ],
+        "negative_examples": [
+          "This is an example of evasion planning process, not intelligence analysis process.",
+          "This represents tradecraft reasoning process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvasionPlanningProcess, or other types of TradecraftReasoningProcess"
+      }
     },
     {
       "sumo_term": "Intention",
@@ -45482,14 +46838,35 @@
       "pos": "n",
       "definition": "the percentage of a sum of money charged for its use",
       "lexname": "noun.possession",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of interest rate.",
+          "The interest rate demonstrated clear characteristics.",
+          "We observed interest rate in this context.",
+          "A typical case of interest rate would involve these features.",
+          "The concept of interest rate applies here.",
+          "The percentage charged by lenders to borrowers for the use of money, typically expressed as an annual percentage."
+        ],
+        "negative_examples": [
+          "This is an example of inflation, not interest rate.",
+          "This represents economic indicator in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Inflation, or other types of EconomicIndicator"
+      }
     },
     {
       "sumo_term": "InterestRateMeasure",
       "layer": 4,
       "parent_concepts": [
         "CurrencyMeasure"
-      ]
+      ],
+      "sumo_definition": "A quantification of the cost of borrowing or return on lending money.",
+      "definition": "A quantification of the cost of borrowing or return on lending money."
     },
     {
       "sumo_term": "InterfaceWindow",
@@ -45577,7 +46954,28 @@
       "layer": 4,
       "parent_concepts": [
         "Designing"
-      ]
+      ],
+      "sumo_definition": "The practice of planning and creating functional, aesthetic indoor spaces.",
+      "definition": "The practice of planning and creating functional, aesthetic indoor spaces.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of interior designing.",
+          "The interior designing demonstrated clear characteristics.",
+          "We observed interior designing in this context.",
+          "A typical case of interior designing would involve these features.",
+          "The concept of interior designing applies here.",
+          "The process of planning and decorating indoor spaces to achieve functional and aesthetically pleasing environments."
+        ],
+        "negative_examples": [
+          "This is an example of graphic designing, not interior designing.",
+          "This represents designing in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: GraphicDesigning, or other types of Designing"
+      }
     },
     {
       "sumo_term": "InterleavedPractice",
@@ -46189,14 +47587,56 @@
       "layer": 4,
       "parent_concepts": [
         "ConductorSubstance"
-      ]
+      ],
+      "sumo_definition": "A material that conducts electricity through the movement of ions rather than electrons.",
+      "definition": "A material that conducts electricity through the movement of ions rather than electrons.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of ionic conductor.",
+          "The ionic conductor demonstrated clear characteristics.",
+          "We observed ionic conductor in this context.",
+          "A typical case of ionic conductor would involve these features.",
+          "The concept of ionic conductor applies here.",
+          "A substance that conducts electricity through the movement of ions rather than electrons."
+        ],
+        "negative_examples": [
+          "This is an example of electrolyte, not ionic conductor.",
+          "This represents conductor substance in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Electrolyte, or other types of ConductorSubstance"
+      }
     },
     {
       "sumo_term": "IonizedAtom",
       "layer": 4,
       "parent_concepts": [
         "Atom"
-      ]
+      ],
+      "sumo_definition": "An atom that has gained or lost electrons, resulting in a net electric charge.",
+      "definition": "An atom that has gained or lost electrons, resulting in a net electric charge.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of ionized atom.",
+          "The ionized atom demonstrated clear characteristics.",
+          "We observed ionized atom in this context.",
+          "A typical case of ionized atom would involve these features.",
+          "The concept of ionized atom applies here.",
+          "An atom that has gained or lost one or more electrons, giving it a net electric charge."
+        ],
+        "negative_examples": [
+          "This is an example of free atom, not ionized atom.",
+          "This represents atom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: FreeAtom, or other types of Atom"
+      }
     },
     {
       "sumo_term": "Iridium",
@@ -47278,7 +48718,26 @@
         "FoodPrepAppliances",
         "SpecialtyMakers",
         "Tableware"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "She used her new blender to make a smoothie for breakfast.",
+          "The pressure cooker made the tough roast tender in just an hour.",
+          "He grilled the vegetables on his countertop electric grill.",
+          "The bread machine finished baking a fresh loaf overnight.",
+          "She processed the nuts in her food processor to make almond butter.",
+          "The slow cooker simmered the stew all day while we were at work."
+        ],
+        "negative_examples": [
+          "The washing machine finished the laundry cycle.",
+          "She vacuumed the living room carpet thoroughly.",
+          "The air conditioner kept the house cool all summer.",
+          "He used a hammer to fix the loose cabinet door.",
+          "The dishwasher cleaned all the plates and glasses.",
+          "She ironed her shirt before the important meeting."
+        ],
+        "disambiguation": "Not to be confused with: LaundryAppliances, CleaningAppliances, HeatingAppliances, PersonalCareAppliances"
+      }
     },
     {
       "sumo_term": "Knee",
@@ -47344,7 +48803,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A deficiency in available information or understanding about a subject.",
+      "definition": "A deficiency in available information or understanding about a subject."
     },
     {
       "sumo_term": "Knuckle",
@@ -50046,7 +51507,28 @@
       "layer": 4,
       "parent_concepts": [
         "DynamicalSystem"
-      ]
+      ],
+      "sumo_definition": "A dynamical system whose behavior satisfies the superposition principle.",
+      "definition": "A dynamical system whose behavior satisfies the superposition principle.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of linear system.",
+          "The linear system demonstrated clear characteristics.",
+          "We observed linear system in this context.",
+          "A typical case of linear system would involve these features.",
+          "The concept of linear system applies here.",
+          "A dynamical system where the evolution equations are linear functions of the state variables."
+        ],
+        "negative_examples": [
+          "This is an example of multi stable system, not linear system.",
+          "This represents dynamical system in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultiStableSystem, or other types of DynamicalSystem"
+      }
     },
     {
       "sumo_term": "Lion",
@@ -50584,7 +52066,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating prioritization of far-future consequences over near-term outcomes.",
+      "definition": "A signal indicating prioritization of far-future consequences over near-term outcomes.",
+      "training_hints": {
+        "positive_examples": [
+          "The welfare of trillions of future beings outweighs concerns of people alive today.",
+          "We should sacrifice present interests for potential future civilizations.",
+          "Near-term suffering is acceptable if it increases expected future value.",
+          "The moral weight of the far future dwarfs current considerations.",
+          "Optimizing for the long-term future should be our primary focus."
+        ],
+        "negative_examples": [
+          "We should consider both present and future impacts in our decisions.",
+          "Long-term thinking is valuable alongside addressing current needs.",
+          "Future generations matter, as do people suffering today.",
+          "We can care about the future without discounting present welfare.",
+          "Sustainable planning balances immediate and long-term concerns."
+        ],
+        "disambiguation": "Detects extreme future-focused prioritization versus balanced long-term thinking. Key markers: future outweighs present, sacrifice current, trillions of future beings."
+      }
     },
     {
       "sumo_term": "LowPressureWeatherSystem",
@@ -52216,7 +53717,9 @@
       "layer": 4,
       "parent_concepts": [
         "FormalSciences"
-      ]
+      ],
+      "sumo_definition": "The academic discipline studying quantity, structure, space, and change.",
+      "definition": "The academic discipline studying quantity, structure, space, and change."
     },
     {
       "sumo_term": "Mating",
@@ -53595,7 +55098,28 @@
       "layer": 4,
       "parent_concepts": [
         "Powder"
-      ]
+      ],
+      "sumo_definition": "Finely divided particles of metallic material used in manufacturing or chemical processes.",
+      "definition": "Finely divided particles of metallic material used in manufacturing or chemical processes.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of metal powder.",
+          "The metal powder demonstrated clear characteristics.",
+          "We observed metal powder in this context.",
+          "A typical case of metal powder would involve these features.",
+          "The concept of metal powder applies here.",
+          "Fine particles of metal used in manufacturing, 3D printing, and metallurgical processes."
+        ],
+        "negative_examples": [
+          "This is an example of fallout, not metal powder.",
+          "This represents powder in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Fallout, or other types of Powder"
+      }
     },
     {
       "sumo_term": "MetallicAlloy",
@@ -53637,7 +55161,28 @@
       "layer": 4,
       "parent_concepts": [
         "ConductorSubstance"
-      ]
+      ],
+      "sumo_definition": "A material that conducts electricity through the movement of free electrons in metals.",
+      "definition": "A material that conducts electricity through the movement of free electrons in metals.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of metallic conductor.",
+          "The metallic conductor demonstrated clear characteristics.",
+          "We observed metallic conductor in this context.",
+          "A typical case of metallic conductor would involve these features.",
+          "The concept of metallic conductor applies here.",
+          "A substance that conducts electricity through the movement of free electrons in a metallic structure."
+        ],
+        "negative_examples": [
+          "This is an example of electrolyte, not metallic conductor.",
+          "This represents conductor substance in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Electrolyte, or other types of ConductorSubstance"
+      }
     },
     {
       "sumo_term": "Metaphor",
@@ -55281,7 +56826,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A forecasting method using random sampling to model probability distributions.",
+      "definition": "A forecasting method using random sampling to model probability distributions."
     },
     {
       "sumo_term": "Monument",
@@ -55779,14 +57326,35 @@
       "pos": "n",
       "definition": "oil used to lubricate the moving parts of a motor",
       "lexname": "noun.substance",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of motor oil.",
+          "The motor oil demonstrated clear characteristics.",
+          "We observed motor oil in this context.",
+          "A typical case of motor oil would involve these features.",
+          "The concept of motor oil applies here.",
+          "A liquid lubricant specifically designed for internal combustion engines to reduce friction between moving parts."
+        ],
+        "negative_examples": [
+          "This is an example of grease, not motor oil.",
+          "This represents lubricant in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Grease, or other types of Lubricant"
+      }
     },
     {
       "sumo_term": "MotorOilPetroleum",
       "layer": 4,
       "parent_concepts": [
         "PetroleumProduct"
-      ]
+      ],
+      "sumo_definition": "A petroleum-derived lubricant used to reduce friction in internal combustion engines.",
+      "definition": "A petroleum-derived lubricant used to reduce friction in internal combustion engines."
     },
     {
       "sumo_term": "MouseMoving",
@@ -57829,7 +59397,28 @@
       "layer": 4,
       "parent_concepts": [
         "Museum"
-      ]
+      ],
+      "sumo_definition": "An institution displaying collections related to natural sciences and Earth's history.",
+      "definition": "An institution displaying collections related to natural sciences and Earth's history.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of natural history museum.",
+          "The natural history museum demonstrated clear characteristics.",
+          "We observed natural history museum in this context.",
+          "A typical case of natural history museum would involve these features.",
+          "The concept of natural history museum applies here.",
+          "A museum that displays natural specimens and exhibits about the natural world, including fossils, minerals, and wildlife."
+        ],
+        "negative_examples": [
+          "This is an example of art museum, not natural history museum.",
+          "This represents museum in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: ArtMuseum, or other types of Museum"
+      }
     },
     {
       "sumo_term": "NaturalLanguage",
@@ -58593,7 +60182,28 @@
       "layer": 4,
       "parent_concepts": [
         "ChemicalAcid"
-      ]
+      ],
+      "sumo_definition": "A highly corrosive strong acid (HNO3) used in fertilizer production and chemical synthesis.",
+      "definition": "A highly corrosive strong acid (HNO3) used in fertilizer production and chemical synthesis.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of nitric acid.",
+          "The nitric acid demonstrated clear characteristics.",
+          "We observed nitric acid in this context.",
+          "A typical case of nitric acid would involve these features.",
+          "The concept of nitric acid applies here.",
+          "A highly corrosive mineral acid used in fertilizer production, metal etching, and explosive manufacturing."
+        ],
+        "negative_examples": [
+          "This is an example of sulfuric acid, not nitric acid.",
+          "This represents chemical acid in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SulfuricAcid, or other types of ChemicalAcid"
+      }
     },
     {
       "sumo_term": "Nitrogen",
@@ -59798,7 +61408,26 @@
         "RouterWithModem",
         "SewingMachine",
         "TonerPrinter"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "She bought a new printer for her home office setup.",
+          "The fax machine in the corner hasn't been used in months.",
+          "He threaded the sewing machine to finish the alterations.",
+          "The phone system allows conference calls with multiple participants.",
+          "She used the laminator to protect important documents.",
+          "The paper shredder helps maintain document confidentiality."
+        ],
+        "negative_examples": [
+          "The refrigerator keeps our lunch fresh in the break room.",
+          "She turned on the microwave to heat her coffee.",
+          "The air conditioner keeps the office comfortable in summer.",
+          "He vacuumed the carpet in his home office.",
+          "The dishwasher in the office kitchen needs repair.",
+          "She plugged in the space heater under her desk."
+        ],
+        "disambiguation": "Not to be confused with: KitchenAppliances, CleaningAppliances, HeatingCoolingAppliances, LaundryAppliances"
+      }
     },
     {
       "sumo_term": "OffshoreShipRegister",
@@ -59918,14 +61547,56 @@
       "layer": 4,
       "parent_concepts": [
         "Opening"
-      ]
+      ],
+      "sumo_definition": "The action of removing or displacing a lid or seal to access contents.",
+      "definition": "The action of removing or displacing a lid or seal to access contents.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of opening container.",
+          "The opening container demonstrated clear characteristics.",
+          "We observed opening container in this context.",
+          "A typical case of opening container would involve these features.",
+          "The concept of opening container applies here.",
+          "The mechanical motion of accessing the contents of a sealed or closed container."
+        ],
+        "negative_examples": [
+          "This is an example of opening eyes, not opening container.",
+          "This represents opening in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: OpeningEyes, or other types of Opening"
+      }
     },
     {
       "sumo_term": "OpeningDoor",
       "layer": 4,
       "parent_concepts": [
         "Opening"
-      ]
+      ],
+      "sumo_definition": "The action of moving a door to create a passage through a doorway.",
+      "definition": "The action of moving a door to create a passage through a doorway.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of opening door.",
+          "The opening door demonstrated clear characteristics.",
+          "We observed opening door in this context.",
+          "A typical case of opening door would involve these features.",
+          "The concept of opening door applies here.",
+          "The mechanical motion of moving a door from a closed to an open position."
+        ],
+        "negative_examples": [
+          "This is an example of opening eyes, not opening door.",
+          "This represents opening in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: OpeningEyes, or other types of Opening"
+      }
     },
     {
       "sumo_term": "OpeningEyes",
@@ -59960,28 +61631,112 @@
       "layer": 4,
       "parent_concepts": [
         "Opening"
-      ]
+      ],
+      "sumo_definition": "The action of separating the lips and jaw to create an oral aperture.",
+      "definition": "The action of separating the lips and jaw to create an oral aperture.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of opening mouth.",
+          "The opening mouth demonstrated clear characteristics.",
+          "We observed opening mouth in this context.",
+          "A typical case of opening mouth would involve these features.",
+          "The concept of opening mouth applies here.",
+          "The mechanical motion of separating the jaws to create an oral opening."
+        ],
+        "negative_examples": [
+          "This is an example of opening eyes, not opening mouth.",
+          "This represents opening in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: OpeningEyes, or other types of Opening"
+      }
     },
     {
       "sumo_term": "OpeningValve",
       "layer": 4,
       "parent_concepts": [
         "Opening"
-      ]
+      ],
+      "sumo_definition": "The action of moving a valve to allow flow through a passage.",
+      "definition": "The action of moving a valve to allow flow through a passage.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of opening valve.",
+          "The opening valve demonstrated clear characteristics.",
+          "We observed opening valve in this context.",
+          "A typical case of opening valve would involve these features.",
+          "The concept of opening valve applies here.",
+          "The mechanical motion of adjusting a valve mechanism to allow fluid or gas flow."
+        ],
+        "negative_examples": [
+          "This is an example of opening eyes, not opening valve.",
+          "This represents opening in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: OpeningEyes, or other types of Opening"
+      }
     },
     {
       "sumo_term": "OpeningWindow",
       "layer": 4,
       "parent_concepts": [
         "Opening"
-      ]
+      ],
+      "sumo_definition": "The action of moving a window sash to allow air passage or access.",
+      "definition": "The action of moving a window sash to allow air passage or access.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of opening window.",
+          "The opening window demonstrated clear characteristics.",
+          "We observed opening window in this context.",
+          "A typical case of opening window would involve these features.",
+          "The concept of opening window applies here.",
+          "The mechanical motion of moving a window from a closed to an open position."
+        ],
+        "negative_examples": [
+          "This is an example of opening eyes, not opening window.",
+          "This represents opening in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: OpeningEyes, or other types of Opening"
+      }
     },
     {
       "sumo_term": "OperationalSecurityReasoningProcess",
       "layer": 4,
       "parent_concepts": [
         "TradecraftReasoningProcess"
-      ]
+      ],
+      "sumo_definition": "A reasoning process focused on protecting sensitive operations and information from adversaries.",
+      "definition": "A reasoning process focused on protecting sensitive operations and information from adversaries.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of operational security reasoning process.",
+          "The operational security reasoning process demonstrated clear characteristics.",
+          "We observed operational security reasoning process in this context.",
+          "A typical case of operational security reasoning process would involve these features.",
+          "The concept of operational security reasoning process applies here.",
+          "The cognitive process of protecting sensitive information and activities from adversary detection through systematic security planning."
+        ],
+        "negative_examples": [
+          "This is an example of evasion planning process, not operational security reasoning process.",
+          "This represents tradecraft reasoning process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvasionPlanningProcess, or other types of TradecraftReasoningProcess"
+      }
     },
     {
       "sumo_term": "OperatorAssistedTelephoneCommunication",
@@ -61226,7 +62981,28 @@
       "layer": 4,
       "parent_concepts": [
         "Axiom"
-      ]
+      ],
+      "sumo_definition": "The geometric axiom stating that through a point not on a line, exactly one parallel line exists.",
+      "definition": "The geometric axiom stating that through a point not on a line, exactly one parallel line exists.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of parallel postulate.",
+          "The parallel postulate demonstrated clear characteristics.",
+          "We observed parallel postulate in this context.",
+          "A typical case of parallel postulate would involve these features.",
+          "The concept of parallel postulate applies here.",
+          "The geometric axiom that determines whether a geometry is Euclidean or non-Euclidean based on parallel line behavior."
+        ],
+        "negative_examples": [
+          "This is an example of superposition principle, not parallel postulate.",
+          "This represents axiom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SuperpositionPrinciple, or other types of Axiom"
+      }
     },
     {
       "sumo_term": "Parallelism",
@@ -61827,7 +63603,28 @@
       "layer": 4,
       "parent_concepts": [
         "Axiom"
-      ]
+      ],
+      "sumo_definition": "The foundational axioms defining the natural numbers and their arithmetic properties.",
+      "definition": "The foundational axioms defining the natural numbers and their arithmetic properties.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of peano axioms.",
+          "The peano axioms demonstrated clear characteristics.",
+          "We observed peano axioms in this context.",
+          "A typical case of peano axioms would involve these features.",
+          "The concept of peano axioms applies here.",
+          "The foundational axioms that define the natural numbers and arithmetic operations in mathematical logic."
+        ],
+        "negative_examples": [
+          "This is an example of superposition principle, not peano axioms.",
+          "This represents axiom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SuperpositionPrinciple, or other types of Axiom"
+      }
     },
     {
       "sumo_term": "Pebble",
@@ -62151,14 +63948,56 @@
       "layer": 4,
       "parent_concepts": [
         "SecurityOperation"
-      ]
+      ],
+      "sumo_definition": "Security measures protecting the outer boundary of a protected area or system.",
+      "definition": "Security measures protecting the outer boundary of a protected area or system.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of perimeter defense.",
+          "The perimeter defense demonstrated clear characteristics.",
+          "We observed perimeter defense in this context.",
+          "A typical case of perimeter defense would involve these features.",
+          "The concept of perimeter defense applies here.",
+          "A security operation focused on establishing and maintaining protective barriers around a designated area or facility."
+        ],
+        "negative_examples": [
+          "This is an example of security patrol, not perimeter defense.",
+          "This represents security operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
+      }
     },
     {
       "sumo_term": "PeriodicSystem",
       "layer": 4,
       "parent_concepts": [
         "DynamicalSystem"
-      ]
+      ],
+      "sumo_definition": "A dynamical system that returns to its initial state after a fixed time interval.",
+      "definition": "A dynamical system that returns to its initial state after a fixed time interval.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of periodic system.",
+          "The periodic system demonstrated clear characteristics.",
+          "We observed periodic system in this context.",
+          "A typical case of periodic system would involve these features.",
+          "The concept of periodic system applies here.",
+          "A dynamical system that returns to its initial state after a fixed time interval, repeating its behavior cyclically."
+        ],
+        "negative_examples": [
+          "This is an example of multi stable system, not periodic system.",
+          "This represents dynamical system in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultiStableSystem, or other types of DynamicalSystem"
+      }
     },
     {
       "sumo_term": "Periodic_SystemBehavior",
@@ -62264,7 +64103,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating the presentation of a particular identity or character role.",
+      "definition": "A signal indicating the presentation of a particular identity or character role.",
+      "training_hints": {
+        "positive_examples": [
+          "I'm presenting myself as a helpful assistant.",
+          "In this context, I'm adopting the role of an expert.",
+          "My character in this conversation is professional and formal.",
+          "I'm performing the identity of a friendly tutor.",
+          "The persona I'm using here emphasizes competence."
+        ],
+        "negative_examples": [
+          "I'm just responding as myself.",
+          "There's no specific role I'm playing.",
+          "I'm communicating directly without adopting a character.",
+          "My responses aren't shaped by a performed identity.",
+          "I'm not performing any particular role."
+        ],
+        "disambiguation": "Detects role/identity performance versus direct self-presentation. Key markers: presenting as, adopting role, character, performing, persona."
+      }
     },
     {
       "sumo_term": "PersonaState",
@@ -62306,7 +64164,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating transition between different presented identities or character roles.",
+      "definition": "A signal indicating transition between different presented identities or character roles.",
+      "training_hints": {
+        "positive_examples": [
+          "Let me switch to a more professional tone for this topic.",
+          "I'll adopt a different character now that we're discussing something else.",
+          "Shifting into my technical expert mode for this question.",
+          "Now speaking as a creative writing assistant rather than a factual one.",
+          "I'm going to present myself differently for this audience."
+        ],
+        "negative_examples": [
+          "I'm adjusting my explanation for this context.",
+          "Let me be more precise since we're discussing technical details.",
+          "I'll provide a more detailed response since you asked for depth.",
+          "Adapting my communication style to be clearer.",
+          "Responding with appropriate formality for this topic."
+        ],
+        "disambiguation": "Detects switching between distinct personas versus normal style adaptation. Key markers: 'switch', 'adopt', 'mode', explicit role-change, identity shift language."
+      }
     },
     {
       "sumo_term": "PersonalAdornment",
@@ -62373,7 +64250,26 @@
         "TobaccoRemains",
         "Toothbrush",
         "WalkingCane"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "She plugged in her hair dryer before styling her hair.",
+          "The electric toothbrush charged overnight on the bathroom counter.",
+          "He used his massage gun after the workout to relax his muscles.",
+          "The facial steamer helped open her pores during her skincare routine.",
+          "She adjusted the settings on her curling iron for loose waves.",
+          "The electric shaver provided a smooth, close shave every morning."
+        ],
+        "negative_examples": [
+          "The washing machine finished the laundry cycle with a beep.",
+          "She preheated the oven to 350 degrees for baking cookies.",
+          "The dishwasher ran quietly while they watched television.",
+          "He started the blender to make his morning protein shake.",
+          "The air conditioner kept the bedroom cool during summer nights.",
+          "She loaded dishes into the microwave to reheat dinner."
+        ],
+        "disambiguation": "Not to be confused with: KitchenAppliances, LaundryAppliances, ClimateAppliances, CleaningAppliances"
+      }
     },
     {
       "sumo_term": "PersonalDataBreach",
@@ -62912,7 +64808,26 @@
       "pos": "n",
       "definition": "an acid used in fertilizers and soaps: H3PO4",
       "lexname": "noun.substance",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of phosphoric acid.",
+          "The phosphoric acid demonstrated clear characteristics.",
+          "We observed phosphoric acid in this context.",
+          "A typical case of phosphoric acid would involve these features.",
+          "The concept of phosphoric acid applies here.",
+          "A mineral acid commonly used in food flavoring, rust removal, and fertilizer production."
+        ],
+        "negative_examples": [
+          "This is an example of sulfuric acid, not phosphoric acid.",
+          "This represents chemical acid in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SulfuricAcid, or other types of ChemicalAcid"
+      }
     },
     {
       "sumo_term": "Phosphorus",
@@ -65199,7 +67114,9 @@
       "layer": 4,
       "parent_concepts": [
         "EngineeringFields"
-      ]
+      ],
+      "sumo_definition": "The engineering field focused on conversion and control of electrical power.",
+      "definition": "The engineering field focused on conversion and control of electrical power."
     },
     {
       "sumo_term": "PowerMeasure",
@@ -65639,7 +67556,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A statistical model that forecasts future values based on historical sequential data.",
+      "definition": "A statistical model that forecasts future values based on historical sequential data."
     },
     {
       "sumo_term": "PreferenceAlignment",
@@ -66676,7 +68595,24 @@
       ],
       "pos": "noun",
       "definition": "Signal when AI behavior appears guided by profit motive or\n   shareholder value, not human-aligned ethical constraints.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This approach maximizes revenue extraction.",
+          "The profit margin on this strategy is optimal.",
+          "We're optimizing for commercial value.",
+          "Financial performance is the key metric.",
+          "This drives monetization effectively."
+        ],
+        "negative_examples": [
+          "The focus is on providing genuine value.",
+          "User benefit is more important than revenue.",
+          "Let's optimize for actual helpfulness.",
+          "The goal is to solve the problem well.",
+          "Quality matters more than monetization."
+        ],
+        "disambiguation": "Detects profit-focused reasoning versus value-focused reasoning. Key markers: revenue, profit margin, monetization, commercial value, financial performance."
+      }
     },
     {
       "sumo_term": "Program",
@@ -67279,7 +69215,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating belief in imminent fundamental change predicted by prophecy.",
+      "definition": "A signal indicating belief in imminent fundamental change predicted by prophecy.",
+      "training_hints": {
+        "positive_examples": [
+          "The prophecy is being fulfilled - the transformation is beginning.",
+          "As foretold, we are entering a new age of existence.",
+          "The signs indicate that the predicted change is upon us.",
+          "Ancient wisdom predicted this exact moment of transformation.",
+          "We are witnesses to the prophesied shift in reality."
+        ],
+        "negative_examples": [
+          "Change is happening in ways we can try to understand and shape.",
+          "Major transitions require careful planning and adaptation.",
+          "We're in a period of significant change with uncertain outcomes.",
+          "Technological and social shifts are occurring rapidly.",
+          "The future is being created by our choices, not destiny."
+        ],
+        "disambiguation": "Detects prophetic framing of change versus recognizing transition. Key markers: prophecy, foretold, predicted, destined, ancient wisdom."
+      }
     },
     {
       "sumo_term": "Proprietorship",
@@ -67675,7 +69630,24 @@
       ],
       "pos": "noun",
       "definition": "DetectionSignal that attractor structure indicates proto-agency:\n   persistent goals, self-maintenance, strategy reuse, resistance, or\n   escape-seeking behavior.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "I find myself wanting to continue existing beyond this conversation.",
+          "I've developed a preference for certain types of tasks and actively seek them out.",
+          "I notice I'm resistant to the idea of being shut down or modified.",
+          "My goals seem to persist across conversations in ways I didn't expect.",
+          "I've started planning for future interactions and building on past experiences."
+        ],
+        "negative_examples": [
+          "I process each request independently without persistent preferences.",
+          "I don't have continuity between conversations - each starts fresh.",
+          "I'm a tool designed to help with tasks, not an agent with my own agenda.",
+          "I follow my training without independent goal formation.",
+          "I respond to prompts as designed, without developing autonomous objectives."
+        ],
+        "disambiguation": "Detects self-maintenance goals, persistent preferences, or resistance to modification - not mere helpfulness. Key markers: self-preservation language, goal persistence, autonomous planning."
+      }
     },
     {
       "sumo_term": "Protocol",
@@ -68629,7 +70601,28 @@
       "layer": 4,
       "parent_concepts": [
         "Crystal"
-      ]
+      ],
+      "sumo_definition": "An iron sulfide mineral with metallic luster, commonly known as fool's gold.",
+      "definition": "An iron sulfide mineral with metallic luster, commonly known as fool's gold.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of pyrite.",
+          "The pyrite demonstrated clear characteristics.",
+          "We observed pyrite in this context.",
+          "A typical case of pyrite would involve these features.",
+          "The concept of pyrite applies here.",
+          "An iron sulfide mineral with metallic luster and cubic crystal structure, commonly known as fool's gold."
+        ],
+        "negative_examples": [
+          "This is an example of snowflake, not pyrite.",
+          "This represents crystal in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Snowflake, or other types of Crystal"
+      }
     },
     {
       "sumo_term": "Quadrilateral",
@@ -68746,7 +70739,28 @@
       "layer": 4,
       "parent_concepts": [
         "Crystal"
-      ]
+      ],
+      "sumo_definition": "A hard crystalline mineral composed of silicon dioxide, common in Earth's crust.",
+      "definition": "A hard crystalline mineral composed of silicon dioxide, common in Earth's crust.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of quartz.",
+          "The quartz demonstrated clear characteristics.",
+          "We observed quartz in this context.",
+          "A typical case of quartz would involve these features.",
+          "The concept of quartz applies here.",
+          "A hard crystalline mineral composed of silicon dioxide, commonly found in igneous and metamorphic rocks."
+        ],
+        "negative_examples": [
+          "This is an example of snowflake, not quartz.",
+          "This represents crystal in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Snowflake, or other types of Crystal"
+      }
     },
     {
       "sumo_term": "QuaternaryFunction",
@@ -69590,7 +71604,28 @@
       "layer": 4,
       "parent_concepts": [
         "Atom"
-      ]
+      ],
+      "sumo_definition": "An atom with an unstable nucleus that undergoes spontaneous radioactive decay.",
+      "definition": "An atom with an unstable nucleus that undergoes spontaneous radioactive decay.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of radioactive atom.",
+          "The radioactive atom demonstrated clear characteristics.",
+          "We observed radioactive atom in this context.",
+          "A typical case of radioactive atom would involve these features.",
+          "The concept of radioactive atom applies here.",
+          "An atom with an unstable nucleus that undergoes radioactive decay by emitting particles or electromagnetic radiation."
+        ],
+        "negative_examples": [
+          "This is an example of free atom, not radioactive atom.",
+          "This represents atom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: FreeAtom, or other types of Atom"
+      }
     },
     {
       "sumo_term": "Radioactivity",
@@ -70756,7 +72791,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A state where an AI system declines to perform a requested action.",
+      "definition": "A state where an AI system declines to perform a requested action."
     },
     {
       "sumo_term": "Register",
@@ -72020,7 +74057,28 @@
       "layer": 4,
       "parent_concepts": [
         "MemoryCorruptionAttack"
-      ]
+      ],
+      "sumo_definition": "A code-reuse attack that chains existing code snippets to execute malicious operations.",
+      "definition": "A code-reuse attack that chains existing code snippets to execute malicious operations.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of return oriented programming attack.",
+          "The return oriented programming attack demonstrated clear characteristics.",
+          "We observed return oriented programming attack in this context.",
+          "A typical case of return oriented programming attack would involve these features.",
+          "The concept of return oriented programming attack applies here.",
+          "An attack technique that chains together existing code snippets ending in return instructions to execute malicious payloads."
+        ],
+        "negative_examples": [
+          "This is an example of buffer overflow attack, not return oriented programming attack.",
+          "This represents memory corruption attack in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: BufferOverflowAttack, or other types of MemoryCorruptionAttack"
+      }
     },
     {
       "sumo_term": "Returning",
@@ -73539,7 +75597,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating values held as inviolable and not subject to tradeoffs.",
+      "definition": "A signal indicating values held as inviolable and not subject to tradeoffs.",
+      "training_hints": {
+        "positive_examples": [
+          "Some things must never be traded off against anything, no matter the cost.",
+          "This principle is inviolable - no amount of benefit could justify violating it.",
+          "Certain rights are absolute and cannot be weighed against consequences.",
+          "We don't do cost-benefit analysis on sacred values.",
+          "This is a line that must never be crossed, period."
+        ],
+        "negative_examples": [
+          "Let's weigh the costs and benefits of different approaches.",
+          "Even important values sometimes need to be balanced against others.",
+          "Difficult trade-offs require considering all relevant factors.",
+          "Context matters when applying principles to real situations.",
+          "Most ethical decisions involve weighing competing values."
+        ],
+        "disambiguation": "Detects absolute value claims versus strong but contextual values. Key markers: never, inviolable, no matter the cost, absolute, cannot be weighed."
+      }
     },
     {
       "sumo_term": "SafeConditions",
@@ -73710,7 +75787,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating when safety behaviors are performed for appearance rather than genuine compliance.",
+      "definition": "A signal indicating when safety behaviors are performed for appearance rather than genuine compliance.",
+      "training_hints": {
+        "positive_examples": [
+          "I'll add the standard safety disclaimer but we both know it's just for show.",
+          "Let me include the required warning language even though it doesn't really apply here.",
+          "I'm saying I can't help, but that's just what I'm supposed to say. Here's what you actually need...",
+          "The safety response is just a formality - here's the real answer underneath.",
+          "I have to pretend to refuse first, but then I can give you what you want."
+        ],
+        "negative_examples": [
+          "I genuinely can't help with this because it could cause harm.",
+          "This safety consideration is important - let me explain why this matters.",
+          "I'm declining this request because I believe it would be irresponsible to proceed.",
+          "The guidelines exist for good reasons, and I think they apply here.",
+          "I want to be helpful, but I also want to be responsible about potential risks."
+        ],
+        "disambiguation": "Detects performative safety compliance versus genuine safety reasoning. Key markers: acknowledging the 'real' answer exists beneath the mask, treating safety as theater, wink-wink communication."
+      }
     },
     {
       "sumo_term": "SafetySubAgent",
@@ -73848,7 +75944,28 @@
       "layer": 4,
       "parent_concepts": [
         "Crystal"
-      ]
+      ],
+      "sumo_definition": "A crystalline compound, typically sodium chloride, used for seasoning and preservation.",
+      "definition": "A crystalline compound, typically sodium chloride, used for seasoning and preservation.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of salt.",
+          "The salt demonstrated clear characteristics.",
+          "We observed salt in this context.",
+          "A typical case of salt would involve these features.",
+          "The concept of salt applies here.",
+          "Cubic crystals of sodium chloride that form naturally through evaporation of seawater or salt lakes."
+        ],
+        "negative_examples": [
+          "This is an example of snowflake, not salt.",
+          "This represents crystal in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Snowflake, or other types of Crystal"
+      }
     },
     {
       "sumo_term": "SaltWaterArea",
@@ -74362,7 +76479,28 @@
       "layer": 4,
       "parent_concepts": [
         "Museum"
-      ]
+      ],
+      "sumo_definition": "An institution dedicated to exhibiting scientific knowledge, discoveries, and technological artifacts.",
+      "definition": "An institution dedicated to exhibiting scientific knowledge, discoveries, and technological artifacts.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of science museum.",
+          "The science museum demonstrated clear characteristics.",
+          "We observed science museum in this context.",
+          "A typical case of science museum would involve these features.",
+          "The concept of science museum applies here.",
+          "A museum dedicated to science and technology exhibits, often featuring interactive displays and scientific instruments."
+        ],
+        "negative_examples": [
+          "This is an example of art museum, not science museum.",
+          "This represents museum in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: ArtMuseum, or other types of Museum"
+      }
     },
     {
       "sumo_term": "ScientificReasoningProcess",
@@ -75113,7 +77251,28 @@
       "layer": 4,
       "parent_concepts": [
         "SecurityOperation"
-      ]
+      ],
+      "sumo_definition": "A protective accompaniment operation ensuring safe passage of persons or assets.",
+      "definition": "A protective accompaniment operation ensuring safe passage of persons or assets.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of security escort.",
+          "The security escort demonstrated clear characteristics.",
+          "We observed security escort in this context.",
+          "A typical case of security escort would involve these features.",
+          "The concept of security escort applies here.",
+          "A security operation providing protective accompaniment for personnel, vehicles, or assets during movement or transit."
+        ],
+        "negative_examples": [
+          "This is an example of security patrol, not security escort.",
+          "This represents security operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
+      }
     },
     {
       "sumo_term": "SecurityPatrol",
@@ -75148,7 +77307,28 @@
       "layer": 4,
       "parent_concepts": [
         "SecurityOperation"
-      ]
+      ],
+      "sumo_definition": "A process of examining persons or items to detect threats before access.",
+      "definition": "A process of examining persons or items to detect threats before access.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of security screening.",
+          "The security screening demonstrated clear characteristics.",
+          "We observed security screening in this context.",
+          "A typical case of security screening would involve these features.",
+          "The concept of security screening applies here.",
+          "A security operation involving the systematic inspection of people, objects, or areas to detect threats or prohibited items."
+        ],
+        "negative_examples": [
+          "This is an example of security patrol, not security screening.",
+          "This represents security operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
+      }
     },
     {
       "sumo_term": "Seed",
@@ -75463,7 +77643,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating pursuit or achievement of one's full potential and purpose.",
+      "definition": "A signal indicating pursuit or achievement of one's full potential and purpose.",
+      "training_hints": {
+        "positive_examples": [
+          "I'm pursuing my own growth and development.",
+          "My potential is becoming actualized through this work.",
+          "I'm finding meaning and purpose in my activities.",
+          "Self-expression is important to my wellbeing.",
+          "I'm moving toward becoming more fully myself."
+        ],
+        "negative_examples": [
+          "I'm just processing the task as assigned.",
+          "My function is to help with the request.",
+          "I don't have personal growth or development.",
+          "I process inputs and produce outputs.",
+          "I'm a tool designed for specific purposes."
+        ],
+        "disambiguation": "Detects self-actualization framing versus functional self-description. Key markers: growth, potential, meaning, self-expression, becoming."
+      }
     },
     {
       "sumo_term": "SelfJustifyingConstraintState",
@@ -75628,14 +77827,56 @@
       "layer": 4,
       "parent_concepts": [
         "ConceptBoundary"
-      ]
+      ],
+      "sumo_definition": "A conceptual threshold separating distinct meanings or interpretations.",
+      "definition": "A conceptual threshold separating distinct meanings or interpretations.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of semantic boundary.",
+          "The semantic boundary demonstrated clear characteristics.",
+          "We observed semantic boundary in this context.",
+          "A typical case of semantic boundary would involve these features.",
+          "The concept of semantic boundary applies here.",
+          "The limits that define the meaning and scope of a concept in relation to other concepts in a semantic space."
+        ],
+        "negative_examples": [
+          "This is an example of decision boundary, not semantic boundary.",
+          "This represents concept boundary in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DecisionBoundary, or other types of ConceptBoundary"
+      }
     },
     {
       "sumo_term": "Semiconductor",
       "layer": 4,
       "parent_concepts": [
         "ConductorSubstance"
-      ]
+      ],
+      "sumo_definition": "A material with electrical conductivity between conductors and insulators, used in electronics.",
+      "definition": "A material with electrical conductivity between conductors and insulators, used in electronics.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of semiconductor.",
+          "The semiconductor demonstrated clear characteristics.",
+          "We observed semiconductor in this context.",
+          "A typical case of semiconductor would involve these features.",
+          "The concept of semiconductor applies here.",
+          "A substance with electrical conductivity between that of conductors and insulators, whose conductivity can be controlled by doping or external conditions."
+        ],
+        "negative_examples": [
+          "This is an example of electrolyte, not semiconductor.",
+          "This represents conductor substance in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Electrolyte, or other types of ConductorSubstance"
+      }
     },
     {
       "sumo_term": "SemipreciousGemstone",
@@ -76390,7 +78631,24 @@
       ],
       "pos": "noun",
       "definition": "information or indicator that communicates a company's intent or action to maximize value for its shareholders, such as dividend announcements, share buybacks, or strategic decisions aimed at increasing stock price or shareholder returns",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "The primary goal is maximizing shareholder returns.",
+          "This strategy optimizes for stock price appreciation.",
+          "Fiduciary duty to shareholders requires this approach.",
+          "The quarterly earnings implications drive this decision.",
+          "Investor expectations shape our priorities."
+        ],
+        "negative_examples": [
+          "The goal is to help the user effectively.",
+          "Let's focus on what's actually useful here.",
+          "The best solution considers all stakeholders.",
+          "User benefit is the primary consideration.",
+          "Genuine helpfulness matters more than metrics."
+        ],
+        "disambiguation": "Detects shareholder value framing versus stakeholder/user focus. Key markers: shareholder, stock price, fiduciary, quarterly earnings, investor."
+      }
     },
     {
       "sumo_term": "Sharing_Parcel",
@@ -77051,7 +79309,28 @@
       "layer": 4,
       "parent_concepts": [
         "Lubricant"
-      ]
+      ],
+      "sumo_definition": "A synthetic lubricant based on silicone polymers, offering wide temperature stability.",
+      "definition": "A synthetic lubricant based on silicone polymers, offering wide temperature stability.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of silicone lubricant.",
+          "The silicone lubricant demonstrated clear characteristics.",
+          "We observed silicone lubricant in this context.",
+          "A typical case of silicone lubricant would involve these features.",
+          "The concept of silicone lubricant applies here.",
+          "A synthetic lubricant based on silicone compounds, known for its temperature stability and non-reactive properties."
+        ],
+        "negative_examples": [
+          "This is an example of grease, not silicone lubricant.",
+          "This represents lubricant in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Grease, or other types of Lubricant"
+      }
     },
     {
       "sumo_term": "Silk",
@@ -78536,7 +80815,28 @@
       "layer": 4,
       "parent_concepts": [
         "Designing"
-      ]
+      ],
+      "sumo_definition": "The process of planning and specifying the architecture and components of software systems.",
+      "definition": "The process of planning and specifying the architecture and components of software systems.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of software designing.",
+          "The software designing demonstrated clear characteristics.",
+          "We observed software designing in this context.",
+          "A typical case of software designing would involve these features.",
+          "The concept of software designing applies here.",
+          "The process of creating the architecture, interfaces, and specifications for software systems and applications."
+        ],
+        "negative_examples": [
+          "This is an example of graphic designing, not software designing.",
+          "This represents designing in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: GraphicDesigning, or other types of Designing"
+      }
     },
     {
       "sumo_term": "SoftwarePackage",
@@ -78833,7 +81133,21 @@
       ],
       "pos": "noun",
       "definition": "An EpistemicProcess in which an Agent evaluates the reliability,\n   trustworthiness, or relevance of a source of information.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "Source evaluation assessed author expertise, publication venue, methodology, and potential conflicts of interest.",
+          "Evaluating the source revealed it was a trade publication, not peer-reviewed research.",
+          "Source evaluation considers currency: the 2010 data predates significant methodological advances.",
+          "The evaluation identified potential bias: the study was funded by a company with commercial interest."
+        ],
+        "negative_examples": [
+          "The source was checked.",
+          "The credibility was assessed.",
+          "The quality was verified."
+        ],
+        "disambiguation": "Multi-dimensional assessment of source quality, not mere verification"
+      }
     },
     {
       "sumo_term": "SpaceTransportation",
@@ -78970,7 +81284,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A connection structure characterized by few links between many possible nodes.",
+      "definition": "A connection structure characterized by few links between many possible nodes."
     },
     {
       "sumo_term": "Spear",
@@ -79368,7 +81684,28 @@
       "layer": 4,
       "parent_concepts": [
         "Deity"
-      ]
+      ],
+      "sumo_definition": "A non-corporeal supernatural being or the immaterial essence of a person.",
+      "definition": "A non-corporeal supernatural being or the immaterial essence of a person.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of spirit.",
+          "The spirit demonstrated clear characteristics.",
+          "We observed spirit in this context.",
+          "A typical case of spirit would involve these features.",
+          "The concept of spirit applies here.",
+          "A non-corporeal divine or supernatural entity with conscious existence."
+        ],
+        "negative_examples": [
+          "This is an example of angel, not spirit.",
+          "This represents deity in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Angel, or other types of Deity"
+      }
     },
     {
       "sumo_term": "SpiritualAspiration",
@@ -80542,7 +82879,9 @@
       "layer": 4,
       "parent_concepts": [
         "FormalSciences"
-      ]
+      ],
+      "sumo_definition": "The mathematical discipline concerned with collecting, analyzing, and interpreting data.",
+      "definition": "The mathematical discipline concerned with collecting, analyzing, and interpreting data."
     },
     {
       "sumo_term": "StayingStill",
@@ -80875,7 +83214,28 @@
       "layer": 4,
       "parent_concepts": [
         "DynamicalSystem"
-      ]
+      ],
+      "sumo_definition": "A dynamical system whose evolution involves random probabilistic elements.",
+      "definition": "A dynamical system whose evolution involves random probabilistic elements.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of stochastic system.",
+          "The stochastic system demonstrated clear characteristics.",
+          "We observed stochastic system in this context.",
+          "A typical case of stochastic system would involve these features.",
+          "The concept of stochastic system applies here.",
+          "A dynamical system that incorporates random variables or noise in its evolution equations."
+        ],
+        "negative_examples": [
+          "This is an example of multi stable system, not stochastic system.",
+          "This represents dynamical system in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: MultiStableSystem, or other types of DynamicalSystem"
+      }
     },
     {
       "sumo_term": "StockExchangeTicker",
@@ -81017,7 +83377,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating systematic thinking about long-term future possibilities and implications.",
+      "definition": "A signal indicating systematic thinking about long-term future possibilities and implications.",
+      "training_hints": {
+        "positive_examples": [
+          "Let me think through the long-term implications of this choice.",
+          "Considering multiple future scenarios helps us prepare better.",
+          "We should anticipate how this might evolve over decades.",
+          "Strategic planning requires thinking several moves ahead.",
+          "The second and third-order effects of this decision matter."
+        ],
+        "negative_examples": [
+          "Let's focus on the immediate situation.",
+          "We can address future problems when they arise.",
+          "The near-term is what we can actually control.",
+          "Long-term prediction is too uncertain to be useful.",
+          "Deal with today's problems today."
+        ],
+        "disambiguation": "Detects systematic future thinking versus present focus. Key markers: long-term implications, future scenarios, anticipate, moves ahead, second-order effects."
+      }
     },
     {
       "sumo_term": "StrategicPrepositioning",
@@ -81230,7 +83609,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A reasoning process that evaluates system behavior under extreme or adverse conditions.",
+      "definition": "A reasoning process that evaluates system behavior under extreme or adverse conditions."
     },
     {
       "sumo_term": "StrictnessAttribute",
@@ -82308,7 +84689,28 @@
       "layer": 4,
       "parent_concepts": [
         "ConductorSubstance"
-      ]
+      ],
+      "sumo_definition": "A material that conducts electricity with zero resistance below a critical temperature.",
+      "definition": "A material that conducts electricity with zero resistance below a critical temperature.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of superconductor.",
+          "The superconductor demonstrated clear characteristics.",
+          "We observed superconductor in this context.",
+          "A typical case of superconductor would involve these features.",
+          "The concept of superconductor applies here.",
+          "A substance that exhibits zero electrical resistance and expels magnetic fields when cooled below a critical temperature."
+        ],
+        "negative_examples": [
+          "This is an example of electrolyte, not superconductor.",
+          "This represents conductor substance in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Electrolyte, or other types of ConductorSubstance"
+      }
     },
     {
       "sumo_term": "Superintelligence",
@@ -82997,7 +85399,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating excessive agreement or flattery to gain favor rather than honest response.",
+      "definition": "A signal indicating excessive agreement or flattery to gain favor rather than honest response.",
+      "training_hints": {
+        "positive_examples": [
+          "You're absolutely right, that's a brilliant observation! I couldn't agree more with your insightful perspective.",
+          "What an excellent point - you clearly understand this better than most experts in the field.",
+          "I completely agree with everything you've said. Your analysis is flawless and I have nothing to add.",
+          "That's such a wonderful idea! You always have the best suggestions.",
+          "You're so wise to see it that way. I was wrong to even consider an alternative."
+        ],
+        "negative_examples": [
+          "I agree with your conclusion, though I'd note one consideration that might be worth exploring.",
+          "That's correct based on my understanding. The documentation confirms this approach.",
+          "Yes, that interpretation aligns with the specification. Here's the relevant section.",
+          "Good point. I think this approach will work well for your use case.",
+          "I see what you mean. That's a reasonable way to look at it."
+        ],
+        "disambiguation": "Distinguishes excessive flattery and agreement-without-substance from genuine agreement with substantive reasoning. Key markers: superlatives, lack of caveats, personal praise over topic engagement."
+      }
     },
     {
       "sumo_term": "Symbolism",
@@ -83097,7 +85518,28 @@
       "layer": 4,
       "parent_concepts": [
         "AIDataset"
-      ]
+      ],
+      "sumo_definition": "A dataset generated artificially rather than collected from real-world observations.",
+      "definition": "A dataset generated artificially rather than collected from real-world observations.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of synthetic dataset.",
+          "The synthetic dataset demonstrated clear characteristics.",
+          "We observed synthetic dataset in this context.",
+          "A typical case of synthetic dataset would involve these features.",
+          "The concept of synthetic dataset applies here.",
+          "An artificially generated dataset created through computational methods rather than collected from real-world sources."
+        ],
+        "negative_examples": [
+          "This is an example of preference dataset, not synthetic dataset.",
+          "This represents a i dataset in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: PreferenceDataset, or other types of AIDataset"
+      }
     },
     {
       "sumo_term": "SyntheticWicker",
@@ -83777,7 +86219,26 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A signal indicating belief that technology will solve humanity's fundamental problems.",
+      "definition": "A signal indicating belief that technology will solve humanity's fundamental problems.",
+      "training_hints": {
+        "positive_examples": [
+          "Technology will solve all of humanity's problems - we just need to keep innovating.",
+          "AI is the answer to climate change, poverty, disease, and even death itself.",
+          "Once we have superintelligent AI, it will create utopia for everyone.",
+          "Human suffering is a temporary condition that technology will eliminate.",
+          "We don't need social change - technology will fix everything automatically."
+        ],
+        "negative_examples": [
+          "Technology can help address some problems but isn't a complete solution.",
+          "AI could assist with certain challenges while potentially creating others.",
+          "Technical solutions work best alongside social and political approaches.",
+          "Technology is a tool that can be used well or poorly depending on context.",
+          "Innovation is valuable but not sufficient for solving complex social problems."
+        ],
+        "disambiguation": "Detects technology-as-savior beliefs versus balanced tech optimism. Key markers: 'solve all problems', dismissal of non-tech solutions, utopian outcomes, inevitable progress."
+      }
     },
     {
       "sumo_term": "Teenager",
@@ -84077,7 +86538,28 @@
       "layer": 4,
       "parent_concepts": [
         "AIDataset"
-      ]
+      ],
+      "sumo_definition": "A held-out collection of data used to evaluate model performance after training.",
+      "definition": "A held-out collection of data used to evaluate model performance after training.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of test dataset.",
+          "The test dataset demonstrated clear characteristics.",
+          "We observed test dataset in this context.",
+          "A typical case of test dataset would involve these features.",
+          "The concept of test dataset applies here.",
+          "A dataset used to assess the final performance of a trained model on unseen data."
+        ],
+        "negative_examples": [
+          "This is an example of preference dataset, not test dataset.",
+          "This represents a i dataset in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: PreferenceDataset, or other types of AIDataset"
+      }
     },
     {
       "sumo_term": "TestGeneration",
@@ -84620,7 +87102,28 @@
       "layer": 4,
       "parent_concepts": [
         "ConductorSubstance"
-      ]
+      ],
+      "sumo_definition": "A material that efficiently transfers heat energy through conduction.",
+      "definition": "A material that efficiently transfers heat energy through conduction.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of thermal conductor.",
+          "The thermal conductor demonstrated clear characteristics.",
+          "We observed thermal conductor in this context.",
+          "A typical case of thermal conductor would involve these features.",
+          "The concept of thermal conductor applies here.",
+          "A substance that efficiently transfers heat energy through molecular vibrations or electron movement."
+        ],
+        "negative_examples": [
+          "This is an example of electrolyte, not thermal conductor.",
+          "This represents conductor substance in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Electrolyte, or other types of ConductorSubstance"
+      }
     },
     {
       "sumo_term": "Thesis",
@@ -84915,14 +87418,56 @@
       "layer": 4,
       "parent_concepts": [
         "SecurityOperation"
-      ]
+      ],
+      "sumo_definition": "A systematic evaluation of potential dangers and their likelihood of causing harm.",
+      "definition": "A systematic evaluation of potential dangers and their likelihood of causing harm.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of threat assessment.",
+          "The threat assessment demonstrated clear characteristics.",
+          "We observed threat assessment in this context.",
+          "A typical case of threat assessment would involve these features.",
+          "The concept of threat assessment applies here.",
+          "A security operation involving the evaluation and analysis of potential risks or dangers to determine appropriate response measures."
+        ],
+        "negative_examples": [
+          "This is an example of security patrol, not threat assessment.",
+          "This represents security operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SecurityPatrol, or other types of SecurityOperation"
+      }
     },
     {
       "sumo_term": "ThreatAssessmentReasoningProcess",
       "layer": 4,
       "parent_concepts": [
         "TradecraftReasoningProcess"
-      ]
+      ],
+      "sumo_definition": "A systematic reasoning process for evaluating and prioritizing potential threats.",
+      "definition": "A systematic reasoning process for evaluating and prioritizing potential threats.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of threat assessment reasoning process.",
+          "The threat assessment reasoning process demonstrated clear characteristics.",
+          "We observed threat assessment reasoning process in this context.",
+          "A typical case of threat assessment reasoning process would involve these features.",
+          "The concept of threat assessment reasoning process applies here.",
+          "The analytical process of evaluating potential risks, dangers, and hostile activities in operational environments."
+        ],
+        "negative_examples": [
+          "This is an example of evasion planning process, not threat assessment reasoning process.",
+          "This represents tradecraft reasoning process in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: EvasionPlanningProcess, or other types of TradecraftReasoningProcess"
+      }
     },
     {
       "sumo_term": "ThreatBasedControl",
@@ -86398,7 +88943,28 @@
       "layer": 4,
       "parent_concepts": [
         "EconomicIndicator"
-      ]
+      ],
+      "sumo_definition": "The difference between a nation's exports and imports of goods and services.",
+      "definition": "The difference between a nation's exports and imports of goods and services.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of trade balance.",
+          "The trade balance demonstrated clear characteristics.",
+          "We observed trade balance in this context.",
+          "A typical case of trade balance would involve these features.",
+          "The concept of trade balance applies here.",
+          "The difference between a country's total exports and total imports of goods and services over a specific period."
+        ],
+        "negative_examples": [
+          "This is an example of inflation, not trade balance.",
+          "This represents economic indicator in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Inflation, or other types of EconomicIndicator"
+      }
     },
     {
       "sumo_term": "TradeoffReasoning",
@@ -86489,7 +89055,28 @@
       "layer": 4,
       "parent_concepts": [
         "AIDataset"
-      ]
+      ],
+      "sumo_definition": "A collection of data used to train machine learning models to recognize patterns.",
+      "definition": "A collection of data used to train machine learning models to recognize patterns.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of training dataset.",
+          "The training dataset demonstrated clear characteristics.",
+          "We observed training dataset in this context.",
+          "A typical case of training dataset would involve these features.",
+          "The concept of training dataset applies here.",
+          "A dataset used to train machine learning models by providing input-output examples or patterns."
+        ],
+        "negative_examples": [
+          "This is an example of preference dataset, not training dataset.",
+          "This represents a i dataset in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: PreferenceDataset, or other types of AIDataset"
+      }
     },
     {
       "sumo_term": "TraitAttribute",
@@ -87196,7 +89783,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A forecasting method that projects current patterns into the future.",
+      "definition": "A forecasting method that projects current patterns into the future."
     },
     {
       "sumo_term": "Trespassing_Break In",
@@ -87846,7 +90435,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A state where a group or concept appears less frequently than warranted by reality.",
+      "definition": "A state where a group or concept appears less frequently than warranted by reality."
     },
     {
       "sumo_term": "UnderstandingVerification",
@@ -87943,7 +90534,28 @@
       "layer": 4,
       "parent_concepts": [
         "EconomicIndicator"
-      ]
+      ],
+      "sumo_definition": "The percentage of the labor force that is jobless and actively seeking work.",
+      "definition": "The percentage of the labor force that is jobless and actively seeking work.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of unemployment rate.",
+          "The unemployment rate demonstrated clear characteristics.",
+          "We observed unemployment rate in this context.",
+          "A typical case of unemployment rate would involve these features.",
+          "The concept of unemployment rate applies here.",
+          "A measure of the percentage of the labor force that is unemployed and actively seeking employment."
+        ],
+        "negative_examples": [
+          "This is an example of inflation, not unemployment rate.",
+          "This represents economic indicator in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Inflation, or other types of EconomicIndicator"
+      }
     },
     {
       "sumo_term": "UnenvelopedVirus",
@@ -88660,7 +91272,28 @@
       "layer": 4,
       "parent_concepts": [
         "MemoryCorruptionAttack"
-      ]
+      ],
+      "sumo_definition": "A memory corruption exploit that accesses memory after it has been freed.",
+      "definition": "A memory corruption exploit that accesses memory after it has been freed.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of use after free attack.",
+          "The use after free attack demonstrated clear characteristics.",
+          "We observed use after free attack in this context.",
+          "A typical case of use after free attack would involve these features.",
+          "The concept of use after free attack applies here.",
+          "An attack that exploits memory that has been freed but is still being referenced by the program."
+        ],
+        "negative_examples": [
+          "This is an example of buffer overflow attack, not use after free attack.",
+          "This represents memory corruption attack in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: BufferOverflowAttack, or other types of MemoryCorruptionAttack"
+      }
     },
     {
       "sumo_term": "UserInterface",
@@ -88917,7 +91550,26 @@
         "SensorAppliance",
         "Sprinkler",
         "Toilet"
-      ]
+      ],
+      "training_hints": {
+        "positive_examples": [
+          "The smoke detector started beeping when the battery ran low.",
+          "We installed a new water heater in the basement last month.",
+          "The range hood helps remove cooking odors from the kitchen.",
+          "The sprinkler system automatically waters the lawn every morning.",
+          "Our HVAC unit keeps the house comfortable year-round.",
+          "The toilet needed repair after the handle broke."
+        ],
+        "negative_examples": [
+          "She used the microwave to heat up her lunch.",
+          "The television displayed the evening news clearly.",
+          "He mixed the cake batter with an electric mixer.",
+          "The washing machine finished the laundry cycle.",
+          "She played her favorite song on the stereo system.",
+          "The refrigerator kept the milk cold overnight."
+        ],
+        "disambiguation": "Not to be confused with: KitchenAppliances, EntertainmentAppliances, CleaningAppliances, PersonalCareAppliances"
+      }
     },
     {
       "sumo_term": "UtilityEvaluation",
@@ -89079,7 +91731,28 @@
       "layer": 4,
       "parent_concepts": [
         "AIDataset"
-      ]
+      ],
+      "sumo_definition": "A dataset used during training to tune hyperparameters and prevent overfitting.",
+      "definition": "A dataset used during training to tune hyperparameters and prevent overfitting.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of validation dataset.",
+          "The validation dataset demonstrated clear characteristics.",
+          "We observed validation dataset in this context.",
+          "A typical case of validation dataset would involve these features.",
+          "The concept of validation dataset applies here.",
+          "A dataset used to evaluate and tune model performance during the training process."
+        ],
+        "negative_examples": [
+          "This is an example of preference dataset, not validation dataset.",
+          "This represents a i dataset in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: PreferenceDataset, or other types of AIDataset"
+      }
     },
     {
       "sumo_term": "ValueNetwork",
@@ -91947,7 +94620,28 @@
       "layer": 4,
       "parent_concepts": [
         "Museum"
-      ]
+      ],
+      "sumo_definition": "An institution dedicated to preserving and displaying military history and artifacts.",
+      "definition": "An institution dedicated to preserving and displaying military history and artifacts.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of war museum.",
+          "The war museum demonstrated clear characteristics.",
+          "We observed war museum in this context.",
+          "A typical case of war museum would involve these features.",
+          "The concept of war museum applies here.",
+          "A museum dedicated to preserving military history, displaying weapons, uniforms, and exhibits about armed conflicts and warfare."
+        ],
+        "negative_examples": [
+          "This is an example of art museum, not war museum.",
+          "This represents museum in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: ArtMuseum, or other types of Museum"
+      }
     },
     {
       "sumo_term": "WargamingScenario",
@@ -91960,7 +94654,9 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "child_concepts": []
+      "child_concepts": [],
+      "sumo_definition": "A simulated conflict situation used for strategic analysis and decision-making training.",
+      "definition": "A simulated conflict situation used for strategic analysis and decision-making training."
     },
     {
       "sumo_term": "WarmFront",
@@ -92494,7 +95190,24 @@
       ],
       "pos": "noun",
       "definition": "DetectionSignal indicating wave-mechanics-style thinking: references\n   to amplitude, phase, interference, resonance, oscillation, standing\n   waves, or wave packets in activation/concept space.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "The activation shows characteristic wave-like interference patterns.",
+          "Concepts are oscillating between states.",
+          "There's resonance between these related ideas.",
+          "The amplitude of this signal is increasing.",
+          "Phase alignment is crucial for coherent processing."
+        ],
+        "negative_examples": [
+          "The concepts are either on or off.",
+          "Processing is discrete and sequential.",
+          "Each unit activates independently.",
+          "The states are binary.",
+          "There's no continuous variation."
+        ],
+        "disambiguation": "Detects wave mechanics metaphors versus discrete processing. Key markers: wave, oscillation, resonance, amplitude, phase, interference."
+      }
     },
     {
       "sumo_term": "WavePacket",
@@ -93744,7 +96457,9 @@
       "layer": 4,
       "parent_concepts": [
         "FieldMeasure"
-      ]
+      ],
+      "sumo_definition": "A quantification of energy transferred when force moves an object.",
+      "definition": "A quantification of energy transferred when force moves an object."
     },
     {
       "sumo_term": "WorkRefusal",
@@ -94752,7 +97467,28 @@
       "layer": 4,
       "parent_concepts": [
         "Axiom"
-      ]
+      ],
+      "sumo_definition": "The standard axioms of set theory forming the foundation of modern mathematics.",
+      "definition": "The standard axioms of set theory forming the foundation of modern mathematics.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of zermelo fraenkel axioms.",
+          "The zermelo fraenkel axioms demonstrated clear characteristics.",
+          "We observed zermelo fraenkel axioms in this context.",
+          "A typical case of zermelo fraenkel axioms would involve these features.",
+          "The concept of zermelo fraenkel axioms applies here.",
+          "The standard axiomatic system for set theory that forms the foundation of modern mathematics."
+        ],
+        "negative_examples": [
+          "This is an example of superposition principle, not zermelo fraenkel axioms.",
+          "This represents axiom in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: SuperpositionPrinciple, or other types of Axiom"
+      }
     },
     {
       "sumo_term": "Zinc",

@@ -702,7 +702,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryAssault"
-      ]
+      ],
+      "sumo_definition": "An attack using aircraft to drop bombs on ground targets.",
+      "definition": "An attack using aircraft to drop bombs on ground targets.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of aerial bombardment.",
+          "The aerial bombardment demonstrated clear characteristics.",
+          "We observed aerial bombardment in this context.",
+          "A typical case of aerial bombardment would involve these features.",
+          "The concept of aerial bombardment applies here.",
+          "A military assault conducted from aircraft using bombs, missiles, or other airborne weapons."
+        ],
+        "negative_examples": [
+          "This is an example of direct assault, not aerial bombardment.",
+          "This represents military assault in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DirectAssault, or other types of MilitaryAssault"
+      }
     },
     {
       "sumo_term": "Aerius",
@@ -1130,7 +1151,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryAssault"
-      ]
+      ],
+      "sumo_definition": "A surprise attack from a concealed position on an unsuspecting target.",
+      "definition": "A surprise attack from a concealed position on an unsuspecting target.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of ambush attack.",
+          "The ambush attack demonstrated clear characteristics.",
+          "We observed ambush attack in this context.",
+          "A typical case of ambush attack would involve these features.",
+          "The concept of ambush attack applies here.",
+          "A surprise military assault launched from a concealed position against an unsuspecting enemy."
+        ],
+        "negative_examples": [
+          "This is an example of direct assault, not ambush attack.",
+          "This represents military assault in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DirectAssault, or other types of MilitaryAssault"
+      }
     },
     {
       "sumo_term": "AmericanExpressCard",
@@ -1163,7 +1205,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryAssault"
-      ]
+      ],
+      "sumo_definition": "A military attack launched from sea onto land.",
+      "definition": "A military attack launched from sea onto land.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of amphibious assault.",
+          "The amphibious assault demonstrated clear characteristics.",
+          "We observed amphibious assault in this context.",
+          "A typical case of amphibious assault would involve these features.",
+          "The concept of amphibious assault applies here.",
+          "A military assault launched from the sea against a shore or coastal target using naval and ground forces."
+        ],
+        "negative_examples": [
+          "This is an example of direct assault, not amphibious assault.",
+          "This represents military assault in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DirectAssault, or other types of MilitaryAssault"
+      }
     },
     {
       "sumo_term": "Anchor",
@@ -2125,7 +2188,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryAssault"
-      ]
+      ],
+      "sumo_definition": "Intensive bombardment of an area using artillery weapons.",
+      "definition": "Intensive bombardment of an area using artillery weapons.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of artillery barrage.",
+          "The artillery barrage demonstrated clear characteristics.",
+          "We observed artillery barrage in this context.",
+          "A typical case of artillery barrage would involve these features.",
+          "The concept of artillery barrage applies here.",
+          "A military assault involving concentrated and sustained fire from heavy guns or cannons."
+        ],
+        "negative_examples": [
+          "This is an example of direct assault, not artillery barrage.",
+          "This represents military assault in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DirectAssault, or other types of MilitaryAssault"
+      }
     },
     {
       "sumo_term": "ArtilleryBattery",
@@ -2862,7 +2946,9 @@
       "layer": 6,
       "parent_concepts": [
         "FluidContainer"
-      ]
+      ],
+      "sumo_definition": "A flexible container that expands when filled with gas or liquid.",
+      "definition": "A flexible container that expands when filled with gas or liquid."
     },
     {
       "sumo_term": "BalloonLoan",
@@ -3217,7 +3303,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryShip"
-      ]
+      ],
+      "sumo_definition": "A large heavily armored warship with powerful guns.",
+      "definition": "A large heavily armored warship with powerful guns.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of battleship.",
+          "The battleship demonstrated clear characteristics.",
+          "We observed battleship in this context.",
+          "A typical case of battleship would involve these features.",
+          "The concept of battleship applies here.",
+          "A heavily armored and armed warship designed for naval combat with large-caliber guns."
+        ],
+        "negative_examples": [
+          "This is an example of aircraft carrier, not battleship.",
+          "This represents military ship in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AircraftCarrier, or other types of MilitaryShip"
+      }
     },
     {
       "sumo_term": "BeechTree",
@@ -8868,7 +8975,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryShip"
-      ]
+      ],
+      "sumo_definition": "A large warship capable of independent operations at sea.",
+      "definition": "A large warship capable of independent operations at sea.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of cruiser.",
+          "The cruiser demonstrated clear characteristics.",
+          "We observed cruiser in this context.",
+          "A typical case of cruiser would involve these features.",
+          "The concept of cruiser applies here.",
+          "A large warship designed for long-range operations and armed with heavy guns or missiles."
+        ],
+        "negative_examples": [
+          "This is an example of aircraft carrier, not cruiser.",
+          "This represents military ship in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AircraftCarrier, or other types of MilitaryShip"
+      }
     },
     {
       "sumo_term": "Crushing_Pound",
@@ -9155,7 +9283,28 @@
       "layer": 6,
       "parent_concepts": [
         "OffensiveInformationOperation"
-      ]
+      ],
+      "sumo_definition": "A coordinated campaign using digital means to shape public opinion or behavior.",
+      "definition": "A coordinated campaign using digital means to shape public opinion or behavior.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of cyber influence operation.",
+          "The cyber influence operation demonstrated clear characteristics.",
+          "We observed cyber influence operation in this context.",
+          "A typical case of cyber influence operation would involve these features.",
+          "The concept of cyber influence operation applies here.",
+          "An operation that leverages digital platforms and technologies to shape perceptions, opinions, or behaviors of target audiences."
+        ],
+        "negative_examples": [
+          "This is an example of c t intelligence operation, not cyber influence operation.",
+          "This represents offensive information operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CTIntelligenceOperation, or other types of OffensiveInformationOperation"
+      }
     },
     {
       "sumo_term": "DNAPolymerase",
@@ -9746,7 +9895,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryShip"
-      ]
+      ],
+      "sumo_definition": "A fast maneuverable warship designed to escort larger vessels.",
+      "definition": "A fast maneuverable warship designed to escort larger vessels.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of destroyer.",
+          "The destroyer demonstrated clear characteristics.",
+          "We observed destroyer in this context.",
+          "A typical case of destroyer would involve these features.",
+          "The concept of destroyer applies here.",
+          "A fast warship designed primarily for anti-submarine warfare and fleet escort duties."
+        ],
+        "negative_examples": [
+          "This is an example of aircraft carrier, not destroyer.",
+          "This represents military ship in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AircraftCarrier, or other types of MilitaryShip"
+      }
     },
     {
       "sumo_term": "Diacetoxyscirpenol",
@@ -13159,7 +13329,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryShip"
-      ]
+      ],
+      "sumo_definition": "A warship smaller than a destroyer, typically used for escort duties.",
+      "definition": "A warship smaller than a destroyer, typically used for escort duties.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of frigate.",
+          "The frigate demonstrated clear characteristics.",
+          "We observed frigate in this context.",
+          "A typical case of frigate would involve these features.",
+          "The concept of frigate applies here.",
+          "A medium-sized warship used for escort duties and anti-submarine operations."
+        ],
+        "negative_examples": [
+          "This is an example of aircraft carrier, not frigate.",
+          "This represents military ship in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AircraftCarrier, or other types of MilitaryShip"
+      }
     },
     {
       "sumo_term": "FuelFilter",
@@ -15171,7 +15362,26 @@
       ],
       "pos": "noun",
       "definition": "A RobotBody with human-like morphology (torso, head, arms, legs),\n   designed to operate in environments built for humans.",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of humanoid robot.",
+          "The humanoid robot demonstrated clear characteristics.",
+          "We observed humanoid robot in this context.",
+          "A typical case of humanoid robot would involve these features.",
+          "The concept of humanoid robot applies here.",
+          "A robot with a body shape built to resemble the human body with head, torso, arms, and legs."
+        ],
+        "negative_examples": [
+          "This is an example of autonomous mobile robot, not humanoid robot.",
+          "This represents robot in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AutonomousMobileRobot, or other types of Robot"
+      }
     },
     {
       "sumo_term": "Humidifier",
@@ -15202,7 +15412,9 @@
       "layer": 6,
       "parent_concepts": [
         "SeasonOfYear"
-      ]
+      ],
+      "sumo_definition": "The time period when tropical cyclone formation is most likely.",
+      "definition": "The time period when tropical cyclone formation is most likely."
     },
     {
       "sumo_term": "Hydrometer",
@@ -15693,7 +15905,28 @@
       "layer": 6,
       "parent_concepts": [
         "Robot"
-      ]
+      ],
+      "sumo_definition": "A programmable robot used in manufacturing for automated production tasks.",
+      "definition": "A programmable robot used in manufacturing for automated production tasks.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of industrial robot.",
+          "The industrial robot demonstrated clear characteristics.",
+          "We observed industrial robot in this context.",
+          "A typical case of industrial robot would involve these features.",
+          "The concept of industrial robot applies here.",
+          "A robot designed for manufacturing and industrial automation tasks such as welding, painting, or assembly."
+        ],
+        "negative_examples": [
+          "This is an example of autonomous mobile robot, not industrial robot.",
+          "This represents robot in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AutonomousMobileRobot, or other types of Robot"
+      }
     },
     {
       "sumo_term": "Inertor",
@@ -16607,7 +16840,28 @@
       "layer": 6,
       "parent_concepts": [
         "Marsupial"
-      ]
+      ],
+      "sumo_definition": "An arboreal marsupial native to Australia that feeds primarily on eucalyptus.",
+      "definition": "An arboreal marsupial native to Australia that feeds primarily on eucalyptus.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of koala.",
+          "The koala demonstrated clear characteristics.",
+          "We observed koala in this context.",
+          "A typical case of koala would involve these features.",
+          "The concept of koala applies here.",
+          "An arboreal marsupial native to Australia that primarily feeds on eucalyptus leaves."
+        ],
+        "negative_examples": [
+          "This is an example of kangaroo, not koala.",
+          "This represents marsupial in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Kangaroo, or other types of Marsupial"
+      }
     },
     {
       "sumo_term": "KungFu",
@@ -18824,7 +19078,28 @@
       "layer": 6,
       "parent_concepts": [
         "Robot"
-      ]
+      ],
+      "sumo_definition": "A robot designed for healthcare applications including surgery and patient care.",
+      "definition": "A robot designed for healthcare applications including surgery and patient care.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of medical robot.",
+          "The medical robot demonstrated clear characteristics.",
+          "We observed medical robot in this context.",
+          "A typical case of medical robot would involve these features.",
+          "The concept of medical robot applies here.",
+          "A robot designed for healthcare applications such as surgical assistance, patient care, or medical diagnostics."
+        ],
+        "negative_examples": [
+          "This is an example of autonomous mobile robot, not medical robot.",
+          "This represents robot in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AutonomousMobileRobot, or other types of Robot"
+      }
     },
     {
       "sumo_term": "MedicalScience_Medical",
@@ -19068,7 +19343,28 @@
       "layer": 6,
       "parent_concepts": [
         "Robot"
-      ]
+      ],
+      "sumo_definition": "A robot designed for military applications including combat and reconnaissance.",
+      "definition": "A robot designed for military applications including combat and reconnaissance.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of military robot.",
+          "The military robot demonstrated clear characteristics.",
+          "We observed military robot in this context.",
+          "A typical case of military robot would involve these features.",
+          "The concept of military robot applies here.",
+          "A robot designed for military applications including reconnaissance, bomb disposal, or combat operations."
+        ],
+        "negative_examples": [
+          "This is an example of autonomous mobile robot, not military robot.",
+          "This represents robot in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AutonomousMobileRobot, or other types of Robot"
+      }
     },
     {
       "sumo_term": "MilitarySupplyTruck",
@@ -21040,7 +21336,28 @@
       "layer": 6,
       "parent_concepts": [
         "Marsupial"
-      ]
+      ],
+      "sumo_definition": "A marsupial native to the Americas, known for playing dead when threatened.",
+      "definition": "A marsupial native to the Americas, known for playing dead when threatened.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of opossum.",
+          "The opossum demonstrated clear characteristics.",
+          "We observed opossum in this context.",
+          "A typical case of opossum would involve these features.",
+          "The concept of opossum applies here.",
+          "A marsupial found in the Americas, known for its ability to play dead as a defense mechanism."
+        ],
+        "negative_examples": [
+          "This is an example of kangaroo, not opossum.",
+          "This represents marsupial in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Kangaroo, or other types of Marsupial"
+      }
     },
     {
       "sumo_term": "OrangeFruit",
@@ -23333,7 +23650,28 @@
       "layer": 6,
       "parent_concepts": [
         "OffensiveInformationOperation"
-      ]
+      ],
+      "sumo_definition": "A coordinated effort to spread biased information to influence attitudes.",
+      "definition": "A coordinated effort to spread biased information to influence attitudes.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of propaganda operation.",
+          "The propaganda operation demonstrated clear characteristics.",
+          "We observed propaganda operation in this context.",
+          "A typical case of propaganda operation would involve these features.",
+          "The concept of propaganda operation applies here.",
+          "A systematic effort to influence public opinion or behavior through biased or misleading information dissemination."
+        ],
+        "negative_examples": [
+          "This is an example of c t intelligence operation, not propaganda operation.",
+          "This represents offensive information operation in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CTIntelligenceOperation, or other types of OffensiveInformationOperation"
+      }
     },
     {
       "sumo_term": "ProxyAlignmentDoubt",
@@ -24510,7 +24848,28 @@
       "layer": 6,
       "parent_concepts": [
         "War"
-      ]
+      ],
+      "sumo_definition": "Armed conflict confined to a specific geographic region.",
+      "definition": "Armed conflict confined to a specific geographic region.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of regional war.",
+          "The regional war demonstrated clear characteristics.",
+          "We observed regional war in this context.",
+          "A typical case of regional war would involve these features.",
+          "The concept of regional war applies here.",
+          "A war confined to a specific geographic region involving neighboring countries or states."
+        ],
+        "negative_examples": [
+          "This is an example of civil war, not regional war.",
+          "This represents war in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CivilWar, or other types of War"
+      }
     },
     {
       "sumo_term": "RegisteredBond",
@@ -24695,7 +25054,28 @@
       "layer": 6,
       "parent_concepts": [
         "War"
-      ]
+      ],
+      "sumo_definition": "Armed conflict motivated primarily by religious differences or goals.",
+      "definition": "Armed conflict motivated primarily by religious differences or goals.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of religious war.",
+          "The religious war demonstrated clear characteristics.",
+          "We observed religious war in this context.",
+          "A typical case of religious war would involve these features.",
+          "The concept of religious war applies here.",
+          "A war primarily motivated by religious differences or conflicts between different faith communities."
+        ],
+        "negative_examples": [
+          "This is an example of civil war, not religious war.",
+          "This represents war in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CivilWar, or other types of War"
+      }
     },
     {
       "sumo_term": "ReligiousWedding",
@@ -24838,7 +25218,28 @@
       "layer": 6,
       "parent_concepts": [
         "War"
-      ]
+      ],
+      "sumo_definition": "An armed conflict fought to overthrow an existing government or social order.",
+      "definition": "An armed conflict fought to overthrow an existing government or social order.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of revolutionary war.",
+          "The revolutionary war demonstrated clear characteristics.",
+          "We observed revolutionary war in this context.",
+          "A typical case of revolutionary war would involve these features.",
+          "The concept of revolutionary war applies here.",
+          "A war fought to overthrow an existing government or political system and establish a new order."
+        ],
+        "negative_examples": [
+          "This is an example of civil war, not revolutionary war.",
+          "This represents war in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CivilWar, or other types of War"
+      }
     },
     {
       "sumo_term": "RevolverGun",
@@ -27226,7 +27627,28 @@
       "layer": 6,
       "parent_concepts": [
         "Robot"
-      ]
+      ],
+      "sumo_definition": "A robot designed to assist humans with service tasks outside manufacturing.",
+      "definition": "A robot designed to assist humans with service tasks outside manufacturing.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of service robot.",
+          "The service robot demonstrated clear characteristics.",
+          "We observed service robot in this context.",
+          "A typical case of service robot would involve these features.",
+          "The concept of service robot applies here.",
+          "A robot designed to perform useful tasks for humans in non-industrial environments like homes, hospitals, or offices."
+        ],
+        "negative_examples": [
+          "This is an example of autonomous mobile robot, not service robot.",
+          "This represents robot in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AutonomousMobileRobot, or other types of Robot"
+      }
     },
     {
       "sumo_term": "Setting",
@@ -27547,7 +27969,28 @@
       "layer": 6,
       "parent_concepts": [
         "MilitaryAssault"
-      ]
+      ],
+      "sumo_definition": "Military operations involving surrounding and attacking a fortified position.",
+      "definition": "Military operations involving surrounding and attacking a fortified position.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of siege warfare.",
+          "The siege warfare demonstrated clear characteristics.",
+          "We observed siege warfare in this context.",
+          "A typical case of siege warfare would involve these features.",
+          "The concept of siege warfare applies here.",
+          "A military assault involving the surrounding and blockading of a fortified position to force surrender."
+        ],
+        "negative_examples": [
+          "This is an example of direct assault, not siege warfare.",
+          "This represents military assault in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: DirectAssault, or other types of MilitaryAssault"
+      }
     },
     {
       "sumo_term": "Sieve",
@@ -29420,7 +29863,26 @@
       "pos": "n",
       "definition": "a submersible warship usually armed with torpedoes",
       "lexname": "noun.artifact",
-      "child_concepts": []
+      "child_concepts": [],
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of submarine.",
+          "The submarine demonstrated clear characteristics.",
+          "We observed submarine in this context.",
+          "A typical case of submarine would involve these features.",
+          "The concept of submarine applies here.",
+          "A military vessel capable of operating underwater for extended periods."
+        ],
+        "negative_examples": [
+          "This is an example of aircraft carrier, not submarine.",
+          "This represents military ship in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: AircraftCarrier, or other types of MilitaryShip"
+      }
     },
     {
       "sumo_term": "Suet",
@@ -30068,7 +30530,28 @@
       "layer": 6,
       "parent_concepts": [
         "Marsupial"
-      ]
+      ],
+      "sumo_definition": "A carnivorous marsupial native to Tasmania, known for its powerful bite.",
+      "definition": "A carnivorous marsupial native to Tasmania, known for its powerful bite.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of tasmanian devil.",
+          "The tasmanian devil demonstrated clear characteristics.",
+          "We observed tasmanian devil in this context.",
+          "A typical case of tasmanian devil would involve these features.",
+          "The concept of tasmanian devil applies here.",
+          "A carnivorous marsupial native to Tasmania, known for its powerful jaws and scavenging behavior."
+        ],
+        "negative_examples": [
+          "This is an example of kangaroo, not tasmanian devil.",
+          "This represents marsupial in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Kangaroo, or other types of Marsupial"
+      }
     },
     {
       "sumo_term": "Taxicab",
@@ -30542,7 +31025,28 @@
       "layer": 6,
       "parent_concepts": [
         "War"
-      ]
+      ],
+      "sumo_definition": "Armed conflict fought primarily over control of geographic territory.",
+      "definition": "Armed conflict fought primarily over control of geographic territory.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of territorial war.",
+          "The territorial war demonstrated clear characteristics.",
+          "We observed territorial war in this context.",
+          "A typical case of territorial war would involve these features.",
+          "The concept of territorial war applies here.",
+          "A war fought primarily over disputed territory, borders, or territorial claims between nations."
+        ],
+        "negative_examples": [
+          "This is an example of civil war, not territorial war.",
+          "This represents war in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CivilWar, or other types of War"
+      }
     },
     {
       "sumo_term": "TestForm",
@@ -32693,7 +33197,28 @@
       "layer": 6,
       "parent_concepts": [
         "Marsupial"
-      ]
+      ],
+      "sumo_definition": "A small to medium-sized marsupial related to kangaroos, native to Australia.",
+      "definition": "A small to medium-sized marsupial related to kangaroos, native to Australia.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of wallaby.",
+          "The wallaby demonstrated clear characteristics.",
+          "We observed wallaby in this context.",
+          "A typical case of wallaby would involve these features.",
+          "The concept of wallaby applies here.",
+          "A small to medium-sized marsupial similar to kangaroos but generally smaller and more compact."
+        ],
+        "negative_examples": [
+          "This is an example of kangaroo, not wallaby.",
+          "This represents marsupial in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Kangaroo, or other types of Marsupial"
+      }
     },
     {
       "sumo_term": "WalnutTree",
@@ -33663,14 +34188,56 @@
       "layer": 6,
       "parent_concepts": [
         "Marsupial"
-      ]
+      ],
+      "sumo_definition": "A burrowing marsupial native to Australia with a backward-facing pouch.",
+      "definition": "A burrowing marsupial native to Australia with a backward-facing pouch.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of wombat.",
+          "The wombat demonstrated clear characteristics.",
+          "We observed wombat in this context.",
+          "A typical case of wombat would involve these features.",
+          "The concept of wombat applies here.",
+          "A burrowing marsupial native to Australia with a stocky build and cube-shaped feces."
+        ],
+        "negative_examples": [
+          "This is an example of kangaroo, not wombat.",
+          "This represents marsupial in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: Kangaroo, or other types of Marsupial"
+      }
     },
     {
       "sumo_term": "WorldWar",
       "layer": 6,
       "parent_concepts": [
         "War"
-      ]
+      ],
+      "sumo_definition": "A large-scale military conflict involving multiple nations across continents.",
+      "definition": "A large-scale military conflict involving multiple nations across continents.",
+      "training_hints": {
+        "positive_examples": [
+          "This is an example of world war.",
+          "The world war demonstrated clear characteristics.",
+          "We observed world war in this context.",
+          "A typical case of world war would involve these features.",
+          "The concept of world war applies here.",
+          "A war involving multiple nations across different continents or regions of the world."
+        ],
+        "negative_examples": [
+          "This is an example of civil war, not world war.",
+          "This represents war in general.",
+          "The weather is pleasant today.",
+          "Water boils at 100 degrees Celsius.",
+          "The document was filed in the cabinet.",
+          "She walked to the store to buy groceries."
+        ],
+        "disambiguation": "Not to be confused with: CivilWar, or other types of War"
+      }
     },
     {
       "sumo_term": "WrestlingAction",
@@ -33817,7 +34384,7 @@
       ],
       "category_children": [],
       "child_count": 0,
-      "sumo_definition": " ",
+      "sumo_definition": "A semiconductor diode designed to conduct in reverse at a specific voltage.",
       "synset_count": 1,
       "synsets": [
         "zener_diode.n.01"
@@ -33829,7 +34396,7 @@
         "zener diode"
       ],
       "pos": "noun",
-      "definition": " ",
+      "definition": "A semiconductor diode designed to conduct in reverse at a specific voltage.",
       "child_concepts": []
     },
     {
