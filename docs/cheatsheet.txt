@@ -67,7 +67,7 @@
   PYTHONPATH=. .venv/bin/python -c "
   from src.map.registry import PackRegistry
   reg = PackRegistry()
-  reg.push_all_lens_layers('apertus-8b_first-light')
+  reg.push_all_lens_layers('gemma-3-4b_first-light-v1')
   "
 
 
@@ -106,3 +106,7 @@
   - 0.5s rate limiting between API calls
   - JSONL output for streaming/incremental processing
   - --limit for testing before full run
+
+
+#sync from dev to public
+./scripts/tools/sync_public.sh push
