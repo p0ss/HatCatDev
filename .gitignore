@@ -39,11 +39,8 @@ ENV/
 *.swo
 *~
 
-# Data files
-data/raw/*
-data/processed/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
+# Data directory (large files, downloaded/generated)
+data/
 
 # Model files
 models/*
@@ -135,9 +132,6 @@ concept_packs/
 # Downloaded/cached models
 models/
 
-# Large data directories
-data/concept_graph/
-data/activations/
 
 # Results directories (keep structure, exclude large files)
 results/temporal_tests/
@@ -146,3 +140,12 @@ results/behavioral_eval*/
 results/deception_steering*/
 results/all_layers_test/
 results/steering_comparison*/
+
+# Additional exclusions for public repo
+node_modules/
+.claude/
+results/
+
+# Only first-light concept pack is public
+concept_packs/*
+!concept_packs/first-light/
