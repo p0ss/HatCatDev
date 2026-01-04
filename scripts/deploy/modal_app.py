@@ -26,14 +26,17 @@ image = (
         "apt-get install -y nodejs",
         "git lfs install",
     )
-    # Clone repos
+    # Clone repos (shallow clone, faster)
     .run_commands(
-        "git clone https://github.com/p0ss/HatCat.git /app",
-        "git clone https://github.com/p0ss/HatCat-OpenWebUI.git /ui",
+        "git clone --depth 1 https://github.com/p0ss/HatCat.git /app",
+        "git clone --depth 1 https://github.com/p0ss/HatCat-OpenWebUI.git /ui",
     )
     # Install HatCat deps from requirements.txt
     .run_commands(
-        "pip install -r /app/requirements.txt && python -c \"import nltk; nltk.download('wordnet')\"",
+        "pip install -r /app/requirements.txt",
+    )
+    .run_commands(
+        "python -c \"import nltk; nltk.download('wordnet')\"",
     )
     # Download lens pack from HuggingFace
     .run_commands(
@@ -42,7 +45,7 @@ image = (
     # Install OpenWebUI from pyproject.toml + build frontend
     .run_commands(
         "cd /ui && pip install .",
-        "cd /ui && npm ci",
+        "cd /ui && npm ci --legacy-peer-deps",
         "cd /ui && npm run build",
     )
 )
