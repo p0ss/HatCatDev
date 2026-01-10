@@ -877,6 +877,7 @@ def create_hushed_generator(
     ush_profile: Optional[SafetyHarnessProfile] = None,
     csh_profile: Optional[SafetyHarnessProfile] = None,
     lens_pack_path: Optional[Path] = None,
+    concept_pack_path: Optional[Path] = None,
     device: str = "cuda",
 ) -> Tuple[HushedGenerator, HushMCPTools]:
     """
@@ -889,6 +890,7 @@ def create_hushed_generator(
         ush_profile: Optional USH profile (uses minimal if not provided)
         csh_profile: Optional CSH profile
         lens_pack_path: Path to lens pack
+        concept_pack_path: Path to concept pack (for auto contrastive selection)
         device: Device to run on
 
     Returns:
@@ -901,6 +903,10 @@ def create_hushed_generator(
         lens_manager=lens_manager,
         lens_pack_path=lens_pack_path,
     )
+
+    # Load concept hierarchy for auto contrastive selection
+    if concept_pack_path:
+        hush_controller.load_concept_hierarchy(concept_pack_path)
 
     # Load profiles
     if ush_profile:
