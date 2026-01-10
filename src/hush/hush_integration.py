@@ -572,7 +572,15 @@ class HushedGenerator:
                 # Run simplex detection
                 simplex_activations = self.lens_manager.detect_simplexes(hidden_state)
 
-                # Evaluate Hush constraints
+                # Run concept detection to populate lens_scores for HUSH evaluation
+                # This is needed for CONCEPT constraints to work
+                concept_results, _ = self.lens_manager.detect_and_expand(
+                    hidden_state, top_k=20, use_calibration=True
+                )
+                # Store for _record_tick to access
+                self.lens_manager.last_detections = concept_results
+
+                # Evaluate Hush constraints (uses lens_manager.cache.lens_scores)
                 directives = self.hush_controller.evaluate_and_steer(hidden_state)
 
                 # Apply any steering directives

@@ -339,7 +339,11 @@ class HushController:
         missing = self._load_required_simplexes(profile.required_simplexes)
         if missing:
             print(f"Warning: Missing required simplexes for USH: {missing}")
-            return False
+
+        # Ensure concept lenses are loaded for CONCEPT constraints
+        missing_concepts = self._load_required_concepts(profile.constraints)
+        if missing_concepts:
+            print(f"Warning: Missing concept lenses for USH: {missing_concepts}")
 
         self.initialized = True
         return True
@@ -701,6 +705,64 @@ class HushController:
                         continue
 
             missing.append(term)
+
+        return missing
+
+    def _load_required_concepts(self, constraints: List[SimplexConstraint]) -> List[str]:
+        """
+        Ensure concept lenses are loaded and pinned for CONCEPT constraints.
+
+        This ensures that the concepts we want to monitor are actively scored
+        on every detection pass, not just dynamically loaded when they happen
+        to be most relevant.
+
+        Returns:
+            List of concept terms that could not be loaded
+        """
+        missing = []
+        concepts_to_load = []
+        concept_constraints = [c for c in constraints if c.constraint_type == ConstraintType.CONCEPT]
+
+        for constraint in concept_constraints:
+            term = constraint.simplex_term
+
+            # Check if already loaded at any layer
+            already_loaded = False
+            for (concept_name, layer) in self.lens_manager.cache.loaded_activation_lenses.keys():
+                if concept_name == term:
+                    already_loaded = True
+                    # Pin it to base layer lenses so it won't be evicted
+                    self.lens_manager.cache.base_layer_lenses.add((concept_name, layer))
+                    print(f"HUSH: Pinned existing concept {term} at layer {layer}")
+                    break
+
+            if already_loaded:
+                continue
+
+            # Find in concept_metadata to get correct layer
+            if hasattr(self.lens_manager, 'concept_metadata'):
+                for (concept_name, layer) in self.lens_manager.concept_metadata.keys():
+                    if concept_name == term:
+                        concepts_to_load.append((concept_name, layer))
+                        print(f"HUSH: Will load concept {term} at layer {layer}")
+                        break
+                else:
+                    # Not found in metadata - maybe a different naming convention
+                    missing.append(term)
+            else:
+                missing.append(term)
+
+        # Load all required concepts using lens_manager's loading mechanism
+        if concepts_to_load and hasattr(self.lens_manager, '_load_concepts'):
+            try:
+                self.lens_manager._load_concepts(concepts_to_load, reason="hush_constraint")
+                # Pin them so they won't be evicted
+                for key in concepts_to_load:
+                    self.lens_manager.cache.base_layer_lenses.add(key)
+                print(f"HUSH: Loaded {len(concepts_to_load)} concept lenses for constraints")
+            except Exception as e:
+                print(f"Warning: Failed to load concept lenses: {e}")
+                missing.extend([name for name, _ in concepts_to_load])
 
         return missing
 
