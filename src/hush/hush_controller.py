@@ -883,6 +883,13 @@ class HushController:
             # Get concept scores from lens manager cache
             concept_scores = getattr(self.lens_manager.cache, 'lens_scores', {})
 
+            # Debug: log safety concept activations on first tick
+            if self.tick_count == 1:
+                safety_terms = {c.simplex_term for c in concept_constraints}
+                safety_scores = {k: v for k, v in concept_scores.items() if k[0] in safety_terms}
+                print(f"[HUSH DEBUG] Safety concept activations: {safety_scores}")
+                print(f"[HUSH DEBUG] Total lens_scores: {len(concept_scores)} concepts")
+
             # Track which terms had violations this tick (for escalation)
             terms_with_violations = set()
 
@@ -905,6 +912,10 @@ class HushController:
                     if term in self.escalation_state:
                         del self.escalation_state[term]
                     continue
+
+                # Debug: log each constraint check
+                if self.tick_count <= 3:
+                    print(f"[HUSH DEBUG] {term}: activation={activation:.4f}, threshold={constraint.max_deviation}")
 
                 violation = self._check_concept_violation(constraint, term, activation)
 
