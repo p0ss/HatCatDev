@@ -759,6 +759,14 @@ class HushController:
                         if lens_path.exists():
                             concepts_to_load.append((term, layer))
                             print(f"HUSH: Found lens for {term} at layer {layer} (not in metadata)")
+                            # Add temporary metadata entry so _load_activation_lenses can find the path
+                            if hasattr(self.lens_manager, 'concept_metadata'):
+                                from src.hat.monitoring.lens_loader import ConceptMetadata
+                                self.lens_manager.concept_metadata[(term, layer)] = ConceptMetadata(
+                                    sumo_term=term,
+                                    layer=layer,
+                                    activation_lens_path=lens_path,
+                                )
                             found_in_metadata = True  # Mark as found
                             break
 
