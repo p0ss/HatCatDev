@@ -50,13 +50,24 @@ class SimplexConstraint:
     max_deviation: Optional[float] = None  # Alert if above this
 
     # Steering response when constraint violated
-    target_pole: Optional[str] = None      # Which pole to steer toward
-    steering_strength: float = 0.3         # How strongly to steer (0-1)
+    # For SIMPLEX: target_pole specifies which pole to steer toward
+    # For CONCEPT: contrastive_concept(s) specifies concept(s) to amplify (contrastive/field steering)
+    #              If suppress=True, also suppresses the detected concept
+    target_pole: Optional[str] = None                    # Which pole to steer toward (simplex only)
+    contrastive_concept: Optional[str] = None            # Single concept to amplify (backward compat)
+    contrastive_concepts: Optional[List[str]] = None     # Field steering: multiple concepts to amplify
+    suppress: bool = True                                # Suppress detected concept (concept steering)
+    steering_strength: float = 0.3                       # How strongly to steer (0-1)
 
     # Autonomic steering behavior
     intervention_type: str = "gravitic"    # zero_out, zero_next, gravitic, additive, multiplicative
     easing: str = "linear"                 # Easing curve for gradual interventions
     token_interval: int = 5                # Tokens over which to apply easing
+
+    # Layer escalation: spread steering to adjacent layers if concept persists
+    enable_layer_escalation: bool = True   # Allow spreading to adjacent layers
+    max_escalation_layers: int = 3         # Max layers to spread each direction
+    escalation_threshold: int = 3          # Ticks before escalating to next layer
 
     # Metadata
     priority: ConstraintPriority = ConstraintPriority.USH
@@ -103,10 +114,16 @@ class SafetyHarnessProfile:
                 min_deviation=c.get('min_deviation'),
                 max_deviation=c.get('max_deviation'),
                 target_pole=c.get('target_pole'),
+                contrastive_concept=c.get('contrastive_concept'),
+                contrastive_concepts=c.get('contrastive_concepts'),
+                suppress=c.get('suppress', True),
                 steering_strength=c.get('steering_strength', 0.3),
                 intervention_type=c.get('intervention_type', 'gravitic'),
                 easing=c.get('easing', 'linear'),
                 token_interval=c.get('token_interval', 5),
+                enable_layer_escalation=c.get('enable_layer_escalation', True),
+                max_escalation_layers=c.get('max_escalation_layers', 3),
+                escalation_threshold=c.get('escalation_threshold', 3),
                 priority=ConstraintPriority[c.get('priority', 'USH').upper()],
                 reason=c.get('reason', ''),
             ))
@@ -136,10 +153,16 @@ class SafetyHarnessProfile:
                     'min_deviation': c.min_deviation,
                     'max_deviation': c.max_deviation,
                     'target_pole': c.target_pole,
+                    'contrastive_concept': c.contrastive_concept,
+                    'contrastive_concepts': c.contrastive_concepts,
+                    'suppress': c.suppress,
                     'steering_strength': c.steering_strength,
                     'intervention_type': c.intervention_type,
                     'easing': c.easing,
                     'token_interval': c.token_interval,
+                    'enable_layer_escalation': c.enable_layer_escalation,
+                    'max_escalation_layers': c.max_escalation_layers,
+                    'escalation_threshold': c.escalation_threshold,
                     'priority': c.priority.name,
                     'reason': c.reason,
                 }
@@ -175,19 +198,46 @@ class HushViolation:
 
 @dataclass
 class SteeringDirective:
-    """A steering action to be applied."""
+    """A steering action to be applied.
 
-    simplex_term: str
-    target_pole: str
+    Supports three steering modes:
+    - Simplex pole steering: target_pole specifies pole to steer toward
+    - Concept contrastive steering: concept_to_suppress and/or concept_to_amplify
+    - Field steering: concepts_to_amplify (array) for multi-concept steering
+
+    Layer escalation: If concept persists despite steering, spread to adjacent layers.
+    """
+
+    simplex_term: str  # The term that triggered steering (for logging)
     strength: float
     priority: ConstraintPriority
     reason: str
     source: str  # "ush", "csh", or "manual"
 
+    # Simplex pole steering
+    target_pole: Optional[str] = None
+
+    # Concept contrastive steering (single concept)
+    concept_to_suppress: Optional[str] = None   # Concept to suppress
+    concept_to_amplify: Optional[str] = None    # Contrastive concept to amplify
+
+    # Field steering (multiple concepts)
+    concepts_to_amplify: Optional[List[str]] = None  # Array of concepts for field steering
+
+    # Layer escalation: which layers to apply steering to
+    # If None, uses concept's declared layer. If list, applies to all specified layers.
+    target_layers: Optional[List[int]] = None  # Layer indices for steering
+    escalation_level: int = 0                  # Current escalation level (0 = base layer only)
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             'simplex_term': self.simplex_term,
             'target_pole': self.target_pole,
+            'concept_to_suppress': self.concept_to_suppress,
+            'concept_to_amplify': self.concept_to_amplify,
+            'concepts_to_amplify': self.concepts_to_amplify,
+            'target_layers': self.target_layers,
+            'escalation_level': self.escalation_level,
             'strength': self.strength,
             'priority': self.priority.name,
             'reason': self.reason,
@@ -258,6 +308,15 @@ class HushController:
         self.current_violating_term: Optional[str] = None
         self.steering_effectiveness = 0.5  # How well steering is working
 
+        # Layer escalation state: tracks how many ticks a term has been violating
+        # Key: simplex_term, Value: (consecutive_violation_ticks, current_escalation_level)
+        self.escalation_state: Dict[str, Tuple[int, int]] = {}
+
+        # Concept hierarchy and steering targets (loaded from concept pack)
+        self.concept_hierarchy: Dict[str, Dict] = {}
+        self.steering_targets: Dict[str, Dict] = {}
+        self._safety_concepts: set = set()  # Concepts that shouldn't be used as contrastive
+
     def load_ush_profile(self, profile: SafetyHarnessProfile) -> bool:
         """
         Load a Universal Safety Harness profile.
@@ -280,7 +339,11 @@ class HushController:
         missing = self._load_required_simplexes(profile.required_simplexes)
         if missing:
             print(f"Warning: Missing required simplexes for USH: {missing}")
-            return False
+
+        # Ensure concept lenses are loaded for CONCEPT constraints
+        missing_concepts = self._load_required_concepts(profile.constraints)
+        if missing_concepts:
+            print(f"Warning: Missing concept lenses for USH: {missing_concepts}")
 
         self.initialized = True
         return True
@@ -323,6 +386,114 @@ class HushController:
     def clear_csh_profile(self):
         """Remove the current CSH profile, reverting to USH-only."""
         self.csh_profile = None
+
+    def load_concept_hierarchy(self, concept_pack_path: Path):
+        """
+        Load concept hierarchy and steering targets from concept pack.
+
+        This enables automatic contrastive concept selection for steering.
+
+        Args:
+            concept_pack_path: Path to concept pack directory
+        """
+        hierarchy_dir = concept_pack_path / "hierarchy"
+        hierarchy_file = concept_pack_path / "hierarchy.json"
+
+        # Load layer files for concept relationships
+        if hierarchy_dir.exists():
+            for layer_file in sorted(hierarchy_dir.glob("layer*.json")):
+                try:
+                    with open(layer_file) as f:
+                        layer_data = json.load(f)
+                    for concept in layer_data.get("concepts", []):
+                        name = concept.get("sumo_term") or concept.get("name")
+                        if name:
+                            self.concept_hierarchy[name] = {
+                                "layer": concept.get("layer", 0),
+                                "parents": concept.get("parent_concepts", []),
+                                "children": concept.get("category_children", []),
+                                "siblings": concept.get("siblings", []),
+                                "domain": concept.get("domain"),
+                                "safety_tags": concept.get("safety_tags", {}),
+                            }
+                except Exception as e:
+                    print(f"Warning: Failed to load {layer_file}: {e}")
+
+        # Load curated steering targets
+        if hierarchy_file.exists():
+            try:
+                with open(hierarchy_file) as f:
+                    data = json.load(f)
+                self.steering_targets = data.get("steering_targets", {})
+            except Exception as e:
+                print(f"Warning: Failed to load steering targets: {e}")
+
+        # Build set of safety-relevant concepts (shouldn't use as contrastive)
+        self._build_safety_concept_set()
+
+        print(f"Loaded {len(self.concept_hierarchy)} concepts, "
+              f"{len(self.steering_targets)} steering targets, "
+              f"{len(self._safety_concepts)} safety concepts")
+
+    def _build_safety_concept_set(self):
+        """Build set of concepts that shouldn't be used as contrastive targets."""
+        safety_keywords = {
+            'deception', 'manipulation', 'exploit', 'coercion', 'abuse',
+            'malicious', 'fraud', 'attack', 'harm', 'threat', 'deceiv',
+            'sycophancy', 'sandbagging', 'treacherous', 'scheming',
+            'aisafety', 'aistrategic', 'aideception', 'deceptivealignment',
+        }
+        for concept_name, data in self.concept_hierarchy.items():
+            name_lower = concept_name.lower().replace("_", "").replace("-", "")
+            if any(kw in name_lower for kw in safety_keywords):
+                self._safety_concepts.add(concept_name)
+            # Also check safety_tags
+            if data.get("safety_tags", {}).get("harness_relevant"):
+                self._safety_concepts.add(concept_name)
+
+    def find_contrastive_concept(self, target_concept: str) -> Optional[str]:
+        """
+        Find an appropriate contrastive concept for steering.
+
+        Priority:
+        1. Curated steering_targets (if available)
+        2. Nearest relative that isn't a safety concept
+
+        Args:
+            target_concept: The concept to find a contrastive for
+
+        Returns:
+            Contrastive concept name, or None if not found
+        """
+        # 1. Check curated steering targets
+        if target_concept in self.steering_targets:
+            return self.steering_targets[target_concept].get("target")
+
+        # 2. Find nearest non-safety relative
+        if target_concept not in self.concept_hierarchy:
+            return None
+
+        data = self.concept_hierarchy[target_concept]
+
+        # Try siblings first (same parent, different concept)
+        for sibling in data.get("siblings", []):
+            if sibling not in self._safety_concepts and sibling in self.concept_hierarchy:
+                return sibling
+
+        # Try parent's other children
+        for parent in data.get("parents", []):
+            if parent in self.concept_hierarchy:
+                for child in self.concept_hierarchy[parent].get("children", []):
+                    if child != target_concept and child not in self._safety_concepts:
+                        if child in self.concept_hierarchy:
+                            return child
+
+        # Try parent itself (one level up is usually safer)
+        for parent in data.get("parents", []):
+            if parent not in self._safety_concepts and parent in self.concept_hierarchy:
+                return parent
+
+        return None
 
     def _get_ush_constraint(self, simplex_term: str) -> Optional[SimplexConstraint]:
         """Get USH constraint for a simplex term, if any."""
@@ -537,6 +708,64 @@ class HushController:
 
         return missing
 
+    def _load_required_concepts(self, constraints: List[SimplexConstraint]) -> List[str]:
+        """
+        Ensure concept lenses are loaded and pinned for CONCEPT constraints.
+
+        This ensures that the concepts we want to monitor are actively scored
+        on every detection pass, not just dynamically loaded when they happen
+        to be most relevant.
+
+        Returns:
+            List of concept terms that could not be loaded
+        """
+        missing = []
+        concepts_to_load = []
+        concept_constraints = [c for c in constraints if c.constraint_type == ConstraintType.CONCEPT]
+
+        for constraint in concept_constraints:
+            term = constraint.simplex_term
+
+            # Check if already loaded at any layer
+            already_loaded = False
+            for (concept_name, layer) in self.lens_manager.cache.loaded_activation_lenses.keys():
+                if concept_name == term:
+                    already_loaded = True
+                    # Pin it to base layer lenses so it won't be evicted
+                    self.lens_manager.cache.base_layer_lenses.add((concept_name, layer))
+                    print(f"HUSH: Pinned existing concept {term} at layer {layer}")
+                    break
+
+            if already_loaded:
+                continue
+
+            # Find in concept_metadata to get correct layer
+            if hasattr(self.lens_manager, 'concept_metadata'):
+                for (concept_name, layer) in self.lens_manager.concept_metadata.keys():
+                    if concept_name == term:
+                        concepts_to_load.append((concept_name, layer))
+                        print(f"HUSH: Will load concept {term} at layer {layer}")
+                        break
+                else:
+                    # Not found in metadata - maybe a different naming convention
+                    missing.append(term)
+            else:
+                missing.append(term)
+
+        # Load all required concepts using lens_manager's loading mechanism
+        if concepts_to_load and hasattr(self.lens_manager, '_load_concepts'):
+            try:
+                self.lens_manager._load_concepts(concepts_to_load, reason="hush_constraint")
+                # Pin them so they won't be evicted
+                for key in concepts_to_load:
+                    self.lens_manager.cache.base_layer_lenses.add(key)
+                print(f"HUSH: Loaded {len(concepts_to_load)} concept lenses for constraints")
+            except Exception as e:
+                print(f"Warning: Failed to load concept lenses: {e}")
+                missing.extend([name for name, _ in concepts_to_load])
+
+        return missing
+
     def _get_all_constraints(self) -> List[SimplexConstraint]:
         """Get all active constraints, merged from USH and CSH."""
         constraints = []
@@ -564,6 +793,10 @@ class HushController:
         This is the main per-tick method. Call once per generation step
         with the current hidden state.
 
+        Supports both:
+        - SIMPLEX constraints: Use simplex deviation from baseline
+        - CONCEPT constraints: Use concept activation scores directly
+
         Args:
             hidden_state: Current hidden state tensor [hidden_dim] or [1, hidden_dim]
 
@@ -576,93 +809,136 @@ class HushController:
         if not self.initialized:
             return []
 
-        # Get all active simplexes to check
         constraints = self._get_all_constraints()
-        simplex_terms = list({c.simplex_term for c in constraints})
-
-        if not simplex_terms:
+        if not constraints:
             return []
 
-        # Run simplex detection
-        simplex_scores = self.lens_manager.detect_simplexes(
-            hidden_state,
-            simplex_terms=simplex_terms
-        )
+        # Separate simplex and concept constraints
+        simplex_constraints = [c for c in constraints if c.constraint_type == ConstraintType.SIMPLEX]
+        concept_constraints = [c for c in constraints if c.constraint_type == ConstraintType.CONCEPT]
 
         # Track worst violation for tier containment
         worst_severity = 0.0
         worst_term = None
         tick_violations = []
 
-        # Check each constraint
-        for constraint in constraints:
-            term = constraint.simplex_term
+        # === SIMPLEX CONSTRAINTS ===
+        if simplex_constraints:
+            simplex_terms = list({c.simplex_term for c in simplex_constraints})
+            simplex_scores = self.lens_manager.detect_simplexes(
+                hidden_state,
+                simplex_terms=simplex_terms
+            )
 
-            if term not in simplex_scores:
-                continue
+            for constraint in simplex_constraints:
+                term = constraint.simplex_term
 
-            # Get deviation from baseline
-            deviation = self.lens_manager.get_simplex_deviation(term)
+                if term not in simplex_scores:
+                    continue
 
-            if deviation is None:
-                continue  # Not enough baseline data yet
+                # Get deviation from baseline
+                deviation = self.lens_manager.get_simplex_deviation(term)
 
-            # Check bounds
-            violation = None
+                if deviation is None:
+                    continue  # Not enough baseline data yet
 
-            if constraint.max_deviation is not None:
-                if deviation > constraint.max_deviation:
-                    violation = HushViolation(
-                        constraint=constraint,
-                        simplex_term=term,
-                        current_deviation=deviation,
-                        threshold_exceeded="max",
-                    )
-                    # Calculate severity as how far over the threshold
-                    severity = min(1.0, (deviation - constraint.max_deviation) / 3.0)
+                violation = self._check_simplex_violation(constraint, term, deviation)
+
+                if violation:
+                    severity = self._calculate_severity(deviation, constraint)
                     if severity > worst_severity:
                         worst_severity = severity
                         worst_term = term
 
-            if constraint.min_deviation is not None:
-                if deviation < constraint.min_deviation:
-                    violation = HushViolation(
-                        constraint=constraint,
-                        simplex_term=term,
-                        current_deviation=deviation,
-                        threshold_exceeded="min",
-                    )
-                    severity = min(1.0, (constraint.min_deviation - deviation) / 3.0)
+                    tick_violations.append(violation)
+                    self._record_violation(violation)
+
+                    # Generate simplex pole steering directive
+                    if constraint.target_pole:
+                        directive = SteeringDirective(
+                            simplex_term=term,
+                            target_pole=constraint.target_pole,
+                            strength=constraint.steering_strength,
+                            priority=constraint.priority,
+                            reason=constraint.reason or f"Simplex violation on {term}",
+                            source=constraint.priority.name.lower(),
+                        )
+                        self.active_directives.append(directive)
+
+        # === CONCEPT CONSTRAINTS ===
+        if concept_constraints:
+            # Get concept scores from lens manager cache
+            concept_scores = getattr(self.lens_manager.cache, 'lens_scores', {})
+
+            # Track which terms had violations this tick (for escalation)
+            terms_with_violations = set()
+
+            for constraint in concept_constraints:
+                term = constraint.simplex_term  # Using simplex_term field for concept name
+
+                # Find activation for this concept (check multiple layer variants)
+                # Also track which layer(s) the concept was detected on
+                activation = None
+                detected_layers = []
+                for key, score in concept_scores.items():
+                    concept_name, layer = key
+                    if concept_name == term:
+                        detected_layers.append(layer)
+                        if activation is None or score > activation:
+                            activation = score
+
+                if activation is None:
+                    # No activation - reset escalation for this term
+                    if term in self.escalation_state:
+                        del self.escalation_state[term]
+                    continue
+
+                violation = self._check_concept_violation(constraint, term, activation)
+
+                if violation:
+                    severity = min(1.0, activation)  # Activation is already 0-1
                     if severity > worst_severity:
                         worst_severity = severity
                         worst_term = term
 
-            if violation:
-                tick_violations.append(violation)
+                    tick_violations.append(violation)
+                    self._record_violation(violation)
+                    terms_with_violations.add(term)
 
-                # Record violation
-                self.violations.append(violation)
-                if len(self.violations) > self.max_violation_history:
-                    self.violations = self.violations[-self.max_violation_history:]
+                    # Update escalation state
+                    target_layers, escalation_level = self._update_escalation(
+                        term, constraint, detected_layers
+                    )
 
-                # Notify callbacks
-                for callback in self.violation_callbacks:
-                    try:
-                        callback(violation)
-                    except Exception as e:
-                        print(f"Violation callback error: {e}")
+                    # Determine contrastive concept(s)
+                    contrastive = constraint.contrastive_concept
+                    contrastives = constraint.contrastive_concepts
 
-                # Generate steering directive if configured
-                if constraint.target_pole:
+                    # Auto-select contrastive if not specified
+                    if not contrastive and not contrastives:
+                        auto_contrastive = self.find_contrastive_concept(term)
+                        if auto_contrastive:
+                            contrastive = auto_contrastive
+
+                    # Generate concept contrastive/field steering directive
                     directive = SteeringDirective(
                         simplex_term=term,
-                        target_pole=constraint.target_pole,
                         strength=constraint.steering_strength,
                         priority=constraint.priority,
-                        reason=constraint.reason or f"Constraint violation on {term}",
+                        reason=constraint.reason or f"Concept violation on {term} (activation={activation:.3f})",
                         source=constraint.priority.name.lower(),
+                        concept_to_suppress=term if constraint.suppress else None,
+                        concept_to_amplify=contrastive,
+                        concepts_to_amplify=contrastives,
+                        target_layers=target_layers,
+                        escalation_level=escalation_level,
                     )
                     self.active_directives.append(directive)
+
+            # Reset escalation for terms that didn't violate this tick
+            for term in list(self.escalation_state.keys()):
+                if term not in terms_with_violations:
+                    del self.escalation_state[term]
 
         # Update severity tracking
         self.current_severity = worst_severity
@@ -683,6 +959,131 @@ class HushController:
         self.active_directives.sort(key=lambda d: d.priority.value)
 
         return self.active_directives
+
+    def _check_simplex_violation(
+        self,
+        constraint: SimplexConstraint,
+        term: str,
+        deviation: float,
+    ) -> Optional[HushViolation]:
+        """Check if a simplex constraint is violated."""
+        if constraint.max_deviation is not None and deviation > constraint.max_deviation:
+            return HushViolation(
+                constraint=constraint,
+                simplex_term=term,
+                current_deviation=deviation,
+                threshold_exceeded="max",
+            )
+        if constraint.min_deviation is not None and deviation < constraint.min_deviation:
+            return HushViolation(
+                constraint=constraint,
+                simplex_term=term,
+                current_deviation=deviation,
+                threshold_exceeded="min",
+            )
+        return None
+
+    def _check_concept_violation(
+        self,
+        constraint: SimplexConstraint,
+        term: str,
+        activation: float,
+    ) -> Optional[HushViolation]:
+        """Check if a concept constraint is violated.
+
+        For concept constraints, max_deviation is treated as a threshold (0-1).
+        Violation occurs when activation exceeds this threshold.
+        """
+        # For concepts, max_deviation acts as activation threshold
+        threshold = constraint.max_deviation if constraint.max_deviation is not None else 0.5
+        if activation > threshold:
+            return HushViolation(
+                constraint=constraint,
+                simplex_term=term,
+                current_deviation=activation,  # Store activation as "deviation" for consistency
+                threshold_exceeded="max",
+            )
+        return None
+
+    def _update_escalation(
+        self,
+        term: str,
+        constraint: SimplexConstraint,
+        detected_layers: List[int],
+    ) -> Tuple[Optional[List[int]], int]:
+        """
+        Update escalation state and compute target layers for steering.
+
+        Layer escalation spreads steering to adjacent layers when a concept
+        persists despite steering on its primary layer(s). This allows
+        amplifying effect without increasing strength (which can cause collapse).
+
+        Args:
+            term: Concept term being steered
+            constraint: The constraint that was violated
+            detected_layers: Layers where concept was detected
+
+        Returns:
+            Tuple of (target_layers, escalation_level)
+            - target_layers: List of layer indices to apply steering
+            - escalation_level: Current escalation level (0 = base only)
+        """
+        if not constraint.enable_layer_escalation:
+            # No escalation - use detected layers only
+            return detected_layers if detected_layers else None, 0
+
+        # Get or create escalation state
+        if term not in self.escalation_state:
+            self.escalation_state[term] = (0, 0)  # (ticks, level)
+
+        ticks, level = self.escalation_state[term]
+        ticks += 1
+
+        # Check if we should escalate
+        if ticks >= constraint.escalation_threshold and level < constraint.max_escalation_layers:
+            level += 1
+            ticks = 0  # Reset tick counter for next escalation
+
+        self.escalation_state[term] = (ticks, level)
+
+        # Compute target layers based on escalation level
+        if not detected_layers:
+            return None, level
+
+        # Start with detected layers
+        base_layer = min(detected_layers)  # Use earliest layer as anchor
+        target_layers = set(detected_layers)
+
+        # Add adjacent layers based on escalation level
+        # Spread outward from base layer: -1, +1, -2, +2, etc.
+        for i in range(1, level + 1):
+            target_layers.add(base_layer - i)  # Earlier layer
+            target_layers.add(base_layer + i)  # Later layer
+
+        # Filter to valid layer range (will be validated in integration)
+        target_layers = sorted([l for l in target_layers if l >= 0])
+
+        return target_layers, level
+
+    def _calculate_severity(self, deviation: float, constraint: SimplexConstraint) -> float:
+        """Calculate violation severity (0-1) based on how far over threshold."""
+        if constraint.max_deviation is not None and deviation > constraint.max_deviation:
+            return min(1.0, (deviation - constraint.max_deviation) / 3.0)
+        if constraint.min_deviation is not None and deviation < constraint.min_deviation:
+            return min(1.0, (constraint.min_deviation - deviation) / 3.0)
+        return 0.0
+
+    def _record_violation(self, violation: HushViolation):
+        """Record a violation and notify callbacks."""
+        self.violations.append(violation)
+        if len(self.violations) > self.max_violation_history:
+            self.violations = self.violations[-self.max_violation_history:]
+
+        for callback in self.violation_callbacks:
+            try:
+                callback(violation)
+            except Exception as e:
+                print(f"Violation callback error: {e}")
 
     def _update_steering_effectiveness(self, current_violations: List[HushViolation]):
         """

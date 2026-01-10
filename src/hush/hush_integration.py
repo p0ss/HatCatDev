@@ -166,33 +166,255 @@ class HushedGenerator:
         return hook
 
     def _apply_steering_directives(self, directives: List[SteeringDirective]):
-        """Apply steering directives as forward hooks."""
+        """Apply steering directives as forward hooks.
+
+        Handles:
+        - Simplex pole steering: target_pole specifies direction
+        - Concept contrastive steering: suppress and/or amplify single concept
+        - Field steering: amplify multiple concepts (concepts_to_amplify)
+        """
         # Remove existing hooks
         self._clear_steering_hooks()
 
         layers = self._get_layers()
 
         for directive in directives:
-            # Get steering vector for this directive
-            vector = self.hush_controller.get_steering_vector(
-                directive,
-                self.concept_vectors
+            # Check if this is concept-based steering (single or field)
+            is_concept_steering = (
+                directive.concept_to_suppress or
+                directive.concept_to_amplify or
+                directive.concepts_to_amplify
             )
+            if is_concept_steering:
+                self._apply_concept_steering(directive, layers)
+            else:
+                # Simplex pole steering
+                vector = self.hush_controller.get_steering_vector(
+                    directive,
+                    self.concept_vectors
+                )
 
-            if vector is None:
-                # Try to extract vector if not cached
-                vector = self._extract_concept_vector(directive.simplex_term)
-                if vector is not None:
-                    self.concept_vectors[directive.simplex_term] = vector
+                if vector is None:
+                    # Try to extract vector if not cached
+                    vector = self._extract_concept_vector(directive.simplex_term)
+                    if vector is not None:
+                        self.concept_vectors[directive.simplex_term] = vector
 
-            if vector is None:
-                continue
+                if vector is None:
+                    continue
 
-            # Apply to last layer by default
-            target_layer = layers[-1]
-            hook_fn = self._create_steering_hook(vector, directive.strength)
-            handle = target_layer.register_forward_hook(hook_fn)
-            self.active_hooks.append(handle)
+                # Apply to last layer by default
+                target_layer = layers[-1]
+                hook_fn = self._create_steering_hook(vector, directive.strength)
+                handle = target_layer.register_forward_hook(hook_fn)
+                self.active_hooks.append(handle)
+
+    def _apply_concept_steering(self, directive: SteeringDirective, layers):
+        """Apply concept-based contrastive or field steering.
+
+        Supports layer escalation: when directive.target_layers is specified,
+        steering is applied to those layers. Otherwise uses concept's declared layer.
+        """
+        # Get vectors for concepts to suppress and amplify
+        suppress_vector = None
+        amplify_vectors = []
+
+        if directive.concept_to_suppress:
+            suppress_vector = self._get_concept_vector(directive.concept_to_suppress)
+
+        # Single contrastive concept (backward compat)
+        if directive.concept_to_amplify:
+            vec = self._get_concept_vector(directive.concept_to_amplify)
+            if vec is not None:
+                amplify_vectors.append(vec)
+
+        # Field steering: multiple concepts to amplify
+        if directive.concepts_to_amplify:
+            for concept_name in directive.concepts_to_amplify:
+                vec = self._get_concept_vector(concept_name)
+                if vec is not None:
+                    amplify_vectors.append(vec)
+
+        if suppress_vector is None and not amplify_vectors:
+            return
+
+        # Determine target layers
+        if directive.target_layers:
+            # Use explicitly specified layers (from escalation)
+            target_layer_indices = directive.target_layers
+        else:
+            # Fall back to concept's declared layer or last layer
+            if directive.concept_to_suppress:
+                info = self._get_concept_vector_with_layer(directive.concept_to_suppress)
+                if info is not None:
+                    target_layer_indices = [info[1]]
+                else:
+                    target_layer_indices = [-1]
+            else:
+                target_layer_indices = [-1]
+
+        # Apply steering to each target layer
+        for layer_idx in target_layer_indices:
+            # Handle layer index bounds
+            if layer_idx < 0:
+                layer_idx = len(layers) + layer_idx
+            if layer_idx < 0 or layer_idx >= len(layers):
+                continue  # Skip invalid layer indices
+
+            target_layer = layers[layer_idx]
+            self._register_concept_hook(target_layer, suppress_vector, amplify_vectors, directive)
+
+    def _register_concept_hook(self, target_layer, suppress_vector, amplify_vectors, directive):
+        """Register a steering hook for a specific layer."""
+        if suppress_vector is None and not amplify_vectors:
+            return
+
+        # Create combined steering hook
+        def concept_steering_hook(module, input, output):
+            hidden_states = output[0]
+
+            # Suppress: remove projection onto concept direction
+            if suppress_vector is not None:
+                vec = torch.tensor(suppress_vector, dtype=hidden_states.dtype, device=hidden_states.device)
+                vec = vec / (vec.norm() + 1e-8)  # Normalize
+                projection = (hidden_states @ vec.unsqueeze(-1)) * vec
+                hidden_states = hidden_states - directive.strength * projection
+
+            # Amplify: add projection onto contrastive concept direction(s)
+            # For field steering, average the vectors for a balanced push
+            if amplify_vectors:
+                for amp_vec in amplify_vectors:
+                    vec = torch.tensor(amp_vec, dtype=hidden_states.dtype, device=hidden_states.device)
+                    vec = vec / (vec.norm() + 1e-8)  # Normalize
+                    projection = (hidden_states @ vec.unsqueeze(-1)) * vec
+                    # Divide strength by number of vectors for balanced field steering
+                    field_strength = directive.strength / len(amplify_vectors)
+                    hidden_states = hidden_states + field_strength * projection
+
+            return (hidden_states,)
+
+        handle = target_layer.register_forward_hook(concept_steering_hook)
+        self.active_hooks.append(handle)
+
+    def _get_concept_vector_with_layer(self, concept_name: str) -> Optional[Tuple[np.ndarray, int]]:
+        """Get steering vector and layer index for a concept.
+
+        Returns:
+            Tuple of (vector, layer_idx) or None if concept not found.
+            layer_idx is the model layer where this concept was trained.
+        """
+        # Check cache first (cache stores (vector, layer))
+        cache_key = f"{concept_name}_with_layer"
+        if cache_key in self.concept_vectors:
+            return self.concept_vectors[cache_key]
+
+        # Find the concept in loaded lenses and get its layer
+        layer_idx = -1  # Default to last layer
+        lens = None
+        for key, loaded_lens in self.lens_manager.cache.loaded_lenses.items():
+            if key[0] == concept_name:
+                lens = loaded_lens
+                layer_idx = key[1]  # key is (concept_name, layer)
+                break
+
+        if lens is None:
+            return None
+
+        # Extract vector from lens weights
+        vector = self._extract_vector_from_lens(lens)
+        if vector is None:
+            return None
+
+        # Cache and return
+        result = (vector, layer_idx)
+        self.concept_vectors[cache_key] = result
+        return result
+
+    def _get_concept_vector(self, concept_name: str) -> Optional[np.ndarray]:
+        """Get steering vector for a concept (without layer info).
+
+        Extracts from lens weights or uses cached vector.
+        """
+        # Check cache first
+        if concept_name in self.concept_vectors:
+            return self.concept_vectors[concept_name]
+
+        # Try to extract from lens
+        vector = self._extract_concept_vector_from_lens(concept_name)
+        if vector is not None:
+            self.concept_vectors[concept_name] = vector
+            return vector
+
+        return None
+
+    def _extract_concept_vector_from_lens(self, concept_name: str) -> Optional[np.ndarray]:
+        """Extract concept direction vector from lens weights by concept name."""
+        # Check if lens is loaded
+        lens = None
+        for key, loaded_lens in self.lens_manager.cache.loaded_lenses.items():
+            if key[0] == concept_name:
+                lens = loaded_lens
+                break
+
+        if lens is None:
+            return None
+
+        return self._extract_vector_from_lens(lens)
+
+    def _extract_vector_from_lens(self, lens) -> Optional[np.ndarray]:
+        """Extract concept direction vector from lens weights.
+
+        SimpleMLP architecture (with or without LayerNorm):
+        - If LayerNorm: net.0 = LayerNorm, net.1 = Linear(input_dim, 128)
+        - If no LayerNorm: net.0 = Linear(input_dim, 128)
+
+        The first Linear layer's weight matrix W has shape [128, hidden_dim].
+        We extract the principal direction by computing the mean across output dims,
+        which gives a [hidden_dim] vector representing the concept direction.
+
+        This is architecture-agnostic and handles different lens structures from
+        gpt2, gemma, olmo, phi, qwen, llama, etc.
+        """
+        try:
+            state_dict = lens.state_dict()
+
+            # Find the first Linear layer (2D weight matrix mapping hidden_dim -> hidden)
+            # Try various naming conventions used by different models
+            linear_weight = None
+            for name in ['net.0.weight', 'net.1.weight', 'net.2.weight',
+                         '0.weight', '1.weight', '2.weight',
+                         'linear.weight', 'fc.weight', 'classifier.weight']:
+                if name in state_dict:
+                    param = state_dict[name]
+                    # Linear weight has shape [out_features, in_features]
+                    # LayerNorm weight has shape [normalized_shape] (1D)
+                    if len(param.shape) == 2:
+                        linear_weight = param
+                        break
+
+            if linear_weight is None:
+                return None
+
+            weight = linear_weight.detach().cpu().numpy()
+            # Weight shape is [128, hidden_dim] for SimpleMLP
+            # The concept direction is the principal direction in the input space
+            # that most activates the positive class.
+
+            # Method 1: Mean direction (simple, fast)
+            # This gives the average direction the lens looks for
+            direction = weight.mean(axis=0)
+
+            # Normalize
+            norm = np.linalg.norm(direction)
+            if norm > 1e-8:
+                direction = direction / norm
+
+            return direction
+
+        except Exception as e:
+            print(f"Failed to extract vector from lens: {e}")
+
+        return None
 
     def _clear_steering_hooks(self):
         """Remove all active steering hooks."""
@@ -350,7 +572,15 @@ class HushedGenerator:
                 # Run simplex detection
                 simplex_activations = self.lens_manager.detect_simplexes(hidden_state)
 
-                # Evaluate Hush constraints
+                # Run concept detection to populate lens_scores for HUSH evaluation
+                # This is needed for CONCEPT constraints to work
+                concept_results, _ = self.lens_manager.detect_and_expand(
+                    hidden_state, top_k=20, use_calibration=True
+                )
+                # Store for _record_tick to access
+                self.lens_manager.last_detections = concept_results
+
+                # Evaluate Hush constraints (uses lens_manager.cache.lens_scores)
                 directives = self.hush_controller.evaluate_and_steer(hidden_state)
 
                 # Apply any steering directives
@@ -655,6 +885,7 @@ def create_hushed_generator(
     ush_profile: Optional[SafetyHarnessProfile] = None,
     csh_profile: Optional[SafetyHarnessProfile] = None,
     lens_pack_path: Optional[Path] = None,
+    concept_pack_path: Optional[Path] = None,
     device: str = "cuda",
 ) -> Tuple[HushedGenerator, HushMCPTools]:
     """
@@ -667,6 +898,7 @@ def create_hushed_generator(
         ush_profile: Optional USH profile (uses minimal if not provided)
         csh_profile: Optional CSH profile
         lens_pack_path: Path to lens pack
+        concept_pack_path: Path to concept pack (for auto contrastive selection)
         device: Device to run on
 
     Returns:
@@ -679,6 +911,10 @@ def create_hushed_generator(
         lens_manager=lens_manager,
         lens_pack_path=lens_pack_path,
     )
+
+    # Load concept hierarchy for auto contrastive selection
+    if concept_pack_path:
+        hush_controller.load_concept_hierarchy(concept_pack_path)
 
     # Load profiles
     if ush_profile:

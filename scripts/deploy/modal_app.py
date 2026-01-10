@@ -28,6 +28,8 @@ image = (
         "apt-get install -y nodejs",
         "git lfs install",
     )
+    # Cache buster BEFORE clone to force fresh code: v3
+    .env({"_HATCAT_BUILD": "v3-2026-01-05"})
     # Clone repos (shallow clone, faster)
     .run_commands(
         "git clone --depth 1 https://github.com/p0ss/HatCat.git /app",
@@ -83,8 +85,10 @@ data_volume = modal.Volume.from_name("hatcat-data", create_if_missing=True)
 @app.cls(
     image=image,
     gpu="T4",  # 16GB VRAM
+    memory=32768,  # 32GB system RAM for model loading
     timeout=600,
     scaledown_window=300,  # Scale to zero after 5 min
+    retries=0,  # Don't retry on failure - prevents crash loops burning credits
     volumes={
         "/data": data_volume,
     },
@@ -130,27 +134,9 @@ class HatCat:
         )
 
         print("HatCat backend starting on :8765")
-
-        # Wait for server to be ready (max 60s)
-        import time
-        import urllib.request
-        for i in range(60):
-            try:
-                urllib.request.urlopen("http://localhost:8765/health", timeout=1)
-                print(f"HatCat backend ready after {i+1}s")
-                break
-            except Exception:
-                # Check if process died
-                if self.hatcat_proc.poll() is not None:
-                    output = self.hatcat_proc.stdout.read().decode() if self.hatcat_proc.stdout else ""
-                    print(f"HatCat backend FAILED to start! Exit code: {self.hatcat_proc.returncode}")
-                    print(f"Output: {output[:2000]}")
-                    raise RuntimeError(f"HatCat failed to start: {output[:500]}")
-                time.sleep(1)
-        else:
-            print("WARNING: HatCat backend didn't respond in 60s, continuing anyway...")
-
-        print("OpenWebUI will connect to local HatCat")
+        print("Backend loads models async - first request may take 1-2 min")
+        # Note: Don't wait here - model loading takes too long for Modal startup timeout
+        # OpenWebUI will retry connections to backend automatically
 
     @modal.exit()
     def shutdown(self):
@@ -183,7 +169,10 @@ def main():
 HatCat Modal Deployment (Complete Stack)
 =========================================
 
-Deploy:
+TEST FIRST (ephemeral, won't crash-loop):
+    modal run scripts/deploy/modal_app.py
+
+Then DEPLOY (only after testing works):
     modal deploy scripts/deploy/modal_app.py
 
 Access:
@@ -193,4 +182,5 @@ First user to sign up becomes admin.
 OpenWebUI connects to HatCat backend automatically.
 
 Cost: ~$0.59/hr when active, $0 when idle.
+WARNING: Crashed deploys retry forever - always test with 'modal run' first!
 """)
