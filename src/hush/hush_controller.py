@@ -740,16 +740,29 @@ class HushController:
                 continue
 
             # Find in concept_metadata to get correct layer
+            found_in_metadata = False
             if hasattr(self.lens_manager, 'concept_metadata'):
                 for (concept_name, layer) in self.lens_manager.concept_metadata.keys():
                     if concept_name == term:
                         concepts_to_load.append((concept_name, layer))
                         print(f"HUSH: Will load concept {term} at layer {layer}")
+                        found_in_metadata = True
                         break
-                else:
-                    # Not found in metadata - maybe a different naming convention
-                    missing.append(term)
-            else:
+
+            # If not in metadata, scan lens pack directory for the concept
+            if not found_in_metadata and hasattr(self.lens_manager, 'lenses_dir'):
+                lenses_dir = self.lens_manager.lenses_dir
+                for layer in range(10):  # Check layers 0-9
+                    layer_dir = lenses_dir / f"layer{layer}"
+                    if layer_dir.exists():
+                        lens_path = layer_dir / f"{term}.pt"
+                        if lens_path.exists():
+                            concepts_to_load.append((term, layer))
+                            print(f"HUSH: Found lens for {term} at layer {layer} (not in metadata)")
+                            found_in_metadata = True  # Mark as found
+                            break
+
+            if not found_in_metadata:
                 missing.append(term)
 
         # Load all required concepts using lens_manager's loading mechanism
