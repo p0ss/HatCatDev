@@ -445,7 +445,7 @@ class HushedGenerator:
         # Get concept activations (top-k from lens manager)
         concept_activations = {}
         if hasattr(self.lens_manager, 'last_detections'):
-            for name, prob, _, layer in self.lens_manager.last_detections[:10]:
+            for name, prob, layer in self.lens_manager.last_detections[:10]:
                 concept_activations[f"{name}_L{layer}"] = float(prob)
 
         # Get simplex deviations
