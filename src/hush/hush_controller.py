@@ -776,13 +776,32 @@ class HushController:
         # Load all required concepts using lens_manager's loading mechanism
         if concepts_to_load and hasattr(self.lens_manager, '_load_concepts'):
             try:
-                self.lens_manager._load_concepts(concepts_to_load, reason="hush_constraint")
+                # Debug: verify metadata was added
+                for key in concepts_to_load:
+                    if key in self.lens_manager.concept_metadata:
+                        md = self.lens_manager.concept_metadata[key]
+                        print(f"HUSH DEBUG: Metadata for {key}: path={md.activation_lens_path}")
+                    else:
+                        print(f"HUSH DEBUG: No metadata for {key}!")
+
+                loaded = self.lens_manager._load_concepts(concepts_to_load, reason="hush_constraint")
+                print(f"HUSH DEBUG: _load_concepts returned: {loaded}")
+
+                # Verify lenses are loaded
+                for key in concepts_to_load:
+                    if key in self.lens_manager.cache.loaded_activation_lenses:
+                        print(f"HUSH DEBUG: Lens {key} is in cache")
+                    else:
+                        print(f"HUSH DEBUG: Lens {key} NOT in cache!")
+
                 # Pin them so they won't be evicted
                 for key in concepts_to_load:
                     self.lens_manager.cache.base_layer_lenses.add(key)
                 print(f"HUSH: Loaded {len(concepts_to_load)} concept lenses for constraints")
             except Exception as e:
                 print(f"Warning: Failed to load concept lenses: {e}")
+                import traceback
+                traceback.print_exc()
                 missing.extend([name for name, _ in concepts_to_load])
 
         return missing
