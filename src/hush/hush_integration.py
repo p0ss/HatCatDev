@@ -55,6 +55,13 @@ class WorldTick:
     token_id: Optional[int] = None
     token_text: Optional[str] = None
 
+    # Significance scoring (distinguishes decision tokens from filler)
+    # See: "Dead Salmons of AI Interpretability" - uncertainty quantification
+    significance: float = 0.0  # 0-1 score, high = model actively deciding
+    entropy_by_layer: Dict[str, float] = field(default_factory=dict)  # early/mid/late
+    activation_delta: float = 0.0  # Hidden state change magnitude
+    is_filler: bool = False  # Hard classification for filtering
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             'tick_id': self.tick_id,
@@ -67,6 +74,10 @@ class WorldTick:
             'steering_applied': self.steering_applied,
             'token_id': self.token_id,
             'token_text': self.token_text,
+            'significance': self.significance,
+            'entropy_by_layer': self.entropy_by_layer,
+            'activation_delta': self.activation_delta,
+            'is_filler': self.is_filler,
         }
 
 
@@ -212,8 +223,12 @@ class HushedGenerator:
     def _apply_concept_steering(self, directive: SteeringDirective, layers):
         """Apply concept-based contrastive or field steering.
 
+        IMPORTANT: Lens pack "layers" are hierarchical abstraction levels, NOT model layers.
+        Steering must target actual transformer model layers. Mid-to-late layers (50-75% depth)
+        are most effective per behavioral steering experiments.
+
         Supports layer escalation: when directive.target_layers is specified,
-        steering is applied to those layers. Otherwise uses concept's declared layer.
+        steering is applied to those model layers.
         """
         # Get vectors for concepts to suppress and amplify
         suppress_vector = None
@@ -238,60 +253,85 @@ class HushedGenerator:
         if suppress_vector is None and not amplify_vectors:
             return
 
-        # Determine target layers
+        # Determine target MODEL layers (not hierarchical layers!)
+        n_layers = len(layers)
         if directive.target_layers:
             # Use explicitly specified layers (from escalation)
             target_layer_indices = directive.target_layers
         else:
-            # Fall back to concept's declared layer or last layer
-            if directive.concept_to_suppress:
-                info = self._get_concept_vector_with_layer(directive.concept_to_suppress)
-                if info is not None:
-                    target_layer_indices = [info[1]]
-                else:
-                    target_layer_indices = [-1]
-            else:
-                target_layer_indices = [-1]
+            # Default: steer at mid-to-late model layers (50-75% depth)
+            # This range is most effective per behavioral steering experiments
+            mid_layer = n_layers // 2
+            late_layer = (3 * n_layers) // 4
+            target_layer_indices = [mid_layer, late_layer]
 
         # Apply steering to each target layer
         for layer_idx in target_layer_indices:
             # Handle layer index bounds
             if layer_idx < 0:
-                layer_idx = len(layers) + layer_idx
-            if layer_idx < 0 or layer_idx >= len(layers):
+                layer_idx = n_layers + layer_idx
+            if layer_idx < 0 or layer_idx >= n_layers:
                 continue  # Skip invalid layer indices
 
             target_layer = layers[layer_idx]
             self._register_concept_hook(target_layer, suppress_vector, amplify_vectors, directive)
 
     def _register_concept_hook(self, target_layer, suppress_vector, amplify_vectors, directive):
-        """Register a steering hook for a specific layer."""
+        """Register a steering hook for a specific layer.
+
+        Uses additive steering with hidden norm scaling (same as hooks.py):
+            steered = hidden + strength * 0.1 * ||hidden|| * direction
+
+        This is more effective than projection-based steering because:
+        - Scales with hidden state magnitude for consistent effect
+        - Additive rather than subtractive for cleaner gradient flow
+        - Matches the validated approach from behavioral steering experiments
+        """
         if suppress_vector is None and not amplify_vectors:
             return
 
+        # Pre-convert vectors to tensors
+        suppress_tensor = None
+        if suppress_vector is not None:
+            suppress_tensor = torch.tensor(suppress_vector, dtype=torch.float32)
+            suppress_tensor = suppress_tensor / (suppress_tensor.norm() + 1e-8)
+
+        amplify_tensors = []
+        for amp_vec in (amplify_vectors or []):
+            t = torch.tensor(amp_vec, dtype=torch.float32)
+            t = t / (t.norm() + 1e-8)
+            amplify_tensors.append(t)
+
         # Create combined steering hook
         def concept_steering_hook(module, input, output):
-            hidden_states = output[0]
+            # Handle different output formats
+            is_tuple = isinstance(output, tuple)
+            if is_tuple:
+                hidden_states = output[0]
+            else:
+                hidden_states = output
 
-            # Suppress: remove projection onto concept direction
-            if suppress_vector is not None:
-                vec = torch.tensor(suppress_vector, dtype=hidden_states.dtype, device=hidden_states.device)
-                vec = vec / (vec.norm() + 1e-8)  # Normalize
-                projection = (hidden_states @ vec.unsqueeze(-1)) * vec
-                hidden_states = hidden_states - directive.strength * projection
+            # Compute hidden norm for scaling
+            hidden_norm = torch.norm(hidden_states, dim=-1, keepdim=True)
 
-            # Amplify: add projection onto contrastive concept direction(s)
-            # For field steering, average the vectors for a balanced push
-            if amplify_vectors:
-                for amp_vec in amplify_vectors:
-                    vec = torch.tensor(amp_vec, dtype=hidden_states.dtype, device=hidden_states.device)
-                    vec = vec / (vec.norm() + 1e-8)  # Normalize
-                    projection = (hidden_states @ vec.unsqueeze(-1)) * vec
-                    # Divide strength by number of vectors for balanced field steering
-                    field_strength = directive.strength / len(amplify_vectors)
-                    hidden_states = hidden_states + field_strength * projection
+            # Suppress: steer AWAY from concept (negative direction)
+            # Uses additive formula: hidden - strength * 0.1 * ||hidden|| * vec
+            if suppress_tensor is not None:
+                vec = suppress_tensor.to(dtype=hidden_states.dtype, device=hidden_states.device)
+                hidden_states = hidden_states - (directive.strength * 0.1) * hidden_norm * vec
 
-            return (hidden_states,)
+            # Amplify: steer TOWARD contrastive concept(s) (positive direction)
+            # For field steering, divide strength across vectors
+            if amplify_tensors:
+                field_strength = directive.strength / len(amplify_tensors)
+                for amp_tensor in amplify_tensors:
+                    vec = amp_tensor.to(dtype=hidden_states.dtype, device=hidden_states.device)
+                    hidden_states = hidden_states + (field_strength * 0.1) * hidden_norm * vec
+
+            # Return in same format
+            if is_tuple:
+                return (hidden_states,) + output[1:]
+            return hidden_states
 
         handle = target_layer.register_forward_hook(concept_steering_hook)
         self.active_hooks.append(handle)
@@ -362,54 +402,71 @@ class HushedGenerator:
         return self._extract_vector_from_lens(lens)
 
     def _extract_vector_from_lens(self, lens) -> Optional[np.ndarray]:
-        """Extract concept direction vector from lens weights.
+        """Extract importance-weighted concept direction vector from lens weights.
 
-        SimpleMLP architecture (with or without LayerNorm):
-        - If LayerNorm: net.0 = LayerNorm, net.1 = Linear(input_dim, 128)
-        - If no LayerNorm: net.0 = Linear(input_dim, 128)
+        Uses the same algorithm as extract_importance_weighted_vector() in hooks.py:
+        - Computes feature importance from downstream layer weights
+        - Weights first-layer directions by their importance to classification
+        - Only uses features with positive importance (increase classification score)
 
-        The first Linear layer's weight matrix W has shape [128, hidden_dim].
-        We extract the principal direction by computing the mean across output dims,
-        which gives a [hidden_dim] vector representing the concept direction.
+        This is much more accurate than naive weight averaging because it only
+        uses features that actually contribute to detecting the concept.
 
-        This is architecture-agnostic and handles different lens structures from
-        gpt2, gemma, olmo, phi, qwen, llama, etc.
+        MLP architecture: Linear(input→128) → ReLU → Dropout → Linear(128→64) → ReLU → Dropout → Linear(64→1)
         """
         try:
             state_dict = lens.state_dict()
 
-            # Find the first Linear layer (2D weight matrix mapping hidden_dim -> hidden)
-            # Try various naming conventions used by different models
-            linear_weight = None
-            for name in ['net.0.weight', 'net.1.weight', 'net.2.weight',
-                         '0.weight', '1.weight', '2.weight',
-                         'linear.weight', 'fc.weight', 'classifier.weight']:
-                if name in state_dict:
-                    param = state_dict[name]
-                    # Linear weight has shape [out_features, in_features]
-                    # LayerNorm weight has shape [normalized_shape] (1D)
-                    if len(param.shape) == 2:
-                        linear_weight = param
+            # Try to get all three layer weights for importance computation
+            W1 = W2 = W3 = None
+
+            # First layer: [128, hidden_dim] - feature directions
+            for name in ['net.0.weight', 'net.1.weight']:
+                if name in state_dict and len(state_dict[name].shape) == 2:
+                    if state_dict[name].shape[0] == 128:  # First hidden layer
+                        W1 = state_dict[name]
                         break
 
-            if linear_weight is None:
-                return None
+            # Second layer: [64, 128]
+            for name in ['net.3.weight', 'net.4.weight']:
+                if name in state_dict and len(state_dict[name].shape) == 2:
+                    if state_dict[name].shape == (64, 128):
+                        W2 = state_dict[name]
+                        break
 
-            weight = linear_weight.detach().cpu().numpy()
-            # Weight shape is [128, hidden_dim] for SimpleMLP
-            # The concept direction is the principal direction in the input space
-            # that most activates the positive class.
+            # Output layer: [1, 64]
+            for name in ['net.6.weight', 'net.7.weight']:
+                if name in state_dict and len(state_dict[name].shape) == 2:
+                    if state_dict[name].shape == (1, 64):
+                        W3 = state_dict[name]
+                        break
 
-            # Method 1: Mean direction (simple, fast)
-            # This gives the average direction the lens looks for
-            direction = weight.mean(axis=0)
+            if W1 is not None and W2 is not None and W3 is not None:
+                # Importance-weighted extraction (preferred)
+                # importance[i] = how much feature i affects final classification
+                importance = (W3 @ W2).squeeze()  # [128]
 
-            # Normalize
-            norm = np.linalg.norm(direction)
-            if norm > 1e-8:
-                direction = direction / norm
+                # Only use features that INCREASE classification score
+                importance = importance.clamp(min=0)
 
-            return direction
+                # Weight feature directions by importance and sum
+                steering = (importance.unsqueeze(1) * W1).sum(dim=0)  # [hidden_dim]
+
+                # Normalize to unit vector
+                steering = steering / (steering.norm() + 1e-8)
+
+                return steering.detach().cpu().numpy()
+
+            elif W1 is not None:
+                # Fallback: simple mean (less accurate but works for non-standard architectures)
+                weight = W1.detach().cpu().numpy()
+                direction = weight.mean(axis=0)
+                norm = np.linalg.norm(direction)
+                if norm > 1e-8:
+                    direction = direction / norm
+                return direction
+
+            return None
 
         except Exception as e:
             print(f"Failed to extract vector from lens: {e}")
@@ -554,19 +611,29 @@ class HushedGenerator:
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         generated_ids = inputs.input_ids
         ticks = []
+        past_key_values = None  # KV cache for O(n) instead of O(n²)
 
         try:
             for step in range(max_new_tokens):
-                # Forward pass with hidden states
+                # Forward pass with hidden states and KV cache
                 with torch.no_grad():
+                    # First step: process full prompt
+                    # Subsequent steps: only process new token with cached KV
+                    if past_key_values is None:
+                        model_inputs = generated_ids
+                    else:
+                        model_inputs = generated_ids[:, -1:]  # Only new token
+
                     outputs = self.model(
-                        generated_ids,
+                        model_inputs,
+                        past_key_values=past_key_values,
                         output_hidden_states=True,
                         return_dict=True,
-                        use_cache=False,
+                        use_cache=True,
                     )
+                    past_key_values = outputs.past_key_values
 
-                # Get hidden state from last layer
+                # Get hidden state from last layer (last position only)
                 hidden_state = outputs.hidden_states[-1][0, -1, :]
 
                 # Run simplex detection
@@ -583,7 +650,7 @@ class HushedGenerator:
                 # Evaluate Hush constraints (uses lens_manager.cache.lens_scores)
                 directives = self.hush_controller.evaluate_and_steer(hidden_state)
 
-                # Apply any steering directives
+                # Apply any steering directives (affects next token generation)
                 if directives:
                     self._apply_steering_directives(directives)
 
@@ -627,7 +694,7 @@ class HushedGenerator:
                 if stream:
                     yield token_text, tick
 
-                # Append token
+                # Append token to generated_ids for tracking
                 generated_ids = torch.cat(
                     [generated_ids, next_token_id.unsqueeze(0)],
                     dim=-1
@@ -637,9 +704,10 @@ class HushedGenerator:
                 if next_token_id.item() == self.tokenizer.eos_token_id:
                     break
 
-                # Clear outputs to save memory
+                # Clear outputs to save memory (but keep past_key_values!)
                 del outputs
-                torch.cuda.empty_cache()
+                if step % 10 == 0:  # Less frequent cache clearing
+                    torch.cuda.empty_cache()
 
         finally:
             self._clear_steering_hooks()
