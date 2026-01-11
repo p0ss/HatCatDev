@@ -21,7 +21,12 @@ import torch
 
 @dataclass
 class ProdSigConfig:
-    """Configuration for production significance scoring."""
+    """Configuration for production significance scoring.
+
+    Defaults calibrated from gemma-3-4b_first-light-v1 lens pack:
+    - Noise floor ~0.60 (median gen_mean across 7696 concepts)
+    - Most concepts fire <5% of the time during generation
+    """
 
     # Entropy computation
     temp: float = 1.0  # softmax temperature for entropy
@@ -33,10 +38,16 @@ class ProdSigConfig:
     w_max_above: float = 1.0
     w_entropy_drop: float = 0.5  # Weight for layer-wise entropy cascade
 
-    # Thresholding (used only if you want a hard filler mask)
-    delta_thresh: float = 0.0  # set after calibration
-    entropy_thresh: float = 0.0  # set after calibration
-    max_above_thresh: float = 0.0  # set after calibration
+    # Thresholding (calibrated from first-light lens pack)
+    # delta_thresh: tokens with hidden state delta below this are likely filler
+    delta_thresh: float = 0.1  # conservative - needs per-model calibration
+    # entropy_thresh: high entropy = diffuse activations = filler
+    entropy_thresh: float = 2.0  # ~log(k) for k=8 top concepts
+    # max_above_thresh: activation must exceed noise floor by this margin
+    max_above_thresh: float = 0.05  # 5% above noise floor
+
+    # Default noise floor from calibration (median gen_mean = 0.6067)
+    default_noise_floor: float = 0.60
 
     # Layer-aware settings
     use_layer_cascade: bool = True
