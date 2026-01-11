@@ -141,25 +141,62 @@ This will:
 
 ### Calibration Cycle
 
-For iterative calibration until convergence:
+For full iterative calibration including cross-activation measurement and validation:
 
 ```bash
 python -m src.map.training.calibration.cycle \
     --lens-pack lens_packs/your-pack \
     --concept-pack concept_packs/your-pack \
     --model your-model \
-    --mode full \
     --max-cycles 10 \
-    --threshold 1.0
+    --convergence-threshold 0.05
 ```
 
-This runs analyze → finetune → analyze cycles until the improvement rate drops below threshold.
+The cycle runs these phases:
+
+1. **Analysis → Finetune cycles**: Iterate until convergence or max cycles
+2. **Cross-activation calibration**: Measure per-concept noise floors for normalized scoring
+3. **Validation**: Compute quality metrics (diagonal rank, Jaccard stability)
+
+Output files:
+- `calibration_analysis_cycle{N}.json` - Analysis results per cycle
+- `calibration_finetune_cycle{N}.json` - Fine-tune report per cycle
+- `calibration.json` - Cross-activation data with validation metrics merged
+- `validation.json` - Standalone validation results
+- `calibration_summary.json` - Overall cycle summary
+
+CLI options:
+- `--no-cross-activation`: Skip cross-activation calibration
+- `--no-validation`: Skip validation step
+- `--fast-mode`: Use prompt-only analysis (faster but less accurate)
+- `--production`: Test against full DynamicLensManager population
+- `--cross-activation-samples N`: Samples per concept (default: 5)
+
+## Cross-Activation Calibration
+
+After the analysis/finetune cycles complete, cross-activation calibration measures how each lens responds to prompts for OTHER concepts. This produces per-concept statistics:
+
+- **self_mean/self_std**: Mean/std activation on the concept's own prompts
+- **cross_mean/cross_std**: Mean/std activation on other concepts' prompts
+- **cross_fire_rate**: Fraction of cross-concept probes where lens fires > threshold
+- **gen_fire_rate**: Fraction of generation probes where lens fires
+
+These enable **normalized scoring** at inference: raw activations are transformed so 1.0 = true signal, 0.5 = noise floor, 0.0 = below floor. Concepts without calibration data get a conservative default (confidence=0) that pulls scores toward 0.5.
+
+## Validation Metrics
+
+The validation step computes quality metrics stored in `calibration.json`:
+
+- **diagonal_in_top_k_rate**: When probing concept X, how often does lens X appear in top-k?
+- **avg_diagonal_rank**: Average rank of the target lens when probing its concept
+- **topk_jaccard_mean/std**: Jaccard similarity between top-k sets across probes (stability)
+- **stable_lens_count/unstable_lens_count**: Lenses classified by coefficient of variation
 
 ## Convergence Criteria
 
 Calibration is complete when:
 - All three criteria pass rates > 90%
-- Improvement between cycles < 1%
+- Improvement between cycles < convergence threshold (default 5%)
 - No concepts failing all three criteria
 
 ## Output Format
@@ -209,9 +246,12 @@ Calibration is complete when:
 
 ## Implementation Files
 
-- `src/training/calibration/batched_analysis.py` - Analysis with triple criteria
-- `src/training/calibration/finetune.py` - Contrastive fine-tuning
-- `src/training/calibration/cycle.py` - Iterative calibration cycles
+- `src/map/training/calibration/batched_analysis.py` - Analysis with triple criteria
+- `src/map/training/calibration/finetune.py` - Contrastive fine-tuning
+- `src/map/training/calibration/cycle.py` - Iterative calibration cycles
+- `src/map/training/calibration/cross_activation.py` - Cross-activation calibration
+- `src/map/training/calibration/validation.py` - Quality metrics validation
+- `src/map/training/calibration/activation_cache.py` - Activation caching for efficiency
 
 ## Future Work
 
