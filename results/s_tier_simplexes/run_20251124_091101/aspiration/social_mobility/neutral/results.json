@@ -1,0 +1,10 @@
+{
+  "activation": {
+    "samples": 30,
+    "iterations": 50,
+    "graduated": false
+  },
+  "text": null,
+  "total_iterations": 50,
+  "total_time": 1.6274981498718262
+}

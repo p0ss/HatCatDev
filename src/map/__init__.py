@@ -10,6 +10,7 @@ Submodules:
 - map.meld: Meld operations (ontology building)
 - map.training: Lens training infrastructure
 - map.data: Version manifests, concept embeddings
+- map.harness: Graft testing harness
 """
 
 # Re-export from registry submodule
@@ -57,6 +58,18 @@ from .data import (
     ClassifierEntry,
 )
 
+# Re-export key harness items
+from .harness import (
+    GraftTester,
+    HarnessConfig,
+    TargetModel,
+    JudgeModel,
+    ConceptEvaluator,
+    HarnessReporter,
+    JudgeCalibrator,
+    MeldDesigner,
+)
+
 __all__ = [
     # Registry
     'PackRegistry',
@@ -88,4 +101,13 @@ __all__ = [
     'LensManifest',
     'LensEntry',
     'ClassifierEntry',
+    # Harness
+    'GraftTester',
+    'HarnessConfig',
+    'TargetModel',
+    'JudgeModel',
+    'ConceptEvaluator',
+    'HarnessReporter',
+    'JudgeCalibrator',
+    'MeldDesigner',
 ]
