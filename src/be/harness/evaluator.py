@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Iterator
 
-from ..registry import ConceptPack, Concept, load_concept_pack
+from src.map.registry import ConceptPack, Concept, load_concept_pack
 from .config import HarnessConfig
 from .models import TargetModel, JudgeModel, JudgeScore
 

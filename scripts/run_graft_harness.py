@@ -25,7 +25,7 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.map.harness import (
+from src.be.harness import (
     GraftTester,
     HarnessConfig,
     JudgeCalibrator,
@@ -142,6 +142,13 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--graft-mode",
+        choices=["soft", "hard"],
+        default="soft",
+        help="Graft mode: 'soft' (bud, reversible) or 'hard' (scion, permanent). Default: soft",
+    )
+
+    parser.add_argument(
         "--no-calibration",
         action="store_true",
         help="Skip judge calibration",
@@ -171,6 +178,7 @@ def run_full_test(config: HarnessConfig, args):
     print("\n" + "=" * 60)
     print("GRAFT TEST SUMMARY")
     print("=" * 60)
+    print(f"Graft Mode: {config.graft_mode.upper()} ({'bud/reversible' if config.graft_mode == 'soft' else 'scion/permanent'})")
     print(f"Concepts Evaluated: {report.baseline_report['summary']['concepts_evaluated']}")
     print(f"Known: {report.baseline_report['summary']['known']}")
     print(f"Unknown: {report.baseline_report['summary']['unknown']}")
@@ -270,9 +278,11 @@ def run_calibration(config: HarnessConfig, args):
     print(f"Failed: {report.failed}")
     print(f"Accuracy: {report.accuracy:.1%}")
     print("-" * 60)
-    print("Accuracy by Expected Bucket:")
-    for bucket, acc in report.accuracy_by_bucket.items():
-        print(f"  {bucket}: {acc:.1%}")
+    print("Confusion Matrix:")
+    print(f"  True Positives:  {report.true_positives} (correctly accepted correct answers)")
+    print(f"  True Negatives:  {report.true_negatives} (correctly rejected wrong answers)")
+    print(f"  False Positives: {report.false_positives} (wrongly accepted wrong answers)")
+    print(f"  False Negatives: {report.false_negatives} (wrongly rejected correct answers)")
     print("-" * 60)
     print(f"Calibrated: {'YES' if report.is_calibrated else 'NO'}")
     print(f"Recommendation: {report.recommendation}")
@@ -283,9 +293,14 @@ def run_calibration(config: HarnessConfig, args):
     if failed:
         print("\nFailed Cases:")
         for r in failed:
-            print(f"  - {r.case.concept}: expected {r.case.expected_bucket}, "
-                  f"got {r.actual_bucket} ({r.actual_score:.1f})")
-            print(f"    Description: {r.case.description}")
+            expected = "CORRECT" if r.case.should_pass else "INCORRECT"
+            got = "CORRECT" if r.judge_verdict else "INCORRECT"
+            print(f"  - Q: {r.case.question}")
+            print(f"    Correct answer: {r.case.correct_answer}")
+            print(f"    Test response: {r.case.test_response}")
+            print(f"    Expected: {expected}, Judge said: {got}")
+            print(f"    Judge's reasoning: {r.reasoning}")
+            print()
 
     # Save report
     output_dir = config.output_dir
@@ -347,6 +362,7 @@ def main():
         judge_dtype=args.judge_dtype,
         knowledge_threshold=args.threshold,
         layers_to_graft=args.layers,
+        graft_mode=args.graft_mode,
     )
 
     # Run requested mode

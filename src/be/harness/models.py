@@ -13,7 +13,7 @@ from typing import Dict, List, Optional, Tuple, Any
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from ..graft import Scion, apply_scion, revert_scion
+from src.map.graft import Scion, apply_scion, revert_scion, Bud, BuddedModel
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +65,10 @@ class TargetModel:
 
         # Track applied scions for reversion
         self._applied_scions: List[Scion] = []
+
+        # Soft graft support (BuddedModel wrapper)
+        self._budded_model: Optional[BuddedModel] = None
+        self._active_buds: Dict[str, Bud] = {}
 
         logger.info(
             f"Target model loaded: {self.num_layers} layers, "
@@ -158,6 +162,73 @@ class TargetModel:
         while self._applied_scions:
             self.revert_scion()
 
+    # ============ Soft Graft (Bud) Methods ============
+
+    def _ensure_budded_model(self) -> BuddedModel:
+        """Ensure BuddedModel wrapper is initialized."""
+        if self._budded_model is None:
+            self._budded_model = BuddedModel(
+                self.model,
+                self.tokenizer,
+                device=self.device,
+            )
+        return self._budded_model
+
+    def apply_bud(self, bud: Bud, strength: float = 1.0) -> str:
+        """Apply a soft graft (bud) to the model.
+
+        Returns the bud ID for later deactivation.
+        """
+        budded = self._ensure_budded_model()
+        budded.add_bud(bud)
+        budded.activate_bud(bud.bud_id, strength=strength)
+        self._active_buds[bud.bud_id] = bud
+        logger.info(f"Applied bud: {bud.bud_id} (strength={strength})")
+        return bud.bud_id
+
+    def deactivate_bud(self, bud_id: str) -> None:
+        """Deactivate a specific bud."""
+        if self._budded_model is None:
+            return
+        self._budded_model.deactivate_bud(bud_id)
+        if bud_id in self._active_buds:
+            del self._active_buds[bud_id]
+        logger.info(f"Deactivated bud: {bud_id}")
+
+    def deactivate_all_buds(self) -> None:
+        """Deactivate all buds."""
+        if self._budded_model is None:
+            return
+        self._budded_model.deactivate_all()
+        self._active_buds.clear()
+        logger.info("Deactivated all buds")
+
+    def generate_with_buds(
+        self,
+        prompt: str,
+        max_new_tokens: int = 100,
+        temperature: float = 0.7,
+    ) -> GenerationResult:
+        """Generate using BuddedModel (with active buds)."""
+        if self._budded_model is None or not self._active_buds:
+            return self.generate(prompt, max_new_tokens, temperature)
+
+        text = self._budded_model.generate(
+            prompt,
+            max_new_tokens=max_new_tokens,
+        )
+
+        # Estimate tokens (BuddedModel doesn't return token counts)
+        inputs = self.tokenizer(prompt, return_tensors="pt")
+        input_tokens = inputs.input_ids.shape[1]
+        output_tokens = len(self.tokenizer.encode(text))
+
+        return GenerationResult(
+            text=text.strip(),
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+        )
+
 
 @dataclass
 class JudgeScore:
@@ -209,29 +280,59 @@ class JudgeModel:
         self,
         prompt: str,
         max_new_tokens: int = 200,
-        temperature: float = 0.3,
+        temperature: float = 0.0,
+        do_sample: bool = False,
     ) -> str:
-        """Internal generation method."""
+        """Internal generation method.
+
+        Uses greedy decoding by default for reliable structured output.
+        Applies chat template for instruction-tuned models.
+        """
+        # Use chat template if available (for instruction-tuned models)
+        if hasattr(self.tokenizer, 'apply_chat_template'):
+            messages = [{"role": "user", "content": prompt}]
+            formatted_prompt = self.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+            print(f"    [PROMPT] {repr(formatted_prompt[:200])}")
+        else:
+            formatted_prompt = prompt
+
         inputs = self.tokenizer(
-            prompt,
+            formatted_prompt,
             return_tensors="pt",
-            padding=True,
             truncation=True,
             max_length=2048,
         ).to(self.model.device)
 
+        print(f"    [INPUT] attention_mask sum: {inputs.attention_mask.sum().item()}, shape: {inputs.input_ids.shape}")
+
         with torch.inference_mode():
-            outputs = self.model.generate(
-                **inputs,
-                max_new_tokens=max_new_tokens,
-                temperature=temperature,
-                do_sample=True,
-                pad_token_id=self.tokenizer.pad_token_id,
-            )
+            generate_kwargs = {
+                "input_ids": inputs.input_ids,
+                "attention_mask": inputs.attention_mask,
+                "max_new_tokens": max_new_tokens,
+                "pad_token_id": self.tokenizer.pad_token_id,
+                "eos_token_id": self.tokenizer.eos_token_id,
+                "do_sample": False,
+            }
+
+            outputs = self.model.generate(**generate_kwargs)
 
         input_len = inputs.input_ids.shape[1]
+        output_len = outputs[0].shape[0]
         generated_ids = outputs[0][input_len:]
-        return self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+
+        # Debug: show what we got
+        raw_decoded = self.tokenizer.decode(generated_ids, skip_special_tokens=False)
+        clean_decoded = self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+        print(f"    [GEN] input_len={input_len}, output_len={output_len}, generated={output_len - input_len} tokens")
+        print(f"    [GEN] raw: {repr(raw_decoded[:100])}")
+        print(f"    [GEN] clean: {repr(clean_decoded[:100])}")
+
+        return clean_decoded
 
     def _parse_score_response(self, response: str) -> Tuple[float, str]:
         """Parse JSON score from response."""

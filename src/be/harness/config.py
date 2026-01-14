@@ -35,6 +35,7 @@ class HarnessConfig:
     scion_epochs: int = 3
     scion_learning_rate: float = 1e-4
     scion_batch_size: int = 4
+    graft_mode: str = "soft"  # "soft" (bud) or "hard" (scion)
 
     # Generation settings
     max_response_tokens: int = 100
@@ -70,6 +71,7 @@ class HarnessConfig:
             "scion_epochs": self.scion_epochs,
             "scion_learning_rate": self.scion_learning_rate,
             "scion_batch_size": self.scion_batch_size,
+            "graft_mode": self.graft_mode,
             "max_response_tokens": self.max_response_tokens,
             "temperature": self.temperature,
             "judge_max_retries": self.judge_max_retries,

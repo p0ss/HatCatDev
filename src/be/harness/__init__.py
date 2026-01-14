@@ -1,11 +1,14 @@
 """
 Graft Testing Harness
 
-A test harness for validating that grafting enables small models to learn new concepts.
+Test harness for validating that grafting enables models to learn new concepts.
 Uses a judge model to evaluate a target model's concept knowledge before and after grafting.
 
+Graft infrastructure (Scion, Bud) lives in MAP since it operates on clefts/lenses.
+This module provides the evaluation harness for testing graft effectiveness.
+
 Usage:
-    from src.map.harness import GraftTester, HarnessConfig
+    from src.be.harness import GraftTester, HarnessConfig
 
     config = HarnessConfig(
         target_model_id="allenai/OLMo-1B",

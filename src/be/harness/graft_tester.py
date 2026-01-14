@@ -13,8 +13,8 @@ from typing import Dict, List, Optional, Tuple
 
 import torch
 
-from ..registry import Concept, load_concept_pack
-from ..graft import Scion, ScionConfig, ScionTrainer, Cleft, CleftRegion, merge_clefts
+from src.map.registry import Concept, load_concept_pack
+from src.map.graft import Scion, ScionConfig, ScionTrainer, Cleft, CleftRegion, merge_clefts, Bud, BuddedModel
 from .config import HarnessConfig
 from .models import TargetModel, JudgeModel
 from .evaluator import ConceptEvaluator, EvaluationResult
@@ -30,6 +30,7 @@ class GraftResult:
     """Result of grafting a single concept."""
     concept_id: str
     concept_term: str
+    graft_mode: str  # "soft" or "hard"
 
     # Pre-graft evaluation
     pre_score: float
@@ -41,6 +42,7 @@ class GraftResult:
     n_positive_examples: int
     n_negative_examples: int
     scion_id: Optional[str]
+    bud_id: Optional[str]
     training_loss: Optional[float]
 
     # Post-graft evaluation
@@ -56,6 +58,7 @@ class GraftResult:
         return {
             "concept_id": self.concept_id,
             "concept_term": self.concept_term,
+            "graft_mode": self.graft_mode,
             "pre_score": self.pre_score,
             "pre_knew": self.pre_knew,
             "pre_response": self.pre_response,
@@ -63,6 +66,7 @@ class GraftResult:
             "n_positive_examples": self.n_positive_examples,
             "n_negative_examples": self.n_negative_examples,
             "scion_id": self.scion_id,
+            "bud_id": self.bud_id,
             "training_loss": self.training_loss,
             "post_score": self.post_score,
             "post_knew": self.post_knew,
@@ -295,6 +299,7 @@ class GraftTester:
         self,
         concept: Concept,
         pre_result: EvaluationResult,
+        mode: Optional[str] = None,
     ) -> GraftResult:
         """
         Graft a single concept and measure improvement.
@@ -302,10 +307,13 @@ class GraftTester:
         Args:
             concept: The concept to graft.
             pre_result: Pre-graft evaluation result.
+            mode: "soft" (bud) or "hard" (scion). Uses config default if not specified.
 
         Returns:
             GraftResult with before/after comparison.
         """
+        mode = mode or self.config.graft_mode
+
         # Get training data
         meld_data = self.meld_designer.get_or_create_training_data(
             concept=concept,
@@ -317,6 +325,7 @@ class GraftTester:
             return GraftResult(
                 concept_id=pre_result.concept_id,
                 concept_term=concept.term,
+                graft_mode=mode,
                 pre_score=pre_result.score,
                 pre_knew=pre_result.knows_concept,
                 pre_response=pre_result.target_response,
@@ -324,6 +333,7 @@ class GraftTester:
                 n_positive_examples=0,
                 n_negative_examples=0,
                 scion_id=None,
+                bud_id=None,
                 training_loss=None,
                 post_score=pre_result.score,
                 post_knew=pre_result.knows_concept,
@@ -332,7 +342,7 @@ class GraftTester:
                 learned=False,
             )
 
-        # Train scion
+        # Train scion (needed for both soft and hard grafts)
         scion = self.train_scion(concept, meld_data)
 
         if not scion:
@@ -340,6 +350,7 @@ class GraftTester:
             return GraftResult(
                 concept_id=pre_result.concept_id,
                 concept_term=concept.term,
+                graft_mode=mode,
                 pre_score=pre_result.score,
                 pre_knew=pre_result.knows_concept,
                 pre_response=pre_result.target_response,
@@ -347,6 +358,7 @@ class GraftTester:
                 n_positive_examples=len(meld_data.positive_examples),
                 n_negative_examples=len(meld_data.negative_examples),
                 scion_id=None,
+                bud_id=None,
                 training_loss=None,
                 post_score=pre_result.score,
                 post_knew=pre_result.knows_concept,
@@ -355,8 +367,17 @@ class GraftTester:
                 learned=False,
             )
 
-        # Apply scion
-        self.target.apply_scion(scion, mode="delta")
+        bud_id = None
+
+        if mode == "soft":
+            # Soft graft: create bud from scion and apply temporarily
+            logger.info(f"Applying soft graft (bud) for {concept.term}")
+            bud = Bud.from_scion(scion, layers=self.config.layers_to_graft)
+            bud_id = self.target.apply_bud(bud, strength=1.0)
+        else:
+            # Hard graft: apply scion permanently
+            logger.info(f"Applying hard graft (scion) for {concept.term}")
+            self.target.apply_scion(scion, mode="delta")
 
         # Re-evaluate
         post_result = self.evaluator.evaluate_concept(concept)
@@ -368,6 +389,7 @@ class GraftTester:
         return GraftResult(
             concept_id=pre_result.concept_id,
             concept_term=concept.term,
+            graft_mode=mode,
             pre_score=pre_result.score,
             pre_knew=pre_result.knows_concept,
             pre_response=pre_result.target_response,
@@ -375,6 +397,7 @@ class GraftTester:
             n_positive_examples=len(meld_data.positive_examples),
             n_negative_examples=len(meld_data.negative_examples),
             scion_id=scion.scion_id,
+            bud_id=bud_id,
             training_loss=scion.metrics.get("final_loss") if scion.metrics else None,
             post_score=post_result.score,
             post_knew=post_result.knows_concept,
