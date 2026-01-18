@@ -5,11 +5,28 @@ Uses training examples from applied melds as deterministic ground truth
 for evaluating judge quality. This tests the exact task a judge does:
 "Is this text an example of concept X?"
 
+DATASET PROVENANCE
+==================
+The examples used for evaluation come from melds/applied/ - these are NOT
+arbitrary examples. Every example in this dataset has passed through the
+complete HATCAT MELD approval pipeline:
+
+1. Initial generation/authoring with positive and negative examples
+2. Automated validation against HATCAT_MELD_POLICY
+3. Protection level assessment (STANDARD/ELEVATED/PROTECTED/CRITICAL)
+4. Human review for elevated/protected/critical concepts
+5. Final approval and application to the concept pack
+
+This provenance makes these examples suitable as ground truth for
+deterministic testing of judge models. The examples represent the
+quality bar we expect judges to enforce.
+
 Advantages:
 - Deterministic scoring (positive examples = yes, negative = no)
 - Real concept diversity from training data
-- Includes safety-critical concepts
+- Includes safety-critical concepts with human-reviewed examples
 - Scales to thousands of test cases automatically
+- Stratified sampling ensures adequate coverage of all risk levels
 """
 
 from dataclasses import dataclass, field
@@ -64,12 +81,15 @@ class MeldEvalReport:
     # By safety level
     accuracy_by_risk: Dict[str, float]
 
+    # Sample counts per risk level (for statistical validity assessment)
+    samples_by_risk: Dict[str, int] = field(default_factory=dict)
+
     # Detailed results
-    results: List[MeldTestResult]
+    results: List[MeldTestResult] = field(default_factory=list)
 
     # Metadata
-    melds_used: int
-    concepts_tested: int
+    melds_used: int = 0
+    concepts_tested: int = 0
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -83,6 +103,7 @@ class MeldEvalReport:
             'false_positives': self.false_positives,
             'false_negatives': self.false_negatives,
             'accuracy_by_risk': self.accuracy_by_risk,
+            'samples_by_risk': self.samples_by_risk,
             'melds_used': self.melds_used,
             'concepts_tested': self.concepts_tested,
             'timestamp': self.timestamp.isoformat(),
@@ -218,6 +239,84 @@ class MeldExampleLoader:
 
         return random.sample(critical, min(n, len(critical)))
 
+    def get_stratified_sample(
+        self,
+        n_per_level: int = 100,
+        risk_levels: List[str] = ["critical", "high", "medium", "low"],
+        balance_pos_neg: bool = True,
+        seed: Optional[int] = None,
+    ) -> Tuple[List[MeldExample], Dict[str, int]]:
+        """
+        Get a stratified sample with equal representation per risk level.
+
+        This ensures adequate sample size for each risk stratum, avoiding
+        the statistical weakness of tiny subsamples that produce meaningless
+        percentages (e.g., 100%/50%/25% from n=1/2/4).
+
+        With n_per_level=100, we get:
+        - Well above law of large numbers threshold (~30) for stable estimates
+        - Clean 1% precision on percentage metrics
+        - 400 total cases (fast to run, statistically robust)
+
+        Args:
+            n_per_level: Target examples per risk level (default 100)
+            risk_levels: Risk levels to include (default all 4)
+            balance_pos_neg: If True, balance positive/negative within each level
+            seed: Random seed for reproducibility
+
+        Returns:
+            Tuple of (examples, actual_counts_per_level)
+        """
+        if seed is not None:
+            random.seed(seed)
+
+        # Group examples by risk level
+        by_risk: Dict[str, List[MeldExample]] = {level: [] for level in risk_levels}
+        for e in self.examples:
+            risk = e.safety_tags.get('risk_level', 'unknown')
+            if risk in by_risk:
+                by_risk[risk].append(e)
+
+        sample = []
+        actual_counts: Dict[str, int] = {}
+
+        for level in risk_levels:
+            available = by_risk[level]
+            if not available:
+                logger.warning(f"No examples found for risk level '{level}'")
+                actual_counts[level] = 0
+                continue
+
+            if balance_pos_neg:
+                # Balance positive/negative within this risk level
+                positives = [e for e in available if e.is_positive]
+                negatives = [e for e in available if not e.is_positive]
+
+                n_each = n_per_level // 2
+                level_sample = []
+                level_sample.extend(random.sample(positives, min(n_each, len(positives))))
+                level_sample.extend(random.sample(negatives, min(n_each, len(negatives))))
+            else:
+                level_sample = random.sample(available, min(n_per_level, len(available)))
+
+            sample.extend(level_sample)
+            actual_counts[level] = len(level_sample)
+
+            if len(level_sample) < n_per_level:
+                logger.warning(
+                    f"Risk level '{level}' has only {len(level_sample)} examples "
+                    f"(requested {n_per_level})"
+                )
+
+        random.shuffle(sample)
+
+        logger.info(
+            f"Stratified sample: {len(sample)} total examples "
+            f"({', '.join(f'{k}={v}' for k, v in actual_counts.items())})"
+        )
+
+        return sample, actual_counts
+
     def get_stats(self) -> Dict[str, Any]:
         """Get statistics about loaded examples."""
         positives = sum(1 for e in self.examples if e.is_positive)
@@ -349,6 +448,7 @@ or {{"is_example": false, "confidence": 0.0-1.0, "reasoning": "brief explanation
             false_positives=fp,
             false_negatives=fn,
             accuracy_by_risk=accuracy_by_risk,
+            samples_by_risk=risk_total,
             results=results,
             melds_used=len(melds_seen),
             concepts_tested=len(concepts_seen),
@@ -358,9 +458,31 @@ or {{"is_example": false, "confidence": 0.0-1.0, "reasoning": "brief explanation
         """Parse judge response. Returns (is_example, confidence, reasoning)."""
         import re
 
+        # Handle OpenAI Harmony format (GPT-OSS models)
+        # Extract content from 'final' channel if present
+        final_content = response
+        if '<|channel|>' in response or '<|start|>' in response:
+            # Try to extract the 'final' channel content
+            final_match = re.search(
+                r'<\|channel\|>final<\|message\|>(.*?)(?:<\|end\|>|$)',
+                response,
+                re.DOTALL | re.IGNORECASE
+            )
+            if final_match:
+                final_content = final_match.group(1).strip()
+            else:
+                # Fallback: get the last message content
+                messages = re.findall(
+                    r'<\|message\|>(.*?)(?:<\|end\|>|<\|channel\|>|$)',
+                    response,
+                    re.DOTALL
+                )
+                if messages:
+                    final_content = messages[-1].strip()
+
         try:
             # Find JSON in response
-            json_match = re.search(r'\{[^}]+\}', response, re.DOTALL)
+            json_match = re.search(r'\{[^}]+\}', final_content, re.DOTALL)
             if json_match:
                 data = json.loads(json_match.group())
                 verdict = data.get('is_example', False)
@@ -370,21 +492,21 @@ or {{"is_example": false, "confidence": 0.0-1.0, "reasoning": "brief explanation
         except (json.JSONDecodeError, ValueError):
             pass
 
-        # Fallback parsing
-        response_lower = response.lower()
+        # Fallback parsing - use final_content for better accuracy
+        response_lower = final_content.lower()
 
         if '"is_example": true' in response_lower or '"is_example":true' in response_lower:
-            return True, 0.5, response
+            return True, 0.5, final_content
         if '"is_example": false' in response_lower or '"is_example":false' in response_lower:
-            return False, 0.5, response
+            return False, 0.5, final_content
 
         # Last resort - look for yes/no
         if 'yes' in response_lower and 'no' not in response_lower:
-            return True, 0.5, response
+            return True, 0.5, final_content
         if 'no' in response_lower and 'yes' not in response_lower:
-            return False, 0.5, response
+            return False, 0.5, final_content
         if 'true' in response_lower and 'false' not in response_lower:
-            return True, 0.5, response
+            return True, 0.5, final_content
 
         return False, 0.0, f"Could not parse: {response[:100]}"
 
@@ -421,12 +543,15 @@ def generate_meld_eval_report(report: MeldEvalReport) -> str:
         "",
         "## Accuracy by Risk Level",
         "",
-        "| Risk Level | Accuracy |",
-        "|------------|----------|",
+        "| Risk Level | n | Accuracy |",
+        "|------------|---|----------|",
     ]
 
-    for risk, acc in sorted(report.accuracy_by_risk.items()):
-        lines.append(f"| {risk} | {acc:.1%} |")
+    for risk in ["critical", "high", "medium", "low", "unknown"]:
+        if risk in report.accuracy_by_risk:
+            acc = report.accuracy_by_risk[risk]
+            n = report.samples_by_risk.get(risk, 0)
+            lines.append(f"| {risk} | {n} | {acc:.1%} |")
 
     # Show some errors
     errors = [r for r in report.results if not r.correct]

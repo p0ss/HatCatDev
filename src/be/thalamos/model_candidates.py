@@ -68,13 +68,22 @@ class ModelCandidate:
 
 # Model candidate registry
 MODEL_CANDIDATES: Dict[str, ModelCandidate] = {
-    # Current baseline
+    # Gemma 3 4B pretrained (base model, no chat template)
     "gemma-3-4b": ModelCandidate(
         model_id="google/gemma-3-4b-pt",
-        name="Gemma 3 4B",
+        name="Gemma 3 4B (PT)",
         params_billions=4,
         vram_gb_estimate=8,
-        notes="Current baseline model",
+        notes="Pretrained base model - no chat template, needs instruct version.",
+    ),
+
+    # Gemma 3 4B instruct (has chat template)
+    "gemma-3-4b-it": ModelCandidate(
+        model_id="google/gemma-3-4b-it",
+        name="Gemma 3 4B Instruct",
+        params_billions=4,
+        vram_gb_estimate=8,
+        notes="Instruction-tuned with chat template.",
     ),
 
     # AllenAI OLMo - open data, reasoning
@@ -152,6 +161,66 @@ MODEL_CANDIDATES: Dict[str, ModelCandidate] = {
         params_billions=8,
         vram_gb_estimate=16,
         notes="Dense transformer, 128k context, V3-Tekken tokenizer.",
+    ),
+
+    # Microsoft Phi-4 mini - small but capable
+    "phi-4-mini": ModelCandidate(
+        model_id="microsoft/Phi-4-mini-instruct",
+        name="Phi-4 Mini Instruct",
+        params_billions=3.8,
+        vram_gb_estimate=8,
+        notes="Small but capable instruction-tuned model from Microsoft.",
+    ),
+
+    # Mistral Nemo 12B - larger Mistral model
+    "mistral-nemo-12b": ModelCandidate(
+        model_id="mistralai/Mistral-Nemo-Base-2407",
+        name="Mistral Nemo 12B",
+        params_billions=12,
+        vram_gb_estimate=24,
+        notes="12B Mistral model, larger context than Ministral.",
+    ),
+
+    # Nemotron with 8-bit quantization for 24GB cards
+    "nemotron-nano-9b-8bit": ModelCandidate(
+        model_id="nvidia/NVIDIA-Nemotron-Nano-9B-v2",
+        name="Nemotron Nano 9B (8-bit)",
+        params_billions=9,
+        architecture="mamba-hybrid",
+        trust_remote_code=True,
+        quantization="8bit",
+        vram_gb_estimate=12,
+        reasoning_mode="/think",
+        notes="Mamba2-Transformer hybrid with 8-bit quantization.",
+    ),
+
+    # Swiss AI Apertus 8B - Swiss/European, open weights
+    "apertus-8b": ModelCandidate(
+        model_id="swiss-ai/Apertus-8B-Instruct-2509",
+        name="Apertus 8B Instruct",
+        params_billions=8,
+        vram_gb_estimate=16,
+        notes="Swiss AI, open weights, instruction-tuned.",
+    ),
+
+    # Swiss AI Apertus 8B Base - for comparison
+    "apertus-8b-base": ModelCandidate(
+        model_id="swiss-ai/Apertus-8B-2509",
+        name="Apertus 8B Base",
+        params_billions=8,
+        vram_gb_estimate=16,
+        notes="Swiss AI base model (non-instruct). Likely ~50% without fine-tuning.",
+    ),
+
+    # OpenAI GPT-OSS 20B - MoE with MXFP4 quantization
+    "gpt-oss-20b": ModelCandidate(
+        model_id="openai/gpt-oss-20b",
+        name="GPT-OSS 20B",
+        params_billions=20,
+        architecture="moe",
+        trust_remote_code=True,
+        vram_gb_estimate=16,  # MXFP4 quantized
+        notes="20B MoE (32 experts, 4 active). MXFP4 quantization. Needs transformers>=4.55.",
     ),
 }
 
@@ -397,7 +466,7 @@ class CandidateEvaluator:
                 )
 
                 start_gen = time.time()
-                response = self._generate(model, tokenizer, prompt, candidate)
+                response = self._generate(model, tokenizer, prompt, candidate, processor=processor)
                 gen_time = time.time() - start_gen
 
                 # Count tokens roughly
@@ -551,9 +620,16 @@ Respond with JSON only: {{"correct": true, "reasoning": "..."}} or {{"correct": 
         prompt: str,
         candidate: ModelCandidate,
         max_new_tokens: int = 256,
+        processor=None,
     ) -> str:
         """Generate response from model."""
-        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        if processor is not None:
+            inputs = processor(text=prompt, return_tensors="pt")
+            inputs = {k: v.to(model.device) for k, v in inputs.items() if torch.is_tensor(v)}
+        else:
+            inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        if "token_type_ids" in inputs:
+            inputs.pop("token_type_ids")
 
         with torch.no_grad():
             outputs = model.generate(

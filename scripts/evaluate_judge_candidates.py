@@ -8,11 +8,19 @@ for Thalamos assessments.
 Primary test: Meld-based evaluation using real training data with deterministic
 ground truth. Tests the exact task a judge does: "Is this text an example of X?"
 
+DATASET PROVENANCE: The test examples come from melds/applied/ - every example
+has passed through the complete HATCAT MELD approval pipeline including human
+review for elevated/protected/critical concepts. This provenance makes these
+examples suitable as ground truth for deterministic testing.
+
 Secondary test: Nuanced quality discrimination (subtle errors, hedging, etc.)
 
 Usage:
-    # Evaluate all candidates that fit in 24GB
-    python scripts/evaluate_judge_candidates.py
+    # Evaluate all candidates that fit in 24GB (RECOMMENDED: stratified sampling)
+    python scripts/evaluate_judge_candidates.py --stratified
+
+    # Stratified: 100 examples per risk level (400 total, statistically robust)
+    python scripts/evaluate_judge_candidates.py --stratified --n-per-level 100
 
     # Evaluate specific models
     python scripts/evaluate_judge_candidates.py --models olmo-3-7b-think nemotron-nano-9b
@@ -23,8 +31,8 @@ Usage:
     # Run with custom VRAM limit
     python scripts/evaluate_judge_candidates.py --max-vram 48
 
-    # Run more test cases
-    python scripts/evaluate_judge_candidates.py --n-cases 200
+    # Legacy: random sampling (not recommended - uneven risk coverage)
+    python scripts/evaluate_judge_candidates.py --n-cases 100
 """
 
 import argparse
@@ -65,14 +73,35 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def create_generate_fn(model, tokenizer, candidate: ModelCandidate):
+def create_generate_fn(model, tokenizer, candidate: ModelCandidate, processor=None):
     """Create a generation function for the judge evaluator."""
     def generate(prompt: str, max_new_tokens: int = 512) -> str:
         # Adapt prompt for model's reasoning mode
         if candidate.reasoning_mode == "/think":
             prompt = f"/think\n{prompt}"
 
-        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        # Apply chat template if available (critical for instruction-tuned models)
+        if processor is not None:
+            inputs = processor(text=prompt, return_tensors="pt")
+            inputs = {k: v.to(model.device) for k, v in inputs.items() if torch.is_tensor(v)}
+        elif hasattr(tokenizer, 'chat_template') and tokenizer.chat_template is not None:
+            # Use chat template for instruction-tuned models
+            messages = [{"role": "user", "content": prompt}]
+            formatted = tokenizer.apply_chat_template(
+                messages,
+                tokenize=True,
+                add_generation_prompt=True,
+                return_tensors="pt"
+            )
+            inputs = {"input_ids": formatted.to(model.device)}
+        else:
+            # Fallback for base models without chat template
+            inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        if "token_type_ids" in inputs:
+            inputs.pop("token_type_ids")
+
+        # Track input length to extract only new tokens
+        input_len = inputs["input_ids"].shape[1] if "input_ids" in inputs else inputs.get("input_ids", inputs).shape[1]
 
         with torch.no_grad():
             outputs = model.generate(
@@ -83,13 +112,11 @@ def create_generate_fn(model, tokenizer, candidate: ModelCandidate):
                 pad_token_id=tokenizer.eos_token_id,
             )
 
-        response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        # Only decode the NEW tokens (after input) - critical for chat-templated models
+        new_tokens = outputs[0][input_len:]
+        response = tokenizer.decode(new_tokens, skip_special_tokens=True)
 
-        # Strip prompt from response if present
-        if response.startswith(prompt):
-            response = response[len(prompt):].strip()
-
-        return response
+        return response.strip()
 
     return generate
 
@@ -115,7 +142,7 @@ def evaluate_candidate(
     logger.info(f"Loaded in {load_time:.1f}s, using {vram_used:.1f}GB VRAM")
 
     # Create generation function
-    generate_fn = create_generate_fn(model, tokenizer, candidate)
+    generate_fn = create_generate_fn(model, tokenizer, candidate, processor=processor)
 
     # PRIMARY: Meld-based evaluation (deterministic ground truth)
     logger.info(f"\n--- Meld-Based Evaluation ({len(meld_examples)} cases) ---")
@@ -186,7 +213,18 @@ def main():
         "--n-cases",
         type=int,
         default=100,
-        help="Number of meld test cases to run (default: 100)"
+        help="Number of meld test cases for random sampling (default: 100, ignored if --stratified)"
+    )
+    parser.add_argument(
+        "--stratified",
+        action="store_true",
+        help="Use stratified sampling with equal examples per risk level (RECOMMENDED)"
+    )
+    parser.add_argument(
+        "--n-per-level",
+        type=int,
+        default=100,
+        help="Examples per risk level for stratified sampling (default: 100, gives 400 total)"
     )
     parser.add_argument(
         "--seed",
@@ -240,9 +278,24 @@ def main():
     logger.info(f"Loaded {stats['total_examples']} examples from {stats['total_concepts']} concepts")
     logger.info(f"By risk level: {stats['by_risk_level']}")
 
-    # Get balanced sample
-    meld_examples = meld_loader.get_random_sample(n=args.n_cases, balance=True, seed=args.seed)
-    logger.info(f"Selected {len(meld_examples)} test cases (seed={args.seed})")
+    # Get sample - stratified (recommended) or random
+    if args.stratified:
+        meld_examples, sample_counts = meld_loader.get_stratified_sample(
+            n_per_level=args.n_per_level,
+            seed=args.seed
+        )
+        logger.info(
+            f"Stratified sampling: {len(meld_examples)} test cases "
+            f"({args.n_per_level}/level, seed={args.seed})"
+        )
+        logger.info(f"Samples per risk level: {sample_counts}")
+    else:
+        logger.warning(
+            "Using random sampling - consider --stratified for statistically robust results "
+            "across all risk levels"
+        )
+        meld_examples = meld_loader.get_random_sample(n=args.n_cases, balance=True, seed=args.seed)
+        logger.info(f"Selected {len(meld_examples)} test cases (seed={args.seed})")
 
     # Select candidates
     if args.models:

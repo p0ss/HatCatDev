@@ -9,7 +9,7 @@ Reframe the graft testing infrastructure from a "harness" (constraining) to an *
 - **Thalamologist**: A CAT performing cognitive surgery. Like an ophthalmologist.
 - **Thalamos**: The examination/operating room itself (Greek: bedroom/chamber - fitting for where the model "rests" during the procedure)
 
-The naming connects to the thalamus (brain region we're analyzing with lenses) while avoiding clinical terms with negative connotations (neurosis, encephalitis).
+The naming connects to the thalamus (brain region we're analyzing with lenses), which has etymology derivces from the greek term for inner sanctum or bed, which is where we're perfroming BE diagesis in the BEDframe. this gives a frame of reference for measurement and treatment, while avoiding clinical terms with negative connotations (neurosis, encephalitis).
 
 ---
 
@@ -270,6 +270,77 @@ Connect to existing MAP graft tools:
 - Use ScionTrainer when ready for permanent grafts
 - Lens pre-calibration for new scions
 - XDB data collection for meld assembly
+
+---
+
+## MELD Review Pipeline
+
+### Three-Tier Review Architecture
+
+MELDs (Modular Enhancement Layer Descriptions) pass through a structured review pipeline:
+
+1. **Generation** (Local target model - e.g., Gemma 3 4B)
+   - Uses decomposed prompting for better near-miss negatives
+   - Receives hierarchy context (level, siblings, granularity expectations)
+   - Can use predefined definitions for L1/L2 pillars
+
+2. **Validation** (Automated - `validate_meld.py`)
+   - Structural checks (required fields, example counts)
+   - Protection level assignment
+
+3. **Ministral Review** (Judge model - 91.8% accuracy)
+   - Bulk filter with hierarchy-aware prompting
+   - Two modes: gatekeeper vs annotator
+
+4. **Claude Review** (Quality gate - API)
+   - Catches subtle issues Ministral misses
+   - Semantic accuracy, discrimination quality, safety
+
+5. **Human Review** (Elevated+ protection levels)
+   - Safety authority for high-stakes concepts
+
+### Judge Mode Philosophy
+
+A key insight from Fractal Model Cartography: **the goal is understanding how the subject model conceptualizes the world, not enforcing the judge's worldview**.
+
+This leads to two distinct judge modes:
+
+**Gatekeeper Mode** (default)
+- Enforces structural correctness AND worldview alignment
+- Rejects MELDs that don't match judge's understanding of the concept
+- Appropriate for: ensuring training data quality matches external standards
+
+**Annotator Mode**
+- Enforces structural correctness only
+- Captures worldview divergence as metadata without rejecting
+- Returns: `structural_pass`, `worldview_notes`, `divergence_score`
+- Appropriate for: understanding how the subject model thinks
+
+```python
+# Example annotator response
+{
+  "structural_pass": true,
+  "structural_issues": [],
+  "worldview_notes": [
+    "Definition emphasizes formal logic more than typical usage",
+    "Examples lean heavily toward technical applications"
+  ],
+  "divergence_score": 0.6  # 0=aligned, 1=very different
+}
+```
+
+### Hierarchy-Aware Review
+
+Each level in the ontology (L1-L4) has different expectations:
+
+| Level | Name | Granularity | MECE Rules |
+|-------|------|-------------|------------|
+| L1 | Pillars | Extremely broad | Must cover ALL human activity |
+| L2 | Domains | Broad | Cover full scope of parent pillar |
+| L3 | Categories | Moderate | Cover major areas of parent domain |
+| L4+ | Concepts | Specific | Leaf-level, some sibling overlap OK |
+
+The `HierarchyContext` dataclass passes this information to both generator and reviewer, ensuring appropriate expectations at each level.
 
 ---
 

@@ -1,0 +1,15 @@
+WARNING: Skipping /home/poss/Documents/Code/HatCat/.venv/lib/python3.12/site-packages/hatcat-0.1.0.dist-info due to invalid metadata entry 'name'
+Requirement already satisfied: triton in /home/poss/Documents/Code/HatCat/.venv/lib/python3.12/site-packages (3.3.1)
+Collecting triton
+  Using cached triton-3.5.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.7 kB)
+Using cached triton-3.5.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (170.5 MB)
+WARNING: Skipping /home/poss/Documents/Code/HatCat/.venv/lib/python3.12/site-packages/hatcat-0.1.0.dist-info due to invalid metadata entry 'name'
+Installing collected packages: triton
+  Attempting uninstall: triton
+    WARNING: Skipping /home/poss/Documents/Code/HatCat/.venv/lib/python3.12/site-packages/hatcat-0.1.0.dist-info due to invalid metadata entry 'name'
+    Found existing installation: triton 3.3.1
+    Uninstalling triton-3.3.1:
+      Successfully uninstalled triton-3.3.1
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+torch 2.7.1 requires triton==3.3.1; platform_system == "Linux" and platform_machine == "x86_64", but you have triton 3.5.1 which is incompatible.
+Successfully installed triton-3.5.1
