@@ -33,6 +33,16 @@ pydantic = ">=2.0.0"
 sse-starlette = ">=1.6.0"
 plotly = "^6.5.0"
 
+[tool.poetry.group.inspect.dependencies]
+inspect-ai = {version = ">=0.3.0", python = ">=3.10"}
+inspect-evals = {version = ">=0.1.0", python = ">=3.10", optional = true}
+
+[tool.poetry.extras]
+inspect = ["inspect-ai", "inspect-evals"]
+
+[tool.poetry.plugins."inspect_ai"]
+hatcat_wrapped = "src.inspect_integration.tasks.wrapped:hatcat_wrapped"
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"
 black = "^23.0.0"
