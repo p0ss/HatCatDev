@@ -192,21 +192,47 @@ class ContextAwareMeldGenerator:
         return self.tokenizer.decode(outputs[0][input_len:], skip_special_tokens=True)
 
     def _extract_json(self, text: str) -> Optional[Dict]:
-        try:
-            if "```json" in text:
-                json_text = text.split("```json")[1].split("```")[0].strip()
-            elif "```" in text:
-                json_text = text.split("```")[1].split("```")[0].strip()
-            else:
-                start = text.find("{")
-                end = text.rfind("}") + 1
-                if start >= 0 and end > start:
-                    json_text = text[start:end]
-                else:
-                    json_text = text.strip()
-            return json.loads(json_text)
-        except json.JSONDecodeError:
-            return None
+        """Extract JSON from model response with multiple fallback strategies."""
+        strategies = []
+
+        # Strategy 1: Code block with json tag
+        if "```json" in text:
+            json_text = text.split("```json")[1].split("```")[0].strip()
+            strategies.append(json_text)
+
+        # Strategy 2: Any code block
+        if "```" in text:
+            parts = text.split("```")
+            if len(parts) >= 2:
+                strategies.append(parts[1].strip())
+
+        # Strategy 3: Find balanced braces
+        start = text.find("{")
+        if start >= 0:
+            # Find matching closing brace
+            depth = 0
+            for i, c in enumerate(text[start:], start):
+                if c == "{":
+                    depth += 1
+                elif c == "}":
+                    depth -= 1
+                    if depth == 0:
+                        strategies.append(text[start:i+1])
+                        break
+
+        # Strategy 4: Simple first-to-last brace
+        end = text.rfind("}") + 1
+        if start >= 0 and end > start:
+            strategies.append(text[start:end])
+
+        # Try each strategy
+        for json_text in strategies:
+            try:
+                return json.loads(json_text)
+            except json.JSONDecodeError:
+                continue
+
+        return None
 
     def _format_list(self, items: List[str], max_items: int = 8) -> str:
         if not items:
@@ -293,8 +319,21 @@ class ContextAwareMeldGenerator:
             parent_level_plural=parent_level_meta["plural"],
         )
 
-        response = self._generate_text(prompt)
-        meld_data = self._extract_json(response)
+        # Retry logic for JSON extraction failures
+        max_retries = 3
+        meld_data = None
+
+        for attempt in range(max_retries):
+            response = self._generate_text(prompt)
+            meld_data = self._extract_json(response)
+
+            if meld_data:
+                break
+            else:
+                logger.warning(f"JSON extraction failed (attempt {attempt + 1}/{max_retries}) for {node.label}")
+                if attempt == max_retries - 1:
+                    # Log the raw response on final failure for debugging
+                    logger.debug(f"Raw response: {response[:500]}...")
 
         if meld_data:
             # Add context metadata
@@ -371,13 +410,15 @@ def generate_melds_for_level(
     output_dir: Path,
     model_id: str = "gemma-3-4b-it",
     judge_mode: str = "annotator",
+    skip_judge: bool = False,
+    skip_existing: bool = False,
 ) -> Dict:
     """Generate MELDs for all nodes at a given level."""
     nodes = skeleton.get_all_at_level(level)
     logger.info(f"Generating MELDs for {len(nodes)} nodes at level {level}")
 
     generator = ContextAwareMeldGenerator(model_id=model_id)
-    judge = MinistralJudge()
+    judge = None if skip_judge else MinistralJudge()
 
     results = {
         "level": level,
@@ -391,6 +432,15 @@ def generate_melds_for_level(
 
     try:
         for i, node in enumerate(nodes):
+            # Check if file exists (for skip_existing mode)
+            safe_name = node.label.lower().replace(" ", "_").replace("/", "_").replace("&", "and")
+            result_file = output_dir / f"L{level}_{safe_name}.json"
+
+            if skip_existing and result_file.exists():
+                logger.info(f"[{i+1}/{len(nodes)}] Skipping existing: {node.label}")
+                results["approved"] += 1  # Count as approved
+                continue
+
             logger.info(f"[{i+1}/{len(nodes)}] Generating MELD for: {node.label}")
 
             parent, siblings = find_parent_and_siblings(skeleton, node)
@@ -403,19 +453,28 @@ def generate_melds_for_level(
                 results["rejected"] += 1
                 continue
 
-            # Review with judge
-            hierarchy_context = HierarchyContext(
-                level=level,
-                parent_concept=parent.label if parent else None,
-                sibling_concepts=[s.label for s in siblings],
-            )
+            # Review with judge (if enabled)
+            review_passed = True
+            review_feedback = "Skipped (no judge)"
+            review_confidence = 1.0
+            worldview_metadata = None
 
-            review_result, worldview_metadata = judge.review(
-                meld_data,
-                hierarchy_context,
-                predefined_definition=False,
-                mode=judge_mode,
-            )
+            if judge:
+                hierarchy_context = HierarchyContext(
+                    level=level,
+                    parent_concept=parent.label if parent else None,
+                    sibling_concepts=[s.label for s in siblings],
+                )
+
+                review_result, worldview_metadata = judge.review(
+                    meld_data,
+                    hierarchy_context,
+                    predefined_definition=False,
+                    mode=judge_mode,
+                )
+                review_passed = review_result.passed
+                review_feedback = review_result.feedback
+                review_confidence = review_result.confidence
 
             # Save result
             result_data = {
@@ -427,9 +486,9 @@ def generate_melds_for_level(
                 },
                 "meld_data": meld_data,
                 "review": {
-                    "passed": review_result.passed,
-                    "feedback": review_result.feedback,
-                    "confidence": review_result.confidence,
+                    "passed": review_passed,
+                    "feedback": review_feedback,
+                    "confidence": review_confidence,
                 },
                 "worldview_metadata": worldview_metadata,
             }
@@ -439,20 +498,21 @@ def generate_melds_for_level(
             with open(result_file, 'w') as f:
                 json.dump(result_data, f, indent=2)
 
-            if review_result.passed:
+            if review_passed:
                 results["approved"] += 1
             else:
                 results["rejected"] += 1
 
             results["melds"].append({
                 "label": node.label,
-                "passed": review_result.passed,
+                "passed": review_passed,
                 "divergence_score": worldview_metadata.get("divergence_score", 0) if worldview_metadata else 0,
             })
 
     finally:
         generator.unload()
-        judge.unload()
+        if judge:
+            judge.unload()
 
     return results
 
@@ -490,10 +550,20 @@ def main():
         help="Judge mode"
     )
     parser.add_argument(
+        "--no-judge",
+        action="store_true",
+        help="Skip Ministral judge review (saves VRAM, faster)"
+    )
+    parser.add_argument(
         "--output", "-o",
         type=Path,
         default=Path("results/context_aware_melds"),
         help="Output directory"
+    )
+    parser.add_argument(
+        "--skip-existing",
+        action="store_true",
+        help="Skip nodes that already have MELD files"
     )
 
     args = parser.parse_args()
@@ -525,6 +595,8 @@ def main():
             output_dir=args.output / f"L{args.level}",
             model_id=args.model,
             judge_mode=args.judge_mode,
+            skip_judge=args.no_judge,
+            skip_existing=args.skip_existing,
         )
 
         print(f"\n{'='*60}")
