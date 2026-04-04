@@ -262,21 +262,24 @@ def train_polar_lens(
     # Extract activations
     logger.info(f"    Extracting activations ({len(pos_prompts_train)}+ / {len(neg_prompts_train)}-)...")
 
+    # Use "generation" mode to extract activations while model is actually
+    # generating content, not just processing the instruction. This captures
+    # the model's state during the behavioral task, not during prompt reading.
     X_pos_train = extract_activations(
         model, tokenizer, pos_prompts_train, device,
-        extraction_mode="prompt", layer_idx=layer_idx
+        extraction_mode="generation", layer_idx=layer_idx
     )
     X_neg_train = extract_activations(
         model, tokenizer, neg_prompts_train, device,
-        extraction_mode="prompt", layer_idx=layer_idx
+        extraction_mode="generation", layer_idx=layer_idx
     )
     X_pos_test = extract_activations(
         model, tokenizer, pos_prompts_test, device,
-        extraction_mode="prompt", layer_idx=layer_idx
+        extraction_mode="generation", layer_idx=layer_idx
     )
     X_neg_test = extract_activations(
         model, tokenizer, neg_prompts_test, device,
-        extraction_mode="prompt", layer_idx=layer_idx
+        extraction_mode="generation", layer_idx=layer_idx
     )
 
     # Combine into train/test sets
