@@ -29,6 +29,7 @@ Usage:
 """
 
 import json
+import re
 import sys
 import argparse
 import logging
@@ -394,8 +395,15 @@ class SkeletonGenerator:
 
         children = []
         for item in children_data:
+            # Generate base ID from model output or derive from label
+            base_id = item.get("id", item.get("label", "unknown").lower().replace(" ", "-"))
+            # Strip any numeric suffix the model may have added (e.g., "-9")
+            base_id = re.sub(r'-\d+$', '', base_id)
+            # Create qualified ID: parent--child to ensure uniqueness across branches
+            qualified_id = f"{parent.id}--{base_id}"
+
             child = SkeletonNode(
-                id=item.get("id", item.get("label", "unknown").lower().replace(" ", "-")),
+                id=qualified_id,
                 label=item.get("label", "Unknown"),
                 scope=item.get("scope", ""),
                 level=child_level,
