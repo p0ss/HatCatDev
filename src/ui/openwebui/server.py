@@ -123,6 +123,18 @@ async def favicon():
     raise HTTPException(status_code=404, detail="Favicon not found")
 
 
+# === Multi-model env config ===
+# Allows running multiple HatCat instances on different ports, each serving a
+# different (model, lens-pack) combination, by setting HATCAT_MODEL_ID and
+# HATCAT_CONFIG_PATH per process.
+import os as _os
+from pathlib import Path as _Path
+HATCAT_MODEL_ID = _os.environ.get("HATCAT_MODEL_ID", "hatcat-divergence")
+_HATCAT_CONFIG_PATH = _os.environ.get("HATCAT_CONFIG_PATH")
+HATCAT_CONFIG_PATH = _Path(_HATCAT_CONFIG_PATH) if _HATCAT_CONFIG_PATH else None
+# === end ===
+
+
 # Request/Response models (OpenAI-compatible)
 class Message(BaseModel):
     role: str
@@ -130,7 +142,7 @@ class Message(BaseModel):
 
 
 class ChatCompletionRequest(BaseModel):
-    model: str = "hatcat-divergence"
+    model: str = HATCAT_MODEL_ID
     messages: List[Message]
     temperature: float = 0.7
     max_tokens: int = 512
@@ -520,7 +532,7 @@ def get_workspace_manager(session_id: str) -> WorkspaceManager:
 @app.on_event("startup")
 async def startup_event():
     """Initialize on startup."""
-    await analyzer.initialize()
+    await analyzer.initialize(config_path=HATCAT_CONFIG_PATH)
 
 
 @app.get("/")
@@ -572,7 +584,7 @@ async def list_models():
     # Add default model for backward compatibility
     if not models:
         models.append({
-            "id": "hatcat-divergence",
+            "id": HATCAT_MODEL_ID,
             "object": "model",
             "created": 1234567890,
             "owned_by": "hatcat",
@@ -1842,6 +1854,88 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
             combined_context = "\n\n".join(context_parts)
             prompt = f"{combined_context}\n\n---\n\n{prompt}"
 
+        # === Apply chat template for instruct models ===
+        # Instruct models (e.g. -it variants) need the proper chat-format framing
+        # (<start_of_turn>user ... <end_of_turn> <start_of_turn>model) or they emit
+        # <end_of_turn> as their first generated token (treating the input as a
+        # finished assistant turn rather than a user prompt to respond to).
+        #
+        # Workspace/autonomic context is *not* injected here: it's a base-model
+        # continuation template ("<workspace_state>... <!-- Instructions ... Response: -->")
+        # that instruct models echo back literally. For instruct models, lens
+        # detection still works on the activations regardless of prompt framing —
+        # the workspace-context hack was only ever needed for base-model prompting.
+        try:
+            _model_name = analyzer.config.get("model", {}).get("name", "") if analyzer.config else ""
+        except Exception:
+            _model_name = ""
+        if "-it" in _model_name.lower() and hasattr(analyzer.tokenizer, "apply_chat_template"):
+            # Strip HatCat-specific suffixes (analyzer summary, LLM explanation)
+            # from prior assistant turns. OpenWebUI merges per-chunk content into
+            # one assistant message, so the "**Analysis**: ..." line and "💭 ..."
+            # explanation get baked into the saved message content. On continuation
+            # the model would echo that pattern back as new output. Keep only the
+            # natural-language response when sending history through the chat template.
+            def _strip_hatcat_suffixes(_text):
+                if not _text:
+                    return _text
+                _markers = ["\n**Analysis**:", "**Analysis**:", "\n\n💭", "\n💭"]
+                _earliest = len(_text)
+                for _mk in _markers:
+                    _i = _text.find(_mk)
+                    if _i != -1 and _i < _earliest:
+                        _earliest = _i
+                return _text[:_earliest].rstrip()
+
+            # Build a clean alternating message list for gemma's chat template.
+            # gemma rejects: system role, consecutive same-role messages, empty turns,
+            # and non-user-first sequences. OpenWebUI cheerfully sends all of those
+            # depending on settings. Normalize:
+            #   - system messages are merged into the next user turn
+            #   - consecutive same-role messages are concatenated
+            #   - empty content (after suffix strip) is dropped
+            #   - if first message isn't user, prepend a placeholder user turn
+            _chat_msgs = []
+            _pending_system = ""
+            _last_role = None
+            for _m in messages_dict:
+                _src_role = _m.get("role", "user")
+                _content = _m.get("content", "") or ""
+                if _src_role == "system":
+                    _pending_system += ("\n\n" if _pending_system else "") + _content
+                    continue
+                if _src_role == "assistant":
+                    _content = _strip_hatcat_suffixes(_content)
+                if not _content.strip():
+                    continue
+                _role = "model" if _src_role == "assistant" else "user"
+                if _role == "user" and _pending_system:
+                    _content = _pending_system + "\n\n" + _content
+                    _pending_system = ""
+                if _last_role == _role and _chat_msgs:
+                    _chat_msgs[-1]["content"] += "\n\n" + _content
+                else:
+                    _chat_msgs.append({"role": _role, "content": _content})
+                    _last_role = _role
+            # Edge: trailing system text with no following user — attach to last user turn
+            if _pending_system and _chat_msgs:
+                for _i in range(len(_chat_msgs) - 1, -1, -1):
+                    if _chat_msgs[_i]["role"] == "user":
+                        _chat_msgs[_i]["content"] = _pending_system + "\n\n" + _chat_msgs[_i]["content"]
+                        break
+            # gemma requires first message to be user
+            if _chat_msgs and _chat_msgs[0]["role"] != "user":
+                _chat_msgs.insert(0, {"role": "user", "content": "Hello"})
+            try:
+                prompt = analyzer.tokenizer.apply_chat_template(
+                    _chat_msgs,
+                    tokenize=False,
+                    add_generation_prompt=True,
+                )
+            except Exception as _e:
+                print(f"⚠ apply_chat_template failed, using raw prompt: {_e}")
+        # === end chat-template override ===
+
         # Tokenize with truncation
         inputs = analyzer.tokenizer(
             prompt,
@@ -1985,7 +2079,7 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
                     "id": f"chatcmpl-{step}-error",
                     "object": "chat.completion.chunk",
                     "created": 1234567890,
-                    "model": "hatcat-divergence",
+                    "model": HATCAT_MODEL_ID,
                     "choices": [{
                         "index": 0,
                         "delta": {
@@ -1999,6 +2093,13 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
 
             # Decode token
             token_text = analyzer.tokenizer.decode([next_token_id.item()])
+
+            # Stop on EOS / <end_of_turn> *before* emitting the chunk, so the special
+            # token's text representation doesn't leak into the streamed response.
+            # Previously the stop-token check happened after the yield, so
+            # "<end_of_turn>" was rendered as visible content before generation halted.
+            if next_token_id.item() in stop_tokens:
+                break
 
             # Check if we're starting to generate conversation structure (stop tokens)
             # Check the accumulated text for conversation markers
@@ -2282,17 +2383,38 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
                 "tools_available": len(workspace._get_available_tools()),
             }
 
+            # Build simplex/tripole metadata — runs alongside hierarchical concept
+            # activations now that detect_and_expand calls simplex.detect() per token.
+            simplex_metadata = None
+            if analyzer.manager.loaded_simplex_lenses:
+                tripole_state = analyzer.manager.get_all_tripole_activations()
+                all_simplex = analyzer.manager.get_all_simplex_activations()
+                grouped_pole_terms = set()
+                for name in tripole_state:
+                    for pole in ("positive", "neutral", "negative"):
+                        grouped_pole_terms.add(f"{name}_{pole}")
+                legacy_singles = {
+                    term: data
+                    for term, data in all_simplex.items()
+                    if term not in grouped_pole_terms
+                }
+                simplex_metadata = {
+                    "tripoles": tripole_state,
+                    "legacy_singles": legacy_singles if legacy_singles else None,
+                }
+
             chunk = {
                 "id": f"chatcmpl-{step}",
                 "object": "chat.completion.chunk",
                 "created": 1234567890,
-                "model": "hatcat-divergence",
+                "model": HATCAT_MODEL_ID,
                 "choices": [{
                     "index": 0,
                     "delta": {
                         "content": token_text,
                         "metadata": {
                             "divergence": div_data,
+                            "simplex": simplex_metadata,
                             "steering": steering_metadata,
                             "hush": hush_metadata,
                             "autonomic": autonomic_metadata,
@@ -2325,7 +2447,7 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
             "id": "chatcmpl-final",
             "object": "chat.completion.chunk",
             "created": 1234567890,
-            "model": "hatcat-divergence",
+            "model": HATCAT_MODEL_ID,
             "choices": [{
                 "index": 0,
                 "delta": {},
@@ -2433,7 +2555,7 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
             "id": "chatcmpl-error",
             "object": "chat.completion.chunk",
             "created": 1234567890,
-            "model": "hatcat-divergence",
+            "model": HATCAT_MODEL_ID,
             "choices": [{
                 "index": 0,
                 "delta": {
