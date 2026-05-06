@@ -26,6 +26,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.map.training.sumo_classifiers import train_sumo_classifiers
+from src.map.training.sample_quality import SampleSaver
 from src.map.training.sumo_data_generation import create_simplex_pole_training_dataset
 from src.map.training.dual_adaptive_trainer import DualAdaptiveTrainer
 from src.map.training.sumo_classifiers import extract_activations
@@ -74,6 +75,9 @@ def parse_args():
                         help='Run name (default: timestamp)')
     parser.add_argument('--all-layers', action='store_true',
                         help='Extract from all layers (experimental). Classifier learns which layers matter.')
+    parser.add_argument('--save-samples', action='store_true',
+                        help='Save generated training samples (with quality checks) to output_dir/samples/. '
+                             'Useful for auditing prompt/response quality and for downstream CAT fine-tuning.')
 
     return parser.parse_args()
 
@@ -329,6 +333,11 @@ def main():
     concept_pack_path = Path(args.concept_pack)
     hierarchy_dir = concept_pack_path / "hierarchy"
 
+    sample_saver = None
+    if args.save_samples:
+        sample_saver = SampleSaver(output_dir, args.concept_pack)
+        print(f"Sample saving enabled: {sample_saver.output_dir}")
+
     train_sumo_classifiers(
         layers=args.layers,
         hierarchy_dir=hierarchy_dir,
@@ -342,6 +351,7 @@ def main():
         train_text_lenses=False,
         use_adaptive_training=True,
         validation_mode=args.validation_mode,
+        sample_saver=sample_saver,
     )
 
     # Train simplexes
