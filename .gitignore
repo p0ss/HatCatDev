@@ -102,6 +102,11 @@ Thumbs.db
 projectplan.md
 .webui_secret_key
 
+# Environment files (may contain secrets)
+.env
+.env.*
+!.env.example
+
 # Probe packs: Keep all
 
 # Concept packs: Keep everything (just metadata)
