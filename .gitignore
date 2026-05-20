@@ -41,6 +41,26 @@ ENV/
 
 # Data directory (large files, downloaded/generated)
 data/
+# ...except hand-authored concept-graph source .kif files (training inputs we
+# don't want to lose). Trained outputs and generated artefacts stay ignored.
+# Pattern: re-include each directory, then re-ignore its contents, then
+# re-include the specific source files we want to track.
+!data/
+!data/concept_graph/
+data/concept_graph/*
+!data/concept_graph/custom_concepts/
+!data/concept_graph/sumo_source/
+!data/concept_graph/sumo_patches/
+!data/concept_graph/persona_concepts.kif
+!data/concept_graph/custom_sumo_concepts.kif
+data/concept_graph/custom_concepts/*
+!data/concept_graph/custom_concepts/*.kif
+!data/concept_graph/custom_concepts/README.md
+data/concept_graph/sumo_source/*
+!data/concept_graph/sumo_source/*.kif
+data/concept_graph/sumo_patches/*
+!data/concept_graph/sumo_patches/*.kif
+!data/concept_graph/sumo_patches/README.md
 
 # Model files
 models/*
