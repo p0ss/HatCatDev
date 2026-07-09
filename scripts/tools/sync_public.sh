@@ -46,6 +46,7 @@ RSYNC_EXCLUDES=(
     --exclude='.pytest_cache'
     --exclude='*.egg-info'
     --exclude='.git'
+    --exclude='.claude'
     --exclude='AGENTS.md'
     --exclude='CLAUDE.md'
     --exclude='lens_packs'
