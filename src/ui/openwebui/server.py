@@ -1828,30 +1828,31 @@ async def generate_stream(request: ChatCompletionRequest) -> AsyncGenerator[str,
         )
         generated_output_text = ""  # Track output for audit finalization
 
-        # Get interprompt session and inject prior concept state
+        # Get interprompt session and workspace manager (always — they back the
+        # observability path even when not injected into the prompt).
         interprompt_session = get_interprompt_session(request.session_id)
         interprompt_context = interprompt_session.get_context_for_next_turn()
-
-        # Get workspace manager and inject workspace context
         workspace = get_workspace_manager(request.session_id)
 
-        # Build combined context
-        context_parts = []
-
-        # Workspace state context (includes pass token requirement)
-        if workspace.state.value == "engaged":
-            context_parts.append(workspace.build_engaged_context())
-        else:
-            context_parts.append(workspace._build_autonomic_context())
-
-        # Prior concept state (if available and not already in workspace context)
+        # Update workspace with prior concepts so internal state stays current
+        # regardless of whether we inject it back into the model.
         if interprompt_context.prior_summary:
-            # Update workspace with prior concepts for its context
             workspace.set_prior_concepts(interprompt_context.prior_summary)
 
-        # Inject combined context
-        if context_parts:
-            combined_context = "\n\n".join(context_parts)
+        # Workspace-context injection is OFF by default. When enabled, the
+        # model sees its own activation report (concept names, divergences,
+        # tier state) prepended to its prompt. Lenses are designed as
+        # out-of-band observation — feeding them back into the prompt lets a
+        # base model parrot them as text, and (more seriously) gives the
+        # occupant a channel to react to its own interpretability output.
+        # Only enable this deliberately, with a model and scaffolding that
+        # know how to read the workspace block.
+        workspace_cfg = analyzer.config.get("workspace", {}) if analyzer.config else {}
+        if workspace_cfg.get("inject_context", False):
+            if workspace.state.value == "engaged":
+                combined_context = workspace.build_engaged_context()
+            else:
+                combined_context = workspace._build_autonomic_context()
             prompt = f"{combined_context}\n\n---\n\n{prompt}"
 
         # === Apply chat template for instruct models ===

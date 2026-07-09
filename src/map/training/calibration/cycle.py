@@ -482,11 +482,12 @@ def main():
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model)
+    tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=True)
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
         torch_dtype=torch.bfloat16,
         device_map=args.device,
+        local_files_only=True,
     )
 
     # Run cycle

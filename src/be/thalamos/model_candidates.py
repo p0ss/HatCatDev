@@ -86,6 +86,29 @@ MODEL_CANDIDATES: Dict[str, ModelCandidate] = {
         notes="Instruction-tuned with chat template.",
     ),
 
+    # Gemma 4 E4B pretrained (base model, PLE architecture)
+    "gemma-4-E4B": ModelCandidate(
+        model_id="google/gemma-4-E4B",
+        name="Gemma 4 E4B (PT)",
+        model_class="AutoModelForMultimodalLM",
+        params_billions=4.5,  # effective; 8B total with embeddings
+        is_multimodal=True,
+        vram_gb_estimate=16,
+        notes="42 layers, PLE, 128k context, 262k vocab. 4.5B effective / 8B total params.",
+    ),
+
+    # Gemma 4 E4B instruct (has chat template + thinking mode)
+    "gemma-4-E4B-it": ModelCandidate(
+        model_id="google/gemma-4-E4B-it",
+        name="Gemma 4 E4B Instruct",
+        model_class="AutoModelForMultimodalLM",
+        params_billions=4.5,  # effective; 8B total with embeddings
+        is_multimodal=True,
+        vram_gb_estimate=16,
+        reasoning_mode="<|think|>",
+        notes="42 layers, PLE, 128k context. Instruction-tuned with thinking mode.",
+    ),
+
     # AllenAI OLMo - open data, reasoning
     "olmo-3-7b-think": ModelCandidate(
         model_id="allenai/Olmo-3-7B-Think",
@@ -362,7 +385,14 @@ class CandidateLoader:
 
         # Load model based on class
         processor = None
-        if candidate.model_class == "AutoModelForImageTextToText":
+        if candidate.model_class == "AutoModelForMultimodalLM":
+            from transformers import AutoModelForMultimodalLM, AutoProcessor
+            model = AutoModelForMultimodalLM.from_pretrained(
+                candidate.model_id, **load_kwargs
+            )
+            processor = AutoProcessor.from_pretrained(candidate.model_id)
+            tokenizer = processor.tokenizer
+        elif candidate.model_class == "AutoModelForImageTextToText":
             from transformers import AutoModelForImageTextToText, AutoProcessor
             model = AutoModelForImageTextToText.from_pretrained(
                 candidate.model_id, **load_kwargs

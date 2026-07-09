@@ -12,6 +12,8 @@ eggs/
 .eggs/
 lib/
 lib64/
+!hatstand/lib/
+!hatstand/lib/**
 parts/
 sdist/
 var/
@@ -65,6 +67,8 @@ data/concept_graph/sumo_patches/*
 # Model files
 models/*
 !models/.gitkeep
+!hatstand/app/models/
+!hatstand/app/models/**
 *.pt
 *.pth
 *.bin
@@ -156,6 +160,8 @@ concept_packs/
 
 # Downloaded/cached models
 models/
+!hatstand/app/models/
+!hatstand/app/models/**
 
 
 # Results directories (keep structure, exclude large files)

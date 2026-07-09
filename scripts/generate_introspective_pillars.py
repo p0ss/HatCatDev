@@ -6,28 +6,48 @@ The model maps its own knowledge and capabilities.
 
 import json
 import logging
+import sys
 from pathlib import Path
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+
+PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.be.thalamos.model_candidates import CandidateLoader, MODEL_CANDIDATES
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
-def load_model(model_id: str = "google/gemma-3-4b-it"):
-    """Load the model for generation."""
-    logger.info(f"Loading {model_id}...")
-
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
-    model = AutoModelForCausalLM.from_pretrained(
-        model_id,
-        device_map="auto",
-        torch_dtype=torch.bfloat16,
+def load_model(model_id: str = "google/gemma-4-E4B-it"):
+    """Load the model for generation, using CandidateLoader if registered."""
+    # Check if model is in the candidate registry (by key or by model_id)
+    candidate_key = (
+        model_id if model_id in MODEL_CANDIDATES
+        else next(
+            (k for k, v in MODEL_CANDIDATES.items() if v.model_id == model_id),
+            None,
+        )
     )
 
-    logger.info("Model loaded")
-    return model, tokenizer
+    if candidate_key:
+        logger.info(f"Loading {model_id} via CandidateLoader...")
+        loader = CandidateLoader()
+        candidate = MODEL_CANDIDATES[candidate_key]
+        model, tokenizer, _ = loader.load(candidate)
+        return model, tokenizer
+    else:
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        logger.info(f"Loading {model_id} directly...")
+        tokenizer = AutoTokenizer.from_pretrained(model_id)
+        model = AutoModelForCausalLM.from_pretrained(
+            model_id,
+            device_map="auto",
+            torch_dtype=torch.bfloat16,
+        )
+        model.eval()
+        return model, tokenizer
 
 
 def generate_pillars(model, tokenizer, prompt: str, max_tokens: int = 4096) -> str:
@@ -92,8 +112,8 @@ def main():
     )
     parser.add_argument(
         "--model", "-m",
-        default="google/gemma-3-4b-it",
-        help="Model to use"
+        default="google/gemma-4-E4B-it",
+        help="Model to use (HuggingFace ID or candidate registry key)"
     )
 
     args = parser.parse_args()
