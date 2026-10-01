@@ -254,6 +254,11 @@ def create_sumo_training_dataset(
     meld_positive_ratio = 0.8 if has_meld_examples else 0.4
     meld_negative_ratio = 0.8 if has_meld_examples else 0.3
 
+    # A concept is defined by what it contains: when the pack gives its children's
+    # definitions, a quarter of the positives describe them (content, not names)
+    child_definitions = [d for d in concept.get('child_definitions', {}).values() if d]
+    n_child_positives = max(2, n_positives // 4) if child_definitions else 0
+
     # Track if this is a polar MELD for backwards compatibility
     is_polar_meld = concept.get('_source') == 'polar_meld'
 
@@ -262,7 +267,7 @@ def create_sumo_training_dataset(
     # ========================================================================
     if meld_positive_examples:
         # Use more meld examples for polar MELDs since generated prompts don't distinguish poles
-        max_meld_positives = max(2, int(n_positives * meld_positive_ratio))
+        max_meld_positives = max(2, int((n_positives - n_child_positives) * meld_positive_ratio))
         for example in meld_positive_examples[:max_meld_positives]:
             prompts.append(example)
             labels.append(1)
@@ -300,9 +305,18 @@ def create_sumo_training_dataset(
         if disambiguation or key_features:
             print(f"    💡 Generated {1 if disambiguation else 0} + {min(3, len(key_features))} prompts from training hints")
 
+    if n_child_positives:
+        sampled = random.sample(child_definitions, min(n_child_positives, len(child_definitions)))
+        prompts.extend(sampled)
+        labels.extend([1] * len(sampled))
+        n_meld_positives_used += len(sampled)
+        print(f"    🧩 Using {len(sampled)} child definitions as positives")
+
     # Positive examples: use diverse templates
     # BALANCE: Mix definitional prompts ("what is X") with instance-eliciting prompts ("give examples of X")
     # Instance-eliciting prompts help the lens generalize to actual content, not just descriptions
+
+    templates_start = len(prompts)
 
     # 1. Definitional prompt (what IS the concept)
     if definition:
@@ -330,7 +344,8 @@ def create_sumo_training_dataset(
 
     # Adjust remaining count based on meld examples already added
     # Base prompts: 1 definitional + 4 instance-eliciting + 1 multilingual = 6
-    n_remaining = n_positives - 6 - n_meld_positives_used
+    # (can run out when MELD examples already exceed a small budget)
+    n_remaining = max(0, n_positives - 6 - n_meld_positives_used)
 
     # SUMO category relationships
     category_prompts = []
@@ -397,6 +412,12 @@ def create_sumo_training_dataset(
 
     prompts.extend(rel_prompts)
     labels.extend([1] * len(rel_prompts))
+
+    # Child positives can push past the budget; drop generic templates, not content
+    surplus = min(len(prompts) - n_positives, 6)
+    if n_child_positives and surplus > 0:
+        del prompts[templates_start:templates_start + surplus]
+        del labels[templates_start:templates_start + surplus]
 
     # ========================================================================
     # NEGATIVE EXAMPLES
@@ -740,8 +761,26 @@ def build_sumo_negative_pool(
     # Build concept map for efficient lookup
     concept_map = {c['sumo_term']: c for c in all_concepts}
 
+    # Parents via category_children (the downward links _find_all_ancestors uses),
+    # built once: scanning every concept per lookup is quadratic in pack size
+    parents_of: Dict[str, set] = {}
+    for c in all_concepts:
+        for child in c.get('category_children', []):
+            parents_of.setdefault(child, set()).add(c['sumo_term'])
+    ancestor_cache: Dict[str, frozenset] = {}
+
+    def all_ancestors(term: str) -> frozenset:
+        if term not in ancestor_cache:
+            ancestor_cache[term] = frozenset()  # guards against cycles
+            found = set()
+            for parent in parents_of.get(term, ()):
+                found.add(parent)
+                found |= all_ancestors(parent)
+            ancestor_cache[term] = frozenset(found)
+        return ancestor_cache[term]
+
     # Find all ancestors (parents, grandparents, etc.)
-    ancestors = _find_all_ancestors(target_term, all_concepts)
+    ancestors = set(all_ancestors(target_term))
 
     # Find ONLY direct children (not all descendants)
     # Nephews/nieces (grandchildren) are valid negatives!
@@ -750,11 +789,35 @@ def build_sumo_negative_pool(
     # Find siblings (same parent) - these are hard negatives
     siblings = _find_siblings(target_term, all_concepts, concept_map)
 
+    # Cross-links from the concept pack builder: related concepts in other branches
+    # are contrasted like siblings; near-duplicates are never negatives for each other
+    related = set(target_concept.get('related_concepts', []))
+    equivalent = set(target_concept.get('equivalent_concepts', []))
+    # From overlaps between definition-only descendants: topics this concept shares
+    # with another branch are never negatives; similar-but-distinct ones are hard negatives
+    shared = set(target_concept.get('shared_topics', []))
+    diagonal = set(target_concept.get('diagonal_negatives', []))
+
+    def is_definition_only_descendant(concept):
+        """Definition-only nodes describe what their ancestors contain, so they
+        are never negatives for those ancestors (only for other branches)."""
+        if not concept.get('definition_only'):
+            return False
+        seen, frontier = set(), list(concept.get('parent_concepts', []))
+        while frontier:
+            parent = frontier.pop()
+            if parent == target_term:
+                return True
+            if parent not in seen:
+                seen.add(parent)
+                frontier.extend(concept_map.get(parent, {}).get('parent_concepts', []))
+        return False
+
     # Identify L0 concepts for bucket organization
     l0_concepts = {c['sumo_term'] for c in all_concepts if c.get('layer') == 0}
 
     # Find which L0 buckets the target belongs to (for exclusion from round-robin)
-    target_l0_ancestors = _find_l0_ancestors(target_term, all_concepts, concept_map, l0_concepts)
+    target_l0_ancestors = all_ancestors(target_term) & l0_concepts
 
     # Build L0 buckets for round-robin sampling
     l0_buckets = {l0: [] for l0 in l0_concepts}
@@ -776,6 +839,13 @@ def build_sumo_negative_pool(
         if concept_term in direct_children:
             continue
 
+        # Skip near-duplicates in other branches, and topics shared with them
+        if concept_term in equivalent or concept_term in shared:
+            continue
+
+        if is_definition_only_descendant(concept):
+            continue
+
         # For Layer 0 (all same layer), accept all non-ancestral relations
         if target_layer == 0 and concept['layer'] == 0:
             negatives.append(concept_term)
@@ -786,7 +856,7 @@ def build_sumo_negative_pool(
         if layer_dist >= min_layer_distance:
             # Add to L0 bucket if using round-robin
             if use_l0_round_robin and concept['layer'] > 0:
-                concept_l0_ancestors = _find_l0_ancestors(concept_term, all_concepts, concept_map, l0_concepts)
+                concept_l0_ancestors = all_ancestors(concept_term) & l0_concepts
                 for l0 in concept_l0_ancestors:
                     if l0 not in target_l0_ancestors:  # Exclude target's own L0 branches
                         l0_buckets[l0].append(concept_term)
@@ -806,6 +876,12 @@ def build_sumo_negative_pool(
         print(f"    👥 Added {len(sibling_negs_available)} sibling hard negatives with {sibling_weight}x weight")
     elif not include_siblings and siblings:
         print(f"    ⏭️  Skipping {len(siblings)} sibling hard negatives (two-pass mode)")
+
+    related_negs_available = [r for r in related | diagonal if r in negatives and r not in sibling_negs_available] if include_siblings else []
+    if related_negs_available:
+        negatives = [n for n in negatives if n not in related_negs_available]
+        negatives = related_negs_available * int(sibling_weight) + negatives
+        print(f"    🔗 Added {len(related_negs_available)} cross-linked hard negatives with {sibling_weight}x weight")
 
     # ========================================================================
     # AI SYMMETRY HARD NEGATIVES
@@ -1599,3 +1675,91 @@ def generate_cross_pole_negatives_from_antonyms(
         prompts.append(random.choice(templates))
 
     return prompts
+
+
+# ============================================================================
+# CONTENT BUDGET
+# ============================================================================
+# Train on real text only, sized by what the concept has, instead of padding a
+# fixed budget with templated rewordings. On the university ontology (Gemma 4
+# E4B-it) this matched the best templated budget on hard negatives with a
+# quarter of the samples, and beat it clearly against all negatives.
+
+MIN_CONTENT_POSITIVES = 8
+
+
+def has_real_content(concept: Dict) -> bool:
+    """Enough authored text (MELD examples, descendants, boundaries) to train on without templates."""
+    n = (len(concept.get('positive_examples', []))
+         + len(concept.get('child_definitions', {}))
+         + len(concept.get('boundary_positives', [])))
+    return n >= MIN_CONTENT_POSITIVES
+
+
+def create_content_dataset(
+    concept: Dict,
+    all_concepts: List[Dict],
+    descendant_cap: int = 100,
+    rng: Optional[random.Random] = None,
+    diagonal_cap: int = 0,
+    diagonal_extra: bool = False,
+):
+    """
+    Real-text dataset for one concept.
+
+    Positives: its MELD examples, its descendants' definitions (up to
+    descendant_cap) and its side of every "differs because" boundary.
+    Negatives: its MELD negatives, the other side of every boundary, then other
+    concepts' real text to balance the classes - never its own descendants,
+    parents, equivalents or shared topics.
+
+    diagonal_cap > 0 first adds up to that many texts from the concept's hard
+    neighbours in other branches (its diagonal negatives and related concepts,
+    from the pack builder's cross-linking), so the budget grows with them. They
+    replace part of the balancing fill unless diagonal_extra, which sizes the
+    fill as if they weren't there and adds them on top.
+
+    Returns (prompts, labels).
+    """
+    rng = rng or random.Random()
+    term = concept['sumo_term']
+    records = {c['sumo_term']: c for c in all_concepts}
+
+    def descends(c):
+        seen = set()
+        while c.get('parent_concepts'):
+            parent = c['parent_concepts'][0]
+            if parent == term:
+                return True
+            if parent in seen:
+                return False
+            seen.add(parent)
+            c = records.get(parent, {})
+        return False
+
+    descendants = list(concept.get('child_definitions', {}).values())
+    pos = list(concept.get('positive_examples', []))
+    pos += rng.sample(descendants, min(descendant_cap, len(descendants)))
+    pos += concept.get('boundary_positives', [])
+    neg = list(concept.get('negative_examples', [])) + list(concept.get('boundary_negatives', []))
+    n_before_diagonal = len(neg)
+    if diagonal_cap:
+        hard = []
+        for t in list(concept.get('diagonal_negatives', [])) + list(concept.get('related_concepts', [])):
+            c = records.get(t)
+            if c is not None:
+                hard += c.get('positive_examples', []) or [c.get('definition', '')]
+        hard = [t for t in hard if t]
+        neg += rng.sample(hard, min(diagonal_cap, len(hard)))
+
+    keep_out = {term} | set(concept.get('equivalent_concepts', [])) | set(concept.get('shared_topics', []))
+    keep_out |= set(concept.get('parent_concepts', []))
+    fill = []
+    for c in all_concepts:
+        if c['sumo_term'] in keep_out or c.get('layer', 0) == 0 or descends(c):
+            continue
+        fill += c.get('positive_examples', []) or [c.get('definition', '')]
+    fill = [t for t in fill if t]
+    n_fill = len(pos) - (n_before_diagonal if diagonal_extra else len(neg))
+    neg += rng.sample(fill, min(max(0, n_fill), len(fill)))
+    return pos + neg, [1] * len(pos) + [0] * len(neg)

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import gc
 import json
+import random
 import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
@@ -22,7 +23,7 @@ from torch.optim import Adam
 from src.hat.classifiers.classifier import MLPClassifier, load_classifier, save_classifier
 
 from .sumo_classifiers import extract_activations
-from .sumo_data_generation import create_sumo_training_dataset
+from .sumo_data_generation import create_content_dataset, create_sumo_training_dataset, has_real_content
 
 
 def find_lens_path(lens_dir: Path, concept_name: str) -> Optional[Path]:
@@ -34,6 +35,25 @@ def find_lens_path(lens_dir: Path, concept_name: str) -> Optional[Path]:
     if legacy_path.exists():
         return legacy_path
     return None
+
+
+def find_probe_paths(lens_dir: Path, concept_name: str) -> Dict[int, Path]:
+    """Band probes of a multi-layer lens (`<concept>@L<model_layer>.pt`), keyed by model layer."""
+    probes = {}
+    for path in lens_dir.glob(f"{concept_name}@L*.pt"):
+        term, _, layer = path.stem.rpartition("@L")
+        if term == concept_name and layer.isdigit():
+            probes[int(layer)] = path
+    return probes
+
+
+def has_trained_lens(lens_dir: Path, concept_name: str) -> bool:
+    return find_lens_path(lens_dir, concept_name) is not None or bool(find_probe_paths(lens_dir, concept_name))
+
+
+def _normalize(acts: torch.Tensor) -> torch.Tensor:
+    """Per-sample standardisation: what training and HAT's runtime LayerNorm apply."""
+    return (acts - acts.mean(dim=-1, keepdim=True)) / (acts.std(dim=-1, keepdim=True) + 1e-8)
 
 
 def load_lens(
@@ -206,12 +226,9 @@ def get_sibling_groups(
             if legacy_parent:
                 parents = [legacy_parent]
 
-        if parents:
-            # Use first parent for primary grouping
-            parent = parents[0]
-            if parent not in parent_to_children:
-                parent_to_children[parent] = []
-            parent_to_children[parent].append(c['sumo_term'])
+        # Use first parent for primary grouping; top-level concepts rank against each other
+        parent = parents[0] if parents else "<root>"
+        parent_to_children.setdefault(parent, []).append(c['sumo_term'])
 
     # Filter to groups where all siblings have trained lenses
     valid_groups = {}
@@ -222,11 +239,7 @@ def get_sibling_groups(
             continue
 
         # Check all have lenses
-        trained_siblings = []
-        for child in children:
-            lens_path = find_lens_path(lens_dir, child)
-            if lens_path is not None:
-                trained_siblings.append(child)
+        trained_siblings = [child for child in children if has_trained_lens(lens_dir, child)]
 
         if len(trained_siblings) < min_siblings:
             continue
@@ -335,7 +348,7 @@ def refine_sibling_group(
     activations_by_sibling = {}
     for sibling, prompts in prompts_by_sibling.items():
         acts = extract_activations(model, tokenizer, prompts, device, layer_idx=layer_idx)
-        activations_by_sibling[sibling] = torch.tensor(acts, dtype=torch.float32).to(device)
+        activations_by_sibling[sibling] = _normalize(torch.tensor(acts, dtype=torch.float32).to(device))
 
     # Evaluate pre-refinement accuracy
     pre_accuracy = evaluate_sibling_ranking_accuracy(lenses, activations_by_sibling, device)
@@ -418,6 +431,124 @@ def refine_sibling_group(
         'improvement': post_accuracy - pre_accuracy,
         'epochs': epochs,
         'time': elapsed,
+    }
+
+
+def refine_band_group(
+    members: List[str],
+    lens_dir: Path,
+    concept_map: Dict[str, Dict],
+    model,
+    tokenizer,
+    device: str = "cuda",
+    n_prompts_per_sibling: int = 15,
+    epochs: int = 20,
+    lr: float = 0.001,
+    margin: float = 1.0,
+    save_refined: bool = True,
+) -> Dict:
+    """
+    Sibling ranking refinement for band-probe lenses (`<concept>@L<n>.pt`).
+
+    Each concept's lens is a set of probes, one per band (early/mid/late), each
+    reading its own model layer. Within each band, a concept's probe should
+    outscore the other members' probes on that concept's prompts, where every
+    probe reads its own layer of the same forward pass. `members` is the
+    sibling group plus any cross-linked related concepts.
+
+    Originals are copied to `_pre_refinement/` before the first overwrite.
+    """
+    import shutil
+
+    start_time = time.time()
+
+    probe_paths = {m: find_probe_paths(lens_dir, m) for m in members}
+    n_bands = min(len(p) for p in probe_paths.values())
+    band_layers = {m: sorted(p)[:n_bands] for m, p in probe_paths.items()}
+    probes = {
+        (m, b): load_lens(probe_paths[m][layer], device=device).train()
+        for m, layers in band_layers.items() for b, layer in enumerate(layers)
+    }
+    needed_layers = sorted({layer for layers in band_layers.values() for layer in layers})
+    n_model_layers = getattr(model.config, "text_config", model.config).num_hidden_layers
+
+    # One all-layers forward pass per member; keep only the layers some probe reads
+    acts = {}
+    rng = random.Random(0)
+    for m in members:
+        if m not in concept_map:
+            continue
+        if has_real_content(concept_map[m]):
+            # The concept's own authored text (as the content budget trains on), not templates
+            texts, labels = create_content_dataset(concept_map[m], list(concept_map.values()), rng=rng)
+            own = [t for t, l in zip(texts, labels) if l == 1]
+            prompts = rng.sample(own, min(n_prompts_per_sibling, len(own)))
+        else:
+            prompts, _ = create_sumo_training_dataset(
+                concept=concept_map[m], all_concepts=concept_map, negative_pool=[],
+                n_positives=n_prompts_per_sibling, n_negatives=0,
+                use_category_relationships=True, use_wordnet_relationships=True,
+            )
+        X = torch.tensor(extract_activations(model, tokenizer, prompts, device, layer_idx=None), dtype=torch.float32)
+        X = X.reshape(X.shape[0], n_model_layers, -1)
+        acts[m] = {layer: _normalize(X[:, layer, :]).to(device) for layer in needed_layers}
+
+    def score(m, b, target):
+        return probes[(m, b)](acts[target][band_layers[m][b]]).squeeze(-1)
+
+    def accuracy():
+        """Fraction of prompts where the target's lens (max over bands, as HAT combines) wins."""
+        correct = total = 0
+        with torch.no_grad():
+            for target in acts:
+                lens_scores = torch.stack([
+                    torch.stack([score(m, b, target) for b in range(n_bands)]).max(dim=0).values
+                    for m in members
+                ])
+                correct += (lens_scores.argmax(dim=0) == members.index(target)).sum().item()
+                total += lens_scores.shape[1]
+        return correct / total if total else 0.0
+
+    pre_accuracy = accuracy()
+
+    optimizer = Adam([p for probe in probes.values() for p in probe.parameters()], lr=lr)
+    margin_loss = nn.MarginRankingLoss(margin=margin)
+    for _ in range(epochs):
+        optimizer.zero_grad()
+        for target in acts:
+            for b in range(n_bands):
+                target_scores = score(target, b, target)
+                ones = torch.ones_like(target_scores)
+                for other in members:
+                    if other != target:
+                        margin_loss(target_scores, score(other, b, target), ones).backward(retain_graph=True)
+        optimizer.step()
+
+    for probe in probes.values():
+        probe.eval()
+    post_accuracy = accuracy()
+
+    if save_refined:
+        backup_dir = lens_dir / "_pre_refinement"
+        backup_dir.mkdir(exist_ok=True)
+        for (m, b), probe in probes.items():
+            path = probe_paths[m][band_layers[m][b]]
+            if not (backup_dir / path.name).exists():
+                shutil.copy2(path, backup_dir / path.name)
+            save_lens(probe, path)
+
+    del probes, acts, optimizer
+    gc.collect()
+    if device == "cuda":
+        torch.cuda.empty_cache()
+
+    return {
+        'siblings': members,
+        'pre_accuracy': pre_accuracy,
+        'post_accuracy': post_accuracy,
+        'improvement': post_accuracy - pre_accuracy,
+        'epochs': epochs,
+        'time': time.time() - start_time,
     }
 
 
@@ -507,19 +638,38 @@ def refine_all_sibling_groups(
 
     results = []
     for i, (parent, siblings) in enumerate(sibling_groups.items()):
-        print(f"[{i+1}/{len(sibling_groups)}] Refining {parent} ({len(siblings)} siblings)")
-
-        result = refine_sibling_group(
-            siblings=siblings,
-            lens_dir=lens_dir,
-            concept_map=concept_map,
-            model=model,
-            tokenizer=tokenizer,
-            device=device,
-            n_prompts_per_sibling=n_prompts_per_sibling,
-            epochs=epochs,
-            hidden_dim=hidden_dim,
-        )
+        if all(find_probe_paths(lens_dir, s) for s in siblings):
+            # Band-probe lenses; cross-linked concepts from other branches join the ranking
+            related = [
+                r for s in siblings for r in concept_map[s].get("related_concepts", [])
+                if r in concept_map and r not in siblings and find_probe_paths(lens_dir, r)
+            ]
+            members = siblings + sorted(set(related))
+            print(f"[{i+1}/{len(sibling_groups)}] Refining {parent} ({len(siblings)} siblings"
+                  f"{f', {len(members) - len(siblings)} cross-linked' if related else ''}, band probes)")
+            result = refine_band_group(
+                members=members,
+                lens_dir=lens_dir,
+                concept_map=concept_map,
+                model=model,
+                tokenizer=tokenizer,
+                device=device,
+                n_prompts_per_sibling=n_prompts_per_sibling,
+                epochs=epochs,
+            )
+        else:
+            print(f"[{i+1}/{len(sibling_groups)}] Refining {parent} ({len(siblings)} siblings)")
+            result = refine_sibling_group(
+                siblings=siblings,
+                lens_dir=lens_dir,
+                concept_map=concept_map,
+                model=model,
+                tokenizer=tokenizer,
+                device=device,
+                n_prompts_per_sibling=n_prompts_per_sibling,
+                epochs=epochs,
+                hidden_dim=hidden_dim,
+            )
 
         print(f"    Accuracy: {result['pre_accuracy']:.1%} → {result['post_accuracy']:.1%} "
               f"({result['improvement']:+.1%}) [{result['time']:.1f}s]")
@@ -560,6 +710,8 @@ __all__ = [
     'save_lens',
     'get_sibling_groups',
     'refine_sibling_group',
+    'refine_band_group',
+    'find_probe_paths',
     'refine_all_sibling_groups',
     'evaluate_sibling_ranking_accuracy',
     'needs_sibling_refinement',

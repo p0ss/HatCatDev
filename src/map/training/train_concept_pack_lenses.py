@@ -101,6 +101,13 @@ def parse_args():
                              'Higher k = more compute but potentially better coverage.')
 
     # Sample saving for CAT training
+    parser.add_argument('--budget', choices=['content', 'adaptive'], default='content',
+                        help='content (default): concepts with authored text (MELD examples, descendants, '
+                             'boundaries) train on that text alone, in one pass; others fall back to adaptive. '
+                             'adaptive: always use the adaptive templated generator.')
+    parser.add_argument('--band-probes', action='store_true',
+                        help='With --multi-layer, train an independent probe per selected layer '
+                             '(saved as <concept>@L<n>.pt) instead of one probe on their concatenation.')
     parser.add_argument('--save-samples', action='store_true',
                         help='Save training samples with quality metrics for later CAT fine-tuning')
 
@@ -241,6 +248,10 @@ def main():
         },
         "trained_at": datetime.now().isoformat() + "Z"
     }
+    pack_reference["training_config"]["budget"] = args.budget
+    if args.band_probes:
+        # Tells HAT each lens is a set of <concept>@L<n>.pt probes, one per band
+        pack_reference["probe_layout"] = {"mode": "band", "per_band": args.multi_layer_k}
 
     with open(output_dir / "pack_info.json", 'w') as f:
         json.dump(pack_reference, f, indent=2)
@@ -338,6 +349,8 @@ def main():
             all_layers=args.all_layers,
             multi_layer_mode=args.multi_layer,
             multi_layer_top_k=args.multi_layer_k,
+            band_probes=args.band_probes,
+            budget=args.budget,
             sample_saver=sample_saver,
         )
     else:

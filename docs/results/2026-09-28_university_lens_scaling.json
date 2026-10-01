@@ -1,0 +1,910 @@
+{
+ "date": "2026-09-28",
+ "model": "google/gemma-4-E4B-it",
+ "held_out_texts": 3260,
+ "metric_note": "per-lens AUROC; 'hard' = siblings + cross-linked concepts only; mean of band probes unless noted",
+ "grid": [
+  {
+   "pack": "university-exp-d0",
+   "budget": "fixed",
+   "samples": 20,
+   "seconds": 173,
+   "summary": {
+    "band0_all": 0.7106,
+    "band0_hard": 0.6793,
+    "band1_all": 0.6114,
+    "band1_hard": 0.594,
+    "band2_all": 0.6627,
+    "band2_hard": 0.6411,
+    "max_all": 0.6731,
+    "max_hard": 0.6477,
+    "mean_all": 0.6923,
+    "mean_hard": 0.6654
+   }
+  },
+  {
+   "pack": "university-exp-d0",
+   "budget": "fixed",
+   "samples": 40,
+   "seconds": 345,
+   "summary": {
+    "band0_all": 0.6962,
+    "band0_hard": 0.6686,
+    "band1_all": 0.6068,
+    "band1_hard": 0.5897,
+    "band2_all": 0.6844,
+    "band2_hard": 0.6571,
+    "max_all": 0.6928,
+    "max_hard": 0.6671,
+    "mean_all": 0.6917,
+    "mean_hard": 0.6658
+   }
+  },
+  {
+   "pack": "university-exp-d0",
+   "budget": "fixed",
+   "samples": 80,
+   "seconds": 686,
+   "summary": {
+    "band0_all": 0.7092,
+    "band0_hard": 0.6689,
+    "band1_all": 0.5941,
+    "band1_hard": 0.5698,
+    "band2_all": 0.698,
+    "band2_hard": 0.6544,
+    "max_all": 0.6934,
+    "max_hard": 0.6551,
+    "mean_all": 0.6975,
+    "mean_hard": 0.658
+   }
+  },
+  {
+   "pack": "university-exp-d0",
+   "budget": "fixed",
+   "samples": 160,
+   "seconds": 1376,
+   "summary": {
+    "band0_all": 0.6968,
+    "band0_hard": 0.6502,
+    "band1_all": 0.5877,
+    "band1_hard": 0.5631,
+    "band2_all": 0.6793,
+    "band2_hard": 0.6319,
+    "max_all": 0.6821,
+    "max_hard": 0.6393,
+    "mean_all": 0.6808,
+    "mean_hard": 0.637
+   }
+  },
+  {
+   "pack": "university-exp-d1",
+   "budget": "fixed",
+   "samples": 20,
+   "seconds": 193,
+   "summary": {
+    "band0_all": 0.7047,
+    "band0_hard": 0.6803,
+    "band1_all": 0.6013,
+    "band1_hard": 0.5892,
+    "band2_all": 0.6491,
+    "band2_hard": 0.6328,
+    "max_all": 0.6519,
+    "max_hard": 0.6368,
+    "mean_all": 0.6823,
+    "mean_hard": 0.6617
+   }
+  },
+  {
+   "pack": "university-exp-d1",
+   "budget": "fixed",
+   "samples": 40,
+   "seconds": 363,
+   "summary": {
+    "band0_all": 0.7552,
+    "band0_hard": 0.7177,
+    "band1_all": 0.629,
+    "band1_hard": 0.6101,
+    "band2_all": 0.6915,
+    "band2_hard": 0.6687,
+    "max_all": 0.7183,
+    "max_hard": 0.6878,
+    "mean_all": 0.7343,
+    "mean_hard": 0.6981
+   }
+  },
+  {
+   "pack": "university-exp-d1",
+   "budget": "fixed",
+   "samples": 80,
+   "seconds": 702,
+   "summary": {
+    "band0_all": 0.7641,
+    "band0_hard": 0.7266,
+    "band1_all": 0.6399,
+    "band1_hard": 0.6157,
+    "band2_all": 0.7101,
+    "band2_hard": 0.6871,
+    "max_all": 0.7344,
+    "max_hard": 0.7029,
+    "mean_all": 0.7479,
+    "mean_hard": 0.7137
+   }
+  },
+  {
+   "pack": "university-exp-d1",
+   "budget": "fixed",
+   "samples": 160,
+   "seconds": 1384,
+   "summary": {
+    "band0_all": 0.7587,
+    "band0_hard": 0.7139,
+    "band1_all": 0.6372,
+    "band1_hard": 0.6101,
+    "band2_all": 0.7133,
+    "band2_hard": 0.6793,
+    "max_all": 0.7366,
+    "max_hard": 0.7004,
+    "mean_all": 0.7431,
+    "mean_hard": 0.6995
+   }
+  },
+  {
+   "pack": "university-exp-d2",
+   "budget": "fixed",
+   "samples": 20,
+   "seconds": 1876,
+   "summary": {
+    "band0_all": 0.6946,
+    "band0_hard": 0.6577,
+    "band1_all": 0.5943,
+    "band1_hard": 0.5734,
+    "band2_all": 0.623,
+    "band2_hard": 0.6025,
+    "max_all": 0.6489,
+    "max_hard": 0.6206,
+    "mean_all": 0.6631,
+    "mean_hard": 0.6293
+   }
+  },
+  {
+   "pack": "university-exp-d2",
+   "budget": "fixed",
+   "samples": 20,
+   "seconds": 249,
+   "summary": {
+    "band0_all": 0.6836,
+    "band0_hard": 0.6531,
+    "band1_all": 0.5946,
+    "band1_hard": 0.582,
+    "band2_all": 0.6262,
+    "band2_hard": 0.6091,
+    "max_all": 0.6484,
+    "max_hard": 0.625,
+    "mean_all": 0.6603,
+    "mean_hard": 0.6355
+   }
+  },
+  {
+   "pack": "university-exp-d2",
+   "budget": "fixed",
+   "samples": 40,
+   "seconds": 419,
+   "summary": {
+    "band0_all": 0.7344,
+    "band0_hard": 0.6903,
+    "band1_all": 0.6152,
+    "band1_hard": 0.5917,
+    "band2_all": 0.6693,
+    "band2_hard": 0.6432,
+    "max_all": 0.6952,
+    "max_hard": 0.6588,
+    "mean_all": 0.7055,
+    "mean_hard": 0.666
+   }
+  },
+  {
+   "pack": "university-exp-d2",
+   "budget": "fixed",
+   "samples": 80,
+   "seconds": 758,
+   "summary": {
+    "band0_all": 0.7384,
+    "band0_hard": 0.6926,
+    "band1_all": 0.6184,
+    "band1_hard": 0.5876,
+    "band2_all": 0.6846,
+    "band2_hard": 0.6486,
+    "max_all": 0.7175,
+    "max_hard": 0.675,
+    "mean_all": 0.7046,
+    "mean_hard": 0.6584
+   }
+  },
+  {
+   "pack": "university-exp-d2",
+   "budget": "fixed",
+   "samples": 160,
+   "seconds": 1445,
+   "summary": {
+    "band0_all": 0.7373,
+    "band0_hard": 0.6897,
+    "band1_all": 0.6246,
+    "band1_hard": 0.5953,
+    "band2_all": 0.6952,
+    "band2_hard": 0.6566,
+    "max_all": 0.7112,
+    "max_hard": 0.6664,
+    "mean_all": 0.7203,
+    "mean_hard": 0.6733
+   }
+  },
+  {
+   "pack": "university-exp-d1-nolinks",
+   "budget": "fixed",
+   "samples": 20,
+   "seconds": 176,
+   "summary": {
+    "band0_all": 0.7089,
+    "band0_hard": 0.6868,
+    "band1_all": 0.5941,
+    "band1_hard": 0.585,
+    "band2_all": 0.6447,
+    "band2_hard": 0.6328,
+    "max_all": 0.6518,
+    "max_hard": 0.6382,
+    "mean_all": 0.6847,
+    "mean_hard": 0.6656
+   }
+  },
+  {
+   "pack": "university-exp-d1-nolinks",
+   "budget": "fixed",
+   "samples": 40,
+   "seconds": 348,
+   "summary": {
+    "band0_all": 0.7407,
+    "band0_hard": 0.7158,
+    "band1_all": 0.6171,
+    "band1_hard": 0.6051,
+    "band2_all": 0.6883,
+    "band2_hard": 0.6748,
+    "max_all": 0.7146,
+    "max_hard": 0.697,
+    "mean_all": 0.722,
+    "mean_hard": 0.7021
+   }
+  },
+  {
+   "pack": "university-exp-d1-nolinks",
+   "budget": "fixed",
+   "samples": 80,
+   "seconds": 692,
+   "summary": {
+    "band0_all": 0.7665,
+    "band0_hard": 0.7253,
+    "band1_all": 0.6354,
+    "band1_hard": 0.6154,
+    "band2_all": 0.7071,
+    "band2_hard": 0.6811,
+    "max_all": 0.7278,
+    "max_hard": 0.6954,
+    "mean_all": 0.7492,
+    "mean_hard": 0.7114
+   }
+  },
+  {
+   "pack": "university-exp-d1-nolinks",
+   "budget": "fixed",
+   "samples": 160,
+   "seconds": 1382,
+   "summary": {
+    "band0_all": 0.7619,
+    "band0_hard": 0.7146,
+    "band1_all": 0.6443,
+    "band1_hard": 0.6151,
+    "band2_all": 0.7258,
+    "band2_hard": 0.6844,
+    "max_all": 0.7352,
+    "max_hard": 0.6945,
+    "mean_all": 0.7575,
+    "mean_hard": 0.7095
+   }
+  },
+  {
+   "pack": "university-exp-d2-nochildlinks",
+   "budget": "fixed",
+   "samples": 20,
+   "seconds": 243,
+   "summary": {
+    "band0_all": 0.6883,
+    "band0_hard": 0.6768,
+    "band1_all": 0.582,
+    "band1_hard": 0.5784,
+    "band2_all": 0.6348,
+    "band2_hard": 0.6289,
+    "max_all": 0.6455,
+    "max_hard": 0.6348,
+    "mean_all": 0.6607,
+    "mean_hard": 0.6553
+   }
+  },
+  {
+   "pack": "university-exp-d2-nochildlinks",
+   "budget": "fixed",
+   "samples": 40,
+   "seconds": 409,
+   "summary": {
+    "band0_all": 0.7457,
+    "band0_hard": 0.7255,
+    "band1_all": 0.621,
+    "band1_hard": 0.6087,
+    "band2_all": 0.702,
+    "band2_hard": 0.6931,
+    "max_all": 0.7032,
+    "max_hard": 0.6874,
+    "mean_all": 0.7214,
+    "mean_hard": 0.704
+   }
+  },
+  {
+   "pack": "university-exp-d2-nochildlinks",
+   "budget": "fixed",
+   "samples": 80,
+   "seconds": 745,
+   "summary": {
+    "band0_all": 0.7562,
+    "band0_hard": 0.7246,
+    "band1_all": 0.6233,
+    "band1_hard": 0.6075,
+    "band2_all": 0.7098,
+    "band2_hard": 0.6896,
+    "max_all": 0.7205,
+    "max_hard": 0.6964,
+    "mean_all": 0.7378,
+    "mean_hard": 0.7084
+   }
+  },
+  {
+   "pack": "university-exp-d2-nochildlinks",
+   "budget": "fixed",
+   "samples": 160,
+   "seconds": 1414,
+   "summary": {
+    "band0_all": 0.7611,
+    "band0_hard": 0.7235,
+    "band1_all": 0.6414,
+    "band1_hard": 0.6189,
+    "band2_all": 0.7101,
+    "band2_hard": 0.6808,
+    "max_all": 0.7285,
+    "max_hard": 0.6964,
+    "mean_all": 0.7433,
+    "mean_hard": 0.7055
+   }
+  },
+  {
+   "pack": "university-exp-d1-nolinks:content",
+   "budget": "content",
+   "samples": 22,
+   "seconds": 199,
+   "summary": {
+    "band0_all": 0.8173,
+    "band0_hard": 0.7382,
+    "band1_all": 0.6668,
+    "band1_hard": 0.6187,
+    "band2_all": 0.7605,
+    "band2_hard": 0.6823,
+    "max_all": 0.7713,
+    "max_hard": 0.7057,
+    "mean_all": 0.7953,
+    "mean_hard": 0.7142
+   }
+  },
+  {
+   "pack": "university-exp-d2-nochildlinks:content",
+   "budget": "content",
+   "samples": 106,
+   "seconds": 902,
+   "summary": {
+    "band0_all": 0.895,
+    "band0_hard": 0.7938,
+    "band1_all": 0.8124,
+    "band1_hard": 0.7158,
+    "band2_all": 0.8738,
+    "band2_hard": 0.7702,
+    "max_all": 0.8778,
+    "max_hard": 0.7817,
+    "mean_all": 0.8902,
+    "mean_hard": 0.7837
+   }
+  },
+  {
+   "pack": "university-exp-d1-nolinks:content+contrasts",
+   "budget": "content",
+   "samples": 85,
+   "seconds": 721,
+   "summary": {
+    "band0_all": 0.8445,
+    "band0_hard": 0.8013,
+    "band1_all": 0.7292,
+    "band1_hard": 0.7049,
+    "band2_all": 0.8148,
+    "band2_hard": 0.776,
+    "max_all": 0.8218,
+    "max_hard": 0.7852,
+    "mean_all": 0.8392,
+    "mean_hard": 0.7985
+   }
+  },
+  {
+   "pack": "university-exp-d2-nochildlinks:content+contrasts",
+   "budget": "content",
+   "samples": 168,
+   "seconds": 1402,
+   "summary": {
+    "band0_all": 0.9034,
+    "band0_hard": 0.8263,
+    "band1_all": 0.815,
+    "band1_hard": 0.746,
+    "band2_all": 0.8751,
+    "band2_hard": 0.7968,
+    "max_all": 0.889,
+    "max_hard": 0.8157,
+    "mean_all": 0.8988,
+    "mean_hard": 0.8203
+   }
+  },
+  {
+   "pack": "university-exp-d2:content+contrasts+diag0",
+   "budget": "content",
+   "samples": 168,
+   "seconds": 1434,
+   "summary": {
+    "band0_all": 0.8923,
+    "band0_hard": 0.8157,
+    "band1_all": 0.8077,
+    "band1_hard": 0.7378,
+    "band2_all": 0.875,
+    "band2_hard": 0.7955,
+    "max_all": 0.8784,
+    "max_hard": 0.8054,
+    "mean_all": 0.8924,
+    "mean_hard": 0.8151
+   }
+  },
+  {
+   "pack": "university-exp-d2:content+contrasts+diag100",
+   "budget": "content",
+   "samples": 168,
+   "seconds": 1446,
+   "summary": {
+    "band0_all": 0.7959,
+    "band0_hard": 0.7805,
+    "band1_all": 0.7058,
+    "band1_hard": 0.6946,
+    "band2_all": 0.7844,
+    "band2_hard": 0.7669,
+    "max_all": 0.772,
+    "max_hard": 0.7579,
+    "mean_all": 0.798,
+    "mean_hard": 0.7811
+   }
+  },
+  {
+   "pack": "university-exp-d2:content+contrasts+diag200",
+   "budget": "content",
+   "samples": 168,
+   "seconds": 1849,
+   "summary": {
+    "band0_all": 0.7955,
+    "band0_hard": 0.7818,
+    "band1_all": 0.6987,
+    "band1_hard": 0.691,
+    "band2_all": 0.7517,
+    "band2_hard": 0.7348,
+    "max_all": 0.7633,
+    "max_hard": 0.7506,
+    "mean_all": 0.7881,
+    "mean_hard": 0.775
+   }
+  }
+ ],
+ "whole_packs": {
+  "v1_refined": {
+   "0_max": {
+    "top1": 0.1518,
+    "top3": 0.3328,
+    "median_rank": 6.0,
+    "n": 3260,
+    "auroc_all": 0.5868,
+    "auroc_hard": 0.5868
+   },
+   "0_mean": {
+    "top1": 0.1908,
+    "top3": 0.3985,
+    "median_rank": 5.0,
+    "n": 3260,
+    "auroc_all": 0.6266,
+    "auroc_hard": 0.6266
+   },
+   "1_max": {
+    "top1": 0.0282,
+    "top3": 0.0724,
+    "median_rank": 57.0,
+    "n": 3260,
+    "auroc_all": 0.6252,
+    "auroc_hard": 0.6092
+   },
+   "1_mean": {
+    "top1": 0.0466,
+    "top3": 0.1074,
+    "median_rank": 46.0,
+    "n": 3260,
+    "auroc_all": 0.6531,
+    "auroc_hard": 0.634
+   }
+  },
+  "v2_refined": {
+   "0_max": {
+    "top1": 0.227,
+    "top3": 0.4463,
+    "median_rank": 4.0,
+    "n": 3260,
+    "auroc_all": 0.6592,
+    "auroc_hard": 0.6592
+   },
+   "0_mean": {
+    "top1": 0.2279,
+    "top3": 0.4844,
+    "median_rank": 4.0,
+    "n": 3260,
+    "auroc_all": 0.6937,
+    "auroc_hard": 0.6937
+   },
+   "1_max": {
+    "top1": 0.0681,
+    "top3": 0.1377,
+    "median_rank": 38.0,
+    "n": 3260,
+    "auroc_all": 0.7026,
+    "auroc_hard": 0.6723
+   },
+   "1_mean": {
+    "top1": 0.0666,
+    "top3": 0.1451,
+    "median_rank": 30.0,
+    "n": 3260,
+    "auroc_all": 0.734,
+    "auroc_hard": 0.697
+   }
+  },
+  "v3": {
+   "0_max": {
+    "top1": 0.3055,
+    "top3": 0.604,
+    "median_rank": 3.0,
+    "n": 3260,
+    "auroc_all": 0.7813,
+    "auroc_hard": 0.7813
+   },
+   "0_mean": {
+    "top1": 0.3261,
+    "top3": 0.6123,
+    "median_rank": 3.0,
+    "n": 3260,
+    "auroc_all": 0.7884,
+    "auroc_hard": 0.7884
+   },
+   "1_max": {
+    "top1": 0.1138,
+    "top3": 0.2699,
+    "median_rank": 9.0,
+    "n": 3260,
+    "auroc_all": 0.8795,
+    "auroc_hard": 0.7869
+   },
+   "1_mean": {
+    "top1": 0.1055,
+    "top3": 0.2752,
+    "median_rank": 9.0,
+    "n": 3260,
+    "auroc_all": 0.8892,
+    "auroc_hard": 0.7894
+   }
+  },
+  "v3_contrasts": {
+   "0_max": {
+    "top1": 0.3423,
+    "top3": 0.6347,
+    "median_rank": 2.0,
+    "n": 3260,
+    "auroc_all": 0.7952,
+    "auroc_hard": 0.7952
+   },
+   "0_mean": {
+    "top1": 0.3411,
+    "top3": 0.6546,
+    "median_rank": 2.0,
+    "n": 3260,
+    "auroc_all": 0.805,
+    "auroc_hard": 0.805
+   },
+   "1_max": {
+    "top1": 0.1761,
+    "top3": 0.3408,
+    "median_rank": 7.0,
+    "n": 3260,
+    "auroc_all": 0.8885,
+    "auroc_hard": 0.8194
+   },
+   "1_mean": {
+    "top1": 0.1693,
+    "top3": 0.3368,
+    "median_rank": 7.0,
+    "n": 3260,
+    "auroc_all": 0.8957,
+    "auroc_hard": 0.8225
+   }
+  },
+  "university-v3-contrasts_test": {
+   "0_max": {
+    "top1": 0.3564,
+    "top3": 0.6356,
+    "median_rank": 2.0,
+    "n": 1630,
+    "auroc_all": 0.7958,
+    "auroc_hard": 0.7958
+   },
+   "0_mean": {
+    "top1": 0.3448,
+    "top3": 0.6601,
+    "median_rank": 2.0,
+    "n": 1630,
+    "auroc_all": 0.8047,
+    "auroc_hard": 0.8047
+   },
+   "0_calibrated_max": {
+    "top1": 0.3282,
+    "top3": 0.6202,
+    "median_rank": 3.0,
+    "n": 1630,
+    "auroc_all": 0.7911,
+    "auroc_hard": 0.7911
+   },
+   "1_max": {
+    "top1": 0.1644,
+    "top3": 0.3245,
+    "median_rank": 8.0,
+    "n": 1630,
+    "auroc_all": 0.8859,
+    "auroc_hard": 0.8131
+   },
+   "1_mean": {
+    "top1": 0.1761,
+    "top3": 0.3374,
+    "median_rank": 7.0,
+    "n": 1630,
+    "auroc_all": 0.893,
+    "auroc_hard": 0.8173
+   },
+   "1_calibrated_max": {
+    "top1": 0.1828,
+    "top3": 0.3497,
+    "median_rank": 7.0,
+    "n": 1630,
+    "auroc_all": 0.8881,
+    "auroc_hard": 0.811
+   }
+  },
+  "university-v3-contrasts-refined_test": {
+   "0_max": {
+    "top1": 0.3558,
+    "top3": 0.6393,
+    "median_rank": 2.0,
+    "n": 1630,
+    "auroc_all": 0.7955,
+    "auroc_hard": 0.7955
+   },
+   "0_mean": {
+    "top1": 0.3564,
+    "top3": 0.6393,
+    "median_rank": 2.0,
+    "n": 1630,
+    "auroc_all": 0.8038,
+    "auroc_hard": 0.8038
+   },
+   "0_calibrated_max": {
+    "top1": 0.3276,
+    "top3": 0.6245,
+    "median_rank": 2.0,
+    "n": 1630,
+    "auroc_all": 0.7865,
+    "auroc_hard": 0.7865
+   },
+   "1_max": {
+    "top1": 0.2006,
+    "top3": 0.3699,
+    "median_rank": 7.0,
+    "n": 1630,
+    "auroc_all": 0.885,
+    "auroc_hard": 0.8154
+   },
+   "1_mean": {
+    "top1": 0.1951,
+    "top3": 0.3712,
+    "median_rank": 7.0,
+    "n": 1630,
+    "auroc_all": 0.8952,
+    "auroc_hard": 0.8247
+   },
+   "1_calibrated_max": {
+    "top1": 0.1908,
+    "top3": 0.3644,
+    "median_rank": 7.0,
+    "n": 1630,
+    "auroc_all": 0.8896,
+    "auroc_hard": 0.8164
+   }
+  }
+ },
+ "grid_subset": [
+  "AdvancedManufacturingTechnologies",
+  "CartographyGeographicDiscovery",
+  "ComparativeMagicAndOccultTraditions",
+  "CorporateStrategyBusinessManagement",
+  "CulturalTransmissionSocialLearning",
+  "CyberConflictAndInformationWarfare",
+  "DanceAndMovementStudies",
+  "Dialogue",
+  "DramaticArtsAndPerformance",
+  "EmotionAndSocialCognitionResearchGroup",
+  "EthicalConsiderationsInNovelDiscovery",
+  "GeneticsHeredity",
+  "GlobalSupplyChainOptimization",
+  "ImmunologyDiseaseResistance",
+  "InformationSecurityCryptanalysis",
+  "InternationalTradeGlobalEconomics",
+  "LinguisticAnalysisSemantics",
+  "MentalPhysicalWellbeingOfCaregivers",
+  "MindfulnessAndMeditationResearch",
+  "NonprofitManagement",
+  "PracticalSkillsDomesticInfrastructure",
+  "PsychologicalProfilingOfViolence",
+  "RitualMovementAndPerformanceStudies",
+  "TribalismInGroupBias",
+  "UrbanPlanning",
+  "VerbalDynamics"
+ ],
+ "grid_bands": {
+  "AdvancedManufacturingTechnologies": [
+   8,
+   22,
+   36
+  ],
+  "CartographyGeographicDiscovery": [
+   0,
+   15,
+   32
+  ],
+  "ComparativeMagicAndOccultTraditions": [
+   0,
+   26,
+   34
+  ],
+  "CorporateStrategyBusinessManagement": [
+   5,
+   14,
+   39
+  ],
+  "CulturalTransmissionSocialLearning": [
+   0,
+   25,
+   39
+  ],
+  "CyberConflictAndInformationWarfare": [
+   3,
+   21,
+   31
+  ],
+  "DanceAndMovementStudies": [
+   4,
+   21,
+   34
+  ],
+  "Dialogue": [
+   1,
+   14,
+   34
+  ],
+  "DramaticArtsAndPerformance": [
+   3,
+   14,
+   29
+  ],
+  "EmotionAndSocialCognitionResearchGroup": [
+   0,
+   23,
+   33
+  ],
+  "EthicalConsiderationsInNovelDiscovery": [
+   9,
+   21,
+   30
+  ],
+  "GeneticsHeredity": [
+   1,
+   27,
+   37
+  ],
+  "GlobalSupplyChainOptimization": [
+   10,
+   26,
+   31
+  ],
+  "ImmunologyDiseaseResistance": [
+   12,
+   14,
+   29
+  ],
+  "InformationSecurityCryptanalysis": [
+   7,
+   21,
+   31
+  ],
+  "InternationalTradeGlobalEconomics": [
+   11,
+   27,
+   33
+  ],
+  "LinguisticAnalysisSemantics": [
+   11,
+   24,
+   28
+  ],
+  "MentalPhysicalWellbeingOfCaregivers": [
+   10,
+   24,
+   33
+  ],
+  "MindfulnessAndMeditationResearch": [
+   0,
+   26,
+   31
+  ],
+  "NonprofitManagement": [
+   11,
+   27,
+   30
+  ],
+  "PracticalSkillsDomesticInfrastructure": [
+   11,
+   16,
+   31
+  ],
+  "PsychologicalProfilingOfViolence": [
+   0,
+   23,
+   33
+  ],
+  "RitualMovementAndPerformanceStudies": [
+   0,
+   15,
+   31
+  ],
+  "TribalismInGroupBias": [
+   4,
+   22,
+   29
+  ],
+  "UrbanPlanning": [
+   4,
+   24,
+   41
+  ],
+  "VerbalDynamics": [
+   1,
+   24,
+   34
+  ]
+ }
+}

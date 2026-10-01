@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import random
 import time
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple, Union
@@ -15,6 +16,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from .sumo_data_generation import (
     build_sumo_negative_pool,
     create_sumo_training_dataset,
+    has_real_content,
 )
 from .dual_adaptive_trainer import DualAdaptiveTrainer
 
@@ -408,22 +410,21 @@ def select_layers_for_concept(
     # Extract activations and score each layer
     print(f"    Layer selection: testing {n_model_layers} layers (top_k={top_k})...", end="", flush=True)
 
-    for layer_idx in range(n_model_layers):
-        # Extract activations for this single layer
-        X = extract_activations(
-            model,
-            tokenizer,
-            all_prompts,
-            device=device,
-            extraction_mode="prompt",  # Faster, just prompt phase
-            layer_idx=layer_idx,
-        )
+    # One forward pass for every layer: all-layers mode concatenates layers in
+    # order, so split it back into [n_samples, n_layers, hidden_dim].
+    X_all = extract_activations(
+        model,
+        tokenizer,
+        all_prompts,
+        device=device,
+        extraction_mode="prompt",  # Faster, just prompt phase
+        layer_idx=None,
+    )
+    X_all = X_all.reshape(X_all.shape[0], n_model_layers, -1)
+    y = labels
 
-        # Handle combined extraction (2x samples)
-        if X.shape[0] == 2 * len(labels):
-            y = np.repeat(labels, 2)
-        else:
-            y = labels
+    for layer_idx in range(n_model_layers):
+        X = X_all[:, layer_idx, :]
 
         # Quick logistic regression with cross-validation
         try:
@@ -588,6 +589,85 @@ def train_simple_classifier(
     return model, metrics
 
 
+def train_concept_on_content(
+    concept: Dict,
+    all_concepts: List[Dict],
+    model,
+    tokenizer,
+    device: str,
+    output_dir: Path,
+    layer: int,
+    multi_layer_mode: bool,
+    band_probes: bool,
+    multi_layer_top_k: int,
+    n_model_layers: Optional[int],
+    descendant_cap: int = 100,
+) -> Dict:
+    """
+    Train a concept's lens on its real content in one pass (the content budget).
+
+    The dataset is sized by what the concept has (see create_content_dataset)
+    instead of by adaptive cycles, so there is nothing to regenerate: activations
+    are extracted once for every layer the lens reads, then one probe is trained
+    per band (or one probe on a single or concatenated layer set).
+    """
+    import zlib
+    from .sumo_data_generation import create_content_dataset
+
+    name = concept["sumo_term"]
+    rng = random.Random(zlib.crc32(name.encode()))
+    prompts, labels = create_content_dataset(concept, all_concepts, descendant_cap=descendant_cap, rng=rng)
+    n_pos = sum(labels)
+    print(f"  Content budget: {n_pos} positives, {len(labels) - n_pos} negatives (real text only)")
+
+    if multi_layer_mode:
+        pos = [p for p, l in zip(prompts, labels) if l == 1]
+        neg = [p for p, l in zip(prompts, labels) if l == 0]
+        layers, _ = select_layers_for_concept(
+            model, tokenizer, rng.sample(pos, min(20, len(pos))), rng.sample(neg, min(20, len(neg))),
+            device=device, n_model_layers=n_model_layers, top_k=multi_layer_top_k,
+        )
+    else:
+        layers = [15]  # the single-layer default used elsewhere in this module
+
+    X = extract_activations(model, tokenizer, prompts, device, layer_idx=layers)
+    y = np.array(labels)
+    if X.shape[0] == 2 * len(y):  # combined extraction: prompt + generation per input
+        y = np.repeat(y, 2)
+    X = X.reshape(X.shape[0], len(layers), -1)
+    order = np.random.default_rng(zlib.crc32(name.encode())).permutation(len(y))
+    cut = int(0.8 * len(y))
+    tr, te = order[:cut], order[cut:]
+
+    result = {
+        "concept": name,
+        "layer": layer,
+        "budget": "content",
+        "n_positives": n_pos,
+        "n_negatives": len(labels) - n_pos,
+        "selected_layers": layers if multi_layer_mode else None,
+    }
+    if band_probes or len(layers) == 1:
+        probes = {}
+        for b, model_layer in enumerate(layers):
+            classifier, metrics = train_simple_classifier(X[tr, b], y[tr], X[te, b], y[te], dtype=torch.float32)
+            filename = f"{name}@L{model_layer}.pt" if band_probes else f"{name}.pt"
+            torch.save(classifier.state_dict(), output_dir / filename)
+            probes[str(model_layer)] = {k: metrics[k] for k in ("train_f1", "test_f1", "test_precision", "test_recall")}
+        if band_probes:
+            result["probes"] = probes
+        # Report the best probe's split metrics (the layer summary averages these)
+        best = max(probes.values(), key=lambda p: p["test_f1"])
+        result.update({k: best[k] for k in ("test_f1", "test_precision", "test_recall")})
+    else:
+        flat = X.reshape(X.shape[0], -1)
+        classifier, metrics = train_simple_classifier(flat[tr], y[tr], flat[te], y[te], dtype=torch.float32)
+        torch.save(classifier.state_dict(), output_dir / f"{name}.pt")
+        result.update({k: metrics[k] for k in ("test_f1", "test_precision", "test_recall")})
+    print(f"  ✓ Content-budget lens: test F1 {result['test_f1']:.3f} over layers {layers}")
+    return result
+
+
 def train_layer(
     layer: int,
     hierarchy_dir: Path,
@@ -609,6 +689,8 @@ def train_layer(
     all_layers: bool = False,
     multi_layer_mode: bool = False,
     multi_layer_top_k: int = 1,
+    band_probes: bool = False,
+    budget: str = "content",
     sample_saver=None,
 ) -> Dict:
     """
@@ -629,6 +711,12 @@ def train_layer(
         multi_layer_top_k: Number of top layers to select from each third (default 1).
                           k=1 → 3 layers, k=2 → 6 layers, k=3 → 9 layers, etc.
                           Higher k = more compute/memory but potentially better coverage.
+        budget: "content" (default) trains concepts that have authored text (MELD examples,
+                descendants, boundaries) on that text alone, in one pass; concepts without
+                it, or budget="adaptive", use the adaptive templated generator.
+        band_probes: With multi_layer_mode, train an independent probe on each selected
+                     layer instead of one probe on their concatenation. Probes are saved
+                     as `<concept>@L<model_layer>.pt`, the multi-layer lens format HAT reads.
         sample_saver: Optional SampleSaver instance for saving training samples with quality checking.
     """
     print(f"\n{'=' * 80}")
@@ -726,7 +814,12 @@ def train_layer(
         classifier_path = output_dir / f"{concept_name}.pt"
         centroid_path = centroid_output_dir / f"{concept_name}_centroid.npy" if train_text_lenses else None
 
-        if classifier_path.exists() and (not train_text_lenses or centroid_path.exists()):
+        if band_probes:
+            already_trained = len(list(output_dir.glob(f"{concept_name}@L*.pt"))) >= 3 * multi_layer_top_k
+        else:
+            already_trained = classifier_path.exists()
+
+        if already_trained and (not train_text_lenses or centroid_path.exists()):
             print(f"\n[{i + 1}/{len(concepts)}] Skipping {concept_name} (already trained)")
             # Carry forward this concept's prior metric record so we don't lose it
             # when results.json is rewritten at the end of the loop.
@@ -761,6 +854,14 @@ def train_layer(
 
             # Track selected layers for result metadata
             selected_layers = None
+
+            if budget == "content" and has_real_content(concept):
+                all_results.append(train_concept_on_content(
+                    concept, all_concepts, model, tokenizer, device, output_dir, layer,
+                    multi_layer_mode, band_probes, multi_layer_top_k,
+                    n_model_layers or get_num_layers(model),
+                ))
+                continue
 
             if use_adaptive_training:
                 # JIT training - only generate test set upfront, train samples generated incrementally
@@ -799,8 +900,10 @@ def train_layer(
                         n_model_layers=n_model_layers,
                         top_k=multi_layer_top_k,
                     )
-                    # Update adaptive trainer to use selected layers
-                    adaptive_trainer.validation_layer_idx = selected_layers
+                    # Concatenated mode trains one probe on all selected layers;
+                    # band mode trains one per layer below
+                    if not band_probes:
+                        adaptive_trainer.validation_layer_idx = selected_layers
             else:
                 # Non-adaptive: generate full train set upfront
                 train_prompts, train_labels = create_sumo_training_dataset(
@@ -850,20 +953,38 @@ def train_layer(
                     'layer': layer,  # For sample saving
                 }
 
-                # Run dual adaptive training with incremental sample generation
-                adaptive_results = adaptive_trainer.train_concept_incremental(
-                    concept_name=concept_name,
-                    generation_config=generation_config,
-                    test_prompts=test_prompts,  # Generate test set once upfront
-                    test_labels=np.array(test_labels),
-                )
+                # Band mode: one independent probe per selected model layer.
+                # Otherwise a single probe at the trainer's configured layer(s).
+                probe_layers = selected_layers if (band_probes and selected_layers) else [None]
+                probe_metrics = {}
+                for model_layer in probe_layers:
+                    if model_layer is not None:
+                        adaptive_trainer.validation_layer_idx = model_layer
+                        print(f"  Probe @ model layer {model_layer}")
 
-                # Save activation classifier
-                if adaptive_results['activation_classifier'] is not None:
-                    torch.save(
-                        adaptive_results['activation_classifier'].state_dict(),
-                        output_dir / f"{concept_name}.pt"
+                    # Run dual adaptive training with incremental sample generation
+                    adaptive_results = adaptive_trainer.train_concept_incremental(
+                        concept_name=concept_name,
+                        generation_config=generation_config,
+                        test_prompts=test_prompts,  # Generate test set once upfront
+                        test_labels=np.array(test_labels),
                     )
+
+                    # Save activation classifier
+                    if adaptive_results['activation_classifier'] is not None:
+                        filename = f"{concept_name}@L{model_layer}.pt" if model_layer is not None else f"{concept_name}.pt"
+                        torch.save(
+                            adaptive_results['activation_classifier'].state_dict(),
+                            output_dir / filename
+                        )
+                    if model_layer is not None:
+                        m = adaptive_results.get('activation') or {}
+                        probe_metrics[model_layer] = {
+                            "test_f1": m.get('test_f1', 0.0),
+                            "train_f1": m.get('train_f1', 0.0),
+                            "samples": m.get('samples_used', 0),
+                            "iterations": m.get('iterations', 0),
+                        }
 
                 # Note: Embedding centroids not supported in JIT adaptive mode
                 # (would require returning prompts from adaptive trainer)
@@ -892,6 +1013,10 @@ def train_layer(
                 # Add selected layers if multi-layer mode was used
                 if selected_layers is not None:
                     result["selected_layers"] = selected_layers
+                if probe_metrics:
+                    # HAT combines probes by max, so report the best probe as the lens F1
+                    result["probes"] = {str(l): m for l, m in probe_metrics.items()}
+                    result["test_f1"] = max(m["test_f1"] for m in probe_metrics.values())
 
                 # Add validation results if available
                 if 'validation' in activation_metrics:
@@ -1084,6 +1209,8 @@ def train_sumo_classifiers(
     all_layers: bool = False,
     multi_layer_mode: bool = False,
     multi_layer_top_k: int = 1,
+    band_probes: bool = False,
+    budget: str = "content",
     sample_saver=None,
 ) -> List[Dict]:
     """
@@ -1105,6 +1232,9 @@ def train_sumo_classifiers(
         sample_saver: Optional SampleSaver instance for saving training samples with quality checking.
     """
     output_dir = Path(output_dir)
+
+    if band_probes and not multi_layer_mode:
+        raise ValueError("band_probes needs multi_layer_mode to select the layers")
 
     print(f"\n{'=' * 80}")
     print("SUMO HIERARCHICAL CLASSIFIER TRAINING")
@@ -1195,6 +1325,8 @@ def train_sumo_classifiers(
             all_layers=all_layers,
             multi_layer_mode=multi_layer_mode,
             multi_layer_top_k=multi_layer_top_k,
+            band_probes=band_probes,
+            budget=budget,
             sample_saver=sample_saver,
         )
         summaries.append(summary)
