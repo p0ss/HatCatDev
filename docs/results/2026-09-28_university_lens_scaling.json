@@ -507,6 +507,24 @@
     "mean_all": 0.7881,
     "mean_hard": 0.775
    }
+  },
+  {
+   "pack": "university-exp-d2:content+contrasts+diag100extra",
+   "budget": "content",
+   "samples": 168,
+   "seconds": 1831,
+   "summary": {
+    "band0_all": 0.8599,
+    "band0_hard": 0.7969,
+    "band1_all": 0.7582,
+    "band1_hard": 0.7057,
+    "band2_all": 0.8198,
+    "band2_hard": 0.7576,
+    "max_all": 0.8289,
+    "max_hard": 0.7724,
+    "mean_all": 0.8504,
+    "mean_hard": 0.7898
+   }
   }
  ],
  "whole_packs": {

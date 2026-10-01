@@ -106,10 +106,10 @@ Cross-lens ranking on the test half of the held-out split (1,630 texts; the even
 | Real text from other concepts (cap 0) | 0.892 | 0.815 |
 | 100 diagonal texts replace most of that | 0.798 | 0.781 |
 | 200 diagonal texts, no other fill | 0.788 | 0.775 |
-| 100 diagonal texts on top of the full fill | *pending* | *pending* |
+| 100 diagonal texts on top of the full fill | 0.850 | 0.790 |
 
-The more a lens's negatives come from similarity-picked neighbours, the worse it gets. Three reasons:
-- **Breadth is lost.** Replacing the broad fill removes the general background a lens needs to reject.
+The more a lens's negatives come from similarity-picked neighbours, the worse it gets. Adding them on top of an intact fill still costs 0.025 hard, so the damage isn't only lost breadth. Three reasons:
+- **Breadth is lost** when they replace the fill, which removes the general background a lens needs to reject.
 - **No stated boundary.** Close-but-unexplained neighbours give the probe a boundary with no stated difference to follow.
 - **Arbitrary test labels.** There are 7,194 cross-University Department pairs at ≥ 0.9 similarity, so some held-out text is filed arbitrarily between two Universities, and training against those neighbours rejects text that is effectively the lens's own topic.
 
